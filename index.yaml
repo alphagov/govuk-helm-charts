@@ -1,0 +1,76 @@
+apiVersion: v1
+entries:
+  cluster-secret-store:
+  - apiVersion: v3
+    created: "2021-09-15T08:17:10.995615759Z"
+    description: A Helm chart for an external-secrets ClusterSecretStore, integrates
+      with AWS SecretsManager
+    digest: ae09a8171d600b7f76374bacffdb382af2624f2ecd23a1930b82f2436bb159e1
+    name: cluster-secret-store
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secret-store-0.1.0/cluster-secret-store-0.1.0.tgz
+    version: 0.1.0
+  content-store:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-15T08:17:11.239819926Z"
+    description: A Helm chart for GOV.UK Content-Store
+    digest: 98724ff6a9a0f0b45118a17aabfe1c7435dfb10a430aeadaf0217e6b818b69d9
+    name: content-store
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.3.0/content-store-0.3.0.tgz
+    version: 0.3.0
+  frontend:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-15T08:17:11.470471979Z"
+    description: A Helm chart for GOV.UK Frontend
+    digest: a51496b04d60f207c0a44f75c03cdf15ffd819332fe8f0c9aa0bf37adfc71452
+    name: frontend
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/frontend-0.3.0/frontend-0.3.0.tgz
+    version: 0.3.0
+  ingress-class:
+  - apiVersion: v3
+    created: "2021-09-15T08:17:11.687986217Z"
+    description: A Helm chart for a IngressClass resource, for use with AWS Load Balancer
+      Controller
+    digest: d0aa37b46b7d9a7f1556f4cfb28254f8abf496951adae1ff4e06b9b4a18dfebe
+    name: ingress-class
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.0/ingress-class-0.1.0.tgz
+    version: 0.1.0
+  publisher:
+  - apiVersion: v2
+    created: "2021-09-15T08:17:11.891202739Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: f84bfd6d31416c38ffe3ce191b59e1cd647be1baae741dd737106f91aa66bd06
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.2.0/publisher-0.2.0.tgz
+    version: 0.2.0
+  router:
+  - apiVersion: v2
+    created: "2021-09-15T08:17:12.076908242Z"
+    description: A Helm chart for GOV.UK router
+    digest: f86d3751ef8cb160356d11bcc40265ff72f2fd6157fa5a4d6b7e390951768594
+    name: router
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/router-0.3.0/router-0.3.0.tgz
+    version: 0.3.0
+  static:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-09-15T08:17:12.336134025Z"
+    description: A Helm chart for GOV.UK Static
+    digest: 97371d970ed660b4efd3febf206acce613ca73284b9420462d3ca231f73d415f
+    name: static
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
+    version: 0.3.0
+generated: "2021-09-15T08:17:12.336139325Z"
