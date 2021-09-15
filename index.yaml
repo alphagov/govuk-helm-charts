@@ -12,6 +12,15 @@ entries:
     version: 0.1.0
   content-store:
   - apiVersion: v2
+    created: "2021-09-15T10:46:48.131167652Z"
+    description: A Helm chart for GOV.UK Content-Store
+    digest: 0ba484f57cc5fd8282c60871f6143d8e4281992bf667c96fa42797e1b7cd5597
+    name: content-store
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.3.1/content-store-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-09-15T08:17:11.239819926Z"
     description: A Helm chart for GOV.UK Content-Store
@@ -22,6 +31,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.3.0/content-store-0.3.0.tgz
     version: 0.3.0
   frontend:
+  - apiVersion: v2
+    created: "2021-09-15T10:46:48.332912133Z"
+    description: A Helm chart for GOV.UK Frontend
+    digest: a9a0ffdfc9fbbb8eb093bc91e05be97d542fdfc19279add38976c4f1c59eb5ad
+    name: frontend
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/frontend-0.3.1/frontend-0.3.1.tgz
+    version: 0.3.1
   - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-09-15T08:17:11.470471979Z"
@@ -44,6 +62,15 @@ entries:
     version: 0.1.0
   publisher:
   - apiVersion: v2
+    created: "2021-09-15T10:46:48.601256734Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: a893040171a2d29f32b72d4dd47110207e3e57232ebb661749f76f94130de95d
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.2.1/publisher-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
     created: "2021-09-15T08:17:11.891202739Z"
     description: A Helm chart for GOV.UK Publisher
     digest: f84bfd6d31416c38ffe3ce191b59e1cd647be1baae741dd737106f91aa66bd06
@@ -53,6 +80,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.2.0/publisher-0.2.0.tgz
     version: 0.2.0
   router:
+  - apiVersion: v2
+    created: "2021-09-15T10:46:48.797901095Z"
+    description: A Helm chart for GOV.UK router
+    digest: fd16a20b287b675188d45ae22e095be9a3c709b1429df6c5fa0a954114ff1776
+    name: router
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/router-0.3.1/router-0.3.1.tgz
+    version: 0.3.1
   - apiVersion: v2
     created: "2021-09-15T08:17:12.076908242Z"
     description: A Helm chart for GOV.UK router
@@ -64,6 +100,15 @@ entries:
     version: 0.3.0
   static:
   - apiVersion: v2
+    created: "2021-09-15T10:46:49.006404595Z"
+    description: A Helm chart for GOV.UK Static
+    digest: 2f1464eff7fe4179364a1f9f52bce0eb11b857a9486d8dcc5b3a6cfbda17ba08
+    name: static
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.1/static-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2021-09-15T08:17:12.336134025Z"
     description: A Helm chart for GOV.UK Static
@@ -73,4 +118,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-09-15T08:17:12.336139325Z"
+generated: "2021-09-15T10:46:49.006424295Z"
