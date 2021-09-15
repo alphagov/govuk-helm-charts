@@ -3,4 +3,3 @@ name: publisher
 description: A Helm chart for GOV.UK Publisher
 type: application
 version: 0.2.1
-appVersion: "1.16.0"
