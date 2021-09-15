@@ -3,4 +3,3 @@ name: router
 description: A Helm chart for GOV.UK router
 type: application
 version: 0.3.1
-appVersion: "1.16.0"
