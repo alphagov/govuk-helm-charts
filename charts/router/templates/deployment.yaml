@@ -40,6 +40,8 @@ spec:
               value: "{{ .Values.appBackendUrlFrontend | default (printf "http://frontend.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
             - name: BACKEND_URL_static
               value: "{{ .Values.appBackendUrlStatic | default (printf "http://static.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
+            - name: BACKEND_URL_signon
+              value: "{{ .Values.appBackendUrlSignon | default (printf "http://signon.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
             - name: DEFAULT_TTL
               value: "{{ .Values.appDefaultTtl }}"
             - name: GOVUK_APP_DOMAIN_EXTERNAL
