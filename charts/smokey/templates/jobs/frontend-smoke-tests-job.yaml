@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: frontend-smoke-tests-{{ now | unixEpoch }}
+spec:
+  template:
+    spec:
+      containers:
+      - name: smokey
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        command: ["bundle", "exec", "cucumber", "--profile", "test", "--strict-undefined", "-t", "@app-frontend", "-t", "@replatforming", "-t", "not @notreplatforming and not @nottest"]
+        env:
+        - name: ENVIRONMENT
+          value: "{{ .Values.govukEnvironment }}"
+        - name: GOVUK_APP_DOMAIN
+          value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
+        - name: GOVUK_WEBSITE_ROOT
+          value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+      restartPolicy: Never
+  ttlSecondsAfterFinished: {{ .Values.jobTtl }}
+  backoffLimit: 4
+

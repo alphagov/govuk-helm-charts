@@ -1,0 +1,5 @@
+apiVersion: v2
+name: signon
+description: A Helm chart for GOV.UK Signon
+type: application
+version: 0.1.0
