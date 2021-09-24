@@ -62,6 +62,15 @@ entries:
     version: 0.1.0
   publisher:
   - apiVersion: v2
+    created: "2021-09-24T15:20:13.50800281Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: c83ad22d20e4349bba03d21978373d3734b77d3ce6e09fffcf1952e8c13b6fc7
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.3.2/publisher-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
     created: "2021-09-15T16:59:45.749801807Z"
     description: A Helm chart for GOV.UK Publisher
     digest: a9cb711e613ab976a3b4f0b802bbc1213397cfbe0662af5fde9d6e1fd0ab9ba4
@@ -90,6 +99,15 @@ entries:
     version: 0.2.0
   router:
   - apiVersion: v2
+    created: "2021-09-24T15:20:13.624830193Z"
+    description: A Helm chart for GOV.UK router
+    digest: 16f43fbf6c7f811172b77fa62458f7afd38bfa7eedb567353e1066cdf618d121
+    name: router
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/router-0.4.2/router-0.4.2.tgz
+    version: 0.4.2
+  - apiVersion: v2
     created: "2021-09-15T16:59:45.903653508Z"
     description: A Helm chart for GOV.UK router
     digest: f853d30359d6bcd5c6cf303980eeeb991afaa72cff7019565f87344b4b2205ca
@@ -116,6 +134,26 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/router-0.3.0/router-0.3.0.tgz
     version: 0.3.0
+  signon:
+  - apiVersion: v2
+    created: "2021-09-24T15:20:13.768416606Z"
+    description: A Helm chart for GOV.UK Signon
+    digest: 19cfc2ed4919de862ff30052c437c4762921e4e316fa554cc9f482e51ba6c01d
+    name: signon
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/signon-0.1.0/signon-0.1.0.tgz
+    version: 0.1.0
+  smokey:
+  - apiVersion: v2
+    created: "2021-09-24T15:20:13.918370822Z"
+    description: A Helm chart for GOV.UK Smokey
+    digest: 7771d8c7ad478172052f88ba4569024211d6c3cf94a00a295da36167b94574cf
+    name: smokey
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/smokey-0.1.0/smokey-0.1.0.tgz
+    version: 0.1.0
   static:
   - apiVersion: v2
     created: "2021-09-15T10:46:49.006404595Z"
@@ -136,4 +174,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-09-15T16:59:45.903677608Z"
+generated: "2021-09-24T15:20:13.918430223Z"
