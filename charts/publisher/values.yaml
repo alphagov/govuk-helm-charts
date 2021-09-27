@@ -27,7 +27,8 @@ nginxImage:
 nginxPort: 80
 appPort: 3000
 
-webResources: {}
+webResources:
+  {}
   # If you do want to specify resources, uncomment the following lines,
   # adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
@@ -37,7 +38,8 @@ webResources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
-workerResources: {}
+workerResources:
+  {}
   # If you do want to specify resources, uncomment the following lines,
   # adjust them as necessary, and remove the curly braces after 'resources:'.
   # limits:
@@ -70,8 +72,7 @@ appPlekServiceContentStoreUri:
 appPlekServicePublisherUri:
 appPlekServiceStaticUri:
 appRailsEnv: "production"
-appRedisUrl: "redis://redis.ecs.test.govuk-internal.digital:6379"    # TODO: decide on Redis for EKS
-
+appRedisUrl: "redis://redis.ecs.test.govuk-internal.digital:6379" # TODO: decide on Redis for EKS
 
 ## Extra environment variables to attach to Publisher Web container
 ##
@@ -84,7 +85,6 @@ appRedisUrl: "redis://redis.ecs.test.govuk-internal.digital:6379"    # TODO: dec
 # workerExtraEnv:
 #   - name: hello
 #     value: world
-
 
 ingress:
   enabled: true
