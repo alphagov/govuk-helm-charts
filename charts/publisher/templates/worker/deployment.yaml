@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ .Release.Name }}-worker
 spec:
-  replicas: {{ .Values.workerReplicaCount}}
+  replicas: {{ .Values.worker.replicas }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-worker
@@ -20,25 +20,25 @@ spec:
     spec:
       containers:
         - name: app
-          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
           command: ["foreman"]
           args: ["run", "worker"]
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-env
           env:
-          {{- range .Values.secrets }}
+          {{- range .Values.common.secrets.keys }}
             - name: {{ . | title }}
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Release.Name }}
                   key: {{ . | title }}
           {{- end }}
-          {{- with .Values.webExtraEnv }}
+          {{- with .Values.worker.extraEnv }}
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           resources:
-{{ toYaml .Values.webResources | indent 12 }}
+{{ toYaml .Values.worker.resources | indent 12 }}
           livenessProbe:
             exec:
               command:
