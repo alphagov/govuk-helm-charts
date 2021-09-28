@@ -8,11 +8,9 @@ metadata:
 spec:
   template:
     metadata:
-      name: "{{ .Release.Name }}"
+      name: {{ .Release.Name }}-dbmigrate-{{ now | unixEpoch }}
       labels:
-        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
-        app.kubernetes.io/instance: {{ .Release.Name | quote }}
-        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        {{- include "publisher.labels" . | nindent 8 }}
     spec:
       restartPolicy: Never
       containers:
