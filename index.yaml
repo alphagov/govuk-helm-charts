@@ -10,6 +10,15 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secret-store-0.1.0/cluster-secret-store-0.1.0.tgz
     version: 0.1.0
+  cluster-secrets:
+  - apiVersion: v2
+    created: "2021-09-28T16:35:08.880734831Z"
+    description: A Helm chart for defining ExternalSecrets for cluster-wide services.
+    digest: 5588d1a93cf88eaef043a7babe3a6625d6fe18c895fc5d1a1f818ed439a2de34
+    name: cluster-secrets
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.1.0/cluster-secrets-0.1.0.tgz
+    version: 0.1.0
   content-store:
   - apiVersion: v2
     created: "2021-09-15T10:46:48.131167652Z"
@@ -174,4 +183,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-09-24T15:20:13.918430223Z"
+generated: "2021-09-28T16:35:08.880798531Z"
