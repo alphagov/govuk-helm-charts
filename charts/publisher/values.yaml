@@ -12,7 +12,7 @@ common:
     tag: latest
 
   secrets:
-    prefix: "govuk/"
+    externalSecretRef:
     keys:
       - ASSET_MANAGER_BEARER_TOKEN
       - FACT_CHECK_PASSWORD
