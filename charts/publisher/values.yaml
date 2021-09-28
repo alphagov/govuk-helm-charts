@@ -53,7 +53,7 @@ common:
     plekServicePublisherUri:
     plekServiceStaticUri:
     railsEnv:
-    redisUrl: "redis://redis.ecs.test.govuk-internal.digital:6379" # TODO: decide on Redis for EKS
+    redisUrl: "redis://redis.ecs.test.govuk-internal.digital:6379"  # TODO: decide on Redis for EKS
 
 web:
   replicas: 1
