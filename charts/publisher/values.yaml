@@ -99,6 +99,8 @@ web:
   #  cpu: 100m
   #  memory: 128Mi
 
+  dbMigrationEnabled: true
+
 worker:
   replicas: 1
 
@@ -114,5 +116,3 @@ worker:
   # requests:
   #  cpu: 100m
   #  memory: 128Mi
-
-dbMigrationEnabled: true
