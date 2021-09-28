@@ -98,12 +98,6 @@ web:
   #  cpu: 100m
   #  memory: 128Mi
 
-  extraEnv: {}
-  # Extra environment variables to attach to Publisher Web container
-  #
-  #   - name: hello
-  #     value: world
-
 worker:
   replicas: 1
 
@@ -119,11 +113,5 @@ worker:
   # requests:
   #  cpu: 100m
   #  memory: 128Mi
-
-  extraEnv: {}
-  # Extra environment variables to attach to Publisher Worker container
-  #
-  #   - name: hello
-  #     value: world
 
 dbMigrationEnabled: true

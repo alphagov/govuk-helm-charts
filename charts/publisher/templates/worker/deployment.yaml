@@ -34,9 +34,6 @@ spec:
                   name: {{ $.Release.Name }}
                   key: {{ . | title }}
           {{- end }}
-          {{- with .Values.worker.extraEnv }}
-            {{- . | toYaml | trim | nindent 12 }}
-          {{- end }}
           resources:
 {{ toYaml .Values.worker.resources | indent 12 }}
           livenessProbe:

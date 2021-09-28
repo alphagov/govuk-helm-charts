@@ -37,9 +37,6 @@ spec:
                   name: {{ $.Release.Name }}
                   key: {{ . | title }}
           {{- end }}
-          {{- with .Values.web.extraEnv }}
-            {{- . | toYaml | trim | nindent 12 }}
-          {{- end }}
           resources:
 {{ toYaml .Values.web.resources | indent 12 }}
           livenessProbe:
