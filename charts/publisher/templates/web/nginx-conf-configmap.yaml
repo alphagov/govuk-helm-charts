@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-web-nginx-conf
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "web"
 data:
   nginx.conf: |-
     user  nginx;

@@ -4,6 +4,7 @@ metadata:
   name: {{ .Release.Name }}-worker
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "worker"
     app: {{ .Release.Name }}-worker
 spec:
   replicas: {{ .Values.worker.replicas }}
