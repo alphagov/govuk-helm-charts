@@ -51,7 +51,7 @@ common:
     plekServiceContentStoreUri:
     plekServicePublisherUri:
     plekServiceStaticUri:
-    railsEnv: "production"
+    railsEnv:
     redisUrl: "redis://redis.ecs.test.govuk-internal.digital:6379" # TODO: decide on Redis for EKS
 
 web:
