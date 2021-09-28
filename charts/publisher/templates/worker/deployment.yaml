@@ -14,6 +14,8 @@ spec:
   template:
     metadata:
       labels:
+        {{- include "publisher.labels" . | nindent 8 }}
+        app.kubernetes.io/component: "worker"
         app: {{ .Release.Name }}-worker
       annotations:
         # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced
