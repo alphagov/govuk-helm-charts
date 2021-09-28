@@ -23,7 +23,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ .Values.web.ingress.host | default (printf "publisher-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}
+    - host: {{ .Values.web.ingress.host | default (printf "publisher-%s.eks.%s.%s" .Release.Namespace .Values.common.govukEnvironment .Values.common.govukDomainExternal ) }}
       http:
         paths:
           - path: {{ .Values.web.ingress.path }}

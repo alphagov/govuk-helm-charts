@@ -1,12 +1,11 @@
 # Default values for Publisher.
 
-govukEnvironment: test
-govukDomainExternal: govuk.digital
-govukDomainInternal: govuk-internal.digital
-clusterDomain: svc.cluster.local
-
 # Values common to both Web and Worker deployments
 common:
+  govukEnvironment: test
+  govukDomainExternal: govuk.digital
+  govukDomainInternal: svc.cluster.local
+
   image: &commonImage
     repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
     pullPolicy: Always
@@ -41,7 +40,6 @@ common:
     factCheckSubjectPrefix: "dev"
     factCheckUsername: "govuk-fact-check-test@digital.cabinet-office.gov.uk"
     govukAppDomain:
-    govukDomainExternal:
     govukAppName:
     govukAppRoot: "/app"
     govukAppType: "rack"
