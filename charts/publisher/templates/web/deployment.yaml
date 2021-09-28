@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-web
   labels:
+    {{- include "publisher.labels" . | nindent 4 }}
     app: {{ .Release.Name }}-web
 spec:
   replicas: {{ .Values.web.replicas }}

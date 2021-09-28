@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-worker
   labels:
+    {{- include "publisher.labels" . | nindent 4 }}
     app: {{ .Release.Name }}-worker
 spec:
   replicas: {{ .Values.worker.replicas }}

@@ -3,6 +3,8 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Release.Name }}-dbmigrate-{{ now | unixEpoch }}
+  labels:
+    {{- include "publisher.labels" . | nindent 4 }}
 spec:
   template:
     metadata:
