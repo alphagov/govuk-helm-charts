@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: frontend.rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: frontend
+    rules:
+    - alert: FrontendNoPodsRunning
+      annotations:
+        description: "Frontend has no pods running in namespace {{ "{{" }} $labels.namespace }}"
+      expr: |-
+        count by (namespace)(kube_pod_container_status_running{container="frontend", namespace="{{ .Release.Namespace }}"}) < 1
+      for: 5m
+      labels:
+        severity: warning
+    # Note: this alert does not necessarily represent best practice
+    - alert: FrontendNotDeployedSuccessfully
+      annotations:
+        description: "Frontend has not deployed successfully in namespace {{ "{{" }} $labels.namespace }}"
+      expr: |-
+        (kube_deployment_status_condition{deployment="frontend", condition="ReplicaFailure", status="true", namespace="{{ .Release.Namespace }}"} == 
+        on(namespace) kube_deployment_status_condition{deployment="frontend", condition="Progressing", status="false"})==1
+      for: 5m
+      labels:
+        severity: warning
