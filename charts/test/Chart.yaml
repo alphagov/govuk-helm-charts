@@ -1,0 +1,5 @@
+apiVersion: v2
+name: test
+description: A Helm chart for a Test app to explore deployment workflows.
+type: application
+version: 0.1.0
