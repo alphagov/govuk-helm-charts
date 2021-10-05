@@ -18,11 +18,11 @@ appImage:
   tag: latest
 
 nginxImage:
-  repository: nginx
+  repository: nginxinc/nginx-unprivileged
   pullPolicy: Always
   tag: stable
 
-nginxPort: 80
+nginxPort: 8080
 appPort: 3000
 
 resources: {}

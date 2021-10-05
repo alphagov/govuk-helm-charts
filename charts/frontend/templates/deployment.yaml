@@ -14,6 +14,8 @@ spec:
       labels:
         app: {{ .Release.Name }}
     spec:
+      securityContext:
+        runAsNonRoot: true
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -53,6 +55,8 @@ spec:
               value: "{{ .Values.appPort }}"
             - name: RAILS_ENV
               value: "{{ .Values.appRailsEnv }}"
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
             - name: SECRET_KEY_BASE
               value: "secret" #TODO: fix when we know how to handle secrets
           {{- with .Values.appExtraEnv }}
@@ -72,6 +76,10 @@ spec:
               port: http
             initialDelaySeconds: 30
             periodSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 2000
+            runAsGroup: 3000
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
@@ -97,7 +105,11 @@ spec:
           - name: {{ .Release.Name }}-nginx-conf
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
+          - name: tmp
+            mountPath: /tmp
       volumes:
+      - name: tmp
+        emptyDir: {}
       - name: {{ .Release.Name }}-nginx-conf 
         configMap:
           name: {{ .Release.Name }}-nginx-conf

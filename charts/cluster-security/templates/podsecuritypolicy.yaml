@@ -1,5 +1,6 @@
 # Based on the baseline PodSecurityPolicy from https://kubernetes.io/docs/concepts/policy/pod-security-policy/#recommended-practice.
 # This is the recommended approach to simplify upgrading to the PodSecurity admission controller by Kubernetes v1.25.
+# TODO: Revise this PSP to ensure it's what we want in production (such as the allowedCapabilities)
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
