@@ -13,7 +13,7 @@ common:
 
   secrets:
     externalSecretRef:
-    externalSecretRefreshInterval: "5m"
+    externalSecretRefreshInterval: "60m"
     keys:
       - ASSET_MANAGER_BEARER_TOKEN
       - FACT_CHECK_PASSWORD
