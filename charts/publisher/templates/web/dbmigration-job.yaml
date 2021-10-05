@@ -1,15 +1,16 @@
 {{- if .Values.web.dbMigrationEnabled -}}
+{{- $jobName := print .Release.Name "-dbmigrate-" (now | date "20060102150405") -}}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-dbmigrate-{{ now | unixEpoch }}
+  name: {{ $jobName }}
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
     app.kubernetes.io/component: "web"
 spec:
   template:
     metadata:
-      name: {{ .Release.Name }}-dbmigrate-{{ now | unixEpoch }}
+      name: {{ $jobName }}
       labels:
         {{- include "publisher.labels" . | nindent 8 }}
         app.kubernetes.io/component: "web"
