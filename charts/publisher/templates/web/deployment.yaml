@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}"
+          image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
           command: ["foreman"]
           args: ["run", "web"]
           ports:

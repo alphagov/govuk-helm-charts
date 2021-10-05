@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
+          image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
           command: ["foreman"]
           args: ["run", "worker"]
           envFrom:
