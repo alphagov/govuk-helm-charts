@@ -28,5 +28,5 @@ data:
   PLEK_SERVICE_SIGNON_URI: "{{ .Values.common.env.plekServiceSignonUri | default (printf "https://signon-%s.eks.%s.%s" .Release.Namespace .Values.common.govukEnvironment .Values.common.env.govukDomainExternal) }}"
   PLEK_SERVICE_STATIC_URI: "{{ .Values.common.env.plekServiceStaticUri | default (printf "http://static.%s.%s" .Release.Namespace .Values.common.govukDomainInternal) }}"
   PORT: "{{ .Values.web.port }}"
-  RAILS_ENV: "{{ .Values.common.env.railsEnv | default .Values.common.govukEnvironment }}"
+  RAILS_ENV: "{{ .Values.common.env.railsEnv  }}"
   REDIS_URL: "{{ .Values.common.env.redisUrl }}"    # TODO: decide on Redis for EKS
