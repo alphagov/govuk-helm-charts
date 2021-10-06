@@ -1,0 +1,4 @@
+apiVersion: v2
+name: cluster-security
+description: A Helm chart defining the cluster-wide Pod Security Policy (PSP) to enforce pod security specifications.
+version: 0.1.0
