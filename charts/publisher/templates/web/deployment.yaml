@@ -3,15 +3,19 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-web
   labels:
+    {{- include "publisher.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "web"
     app: {{ .Release.Name }}-web
 spec:
-  replicas: {{ .Values.webReplicaCount}}
+  replicas: {{ .Values.web.replicas }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-web
   template:
     metadata:
       labels:
+        {{- include "publisher.labels" . | nindent 8 }}
+        app.kubernetes.io/component: "web"
         app: {{ .Release.Name }}-web
       annotations:
         # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced
@@ -20,28 +24,25 @@ spec:
     spec:
       containers:
         - name: app
-          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
           command: ["foreman"]
           args: ["run", "web"]
           ports:
             - name: http
-              containerPort: {{ .Values.appPort }}
+              containerPort: {{ .Values.web.port }}
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-env
           env:
-          {{- range .Values.secrets }}
+          {{- range .Values.common.secrets.keys }}
             - name: {{ . | title }}
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Release.Name }}
                   key: {{ . | title }}
           {{- end }}
-          {{- with .Values.webExtraEnv }}
-            {{- . | toYaml | trim | nindent 12 }}
-          {{- end }}
           resources:
-{{ toYaml .Values.webResources | indent 12 }}
+{{ toYaml .Values.web.resources | indent 12 }}
           livenessProbe:
             httpGet:
               path: /healthcheck/live
@@ -55,10 +56,10 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 5
         - name: nginx
-          image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
+          image: "{{ .Values.web.nginx.image.repository }}:{{ .Values.web.nginx.image.tag }}"
           ports:
             - name: http
-              containerPort: {{ .Values.nginxPort }}
+              containerPort: {{ .Values.web.nginx.port }}
           livenessProbe:
             tcpSocket:
               port: http

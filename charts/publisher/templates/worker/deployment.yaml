@@ -3,15 +3,19 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-worker
   labels:
+    {{- include "publisher.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "worker"
     app: {{ .Release.Name }}-worker
 spec:
-  replicas: {{ .Values.workerReplicaCount}}
+  replicas: {{ .Values.worker.replicas }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-worker
   template:
     metadata:
       labels:
+        {{- include "publisher.labels" . | nindent 8 }}
+        app.kubernetes.io/component: "worker"
         app: {{ .Release.Name }}-worker
       annotations:
         # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced
@@ -20,25 +24,22 @@ spec:
     spec:
       containers:
         - name: app
-          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
           command: ["foreman"]
           args: ["run", "worker"]
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-env
           env:
-          {{- range .Values.secrets }}
+          {{- range .Values.common.secrets.keys }}
             - name: {{ . | title }}
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Release.Name }}
                   key: {{ . | title }}
           {{- end }}
-          {{- with .Values.webExtraEnv }}
-            {{- . | toYaml | trim | nindent 12 }}
-          {{- end }}
           resources:
-{{ toYaml .Values.webResources | indent 12 }}
+{{ toYaml .Values.worker.resources | indent 12 }}
           livenessProbe:
             exec:
               command:
