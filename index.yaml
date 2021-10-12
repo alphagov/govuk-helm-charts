@@ -80,6 +80,15 @@ entries:
     version: 0.1.0
   publisher:
   - apiVersion: v2
+    created: "2021-10-12T16:05:53.586299641Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: 065c874e711bc64f8f9a8443e7a205c9897bdcff760d4114e32bcb1280acbc78
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.5.0/publisher-0.5.0.tgz
+    version: 0.5.0
+  - apiVersion: v2
     created: "2021-10-06T10:00:21.915527612Z"
     description: A Helm chart for GOV.UK Publisher
     digest: dc623617a17fbc335633895394099ad68f625d12d16414b2f060438b0900f983
@@ -201,4 +210,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-10-06T10:00:21.915582015Z"
+generated: "2021-10-12T16:05:53.586353744Z"
