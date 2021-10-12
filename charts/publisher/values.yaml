@@ -12,7 +12,7 @@ common:
     tag: latest
 
   secrets:
-    externalSecretRef:
+    externalSecretRef: govuk/publisher
     externalSecretRefreshInterval: "60m"
     keys:
       - ASSET_MANAGER_BEARER_TOKEN
