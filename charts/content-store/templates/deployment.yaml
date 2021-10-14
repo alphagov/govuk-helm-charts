@@ -20,6 +20,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
+          command: ["bundle"]
+          args: ["exec", "puma"]
           env:
             - name: DEFAULT_TTL
               value: "{{ .Values.appDefaultTtl }}"

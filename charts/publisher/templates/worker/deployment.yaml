@@ -25,8 +25,8 @@ spec:
       containers:
         - name: app
           image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
-          command: ["foreman"]
-          args: ["run", "worker"]
+          command: ["bundle"]
+          args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-env

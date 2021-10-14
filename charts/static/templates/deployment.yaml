@@ -20,6 +20,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
+          command: ["bundle"]
+          args: ["exec", "puma"]
           env:
             - name: GOVUK_APP_DOMAIN
               value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
