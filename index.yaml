@@ -19,6 +19,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.1.0/cluster-secrets-0.1.0.tgz
     version: 0.1.0
+  cluster-security:
+  - apiVersion: v2
+    created: "2021-10-15T10:19:01.896172457Z"
+    description: A Helm chart defining the cluster-wide Pod Security Policy (PSP)
+      to enforce pod security specifications.
+    digest: 6657ab8df11a45468e3bca5d42f09de804447b3c38857c3acff6493f4cf86239
+    name: cluster-security
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-security-0.1.0/cluster-security-0.1.0.tgz
+    version: 0.1.0
   content-store:
   - apiVersion: v2
     created: "2021-09-15T10:46:48.131167652Z"
@@ -40,6 +50,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.3.0/content-store-0.3.0.tgz
     version: 0.3.0
   frontend:
+  - apiVersion: v2
+    created: "2021-10-15T10:19:02.145753874Z"
+    description: A Helm chart for GOV.UK Frontend
+    digest: e25e0a87d2c97f29a2b9288ac3c62bc81c88d66de6883182ee669db5a85a9018
+    name: frontend
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/frontend-0.5.0/frontend-0.5.0.tgz
+    version: 0.5.0
   - apiVersion: v2
     created: "2021-10-01T09:50:02.107447887Z"
     description: A Helm chart for GOV.UK Frontend
@@ -210,4 +229,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-10-12T16:05:53.586353744Z"
+generated: "2021-10-15T10:19:02.145792975Z"
