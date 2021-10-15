@@ -20,6 +20,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
+          command: ["bundle"]
+          args: ["exec", "puma"]
           env:
             - name: ASSET_HOST
               value: "{{ .Values.appAssetHost | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"

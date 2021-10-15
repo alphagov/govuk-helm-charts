@@ -20,6 +20,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
+          command: ["bundle"]
+          args: ["exec", "puma"]
           env:
             - name: GOVUK_APP_DOMAIN
               value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
@@ -38,7 +40,7 @@ spec:
             - name: PORT
               value: "{{ .Values.appPort }}"
             - name: RAILS_ENV
-              value: "{{ .Values.govukEnvironment }}"
+              value: "{{ .Values.appRailsEnv }}"
             - name: REDIS_URL
               value: "{{ .Values.appRedisUrl | default (printf "redis://redis.ecs.%s.%s:6379" .Values.govukEnvironment .Values.govukDomainExternal) }}" #TODO: use EKS Redis cluster
             - name: GOVUK_APP_ROOT

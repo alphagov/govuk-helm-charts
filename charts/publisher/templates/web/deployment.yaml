@@ -25,8 +25,8 @@ spec:
       containers:
         - name: app
           image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
-          command: ["foreman"]
-          args: ["run", "web"]
+          command: ["bundle"]
+          args: ["exec", "puma"]
           ports:
             - name: http
               containerPort: {{ .Values.web.port }}

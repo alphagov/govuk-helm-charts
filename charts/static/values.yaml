@@ -46,6 +46,7 @@ appGovukAssetRoot:
 appRedisUrl:
 appGovukAppRoot: "/var/apps/static"
 appGovukAppType: "rack"
+appRailsEnv: "production"
 
 ## Extra environment variables to attach to application container
 ##
