@@ -1,6 +1,7 @@
 govukEnvironment: test
 
 applications:
+- name: cluster-secrets
 - name: publisher
   helm:
     parameters:
