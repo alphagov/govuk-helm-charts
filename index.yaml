@@ -31,6 +31,15 @@ entries:
     version: 0.1.0
   content-store:
   - apiVersion: v2
+    created: "2021-10-18T14:50:25.55927578Z"
+    description: A Helm chart for GOV.UK Content-Store
+    digest: b87aff838d5b6c46538f301a4f89e34c37d567000f425c0d5b8bc6fb46adab6a
+    name: content-store
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.4.1/content-store-0.4.1.tgz
+    version: 0.4.1
+  - apiVersion: v2
     created: "2021-10-15T10:25:10.53435874Z"
     description: A Helm chart for GOV.UK Content-Store
     digest: 3b6bca57f72be59a0c8c78573be26d93b85c4547011f1d35611bc357d4f5f86a
@@ -59,6 +68,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.3.0/content-store-0.3.0.tgz
     version: 0.3.0
   frontend:
+  - apiVersion: v2
+    created: "2021-10-18T14:50:25.718920032Z"
+    description: A Helm chart for GOV.UK Frontend
+    digest: 61da798c7b4a51fd3b544c6e8a0787f8fa1ddab675cb3bcc9f22f72836ba43ec
+    name: frontend
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/frontend-0.6.1/frontend-0.6.1.tgz
+    version: 0.6.1
   - apiVersion: v2
     created: "2021-10-15T10:25:10.679629887Z"
     description: A Helm chart for GOV.UK Frontend
@@ -116,6 +134,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.0/ingress-class-0.1.0.tgz
     version: 0.1.0
   publisher:
+  - apiVersion: v2
+    created: "2021-10-18T14:50:25.864513379Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: f7e84340d580e7d6fd017f2c8949679302534053294ca94b482d6f4073776879
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.6.1/publisher-0.6.1.tgz
+    version: 0.6.1
   - apiVersion: v2
     created: "2021-10-15T10:25:10.81695417Z"
     description: A Helm chart for GOV.UK Publisher
@@ -218,6 +245,15 @@ entries:
     version: 0.3.0
   signon:
   - apiVersion: v2
+    created: "2021-10-18T14:50:26.012357927Z"
+    description: A Helm chart for GOV.UK Signon
+    digest: 1a53537ff59ed7ed724aa0470649cdf2802f5eea4894cf127b566206495257d5
+    name: signon
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/signon-0.2.1/signon-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
     created: "2021-10-15T10:25:10.970023378Z"
     description: A Helm chart for GOV.UK Signon
     digest: d80c48dae7fd1e9b52e59de886ab1caf672a44a2806350eb4b0ba3c5634bede0
@@ -247,6 +283,15 @@ entries:
     version: 0.1.0
   static:
   - apiVersion: v2
+    created: "2021-10-18T14:50:26.170740179Z"
+    description: A Helm chart for GOV.UK Static
+    digest: 275f263a53d52771947d1375d5d58f5248eff43ec54fb4b46dab702880de5239
+    name: static
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.4.1/static-0.4.1.tgz
+    version: 0.4.1
+  - apiVersion: v2
     created: "2021-10-15T10:25:11.09579147Z"
     description: A Helm chart for GOV.UK Static
     digest: 8bf75857a10acb5fabe93d1db7f5deeb941cc72ef9e57c9f01c8ccde32b8e7b7
@@ -274,4 +319,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-10-15T10:25:11.095895571Z"
+generated: "2021-10-18T14:50:26.170830679Z"
