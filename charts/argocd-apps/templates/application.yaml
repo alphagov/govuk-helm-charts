@@ -1,0 +1,40 @@
+{{- range .Values.applications }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  namespace: cluster-services
+  finalizers:
+  # TODO: Disable this finalizer in production –
+  # deleting this Application will delete its resources (pods etc.)
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: govuk
+  source:
+    repoURL: 'git@github.com/alphagov/govuk-helm-charts'
+    path: "{{ .chartPath | default (printf "charts/%s" .name) }}"
+    targetRevision: {{ .targetRevision | default "HEAD" }}
+
+    # Helm overrides specific to environment
+    # Same as setting through values.yaml, but these take precedence.
+{{ if .helm }}
+    helm:
+      {{ if .helm.parameters }}
+      parameters:
+        {{- .helm.parameters | toYaml | trim | nindent 6 }}
+      {{- end }}
+{{- end }}
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+---
+{{- end }}

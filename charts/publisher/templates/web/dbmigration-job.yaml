@@ -7,6 +7,7 @@ metadata:
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
     app.kubernetes.io/component: "web"
+    argocd.argoproj.io/hook: PreSync
 spec:
   template:
     metadata:

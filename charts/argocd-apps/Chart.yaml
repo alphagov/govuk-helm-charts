@@ -1,0 +1,5 @@
+# https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/
+apiVersion: v2
+name: argocd-apps
+description: Installs ArgoCD applications into the cluster-services namespace
+version: 0.1.2
