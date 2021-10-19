@@ -1,0 +1,5 @@
+apiVersion: v2
+name: deploy-smoke-test
+description: A library chart to run smoke tests after a deployment
+type: library
+version: 0.0.1

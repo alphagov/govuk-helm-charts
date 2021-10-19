@@ -6,6 +6,7 @@ spec:
   template:
     spec:
       containers:
+      # TODO: Smokey needs credentials from the smokey Secret
       - name: smokey
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command: ["bundle", "exec", "cucumber", "--profile", "test", "--strict-undefined", "-t", "@app-frontend", "-t", "@replatforming", "-t", "not @notreplatforming and not @nottest"]
@@ -19,4 +20,3 @@ spec:
       restartPolicy: Never
   ttlSecondsAfterFinished: {{ .Values.jobTtl }}
   backoffLimit: 4
-

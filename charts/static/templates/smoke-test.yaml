@@ -1,0 +1,7 @@
+{{ include "deploy-smoke-test.job" (
+  merge (dict
+  "govukEnvironment" .Values.govukEnvironment
+  "govukDomainExternal" .Values.govukDomainExternal
+  "govukDomainInternal" .Values.govukDomainInternal
+  ) .)
+}}

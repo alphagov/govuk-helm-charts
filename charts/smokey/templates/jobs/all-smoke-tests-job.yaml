@@ -28,8 +28,17 @@ spec:
           valueFrom:
             secretKeyRef:
               name: smokey
-              key: password
+              key: signon_password
+        - name: AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: smokey
+              key: auth_username
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smokey
+              key: auth_password
       restartPolicy: Never
   ttlSecondsAfterFinished: 3600
   backoffLimit: 4
-

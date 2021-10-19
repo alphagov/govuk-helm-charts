@@ -4,33 +4,34 @@ metadata:
   name: all-smoke-tests
 spec:
   schedule: "*/15 * * * *"
-  template:
+  jobTemplate:
     spec:
-      containers:
-      - name: smokey
-        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-        command: ["bundle", "exec", "cucumber", "--profile", "test", "--strict-undefined", "-t", "@replatforming", "-t", "not @notreplatforming and not @nottest"]
-        env:
-        - name: ENVIRONMENT
-          value: "{{ .Values.govukEnvironment }}"
-        - name: GOVUK_APP_DOMAIN
-          value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
-        - name: GOVUK_WEBSITE_ROOT
-          value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
-        - name: PLEK_SERVICE_PUBLISHER_URI
-          value: "{{ .Values.appPlekServicePublisherUri | default (printf "http://publisher-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
-        - name: PLEK_SERVICE_FRONTEND_URI
-          value: "{{ .Values.appPlekServiceFrontendUri | default (printf "http://frontend.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
-        - name: PLEK_SERVICE_SIGNON_URI
-          value: "{{ .Values.appPlekServiceSignonUri | default (printf "http://signon-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
-        - name: SIGNON_EMAIL
-          value: "signon@alphagov.co.uk"
-        - name: SIGNON_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: smokey
-              key: password
-      restartPolicy: Never
-  ttlSecondsAfterFinished: 3600
-  backoffLimit: 4
-
+      template:
+        spec:
+          containers:
+          - name: smokey
+            image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+            command: ["bundle", "exec", "cucumber", "--profile", "test", "--strict-undefined", "-t", "@replatforming", "-t", "not @notreplatforming and not @nottest"]
+            env:
+            - name: ENVIRONMENT
+              value: "{{ .Values.govukEnvironment }}"
+            - name: GOVUK_APP_DOMAIN
+              value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
+            - name: GOVUK_WEBSITE_ROOT
+              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: PLEK_SERVICE_PUBLISHER_URI
+              value: "{{ .Values.appPlekServicePublisherUri | default (printf "http://publisher-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: PLEK_SERVICE_FRONTEND_URI
+              value: "{{ .Values.appPlekServiceFrontendUri | default (printf "http://frontend.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
+            - name: PLEK_SERVICE_SIGNON_URI
+              value: "{{ .Values.appPlekServiceSignonUri | default (printf "http://signon-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: SIGNON_EMAIL
+              value: "signon@alphagov.co.uk"
+            - name: SIGNON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: smokey
+                  key: password
+          restartPolicy: Never
+      ttlSecondsAfterFinished: 3600
+      backoffLimit: 4
