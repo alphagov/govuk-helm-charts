@@ -1,5 +1,23 @@
 apiVersion: v1
 entries:
+  argocd-apps:
+  - apiVersion: v2
+    created: "2021-10-19T11:54:52.924192431Z"
+    description: Installs ArgoCD applications into the cluster-services namespace
+    digest: e0df1363dd052a485848f966deda9c0fc264da9adb5f9e06db1b4ec9734d59ef
+    name: argocd-apps
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-apps-0.1.2/argocd-apps-0.1.2.tgz
+    version: 0.1.2
+  argocd-config:
+  - apiVersion: v2
+    created: "2021-10-19T11:54:53.118582686Z"
+    description: Installs ArgoCD Repositories, Projects, and the argocd-apps chart
+    digest: dabbec4666129ba45fe6b5721fbbd3119db175c7bbbf0ccc0b75590137e60bb2
+    name: argocd-config
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-config-0.1.2/argocd-config-0.1.2.tgz
+    version: 0.1.2
   cluster-secret-store:
   - apiVersion: v3
     created: "2021-09-15T08:17:10.995615759Z"
@@ -11,6 +29,14 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secret-store-0.1.0/cluster-secret-store-0.1.0.tgz
     version: 0.1.0
   cluster-secrets:
+  - apiVersion: v2
+    created: "2021-10-19T11:54:53.327376722Z"
+    description: A Helm chart for defining ExternalSecrets for cluster-wide services.
+    digest: 72b6230c115ac05fded1cee0fe6cb852e8aaf4a618d633f1a157de5e46b27dc3
+    name: cluster-secrets
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.2.0/cluster-secrets-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v2
     created: "2021-09-28T16:35:08.880734831Z"
     description: A Helm chart for defining ExternalSecrets for cluster-wide services.
@@ -134,6 +160,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.0/ingress-class-0.1.0.tgz
     version: 0.1.0
   publisher:
+  - apiVersion: v2
+    created: "2021-10-19T11:54:53.535073444Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: 1a9cfd5f41de495c91e5128904fd4510a2fe67a9b8d767602e37f720879d5adf
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.7.0/publisher-0.7.0.tgz
+    version: 0.7.0
   - apiVersion: v2
     created: "2021-10-18T14:50:25.864513379Z"
     description: A Helm chart for GOV.UK Publisher
@@ -319,4 +354,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-10-18T14:50:26.170830679Z"
+generated: "2021-10-19T11:54:53.535151545Z"
