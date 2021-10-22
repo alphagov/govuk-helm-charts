@@ -49,6 +49,8 @@ spec:
               value: "{{ .Values.appPort }}"
             - name: RAILS_ENV
               value: "{{ .Values.appRailsEnv }}"
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
             - name: SECRET_KEY_BASE
               value: "secret" #TODO: fix when we know how to handle secrets
           {{- with .Values.appExtraEnv }}
