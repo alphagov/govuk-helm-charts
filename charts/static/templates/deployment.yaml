@@ -39,6 +39,8 @@ spec:
               value: "{{ .Values.appPort }}"
             - name: RAILS_ENV
               value: "{{ .Values.appRailsEnv }}"
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
             - name: REDIS_URL
               value: "{{ .Values.appRedisUrl | default (printf "redis://redis.ecs.%s.%s:6379" .Values.govukEnvironment .Values.govukDomainExternal) }}" #TODO: use EKS Redis cluster
             - name: GOVUK_APP_ROOT
