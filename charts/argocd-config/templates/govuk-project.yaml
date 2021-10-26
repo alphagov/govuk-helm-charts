@@ -6,6 +6,8 @@ metadata:
   finalizers:
     # Ensure that project is not deleted until it is not referenced by any application
     - resources-finalizer.argocd.argoproj.io
+  annotations:
+    notifications.argoproj.io/subscribe.sync-operation-change.slack_webhook: ""
 spec:
   description: ArgoCD project containing GOV.UK applications.
 
