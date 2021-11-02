@@ -19,4 +19,4 @@ spec:
         args: ["Smoke test run for app: {{"{{inputs.parameters.application}}"}} in env $(ENVIRONMENT)"]
         env:
         - name: ENVIRONMENT
-          value: "{{ .govukEnvironment }}"
+          value: "{{ .Values.govukEnvironment }}"
