@@ -15,8 +15,8 @@ spec:
         tasks:
           - name: smoke-test-runner
             templateRef:
-              template: smoke-test # TODO: Can't find it
               name: smoke-test # TODO: Can't find it
+              template: smoke-test-template-runner # TODO: Can't find it
             # templates.handle-sync-event.tasks.smoke-test-runner failed to get a template
             arguments:
               parameters:
