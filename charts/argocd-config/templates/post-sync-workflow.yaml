@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: post-sync
+spec:
+  entrypoint: handle-sync-event
+  arguments:
+    parameters:
+      # NOTE: template parameters are overridden by the calling Sensor
+      - name: application
+        value:
+  templates:
+    - name: handle-sync-event
+      dag:
+        tasks:
+          - name: smoke-test
+            workflowTemplateRef: smoke-test
+            arguments:
+              parameters:
+                - name: application
+                  value: "{{
+                    "{{workflow.parameters.application}}"
+                  }}"
+          - name: slack-notify-failure
+            depends: smoke-test
+            templateRef: slack-notify-failure
+            # TODO: Slack notification trigger Workflow
+            when: "{{
+              "{{tasks.smoke-test.outputs.result}} != success"
+            }}"
+            arguments:
+              parameters:
+                - name: application
+                  value: "{{
+                    "{{workflow.parameters.application}}"
+                  }}"

@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  name: test-cron-wf
+spec:
+  schedule: "* * * * *"
+  concurrencyPolicy: "Replace"
+  startingDeadlineSeconds: 0
+  workflowSpec:
+    entrypoint: whalesay
+    templates:
+    - name: whalesay
+      container:
+        image: alpine:3.6
+        command: [sh, -c]
+        args: ["date; sleep 90"]
+
+# TODO: Should call smokey workflow template

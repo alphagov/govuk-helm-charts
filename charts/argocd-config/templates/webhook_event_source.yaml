@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: webhook
+spec:
+  # TODO: service should be replaced before production
+  # https://argoproj.github.io/argo-events/eventsources/services/
+  service:
+    ports:
+      - port: 12000
+        targetPort: 12000
+  webhook:
+    argocd:
+      port: "12000"
+      endpoint: /argocd
+      method: POST

@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: webhook
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  dependencies:
+  - name: argocd-sync-notification
+    eventSourceName: webhook
+    eventName: argocd
+  triggers:
+  - template:
+      name: trigger
+      argoWorkflow:
+        group: argoproj.io
+        version: v1alpha1
+        resource: workflows
+        operation: submit
+        parameters:
+          - dest: spec.arguments.parameters.0.value
+            src:
+              dependencyName: argocd-sync-notification
+              dataKey: application
+        source:
+          resource:
+            # TODO: Use https://argoproj.github.io/argo-workflows/workflow-templates/
+            apiVersion: argoproj.io/v1alpha1
+            kind: Workflow
+            metadata:
+              generateName: argo-sync-notification-
+            spec:
+              arguments:
+                parameters:
+                - name: application
+                  value: # overridden by argocd-sync-notification payload
+              workflowTemplateRef:
+                name: post-sync
