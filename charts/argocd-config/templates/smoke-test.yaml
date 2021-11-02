@@ -9,7 +9,7 @@ spec:
       - name: application
         value: # TODO: overridden
   templates:
-    - name: smoke-test
+    - name: smoke-test-template-runner
       inputs:
         parameters:
           - name: application
