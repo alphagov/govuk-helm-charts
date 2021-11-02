@@ -14,9 +14,12 @@ spec:
         parameters:
           - name: application
       container:
-        image: docker/whalesay
-        command: [cowsay]
-        args: ["Smoke test run for app: {{"{{inputs.parameters.application}}"}} in env $(ENVIRONMENT)"]
+        image: "{{ .Values.smokeyImage.repository }}:{{ .Values.smokeyImage.tag }}"
+        command: ["bundle", "exec", "cucumber", "--profile", "test", "--strict-undefined", "-t", "@app-{{"{{inputs.parameters.application}}"}}", "-t", "@replatforming", "-t", "not @notreplatforming and not @nottest"]
         env:
         - name: ENVIRONMENT
           value: "{{ .Values.govukEnvironment }}"
+        - name: GOVUK_APP_DOMAIN
+          value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
+        - name: GOVUK_WEBSITE_ROOT
+          value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"

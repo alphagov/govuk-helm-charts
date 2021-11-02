@@ -4,6 +4,7 @@ metadata:
   name: post-sync
 spec:
   entrypoint: handle-sync-event
+  onExit: exit-handler
   arguments:
     parameters:
       # NOTE: template parameters are overridden by the calling Sensor
@@ -24,3 +25,29 @@ spec:
                   value: "{{
                     "{{workflow.parameters.application}}"
                   }}"
+    - name: exit-handler
+      steps:
+      - - name: notify
+          template: send-slack
+    - name: send-slack
+      container:
+        image: curlimages/curl
+        command:
+          - "curl"
+          - "-X"
+          - "POST"
+          - "--data-urlencode"
+          - >
+              payload={
+                "channel": "#govuk-deploy-alerts",
+                "username": "argocd",
+                "text": "smokey test for {{"{{workflow.parameters.application}}"}} has status {{"{{workflow.status}}"}} :deployparrot:",
+                "icon_emoji": ":kubernetes:"
+              }
+          - "$(SLACK_WEBHOOK_ENDPOINT)"
+        env:
+          - name: SLACK_WEBHOOK_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: slack-webhook-url
+                key: url
