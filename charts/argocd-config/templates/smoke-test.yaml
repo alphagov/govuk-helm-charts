@@ -16,7 +16,7 @@ spec:
       container:
         image: docker/whalesay
         command: [cowsay]
-        args: ["Smoke test run for app: {{"{{inputs.parameters.application}}"}} in env ${ENVIRONMENT}"]
+        args: ["Smoke test run for app: {{"{{inputs.parameters.application}}"}} in env {{ .govukEnvironment }}"]
         env:
         - name: ENVIRONMENT
           value: "{{ .govukEnvironment }}"
