@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: smoke-test
+spec:
+  entrypoint: smoke-test
+  arguments:
+    parameters:
+      - name: application
+        value: # TODO: overridden
+  templates:
+    - name: smoke-test
+      inputs:
+        parameters:
+          - name: application
+      container:
+        image: docker/whalesay
+        command: [cowsay]
+        args: ["Smoke test run for app: {{"{{inputs.parameters.application}}"}} in env ${ENVIRONMENT}"]
+        env:
+        - name: ENVIRONMENT
+          value: "{{ .govukEnvironment }}"
