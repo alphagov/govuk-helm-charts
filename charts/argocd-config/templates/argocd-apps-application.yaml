@@ -8,6 +8,7 @@ spec:
   source:
     repoURL: 'git@github.com/alphagov/govuk-helm-charts'
     path: charts/argocd-apps
+    targetRevision: bilbof/post-deploy-smoke
 
     helm:
       valueFiles:
