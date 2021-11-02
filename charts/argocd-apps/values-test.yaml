@@ -3,6 +3,7 @@ govukEnvironment: test
 applications:
 - name: cluster-secrets
 - name: smokey
+  targetRevision: bilbof/post-deploy-smoke
   helm:
     parameters:
     - name: govukEnvironment

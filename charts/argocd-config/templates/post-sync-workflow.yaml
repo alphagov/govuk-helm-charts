@@ -21,16 +21,3 @@ spec:
                   value: "{{
                     "{{workflow.parameters.application}}"
                   }}"
-          - name: slack-notify-failure
-            depends: smoke-test
-            templateRef: slack-notify-failure
-            # TODO: Slack notification trigger Workflow
-            when: "{{
-              "{{tasks.smoke-test.outputs.result}} != success"
-            }}"
-            arguments:
-              parameters:
-                - name: application
-                  value: "{{
-                    "{{workflow.parameters.application}}"
-                  }}"
