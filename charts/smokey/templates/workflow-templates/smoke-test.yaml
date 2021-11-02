@@ -14,7 +14,7 @@ spec:
         parameters:
           - name: application
       container:
-        image: "{{ .Values.smokeyImage.repository }}:{{ .Values.smokeyImage.tag }}"
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command: ["bundle", "exec", "cucumber", "--profile", "test", "--strict-undefined", "-t", "@app-{{"{{inputs.parameters.application}}"}}", "-t", "@replatforming", "-t", "not @notreplatforming and not @nottest"]
         env:
         - name: ENVIRONMENT
