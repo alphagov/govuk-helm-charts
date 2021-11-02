@@ -3,7 +3,7 @@ kind: WorkflowTemplate
 metadata:
   name: smoke-test
 spec:
-  entrypoint: smoke-test
+  entrypoint: smoke-test-template-runner
   arguments:
     parameters:
       - name: application

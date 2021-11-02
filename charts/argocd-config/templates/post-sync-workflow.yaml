@@ -14,9 +14,9 @@ spec:
       dag:
         tasks:
           - name: smoke-test-runner
-            workflowTemplateRef:
+            templateRef:
               name: smoke-test # TODO: Can't find it
-            # templates.handle-sync-event.tasks.smoke-test failed to get a template
+            # templates.handle-sync-event.tasks.smoke-test-runner failed to get a template
             arguments:
               parameters:
                 - name: application
