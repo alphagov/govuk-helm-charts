@@ -86,3 +86,5 @@ applications:
       value: "latest" # Automatically updated
     - name: replicaCount
       value: "1"
+- name: argo-workflows
+  targetRevision: bilbof/post-deploy-smoke
