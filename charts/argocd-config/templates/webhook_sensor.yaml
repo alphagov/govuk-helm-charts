@@ -21,7 +21,7 @@ spec:
           - dest: spec.arguments.parameters.0.value
             src:
               dependencyName: argocd-sync-notification
-              dataKey: application # TODO: Not present
+              dataKey: body.application # TODO: Not present
         source:
           resource:
             # TODO: Use https://argoproj.github.io/argo-workflows/workflow-templates/
