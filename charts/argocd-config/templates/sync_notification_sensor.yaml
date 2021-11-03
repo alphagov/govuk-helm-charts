@@ -23,6 +23,22 @@ spec:
             src:
               dependencyName: sync-notification
               dataKey: body.application
+          - dest: spec.arguments.parameters.1.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.commitSha
+          - dest: spec.arguments.parameters.2.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.commitUrl
+          - dest: spec.arguments.parameters.3.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.argoUrl
+          - dest: spec.arguments.parameters.4.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.slackChannel
         source:
           resource:
             apiVersion: argoproj.io/v1alpha1
@@ -33,7 +49,11 @@ spec:
             spec:
               arguments:
                 parameters:
+                # values overridden by sync-notification payload
                 - name: application
-                  value: # overridden by sync-notification payload
+                - name: commitSha
+                - name: commitUrl
+                - name: argoUrl
+                - name: slackChannel
               workflowTemplateRef:
                 name: post-sync

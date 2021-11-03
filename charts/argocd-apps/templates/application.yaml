@@ -4,6 +4,7 @@ kind: Application
 metadata:
   name: {{ .name }}
   namespace: cluster-services
+  slackChannel: {{ .slackChannel | default "govuk-deploy-alerts" }}
   finalizers:
   # TODO: Disable this finalizer in production –
   # deleting this Application will delete its resources (pods etc.)
