@@ -12,6 +12,7 @@ spec:
 
     helm:
       valueFiles:
+      - "values.yaml"
       - "values-{{ .Values.govukEnvironment }}.yaml"
 
   destination:
