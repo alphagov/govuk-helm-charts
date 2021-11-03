@@ -36,10 +36,10 @@ spec:
             template: notify-slack
           arguments:
             parameters:
-              - name: channel
+              - name: slackChannel
                 # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
                 # send to team slack channel.
                 value: "govuk-deploy-alerts"
-              - name: payload
+              - name: text
                 value: "post-sync job for {{"{{workflow.parameters.application}}"}} has status {{"{{workflow.status}}"}} :deployparrot:\n
                 <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}> • <{{"{{workflow.parameters.argoUrl}}"}}|Argo application>."

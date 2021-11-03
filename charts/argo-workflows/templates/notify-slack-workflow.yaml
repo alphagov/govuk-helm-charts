@@ -6,12 +6,8 @@ spec:
   entrypoint: notify-slack
   arguments:
     parameters:
-      - name: channel
-        value: govuk-deploy-alerts
-      - name: username
-        value: argocd
-      - name: payload
-        value: "Default message"
+      - name: slackChannel
+      - name: text
   templates:
     - name: notify-slack
       container:
@@ -23,8 +19,8 @@ spec:
           - "--data-urlencode"
           - >
               payload={
-                "channel": "#{{"{{workflow.parameters.channel}}"}}",
-                "username": "{{"{{workflow.parameters.username}}"}}",
+                "channel": "#{{"{{workflow.parameters.slackChannel}}"}}",
+                "username": "Argo",
                 "text": "{{"{{workflow.parameters.text}}"}}",
                 "icon_emoji": ":argocd:"
               }
