@@ -1,7 +1,1 @@
 govukEnvironment: test
-govukDomainExternal: govuk.digital
-clusterDomain: svc.cluster.local
-
-smokeyImage:
-  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smokey
-  tag: latest
