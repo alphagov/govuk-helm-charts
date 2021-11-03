@@ -3,7 +3,3 @@ name: static
 description: A Helm chart for GOV.UK Static
 type: application
 version: 0.4.3
-dependencies:
-  - name: deploy-smoke-test
-    version: 0.0.1
-    repository: file://../deploy-smoke-test

@@ -3,7 +3,3 @@ name: content-store
 description: A Helm chart for GOV.UK Content-Store
 type: application
 version: 0.4.3
-dependencies:
-  - name: deploy-smoke-test
-    version: 0.0.1
-    repository: file://../deploy-smoke-test

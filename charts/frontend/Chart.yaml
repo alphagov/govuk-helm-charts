@@ -3,7 +3,3 @@ name: frontend
 description: A Helm chart for GOV.UK Frontend
 type: application
 version: 0.6.3
-dependencies:
-  - name: deploy-smoke-test
-    version: 0.0.1
-    repository: file://../deploy-smoke-test

@@ -3,7 +3,3 @@ name: signon
 description: A Helm chart for GOV.UK Signon
 type: application
 version: 0.2.3
-dependencies:
-  - name: deploy-smoke-test
-    version: 0.0.1
-    repository: file://../deploy-smoke-test
