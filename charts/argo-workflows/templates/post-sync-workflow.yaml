@@ -14,11 +14,10 @@ spec:
     - name: handle-sync-event
       dag:
         tasks:
-          - name: smoke-test-runner
+          - name: smoke-test
             templateRef:
-              name: smoke-test # TODO: Can't find it
-              template: smoke-test-template-runner # TODO: Can't find it
-            # templates.handle-sync-event.tasks.smoke-test-runner failed to get a template
+              name: smoke-test
+              template: smoke-test
             arguments:
               parameters:
                 - name: application

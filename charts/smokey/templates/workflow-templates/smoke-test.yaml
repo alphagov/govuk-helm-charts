@@ -3,13 +3,13 @@ kind: WorkflowTemplate
 metadata:
   name: smoke-test
 spec:
-  entrypoint: smoke-test-template-runner
+  entrypoint: smoke-test
   arguments:
     parameters:
       - name: application
         value: # TODO: overridden
   templates:
-    - name: smoke-test-template-runner
+    - name: smoke-test
       inputs:
         parameters:
           - name: application

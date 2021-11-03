@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
-  name: webhook
+  name: sync-notification
 spec:
   # TODO: service should be replaced before production
   # https://argoproj.github.io/argo-events/eventsources/services/
