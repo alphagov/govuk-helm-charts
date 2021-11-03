@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: notify-slack
+spec:
+  entrypoint: notify-slack
+  arguments:
+    parameters:
+      - name: channel
+        value: govuk-deploy-alerts
+      - name: username
+        value: argocd
+      - name: payload
+        value: "Default message"
+  templates:
+    - name: notify-slack
+      container:
+        image: curlimages/curl
+        command:
+          - "curl"
+          - "-X"
+          - "POST"
+          - "--data-urlencode"
+          - >
+              payload={
+                "channel": "#{{"{{workflow.parameters.channel}}"}}",
+                "username": "{{"{{workflow.parameters.username}}"}}",
+                "text": "{{"{{workflow.parameters.text}}"}}",
+                "icon_emoji": ":argocd:"
+              }
+          - "$(SLACK_WEBHOOK_ENDPOINT)"
+        env:
+          - name: SLACK_WEBHOOK_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: slack-webhook-url
+                key: url

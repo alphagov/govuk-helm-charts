@@ -7,7 +7,6 @@ spec:
   onExit: exit-handler
   arguments:
     parameters:
-      # NOTE: template parameters are overridden by the calling Sensor
       - name: application
       - name: commitSha
       - name: commitUrl
@@ -25,40 +24,22 @@ spec:
               parameters:
                 - name: application
                   value: "{{"{{workflow.parameters.application}}"}}"
-                - name: commitSha
-                  value: "{{"{{workflow.parameters.commitSha}}"}}"
-                - name: commitUrl
-                  value: "{{"{{workflow.parameters.commitUrl}}"}}"
-                - name: argoUrl
-                  value: "{{"{{workflow.parameters.argoUrl}}"}}"
-                - name: slackChannel
-                  value: "{{"{{workflow.parameters.slackChannel}}"}}"
+          # TODO: Promote releases
+          # - name: promote-release
+          #   templateRef:
+          #     name: promote-release
+          #     template: promote-release
     - name: exit-handler
       steps:
-      - - name: notify
-          template: send-slack
-    - name: send-slack
-      container:
-        image: curlimages/curl
-        command:
-          - "curl"
-          - "-X"
-          - "POST"
-          - "--data-urlencode"
-          - >
-              payload={
-                "channel": "#govuk-deploy-alerts",
-                "username": "argocd",
-                "text": "smokey test for {{"{{workflow.parameters.application}}"}} has status {{"{{workflow.status}}"}} :deployparrot:\n
-                <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}> • <{{"{{workflow.parameters.argoUrl}}"}}|Argo application>\n
-                In future this will be sent to #{{"{{workflow.parameters.slackChannel}}"}}.
-                ",
-                "icon_emoji": ":kubernetes:"
-              }
-          - "$(SLACK_WEBHOOK_ENDPOINT)"
-        env:
-          - name: SLACK_WEBHOOK_ENDPOINT
-            valueFrom:
-              secretKeyRef:
-                name: slack-webhook-url
-                key: url
+      - - templateRef:
+            name: notify-slack
+            template: notify-slack
+          arguments:
+            parameters:
+              - name: channel
+                # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
+                # send to team slack channel.
+                value: "govuk-deploy-alerts"
+              - name: payload
+                value: "post-sync job for {{"{{workflow.parameters.application}}"}} has status {{"{{workflow.status}}"}} :deployparrot:\n
+                <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}> • <{{"{{workflow.parameters.argoUrl}}"}}|Argo application>."

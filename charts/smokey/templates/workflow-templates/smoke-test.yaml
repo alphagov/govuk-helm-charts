@@ -7,7 +7,6 @@ spec:
   arguments:
     parameters:
       - name: application
-        value: # TODO: overridden
   templates:
     - name: smoke-test
       inputs:
@@ -15,7 +14,19 @@ spec:
           - name: application
       container:
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-        command: ["bundle", "exec", "cucumber", "--profile", "test", "--strict-undefined", "-t", "@app-{{"{{inputs.parameters.application}}"}}", "-t", "@replatforming", "-t", "not @notreplatforming and not @nottest"]
+        command:
+          - "bundle"
+          - "exec"
+          - "cucumber"
+          - "--profile test"
+          - "--strict-undefined"
+          - "-t @replatforming"
+          - "-t not @notreplatforming and not @nottest"
+          - "{{
+              {{- if ne .inputs.parameters.application nil -}}
+                "-t @app-{{"{{inputs.parameters.application}}"}}"
+              {{- end -}}
+            }}"
         env:
         - name: ENVIRONMENT
           value: "{{ .Values.govukEnvironment }}"
@@ -23,3 +34,20 @@ spec:
           value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
         - name: GOVUK_WEBSITE_ROOT
           value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+        - name: SIGNON_EMAIL
+          value: "signon@alphagov.co.uk"
+        - name: SIGNON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smokey
+              key: signon_password
+        - name: AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: smokey
+              key: auth_username
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smokey
+              key: auth_password
