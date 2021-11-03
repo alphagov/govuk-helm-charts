@@ -4,11 +4,12 @@ kind: Application
 metadata:
   name: {{ .name }}
   namespace: cluster-services
-  slackChannel: {{ .slackChannel | default "govuk-deploy-alerts" }}
   finalizers:
   # TODO: Disable this finalizer in production –
   # deleting this Application will delete its resources (pods etc.)
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
 spec:
   project: govuk
   source:
