@@ -24,7 +24,7 @@ spec:
           - "--strict-undefined"
           - "-t @replatforming"
           - "-t not @notreplatforming and not @nottest"
-          - "{{"{{=inputs.parameters.application != nil ? '-t @app-{{inputs.parameters.application}}' : ''}}"}}"
+          - "{{"{{=inputs.parameters.application}}"}}"
         env:
         - name: ENVIRONMENT
           value: "{{ .Values.govukEnvironment }}"
