@@ -2,4 +2,4 @@ apiVersion: v2
 name: smokey
 description: A Helm chart for GOV.UK Smokey
 type: application
-version: 0.1.2
+version: 0.1.3

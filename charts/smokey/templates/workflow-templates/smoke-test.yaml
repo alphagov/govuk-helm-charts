@@ -22,11 +22,10 @@ spec:
           - "--strict-undefined"
           - "-t @replatforming"
           - "-t not @notreplatforming and not @nottest"
-          - "{{
-              {{- if ne .inputs.parameters.application nil -}}
-                "-t @app-{{"{{inputs.parameters.application}}"}}"
-              {{- end -}}
-            }}"
+          - >
+              {{"{{- if ne .inputs.parameters.application nil -}}"}}
+                "{{"-t @app-{{inputs.parameters.application}}"}}"
+              {{"{{- end -}}"}}
         env:
         - name: ENVIRONMENT
           value: "{{ .Values.govukEnvironment }}"
