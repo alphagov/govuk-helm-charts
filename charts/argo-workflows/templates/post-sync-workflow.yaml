@@ -42,4 +42,4 @@ spec:
                 value: "govuk-deploy-alerts"
               - name: text
                 value: "post-sync job for {{"{{workflow.parameters.application}}"}} has status {{"{{workflow.status}}"}} :deployparrot:\n
-                <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}> • <{{"{{workflow.parameters.argoUrl}}"}}|Argo application>."
+                <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}> • <{{"{{workflow.parameters.argoUrl}}"}}|{{"{{workflow.parameters.application}} Application"}}>."

@@ -18,7 +18,9 @@ spec:
           - "bundle"
           - "exec"
           - "cucumber"
-          - "--profile test"
+        args:
+          - "--profile"
+          - "test"
           - "--strict-undefined"
           - "-t @replatforming"
           - "-t not @notreplatforming and not @nottest"
