@@ -10,6 +10,10 @@ spec:
       - name: text
   templates:
     - name: notify-slack
+      inputs:
+        parameters:
+        - name: slackChannel
+        - name: text
       container:
         image: curlimages/curl
         command:
@@ -19,9 +23,9 @@ spec:
           - "--data-urlencode"
           - >
               payload={
-                "channel": "#{{"{{workflow.parameters.slackChannel}}"}}",
+                "channel": "#{{"{{inputs.parameters.slackChannel}}"}}",
                 "username": "Argo",
-                "text": "{{"{{workflow.parameters.text}}"}}",
+                "text": "{{"{{inputs.parameters.text}}"}}",
                 "icon_emoji": ":argocd:"
               }
           - "$(SLACK_WEBHOOK_ENDPOINT)"
