@@ -23,7 +23,7 @@ spec:
             arguments:
               parameters:
                 - name: extra-args
-                  value: "{{"-t @app-{{=workflow.parameters.application}}"}}"
+                  value: "{{"-t @replatforming -t @app-{{=workflow.parameters.application}}"}}"
           # TODO: Promote releases
           # - name: promote-release
           #   templateRef:

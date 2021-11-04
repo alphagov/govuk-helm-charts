@@ -7,12 +7,12 @@ spec:
   arguments:
     parameters:
       - name: extra-args
+        value: "-t @replatforming"
   templates:
     - name: smoke-test
       inputs:
         parameters:
           - name: extra-args
-            value: ""
       container:
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command:
@@ -23,7 +23,6 @@ spec:
           - "--profile"
           - "test"
           - "--strict-undefined"
-          - "-t @replatforming"
           - "-t not @notreplatforming and not @nottest"
           - "{{"{{ inputs.parameters.extra-args }}"}}"
         env:
