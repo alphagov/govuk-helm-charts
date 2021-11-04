@@ -12,6 +12,7 @@ spec:
       inputs:
         parameters:
           - name: extra-args
+            value: ""
       container:
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command:
