@@ -8,7 +8,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
   annotations:
     notifications.argoproj.io/subscribe.sync-operation-change.slack_webhook: ""
-    notifications.argoproj.io/subscribe.sync-succeeded.argo_events: ""
+    notifications.argoproj.io/subscribe.on-sync-succeeded.argo_events: ""
 spec:
   description: ArgoCD project containing GOV.UK applications.
 
