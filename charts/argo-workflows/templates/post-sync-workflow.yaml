@@ -22,8 +22,8 @@ spec:
               template: smoke-test
             arguments:
               parameters:
-                - name: application
-                  value: "{{"{{workflow.parameters.application}}"}}"
+                - name: extra-args
+                  value: - "{{"-t @app-{{=workflow.parameters.application}}"}}"
           # TODO: Promote releases
           # - name: promote-release
           #   templateRef:
