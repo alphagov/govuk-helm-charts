@@ -108,6 +108,6 @@ spec:
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
       volumes:
-      - name: {{ .Release.Name }}-nginx-conf 
+      - name: {{ .Release.Name }}-nginx-conf
         configMap:
           name: {{ .Release.Name }}-nginx-conf
