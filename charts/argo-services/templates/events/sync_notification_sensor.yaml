@@ -1,0 +1,59 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: sync-notification
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  dependencies:
+  - name: sync-notification
+    eventSourceName: sync-notification
+    eventName: argocd
+  triggers:
+  - template:
+      name: trigger
+      argoWorkflow:
+        group: argoproj.io
+        version: v1alpha1
+        resource: workflows
+        operation: submit
+        namespace: {{ .Values.workflowsNamespace }}
+        parameters:
+          - dest: spec.arguments.parameters.0.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.application
+          - dest: spec.arguments.parameters.1.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.commitSha
+          - dest: spec.arguments.parameters.2.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.commitUrl
+          - dest: spec.arguments.parameters.3.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.argoUrl
+          - dest: spec.arguments.parameters.4.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.slackChannel
+        source:
+          resource:
+            apiVersion: argoproj.io/v1alpha1
+            kind: Workflow
+            metadata:
+              generateName: post-sync-
+              namespace: {{ .Values.workflowsNamespace }}
+            spec:
+              arguments:
+                parameters:
+                # values overridden by sync-notification payload
+                - name: application
+                - name: commitSha
+                - name: commitUrl
+                - name: argoUrl
+                - name: slackChannel
+              workflowTemplateRef:
+                name: post-sync
