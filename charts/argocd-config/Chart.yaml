@@ -1,5 +1,0 @@
-# https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/
-apiVersion: v2
-name: argocd-config
-description: Installs ArgoCD Repositories, Projects, and the argocd-apps chart
-version: 0.2.0

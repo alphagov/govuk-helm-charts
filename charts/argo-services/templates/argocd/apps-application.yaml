@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: argocd-apps
-  namespace: cluster-services
 spec:
   project: default
   source:
@@ -11,6 +10,7 @@ spec:
 
     helm:
       valueFiles:
+      - "values.yaml"
       - "values-{{ .Values.govukEnvironment }}.yaml"
 
   destination:
@@ -25,3 +25,4 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
+    - ApplyOutOfSyncOnly=true
