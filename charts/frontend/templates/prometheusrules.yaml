@@ -2,7 +2,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: frontend.rules
-  namespace: monitoring
 spec:
   groups:
   - name: frontend
@@ -20,7 +19,7 @@ spec:
       annotations:
         description: "Frontend has not deployed successfully in namespace {{ "{{" }} $labels.namespace }}"
       expr: |-
-        (kube_deployment_status_condition{deployment="frontend", condition="ReplicaFailure", status="true", namespace="{{ .Release.Namespace }}"} == 
+        (kube_deployment_status_condition{deployment="frontend", condition="ReplicaFailure", status="true", namespace="{{ .Release.Namespace }}"} ==
         on(namespace) kube_deployment_status_condition{deployment="frontend", condition="Progressing", status="false"})==1
       for: 5m
       labels:

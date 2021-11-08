@@ -110,6 +110,6 @@ spec:
       volumes:
       - name: tmp
         emptyDir: {}
-      - name: {{ .Release.Name }}-nginx-conf 
+      - name: {{ .Release.Name }}-nginx-conf
         configMap:
           name: {{ .Release.Name }}-nginx-conf
