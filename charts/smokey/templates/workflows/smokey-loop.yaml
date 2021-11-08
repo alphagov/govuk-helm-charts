@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  name: smokey-loop
+spec:
+  schedule: "*/3 9-17 * * 1-5"
+  timezone: Europe/London
+  concurrencyPolicy: Replace
+  workflowSpec:
+    arguments:
+      parameters:
+      - name: extra-args
+        value: ""
+    workflowTemplateRef:
+      name: smoke-test
