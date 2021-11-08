@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: post-sync
+spec:
+  entrypoint: handle-sync-event
+  onExit: exit-handler
+  arguments:
+    parameters:
+      - name: application
+      - name: commitSha
+      - name: commitUrl
+      - name: argoUrl
+      - name: slackChannel
+  templates:
+    - name: handle-sync-event
+      dag:
+        tasks:
+          - name: smoke-test
+            templateRef:
+              name: smoke-test
+              template: smoke-test
+            arguments:
+              parameters:
+                - name: extra-args
+                  value: "{{" and @app-{{workflow.parameters.application}}"}}"
+          # TODO: Promote releases
+          # - name: promote-release
+          #   templateRef:
+          #     name: promote-release
+          #     template: promote-release
+    - name: exit-handler
+      steps:
+      - - templateRef:
+            name: notify-slack
+            template: notify-slack
+          arguments:
+            parameters:
+              - name: slackChannel
+                # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
+                # send to team slack channel.
+                value: "govuk-deploy-alerts"
+              - name: text
+                value: "post-sync job for {{"{{workflow.parameters.application}}"}} has status {{"{{workflow.status}}"}} :deployparrot:\n
+                <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}> • <{{"{{workflow.parameters.argoUrl}}"}}|{{"{{workflow.parameters.application}} Application"}}>."
