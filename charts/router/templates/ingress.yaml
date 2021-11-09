@@ -22,7 +22,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ .Values.ingress.host | default (printf "www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}
+    - host: {{ .Values.ingress.host | default (printf "%s-%s.eks.%s.%s" .Values.ingress.name .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}
       http:
        paths:
          - path: {{ .Values.ingress.path }}
