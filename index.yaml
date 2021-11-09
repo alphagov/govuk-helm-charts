@@ -195,6 +195,15 @@ entries:
     version: 0.1.0
   publisher:
   - apiVersion: v2
+    created: "2021-11-09T16:38:50.903157113Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: 7c9f622544bb4b38a737ab78f508f7179deafe30cd116fde5b8a4a3bffa0ac4e
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.8.1/publisher-0.8.1.tgz
+    version: 0.8.1
+  - apiVersion: v2
     created: "2021-10-27T09:52:51.782138425Z"
     description: A Helm chart for GOV.UK Publisher
     digest: 51140f135192bca847d30f48519e79cee950809090a090bac10c53f01d2f9e23
@@ -295,6 +304,15 @@ entries:
     version: 0.2.0
   router:
   - apiVersion: v2
+    created: "2021-11-09T16:38:51.125829563Z"
+    description: A Helm chart for GOV.UK router
+    digest: 408bc149cc8f0a7f4ff3ff87e7072751f566ce593ed4dc50bc93090f9aebe9ce
+    name: router
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/router-0.4.3/router-0.4.3.tgz
+    version: 0.4.3
+  - apiVersion: v2
     created: "2021-09-24T15:20:13.624830193Z"
     description: A Helm chart for GOV.UK router
     digest: 16f43fbf6c7f811172b77fa62458f7afd38bfa7eedb567353e1066cdf618d121
@@ -331,6 +349,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/router-0.3.0/router-0.3.0.tgz
     version: 0.3.0
   signon:
+  - apiVersion: v2
+    created: "2021-11-09T16:38:51.258662151Z"
+    description: A Helm chart for GOV.UK Signon
+    digest: 76fdae64fa0c67b7aa991a8918cb7e54244efe6fd82390aa3907dc0b631f4c9c
+    name: signon
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/signon-0.2.4/signon-0.2.4.tgz
+    version: 0.2.4
   - apiVersion: v2
     created: "2021-11-08T14:26:24.876819551Z"
     description: A Helm chart for GOV.UK Signon
@@ -433,4 +460,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-11-08T14:26:24.879778464Z"
+generated: "2021-11-09T16:38:51.258755457Z"
