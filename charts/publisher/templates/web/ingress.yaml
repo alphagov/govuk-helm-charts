@@ -8,10 +8,9 @@ metadata:
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
     app.kubernetes.io/component: "web"
-  {{- with .Values.web.ingress.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.web.ingress.name }}-{{ .Release.Namespace }}
+    {{- toYaml .Values.web.ingress.annotations | nindent 4 }}
 spec:
   {{- if .Values.web.ingress.tls }}
   tls:
@@ -24,7 +23,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ .Values.web.ingress.host | default (printf "publisher-%s.eks.%s.%s" .Release.Namespace .Values.common.govukEnvironment .Values.common.govukDomainExternal ) }}
+    - host: {{ .Values.web.ingress.host | default (printf "%s-%s.eks.%s.%s" .Values.web.ingress.name .Release.Namespace .Values.common.govukEnvironment .Values.common.govukDomainExternal ) }}
       http:
         paths:
           - path: {{ .Values.web.ingress.path }}
