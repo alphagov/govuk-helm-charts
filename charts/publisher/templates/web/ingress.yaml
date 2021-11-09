@@ -8,10 +8,9 @@ metadata:
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
     app.kubernetes.io/component: "web"
-  {{- with .Values.web.ingress.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.web.ingress.name }}-{{ .Release.Namespace }}
+    {{- toYaml .Values.web.ingress.annotations | nindent 4 }}
 spec:
   {{- if .Values.web.ingress.tls }}
   tls:

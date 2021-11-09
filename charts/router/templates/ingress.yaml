@@ -7,10 +7,9 @@ metadata:
   name: {{ .Values.ingress.name }}
   labels:
     {{- include "router.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.ingress.name }}-{{ .Release.Namespace }}
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
   {{- if .Values.ingress.tls }}
   tls:
