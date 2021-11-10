@@ -1,0 +1,69 @@
+# NOTE: this file is pulled into templates/argocd-notifications/cm.yaml
+# to avoid needing to nesting conflicting template tags (Helm uses Go, Argo
+# uses Jinja2 which both use the `{{}}` syntax).
+service.webhook.argo_events:
+  headers:
+  - name: "Content-Type"
+    value: "application/json"
+  url: "http://sync-notification-eventsource-svc.cluster-services.svc.cluster.local:12000"
+service.webhook.slack_webhook:
+  headers:
+  - name: "Content-Type"
+    value: "application/json"
+  url: "$slack_url"
+template.send-argo-events-webhook:
+  webhook:
+    argo_events:
+      body: |
+        {
+          "application": "{{.app.metadata.name}}",
+          "state": "{{.app.status.operationState.phase}}",
+          "commitSha": "{{.app.status.sync.revision}}",
+          "commitUrl": "https://github.com/alphagov/govuk-helm-charts/commits/"{{.app.status.sync.revision}}",
+          "argoUrl": "{{.context.argocdUrl}}/applications/"{{.app.metadata.name}}",
+          "slackChannel": "{{.app.metadata.annotations.slackChannel}}"
+        }
+      method: "POST"
+      path: "/argocd"
+template.send-slack:
+  webhook":
+    slack_webhook":
+      "body": |
+        {
+          "attachments": [{
+            "title": "{{.app.metadata.name}}",
+            "title_link": "{{.context.argocdUrl}}/applications/"{{.app.metadata.name}}",
+            {{- if eq .app.status.operationState.phase "Succeeded" -}}
+            "color": "#18be52",
+            {{- else if eq .app.status.operationState.phase "Running" -}}
+            "color": "#beb618",
+            {{- else if or (eq .app.status.operationState.phase "Error") (eq .app.status.operationState.phase "Failed") -}}
+            "color": "#be1b18",
+            {{- else -}}
+            "color": "#183cbe",
+            {{- end -}}
+            "fields": [{
+              "title": "state",
+              "value": "{{.app.status.operationState.phase}}",
+              "short": true
+            }]
+          }]
+        }
+      method: "POST"
+trigger.on-deployed:
+  - oncePer: "app.status.operationState.syncResult.revision"
+    send:
+    - "send-argo-events-webhook"
+    when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
+      == 'Healthy'"
+trigger.sync-operation-change:
+  - oncePer: "app.status.operationState.syncResult.revision"
+    send: ["send-slack"]
+    when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
+      == 'Healthy'"
+  - oncePer: "app.status.operationState.syncResult.revision"
+    send: ["send-slack"]
+    when: "app.status.operationState.phase in ['Running']"
+  - oncePer: "app.status.operationState.syncResult.revision"
+    send: ["send-slack"]
+    when: "app.status.operationState.phase in ['Error', 'Failed']"

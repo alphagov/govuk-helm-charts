@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: smoke-test
+spec:
+  entrypoint: smoke-test
+  arguments:
+    parameters:
+      - name: extra-args
+  templates:
+    - name: smoke-test
+      inputs:
+        parameters:
+          - name: extra-args
+      container:
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        command:
+          - "bundle"
+          - "exec"
+          - "cucumber --profile=test --strict-undefined --tags='@replatforming' --tags='not @notreplatforming and not @nottest{{"{{ inputs.parameters.extra-args }}"}}'"
+        env:
+        - name: ENVIRONMENT
+          value: "{{ .Values.govukEnvironment }}"
+        - name: GOVUK_APP_DOMAIN
+          value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
+        - name: GOVUK_WEBSITE_ROOT
+          value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+        - name: SIGNON_EMAIL
+          value: "signon@alphagov.co.uk"
+        - name: SIGNON_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smokey
+              key: signon_password
+        - name: AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: smokey
+              key: auth_username
+        - name: AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: smokey
+              key: auth_password

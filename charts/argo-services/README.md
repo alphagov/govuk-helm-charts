@@ -1,4 +1,4 @@
-## ArgoCD Config
+## Argo Services
 
 **Note: This Helm Chart should not be installed by Argo!**
 

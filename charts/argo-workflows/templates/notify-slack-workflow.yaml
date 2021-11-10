@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: notify-slack
+spec:
+  entrypoint: notify-slack
+  arguments:
+    parameters:
+      - name: slackChannel
+      - name: text
+  templates:
+    - name: notify-slack
+      inputs:
+        parameters:
+        - name: slackChannel
+        - name: text
+      container:
+        image: curlimages/curl
+        command:
+          - "curl"
+          - "-X"
+          - "POST"
+          - "--data-urlencode"
+          # The double template tags {{"{{}}"}} is because Helm and Argo
+          # use the same templating syntax.
+          - >
+              payload={
+                "channel": "#{{"{{inputs.parameters.slackChannel}}"}}",
+                "username": "Argo",
+                "text": "{{"{{inputs.parameters.text}}"}}",
+                "icon_emoji": ":argocd:"
+              }
+          - "$(SLACK_WEBHOOK_ENDPOINT)"
+        env:
+          - name: SLACK_WEBHOOK_ENDPOINT
+            valueFrom:
+              secretKeyRef:
+                name: slack-webhook-url
+                key: url

@@ -1,5 +1,5 @@
 {{- if .Values.web.dbMigrationEnabled -}}
-{{- $jobName := print .Release.Name "-dbmigrate-" (now | date "20060102150405") -}}
+{{- $jobName := print .Release.Name "-dbmigrate" -}}
 apiVersion: batch/v1
 kind: Job
 metadata:

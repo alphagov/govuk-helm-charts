@@ -3,11 +3,13 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ .name }}
-  namespace: cluster-services
   finalizers:
   # TODO: Disable this finalizer in production –
   # deleting this Application will delete its resources (pods etc.)
   - resources-finalizer.argocd.argoproj.io
+  annotations:
+    slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
+    notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
 spec:
   project: govuk
   source:

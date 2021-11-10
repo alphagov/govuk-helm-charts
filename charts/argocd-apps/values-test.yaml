@@ -2,6 +2,11 @@ govukEnvironment: test
 
 applications:
 - name: cluster-secrets
+- name: smokey
+  helm:
+    parameters:
+    - name: govukEnvironment
+      value: "test"
 - name: publisher
   helm:
     parameters:
@@ -80,3 +85,4 @@ applications:
       value: "latest" # Automatically updated
     - name: replicaCount
       value: "1"
+- name: argo-workflows

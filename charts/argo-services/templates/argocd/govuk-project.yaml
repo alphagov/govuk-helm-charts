@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
   name: govuk
-  namespace: cluster-services
   finalizers:
     # Ensure that project is not deleted until it is not referenced by any application
     - resources-finalizer.argocd.argoproj.io
