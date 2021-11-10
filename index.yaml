@@ -1,6 +1,23 @@
 apiVersion: v1
 entries:
+  argo-services:
+  - apiVersion: v2
+    created: "2021-11-10T16:33:54.776520109Z"
+    description: Installs Argo service configuration (cd, events, notifications, workflows)
+    digest: aa0b9d93d463863a80d647ce423be623dcbea39084000038642b4712a4b89eb3
+    name: argo-services
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-services-0.1.1/argo-services-0.1.1.tgz
+    version: 0.1.1
   argocd-apps:
+  - apiVersion: v2
+    created: "2021-11-10T16:33:54.966953349Z"
+    description: Installs ArgoCD applications into the cluster-services namespace
+    digest: 2ac74fc5467b580795f58115470ff28d5608ec840607c76e9966587f0368305e
+    name: argocd-apps
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-apps-0.2.1/argocd-apps-0.2.1.tgz
+    version: 0.2.1
   - apiVersion: v2
     created: "2021-10-22T16:42:14.221123204Z"
     description: Installs ArgoCD applications into the cluster-services namespace
@@ -34,6 +51,15 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-config-0.1.2/argocd-config-0.1.2.tgz
     version: 0.1.2
+  argocd-workflows:
+  - apiVersion: v2
+    created: "2021-11-10T16:33:55.129378051Z"
+    description: Configure Argo workflows
+    digest: 88f402c3bdeb84acb49903bfaef8ef8b762905dc96a904aecc411c71f6ff3673
+    name: argocd-workflows
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-workflows-0.0.1/argocd-workflows-0.0.1.tgz
+    version: 0.0.1
   cluster-secret-store:
   - apiVersion: v3
     created: "2021-09-15T08:17:10.995615759Z"
@@ -194,6 +220,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.0/ingress-class-0.1.0.tgz
     version: 0.1.0
   publisher:
+  - apiVersion: v2
+    created: "2021-11-10T16:33:55.273359391Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: cb396dc71456f67234e42e9bf7d73d95b230f80f748977147bc38f6cecbb3879
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.8.2/publisher-0.8.2.tgz
+    version: 0.8.2
   - apiVersion: v2
     created: "2021-11-09T16:38:50.903157113Z"
     description: A Helm chart for GOV.UK Publisher
@@ -405,6 +440,15 @@ entries:
     version: 0.1.0
   smokey:
   - apiVersion: v2
+    created: "2021-11-10T16:33:55.434913504Z"
+    description: A Helm chart for GOV.UK Smokey
+    digest: 7af6822c89a4880c56becf8819267baf39955d10081d5dbb70aca5c888d30e28
+    name: smokey
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/smokey-0.1.3/smokey-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
     created: "2021-09-24T15:20:13.918370822Z"
     description: A Helm chart for GOV.UK Smokey
     digest: 7771d8c7ad478172052f88ba4569024211d6c3cf94a00a295da36167b94574cf
@@ -460,4 +504,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-11-09T16:38:51.258755457Z"
+generated: "2021-11-10T16:33:55.435081302Z"
