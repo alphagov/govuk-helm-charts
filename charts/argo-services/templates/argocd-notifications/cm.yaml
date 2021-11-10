@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: argocd-notifications-cm
 data:
-  context:
+  context: |
     argocdUrl: "{{ .Values.argocdUrl }}"
 {{ .Files.Get "cd-notifications-config.yaml" | indent 2 }}
