@@ -1,17 +1,17 @@
 # NOTE: this file is pulled into templates/argocd-notifications/cm.yaml
 # to avoid needing to nesting conflicting template tags (Helm uses Go, Argo
 # uses Jinja2 which both use the `{{}}` syntax).
-service.webhook.argo_events:
+service.webhook.argo_events: |
   headers:
   - name: "Content-Type"
     value: "application/json"
   url: "http://sync-notification-eventsource-svc.cluster-services.svc.cluster.local:12000"
-service.webhook.slack_webhook:
+service.webhook.slack_webhook: |
   headers:
   - name: "Content-Type"
     value: "application/json"
   url: "$slack_url"
-template.send-argo-events-webhook:
+template.send-argo-events-webhook: |
   webhook:
     argo_events:
       body: |
@@ -19,15 +19,15 @@ template.send-argo-events-webhook:
           "application": "{{.app.metadata.name}}",
           "state": "{{.app.status.operationState.phase}}",
           "commitSha": "{{.app.status.sync.revision}}",
-          "commitUrl": "https://github.com/alphagov/govuk-helm-charts/commits/"{{.app.status.sync.revision}}",
-          "argoUrl": "{{.context.argocdUrl}}/applications/"{{.app.metadata.name}}",
+          "commitUrl": "https://github.com/alphagov/govuk-helm-charts/commits/{{.app.status.sync.revision}}",
+          "argoUrl": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
           "slackChannel": "{{.app.metadata.annotations.slackChannel}}"
         }
       method: "POST"
       path: "/argocd"
-template.send-slack:
-  webhook":
-    slack_webhook":
+template.send-slack: |
+  webhook: |
+    slack_webhook: |
       "body": |
         {
           "attachments": [{
@@ -50,13 +50,13 @@ template.send-slack:
           }]
         }
       method: "POST"
-trigger.on-deployed:
+trigger.on-deployed: |
   - oncePer: "app.status.operationState.syncResult.revision"
     send:
     - "send-argo-events-webhook"
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
       == 'Healthy'"
-trigger.sync-operation-change:
+trigger.sync-operation-change: |
   - oncePer: "app.status.operationState.syncResult.revision"
     send: ["send-slack"]
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
