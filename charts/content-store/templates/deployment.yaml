@@ -41,17 +41,23 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-          livenessProbe:
+          startupProbe: &app-probe  # TODO: check the app responds with any Host header
             httpGet:
               path: /healthcheck/live
               port: http
-            initialDelaySeconds: 30
+            failureThreshold: 10
+            periodSeconds: 3
+            timeoutSeconds: 5
+          livenessProbe:
+            <<: *app-probe
+            failureThreshold: 3
             periodSeconds: 5
           readinessProbe:
+            <<: *app-probe
             httpGet:
               path: /healthcheck/ready
               port: http
-            initialDelaySeconds: 30
+            failureThreshold: 2
             periodSeconds: 5
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
