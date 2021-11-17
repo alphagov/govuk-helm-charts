@@ -19,6 +19,14 @@ entries:
     version: 0.1.1
   argocd-apps:
   - apiVersion: v2
+    created: "2021-11-17T11:16:54.230298814Z"
+    description: Installs ArgoCD applications into the cluster-services namespace
+    digest: 3febafdde7bedd6e8d0a00247bfb0b3766cc416bf36fa20efff6169e9c6021d7
+    name: argocd-apps
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-apps-0.2.2/argocd-apps-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
     created: "2021-11-10T16:33:54.966953349Z"
     description: Installs ArgoCD applications into the cluster-services namespace
     digest: 2ac74fc5467b580795f58115470ff28d5608ec840607c76e9966587f0368305e
@@ -512,4 +520,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-11-11T11:23:13.568524303Z"
+generated: "2021-11-17T11:16:54.230483228Z"
