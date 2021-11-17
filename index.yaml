@@ -19,6 +19,14 @@ entries:
     version: 0.1.1
   argocd-apps:
   - apiVersion: v2
+    created: "2021-11-17T17:16:25.158436087Z"
+    description: Installs ArgoCD applications into the cluster-services namespace
+    digest: ac742c252e9932f41f5616b31323ef3efa9c748409b4bf5cd2c7439815026cb6
+    name: argocd-apps
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-apps-0.2.3/argocd-apps-0.2.3.tgz
+    version: 0.2.3
+  - apiVersion: v2
     created: "2021-11-17T11:16:54.230298814Z"
     description: Installs ArgoCD applications into the cluster-services namespace
     digest: 3febafdde7bedd6e8d0a00247bfb0b3766cc416bf36fa20efff6169e9c6021d7
@@ -236,6 +244,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.0/ingress-class-0.1.0.tgz
     version: 0.1.0
   publisher:
+  - apiVersion: v2
+    created: "2021-11-17T17:16:25.295744539Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: a88f99215438103b70edcab946bdb2e12ee4c21dbd491f1f23993c6f5c7c6533
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.8.3/publisher-0.8.3.tgz
+    version: 0.8.3
   - apiVersion: v2
     created: "2021-11-10T16:33:55.273359391Z"
     description: A Helm chart for GOV.UK Publisher
@@ -520,4 +537,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-11-17T11:16:54.230483228Z"
+generated: "2021-11-17T17:16:25.295998939Z"
