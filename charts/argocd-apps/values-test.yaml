@@ -19,7 +19,7 @@ applications:
     - name: web.dbMigrationEnabled
       value: "true"
     - name: common.env.redisUrl
-      value: "redis://redis.ecs.test.govuk-internal.digital:6379"
+      value: "redis://shared-redis.eks.test.govuk-internal.digital"
     - name: web.replicas
       value: "1"
     - name: worker.replicas
@@ -36,7 +36,7 @@ applications:
     - name: web.dbMigrationEnabled
       value: "true"
     - name: common.env.redisUrl
-      value: "redis://redis.ecs.test.govuk-internal.digital:6379"
+      value: "redis://shared-redis.eks.test.govuk-internal.digital"
     - name: web.replicas
       value: "1"
     - name: worker.replicas
