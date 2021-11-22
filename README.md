@@ -3,6 +3,9 @@
 [Helm](https://helm.sh) must be installed to use the charts.  Please refer to
 Helm's [documentation](https://helm.sh/docs) to get started.
 
+Refer to the [GOV.UK Kubernetes Cluster User Docs] for an introduction to
+the cluster or ask for help from [#govuk-replatforming] in Slack.
+
 Once Helm has been set up correctly, add the repo as follows:
 
     helm repo add govuk-helm-charts https://alphagov.github.io/govuk-helm-charts/
@@ -18,3 +21,6 @@ To install the <chart-name> chart:
 To uninstall the chart:
 
     helm delete my-<chart-name>
+
+[GOV.UK Kubernetes Cluster User Docs]: https://govuk-k8s-user-docs.publishing.service.gov.uk
+[#govuk-replatforming]: https://gds.slack.com/channels/govuk-replatforming
