@@ -1,7 +1,6 @@
 # Default values for static.
 
 govukEnvironment: test
-govukStack: pink
 govukDomainExternal: govuk.digital
 govukDomainInternal: govuk-internal.digital
 clusterDomain: svc.cluster.local
