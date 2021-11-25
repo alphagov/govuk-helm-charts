@@ -202,6 +202,15 @@ entries:
     version: 0.3.0
   frontend:
   - apiVersion: v2
+    created: "2021-11-25T18:09:05.044010375Z"
+    description: A Helm chart for GOV.UK Frontend
+    digest: 72adb5e81b85c12d9cc9c3bd9697867cebeb19fcdd87c592fa98c7ae3fa6bcb2
+    name: frontend
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/frontend-0.6.3/frontend-0.6.3.tgz
+    version: 0.6.3
+  - apiVersion: v2
     created: "2021-11-08T14:26:24.724019628Z"
     description: A Helm chart for GOV.UK Frontend
     digest: 647469175199aacb3452a5b093e960d2724416b77747a4d01d58c9d49543a4fd
@@ -578,4 +587,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-11-25T16:24:52.342967096Z"
+generated: "2021-11-25T18:09:05.044279075Z"
