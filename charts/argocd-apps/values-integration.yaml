@@ -64,7 +64,7 @@ applications:
     - name: image.tag
       value: "latest" # Automatically updated
     - name: replicaCount
-      value: "3"
+      value: "1"
 - name: static
   helm:
     parameters:
