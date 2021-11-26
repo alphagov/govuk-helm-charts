@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-web
+  labels:
+    {{- include "publishing-api.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "web"
+    app: {{ .Release.Name }}-web
+spec:
+  replicas: {{ .Values.web.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-web
+  template:
+    metadata:
+      labels:
+        {{- include "publishing-api.labels" . | nindent 8 }}
+        app.kubernetes.io/component: "web"
+        app: {{ .Release.Name }}-web
+      annotations:
+        # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced
+        # by chart name, see https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+        checksum/configmap: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.web.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-env
+          env:
+            {{- include "envs-from-secrets" . | indent 12 }}
+          resources:
+{{ toYaml .Values.web.resources | indent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthcheck/live
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck/ready
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+        - name: nginx
+          image: "{{ .Values.web.nginx.image.repository }}:{{ .Values.web.nginx.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.web.nginx.port }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          volumeMounts:
+          - name: {{ .Release.Name }}-web-nginx-conf
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+      volumes:
+      - name: {{ .Release.Name }}-web-nginx-conf
+        configMap:
+          name: {{ .Release.Name }}-web-nginx-conf

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-worker
+  labels:
+    {{- include "publishing-api.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "worker"
+    app: {{ .Release.Name }}-worker
+spec:
+  replicas: {{ .Values.worker.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-worker
+  template:
+    metadata:
+      labels:
+        {{- include "publishing-api.labels" . | nindent 8 }}
+        app.kubernetes.io/component: "worker"
+        app: {{ .Release.Name }}-worker
+      annotations:
+        # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced
+        # by chart name, see https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+        checksum/configmap: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
+          command: ["bundle"]
+          args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-env
+          env:
+            {{- include "envs-from-secrets" . | indent 12 }}
+          resources:
+{{ toYaml .Values.worker.resources | indent 12 }}
+          livenessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - exit 0
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - exit 0
+            initialDelaySeconds: 30
+            periodSeconds: 5

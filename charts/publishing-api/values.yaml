@@ -1,0 +1,91 @@
+# Default values for publishing-api.
+
+# Values common to both Web and Worker deployments
+common:
+  govukEnvironment: test
+  govukDomainExternal: govuk.digital
+  govukDomainInternal: svc.cluster.local
+
+  image:
+    repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publishing-api
+    pullPolicy: Always
+    tag: latest
+
+  secrets:
+    externalSecretRef:
+    externalSecretRefreshInterval: "60m"
+    literalKeys:
+      - content-store-bearer-token
+      - draft-content-store-bearer-token
+      - event-log-aws-secret-key
+      - gds-sso-oauth
+      - rabbitmq
+      - router-api-bearer-token
+      - secret-key-base
+
+  env:
+    contentApiPrototype: "yes"
+    contentStore:
+    draftContentStore:
+    defaultTtl: "1800"
+    govukAppDomain:
+    govukAppDomainExternal:
+    govukAppName:
+    govukAppType: "rack"
+    govukContentSchemasPath:
+    govukWebsiteRoot:
+    plekServiceContentStoreUri:
+    plekServiceDraftContentStoreUri:
+    plekServiceSignonUri:
+    port: 80
+    rabbitmqHosts:
+    rabbitmqVhost: "/"
+    plekServicepublishing-apiUri:
+    plekServiceStaticUri:
+    railsEnv: "production"
+    redisUrl: "redis://redis"  # TODO: decide on Redis for EKS
+    unicornWorkerProcesses: 8
+
+web:
+  replicas: 1
+
+  port: 3000
+
+  nginx:
+    image:
+      repository: nginx
+      pullPolicy: Always
+      tag: stable
+    port: 80
+
+  service:
+    type: NodePort
+    annotations: {}
+    port: 80
+
+  resources: {}
+  # If you do want to specify resources, uncomment the following lines,
+  # adjust them as necessary, and remove the curly braces after 'resources:'.
+  #
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+  dbMigrationEnabled: true
+
+worker:
+  replicas: 1
+
+  resources: {}
+  # If you do want to specify resources, uncomment the following lines,
+  # adjust them as necessary, and remove the curly braces after 'resources:'.
+  #
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi

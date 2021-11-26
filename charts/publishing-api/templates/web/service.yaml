@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "publishing-api.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "web"
+    app: {{ .Release.Name }}
+{{ if .Values.web.service.annotations}}
+  annotations:
+    {{- range $key, $value := .Values.web.service.annotations }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
+{{- end }}
+spec:
+  type: {{ .Values.web.service.type }}
+  ports:
+    - port: {{ .Values.web.service.port }}
+      targetPort: {{ .Values.web.nginx.port }}
+  selector:
+    app: {{ .Release.Name }}-web

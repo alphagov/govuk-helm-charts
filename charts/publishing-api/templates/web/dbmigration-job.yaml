@@ -1,0 +1,32 @@
+{{- if .Values.web.dbMigrationEnabled -}}
+{{- $jobName := print .Release.Name "-dbmigrate" -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $jobName }}
+  labels:
+    {{- include "publishing-api.labels" . | nindent 4 }}
+    app.kubernetes.io/component: "web"
+    argocd.argoproj.io/hook: PreSync
+spec:
+  template:
+    metadata:
+      name: {{ $jobName }}
+      labels:
+        {{- include "publishing-api.labels" . | nindent 8 }}
+        app.kubernetes.io/component: "web"
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ .Release.Name }}-dbmigrate
+        image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
+        command: ["bundle"]
+        args: ["exec", "rails", "db:migrate"]
+        envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-env
+        env:
+          {{- include "envs-from-secrets" . | indent 12 }}
+        resources:
+{{ toYaml .Values.web.resources | indent 12 }}
+{{- end}}
