@@ -45,6 +45,31 @@ spec:
             httpGet:
               path: /
               port: http
+          env:
+            - name: GOVUK_APP_DOMAIN
+              value: "{{ .Values.appGovukAppDomain | default (printf "%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
+            - name: GOVUK_APP_DOMAIN_EXTERNAL
+              value: "{{ .Values.appGovukDomainExternal | default (printf "%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: GOVUK_APP_NAME
+              value: "{{ .Values.appGovukAppName | default .Release.Name }}"
+            - name: GOVUK_APP_TYPE
+              value: "{{ .Values.appGovukAppType }}"
+            - name: GOVUK_WEBSITE_ROOT
+              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: DEFAULT_TTL
+              value: "{{ .Values.appDefaultTtl }}"
+            - name: GOVUK_ASSET_ROOT
+              value: "{{ .Values.appGovukAssetRoot | default (printf "https://assets-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+            - name: GOVUK_CONTENT_SCHEMAS_PATH
+              value: "{{ .Values.appGovukContentSchemasPath }}"
+            - name: GOVUK_ENVIRONMENT
+              value: "{{ .Values.govukEnvironment }}"
+            - name: PORT
+              value: "{{ .Values.appPort }}"
+            - name: RAILS_ENV
+              value: "{{ .Values.appRailsEnv }}"
+            - name: RAILS_LOG_TO_STDOUT
+              value: "true"
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
