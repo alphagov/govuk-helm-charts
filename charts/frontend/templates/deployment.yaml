@@ -35,8 +35,10 @@ spec:
           {{- with .Values.appExtraEnv }}
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
+          {{- with .Values.resources }}
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           startupProbe: &app-probe  # TODO: check the app responds with any Host header
             httpGet:
               path: /healthcheck/live
