@@ -20,39 +20,22 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
+          envFrom:
+          - configMapRef:
+              name: govuk-apps-env
           env:
             - name: DEFAULT_TTL
               value: "{{ .Values.appDefaultTtl }}"
-            - name: GOVUK_APP_DOMAIN
-              value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
-            - name: GOVUK_APP_DOMAIN_EXTERNAL
-              value: "{{ .Values.appGovukDomainExternal | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: GOVUK_APP_NAME
-              value: "{{ .Values.appGovukAppName | default .Release.Name }}"
-            - name: GOVUK_APP_TYPE
-              value: "{{ .Values.appGovukAppType }}"
+              value: "{{ .Release.Name }}"
             - name: GOVUK_CONTENT_SCHEMAS_PATH
               value: "{{ .Values.appGovukContentSchemasPath }}"
-            - name: GOVUK_WEBSITE_ROOT
-              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
-            - name: GOVUK_ENVIRONMENT
-              value: "{{ .Values.appGovukEnvironment }}"
             - name: MONGODB_URI
-              value: "{{ .Values.appMongodbUri | default (printf "mongodb://mongo-1.%[1]s.%[2]s.%[3]s,mongo-2.%[1]s.%[2]s.%[3]s,mongo-3.%[1]s.%[2]s.%[3]s/content_store_production" .Values.govukStack .Values.govukEnvironment .Values.govukDomainInternal) }}"
-            - name: PLEK_SERVICE_PUBLISHING_API_URI
-              value: "{{ .Values.appPlekServicePublishingApiUri | default (printf "http://publishing-api-web.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
-            - name: PLEK_SERVICE_ROUTER_API_URI
-              value: "{{ .Values.appPlekServiceRouterApiUri | default (printf "http://router-api.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
-            - name: PLEK_SERVICE_SIGNON_URI
-              value: "{{ .Values.appPlekServiceSignonUri | default (printf "http://signon.%s.%s" .Release.Namespace .Values.clusterDomain) }}"
+              value: "{{ .Values.appMongodbUri }}"
             - name: PORT
               value: "{{ .Values.appPort }}"
-            - name: RAILS_ENV
-              value: "{{ .Values.appRailsEnv }}"
-            - name: RAILS_LOG_TO_STDOUT
-              value: "true"
             - name: SECRET_KEY_BASE
-              value: "secret" #TODO: fix when we know how to handle secrets
+              value: "secret"  # TODO: fix when we know how to handle secrets
           {{- with .Values.appExtraEnv }}
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
