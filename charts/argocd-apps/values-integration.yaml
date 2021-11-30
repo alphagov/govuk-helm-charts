@@ -63,6 +63,8 @@ applications:
       value: "latest" # Automatically updated
     - name: replicaCount
       value: "1"
+    - name: appMemcacheServers
+      value: ["frontend-memcached.integration.govuk-internal.digital:11211"]
 - name: static
   helm:
     parameters:

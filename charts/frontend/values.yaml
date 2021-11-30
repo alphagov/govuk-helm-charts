@@ -20,6 +20,8 @@ nginxImage:
 nginxPort: 8080
 appPort: 3000
 
+appMemcacheServers: []
+
 # resources:
 #   limits:
 #     cpu: 500m

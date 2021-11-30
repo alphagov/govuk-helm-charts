@@ -26,6 +26,8 @@ spec:
           - configMapRef:
               name: govuk-apps-env
           env:
+            - name: MEMCACHE_SERVERS
+              value: "{{ join "," .Values.appMemcacheServers }}"
             - name: PORT
               value: "{{ .Values.appPort }}"
             - name: SECRET_KEY_BASE
