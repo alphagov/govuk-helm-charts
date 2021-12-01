@@ -1,13 +1,8 @@
 name: linting
-on: [push, pull_request]
+on: [push]
 jobs:
   test:
     runs-on: ubuntu-latest
-    # Avoid duplicate checks. On PR, run only if the PR is from a forked repo.
-    if: >
-      github.event_name == 'push' ||
-          github.event.pull_request.head.repo.full_name !=
-          github.event.pull_request.base.repo.full_name
     steps:
       - uses: actions/checkout@v2
         with:
