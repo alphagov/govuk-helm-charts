@@ -1,14 +1,9 @@
-# Default values for Publisher.
+# Default/example values for Publisher.
 
-# Values common to both Web and Worker deployments
+# common represents values common to both the `web` and `worker` deployments.
 common:
-  govukEnvironment: test
-  govukDomainExternal: govuk.digital
-  govukDomainInternal: svc.cluster.local
-
   image:
     repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
-    pullPolicy: Always
     tag: latest
 
   secrets:
@@ -17,13 +12,10 @@ common:
     keys:
       - ASSET_MANAGER_BEARER_TOKEN
       - FACT_CHECK_PASSWORD
-      - FACT_CHECK_REPLY_TO_ADDRESS
-      - FACT_CHECK_REPLY_TO_ID
-      - GA_UNIVERSAL_ID
+      - FACT_CHECK_USERNAME
       - GDS_SSO_OAUTH_ID
       - GDS_SSO_OAUTH_SECRET
       - GOVUK_NOTIFY_API_KEY
-      - GOVUK_NOTIFY_TEMPLATE_ID
       - JWT_AUTH_SECRET
       - LINK_CHECKER_API_BEARER_TOKEN
       - LINK_CHECKER_API_SECRET_TOKEN
@@ -32,33 +24,22 @@ common:
       - SECRET_KEY_BASE
 
   env:
-    assetsPrefix: "/assets/publisher"
-    basicAuthUsername: "gds"
-    defaultTtl: "1800"
-    emailGroupBusiness: "test-address@digital.cabinet-office.gov.uk"
-    emailGroupCitizen: "test-address@digital.cabinet-office.gov.uk"
-    emailGroupForcePublishAlerts: "test-address@digital.cabinet-office.gov.uk"
-    factCheckSubjectPrefix: "dev"
-    factCheckUsername: "govuk-fact-check-test@digital.cabinet-office.gov.uk"
-    govukAppDomain:
-    govukAppName:
-    govukAppRoot: "/app"
-    govukAppType: "rack"
-    govukWebsiteRoot:
-    govukAssetRoot:
-    assetHost:
-    plekServicePublishingApiUri:
-    plekServiceSignonUri:
-    plekServiceContentStoreUri:
-    plekServicePublisherUri:
-    plekServiceStaticUri:
-    railsEnv: "production"
-    redisUrl: "redis://redis"  # TODO: decide on Redis for EKS
+    emailGroupBusiness: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
+    emailGroupCitizen: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
+    emailGroupDev: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
+    emailGroupForcePublishAlerts: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
+    factCheckSubjectPrefix: test
+    factCheckUsername: govuk-fact-check-test@digital.cabinet-office.gov.uk
+    factCheckAddressFormat: factcheck+test-{id}@alphagov.co.uk
+    factCheckReplyToAddress: govuk-fact-check-test@digital.cabinet-office.gov.uk
+    factCheckReplyToId: govuk-fact-check-test@digital.cabinet-office.gov.uk
+    govukNotifyTemplateId: 123e4567-e89b-12d3-a456-426614174000
+    redisUrl: redis://redis  # TODO: decide on Redis for EKS
 
 web:
   replicas: 1
-
   port: 3000
+  dbMigrationEnabled: true
 
   nginx:
     image:
@@ -75,7 +56,7 @@ web:
   ingress:
     enabled: true
     name: publisher
-    host:
+    host: ""
     path: "/"
     pathType: Prefix
     annotations:
@@ -85,29 +66,20 @@ web:
       alb.ingress.kubernetes.io/ssl-redirect: "443"
       alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
 
-  resources: {}
-  # If you do want to specify resources, uncomment the following lines,
-  # adjust them as necessary, and remove the curly braces after 'resources:'.
-  #
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
-
-  dbMigrationEnabled: true
+  # resources:
+  #   limits:
+  #     cpu: 500m
+  #     memory: 512Mi
+  #   requests:
+  #     cpu: 500m
+  #     memory: 512Mi
 
 worker:
   replicas: 1
-
-  resources: {}
-  # If you do want to specify resources, uncomment the following lines,
-  # adjust them as necessary, and remove the curly braces after 'resources:'.
-  #
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+  # resources:
+  #   limits:
+  #     cpu: 500m
+  #     memory: 512Mi
+  #   requests:
+  #     cpu: 500m
+  #     memory: 512Mi

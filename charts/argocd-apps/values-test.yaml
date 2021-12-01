@@ -13,7 +13,6 @@ applications:
       env:
         redisUrl: redis://shared-redis.eks.test.govuk-internal.digital
     web:
-      dbMigrationEnabled: true
       replicas: 1
     worker:
       replicas: 1

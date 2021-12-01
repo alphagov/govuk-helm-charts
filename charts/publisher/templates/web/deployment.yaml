@@ -30,6 +30,8 @@ spec:
               containerPort: {{ .Values.web.port }}
           envFrom:
             - configMapRef:
+                name: govuk-apps-env
+            - configMapRef:
                 name: {{ .Release.Name }}-env
           env:
           {{- range .Values.common.secrets.keys }}
