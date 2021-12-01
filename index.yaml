@@ -165,6 +165,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-workflows-0.0.1/argocd-workflows-0.0.1.tgz
     version: 0.0.1
   cluster-secret-store:
+  - apiVersion: v2
+    created: "2021-12-01T11:11:07.902013645Z"
+    description: A Helm chart for an external-secrets ClusterSecretStore, integrates
+      with AWS SecretsManager
+    digest: ed10e65d0cf97e12410f7b1f12ba0e8948e9a78d45cbfa45afb0095430f94bbd
+    name: cluster-secret-store
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secret-store-0.1.1/cluster-secret-store-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v3
     created: "2021-09-15T08:17:10.995615759Z"
     description: A Helm chart for an external-secrets ClusterSecretStore, integrates
@@ -332,6 +341,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/frontend-0.3.0/frontend-0.3.0.tgz
     version: 0.3.0
   ingress-class:
+  - apiVersion: v2
+    created: "2021-12-01T11:11:08.071769417Z"
+    description: A Helm chart for an IngressClass resource, for use with AWS Load
+      Balancer Controller
+    digest: d04b5f9a059fed83a3062d85169fc6bcdd82f8cc524d9080c5bb26d16ed3aa1c
+    name: ingress-class
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.1/ingress-class-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v3
     created: "2021-09-15T08:17:11.687986217Z"
     description: A Helm chart for a IngressClass resource, for use with AWS Load Balancer
@@ -644,4 +662,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2021-11-26T12:27:30.601150931Z"
+generated: "2021-12-01T11:11:08.072010317Z"
