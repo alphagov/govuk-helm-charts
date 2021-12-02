@@ -70,6 +70,16 @@ spec:
               value: "{{ .Values.appRailsEnv }}"
             - name: RAILS_LOG_TO_STDOUT
               value: "true"
+            - name: JWT_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: asset-manager
+                  key: jwt_auth_secret
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: asset-manager
+                  key: secret_key_base
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
