@@ -1,0 +1,5 @@
+apiVersion: v2
+name: govuk-apps-conf
+description: Shared ConfigMap for global (per-environment) settings for GOV.UK apps
+type: application
+version: 0.1.0

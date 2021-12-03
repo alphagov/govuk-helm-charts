@@ -55,14 +55,14 @@ applications:
 - name: frontend
   helm:
     parameters:
-    - name: govukEnvironment
-      value: "test"
     - name: image.repository
       value: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/frontend"
     - name: image.tag
       value: "latest" # Automatically updated
     - name: replicaCount
       value: "1"
+    - name: appMemcacheServers
+      value: ["frontend-memcached.test.govuk-internal.digital:11211"]
 - name: static
   helm:
     parameters:
@@ -77,12 +77,12 @@ applications:
 - name: content-store
   helm:
     parameters:
-    - name: govukEnvironment
-      value: "test"
     - name: image.repository
       value: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/content-store"
     - name: image.tag
       value: "latest" # Automatically updated
     - name: replicaCount
       value: "1"
+    - name: appMongodbUri
+      value: "mongodb://mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital/content_store_production"
 - name: argo-workflows

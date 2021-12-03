@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: govuk-apps-env
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+data:
+  {{/*
+  TODO: probably omit namespace from these user-facing URLs in the default
+  namespace. Consider a helper template for the namespace suffix.
+  */}}
+  ASSET_HOST: https://www-origin-{{ .Release.Namespace }}.{{ template "govuk.externalDomainSuffix" . }}
+  GOVUK_APP_DOMAIN: {{ template "govuk.internalDomainSuffix" . }}
+  GOVUK_APP_DOMAIN_EXTERNAL: {{ template "govuk.externalDomainSuffix" . }}
+  GOVUK_ASSET_ROOT: https://assets-{{ .Release.Namespace }}.{{ template "govuk.externalDomainSuffix" . }}
+  GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
+  GOVUK_WEBSITE_ROOT: https://www-origin-{{ .Release.Namespace }}.{{ template "govuk.externalDomainSuffix" . }}
+  PLEK_SERVICE_CONTENT_STORE_URI: http://content-store.{{ template "govuk.internalDomainSuffix" . }}
+  PLEK_SERVICE_PUBLISHING_API_URI: http://publishing-api-web.{{ template "govuk.internalDomainSuffix" . }}
+  PLEK_SERVICE_ROUTER_API_URI: http://router-api.{{ template "govuk.internalDomainSuffix" . }}
+  PLEK_SERVICE_SIGNON_URI: http://signon.{{ template "govuk.internalDomainSuffix" . }}
+  PLEK_SERVICE_STATIC_URI: http://static.{{ template "govuk.internalDomainSuffix" . }}
+  SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
