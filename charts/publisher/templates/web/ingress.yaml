@@ -4,12 +4,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.web.ingress.name }}
+  name: {{ .Values.web.ingress.name | default .Release.Name }}
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
   annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.web.ingress.name }}-{{ .Release.Namespace }}
     {{- toYaml .Values.web.ingress.annotations | nindent 4 }}
 spec:
   {{- if .Values.web.ingress.tls }}
@@ -23,14 +22,18 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ .Values.web.ingress.host | default (printf "%s-%s.eks.%s.%s" .Values.web.ingress.name .Release.Namespace .Values.common.govukEnvironment .Values.common.govukDomainExternal ) }}
+    {{- range .Values.web.ingress.hosts }}
+    - host: {{ .host | quote }}
       http:
         paths:
-          - path: {{ .Values.web.ingress.path }}
-            pathType: {{ .Values.web.ingress.pathType }}
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
+          {{- end }}
+    {{- end }}
 {{- end }}

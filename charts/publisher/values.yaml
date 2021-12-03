@@ -55,17 +55,18 @@ web:
 
   ingress:
     enabled: true
-    name: publisher
-    host: ""
-    path: "/"
-    pathType: Prefix
     annotations:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
       alb.ingress.kubernetes.io/ssl-redirect: "443"
       alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
-
+      alb.ingress.kubernetes.io/load-balancer-name: publisher  # changeme
+    hosts:
+    - host: publisher.eks.test.govuk.digital  # changeme
+      paths:
+      - path: /
+        pathType: Prefix
   # resources:
   #   limits:
   #     cpu: 500m
