@@ -2,4 +2,4 @@
 apiVersion: v2
 name: argocd-apps
 description: Installs ArgoCD applications into the cluster-services namespace
-version: 0.3.5
+version: 0.3.6
