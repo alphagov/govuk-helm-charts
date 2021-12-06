@@ -2,6 +2,11 @@ govukEnvironment: test
 
 applications:
 - name: cluster-secrets
+- name: govuk-apps-conf
+  helm:
+    parameters:
+    - name: govukEnvironment
+      value: test
 - name: smokey
   helm:
     parameters:

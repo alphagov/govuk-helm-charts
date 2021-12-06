@@ -2,6 +2,11 @@ govukEnvironment: integration
 
 applications:
 - name: cluster-secrets
+- name: govuk-apps-conf
+  helm:
+    parameters:
+    - name: govukEnvironment
+      value: integration
 - name: smokey
   helm:
     parameters:
