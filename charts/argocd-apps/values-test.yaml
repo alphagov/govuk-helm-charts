@@ -20,7 +20,7 @@ applications:
     - name: common.image.repository
       value: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher"
     - name: common.image.tag
-      value: "latest" # Automatically updated
+      value: "latest"  # Automatically updated
     - name: web.dbMigrationEnabled
       value: "true"
     - name: common.env.redisUrl
@@ -37,7 +37,7 @@ applications:
     - name: common.image.repository
       value: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon"
     - name: common.image.tag
-      value: "latest" # Automatically updated
+      value: "latest"  # Automatically updated
     - name: web.dbMigrationEnabled
       value: "true"
     - name: common.env.redisUrl
@@ -54,7 +54,7 @@ applications:
     - name: image.repository
       value: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/router"
     - name: image.tag
-      value: "latest" # Automatically updated
+      value: "latest"  # Automatically updated
     - name: replicaCount
       value: "1"
 - name: frontend
@@ -63,7 +63,7 @@ applications:
     - name: image.repository
       value: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/frontend"
     - name: image.tag
-      value: "latest" # Automatically updated
+      value: "latest"  # Automatically updated
     - name: replicaCount
       value: "1"
     - name: appMemcacheServers
@@ -76,7 +76,7 @@ applications:
     - name: image.repository
       value: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/static"
     - name: image.tag
-      value: "latest" # Automatically updated
+      value: "latest"  # Automatically updated
     - name: replicaCount
       value: "1"
 - name: content-store
@@ -85,7 +85,7 @@ applications:
     - name: image.repository
       value: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/content-store"
     - name: image.tag
-      value: "latest" # Automatically updated
+      value: "latest"  # Automatically updated
     - name: replicaCount
       value: "1"
     - name: appMongodbUri
