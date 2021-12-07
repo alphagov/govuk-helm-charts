@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "authenticating-proxy.labels" . | nindent 4 }}
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{- include "authenticating-proxy.labels" . | nindent 8 }}
+        app: {{ .Release.Name }}
+      annotations:
+        # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced
+        # by chart name, see https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+    spec:
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-env
+          env:
+            - name: GDS_SSO_OAUTH_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Release.Name }}-gds-sso-oauth
+                  key: id
+            - name: GDS_SSO_OAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Release.Name }}-gds-sso-oauth
+                  key: secret
+            - name: JWT_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Release.Name }}-jwt-auth-secret
+                  key: secret
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Release.Name }}-secret-key-base
+                  key: secret
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /healthcheck/live
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck/ready
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5

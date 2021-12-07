@@ -1,0 +1,65 @@
+# Default values for authenticating-proxy.
+
+govukEnvironment: test
+govukStack: pink
+govukDomainExternal: govuk.digital
+govukDomainInternal: svc.cluster.local
+
+service:
+  type: NodePort
+  annotations: {}
+  port: 80
+
+replicaCount: 1
+
+image:
+  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/authenticating-proxy
+  pullPolicy: Always
+  tag: latest
+
+port: 80
+
+resources: {}
+# If you do want to specify resources, uncomment the following lines,
+# adjust them as necessary, and remove the curly braces after 'resources:'.
+#
+# limits:
+#  cpu: 100m
+#  memory: 128Mi
+# requests:
+#  cpu: 100m
+#  memory: 128Mi
+
+env:
+  defaultTtl: "1800"
+  govukAppDomain:
+  govukDomainExternal:
+  govukAppName:
+  govukAppType: "rack"
+  govukUpstreamUri:
+  govukWebsiteRoot:
+  mongodbUri:
+  plekServiceSignonUri:
+  port: 80
+  railsEnv: "production"
+
+secrets:
+  externalSecretRef:
+  externalSecretRefreshInterval: "60m"
+  literalKeys:
+    - gds-sso-oauth
+    - jwt-auth-secret
+    - secret-key-base
+
+
+
+ingress:
+  enabled: true
+  name: draft-origin
+  host:
+  path: "/"
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
