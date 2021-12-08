@@ -4,9 +4,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout source code
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: ${{ github.head_ref }}
 
       - name: Set up Helm
         uses: azure/setup-helm@v1.1
