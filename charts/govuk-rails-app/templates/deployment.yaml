@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.appPort }}
+          envFrom:
+          - configMapRef:
+              name: govuk-apps-env
+          env:
+            - name: PORT
+              value: "{{ .Values.appPort }}"
+            - name: SECRET_KEY_BASE
+              value: "secret"  # TODO: fix when we know how to handle secrets
+          {{- with .Values.appExtraEnv }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          startupProbe: &app-probe  # TODO: check the app responds with any Host header
+            httpGet:
+              path: /healthcheck/live
+              port: http
+            failureThreshold: 10
+            periodSeconds: 3
+            timeoutSeconds: 5
+          livenessProbe:
+            <<: *app-probe
+            failureThreshold: 3
+            periodSeconds: 5
+          readinessProbe:
+            <<: *app-probe
+            httpGet:
+              path: /healthcheck/ready
+              port: http
+            failureThreshold: 2
+            periodSeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 2000
+            runAsGroup: 3000
+        - name: {{ .Release.Name }}-nginx
+          image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.nginxPort }}
+          livenessProbe: &nginx-probe  # TODO: make this an HTTP probe
+            tcpSocket:
+              port: http
+            periodSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            <<: *nginx-probe
+            failureThreshold: 2
+          volumeMounts:
+          - name: {{ .Release.Name }}-nginx-conf
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+          - name: tmp
+            mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: {{ .Release.Name }}-nginx-conf
+        configMap:
+          name: {{ .Release.Name }}-nginx-conf
