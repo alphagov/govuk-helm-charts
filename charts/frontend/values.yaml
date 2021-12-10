@@ -5,7 +5,7 @@ service:
   annotations: {}
   port: 80
 
-replicaCount: 2
+replicaCount: 1
 
 appImage:
   # TODO: point this at a public repo and override to the private repo in our CD config.
