@@ -14,7 +14,7 @@ applications:
       govukEnvironment: test
       image:
         repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
-        tag: latest  # Automatically updated
+        tag: latest  # To be edited by automation (not yet implemented).
       env:
         redisUrl: redis://shared-redis.eks.test.govuk-internal.digital
     web:
@@ -28,7 +28,7 @@ applications:
       govukEnvironment: test
       image:
         repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon
-        tag: latest  # Automatically updated
+        tag: latest  # To be edited by automation (not yet implemented).
       env:
         redisUrl: redis://shared-redis.eks.test.govuk-internal.digital
     web:
@@ -41,13 +41,13 @@ applications:
     govukEnvironment: test
     image:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
-      tag: latest  # Automatically updated
+      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
 - name: frontend
   helmValues:
     image:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/frontend
-      tag: latest  # Automatically updated
+      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     appMemcacheServers:
     - frontend-memcached.eks.test.govuk-internal.digital
@@ -56,13 +56,13 @@ applications:
     govukEnvironment: test
     image:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/static
-      tag: latest  # Automatically updated
+      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
 - name: content-store
   helmValues:
     image:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/content-store
-      tag: latest  # Automatically updated
+      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     appMongodbUri: mongodb://mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital/content_store_production
 - name: argo-workflows
