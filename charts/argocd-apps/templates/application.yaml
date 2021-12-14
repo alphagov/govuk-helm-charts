@@ -16,13 +16,14 @@ spec:
     repoURL: 'git@github.com/alphagov/govuk-helm-charts'
     path: "{{ .chartPath | default (printf "charts/%s" .name) }}"
     targetRevision: {{ .targetRevision | default "HEAD" }}
-    {{- with .helmValues }}
     helm:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
       values: |
+        govukEnvironment: {{ $.Values.govukEnvironment }}
+        {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
-    {{- end }}
+        {{- end }}
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: apps

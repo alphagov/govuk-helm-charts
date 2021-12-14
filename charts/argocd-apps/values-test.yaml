@@ -3,15 +3,10 @@ govukEnvironment: test
 applications:
 - name: cluster-secrets
 - name: govuk-apps-conf
-  helmValues:
-    govukEnvironment: test
 - name: smokey
-  helmValues:
-    govukEnvironment: test
 - name: publisher
   helmValues:
     common:
-      govukEnvironment: test
       image:
         repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
         tag: latest  # To be edited by automation (not yet implemented).
@@ -25,7 +20,6 @@ applications:
 - name: signon
   helmValues:
     common:
-      govukEnvironment: test
       image:
         repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon
         tag: latest  # To be edited by automation (not yet implemented).
@@ -38,7 +32,6 @@ applications:
       replicas: 1
 - name: router
   helmValues:
-    govukEnvironment: test
     image:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
@@ -53,7 +46,6 @@ applications:
     - frontend-memcached.eks.test.govuk-internal.digital
 - name: static
   helmValues:
-    govukEnvironment: test
     image:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/static
       tag: latest  # To be edited by automation (not yet implemented).
