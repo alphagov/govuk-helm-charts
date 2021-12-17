@@ -4,7 +4,7 @@ It has been [decided](../../docs/architecture/decisions/0006-use-helm-for-applic
 to use [Helm v3](https://helm.sh/docs/) to package GOV.UK apps for our
 Kubernetes platform.
 
-A Helm charts for the apps are located under the [helm](../helm) directory.
+All Helm charts for the apps are located under the [helm](../helm) directory.
 
 ## Creating an App
 
