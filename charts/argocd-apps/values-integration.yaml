@@ -42,7 +42,7 @@ applications:
     image:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/frontend
       tag: latest  # To be edited by automation (not yet implemented).
-    replicaCount: 1
+    replicaCount: 2
     appMemcacheServers:
     - frontend-memcached.eks.integration.govuk-internal.digital
 - name: static
