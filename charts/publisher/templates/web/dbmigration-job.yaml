@@ -6,7 +6,7 @@ metadata:
   name: {{ $jobName }}
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "web"
+    app.kubernetes.io/component: web
     argocd.argoproj.io/hook: PreSync
 spec:
   template:
@@ -14,7 +14,7 @@ spec:
       name: {{ $jobName }}
       labels:
         {{- include "publisher.labels" . | nindent 8 }}
-        app.kubernetes.io/component: "web"
+        app.kubernetes.io/component: web
     spec:
       restartPolicy: Never
       containers:

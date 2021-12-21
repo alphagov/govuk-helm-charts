@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "web"
+    app.kubernetes.io/component: web
     app: {{ .Release.Name }}
 {{ if .Values.web.service.annotations}}
   annotations:

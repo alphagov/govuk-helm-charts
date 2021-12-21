@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-web
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "web"
+    app.kubernetes.io/component: web
     app: {{ .Release.Name }}-web
 spec:
   replicas: {{ .Values.web.replicas }}
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         {{- include "publisher.labels" . | nindent 8 }}
-        app.kubernetes.io/component: "web"
+        app.kubernetes.io/component: web
         app: {{ .Release.Name }}-web
       annotations:
         # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced

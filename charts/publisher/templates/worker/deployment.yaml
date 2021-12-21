@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-worker
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "worker"
+    app.kubernetes.io/component: worker
     app: {{ .Release.Name }}-worker
 spec:
   replicas: {{ .Values.worker.replicas }}
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         {{- include "publisher.labels" . | nindent 8 }}
-        app.kubernetes.io/component: "worker"
+        app.kubernetes.io/component: worker
         app: {{ .Release.Name }}-worker
       annotations:
         # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced
