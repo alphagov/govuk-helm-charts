@@ -34,7 +34,7 @@ common:
     factCheckReplyToAddress: govuk-fact-check-test@digital.cabinet-office.gov.uk
     factCheckReplyToId: govuk-fact-check-test@digital.cabinet-office.gov.uk
     govukNotifyTemplateId: 123e4567-e89b-12d3-a456-426614174000
-    redisUrl: redis://redis  # TODO: decide on Redis for EKS
+    redisUrl: redis://shared-redis-govuk.eks.test.govuk-internal.digital
 
 web:
   replicas: 1

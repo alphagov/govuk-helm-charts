@@ -11,7 +11,7 @@ applications:
         repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
         tag: latest  # To be edited by automation (not yet implemented).
       env:
-        redisUrl: redis://shared-redis.eks.test.govuk-internal.digital
+        redisUrl: redis://shared-redis-govuk.eks.test.govuk-internal.digital
     web:
       replicas: 1
     worker:
@@ -23,7 +23,7 @@ applications:
         repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon
         tag: latest  # To be edited by automation (not yet implemented).
       env:
-        redisUrl: redis://shared-redis.eks.test.govuk-internal.digital
+        redisUrl: redis://shared-redis-govuk.eks.test.govuk-internal.digital
     web:
       dbMigrationEnabled: true
       replicas: 1
