@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: {{ .Release.Name }}
-          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
@@ -64,7 +64,10 @@ spec:
             - name: SECRET_KEY_BASE
               value: "secret" #TODO: fix when we know how to handle secrets
             - name: SIGNON_ADMIN_PASSWORD
-              value: "secret"
+              valueFrom:
+                secretKeyRef:
+                  name: signon-auth-token
+                  key: token
           {{- with .Values.appExtraEnv }}
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
