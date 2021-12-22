@@ -58,3 +58,4 @@ applications:
     replicaCount: 1
     appMongodbUri: mongodb://mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital/content_store_production
 - name: argo-workflows
+- name: signon-resources

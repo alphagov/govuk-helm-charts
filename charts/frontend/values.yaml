@@ -22,6 +22,13 @@ appPort: 3000
 
 appMemcacheServers: []
 
+extraEnv:
+  - name: PUBLISHING_API_BEARER_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: signon-token-frontend-publishing-api
+        key: bearer_token
+
 # resources:
 #   limits:
 #     cpu: 500m
