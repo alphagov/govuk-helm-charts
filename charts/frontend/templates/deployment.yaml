@@ -32,7 +32,7 @@ spec:
               value: "{{ .Values.appPort }}"
             - name: SECRET_KEY_BASE
               value: "secret"  # TODO: fix when we know how to handle secrets
-          {{- with .Values.appExtraEnv }}
+          {{- with .Values.extraEnv }}
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           {{- with .Values.resources }}

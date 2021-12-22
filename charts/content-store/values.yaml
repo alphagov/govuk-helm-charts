@@ -31,6 +31,23 @@ appGovukContentSchemasPath: "/govuk-content-schemas"
 appDefaultTtl: "1800"
 appMongodbUri: "mongodb://mongo/content-store"
 
+extraEnv:
+  - name: ROUTER_API_BEARER_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: signon-token-content-store-router-api
+        key: bearer_token
+  - name: GDS_SSO_OAUTH_ID
+    valueFrom:
+      secretKeyRef:
+        name: signon-app-content-store
+        key: oauth_id
+  - name: GDS_SSO_OAUTH_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: signon-app-content-store
+        key: oauth_secret
+
 # appExtraEnv:
 #   - name: RETICULATE_SPLINES
 #     value: "true"

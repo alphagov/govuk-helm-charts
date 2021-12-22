@@ -57,3 +57,4 @@ applications:
     replicaCount: 1
     appMongodbUri: mongodb://mongo-1.integration.govuk-internal.digital,mongo-2.integration.govuk-internal.digital,mongo-3.integration.govuk-internal.digital/content_store_production
 - name: argo-workflows
+- name: signon-resources
