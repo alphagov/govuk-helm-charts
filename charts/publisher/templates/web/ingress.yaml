@@ -1,19 +1,19 @@
-{{- if .Values.web.ingress.enabled -}}
+{{- if .Values.ingress.enabled -}}
 {{- $fullName := .Release.Name -}}
-{{- $svcPort := .Values.web.service.port -}}
+{{- $svcPort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.web.ingress.name | default .Release.Name }}
+  name: {{ .Values.ingress.name | default .Release.Name }}
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
   annotations:
-    {{- toYaml .Values.web.ingress.annotations | nindent 4 }}
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
-  {{- if .Values.web.ingress.tls }}
+  {{- if .Values.ingress.tls }}
   tls:
-    {{- range .Values.web.ingress.tls }}
+    {{- range .Values.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -22,7 +22,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.web.ingress.hosts }}
+    {{- range .Values.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:

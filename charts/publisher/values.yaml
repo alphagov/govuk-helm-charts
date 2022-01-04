@@ -1,86 +1,72 @@
 # Default/example values for Publisher.
 
-# common represents values common to both the `web` and `worker` deployments.
-common:
+image:
+  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
+  tag: latest
+
+externalSecrets:
+  enabled: true
+  refreshInterval: 60m
+
+emailGroupBusiness: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
+emailGroupCitizen: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
+emailGroupDev: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
+emailGroupForcePublishAlerts: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
+factCheckSubjectPrefix: test
+factCheckUsername: govuk-fact-check-test@digital.cabinet-office.gov.uk
+factCheckAddressFormat: factcheck+test-{id}@alphagov.co.uk
+factCheckReplyToAddress: govuk-fact-check-test@digital.cabinet-office.gov.uk
+factCheckReplyToId: govuk-fact-check-test@digital.cabinet-office.gov.uk
+govukNotifyTemplateId: 123e4567-e89b-12d3-a456-426614174000
+redisUrl: redis://shared-redis-govuk.eks.test.govuk-internal.digital
+
+replicas: 1
+workerReplicas: 1
+port: 3000
+dbMigrationEnabled: true
+extraEnv: []
+# - name: RETICULATE_SPLINES
+#   value: true
+
+nginx:
   image:
-    repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
-    tag: latest
+    repository: nginx
+    pullPolicy: Always
+    tag: stable
+  port: 80
 
-  secrets:
-    externalSecretRef: govuk/publisher
-    externalSecretRefreshInterval: "60m"
-    keys:
-      - ASSET_MANAGER_BEARER_TOKEN
-      - FACT_CHECK_PASSWORD
-      - FACT_CHECK_USERNAME
-      - GDS_SSO_OAUTH_ID
-      - GDS_SSO_OAUTH_SECRET
-      - GOVUK_NOTIFY_API_KEY
-      - JWT_AUTH_SECRET
-      - LINK_CHECKER_API_BEARER_TOKEN
-      - LINK_CHECKER_API_SECRET_TOKEN
-      - MONGODB_URI
-      - PUBLISHING_API_BEARER_TOKEN
-      - SECRET_KEY_BASE
+service:
+  type: NodePort
+  annotations: {}
+  port: 80
 
-  env:
-    emailGroupBusiness: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
-    emailGroupCitizen: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
-    emailGroupDev: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
-    emailGroupForcePublishAlerts: mainstream-publisher-notifications-test@digital.cabinet-office.gov.uk
-    factCheckSubjectPrefix: test
-    factCheckUsername: govuk-fact-check-test@digital.cabinet-office.gov.uk
-    factCheckAddressFormat: factcheck+test-{id}@alphagov.co.uk
-    factCheckReplyToAddress: govuk-fact-check-test@digital.cabinet-office.gov.uk
-    factCheckReplyToId: govuk-fact-check-test@digital.cabinet-office.gov.uk
-    govukNotifyTemplateId: 123e4567-e89b-12d3-a456-426614174000
-    redisUrl: redis://shared-redis-govuk.eks.test.govuk-internal.digital
+ingress:
+  enabled: true
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
+    alb.ingress.kubernetes.io/load-balancer-name: publisher  # changeme
+  hosts:
+  - host: publisher.eks.test.govuk.digital  # changeme
+    paths:
+    - path: /
+      pathType: Prefix
 
-web:
-  replicas: 1
-  port: 3000
-  dbMigrationEnabled: true
+resources: {}
+#   limits:
+#     cpu: 500m
+#     memory: 512Mi
+#   requests:
+#     cpu: 500m
+#     memory: 512Mi
 
-  nginx:
-    image:
-      repository: nginx
-      pullPolicy: Always
-      tag: stable
-    port: 80
-
-  service:
-    type: NodePort
-    annotations: {}
-    port: 80
-
-  ingress:
-    enabled: true
-    annotations:
-      alb.ingress.kubernetes.io/scheme: internet-facing
-      alb.ingress.kubernetes.io/target-type: ip
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-      alb.ingress.kubernetes.io/ssl-redirect: "443"
-      alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
-      alb.ingress.kubernetes.io/load-balancer-name: publisher  # changeme
-    hosts:
-    - host: publisher.eks.test.govuk.digital  # changeme
-      paths:
-      - path: /
-        pathType: Prefix
-  # resources:
-  #   limits:
-  #     cpu: 500m
-  #     memory: 512Mi
-  #   requests:
-  #     cpu: 500m
-  #     memory: 512Mi
-
-worker:
-  replicas: 1
-  # resources:
-  #   limits:
-  #     cpu: 500m
-  #     memory: 512Mi
-  #   requests:
-  #     cpu: 500m
-  #     memory: 512Mi
+workerResources: {}
+#   limits:
+#     cpu: 500m
+#     memory: 512Mi
+#   requests:
+#     cpu: 500m
+#     memory: 512Mi
