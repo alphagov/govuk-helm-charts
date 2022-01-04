@@ -40,8 +40,10 @@ spec:
                   name: {{ $.Release.Name }}
                   key: {{ . | title }}
           {{- end }}
+          {{- with .Values.resources }}
           resources:
-{{ toYaml .Values.worker.resources | indent 12 }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           livenessProbe:
             exec:
               command:

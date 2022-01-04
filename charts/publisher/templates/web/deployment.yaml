@@ -41,8 +41,10 @@ spec:
                   name: {{ $.Release.Name }}
                   key: {{ . | title }}
           {{- end }}
+          {{- with .Values.resources }}
           resources:
-{{ toYaml .Values.web.resources | indent 12 }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /healthcheck/live
