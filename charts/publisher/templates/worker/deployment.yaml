@@ -4,10 +4,10 @@ metadata:
   name: {{ .Release.Name }}-worker
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "worker"
+    app.kubernetes.io/component: worker
     app: {{ .Release.Name }}-worker
 spec:
-  replicas: {{ .Values.worker.replicas }}
+  replicas: {{ .Values.workerReplicas }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-worker
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         {{- include "publisher.labels" . | nindent 8 }}
-        app.kubernetes.io/component: "worker"
+        app.kubernetes.io/component: worker
         app: {{ .Release.Name }}-worker
       annotations:
         # TODO: if Helm library is used, `$.Template.BasePath` needs to be replaced
@@ -24,35 +24,19 @@ spec:
     spec:
       containers:
         - name: app
-          image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command: ["bundle"]
           args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
           envFrom:
             - configMapRef:
+                name: govuk-apps-env
+            - configMapRef:
+                name: {{ .Release.Name }}-env
+            - secretRef:
                 name: {{ .Release.Name }}-env
           env:
-          {{- range .Values.common.secrets.keys }}
-            - name: {{ . | title }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $.Release.Name }}
-                  key: {{ . | title }}
-          {{- end }}
+            {{- .Values.extraEnv | toYaml | nindent 12 }}
           resources:
-{{ toYaml .Values.worker.resources | indent 12 }}
-          livenessProbe:
-            exec:
-              command:
-              - /bin/sh
-              - -c
-              - exit 0
-            initialDelaySeconds: 30
-            periodSeconds: 5
-          readinessProbe:
-            exec:
-              command:
-              - /bin/sh
-              - -c
-              - exit 0
-            initialDelaySeconds: 30
-            periodSeconds: 5
+            {{- .Values.workerResources | toYaml | nindent 12 }}
+          # TODO: consider implementing a liveness probe for Sidekiq
+          # e.g. https://github.com/arturictus/sidekiq_alive

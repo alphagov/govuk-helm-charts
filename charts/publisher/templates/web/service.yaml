@@ -4,18 +4,16 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "web"
+    app.kubernetes.io/component: web
     app: {{ .Release.Name }}
-{{ if .Values.web.service.annotations}}
+  {{- with .Values.service.annotations }}
   annotations:
-    {{- range $key, $value := .Values.web.service.annotations }}
-    {{ $key }}: {{ $value }}
-    {{- end }}
-{{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
-  type: {{ .Values.web.service.type }}
+  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.web.service.port }}
-      targetPort: {{ .Values.web.nginx.port }}
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.nginx.port }}
   selector:
     app: {{ .Release.Name }}-web

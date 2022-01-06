@@ -1,4 +1,4 @@
-{{- if .Values.web.dbMigrationEnabled -}}
+{{- if .Values.dbMigrationEnabled -}}
 {{- $jobName := print .Release.Name "-dbmigrate" -}}
 apiVersion: batch/v1
 kind: Job
@@ -6,7 +6,7 @@ metadata:
   name: {{ $jobName }}
   labels:
     {{- include "publisher.labels" . | nindent 4 }}
-    app.kubernetes.io/component: "web"
+    app.kubernetes.io/component: web
     argocd.argoproj.io/hook: PreSync
 spec:
   template:
@@ -14,25 +14,23 @@ spec:
       name: {{ $jobName }}
       labels:
         {{- include "publisher.labels" . | nindent 8 }}
-        app.kubernetes.io/component: "web"
+        app.kubernetes.io/component: web
     spec:
       restartPolicy: Never
       containers:
-      - name: {{ .Release.Name }}-dbmigrate
-        image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
+      - name: {{ $jobName }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command: ["bundle"]
         args: ["exec", "rails", "db:migrate"]
         envFrom:
           - configMapRef:
+              name: govuk-apps-env
+          - configMapRef:
+              name: {{ .Release.Name }}-env
+          - secretRef:
               name: {{ .Release.Name }}-env
         env:
-        {{- range .Values.secrets }}
-          - name: {{ . | title }}
-            valueFrom:
-              secretKeyRef:
-                name: {{ $.Release.Name }}
-                key: {{ . | title }}
-        {{- end }}
+          {{- .Values.extraEnv | toYaml | nindent 12 }}
         resources:
-{{ toYaml .Values.web.resources | indent 12 }}
-{{- end}}
+          {{- .Values.resources | toYaml | nindent 12 }}
+{{- end }}
