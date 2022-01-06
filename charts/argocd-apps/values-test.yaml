@@ -6,14 +6,11 @@ applications:
 - name: smokey
 - name: publisher
   helmValues:
-    common:
-      image:
-        repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
-        tag: latest  # To be edited by automation (not yet implemented).
-      env:
-        redisUrl: redis://shared-redis-govuk.eks.test.govuk-internal.digital
-    web:
-      replicas: 1
+    image:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
+      tag: latest  # To be edited by automation (not yet implemented).
+    redisUrl: redis://shared-redis-govuk.eks.test.govuk-internal.digital
+    replicas: 1
     worker:
       replicas: 1
 - name: signon

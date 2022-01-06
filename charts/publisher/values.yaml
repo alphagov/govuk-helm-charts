@@ -1,4 +1,8 @@
 # Default/example values for Publisher.
+#
+# The defaults marked "# change when running multiple copies" need changing
+# when installing multiple copies of the chart in the same cluster, to avoid
+# name clashes in external resources like load balancers.
 
 image:
   repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
@@ -42,15 +46,18 @@ service:
 
 ingress:
   enabled: true
+  # TODO: template this stuff in ../argocd-apps chart and simplify this to a
+  # generic example, then get rid of the header comment about avoiding name
+  # clashes when running multiple copies.
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
-    alb.ingress.kubernetes.io/load-balancer-name: publisher  # changeme
+    alb.ingress.kubernetes.io/load-balancer-name: publisher  # change when running multiple copies
   hosts:
-  - host: publisher.eks.test.govuk.digital  # changeme
+  - host: publisher.eks.test.govuk.digital  # change when running multiple copies
     paths:
     - path: /
       pathType: Prefix
