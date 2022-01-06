@@ -49,13 +49,3 @@ Selector labels
 app.kubernetes.io/name: {{ include "govuk-apps-conf.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
-
-{{/*
-Construct the domain name suffixes for internal and external services.
-*/}}
-{{- define "govuk.internalDomainSuffix" -}}
-{{- printf "%s.%s" .Release.Namespace .Values.clusterDomain }}
-{{- end }}
-{{- define "govuk.externalDomainSuffix" -}}
-{{- printf "eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal }}
-{{- end }}
