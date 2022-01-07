@@ -1,8 +1,12 @@
 {{- if .Values.dbMigrationEnabled -}}
-{{/* Job objects are immutable but Helm still tries to patch them when they
-change, so we suffix the name with the chart version and image tag to create a
-new one when the chart or the binary changes. */}}
-{{- $jobName := print .Release.Name "-dbmigrate-" .Chart.Version "-" .Values.image.tag -}}
+{{/*
+k8s Jobs are immutable but Helm still tries to patch them when they change, so
+we suffix the name with the chart version and image tag to create a new one
+when the chart or the binary changes. This workaround doesn't work when moving
+a mutable tag (like "latest"), but we shouldn't be using those anyway.
+*/}}
+{{- $chartVersionNoDots := .Chart.Version | replace "." "-" }}
+{{- $jobName := print .Release.Name "-dbmigrate-" $chartVersionNoDots "-" .Values.image.tag }}
 apiVersion: batch/v1
 kind: Job
 metadata:
