@@ -522,6 +522,16 @@ entries:
     version: 0.3.0
   govuk-apps-conf:
   - apiVersion: v2
+    created: "2022-01-07T16:07:45.793159245Z"
+    description: Shared ConfigMap for global (per-environment) settings for GOV.UK
+      apps
+    digest: a09402984c5aa700b4e1ab518e7c4a05f77b67004ef29f77ed707176afe689a8
+    name: govuk-apps-conf
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/govuk-apps-conf-0.1.2/govuk-apps-conf-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
     created: "2022-01-06T14:55:13.624841165Z"
     description: Shared ConfigMap for global (per-environment) settings for GOV.UK
       apps
@@ -881,4 +891,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-01-06T17:43:21.980110294Z"
+generated: "2022-01-07T16:07:45.793555448Z"
