@@ -4,6 +4,7 @@ kind: Application
 metadata:
   name: {{ .name }}
   {{- if has $.Values.govukEnvironment (list "test" "integration") }}
+  {{- /* Clean up k8s resources on chart deletion in non-prod only. */}}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
   {{- end }}
@@ -20,13 +21,16 @@ spec:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
       values: |
-        govukEnvironment: {{ $.Values.govukEnvironment }}
+        {{- toYaml $.Values.globalHelmValues | nindent 8 }}
+        {{- if .ingressHostname }}
+        {{- include "govukIngress" (dict "name" .name "host" (tpl .ingressHostname $)) | indent 8 }}
+        {{- end }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: apps
+    server: https://kubernetes.default.svc
+    namespace: {{ $.Values.appsNamespace }}
   syncPolicy:
     automated:
       prune: true

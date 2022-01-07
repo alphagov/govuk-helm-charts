@@ -1,5 +1,3 @@
 govukEnvironment: test
-clusterDomain: svc.cluster.local.  # FDQN with trailing dot. See [1].
-govukDomainExternal: govuk.digital
-
-# [1]: https://pracucci.com/kubernetes-dns-resolution-ndots-options-and-why-it-may-affect-application-performances.html
+internalDomainSuffix: ""
+externalDomainSuffix: eks.test.govuk.digital
