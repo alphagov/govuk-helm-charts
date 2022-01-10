@@ -1,2 +1,14 @@
-govukEnvironment: ""
+# Default values for the argocd-apps chart. Setting a value here will set it
+# for all app charts in all environments.
+#
+# See values-${env}.yaml for per-environment values for app charts.
+
+# Helm values applied to every app chart.
+globalHelmValues:
+  govukEnvironment: ""
+  govukStack: blue  # TODO: eliminate the need for govukStack.
+  externalDomainSuffix: ""
+  # TODO: delete internalDomainSuffix once Plek handles empty GOVUK_APP_DOMAIN.
+  internalDomainSuffix: apps.svc.cluster.local.
+appsNamespace: apps
 applications: []
