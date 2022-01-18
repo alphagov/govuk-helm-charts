@@ -27,6 +27,14 @@ entries:
     version: 0.1.1
   argocd-apps:
   - apiVersion: v2
+    created: "2022-01-18T12:49:00.363159258Z"
+    description: Installs ArgoCD applications into the cluster-services namespace
+    digest: faab99d5f7b35fdcc4871b07227b83be8aeadc3b3c3fda59ee15bbd4ff8f2475
+    name: argocd-apps
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-apps-0.5.1/argocd-apps-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v2
     created: "2022-01-10T15:17:43.555113882Z"
     description: Installs ArgoCD applications into the cluster-services namespace
     digest: eab8153c4a4429fb620f9e87c26a6e75deebbf33befefb562f241f39eab50700
@@ -364,6 +372,15 @@ entries:
     version: 0.1.0
   content-store:
   - apiVersion: v2
+    created: "2022-01-18T12:49:00.568400347Z"
+    description: A Helm chart for GOV.UK Content-Store
+    digest: 0c9af1487c0d803bab7575961a80eacb24af73c259861c51ac9b56253315b119
+    name: content-store
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.5.1/content-store-0.5.1.tgz
+    version: 0.5.1
+  - apiVersion: v2
     created: "2021-12-03T11:41:16.397963171Z"
     description: A Helm chart for GOV.UK Content-Store
     digest: 765f95a9155cf8e6c227a932565d6e619010da002362cf677784a75f8c3f0a80
@@ -419,6 +436,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.3.0/content-store-0.3.0.tgz
     version: 0.3.0
   frontend:
+  - apiVersion: v2
+    created: "2022-01-18T12:49:00.821375897Z"
+    description: A Helm chart for GOV.UK Frontend
+    digest: b7712ff0afd4a3a646fc237f4248af52fa20ad5429f02eb92be21260b893c81d
+    name: frontend
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/frontend-0.7.3/frontend-0.7.3.tgz
+    version: 0.7.3
   - apiVersion: v2
     created: "2021-12-10T16:07:19.040794937Z"
     description: A Helm chart for GOV.UK Frontend
@@ -589,6 +615,15 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.0/ingress-class-0.1.0.tgz
     version: 0.1.0
   publisher:
+  - apiVersion: v2
+    created: "2022-01-18T12:49:01.147732922Z"
+    description: A Helm chart for GOV.UK Publisher
+    digest: fbbe1f6ee1df9712552216eeab39e55209ffc6cd88a93d3693721d7bde0566e0
+    name: publisher
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/publisher-0.9.3/publisher-0.9.3.tgz
+    version: 0.9.3
   - apiVersion: v2
     created: "2022-01-10T15:17:43.856867495Z"
     description: A Helm chart for GOV.UK Publisher
@@ -790,6 +825,15 @@ entries:
     version: 0.3.0
   signon:
   - apiVersion: v2
+    created: "2022-01-18T12:49:01.698143922Z"
+    description: A Helm chart for GOV.UK Signon
+    digest: 8c78744c59f5396aa008f9310178ca1a6b9606b0c8d6a9b138f4944469a378e9
+    name: signon
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/signon-0.2.5/signon-0.2.5.tgz
+    version: 0.2.5
+  - apiVersion: v2
     created: "2021-11-09T16:38:51.258662151Z"
     description: A Helm chart for GOV.UK Signon
     digest: 76fdae64fa0c67b7aa991a8918cb7e54244efe6fd82390aa3907dc0b631f4c9c
@@ -842,6 +886,16 @@ entries:
     type: application
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/signon-0.1.0/signon-0.1.0.tgz
+    version: 0.1.0
+  signon-resources:
+  - apiVersion: v2
+    created: "2022-01-18T12:49:01.935191552Z"
+    description: A Helm chart for creating Signon resources such as bearer tokens
+    digest: bd595262a061fef58b82e2e2f5fe66ad2749c005df4913bd71db5b8367f6cbc5
+    name: signon-resources
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/signon-resources-0.1.0/signon-resources-0.1.0.tgz
     version: 0.1.0
   smokey:
   - apiVersion: v2
@@ -918,4 +972,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-01-10T15:17:43.857341798Z"
+generated: "2022-01-18T12:49:01.936010343Z"
