@@ -28,7 +28,82 @@ replicas: 1
 workerReplicas: 1
 port: 3000
 dbMigrationEnabled: true
-extraEnv: []
+extraEnv:
+  - name: GDS_SSO_OAUTH_ID
+    valueFrom:
+      secretKeyRef:
+        name: signon-app-publisher-eks
+        key: oauth_id
+  - name: GDS_SSO_OAUTH_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: signon-app-publisher-eks
+        key: oauth_secret
+  - name: ASSET_MANAGER_BEARER_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: "signon-token-publisher-asset-manager"
+        key: bearer_token
+  - name: PUBLISHING_API_BEARER_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: "signon-token-publisher-publishing-api"
+        key: bearer_token
+  - name: FACT_CHECK_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: FACT_CHECK_PASSWORD
+  - name: FACT_CHECK_REPLY_TO_ADDRESS
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: FACT_CHECK_REPLY_TO_ADDRESS
+  - name: FACT_CHECK_REPLY_TO_ID
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: FACT_CHECK_REPLY_TO_ID
+  - name: GA_UNIVERSAL_ID
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: GA_UNIVERSAL_ID
+  - name: GOVUK_NOTIFY_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: GOVUK_NOTIFY_API_KEY
+  - name: GOVUK_NOTIFY_TEMPLATE_ID
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: GOVUK_NOTIFY_TEMPLATE_ID
+  - name: JWT_AUTH_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: JWT_AUTH_SECRET
+  - name: LINK_CHECKER_API_BEARER_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: LINK_CHECKER_API_BEARER_TOKEN
+  - name: LINK_CHECKER_API_SECRET_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: LINK_CHECKER_API_SECRET_TOKEN
+  - name: MONGODB_URI
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: MONGODB_URI
+  - name: SECRET_KEY_BASE
+    valueFrom:
+      secretKeyRef:
+        name: publisher
+        key: SECRET_KEY_BASE
 # - name: RETICULATE_SPLINES
 #   value: true
 
