@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.appPort }}
+          envFrom:
+          - configMapRef:
+              name: govuk-apps-env
+          env:
+            - name: GOVUK_APP_DOMAIN
+              value: "{{ .Values.govukAppDomain }}"
+            - name: GOVUK_APP_NAME
+              value: "{{ .Release.Name }}"
+            - name: GOVUK_WEBSITE_ROOT
+              value: "{{ .Values.govukWebsiteRoot }}"
+            - name: PORT
+              value: "{{ .Values.appPort }}"
+            - name: SECRET_KEY_BASE
+              value: "secret"  # TODO: fix when we know how to handle secrets
+          {{- with .Values.appExtraEnv }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          startupProbe: &app-probe  # TODO: check the app responds with any Host header
+            httpGet:
+              path: /healthcheck/live
+              port: http
+            failureThreshold: 10
+            periodSeconds: 3
+            timeoutSeconds: 5
+          livenessProbe:
+            <<: *app-probe
+            failureThreshold: 3
+            periodSeconds: 5
+          readinessProbe:
+            <<: *app-probe
+            httpGet:
+              path: /healthcheck/ready
+              port: http
+            failureThreshold: 2
+            periodSeconds: 5
+        - name: {{ .Release.Name }}-nginx
+          image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.nginxPort }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          volumeMounts:
+          - name: {{ .Release.Name }}-nginx-conf
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+      volumes:
+      - name: {{ .Release.Name }}-nginx-conf
+        configMap:
+          name: {{ .Release.Name }}-nginx-conf

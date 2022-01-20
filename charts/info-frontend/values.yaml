@@ -1,0 +1,35 @@
+# Default/example values for info-frontend.
+
+service:
+  annotations: {}
+  type: NodePort
+  port: 80
+
+replicaCount: 1
+
+appImage:
+  repository: 430354129336.dkr.ecr.eu-west-1.amazonaws.com/info-frontend
+  tag: latest
+
+nginxImage:
+  repository: nginx
+  pullPolicy: Always
+  tag: stable
+
+appPort: 9292
+nginxPort: 80
+
+govukAppDomain: www.gov.uk
+govukWebsiteRoot: http://www.gov.uk
+
+# resources:
+#   limits:
+#     cpu: 500m
+#     memory: 512Mi
+#   requests:
+#     cpu: 500m
+#     memory: 512Mi
+
+# appExtraEnv:
+#   - name: RETICULATE_SPLINES
+#     value: "true"
