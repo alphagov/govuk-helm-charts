@@ -2,10 +2,15 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-nginx-conf
+  labels:
+    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
 data:
   nginx.conf: |-
-    error_log  /tmp/error.log warn;
-    pid        /tmp/nginx.pid;
+    user nginx;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/nginx.pid;
 
     events {
       worker_connections  1024;
@@ -21,11 +26,11 @@ data:
       keepalive_timeout  65;
 
       upstream {{ .Release.Name }} {
-        server 127.0.0.1:{{ .Values.appPort }};
+        server 127.0.0.1:{{ .Values.appImage.appPort }};
       }
 
       server {
-        listen {{ .Values.nginxPort }};
+        listen {{ .Values.nginxImage.nginxPort }};
 
         location / {
           proxy_set_header   Host $host;
