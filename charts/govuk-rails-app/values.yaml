@@ -5,9 +5,13 @@ service:
   annotations: {}
   port: 80
 
+externalSecrets:
+  enabled: true
+  refreshInterval: 60m
+
 ingress:
   enabled: false
-  name: 
+  name:
   host: ""
   path: "/"
   pathType: Prefix
@@ -17,23 +21,33 @@ ingress:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
+  hosts:
+  - host:
+    paths:
+    - path: /
+      pathType: Prefix
 
 replicaCount: 1
 
+# workerEnabled should be true if the app uses Sidekiq, false otherwise.
+workerEnabled: false
+workerReplicaCount: 1
+
+# dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
+dbMigrationEnabled: false
+
 appImage:
-  # TODO: point this at a public repo and override to the private repo in our CD config.
-  repository:
+  repository: ""  # Dummy value, overridden in ArgoCD config.
   tag: latest
+  appPort: 3000
 
 nginxImage:
-  repository: nginxinc/nginx-unprivileged
+  repository: nginx
   pullPolicy: Always
   tag: stable
+  nginxPort: 8080
 
-nginxPort: 8080
-appPort: 3000
-
-# resources:
+appResources: {}
 #   limits:
 #     cpu: 500m
 #     memory: 512Mi
@@ -41,6 +55,14 @@ appPort: 3000
 #     cpu: 500m
 #     memory: 512Mi
 
-# appExtraEnv:
+workerResources: {}
+#   limits:
+#     cpu: 500m
+#     memory: 512Mi
+#   requests:
+#     cpu: 500m
+#     memory: 512Mi
+
+# extraEnv:
 #  - name: RETICULATE_SPLINES
 #    value: "true"
