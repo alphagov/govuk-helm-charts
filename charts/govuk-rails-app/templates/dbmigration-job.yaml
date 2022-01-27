@@ -1,0 +1,45 @@
+{{- if .Values.dbMigrationEnabled -}}
+{{/*
+k8s Jobs are immutable but Helm still tries to patch them when they change, so
+we suffix the name with the chart version and image tag to create a new one
+when the chart or the binary changes. This workaround doesn't work when moving
+a mutable tag (like "latest"), but we shouldn't be using those anyway.
+*/}}
+{{- $chartVersionNoDots := .Chart.Version | replace "." "-" }}
+{{- $jobName := print .Release.Name "-dbmigrate-" $chartVersionNoDots "-" .Values.appImage.tag }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $jobName }}
+  labels:
+    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+    argocd.argoproj.io/hook: PreSync
+spec:
+  template:
+    metadata:
+      name: {{ $jobName }}
+      labels:
+        {{- include "govuk-rails-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: web
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ $jobName }}
+        image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        command: ["bundle"]
+        args: ["exec", "rails", "db:migrate"]
+        envFrom:
+          - configMapRef:
+              name: govuk-apps-env
+          - secretRef:
+              name: {{ .Release.Name }}
+        env:
+        {{- with .Values.appExtraEnv }}
+          {{- . | toYaml | trim | nindent 12 }}
+        {{- end }}
+        {{- with .Values.appResources }}
+        resources:
+          {{- . | toYaml | trim | nindent 12 }}
+        {{- end }}
+{{- end }}

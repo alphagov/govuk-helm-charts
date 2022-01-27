@@ -1,0 +1,42 @@
+{{- if .Values.workerEnabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-worker
+  labels:
+    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+    app: {{ .Release.Name }}-worker
+spec:
+  replicas: {{ .Values.workerReplicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-worker
+  template:
+    metadata:
+      labels:
+        {{- include "govuk-rails-app.labels" . | nindent 8 }}
+        app.kubernetes.io/component: worker
+        app: {{ .Release.Name }}-worker
+    spec:
+      containers:
+        - name: app
+          image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          command: ["bundle"]
+          args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
+          envFrom:
+            - configMapRef:
+                name: govuk-apps-env
+            - secretRef:
+                name: {{ .Release.Name }}
+          env:
+          {{- with .Values.workerExtraEnv }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.workerResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          # TODO: consider implementing a liveness probe for Sidekiq
+          # e.g. https://github.com/arturictus/sidekiq_alive
+{{- end }}
