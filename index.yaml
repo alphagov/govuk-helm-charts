@@ -603,6 +603,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/govuk-apps-conf-0.1.0/govuk-apps-conf-0.1.0.tgz
     version: 0.1.0
+  govuk-rails-app:
+  - apiVersion: v2
+    created: "2022-01-27T09:04:21.381611909Z"
+    description: A Helm chart for GOV.UK Rails app
+    digest: e30ce30a836c9c1886fd52c56270b692d08474ef4971ccd4452020091dcfcb49
+    name: govuk-rails-app
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/govuk-rails-app-0.1.0/govuk-rails-app-0.1.0.tgz
+    version: 0.1.0
   ingress-class:
   - apiVersion: v2
     created: "2021-12-01T11:11:08.071769417Z"
@@ -980,4 +990,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-01-20T12:35:44.461523627Z"
+generated: "2022-01-27T09:04:21.382019407Z"
