@@ -353,6 +353,14 @@ entries:
     version: 0.1.0
   cluster-secrets:
   - apiVersion: v2
+    created: "2022-01-27T12:07:36.414231995Z"
+    description: A Helm chart for defining ExternalSecrets for cluster-wide services.
+    digest: f69fb9c1d6c595f24fd03cb32f4691c810a4edb41db9ba97cecfe8040257c82c
+    name: cluster-secrets
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.3.0/cluster-secrets-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     created: "2021-10-19T11:54:53.327376722Z"
     description: A Helm chart for defining ExternalSecrets for cluster-wide services.
     digest: 72b6230c115ac05fded1cee0fe6cb852e8aaf4a618d633f1a157de5e46b27dc3
@@ -990,4 +998,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-01-27T09:04:21.382019407Z"
+generated: "2022-01-27T12:07:36.415312781Z"
