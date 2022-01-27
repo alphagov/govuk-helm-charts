@@ -15,16 +15,12 @@ spec:
   project: govuk
   source:
     repoURL: 'git@github.com/alphagov/govuk-helm-charts'
-    path: "{{ .chartPath | default (printf "charts/%s" .name) }}"
-    targetRevision: {{ .targetRevision | default "HEAD" }}
+    path: "{{ .chartPath | default (printf "charts/govuk-rails-app") }}"
+    targetRevision: nsabri1/default-rails-chart-test
     helm:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
       values: |
-        {{- toYaml $.Values.globalHelmValues | nindent 8 }}
-        {{- if .ingressHostname }}
-        {{- include "govukIngress" (dict "name" .name "host" (tpl .ingressHostname $)) | indent 8 }}
-        {{- end }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

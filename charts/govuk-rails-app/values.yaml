@@ -11,21 +11,17 @@ externalSecrets:
 
 ingress:
   enabled: false
-  name:
-  host: ""
-  path: "/"
-  pathType: Prefix
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
+    alb.ingress.kubernetes.io/load-balancer-name:
   hosts:
-  - host:
-    paths:
-    - path: /
-      pathType: Prefix
+  - name:
+    path: /
+    pathType: Prefix
 
 replicaCount: 1
 
