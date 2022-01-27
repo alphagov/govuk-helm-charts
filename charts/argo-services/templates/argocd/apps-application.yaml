@@ -6,6 +6,7 @@ spec:
   project: default
   source:
     repoURL: 'git@github.com/alphagov/govuk-helm-charts'
+    targetRevision: nsabri1/argo-test
     path: charts/argocd-apps
 
     helm:

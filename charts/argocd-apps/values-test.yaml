@@ -4,9 +4,14 @@ globalHelmValues:
   externalDomainSuffix: eks.test.govuk.digital
 
 applications:
+- name: argo-workflows
+  chartPath: charts/argo-workflows
 - name: cluster-secrets
+  chartPath: charts/cluster-secrets
 - name: govuk-apps-conf
+  chartPath: charts/govuk-apps-conf
 - name: smokey
+  chartPath: charts/smokey
 - name: publisher
   ingressHostname: publisher.{{ .Values.globalHelmValues.externalDomainSuffix }}
   helmValues:
@@ -56,6 +61,27 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/content-store
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
-    appMongodbUri: mongodb://mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital/content_store_production
-- name: argo-workflows
+    extraEnv:
+      - name: ROUTER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-store-router-api
+            key: bearer_token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-store
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-store
+            key: oauth_secret
+      - name: appGovukContentSchemasPath
+        value: /govuk-content-schemas
+      - name: appDefaultTtl:
+        value: 1800
+      - name: appMongodbUri
+        value: mongodb://mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital/content_store_production
 - name: signon-resources
+  chartPath: charts/signon-resources 
