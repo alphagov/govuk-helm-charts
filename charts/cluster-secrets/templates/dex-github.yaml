@@ -1,0 +1,16 @@
+# Note: This secret is used to allow Dex (https://dexidp.io/), a federated
+# OpenID connect provider, to use GitHub as an identity provider
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: govuk-dex-github
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-dex-github
+    creationPolicy: Owner
+  dataFrom:
+  - key: govuk/dex/github
