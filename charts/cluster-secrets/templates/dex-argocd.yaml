@@ -1,0 +1,21 @@
+# Note: This secret contains the OAUTH secret which allows ArgoCD to
+# authenticate with Dex (https://dexidp.io/), a federated
+# OpenID connect provider.
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: govuk-dex-argocd
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-dex-argocd
+    creationPolicy: Owner
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/part-of: argocd
+  dataFrom:
+  - key: govuk/dex/argocd
