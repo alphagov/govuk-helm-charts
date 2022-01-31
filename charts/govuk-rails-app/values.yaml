@@ -11,10 +11,6 @@ externalSecrets:
 
 ingress:
   enabled: false
-  name:
-  host: ""
-  path: "/"
-  pathType: Prefix
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
@@ -22,10 +18,9 @@ ingress:
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
   hosts:
-  - host:
-    paths:
-    - path: /
-      pathType: Prefix
+  - name:
+    path: /
+    pathType: Prefix
 
 replicaCount: 1
 

@@ -23,17 +23,15 @@ spec:
   {{- end }}
   rules:
     {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
+    - host: {{ .name }}
       http:
         paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
+          - path: {{ default "/" .path }}
+            pathType: {{ default "Prefix" .pathType }}
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
-          {{- end }}
     {{- end }}
 {{- end }}
