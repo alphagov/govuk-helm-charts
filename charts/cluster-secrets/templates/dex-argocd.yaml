@@ -5,6 +5,7 @@ apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-argocd
+  namespace: "{{ .Values.clusterServicesNamespace }}"
 spec:
   refreshInterval: 1h
   secretStoreRef:
