@@ -6,6 +6,8 @@ kind: ExternalSecret
 metadata:
   name: govuk-dex-argocd
   namespace: "{{ .Values.clusterServicesNamespace }}"
+  labels:
+    app.kubernetes.io/part-of: argocd
 spec:
   refreshInterval: 1h
   secretStoreRef:
@@ -14,9 +16,5 @@ spec:
   target:
     name: govuk-dex-argocd
     creationPolicy: Owner
-    template:
-      metadata:
-        labels:
-          app.kubernetes.io/part-of: argocd
   dataFrom:
   - key: govuk/dex/argocd
