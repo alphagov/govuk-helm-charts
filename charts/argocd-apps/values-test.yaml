@@ -249,7 +249,7 @@ applications:
       - name: DEFAULT_TTL
         value: "1800"
       - name: MONGODB_URI
-        value: mongodb://mongo-1.test.govuk-internal.digital,mongo-2.test.govuk-internal.digital,mongo-3.test.govuk-internal.digital/content_store_production
+        value: mongodb://shared-documentdb.test.govuk-internal.digital/content_store_production
       - name: GOVUK_APP_NAME
         value: content-store
 - name: signon-resources
