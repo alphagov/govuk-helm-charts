@@ -1,1 +1,2 @@
 clusterServicesNamespace: cluster-services
+dexGrafanaSecretsNamespaces: ["cluster-services", "monitoring"]
