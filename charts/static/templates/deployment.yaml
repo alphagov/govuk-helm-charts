@@ -22,17 +22,17 @@ spec:
               containerPort: {{ .Values.appPort }}
           env:
             - name: GOVUK_APP_DOMAIN
-              value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
+              value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s" .Values.govukEnvironment .Values.clusterDomain) }}"
             - name: GOVUK_APP_DOMAIN_EXTERNAL
-              value: "{{ .Values.appGovukDomainExternal | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appGovukDomainExternal | default (printf "%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: GOVUK_APP_NAME
               value: "{{ .Values.appGovukAppName | default .Release.Name }}"
             - name: GOVUK_WEBSITE_ROOT
-              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: DEFAULT_TTL
               value: "{{ .Values.appDefaultTtl }}"
             - name: GOVUK_ASSET_ROOT
-              value: "{{ .Values.appGovukAssetRoot | default (printf "https://assets.%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appGovukAssetRoot | default (printf "https://assets.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: GOVUK_ENVIRONMENT
               value: "{{ .Values.govukEnvironment }}"
             - name: PORT

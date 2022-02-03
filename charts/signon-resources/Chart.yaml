@@ -2,4 +2,4 @@ apiVersion: v2
 name: signon-resources
 description: A Helm chart for creating Signon resources such as bearer tokens
 type: application
-version: 0.1.0
+version: 0.1.1

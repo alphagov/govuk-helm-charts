@@ -22,7 +22,7 @@ spec:
               containerPort: {{ .Values.appPort }}
           env:
             - name: ASSET_HOST
-              value: "{{ .Values.appAssetHost | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appAssetHost | default (printf "https://www-origin.eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
@@ -35,17 +35,17 @@ spec:
             - name: GOVUK_APP_DOMAIN
               value: "{{ .Values.appGovukAppDomain | default (printf "%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
             - name: GOVUK_APP_DOMAIN_EXTERNAL
-              value: "{{ .Values.appGovukDomainExternal | default (printf "%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appGovukDomainExternal | default (printf "eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: GOVUK_APP_NAME
               value: "{{ .Values.appGovukAppName | default .Release.Name }}"
             - name: GOVUK_APP_TYPE
               value: "{{ .Values.appGovukAppType }}"
             - name: GOVUK_WEBSITE_ROOT
-              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin.eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: DEFAULT_TTL
               value: "{{ .Values.appDefaultTtl }}"
             - name: GOVUK_ASSET_ROOT
-              value: "{{ .Values.appGovukAssetRoot | default (printf "https://assets-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appGovukAssetRoot | default (printf "https://assets.eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: GOVUK_CONTENT_SCHEMAS_PATH
               value: "{{ .Values.appGovukContentSchemasPath }}"
             - name: GOVUK_ENVIRONMENT

@@ -7,14 +7,14 @@ metadata:
 data:
   {{- /* TODO: omit namespace from these user-facing URLs in the default namespace. */}}
   {{- /* TODO: delete PLEK_SERVICE_*_URI once Plek can construct http:// internal URLs. */}}
-  ASSET_HOST: https://www-origin-{{ .Release.Namespace }}.{{ .Values.externalDomainSuffix }}
+  ASSET_HOST: https://www-origin.{{ .Values.externalDomainSuffix }}
   GOVUK_APP_DOMAIN: {{ .Values.internalDomainSuffix }}
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.externalDomainSuffix }}
-  GOVUK_ASSET_ROOT: https://assets-{{ .Release.Namespace }}.{{ .Values.externalDomainSuffix }}
+  GOVUK_ASSET_ROOT: https://assets.{{ .Values.externalDomainSuffix }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
-  GOVUK_WEBSITE_ROOT: https://www-origin-{{ .Release.Namespace }}.{{ .Values.externalDomainSuffix }}
+  GOVUK_WEBSITE_ROOT: https://www-origin.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_CONTENT_STORE_URI: http://content-store.{{ .Values.internalDomainSuffix }}
-  PLEK_SERVICE_DRAFT_ORIGIN_URI: https://draft-origin-{{ .Release.Namespace }}.{{ .Values.externalDomainSuffix }}
+  PLEK_SERVICE_DRAFT_ORIGIN_URI: https://draft-origin.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_PUBLISHING_API_URI: http://publishing-api-web.{{ .Values.internalDomainSuffix }}
   PLEK_SERVICE_ROUTER_API_URI: http://router-api.{{ .Values.internalDomainSuffix }}
   PLEK_SERVICE_SIGNON_URI: http://signon.{{ .Values.externalDomainSuffix }}

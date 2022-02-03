@@ -2,4 +2,4 @@ apiVersion: v2
 name: signon
 description: A Helm chart for GOV.UK Signon
 type: application
-version: 0.2.5
+version: 0.2.6
