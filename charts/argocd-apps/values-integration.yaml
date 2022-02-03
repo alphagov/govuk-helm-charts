@@ -294,7 +294,7 @@ applications:
 - name: finder-frontend
   helmValues:
     appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/info-frontend
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/finder-frontend
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
