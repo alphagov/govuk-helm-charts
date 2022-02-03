@@ -1,0 +1,19 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: publisher-fact-check-email-account
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+      Username and password for the factcheck Gmail account. See
+      https://github.com/alphagov/publisher/blob/main/docs/fact-checking.md
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: publisher-fact-check-email-account
+  dataFrom:
+    - key: govuk/publisher/fact-check-email-account

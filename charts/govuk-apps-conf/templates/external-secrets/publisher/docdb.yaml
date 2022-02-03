@@ -1,0 +1,21 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: publisher-docdb
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+      Credentials for Publisher to connect to DocumentDB (MongoDB).
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: publisher-docdb
+    template:
+      data:
+        MONGODB_URI: '{{ $.Files.Get "externalsecrets-templates/mongo-conn-string.tpl" | trim }}/govuk_content_production'
+  dataFrom:
+    - key: govuk/common/shared-documentdb

@@ -51,42 +51,42 @@ applications:
       - name: FACT_CHECK_USERNAME
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-fact-check-email-account
             key: FACT_CHECK_USERNAME
       - name: FACT_CHECK_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-fact-check-email-account
             key: FACT_CHECK_PASSWORD
       - name: GOVUK_NOTIFY_API_KEY
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: JWT_AUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: authenticating-proxy-jwt-auth-secret
             key: JWT_AUTH_SECRET
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: publisher
-            key: LINK_CHECKER_API_BEARER_TOKEN
+            name: signon-token-publisher-link-checker-api
+            key: bearer_token
       - name: LINK_CHECKER_API_SECRET_TOKEN
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-link-checker-api-callback-token
             key: LINK_CHECKER_API_SECRET_TOKEN
       - name: MONGODB_URI
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-docdb
             key: MONGODB_URI
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-secret-key-base
             key: SECRET_KEY_BASE
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.test.govuk-internal.digital
