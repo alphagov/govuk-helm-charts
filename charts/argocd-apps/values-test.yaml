@@ -263,10 +263,6 @@ applications:
     extraEnv:
       - name: SECRET_KEY_BASE
         value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
-      - name: GOVUK_APP_DOMAIN
-        value: www.gov.uk
-      - name: GOVUK_WEBSITE_ROOT
-        value: https://www.gov.uk
       - name: GOVUK_APP_NAME
         value: info-frontend
 - name: whitehall-admin
@@ -292,7 +288,7 @@ applications:
       - name: MEMCACHE_SERVERS
         value: frontend-memcached.eks.test.govuk-internal.digital
       - name: DATABASE_URL
-        value: mysql2://something:something@mysql-primary.test.govuk-internal.digital/whitehall_production  # TODO: set DATABASE_URL as a secret
+        value: mysql2://  # TODO: set DATABASE_URL as a secret
 - name: whitehall-frontend
   helmValues:
     appImage:
@@ -307,7 +303,7 @@ applications:
       - name: MEMCACHE_SERVERS
         value: frontend-memcached.eks.test.govuk-internal.digital
       - name: DATABASE_URL
-        value: mysql2://something:something@mysql-primary.test.govuk-internal.digital/whitehall_production  # TODO: set DATABASE_URL as a secret
+        value: mysql2://  # TODO: set DATABASE_URL as a secret
 - name: draft-whitehall-frontend
   helmValues:
     appImage:
@@ -322,4 +318,4 @@ applications:
       - name: MEMCACHE_SERVERS
         value: frontend-memcached.eks.test.govuk-internal.digital
       - name: DATABASE_URL
-        value: mysql2://something:something@mysql-primary.test.govuk-internal.digital/whitehall_production  # TODO: set DATABASE_URL as a secret
+        value: mysql2://  # TODO: set DATABASE_URL as a secret
