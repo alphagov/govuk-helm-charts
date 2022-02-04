@@ -2,7 +2,7 @@ common:
   image:
     # TODO: Replace with ECR once image CI is set up
     repository: govuk/signon-bootstrap
-    tag: 0.0.11
+    tag: 0.0.12
 
 govukEnvironment: test
 govukDomainExternal: govuk.digital
