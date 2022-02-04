@@ -156,7 +156,7 @@ applications:
             key: token
 - name: router
   helmValues:
-    image:
+    appImage:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
