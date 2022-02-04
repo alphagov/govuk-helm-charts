@@ -242,6 +242,9 @@ applications:
         value: content-store
 - name: signon-resources
   chartPath: charts/signon-resources
+  helmValues:
+    image:
+      tag: 0.0.14
 - name: info-frontend
   helmValues:
     appImage:
