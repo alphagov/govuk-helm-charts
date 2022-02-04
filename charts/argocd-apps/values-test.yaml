@@ -234,7 +234,10 @@ applications:
       - name: DEFAULT_TTL
         value: "1800"
       - name: MONGODB_URI
-        value: mongodb://shared-documentdb.test.govuk-internal.digital/content_store_production
+        valueFrom:
+          secretKeyRef:
+            name: content-store-documentdb
+            key: uri
       - name: GOVUK_APP_NAME
         value: content-store
 - name: signon-resources

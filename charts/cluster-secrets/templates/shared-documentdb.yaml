@@ -1,0 +1,16 @@
+# NOTE: This is a temporary home for this ExternalSecret. We'll be moving it
+# to the govuk-apps-conf chart soon, and later to the content store chart.
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: content-store-documentdb
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: content-store-documentdb
+    creationPolicy: Owner
+  dataFrom:
+  - key: govuk/common/content-store-documentdb
