@@ -55,8 +55,8 @@ spec:
                   "slug": "publisher-eks",
                   "secret_name": "signon-app-publisher-eks",
                   "description": "Mainstream publishing application",
-                  "home_uri": "https://publisher-apps.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://publisher-apps.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://publisher.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://publisher.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 },
                 "publishing-api": {

@@ -45,13 +45,13 @@ spec:
             - name: DEFAULT_TTL
               value: "{{ .Values.appDefaultTtl }}"
             - name: GOVUK_APP_DOMAIN_EXTERNAL
-              value: "{{ .Values.appGovukDomainExternal | default (printf "%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appGovukDomainExternal | default (printf "eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: GOVUK_APP_ROOT
               value: "{{ .Values.appGovukAppRoot }}"
             - name: GOVUK_ENVIRONMENT
               value: "{{ .Values.govukEnvironment }}"
             - name: GOVUK_WEBSITE_ROOT
-              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin-%s.eks.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal) }}"
+              value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin.eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
             - name: ROUTER_APIADDR
               value: ":{{ .Values.appRouterApiAddr }}"
             - name: ROUTER_BACKEND_HEADER_TIMEOUT

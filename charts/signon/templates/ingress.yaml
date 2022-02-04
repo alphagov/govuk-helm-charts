@@ -6,7 +6,7 @@ kind: Ingress
 metadata:
   name: {{ .Values.ingress.name }}
   annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.ingress.name }}-{{ .Release.Namespace }}
+    alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.ingress.name }}
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
   {{- if .Values.ingress.tls }}
@@ -20,7 +20,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ .Values.ingress.host | default (printf "%s-%s.eks.%s.%s" .Values.ingress.name .Release.Namespace .Values.govukEnvironment .Values.govukDomainExternal ) }}
+    - host: {{ .Values.ingress.host | default (printf "%s.eks.%s.%s" .Values.ingress.name .Values.govukEnvironment .Values.govukDomainExternal ) }}
       http:
        paths:
          - path: {{ .Values.ingress.path }}
