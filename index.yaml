@@ -27,6 +27,14 @@ entries:
     version: 0.1.1
   argocd-apps:
   - apiVersion: v2
+    created: "2022-02-04T10:22:33.068269484Z"
+    description: Installs ArgoCD applications into the cluster-services namespace
+    digest: 542de0835dd45b90940dffe4c8cc8b1ed86f685b74aa3bb86f2e539341489f20
+    name: argocd-apps
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-apps-0.5.8/argocd-apps-0.5.8.tgz
+    version: 0.5.8
+  - apiVersion: v2
     created: "2022-02-03T17:47:33.403879282Z"
     description: Installs ArgoCD applications into the cluster-services namespace
     digest: 058829ec7573cc67603158a05c0502c8581b3fda10c07908ec829a7cc6aef94a
@@ -612,6 +620,16 @@ entries:
     version: 0.3.0
   govuk-apps-conf:
   - apiVersion: v2
+    created: "2022-02-04T10:22:33.1892999Z"
+    description: Shared ConfigMap for global (per-environment) settings for GOV.UK
+      apps
+    digest: 766f4c547bf057adb20a52d80b102ef508670d1512e44913c7b9cba7738815df
+    name: govuk-apps-conf
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/govuk-apps-conf-0.3.0/govuk-apps-conf-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     created: "2022-02-04T09:33:44.587497786Z"
     description: Shared ConfigMap for global (per-environment) settings for GOV.UK
       apps
@@ -1120,4 +1138,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-02-04T09:33:45.214074854Z"
+generated: "2022-02-04T10:22:33.190370903Z"
