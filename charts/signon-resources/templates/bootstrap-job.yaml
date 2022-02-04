@@ -50,6 +50,15 @@ spec:
                   "redirect_uri": "https://asset-manager.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
+                "link-checker-api": {
+                  "name": "Link Checker API",
+                  "slug": "link-checker-api",
+                  "secret_name": "signon-app-link-checker-api",
+                  "description": "Checks links",
+                  "home_uri": "https://link-checker-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://link-checker-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                },
                 "publisher-eks": {
                   "name": "Publisher [EKS]",
                   "slug": "publisher-eks",
@@ -94,6 +103,7 @@ spec:
                   "email": "publisher@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
                     { "application_slug": "publishing-api" },
+                    { "application_slug": "link-checker-api" },
                     { "application_slug": "asset-manager" }
                   ]
                 },
