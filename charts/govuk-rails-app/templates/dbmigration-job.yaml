@@ -15,7 +15,6 @@ metadata:
     {{- include "govuk-rails-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
   annotations:
-    argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/sync-options: Replace=true
 spec:
   template:
