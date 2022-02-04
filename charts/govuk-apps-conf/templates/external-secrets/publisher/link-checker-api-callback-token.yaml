@@ -1,0 +1,20 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: publisher-link-checker-api-callback-token
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+      Publisher uses this for verification of batch-completion webhook
+      (i.e. callback) requests from Link Checker API. See
+      https://github.com/alphagov/link-checker-api/blob/main/docs/api.md#verifying-the-webhook-request
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: publisher-link-checker-api-callback-token
+  dataFrom:
+    - key: govuk/publisher/link-checker-api-callback-token
