@@ -156,10 +156,19 @@ applications:
             key: token
 - name: router
   helmValues:
-    image:
+    appImage:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: www-origin
+      hosts:
+      - name: www-origin.eks.test.govuk.digital
+    extraEnv:
+      - name: foo  # XXX TODO: finish configuring Router
+        value: bar
 - name: frontend
   helmValues:
     appImage:
