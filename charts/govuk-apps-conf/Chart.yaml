@@ -1,5 +1,5 @@
 apiVersion: v2
 name: govuk-apps-conf
-description: Shared ConfigMap for global (per-environment) settings for GOV.UK apps
+description: ConfigMap and ExternalSecrets for global (per-environment) settings shared between multiple GOV.UK apps
 type: application
 version: 0.3.0
