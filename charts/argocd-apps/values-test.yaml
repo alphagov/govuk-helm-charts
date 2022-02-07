@@ -245,8 +245,8 @@ applications:
       - name: MONGODB_URI
         valueFrom:
           secretKeyRef:
-            name: content-store-documentdb
-            key: uri
+            name: content-store-docdb
+            key: MONGODB_URI
       - name: GOVUK_APP_NAME
         value: content-store
 - name: signon-resources
