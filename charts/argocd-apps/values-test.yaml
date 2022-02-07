@@ -86,7 +86,7 @@ applications:
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
-            name: publisher-rails-secret-key-base
+            name: rails-secret-key-base
             key: SECRET_KEY_BASE
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.test.govuk-internal.digital
