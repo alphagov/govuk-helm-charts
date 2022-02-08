@@ -1,4 +1,4 @@
-# Note: This secret contains the OAUTH secret which allows Argo-Workflows to
+# This secret contains the OAUTH secret which allows Argo-Workflows to
 # authenticate with Dex (https://dexidp.io/), a federated
 # OpenID connect provider.
 apiVersion: external-secrets.io/v1alpha1
