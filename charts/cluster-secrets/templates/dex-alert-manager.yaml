@@ -1,0 +1,21 @@
+# This secret contains the OAUTH secret which allows the
+# ingress of Alert Manager to authenticate with Dex
+# (https://dexidp.io/), a federated OpenID connect provider.
+{{- range .Values.dexAlertManagerSecretsNamespaces}}
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: govuk-dex-alert-manager
+  namespace: "{{ . }}"
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-dex-alert-manager
+    creationPolicy: Owner
+  dataFrom:
+  - key: govuk/dex/alert-manager
+{{- end }}

@@ -1,2 +1,4 @@
 clusterServicesNamespace: cluster-services
 dexGrafanaSecretsNamespaces: ["cluster-services", "monitoring"]
+dexPrometheusSecretsNamespaces: ["cluster-services", "monitoring"]
+dexAlertManagerSecretsNamespaces: ["cluster-services", "monitoring"]
