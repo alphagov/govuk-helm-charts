@@ -385,6 +385,14 @@ entries:
     version: 0.1.0
   cluster-secrets:
   - apiVersion: v2
+    created: "2022-02-08T12:25:17.576107638Z"
+    description: A Helm chart for defining ExternalSecrets for cluster-wide services.
+    digest: bbc05951e37f9c9df9135789b1f68acd8dc5c5de0c3838282f6c3214230c8557
+    name: cluster-secrets
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.7.1/cluster-secrets-0.7.1.tgz
+    version: 0.7.1
+  - apiVersion: v2
     created: "2022-02-03T16:05:03.763281234Z"
     description: A Helm chart for defining ExternalSecrets for cluster-wide services.
     digest: 01c9d3768b522d946782a9337d0459e4ff8e686abae43f437ba30921a22c2f53
@@ -1028,6 +1036,15 @@ entries:
     version: 0.1.0
   signon-resources:
   - apiVersion: v2
+    created: "2022-02-08T12:25:18.114051199Z"
+    description: A Helm chart for creating Signon resources such as bearer tokens
+    digest: 8fe50a4e5e9857b28f4abbeb68aee099a5ed9649129478cecce3ebc6a6bdb644
+    name: signon-resources
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/signon-resources-0.1.3/signon-resources-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
     created: "2022-02-04T09:33:44.976312638Z"
     description: A Helm chart for creating Signon resources such as bearer tokens
     digest: 184702cff5176b0f248475728350581750a5dc82009c964224ae044c0b4956a7
@@ -1138,4 +1155,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-02-04T10:22:33.190370903Z"
+generated: "2022-02-08T12:25:18.114548703Z"
