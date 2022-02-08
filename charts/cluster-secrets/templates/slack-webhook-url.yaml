@@ -1,9 +1,10 @@
-# NOTE: This assumes that an AWS SecretsManager secret `govuk/slack-webhook-url`
-# exists with key `url`.
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: slack-webhook-url
+  annotations:
+    a8r.io/description: >
+      This secret contains the slack webhook to post on Slack
 spec:
   refreshInterval: 1h
   secretStoreRef:

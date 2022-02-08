@@ -1,10 +1,12 @@
-# Note: This secret is used to allow Dex (https://dexidp.io/), a federated
-# OpenID connect provider, to use GitHub as an identity provider
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-github
   namespace: "{{ .Values.clusterServicesNamespace }}"
+  annotations:
+    a8r.io/description: >
+      This secret is used to allow Dex (https://dexidp.io/), a federated
+      OpenID connect provider, to use GitHub as an identity provider
 spec:
   refreshInterval: 1h
   secretStoreRef:

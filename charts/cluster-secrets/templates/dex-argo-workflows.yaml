@@ -1,11 +1,13 @@
-# This secret contains the OAUTH secret which allows Argo-Workflows to
-# authenticate with Dex (https://dexidp.io/), a federated
-# OpenID connect provider.
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-argo-workflows
   namespace: "{{ .Values.clusterServicesNamespace }}"
+  annotations:
+    a8r.io/description: >
+      This secret contains the OAUTH secret which allows Argo-Workflows to
+      authenticate with Dex (https://dexidp.io/), a federated
+      OpenID connect provider
 spec:
   refreshInterval: 1h
   secretStoreRef:
