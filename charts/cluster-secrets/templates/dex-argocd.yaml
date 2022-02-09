@@ -1,6 +1,3 @@
-# Note: This secret contains the OAUTH secret which allows ArgoCD to
-# authenticate with Dex (https://dexidp.io/), a federated
-# OpenID connect provider.
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
@@ -8,6 +5,11 @@ metadata:
   namespace: "{{ .Values.clusterServicesNamespace }}"
   labels:
     app.kubernetes.io/part-of: argocd
+  annotations:
+    a8r.io/description: >
+      This secret contains the OAUTH secret which allows ArgoCD to
+      authenticate with Dex (https://dexidp.io/), a federated
+      OpenID connect provider
 spec:
   refreshInterval: 1h
   secretStoreRef:
