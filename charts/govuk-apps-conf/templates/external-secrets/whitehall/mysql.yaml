@@ -1,0 +1,21 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: whitehall-mysql
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+      Credentials for Whitehall to connect to MYSQL.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: whitehall-mysql
+    template:
+      data:
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/mysql-conn-string.tpl" | trim }}/whitehall_production'
+  dataFrom:
+    - key: govuk/common/shared-mysql-primary
