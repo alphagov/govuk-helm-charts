@@ -1,0 +1,18 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: whitehall-notify
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+      The GOV.UK Notify API key belonging to Whitehall.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: whitehall-notify
+  dataFrom:
+    - key: govuk/whitehall/notify

@@ -77,7 +77,17 @@ spec:
                   "redirect_uri": "https://publishing-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 }
+                "whitehall": {
+                  "name": "Whitehall",
+                  "slug": "whitehall",
+                  "secret_name": "signon-app-whitehall-eks",
+                  "description": "Mainstream Whitehall application",
+                  "home_uri": "https://whitehall-admin.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://whitehall-admin.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                }
               }
+
           - name: API_USERS
             value: |-
               {
@@ -113,6 +123,16 @@ spec:
                   "email": "publishing-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
                     { "application_slug": "content-store" }
+                  ]
+                },
+                "whitehall": {
+                  "name": "Whitehall",
+                  "username": "whitehall",
+                  "email": "whitehall@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api" },
+                    { "application_slug": "link-checker-api" },
+                    { "application_slug": "asset-manager" }
                   ]
                 }
               }

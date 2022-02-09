@@ -295,3 +295,100 @@ applications:
         value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
       - name: GOVUK_APP_NAME
         value: collections
+- name: whitehall-admin
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
+      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
+    dbMigrationEnabled: true
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
+      hosts:
+      - name: whitehall-admin.eks.test.govuk.digital
+    replicaCount: 1
+    workerReplicaCount: 1
+    extraEnv: &whitehall-envs
+      - name: GOVUK_APP_NAME
+        value: whitehall
+      - name: GOVUK_APP_TYPE
+        value: rack
+      - name: NODE_ENV
+        value: production
+      - name: RACK_ENV
+        value: production
+      - name: RAILS_ENV
+        value: production
+      - name: GDS_SSO_OAUTH_ID
+        value: eiGhei3oop2seGh4Phee8eikuphai9coh5moJ2ohTh8soghohdohquashaor0joh
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall-eks
+            key: oauth_secret
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-asset-manager
+            key: bearer_token
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: publisher-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-publishing-api
+            key: bearer_token
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: GOVUK_STATSD_PREFIX
+        value: whitehall
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.test.govuk-internal.digital
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached.eks.test.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-mysql
+            key: DATABASE_URL
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: whitehall-frontend
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
+      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      *whitehall-envs
+- name: draft-whitehall-frontend
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
+      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      *whitehall-envs
