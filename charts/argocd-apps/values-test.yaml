@@ -303,7 +303,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: GOVUK_APP_DOMAIN
         value: www.gov.uk
       - name: GOVUK_WEBSITE_ROOT
