@@ -324,12 +324,12 @@ applications:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-app-whitehall-eks
+            name: signon-app-whitehall
             key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-whitehall-eks
+            name: signon-app-whitehall
             key: oauth_secret
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
