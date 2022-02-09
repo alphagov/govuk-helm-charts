@@ -5,10 +5,6 @@ service:
   annotations: {}
   port: 80
 
-externalSecrets:
-  enabled: true
-  refreshInterval: 60m
-
 ingress:
   enabled: false
   annotations:
