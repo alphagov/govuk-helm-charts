@@ -76,7 +76,7 @@ spec:
                   "home_uri": "https://publishing-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://publishing-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["view_all"]
-                }
+                },
                 "whitehall": {
                   "name": "Whitehall",
                   "slug": "whitehall",
@@ -87,7 +87,6 @@ spec:
                   "permissions": []
                 }
               }
-
           - name: API_USERS
             value: |-
               {

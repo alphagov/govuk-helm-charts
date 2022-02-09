@@ -322,7 +322,10 @@ applications:
       - name: RAILS_ENV
         value: production
       - name: GDS_SSO_OAUTH_ID
-        value: eiGhei3oop2seGh4Phee8eikuphai9coh5moJ2ohTh8soghohdohquashaor0joh
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall-eks
+            key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
