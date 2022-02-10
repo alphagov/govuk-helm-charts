@@ -242,11 +242,30 @@ applications:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
       hosts:
       - name: www-origin.eks.test.govuk.digital
-    service:
-      port: 8000
+    appProbes: &router-app-probes
+      startupProbe: &router-probe
+        httpGet:
+          path: /healthcheck
+          port: 3001
+        failureThreshold: 10
+        periodSeconds: 1
+        timeoutSeconds: 1
+      livenessProbe:
+        <<: *router-probe
+        failureThreshold: 3
+        periodSeconds: 5
+      readinessProbe:
+        <<: *router-probe
+        httpGet:
+          path: /healthcheck
+          port: 3001
+        failureThreshold: 2
+        periodSeconds: 5
     extraEnv:
-      - name: ROUTER_PUBADDR  # TODO: remove once Dockerfile cleaned up.
-        value: ":8000"
+      - name: ROUTER_PUBADDR
+        value: ":3000"
+      - name: ROUTER_APIADDR
+        value: ":3001"
       - name: ROUTER_MONGO_URL
         value: &router_mongo_hosts "\
           router-backend-1.pink.test.govuk-internal.digital,\
@@ -268,11 +287,10 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
-    service:
-      port: 8000
+    appProbes: *router-app-probes
     extraEnv:
-      - name: ROUTER_PUBADDR  # TODO: remove once Dockerfile cleaned up.
-        value: ":8000"
+      - name: ROUTER_PUBADDR
+        value: ":3000"
       - name: ROUTER_MONGO_URL
         value: *router_mongo_hosts
       - name: ROUTER_MONGO_DB

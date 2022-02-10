@@ -32,6 +32,28 @@ appImage:
   tag: latest
   appPort: 3000
 
+# appProbes defines liveness/readiness/startup probes for the app container.
+# These default should suffice for most GOV.UK Rails apps.
+appProbes:
+  startupProbe: &app-probe  # TODO: check the Rails apps aren't picky about the Host header.
+    httpGet:
+      path: /healthcheck/live
+      port: http
+    failureThreshold: 10
+    periodSeconds: 3
+    timeoutSeconds: 5
+  livenessProbe:
+    <<: *app-probe
+    failureThreshold: 3
+    periodSeconds: 5
+  readinessProbe:
+    <<: *app-probe
+    httpGet:
+      path: /healthcheck/ready
+      port: http
+    failureThreshold: 2
+    periodSeconds: 5
+
 nginxImage:
   repository: nginx
   pullPolicy: Always

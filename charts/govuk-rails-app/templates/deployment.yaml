@@ -32,18 +32,9 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          livenessProbe:
-            httpGet:
-              path: /healthcheck/live
-              port: http
-            initialDelaySeconds: 30
-            periodSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /healthcheck/ready
-              port: http
-            initialDelaySeconds: 30
-            periodSeconds: 5
+          {{- with .Values.appProbes }}
+          {{- . | toYaml | trim | nindent 10 }}
+          {{- end }}
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
