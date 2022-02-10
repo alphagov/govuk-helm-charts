@@ -32,6 +32,15 @@ spec:
                   "redirect_uri": "https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
+                "draft-content-store": {
+                  "name": "Draft Content Store",
+                  "slug": "draft-content-store",
+                  "secret_name": "signon-app-draft-content-store",
+                  "description": "Central store for draft content on GOV.UK",
+                  "home_uri": "https://draft-content-store.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://draft-content-store.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                },
                 "router-api": {
                   "name": "Router API",
                   "slug": "router-api",
@@ -121,7 +130,9 @@ spec:
                   "username": "publishing-api",
                   "email": "publishing-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "content-store" }
+                    { "application_slug": "content-store" },
+                    { "application_slug": "draft-content-store" },
+                    { "application_slug": "router-api" }
                   ]
                 },
                 "whitehall": {

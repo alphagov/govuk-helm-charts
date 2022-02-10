@@ -1,0 +1,18 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: publishing-api-database-url-ec2
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+      Connection string for Publishing API DB hosted in EC2
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: publishing-api-database-url-ec2
+  dataFrom:
+    - key: govuk/publishing-api/database-url
