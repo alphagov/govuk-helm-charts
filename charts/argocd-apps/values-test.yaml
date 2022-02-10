@@ -144,8 +144,8 @@ applications:
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
-            name: signon
-            key: database-url
+            name: signon-mysql
+            key: DATABASE_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.test.govuk-internal.digital
       - name: RAILS_ENV
