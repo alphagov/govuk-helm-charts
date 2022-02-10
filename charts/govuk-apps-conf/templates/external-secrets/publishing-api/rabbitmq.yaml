@@ -15,4 +15,4 @@ spec:
   target:
     name: publishing-api-rabbitmq
   dataFrom:
-    - key: govuk/apps/publishing-api/rabbitmq
+    - key: govuk/common/rabbitmq-govuk
