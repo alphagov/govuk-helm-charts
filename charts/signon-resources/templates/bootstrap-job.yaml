@@ -50,6 +50,15 @@ spec:
                   "redirect_uri": "https://asset-manager.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
+                "authenticating-proxy": {
+                  "name": "Content Preview (aka Authenticating Proxy)",
+                  "slug": "authenticating-proxy",
+                  "secret_name": "signon-app-authenticating-proxy",
+                  "description": "Provides authenticated access to draft content on GOV.UK",
+                  "home_uri": "https://draft-origin.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://draft-origin.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                },
                 "link-checker-api": {
                   "name": "Link Checker API",
                   "slug": "link-checker-api",
