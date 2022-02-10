@@ -166,9 +166,93 @@ applications:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
       hosts:
       - name: www-origin.eks.test.govuk.digital
+    service:
+      port: 8000
     extraEnv:
-      - name: foo  # XXX TODO: finish configuring Router
-        value: bar
+      - name: ROUTER_PUBADDR  # TODO: remove PORT once Dockerfile cleaned up.
+        value: "8000"
+      - name: ROUTER_MONGO_URL
+        value: &router_mongo_hosts "\
+          router-backend-1.pink.test.govuk-internal.digital,\
+          router-backend-2.pink.test.govuk-internal.digital,\
+          router-backend-3.pink.test.govuk-internal.digital"
+      - name: BACKEND_URL_content-store
+        value: "http://content-store"
+      - name: BACKEND_URL_frontend
+        value: "http://frontend"
+      - name: BACKEND_URL_static
+        value: "http://static"
+      - name: BACKEND_URL_signon
+        value: "http://signon"
+      - name: ROUTER_BACKEND_HEADER_TIMEOUT  # TODO: change Router's default to this.
+        value: 20s
+- name: draft-router
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    service:
+      port: 8000
+    extraEnv:
+      - name: ROUTER_PUBADDR  # TODO: remove once Dockerfile cleaned up.
+        value: "8000"
+      - name: ROUTER_MONGO_URL
+        value: *router_mongo_hosts
+      - name: ROUTER_MONGO_DB
+        value: draft_router
+      - name: BACKEND_URL_content-store
+        value: "http://draft-content-store"
+      - name: BACKEND_URL_frontend
+        value: "http://draft-frontend"
+      - name: BACKEND_URL_static
+        value: "http://draft-static"
+      - name: BACKEND_URL_signon
+        value: "http://signon"
+      - name: ROUTER_BACKEND_HEADER_TIMEOUT
+        value: 20s
+- name: authenticating-proxy
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/authenticating-proxy
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: draft-origin
+      hosts:
+      - name: draft-origin.eks.test.govuk.digital
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-authenticating-proxy
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-authenticating-proxy
+            key: oauth_secret
+      - name: GOVUK_UPSTREAM_URI
+        value: "http://draft-router"
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: MONGODB_URI  # TODO: this will need to become a secret when moving to DocDB.
+        value: "mongodb://\
+          router-backend-1.test.govuk-internal.digital,\
+          router-backend-2.test.govuk-internal.digital,\
+          router-backend-3.test.govuk-internal.digital/authenticating_proxy_production"
+      - name: PORT  # TODO: remove PORT once Dockerfile cleaned up.
+        value: "3000"
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: frontend
   helmValues:
     appImage:
