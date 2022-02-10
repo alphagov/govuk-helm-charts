@@ -129,7 +129,10 @@ applications:
       - name: DEVISE_SECRET_KEY
         value: secret
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: PORT
         value: "3000"
       - name: GOVUK_CONTENT_SCHEMAS_PATH
@@ -177,7 +180,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -186,7 +192,7 @@ applications:
       - name: PORT
         value: "3000"
       - name: MEMCACHE_SERVERS
-        value: frontend-memcached.eks.test.govuk-internal.digital
+        value: frontend-memcached-govuk.eks.test.govuk-internal.digital
 - name: static
   helmValues:
     appImage:
@@ -195,7 +201,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: PORT
         value: "3000"
       - name: RAILS_ENV
@@ -235,7 +244,10 @@ applications:
             name: signon-app-content-store
             key: oauth_secret
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: PORT
         value: "3000"
       - name: GOVUK_CONTENT_SCHEMAS_PATH
@@ -262,11 +274,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
-      - name: GOVUK_APP_DOMAIN
-        value: www.gov.uk
-      - name: GOVUK_WEBSITE_ROOT
-        value: https://www.gov.uk
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: info-frontend
 - name: finder-frontend
@@ -277,11 +288,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
-      - name: GOVUK_APP_DOMAIN
-        value: www.gov.uk
-      - name: GOVUK_WEBSITE_ROOT
-        value: https://www.gov.uk
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: finder-frontend
 - name: collections
@@ -292,7 +302,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: collections
 - name: whitehall-admin
@@ -368,7 +381,7 @@ applications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.test.govuk-internal.digital
       - name: MEMCACHE_SERVERS
-        value: frontend-memcached.eks.test.govuk-internal.digital
+        value: frontend-memcached-govuk.eks.test.govuk-internal.digital
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -407,9 +420,5 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_DOMAIN
-        value: www.gov.uk
-      - name: GOVUK_WEBSITE_ROOT
-        value: https://www.gov.uk
       - name: GOVUK_APP_NAME
         value: government-frontend
