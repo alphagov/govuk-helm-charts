@@ -169,8 +169,8 @@ applications:
     service:
       port: 8000
     extraEnv:
-      - name: ROUTER_PUBADDR  # TODO: remove PORT once Dockerfile cleaned up.
-        value: "8000"
+      - name: ROUTER_PUBADDR  # TODO: remove once Dockerfile cleaned up.
+        value: ":8000"
       - name: ROUTER_MONGO_URL
         value: &router_mongo_hosts "\
           router-backend-1.pink.test.govuk-internal.digital,\
@@ -196,7 +196,7 @@ applications:
       port: 8000
     extraEnv:
       - name: ROUTER_PUBADDR  # TODO: remove once Dockerfile cleaned up.
-        value: "8000"
+        value: ":8000"
       - name: ROUTER_MONGO_URL
         value: *router_mongo_hosts
       - name: ROUTER_MONGO_DB
