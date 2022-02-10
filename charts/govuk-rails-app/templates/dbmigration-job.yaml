@@ -6,7 +6,7 @@ when the chart or the binary changes. This workaround doesn't work when moving
 a mutable tag (like "latest"), but we shouldn't be using those anyway.
 */}}
 {{- $chartVersionNoDots := .Chart.Version | replace "." "-" }}
-{{- $jobName := print .Release.Name "-dbmigrate-" $chartVersionNoDots "-" .Values.appImage.tag }}
+{{- $jobName := print .Release.Name "-dbmigrate-" $chartVersionNoDots "-" (trunc 7 .Values.appImage.tag) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
