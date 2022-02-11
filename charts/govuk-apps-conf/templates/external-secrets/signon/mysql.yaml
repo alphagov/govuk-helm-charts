@@ -18,4 +18,4 @@ spec:
       data:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/mysql-conn-string.tpl" | trim }}/signon_production'
   dataFrom:
-    - key: govuk/signon/mysql-primary
+    - key: govuk/signon/mysql
