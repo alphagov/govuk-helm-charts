@@ -117,7 +117,16 @@ applications:
     workerEnabled: true
     replicaCount: 1
     workerReplicaCount: 1
-    appProbes: {}
+    appProbes:
+      livenessProbe:
+        exec:
+          command:
+          - cat
+          - /
+        initialDelaySeconds: 10
+        failureThreshold: 100
+        periodSeconds: 10
+        timeoutSeconds: 900
     appResources:
       limits:
         cpu: 1
