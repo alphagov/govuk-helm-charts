@@ -275,9 +275,9 @@ applications:
         value: ":3001"
       - name: ROUTER_MONGO_URL
         value: &router_mongo_hosts "\
-          router-backend-1.pink.integration.govuk-internal.digital,\
-          router-backend-2.pink.integration.govuk-internal.digital,\
-          router-backend-3.pink.integration.govuk-internal.digital"
+          router-backend-1.blue.integration.govuk-internal.digital,\
+          router-backend-2.blue.integration.govuk-internal.digital,\
+          router-backend-3.blue.integration.govuk-internal.digital"
       - name: BACKEND_URL_content-store
         value: "http://content-store"
       - name: BACKEND_URL_frontend
@@ -344,9 +344,9 @@ applications:
             key: JWT_AUTH_SECRET
       - name: MONGODB_URI  # TODO: this will need to become a secret when moving to DocDB.
         value: "mongodb://\
-          router-backend-1.integration.govuk-internal.digital,\
-          router-backend-2.integration.govuk-internal.digital,\
-          router-backend-3.integration.govuk-internal.digital/authenticating_proxy_production"
+          router-backend-1.blue.integration.govuk-internal.digital,\
+          router-backend-2.blue.integration.govuk-internal.digital,\
+          router-backend-3.blue.integration.govuk-internal.digital/authenticating_proxy_production"
       - name: PORT  # TODO: remove PORT once Dockerfile cleaned up.
         value: "3000"
       - name: SECRET_KEY_BASE
