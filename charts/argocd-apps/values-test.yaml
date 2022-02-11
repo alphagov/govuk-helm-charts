@@ -117,6 +117,7 @@ applications:
     workerEnabled: true
     replicaCount: 1
     workerReplicaCount: 1
+    appProbes: {}
     appResources:
       limits:
         cpu: 1
