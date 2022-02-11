@@ -12,31 +12,6 @@ applications:
 - name: smokey
   chartPath: charts/smokey
 - name: publisher
-  ingressHostname: publisher.{{ .Values.globalHelmValues.externalDomainSuffix }}
-  helmValues:
-    image:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
-      tag: latest  # To be edited by automation (not yet implemented).
-    redisUrl: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-    replicas: 1
-    worker:
-      replicas: 1
-- name: signon
-  helmValues:
-    common:
-      image:
-        repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon
-        tag: latest  # To be edited by automation (not yet implemented).
-      env:
-        redisUrl: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-    web:
-      dbMigrationEnabled: true
-      replicas: 1
-    worker:
-      replicas: 1
-- name: signon-resources
-  chartPath: charts/signon-resources
-- name: publisher
   helmValues:
     appImage:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
@@ -65,90 +40,154 @@ applications:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: "signon-token-publisher-asset-manager"
+            name: signon-token-publisher-asset-manager
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: "signon-token-publisher-publishing-api"
+            name: signon-token-publisher-publishing-api
             key: bearer_token
+      - name: FACT_CHECK_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: publisher-fact-check-email-account
+            key: FACT_CHECK_USERNAME
       - name: FACT_CHECK_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-fact-check-email-account
             key: FACT_CHECK_PASSWORD
-      - name: FACT_CHECK_REPLY_TO_ADDRESS
-        valueFrom:
-          secretKeyRef:
-            name: publisher
-            key: FACT_CHECK_REPLY_TO_ADDRESS
-      - name: FACT_CHECK_REPLY_TO_ID
-        valueFrom:
-          secretKeyRef:
-            name: publisher
-            key: FACT_CHECK_REPLY_TO_ID
-      - name: GA_UNIVERSAL_ID
-        valueFrom:
-          secretKeyRef:
-            name: publisher
-            key: GA_UNIVERSAL_ID
       - name: GOVUK_NOTIFY_API_KEY
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-notify
             key: GOVUK_NOTIFY_API_KEY
-      - name: GOVUK_NOTIFY_TEMPLATE_ID
-        valueFrom:
-          secretKeyRef:
-            name: publisher
-            key: GOVUK_NOTIFY_TEMPLATE_ID
       - name: JWT_AUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: authenticating-proxy-jwt-auth-secret
             key: JWT_AUTH_SECRET
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: publisher
-            key: LINK_CHECKER_API_BEARER_TOKEN
+            name: signon-token-publisher-link-checker-api
+            key: bearer_token
       - name: LINK_CHECKER_API_SECRET_TOKEN
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-link-checker-api-callback-token
             key: LINK_CHECKER_API_SECRET_TOKEN
       - name: MONGODB_URI
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: publisher-docdb
             key: MONGODB_URI
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
-            name: publisher
+            name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: PORT
-        value: "3000"
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: EMAIL_GROUP_BUSINESS
-        value: mainstream-publisher-notifications-integration+eks@digital.cabinet-office.gov.uk
+        value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
       - name: EMAIL_GROUP_CITIZEN
-        value: mainstream-publisher-notifications-integration+eks@digital.cabinet-office.gov.uk
+        value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
       - name: EMAIL_GROUP_DEV
-        value: mainstream-publisher-notifications-integration+eks@digital.cabinet-office.gov.uk
+        value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
       - name: EMAIL_GROUP_FORCE_PUBLISH_ALERTS
-        value: mainstream-publisher-notifications-integration+eks@digital.cabinet-office.gov.uk
+        value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
       - name: FACT_CHECK_ADDRESS_FORMAT
-        value: factcheck+integration-{id}-eks@alphagov.co.uk
+        value: factcheck+integration-{id}@alphagov.co.uk
       - name: FACT_CHECK_SUBJECT_PREFIX
         value: integration
       - name: FACT_CHECK_REPLY_TO_ADDRESS
-        value: govuk-fact-check-integration+eks@digital.cabinet-office.gov.uk
+        value: govuk-fact-check-integration@digital.cabinet-office.gov.uk
       - name: FACT_CHECK_REPLY_TO_ID
-        value: govuk-fact-check-integration+eks@digital.cabinet-office.gov.uk
+        value: govuk-fact-check-integration@digital.cabinet-office.gov.uk
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 123e4567-e89b-12d3-a456-426614174000
+- name: publishing-api
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publishing-api
+      tag: latest  # To be edited by automation (not yet implemented).
+    dbMigrationEnabled: true
+    workerEnabled: true
+    replicaCount: 1
+    workerReplicaCount: 1
+    appProbes: {}
+    appResources:
+      limits:
+        cpu: 1
+        memory: 2Gi
+      requests:
+        cpu: 1
+        memory: 2Gi
+    extraEnv:
+      - name: PORT
+        value: "3000"
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-publishing-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-publishing-api
+            key: oauth_secret
+      - name: CONTENT_STORE_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publishing-api-content-store
+            key: bearer_token
+      - name: DRAFT_CONTENT_STORE_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publishing-api-draft-content-store
+            key: bearer_token
+      - name: ROUTER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publishing-api-router-api
+            key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: RABBITMQ_HOSTS
+        value: rabbitmq.integration.govuk-internal.digital
+      - name: RABBITMQ_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: publishing-api-rabbitmq
+            key: password
+      - name: RABBITMQ_USER
+        value: publishing_api
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: EVENT_LOG_AWS_BUCKETNAME
+        value: govuk-publishing-api-event-log-integration
+      - name: EVENT_LOG_AWS_ACCESS_ID
+        value: unset  # TODO: Set up Event Log S3 Bucket (not in terraform)
+      - name: EVENT_LOG_AWS_SECRET_KEY
+        value: unset  # TODO: Set up Event Log S3 Bucket (not in terraform)
+      - name: EVENT_LOG_AWS_USERNAME
+        value: govuk-publishing-api-event-log_user
+      - name: GOVUK_CONTENT_SCHEMAS_PATH
+        value: /govuk-content-schemas
+      - name: SENTRY_DSN
+        valueFrom:
+          secretKeyRef:
+            name: publishing-api-sentry-dsn
+            key: dsn
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: publishing-api-database-url-ec2
+            key: DATABASE_URL
 - name: signon
   helmValues:
     appImage:
@@ -170,7 +209,10 @@ applications:
       - name: DEVISE_SECRET_KEY
         value: secret
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: PORT
         value: "3000"
       - name: GOVUK_CONTENT_SCHEMAS_PATH
@@ -182,8 +224,8 @@ applications:
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
-            name: signon
-            key: database-url
+            name: signon-mysql
+            key: DATABASE_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: RAILS_ENV
@@ -201,6 +243,117 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: www-origin
+      hosts:
+      - name: www-origin.eks.integration.govuk.digital
+    appProbes: &router-app-probes
+      startupProbe: &router-probe
+        httpGet:
+          path: /healthcheck
+          port: 3001
+        failureThreshold: 10
+        periodSeconds: 1
+        timeoutSeconds: 1
+      livenessProbe:
+        <<: *router-probe
+        failureThreshold: 3
+        periodSeconds: 5
+      readinessProbe:
+        <<: *router-probe
+        httpGet:
+          path: /healthcheck
+          port: 3001
+        failureThreshold: 2
+        periodSeconds: 5
+    extraEnv:
+      - name: ROUTER_PUBADDR
+        value: ":3000"
+      - name: ROUTER_APIADDR
+        value: ":3001"
+      - name: ROUTER_MONGO_URL
+        value: &router_mongo_hosts "\
+          router-backend-1.pink.integration.govuk-internal.digital,\
+          router-backend-2.pink.integration.govuk-internal.digital,\
+          router-backend-3.pink.integration.govuk-internal.digital"
+      - name: BACKEND_URL_content-store
+        value: "http://content-store"
+      - name: BACKEND_URL_frontend
+        value: "http://frontend"
+      - name: BACKEND_URL_static
+        value: "http://static"
+      - name: BACKEND_URL_signon
+        value: "http://signon"
+      - name: ROUTER_BACKEND_HEADER_TIMEOUT  # TODO: change Router's default to this.
+        value: 20s
+- name: draft-router
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    appProbes: *router-app-probes
+    extraEnv:
+      - name: ROUTER_PUBADDR
+        value: ":3000"
+      - name: ROUTER_MONGO_URL
+        value: *router_mongo_hosts
+      - name: ROUTER_MONGO_DB
+        value: draft_router
+      - name: BACKEND_URL_content-store
+        value: "http://draft-content-store"
+      - name: BACKEND_URL_frontend
+        value: "http://draft-frontend"
+      - name: BACKEND_URL_static
+        value: "http://draft-static"
+      - name: BACKEND_URL_signon
+        value: "http://signon"
+      - name: ROUTER_BACKEND_HEADER_TIMEOUT
+        value: 20s
+- name: authenticating-proxy
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/authenticating-proxy
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: draft-origin
+      hosts:
+      - name: draft-origin.eks.integration.govuk.digital
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-authenticating-proxy
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-authenticating-proxy
+            key: oauth_secret
+      - name: GOVUK_UPSTREAM_URI
+        value: "http://draft-router"
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: MONGODB_URI  # TODO: this will need to become a secret when moving to DocDB.
+        value: "mongodb://\
+          router-backend-1.integration.govuk-internal.digital,\
+          router-backend-2.integration.govuk-internal.digital,\
+          router-backend-3.integration.govuk-internal.digital/authenticating_proxy_production"
+      - name: PORT  # TODO: remove PORT once Dockerfile cleaned up.
+        value: "3000"
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: frontend
   helmValues:
     appImage:
@@ -209,7 +362,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -218,7 +374,7 @@ applications:
       - name: PORT
         value: "3000"
       - name: MEMCACHE_SERVERS
-        value: frontend-memcached.eks.integration.govuk-internal.digital
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: static
   helmValues:
     appImage:
@@ -227,7 +383,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: PORT
         value: "3000"
       - name: RAILS_ENV
@@ -236,6 +395,8 @@ applications:
         value: "1800"
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: GA_UNIVERSAL_ID
+        value: UA-26179049-22
       - name: GOVUK_APP_NAME
         value: static
       - name: GOVUK_APP_TYPE
@@ -265,7 +426,10 @@ applications:
             name: signon-app-content-store
             key: oauth_secret
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: PORT
         value: "3000"
       - name: GOVUK_CONTENT_SCHEMAS_PATH
@@ -273,9 +437,17 @@ applications:
       - name: DEFAULT_TTL
         value: "1800"
       - name: MONGODB_URI
-        value: mongodb://mongo-1.integration.govuk-internal.digital,mongo-2.integration.govuk-internal.digital,mongo-3.integration.govuk-internal.digital/content_store_production
+        valueFrom:
+          secretKeyRef:
+            name: content-store-docdb
+            key: MONGODB_URI
       - name: GOVUK_APP_NAME
         value: content-store
+- name: signon-resources
+  chartPath: charts/signon-resources
+  helmValues:
+    image:
+      tag: 0.0.14
 - name: info-frontend
   helmValues:
     appImage:
@@ -284,11 +456,10 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
-      - name: GOVUK_APP_DOMAIN
-        value: www.gov.uk
-      - name: GOVUK_WEBSITE_ROOT
-        value: https://www.gov.uk
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: info-frontend
 - name: finder-frontend
@@ -299,10 +470,137 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
-        value: secret  # TODO: set SECRET_KEY_BASE and make it a secret
-      - name: GOVUK_APP_DOMAIN
-        value: www.gov.uk
-      - name: GOVUK_WEBSITE_ROOT
-        value: https://www.gov.uk
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: finder-frontend
+- name: collections
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/collections
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: GOVUK_APP_NAME
+        value: collections
+- name: whitehall-admin
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
+      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
+    dbMigrationEnabled: true
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
+      hosts:
+      - name: whitehall-admin.eks.integration.govuk.digital
+    replicaCount: 1
+    workerReplicaCount: 1
+    extraEnv: &whitehall-envs
+      - name: GOVUK_APP_NAME
+        value: whitehall
+      - name: GOVUK_APP_TYPE
+        value: rack
+      - name: NODE_ENV
+        value: production
+      - name: RACK_ENV
+        value: production
+      - name: RAILS_ENV
+        value: production
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_secret
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-asset-manager
+            key: bearer_token
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: publisher-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-publishing-api
+            key: bearer_token
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: GOVUK_STATSD_PREFIX
+        value: whitehall
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-mysql
+            key: DATABASE_URL
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: whitehall-frontend
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
+      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      *whitehall-envs
+- name: draft-whitehall-frontend
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
+      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      *whitehall-envs
+- name: government-frontend
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/government-frontend
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: GOVUK_APP_NAME
+        value: government-frontend
