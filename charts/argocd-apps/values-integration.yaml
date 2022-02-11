@@ -437,10 +437,10 @@ applications:
       - name: DEFAULT_TTL
         value: "1800"
       - name: MONGODB_URI
-        valueFrom:
-          secretKeyRef:
-            name: content-store-docdb
-            key: MONGODB_URI
+        value: "mongodb://\
+          mongo-1.blue.integration.govuk-internal.digital,\
+          mongo-2.blue.integration.govuk-internal.digital,\
+          mongo-3.blue.integration.govuk-internal.digital/content_store_production"
       - name: GOVUK_APP_NAME
         value: content-store
 - name: signon-resources
