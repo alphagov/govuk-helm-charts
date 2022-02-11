@@ -117,6 +117,14 @@ applications:
     workerEnabled: true
     replicaCount: 1
     workerReplicaCount: 1
+    appResources:
+      resources:
+        limits:
+          cpu: 1
+          memory: 2Gi
+        requests:
+          cpu: 1
+          memory: 2Gi
     extraEnv:
       - name: PORT
         value: "3000"
