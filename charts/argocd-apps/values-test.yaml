@@ -121,8 +121,7 @@ applications:
       livenessProbe:
         exec:
           command:
-          - cat
-          - /
+          - true
         initialDelaySeconds: 10
         failureThreshold: 100
         periodSeconds: 10
