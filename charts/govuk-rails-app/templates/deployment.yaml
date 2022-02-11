@@ -32,8 +32,27 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          {{- with .Values.appProbes }}
-          {{- . | toYaml | trim | nindent 10 }}
+          {{- if .Values.appProbes }}
+          {{- .Values.appProbes | toYaml | trim | nindent 10 }}
+          {{- else }}
+          startupProbe: &app-probe  # TODO: check the Rails apps aren't picky about the Host header.
+            httpGet:
+              path: /healthcheck/live
+              port: http
+            failureThreshold: 10
+            periodSeconds: 3
+            timeoutSeconds: 5
+          livenessProbe:
+            <<: *app-probe
+            failureThreshold: 3
+            periodSeconds: 5
+          readinessProbe:
+            <<: *app-probe
+            httpGet:
+              path: /healthcheck/ready
+              port: http
+            failureThreshold: 2
+            periodSeconds: 5
           {{- end }}
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
