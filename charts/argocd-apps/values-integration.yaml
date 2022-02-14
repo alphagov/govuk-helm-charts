@@ -604,3 +604,53 @@ applications:
             key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: government-frontend
+- name: asset-manager
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/asset-manager
+      tag: latest  # TODO: To be edited by automation (not yet implemented).
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: asset-manager
+      hosts:
+      - name: asset-manager.eks.integration.govuk.digital
+    replicaCount: 1
+    workerReplicaCount: 1
+    extraEnv:
+      - name: ASSET_MANAGER_CLAMSCAN_PATH
+        value: /bin/true  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-asset-manager
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-asset-manager
+            key: oauth_secret
+      - name: GOVUK_APP_NAME
+        value: asset-manager
+      - name: GOVUK_APP_ROOT
+        value: /var/apps/static
+      - name: GOVUK_STATSD_PREFIX
+        value: asset-manager
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: asset-manager-docdb
+            key: MONGODB_URI
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
