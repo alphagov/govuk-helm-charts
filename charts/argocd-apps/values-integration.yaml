@@ -476,6 +476,8 @@ applications:
             key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: finder-frontend
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: collections
   helmValues:
     appImage:
@@ -490,6 +492,8 @@ applications:
             key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: collections
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: whitehall-admin
   helmValues:
     appImage:
@@ -604,6 +608,8 @@ applications:
             key: SECRET_KEY_BASE
       - name: GOVUK_APP_NAME
         value: government-frontend
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: asset-manager
   helmValues:
     appImage:
