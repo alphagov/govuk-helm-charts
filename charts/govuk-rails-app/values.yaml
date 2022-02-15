@@ -44,21 +44,21 @@ nginxImage:
   tag: stable
   nginxPort: 8080
 
-appResources: {}
-#   limits:
-#     cpu: 500m
-#     memory: 512Mi
-#   requests:
-#     cpu: 500m
-#     memory: 512Mi
+appResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
 
-workerResources: {}
-#   limits:
-#     cpu: 500m
-#     memory: 512Mi
-#   requests:
-#     cpu: 500m
-#     memory: 512Mi
+workerResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
 
 # extraEnv:
 #  - name: RETICULATE_SPLINES
