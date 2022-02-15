@@ -676,3 +676,4 @@ applications:
         value: contacts-admin
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+        
