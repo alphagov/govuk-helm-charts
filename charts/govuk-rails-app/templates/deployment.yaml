@@ -51,7 +51,7 @@ spec:
           readinessProbe:
             <<: *app-probe
             httpGet:
-              path: /healthcheck/ready
+              path: /healthcheck/live  # TODO: fix readiness check so that we can use it here.
               port: http
             failureThreshold: 2
             periodSeconds: 5
