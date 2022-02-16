@@ -12,6 +12,7 @@ applications:
 - name: smokey
   chartPath: charts/smokey
 - name: publisher
+  chartPath: charts/govuk-apps-conf
   helmValues:
     appImage:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
