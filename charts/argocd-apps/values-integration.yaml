@@ -663,3 +663,17 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+      - name: AWS_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: asset-manager-aws-access-key
+            key: AWS_ACCESS_KEY
+      - name: AWS_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: asset-manager-aws-secret-key
+            key: AWS_SECRET_KEY
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-assets-integration-test
