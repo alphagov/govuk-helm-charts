@@ -108,6 +108,8 @@ applications:
         value: govuk-fact-check-test@digital.cabinet-office.gov.uk
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 123e4567-e89b-12d3-a456-426614174000
+      - name: TEST_VAR
+        value: test
 - name: publishing-api
   helmValues:
     appImage:

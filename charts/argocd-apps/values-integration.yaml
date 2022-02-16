@@ -189,6 +189,8 @@ applications:
           secretKeyRef:
             name: publishing-api-postgres
             key: DATABASE_URL
+      - name: TEST_VAR
+        value: test
 - name: signon
   helmValues:
     appImage:
