@@ -207,9 +207,15 @@ applications:
     workerReplicaCount: 1
     extraEnv:
       - name: DEVISE_PEPPER
-        value: secret
+        valueFrom:
+          secretKeyRef:
+            name: signon-devise-pepper
+            key: DEVISE_PEPPER
       - name: DEVISE_SECRET_KEY
-        value: secret
+        valueFrom:
+          secretKeyRef:
+            name: signon-devise-secret
+            key: DEVISE_SECRET_KEY
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
