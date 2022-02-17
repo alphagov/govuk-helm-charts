@@ -665,3 +665,17 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+- name: contacts-admin
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/contacts-admin
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: GOVUK_APP_NAME
+        value: contacts-admin
