@@ -276,6 +276,13 @@ applications:
           port: 3001
         failureThreshold: 2
         periodSeconds: 5
+    appResources:
+      limits:
+        cpu: 1
+        memory: 1.5Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
     extraEnv:
       - name: ROUTER_PUBADDR
         value: ":3000"
@@ -331,6 +338,13 @@ applications:
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     appProbes: *router-app-probes
+    appResources:
+      limits:
+        cpu: 1
+        memory: 1.5Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
     extraEnv:
       - name: ROUTER_PUBADDR
         value: ":3000"
