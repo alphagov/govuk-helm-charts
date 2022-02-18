@@ -81,6 +81,10 @@ spec:
           - name: {{ .Release.Name }}-nginx-conf
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
+      {{- with .Values.dnsConfig }}
+      dnsConfig:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
       volumes:
       - name: {{ .Release.Name }}-nginx-conf
         configMap:
