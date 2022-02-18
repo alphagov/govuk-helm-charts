@@ -306,6 +306,8 @@ applications:
     extraEnv:
       - name: ROUTER_PUBADDR
         value: ":3000"
+      - name: ROUTER_APIADDR
+        value: ":3001"
       - name: ROUTER_MONGO_URL
         value: *router_mongo_hosts
       - name: ROUTER_MONGO_DB
