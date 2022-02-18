@@ -1,3 +1,5 @@
+{{- /* TODO: remove this file once the test account is gone or fixed up. */ -}}
+{{- if (eq .Values.govukEnvironment "test") -}}
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
@@ -17,3 +19,4 @@ spec:
     name: publishing-api-database-url-ec2
   dataFrom:
     - key: govuk/publishing-api/database-url
+{{- end -}}
