@@ -393,6 +393,9 @@ applications:
         alb.ingress.kubernetes.io/load-balancer-name: draft-origin
       hosts:
       - name: draft-origin.eks.test.govuk.digital
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - pink.test.govuk-internal.digital
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
