@@ -286,14 +286,42 @@ applications:
           router-backend-1.blue.integration.govuk-internal.digital,\
           router-backend-2.blue.integration.govuk-internal.digital,\
           router-backend-3.blue.integration.govuk-internal.digital"
+      - name: BACKEND_URL_collections
+        value: "http://collections"
       - name: BACKEND_URL_content-store
         value: "http://content-store"
+      - name: BACKEND_URL_email-alert-frontend
+        value: "http://email-alert-frontend"
       - name: BACKEND_URL_frontend
         value: "http://frontend"
+      - name: BACKEND_URL_government_frontend
+        value: "http://government-frontend"
+      - name: BACKEND_URL_manuals-frontend
+        value: "http://manuals-frontend"
+      - name: BACKEND_URL_service-manual-frontend
+        value: "http://service-manual-frontend"
+      - name: BACKEND_URL_smartanswers
+        value: "http://smartanswers"
       - name: BACKEND_URL_static
         value: "http://static"
-      - name: BACKEND_URL_signon
-        value: "http://signon"
+      - name: BACKEND_URL_whitehall-frontend
+        value: "http://whitehall-frontend"
+      - name: BACKEND_URL_account-api
+        value: "http://account-api"
+      - name: BACKEND_URL_feedback
+        value: "http://feedback"
+      - name: BACKEND_URL_finder-frontend
+        value: "http://finder-frontend"
+      - name: BACKEND_URL_info-frontend
+        value: "http://info-frontend"
+      - name: BACKEND_URL_licencefinder
+        value: "http://licencefinder"
+      - name: BACKEND_URL_licensify
+        value: "https://licensify.integration.publishing.service.gov.uk"
+      - name: BACKEND_URL_search
+        value: "http://search"
+      - name: BACKEND_URL_search-api
+        value: "http://search-api"
       - name: ROUTER_BACKEND_HEADER_TIMEOUT  # TODO: change Router's default to this.
         value: 20s
 - name: draft-router
@@ -312,14 +340,42 @@ applications:
         value: *router_mongo_hosts
       - name: ROUTER_MONGO_DB
         value: draft_router
+      - name: BACKEND_URL_collections
+        value: "http://draft-collections"
       - name: BACKEND_URL_content-store
         value: "http://draft-content-store"
+      - name: BACKEND_URL_email-alert-frontend
+        value: "http://draft-email-alert-frontend"
       - name: BACKEND_URL_frontend
         value: "http://draft-frontend"
+      - name: BACKEND_URL_government_frontend
+        value: "http://draft-government-frontend"
+      - name: BACKEND_URL_manuals-frontend
+        value: "http://draft-manuals-frontend"
+      - name: BACKEND_URL_service-manual-frontend
+        value: "http://draft-service-manual-frontend"
+      - name: BACKEND_URL_smartanswers
+        value: "http://draft-smartanswers"
       - name: BACKEND_URL_static
         value: "http://draft-static"
-      - name: BACKEND_URL_signon
-        value: "http://signon"
+      - name: BACKEND_URL_whitehall-frontend
+        value: "http://draft-whitehall-frontend"
+      - name: BACKEND_URL_account-api
+        value: "http://account-api"
+      - name: BACKEND_URL_feedback
+        value: "http://feedback"
+      - name: BACKEND_URL_finder-frontend
+        value: "http://finder-frontend"
+      - name: BACKEND_URL_info-frontend
+        value: "http://info-frontend"
+      - name: BACKEND_URL_licencefinder
+        value: "http://licencefinder"
+      - name: BACKEND_URL_licensify
+        value: "https://licensify.integration.publishing.service.gov.uk"
+      - name: BACKEND_URL_search
+        value: "http://search"
+      - name: BACKEND_URL_search-api
+        value: "http://search-api"
       - name: ROUTER_BACKEND_HEADER_TIMEOUT
         value: 20s
 - name: authenticating-proxy
