@@ -15,7 +15,7 @@ data:
   GOVUK_WEBSITE_ROOT: https://www-origin.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_CONTENT_STORE_URI: http://content-store.{{ .Values.internalDomainSuffix }}
   PLEK_SERVICE_DRAFT_ORIGIN_URI: https://draft-origin.{{ .Values.externalDomainSuffix }}
-  PLEK_SERVICE_PUBLISHING_API_URI: http://publishing-api-web.{{ .Values.internalDomainSuffix }}
+  PLEK_SERVICE_PUBLISHING_API_URI: http://publishing-api.{{ .Values.internalDomainSuffix }}
   PLEK_SERVICE_ROUTER_API_URI: http://router-api.{{ .Values.internalDomainSuffix }}
   PLEK_SERVICE_SIGNON_URI: http://signon.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_STATIC_URI: http://static.{{ .Values.internalDomainSuffix }}
