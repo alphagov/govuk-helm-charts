@@ -30,7 +30,7 @@ dbMigrationEnabled: false
 appImage:
   repository: ""  # Dummy value, overridden in ArgoCD config.
   tag: latest
-  appPort: 3000
+appPort: 3000
 
 # appProbes defines liveness/readiness/startup probes for the app container.
 # See templates/deployment.yaml file for the default values.
@@ -42,7 +42,7 @@ nginxImage:
   repository: nginx
   pullPolicy: Always
   tag: stable
-  nginxPort: 8080
+nginxPort: 8080
 
 appResources:
   limits:
