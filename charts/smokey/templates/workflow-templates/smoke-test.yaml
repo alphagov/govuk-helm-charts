@@ -17,14 +17,14 @@ spec:
         command:
           - "bundle"
           - "exec"
-          - "cucumber --profile=test --strict-undefined --tags='@replatforming' --tags='not @notreplatforming and not @nottest{{"{{ inputs.parameters.extra-args }}"}}'"
+          - "cucumber --profile={{ .Values.govukEnvironment }} --strict-undefined --tags='@replatforming' --tags='not @notreplatforming and not @not{{ .Values.govukEnvironment }}{{"{{ inputs.parameters.extra-args }}"}}'"
         env:
         - name: ENVIRONMENT
           value: "{{ .Values.govukEnvironment }}"
         - name: GOVUK_APP_DOMAIN
           value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
         - name: GOVUK_WEBSITE_ROOT
-          value: "{{ .Values.appGovukWebsiteRoot | default (printf "https://www-origin.eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
+          value: "{{ (printf "https://www-origin.eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
         - name: SIGNON_EMAIL
           value: "signon@alphagov.co.uk"
         - name: SIGNON_PASSWORD

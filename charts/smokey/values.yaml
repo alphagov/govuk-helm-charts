@@ -7,8 +7,6 @@ appImage:
   repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smokey
   tag: latest
 
-appGovukWebsiteRoot: http://frontend
-
 jobTtl: 3600
 
 secrets:
