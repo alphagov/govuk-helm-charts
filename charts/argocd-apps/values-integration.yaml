@@ -125,8 +125,6 @@ applications:
         cpu: 1
         memory: 2Gi
     extraEnv:
-      - name: PORT
-        value: "3000"
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -188,8 +186,6 @@ applications:
           secretKeyRef:
             name: publishing-api-postgres
             key: DATABASE_URL
-      - name: TEST_VAR
-        value: test
 - name: signon
   helmValues:
     appImage:
@@ -221,14 +217,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: PORT
-        value: "3000"
-      - name: GOVUK_CONTENT_SCHEMAS_PATH
-        value: /govuk-content-schemas
-      - name: DEFAULT_TTL
-        value: "1800"
-      - name: GOVUK_APP_NAME
-        value: signon
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -236,10 +224,6 @@ applications:
             key: DATABASE_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: RAILS_ENV
-        value: production
-      - name: GOVUK_APP_TYPE
-        value: rack
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
@@ -329,8 +313,6 @@ applications:
         value: "http://search"
       - name: BACKEND_URL_search-api
         value: "http://search-api"
-      - name: ROUTER_BACKEND_HEADER_TIMEOUT  # TODO: change Router's default to this.
-        value: 20s
 - name: draft-router
   helmValues:
     appImage:
@@ -390,8 +372,6 @@ applications:
         value: "http://search"
       - name: BACKEND_URL_search-api
         value: "http://search-api"
-      - name: ROUTER_BACKEND_HEADER_TIMEOUT
-        value: 20s
 - name: authenticating-proxy
   helmValues:
     appImage:
@@ -427,11 +407,9 @@ applications:
             key: JWT_AUTH_SECRET
       - name: MONGODB_URI  # TODO: this will need to become a secret when moving to DocDB.
         value: "mongodb://\
-          router-backend-1.blue.integration.govuk-internal.digital,\
-          router-backend-2.blue.integration.govuk-internal.digital,\
-          router-backend-3.blue.integration.govuk-internal.digital/authenticating_proxy_production"
-      - name: PORT  # TODO: remove PORT once Dockerfile cleaned up.
-        value: "3000"
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3/authenticating_proxy_production"
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
@@ -454,8 +432,6 @@ applications:
           secretKeyRef:
             name: signon-token-frontend-publishing-api
             key: bearer_token
-      - name: PORT
-        value: "3000"
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: static
@@ -470,20 +446,10 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: PORT
-        value: "3000"
-      - name: RAILS_ENV
-        value: production
-      - name: DEFAULT_TTL
-        value: "1800"
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: GA_UNIVERSAL_ID
         value: UA-26179049-22
-      - name: GOVUK_APP_NAME
-        value: static
-      - name: GOVUK_APP_TYPE
-        value: rack
       - name: GOVUK_APP_ROOT
         value: /var/apps/static
 - name: content-store
@@ -513,10 +479,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: PORT
-        value: "3000"
-      - name: GOVUK_CONTENT_SCHEMAS_PATH
-        value: /govuk-content-schemas
       - name: DEFAULT_TTL
         value: "1800"
       - name: MONGODB_URI
@@ -543,8 +505,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: info-frontend
 - name: finder-frontend
   helmValues:
     appImage:
@@ -557,8 +517,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: finder-frontend
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: collections
@@ -573,8 +531,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: collections
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: whitehall-admin
@@ -593,15 +549,7 @@ applications:
     replicaCount: 1
     workerReplicaCount: 1
     extraEnv: &whitehall-envs
-      - name: GOVUK_APP_NAME
-        value: whitehall
-      - name: GOVUK_APP_TYPE
-        value: rack
       - name: NODE_ENV
-        value: production
-      - name: RACK_ENV
-        value: production
-      - name: RAILS_ENV
         value: production
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -645,8 +593,6 @@ applications:
             key: bearer_token
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
-      - name: GOVUK_STATSD_PREFIX
-        value: whitehall
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: MEMCACHE_SERVERS
@@ -689,8 +635,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: government-frontend
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: asset-manager
@@ -769,5 +713,3 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: contacts-admin

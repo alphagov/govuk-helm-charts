@@ -108,8 +108,6 @@ applications:
         value: govuk-fact-check-test@digital.cabinet-office.gov.uk
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 123e4567-e89b-12d3-a456-426614174000
-      - name: TEST_VAR
-        value: test
 - name: publishing-api
   helmValues:
     appImage:
@@ -136,8 +134,6 @@ applications:
         cpu: 1
         memory: 2Gi
     extraEnv:
-      - name: PORT
-        value: "3000"
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -224,14 +220,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: PORT
-        value: "3000"
-      - name: GOVUK_CONTENT_SCHEMAS_PATH
-        value: /govuk-content-schemas
-      - name: DEFAULT_TTL
-        value: "1800"
-      - name: GOVUK_APP_NAME
-        value: signon
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -239,10 +227,6 @@ applications:
             key: DATABASE_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.test.govuk-internal.digital
-      - name: RAILS_ENV
-        value: production
-      - name: GOVUK_APP_TYPE
-        value: rack
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
@@ -332,8 +316,6 @@ applications:
         value: "http://search"
       - name: BACKEND_URL_search-api
         value: "http://search-api"
-      - name: ROUTER_BACKEND_HEADER_TIMEOUT  # TODO: change Router's default to this.
-        value: 20s
 - name: draft-router
   helmValues:
     appImage:
@@ -393,8 +375,6 @@ applications:
         value: "http://search"
       - name: BACKEND_URL_search-api
         value: "http://search-api"
-      - name: ROUTER_BACKEND_HEADER_TIMEOUT
-        value: 20s
 - name: authenticating-proxy
   helmValues:
     appImage:
@@ -430,11 +410,9 @@ applications:
             key: JWT_AUTH_SECRET
       - name: MONGODB_URI  # TODO: this will need to become a secret when moving to DocDB.
         value: "mongodb://\
-          router-backend-1.test.govuk-internal.digital,\
-          router-backend-2.test.govuk-internal.digital,\
-          router-backend-3.test.govuk-internal.digital/authenticating_proxy_production"
-      - name: PORT  # TODO: remove PORT once Dockerfile cleaned up.
-        value: "3000"
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3/authenticating_proxy_production"
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
@@ -457,8 +435,6 @@ applications:
           secretKeyRef:
             name: signon-token-frontend-publishing-api
             key: bearer_token
-      - name: PORT
-        value: "3000"
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.test.govuk-internal.digital
 - name: static
@@ -473,20 +449,10 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: PORT
-        value: "3000"
-      - name: RAILS_ENV
-        value: production
-      - name: DEFAULT_TTL
-        value: "1800"
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.test.govuk-internal.digital
       - name: GA_UNIVERSAL_ID
         value: UA-26179049-22
-      - name: GOVUK_APP_NAME
-        value: static
-      - name: GOVUK_APP_TYPE
-        value: rack
       - name: GOVUK_APP_ROOT
         value: /var/apps/static
 - name: content-store
@@ -516,10 +482,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: PORT
-        value: "3000"
-      - name: GOVUK_CONTENT_SCHEMAS_PATH
-        value: /govuk-content-schemas
       - name: DEFAULT_TTL
         value: "1800"
       - name: MONGODB_URI
@@ -527,8 +489,6 @@ applications:
           secretKeyRef:
             name: content-store-docdb
             key: MONGODB_URI
-      - name: GOVUK_APP_NAME
-        value: content-store
 - name: signon-resources
   chartPath: charts/signon-resources
   helmValues:
@@ -546,8 +506,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: info-frontend
 - name: finder-frontend
   helmValues:
     appImage:
@@ -560,8 +518,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: finder-frontend
 - name: collections
   helmValues:
     appImage:
@@ -574,8 +530,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: collections
 - name: whitehall-admin
   helmValues:
     appImage:
@@ -592,15 +546,7 @@ applications:
     replicaCount: 1
     workerReplicaCount: 1
     extraEnv: &whitehall-envs
-      - name: GOVUK_APP_NAME
-        value: whitehall
-      - name: GOVUK_APP_TYPE
-        value: rack
       - name: NODE_ENV
-        value: production
-      - name: RACK_ENV
-        value: production
-      - name: RAILS_ENV
         value: production
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -644,8 +590,6 @@ applications:
             key: bearer_token
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
-      - name: GOVUK_STATSD_PREFIX
-        value: whitehall
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.test.govuk-internal.digital
       - name: MEMCACHE_SERVERS
@@ -688,8 +632,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: government-frontend
 - name: asset-manager
   helmValues:
     appImage:
@@ -717,8 +659,6 @@ applications:
           secretKeyRef:
             name: signon-app-asset-manager
             key: oauth_secret
-      - name: GOVUK_APP_NAME
-        value: asset-manager
       - name: GOVUK_APP_ROOT
         value: /var/apps/static
       - name: GOVUK_STATSD_PREFIX
@@ -752,5 +692,3 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GOVUK_APP_NAME
-        value: contacts-admin
