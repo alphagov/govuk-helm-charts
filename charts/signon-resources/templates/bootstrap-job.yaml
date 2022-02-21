@@ -23,58 +23,58 @@ spec:
           - name: APPLICATIONS
             value: |-
               {
-                "content-store": {
-                  "name": "Content Store",
+                "content-store-eks": {
+                  "name": "Content Store [EKS]",
                   "slug": "content-store",
                   "secret_name": "signon-app-content-store",
                   "description": "Central store for current live content on GOV.UK",
-                  "home_uri": "https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://content-store.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://content-store.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "draft-content-store": {
-                  "name": "Draft Content Store",
+                "draft-content-store-eks": {
+                  "name": "Draft Content Store [EKS]",
                   "slug": "draft-content-store",
                   "secret_name": "signon-app-draft-content-store",
                   "description": "Central store for draft content on GOV.UK",
-                  "home_uri": "https://draft-content-store.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://draft-content-store.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://draft-content-store.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://draft-content-store.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "router-api": {
-                  "name": "Router API",
+                "router-api-eks": {
+                  "name": "Router API [EKS]",
                   "slug": "router-api",
                   "secret_name": "signon-app-router-api",
                   "description": "Manages the Router database",
-                  "home_uri": "https://router-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://router-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "asset-manager": {
-                  "name": "Asset Manager",
+                "asset-manager-eks": {
+                  "name": "Asset Manager [EKS]",
                   "slug": "asset-manager",
                   "secret_name": "signon-app-asset-manager",
                   "description": "Manages assets",
-                  "home_uri": "https://asset-manager.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://asset-manager.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://asset-manager.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://asset-manager.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "authenticating-proxy": {
-                  "name": "Content Preview (aka Authenticating Proxy)",
+                "authenticating-proxy-eks": {
+                  "name": "Content Preview (aka Authenticating Proxy) [EKS]",
                   "slug": "authenticating-proxy",
                   "secret_name": "signon-app-authenticating-proxy",
                   "description": "Provides authenticated access to draft content on GOV.UK",
-                  "home_uri": "https://draft-origin.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://draft-origin.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://draft-origin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://draft-origin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "link-checker-api": {
-                  "name": "Link Checker API",
+                "link-checker-api-eks": {
+                  "name": "Link Checker API [EKS]",
                   "slug": "link-checker-api",
                   "secret_name": "signon-app-link-checker-api",
                   "description": "Checks links",
-                  "home_uri": "https://link-checker-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://link-checker-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://link-checker-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://link-checker-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
                 "publisher-eks": {
@@ -86,22 +86,22 @@ spec:
                   "redirect_uri": "https://publisher.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 },
-                "publishing-api": {
-                  "name": "Publishing API",
+                "publishing-api-eks": {
+                  "name": "Publishing API [EKS]",
                   "slug": "publishing-api",
                   "secret_name": "signon-app-publishing-api",
                   "description": "Central store for all publishing content on GOV.UK",
-                  "home_uri": "https://publishing-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://publishing-api.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://publishing-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://publishing-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 },
-                "whitehall": {
-                  "name": "Whitehall",
+                "whitehall-eks": {
+                  "name": "Whitehall [EKS]",
                   "slug": "whitehall",
                   "secret_name": "signon-app-whitehall-eks",
                   "description": "Mainstream Whitehall application",
-                  "home_uri": "https://whitehall-admin.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://whitehall-admin.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 }
               }
