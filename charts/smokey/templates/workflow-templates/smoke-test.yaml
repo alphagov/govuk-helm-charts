@@ -22,7 +22,7 @@ spec:
         - name: ENVIRONMENT
           value: "{{ .Values.govukEnvironment }}"
         - name: GOVUK_APP_DOMAIN
-          value: "{{ .Values.appGovukAppDomain | default (printf "%s.%s.%s" .Release.Namespace .Values.govukEnvironment .Values.clusterDomain) }}"
+          value: "{{ (printf "eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
         - name: GOVUK_WEBSITE_ROOT
           value: "{{ (printf "https://www-origin.eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
         - name: SIGNON_EMAIL
