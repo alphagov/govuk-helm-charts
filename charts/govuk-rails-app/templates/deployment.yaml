@@ -20,13 +20,13 @@ spec:
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           ports:
             - name: http
-              containerPort: {{ .Values.appImage.appPort }}
+              containerPort: {{ .Values.appPort }}
           envFrom:
           - configMapRef:
               name: govuk-apps-env
           env:
             - name: PORT
-              value: "{{ .Values.appImage.appPort }}"
+              value: "{{ .Values.appPort }}"
           {{- with .Values.extraEnv }}
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
@@ -60,7 +60,7 @@ spec:
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
             - name: http
-              containerPort: {{ .Values.nginxImage.nginxPort }}
+              containerPort: {{ .Values.nginxPort }}
           livenessProbe:
             tcpSocket:
               port: http

@@ -26,11 +26,11 @@ data:
       keepalive_timeout  65;
 
       upstream {{ .Release.Name }} {
-        server 127.0.0.1:{{ .Values.appImage.appPort }};
+        server 127.0.0.1:{{ .Values.appPort }};
       }
 
       server {
-        listen {{ .Values.nginxImage.nginxPort }};
+        listen {{ .Values.nginxPort }};
 
         location / {
           proxy_set_header   Host $host;
