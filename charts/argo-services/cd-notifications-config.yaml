@@ -26,9 +26,9 @@ template.send-argo-events-webhook: |
       method: "POST"
       path: "/argocd"
 template.send-slack: |
-  webhook: |
-    slack_webhook: |
-      "body": |
+  webhook:
+    slack_webhook:
+      body: |
         {
           "attachments": [{
             "title": "{{.app.metadata.name}}",
