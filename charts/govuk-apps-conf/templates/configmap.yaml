@@ -13,11 +13,11 @@ data:
   GOVUK_ASSET_ROOT: https://assets.{{ .Values.externalDomainSuffix }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
   GOVUK_WEBSITE_ROOT: https://www-origin.{{ .Values.externalDomainSuffix }}
-  PLEK_SERVICE_CONTENT_STORE_URI: http://content-store.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
+  PLEK_SERVICE_CONTENT_STORE_URI: https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_DRAFT_ORIGIN_URI: https://draft-origin.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_PUBLISHING_API_URI: http://publishing-api.{{ .Values.internalDomainSuffix }}
-  PLEK_SERVICE_ROUTER_API_URI: http://router-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_SEARCH_API_URI: http://search-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
+  PLEK_SERVICE_ROUTER_API_URI: https://router-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
+  PLEK_SERVICE_SEARCH_API_URI: https://search-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_SIGNON_URI: http://signon.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_STATIC_URI: http://static.{{ .Values.internalDomainSuffix }}
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
