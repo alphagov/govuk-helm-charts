@@ -309,8 +309,6 @@ applications:
         value: "http://licencefinder"
       - name: BACKEND_URL_licensify
         value: "https://licensify.integration.publishing.service.gov.uk"
-      - name: BACKEND_URL_search
-        value: "http://search"
       - name: BACKEND_URL_search-api
         value: "http://search-api"
 - name: draft-router
@@ -368,8 +366,6 @@ applications:
         value: "http://licencefinder"
       - name: BACKEND_URL_licensify
         value: "https://licensify.integration.publishing.service.gov.uk"
-      - name: BACKEND_URL_search
-        value: "http://search"
       - name: BACKEND_URL_search-api
         value: "http://search-api"
 - name: authenticating-proxy
