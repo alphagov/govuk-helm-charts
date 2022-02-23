@@ -707,5 +707,5 @@ applications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-publishing-api-manuals-frontend
+            name: signon-token-manuals-frontend-publishing-api
             key: bearer_token

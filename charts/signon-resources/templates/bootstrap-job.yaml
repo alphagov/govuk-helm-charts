@@ -154,6 +154,14 @@ spec:
                     { "application_slug": "link-checker-api" },
                     { "application_slug": "asset-manager" }
                   ]
+                },
+                "manuals-frontend": {
+                  "name": "Manuals Frontend",
+                  "username": "manuals-frontend",
+                  "email": "manuals-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api" },
+                  ]
                 }
               }
           - name: SIGNON_API_ENDPOINT
