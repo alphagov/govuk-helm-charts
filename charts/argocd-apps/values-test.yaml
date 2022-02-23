@@ -288,7 +288,7 @@ applications:
         value: "http://email-alert-frontend"
       - name: BACKEND_URL_frontend
         value: "http://frontend"
-      - name: BACKEND_URL_government_frontend
+      - name: BACKEND_URL_government-frontend
         value: "http://government-frontend"
       - name: BACKEND_URL_manuals-frontend
         value: "http://manuals-frontend"
@@ -347,7 +347,7 @@ applications:
         value: "http://draft-email-alert-frontend"
       - name: BACKEND_URL_frontend
         value: "http://draft-frontend"
-      - name: BACKEND_URL_government_frontend
+      - name: BACKEND_URL_government-frontend
         value: "http://draft-government-frontend"
       - name: BACKEND_URL_manuals-frontend
         value: "http://draft-manuals-frontend"
