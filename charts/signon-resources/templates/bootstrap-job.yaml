@@ -23,7 +23,7 @@ spec:
           - name: APPLICATIONS
             value: |-
               {
-                "content-store-eks": {
+                "content-store": {
                   "name": "Content Store [EKS]",
                   "slug": "content-store",
                   "secret_name": "signon-app-content-store",
@@ -32,7 +32,7 @@ spec:
                   "redirect_uri": "https://content-store.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "draft-content-store-eks": {
+                "draft-content-store": {
                   "name": "Draft Content Store [EKS]",
                   "slug": "draft-content-store",
                   "secret_name": "signon-app-draft-content-store",
@@ -41,7 +41,7 @@ spec:
                   "redirect_uri": "https://draft-content-store.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "router-api-eks": {
+                "router-api": {
                   "name": "Router API [EKS]",
                   "slug": "router-api",
                   "secret_name": "signon-app-router-api",
@@ -50,7 +50,7 @@ spec:
                   "redirect_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "asset-manager-eks": {
+                "asset-manager": {
                   "name": "Asset Manager [EKS]",
                   "slug": "asset-manager",
                   "secret_name": "signon-app-asset-manager",
@@ -59,7 +59,7 @@ spec:
                   "redirect_uri": "https://asset-manager.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "authenticating-proxy-eks": {
+                "authenticating-proxy": {
                   "name": "Content Preview (aka Authenticating Proxy) [EKS]",
                   "slug": "authenticating-proxy",
                   "secret_name": "signon-app-authenticating-proxy",
@@ -68,7 +68,7 @@ spec:
                   "redirect_uri": "https://draft-origin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
-                "link-checker-api-eks": {
+                "link-checker-api": {
                   "name": "Link Checker API [EKS]",
                   "slug": "link-checker-api",
                   "secret_name": "signon-app-link-checker-api",
@@ -86,7 +86,7 @@ spec:
                   "redirect_uri": "https://publisher.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 },
-                "publishing-api-eks": {
+                "publishing-api": {
                   "name": "Publishing API [EKS]",
                   "slug": "publishing-api",
                   "secret_name": "signon-app-publishing-api",
