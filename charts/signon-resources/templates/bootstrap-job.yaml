@@ -141,8 +141,7 @@ spec:
                   "bearer_tokens": [
                     { "application_slug": "content-store" },
                     { "application_slug": "draft-content-store" },
-                    { "application_slug": "router-api" },
-                    { "application_slug": "manuals-frontend" }
+                    { "application_slug": "router-api" }
                   ]
                 },
                 "whitehall": {
@@ -160,7 +159,7 @@ spec:
                   "username": "manuals-frontend",
                   "email": "manuals-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "publishing-api" },
+                    { "application_slug": "publishing-api" }
                   ]
                 }
               }
