@@ -5,6 +5,9 @@ metadata:
 spec:
   entrypoint: handle-sync-event
   onExit: exit-handler
+  retryStrategy:
+    limit: "3"
+    expression: "asInt(lastRetry.exitCode) > 1"
   arguments:
     parameters:
       - name: application
