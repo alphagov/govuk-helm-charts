@@ -51,9 +51,7 @@ template.send-slack: |
         }
       method: "POST"
 trigger.on-deployed: |
-  - oncePer: "app.status.operationState.syncResult.revision"
-    send:
-    - "send-argo-events-webhook"
+  - send: ["send-argo-events-webhook"]
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
       == 'Healthy'"
 trigger.sync-operation-change: |
