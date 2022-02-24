@@ -44,5 +44,6 @@ spec:
                 # send to team slack channel.
                 value: "govuk-deploy-alerts"
               - name: text
-                value: "post-sync job for {{"{{workflow.parameters.application}}"}} has status {{"{{workflow.status}}"}} :deployparrot:\n
-                <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}> • <{{"{{workflow.parameters.argoUrl}}"}}|{{"{{workflow.parameters.application}} Application"}}> • {{"{{workflow.name}}"}}."
+                value: "\
+                  post-sync job ({{"{{workflow.name}}"}}) for <{{"{{workflow.parameters.argoUrl}}"}}|{{"{{workflow.parameters.application}}"}}> in {{ .Values.govukEnvironment }} {{"{{workflow.status}}"}} \
+                  (revision <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}>)."
