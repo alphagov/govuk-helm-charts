@@ -649,7 +649,7 @@ applications:
     workerReplicaCount: 1
     extraEnv:
       - name: ASSET_MANAGER_CLAMSCAN_PATH
-        value: /bin/true  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing
+        value: /usr/bin/clamscan  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
