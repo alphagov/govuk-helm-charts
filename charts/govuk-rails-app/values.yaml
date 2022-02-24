@@ -67,3 +67,5 @@ dnsConfig: {}
 # extraEnv:
 #  - name: RETICULATE_SPLINES
 #    value: "true"
+
+govukEnvironment: test

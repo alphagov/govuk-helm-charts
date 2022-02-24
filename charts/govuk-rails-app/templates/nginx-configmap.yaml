@@ -38,5 +38,11 @@ data:
           proxy_pass         http://{{ .Release.Name }};
           proxy_redirect     off;
         }
+        location /assets {
+          proxy_set_header   Host $host;
+          proxy_set_header   X-Real-IP $remote_addr;
+          proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
+          proxy_redirect     off;
+        }
       }
     }
