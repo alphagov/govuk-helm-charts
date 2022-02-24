@@ -705,3 +705,39 @@ applications:
           secretKeyRef:
             name: signon-token-manuals-frontend-publishing-api
             key: bearer_token
+- name: email-alert-frontend
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/email-alert-frontend
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      - name: SUBSCRIPTION_MANAGEMENT_ENABLED
+        value: yes
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-account-api
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-email-alert-api
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-publishing-api
+            key: bearer_token
+      - name: EMAIL_ALERT_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-auth
+            key: token
