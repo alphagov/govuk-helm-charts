@@ -152,6 +152,16 @@ spec:
                   "bearer_tokens": [
                     { "application_slug": "publishing-api" }
                   ]
+                },
+                "email-alert-frontend": {
+                  "name": "Email Alert Frontend",
+                  "username": "email-alert-frontend",
+                  "email": "email-alert-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "account-api" },
+                    { "application_slug": "email-alert-api" },
+                    { "application_slug": "publishing-api" }
+                  ]
                 }
               }
           - name: SIGNON_API_ENDPOINT
