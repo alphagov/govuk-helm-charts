@@ -1,0 +1,18 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: email-alert-auth
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+       Token used to validate messages in email-alert-frontend/api
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: email-alert-auth
+  dataFrom:
+    - key: govuk/email-alert/auth
