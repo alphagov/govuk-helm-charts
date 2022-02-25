@@ -113,6 +113,8 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publishing-api
       tag: latest  # To be edited by automation (not yet implemented).
     dbMigrationEnabled: true
+    uploadAssets:
+      enabled: false
     workerEnabled: true
     replicaCount: 1
     workerReplicaCount: 1
@@ -392,6 +394,8 @@ applications:
     dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
       searches:
         - blue.integration.govuk-internal.digital
+    uploadAssets:
+      enabled: false
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:

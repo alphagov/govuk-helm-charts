@@ -72,3 +72,5 @@ dnsConfig: {}
 #    value: "true"
 
 govukEnvironment: test
+uploadAssets:
+  enabled: true
