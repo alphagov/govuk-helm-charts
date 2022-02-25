@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-uploadRailsAssets
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-uploadRailsAssets
+        image: "{{ required "Valid .Values.appImage.repository required!" .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
+        command:
+        - "bash"
+        - "-c"
+        - |
+          [ -d "/app/public/assets/{{ .Release.Name }}" ] && \
+          apt-get update && \
+          apt-get install -y awscli && \
+          aws s3 sync /app/public/assets/{{ .Release.Name }} \
+            s3://govuk-app-assets-{{ .Values.govukEnvironment }}/assets/{{ .Release.Name }}/
+      restartPolicy: Never
