@@ -39,10 +39,17 @@ data:
           proxy_redirect     off;
         }
         location /assets {
-          proxy_set_header   Host $host;
-          proxy_set_header   X-Real-IP $remote_addr;
+          proxy_set_header   Authorization "";
+          proxy_set_header   Connection "";
+          proxy_set_header   X-Real-IP $remote_addr;  # TODO: pass the actual end-client address
+          proxy_hide_header  x-amz-id-2;
+          proxy_hide_header  x-amz-meta-server-side-encryption;
+          proxy_hide_header  x-amz-request-id;
+          proxy_hide_header  x-amz-server-side-encryption;
+          proxy_hide_header  x-amz-version-id;
+          add_header         Cache-Control max-age=31536000;
+          proxy_intercept_errors on;
           proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
-          proxy_redirect     off;
         }
       }
     }
