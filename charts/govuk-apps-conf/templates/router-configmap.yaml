@@ -39,6 +39,11 @@ data:
       server {
         listen 8080;
 
+        {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
+        auth_basic "Enter the GOV.UK username/password (not your personal username/password)";
+        auth_basic_user_file /etc/nginx/htpasswd/htpasswd;
+        {{- end }}
+
         location / {
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
