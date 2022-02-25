@@ -43,6 +43,9 @@ nginxImage:
   pullPolicy: Always
   tag: stable
 nginxPort: 8080
+nginxConfigMap:
+  create: true
+  extraVolumeMounts: []
 
 appResources:
   limits:
