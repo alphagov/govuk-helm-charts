@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-uploadRailsAssets
+  name: {{ .Release.Name }}-upload-rails-assets
   annotations:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
@@ -10,7 +10,7 @@ spec:
   template:
     spec:
       containers:
-      - name: {{ .Release.Name }}-uploadRailsAssets
+      - name: {{ .Release.Name }}-upload-rails-assets
         image: "{{ required "Valid .Values.appImage.repository required!" .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
         command:
         - "bash"
