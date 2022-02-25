@@ -23,6 +23,14 @@ spec:
           - name: APPLICATIONS
             value: |-
               {
+                "account-api": {
+                  "name": "Account API [EKS]",
+                  "secret_name": "signon-app-account-api",
+                  "description": "API to manage GOV.UK Accounts feature",
+                  "home_uri": "https://account-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://account-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                },
                 "content-store": {
                   "name": "Content Store [EKS]",
                   "secret_name": "signon-app-content-store",
@@ -37,6 +45,14 @@ spec:
                   "description": "Central store for draft content on GOV.UK",
                   "home_uri": "https://draft-content-store.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://draft-content-store.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                },
+                "email-alert-api": {
+                  "name": "Email Alert API [EKS]",
+                  "secret_name": "signon-app-email-alert-api",
+                  "description": "API to manage GOV.UK email subscriptions",
+                  "home_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
                 "router-api": {
