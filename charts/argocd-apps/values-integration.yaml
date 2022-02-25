@@ -748,7 +748,7 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: SUBSCRIPTION_MANAGEMENT_ENABLED
-        value: yes
+        value: "yes"
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
