@@ -7,6 +7,7 @@ metadata:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
+  backoffLimit: 2  # Retry once, in case of network error.
   template:
     spec:
       containers:
