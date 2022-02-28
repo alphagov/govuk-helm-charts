@@ -45,6 +45,7 @@ data:
           proxy_pass         http://router;
           proxy_redirect     off;
         }
+
         location /assets {
           proxy_set_header   Authorization "";
           proxy_set_header   Connection "";
@@ -58,12 +59,23 @@ data:
           proxy_intercept_errors on;
           proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
         }
+
+        # Endpoint that isn't cached, which is used to assert that an external
+        # service can receive a response from GOV.UK origin on www hostname. It
+        # is intended for pingdom monitoring
         location = /__canary__ {
-          return 200 '{"message": "Tweet tweet"}';
+          default_type application/json;
+          add_header cache-control "max-age=0,no-store,no-cache";
+          return 200 '{"message": "Tweet tweet"}\n';
         }
+
+        # If slug contains no lowercase letters then lowercase it
+        # eg www.gov.uk/GOVERNMENT/GUIDANCE -> www.gov.uk/government/guidance
+        # eg WWW.GOV.UK/GOVERNMENT/GUIDANCE -> www.gov.uk/government/guidance
         location ~ ^\/[A-Z]+[A-Z\W\d]+$ {
           rewrite ^(.*)$ $scheme://$host$uri_lowercase permanent;
         }
+
         location = /robots.txt {
           root /usr/share/nginx/html;
         }
