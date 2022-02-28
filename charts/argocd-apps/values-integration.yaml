@@ -237,6 +237,8 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    uploadAssets:
+      enabled: false
     ingress:
       enabled: true
       annotations:
@@ -334,6 +336,8 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    uploadAssets:
+      enabled: false
     appProbes: *router-app-probes
     appResources:
       limits:
