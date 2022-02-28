@@ -178,6 +178,15 @@ spec:
                     { "application_slug": "email-alert-api" },
                     { "application_slug": "publishing-api" }
                   ]
+                },
+                "smart-answers": {
+                  "name": "Smart Answers",
+                  "username": "smart-anwsers",
+                  "email": "smart-answers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "link-checker-api" },
+                    { "application_slug": "publishing-api" }
+                  ]
                 }
               }
           - name: SIGNON_API_ENDPOINT
