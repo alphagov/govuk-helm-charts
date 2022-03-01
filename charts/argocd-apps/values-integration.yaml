@@ -788,7 +788,7 @@ applications:
     replicaCount: 1
     extraEnv:
       - name: EXPOSE_GOVSPEAK
-        value: 1
+        value: "1"
       - name: COMPANIES_HOUSE_API_KEY
         valueFrom:
           secretKeyRef:
