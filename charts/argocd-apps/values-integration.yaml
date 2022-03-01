@@ -311,7 +311,7 @@ applications:
       - name: BACKEND_URL_service-manual-frontend
         value: "http://service-manual-frontend"
       - name: BACKEND_URL_smartanswers
-        value: "http://smartanswers"
+        value: "http://smart-answers"
       - name: BACKEND_URL_static
         value: "http://static"
       - name: BACKEND_URL_whitehall-frontend
@@ -370,7 +370,7 @@ applications:
       - name: BACKEND_URL_service-manual-frontend
         value: "http://draft-service-manual-frontend"
       - name: BACKEND_URL_smartanswers
-        value: "http://draft-smartanswers"
+        value: "http://draft-smart-answers"
       - name: BACKEND_URL_static
         value: "http://draft-static"
       - name: BACKEND_URL_whitehall-frontend
