@@ -18,7 +18,7 @@ spec:
         # image. Better still: have the build process emit the assets and just
         # copy them to the serving bucket here, without involving the app image.
         command:
-        - "bash"
+        - "sh"
         - "-c"
         - |
           ASSETS_PATH="{{ .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}"
