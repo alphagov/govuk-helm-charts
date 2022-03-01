@@ -81,10 +81,8 @@ spec:
           - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
-          {{- with .Values.nginxConfigMap.extraVolumeMounts }}
-          {{- if not (empty .) }}
+          {{- with .Values.nginxExtraVolumeMounts }}
           {{ . | toYaml | trim | nindent 10 }}
-          {{- end }}
           {{- end }}
       {{- with .Values.dnsConfig }}
       dnsConfig:
@@ -94,3 +92,6 @@ spec:
       - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
         configMap:
           name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+      {{- with .Values.nginxExtraVolumes }}
+      {{ . | toYaml | trim | nindent 6 }}
+      {{- end }}

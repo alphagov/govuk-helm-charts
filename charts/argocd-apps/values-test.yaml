@@ -240,12 +240,29 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    uploadAssets:
+      enabled: false
     ingress:
       enabled: true
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
       hosts:
       - name: www-origin.eks.test.govuk.digital
+    nginxConfigMap:
+      create: false
+      name: router-nginx-conf
+    nginxExtraVolumeMounts:
+      - name: router-nginx-conf
+        mountPath: /usr/share/nginx/html/robots.txt
+        subPath: robots.txt
+      - name: router-nginx-htpasswd
+        mountPath: /etc/nginx/htpasswd
+    nginxExtraVolumes:
+      - name: router-nginx-htpasswd
+        secret:
+          secretName: router-nginx-htpasswd
+    nginxImage:
+      tag: stable-perl
     appProbes: &router-app-probes
       startupProbe: &router-probe
         httpGet:
@@ -322,6 +339,8 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    uploadAssets:
+      enabled: false
     appProbes: *router-app-probes
     appResources:
       limits:

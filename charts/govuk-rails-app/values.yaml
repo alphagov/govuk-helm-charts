@@ -45,7 +45,8 @@ nginxImage:
 nginxPort: 8080
 nginxConfigMap:
   create: true
-  extraVolumeMounts: []
+nginxExtraVolumeMounts: []
+nginxExtraVolumes: []
 
 appResources:
   limits:
