@@ -12,6 +12,7 @@ data:
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.externalDomainSuffix }}
   GOVUK_ASSET_ROOT: https://assets.{{ .Values.externalDomainSuffix }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
+  GOVUK_ENVIRONMENT_NAME: {{ .Values.govukEnvironment }}
   GOVUK_WEBSITE_ROOT: https://www-origin.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_ACCOUNT_URI: https://account-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_CONTENT_STORE_URI: https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
