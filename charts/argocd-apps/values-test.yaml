@@ -762,6 +762,11 @@ applications:
           secretKeyRef:
             name: smart-answers-companies-house
             key: api_key
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
