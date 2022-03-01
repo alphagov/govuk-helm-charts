@@ -772,6 +772,7 @@ applications:
     replicaCount: 1
     uploadAssets:
       path: "/app/public/assets/smartanswers"
+      s3Directory: "smartanswers"
     extraEnv:
       - name: EXPOSE_GOVSPEAK
         value: "1"

@@ -21,10 +21,11 @@ spec:
         - "bash"
         - "-c"
         - |
-          [ -d "{{ .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}" ] && \
+          ASSETS_PATH="{{ .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}"
+          [ -d "${ASSETS_PATH}" ] && \
           apt-get update && \
           apt-get install -y awscli && \
-          aws s3 sync /app/public/assets/{{ .Release.Name }} \
-            s3://govuk-app-assets-{{ .Values.govukEnvironment }}/assets/{{ .Release.Name }}/
+          aws s3 sync ${ASSETS_PATH} \
+            s3://govuk-app-assets-{{ .Values.govukEnvironment }}/assets/{{ .Values.uploadAssets.s3Directory | default .Release.Name }}/
       restartPolicy: Never
 {{- end }}
