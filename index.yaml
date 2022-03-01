@@ -364,6 +364,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/argocd-workflows-0.0.1/argocd-workflows-0.0.1.tgz
     version: 0.0.1
+  asset-manager:
+  - apiVersion: v2
+    created: "2022-03-01T17:28:20.458161311Z"
+    description: A Helm chart for GOV.UK Asset-manager App
+    digest: 7e2eab4527c5eadcbc176c193953b62c16cb9e7220ecc45b26f6281e21f64583
+    name: asset-manager
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/asset-manager-0.1.4/asset-manager-0.1.4.tgz
+    version: 0.1.4
   cluster-secret-store:
   - apiVersion: v2
     created: "2021-12-01T11:11:07.902013645Z"
@@ -1171,4 +1181,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-02-09T09:34:22.096363238Z"
+generated: "2022-03-01T17:28:21.152606193Z"
