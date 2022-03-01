@@ -48,7 +48,7 @@ spec:
                   "permissions": []
                 },
                 "email-alert-api": {
-                  "name": "Email Alert API [EKS]",
+                  "name": "Email Alert API",
                   "secret_name": "signon-app-email-alert-api",
                   "description": "API to manage GOV.UK email subscriptions",
                   "home_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
@@ -186,6 +186,14 @@ spec:
                   "bearer_tokens": [
                     { "application_slug": "link-checker-api" },
                     { "application_slug": "publishing-api" }
+                  ]
+                },
+                "finder-frontend": {
+                  "name": "Finder Frontend",
+                  "username": "finder-frontend",
+                  "email": "finder-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "email-alert-api" }
                   ]
                 }
               }

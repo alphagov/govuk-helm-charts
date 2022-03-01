@@ -538,6 +538,12 @@ applications:
             key: SECRET_KEY_BASE
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-finder-frontend-email-alert-api
+            key: bearer_token
+
 - name: collections
   helmValues:
     appImage:

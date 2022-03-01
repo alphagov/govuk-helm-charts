@@ -537,6 +537,11 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-finder-frontend-email-alert-api
+            key: bearer_token
 - name: collections
   helmValues:
     appImage:
