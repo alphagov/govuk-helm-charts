@@ -817,6 +817,11 @@ applications:
           secretKeyRef:
             name: signon-token-smart-answers-publishing-api
             key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: ZENDESK_CLIENT_USERNAME
         valueFrom:
           secretKeyRef:
