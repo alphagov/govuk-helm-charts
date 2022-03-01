@@ -1,5 +1,6 @@
 globalHelmValues:
   govukEnvironment: integration
+  govukWebsiteRoot: https://www.integration.publishing.service.gov.uk
   externalDomainSuffix: eks.integration.govuk.digital
 
 applications:

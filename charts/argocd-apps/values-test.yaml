@@ -1,6 +1,7 @@
 globalHelmValues:
   govukEnvironment: test
   govukStack: pink  # TODO: eliminate the need for govukStack
+  govukWebsiteRoot: https://www.test.publishing.service.gov.uk
   externalDomainSuffix: eks.test.govuk.digital
 
 applications:
