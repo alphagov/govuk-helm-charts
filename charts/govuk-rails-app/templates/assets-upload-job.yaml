@@ -21,7 +21,7 @@ spec:
         - "bash"
         - "-c"
         - |
-          [ -d "/app/public/assets/{{ .Release.Name }}" ] && \
+          [ -d "{{ .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}" ] && \
           apt-get update && \
           apt-get install -y awscli && \
           aws s3 sync /app/public/assets/{{ .Release.Name }} \

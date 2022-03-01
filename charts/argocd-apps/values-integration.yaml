@@ -796,6 +796,8 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smart-answers
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    uploadAssets:
+      path: "/app/public/assets/smartanswers"
     extraEnv:
       - name: EXPOSE_GOVSPEAK
         value: "1"
