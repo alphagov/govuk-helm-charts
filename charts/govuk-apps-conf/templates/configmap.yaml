@@ -23,5 +23,5 @@ data:
   PLEK_SERVICE_SEARCH_URI: https://search-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_SIGNON_URI: http://signon.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_STATIC_URI: http://static.{{ .Values.internalDomainSuffix }}
-  PLEK_SERVICE_WHITEHALL_FRONTEND_URI: http://whitehall.{{ .Values.internalDomainSuffix }}
+  PLEK_SERVICE_WHITEHALL_FRONTEND_URI: http://whitehall-frontend.{{ .Values.internalDomainSuffix }}
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
