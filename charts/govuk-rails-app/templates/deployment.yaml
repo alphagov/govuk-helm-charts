@@ -18,6 +18,7 @@ spec:
       containers:
         - name: {{ .Release.Name }}
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
@@ -58,6 +59,7 @@ spec:
           {{- end }}
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
+          imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
           ports:
             - name: http
               containerPort: {{ .Values.nginxPort }}

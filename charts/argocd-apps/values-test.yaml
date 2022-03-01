@@ -261,8 +261,9 @@ applications:
       - name: router-nginx-htpasswd
         secret:
           secretName: router-nginx-htpasswd
-    nginxImage:
+    nginxImage: &router-nginx-image
       tag: stable-perl
+      pullPolicy: Always
     appProbes: &router-app-probes
       startupProbe: &router-probe
         httpGet:
@@ -341,6 +342,7 @@ applications:
     replicaCount: 1
     uploadAssets:
       enabled: false
+    nginxImage: *router-nginx-image
     appProbes: *router-app-probes
     appResources:
       limits:
