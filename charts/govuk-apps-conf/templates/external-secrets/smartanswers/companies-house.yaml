@@ -1,18 +1,18 @@
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
-  name: smart-answers-zendesk-client
+  name: smartanswers-companies-house
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
     a8r.io/description: >
-       Username/Password used by Smart-answers to access Zendesk
+       API key used by Smart-answers to access Companies House API
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
     name: aws-secretsmanager
     kind: ClusterSecretStore
   target:
-    name: smart-answers-zendesk-client
+    name: smartanswers-companies-house
   dataFrom:
-    - key: govuk/smart-answers/zendesk-client
+    - key: govuk/smartanswers/companies-house

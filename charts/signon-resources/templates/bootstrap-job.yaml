@@ -179,10 +179,10 @@ spec:
                     { "application_slug": "publishing-api" }
                   ]
                 },
-                "smart-answers": {
+                "smartanswers": {
                   "name": "Smart Answers",
-                  "username": "smart-anwsers",
-                  "email": "smart-answers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "username": "smartanwsers",
+                  "email": "smartanswers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
                     { "application_slug": "link-checker-api" },
                     { "application_slug": "publishing-api" }
