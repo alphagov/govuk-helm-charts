@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        {{- include "asset-manager.labels" . | nindent 8 }}
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.appPort }}
+          envFrom:
+          - configMapRef:
+              name: govuk-apps-env
+          env:
+            - name: PORT
+              value: "{{ .Values.appPort }}"
+          {{- with .Values.extraEnv }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.appProbes }}
+          {{- .Values.appProbes | toYaml | trim | nindent 10 }}
+          {{- else }}
+          startupProbe: &app-probe  # TODO: check the Rails apps aren't picky about the Host header.
+            httpGet:
+              path: /healthcheck/live
+              port: http
+            failureThreshold: 10
+            periodSeconds: 3
+            timeoutSeconds: 5
+          livenessProbe:
+            <<: *app-probe
+            failureThreshold: 3
+            periodSeconds: 5
+          readinessProbe:
+            <<: *app-probe
+            httpGet:
+              path: /healthcheck/live  # TODO: fix readiness check so that we can use it here.
+              port: http
+            failureThreshold: 2
+            periodSeconds: 5
+          {{- end }}
+        - name: {{ .Release.Name }}-clamav
+          image: "{{ .Values.clamImage.repository }}:{{ .Values.clamImage.tag }}"
+          ports:
+            - name: tcp
+              containerPort: {{ .Values.clamPort }}
+        - name: {{ .Release.Name }}-nginx
+          image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
+          ports:
+            - name: http
+              containerPort: {{ .Values.nginxPort }}
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          volumeMounts:
+          - name: {{ .Release.Name }}-nginx-conf
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+      {{- with .Values.dnsConfig }}
+      dnsConfig:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
+      volumes:
+      - name: {{ .Release.Name }}-nginx-conf
+        configMap:
+          name: {{ .Release.Name }}-nginx-conf
