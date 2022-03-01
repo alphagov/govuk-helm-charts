@@ -663,6 +663,7 @@ applications:
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: asset-manager
+  chartPath: charts/asset-manager
   helmValues:
     appImage:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/asset-manager
@@ -676,11 +677,6 @@ applications:
       - name: asset-manager.eks.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
-    appResources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 2Gi
     extraEnv:
       - name: ASSET_MANAGER_CLAMSCAN_PATH
         value: /usr/bin/clamscan  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing
