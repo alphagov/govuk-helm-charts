@@ -29,6 +29,7 @@ dbMigrationEnabled: false
 
 appImage:
   repository: ""  # Dummy value, overridden in ArgoCD config.
+  pullPolicy: Always
   tag: latest
 appPort: 3000
 
