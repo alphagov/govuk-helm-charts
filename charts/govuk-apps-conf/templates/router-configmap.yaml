@@ -79,6 +79,12 @@ data:
         location = /robots.txt {
           root /usr/share/nginx/html;
         }
+
+        # DWP YouTube Channel Verification
+        location = /dla-ending/google6db9c061ce178960.html {
+          add_header Content-Type text/html;
+          return 200 '';
+        }
       }
     }
   robots.txt: |-
