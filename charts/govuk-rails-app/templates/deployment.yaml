@@ -86,6 +86,7 @@ spec:
           {{- with .Values.nginxExtraVolumeMounts }}
           {{ . | toYaml | trim | nindent 10 }}
           {{- end }}
+      enableServiceLinks: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
