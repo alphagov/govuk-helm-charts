@@ -1,0 +1,18 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: smartanswers-zendesk-client
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+       Username/Password used by Smart-answers to access Zendesk
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: smartanswers-zendesk-client
+  dataFrom:
+    - key: govuk/smartanswers/zendesk-client

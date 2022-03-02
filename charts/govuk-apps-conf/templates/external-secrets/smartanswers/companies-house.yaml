@@ -1,7 +1,7 @@
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
-  name: smart-answers-companies-house
+  name: smartanswers-companies-house
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
@@ -13,6 +13,6 @@ spec:
     name: aws-secretsmanager
     kind: ClusterSecretStore
   target:
-    name: smart-answers-companies-house
+    name: smartanswers-companies-house
   dataFrom:
-    - key: govuk/smart-answers/companies-house
+    - key: govuk/smartanswers/companies-house

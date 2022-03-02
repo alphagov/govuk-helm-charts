@@ -29,7 +29,7 @@ spec:
                   "description": "API to manage GOV.UK Accounts feature",
                   "home_uri": "https://account-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://account-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": []
+                  "permissions": ["internal_app","update_protected_attributes"]
                 },
                 "content-store": {
                   "name": "Content Store [EKS]",
@@ -48,12 +48,12 @@ spec:
                   "permissions": []
                 },
                 "email-alert-api": {
-                  "name": "Email Alert API [EKS]",
+                  "name": "Email Alert API",
                   "secret_name": "signon-app-email-alert-api",
                   "description": "API to manage GOV.UK email subscriptions",
                   "home_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": []
+                  "permissions": ["internal_app"]
                 },
                 "router-api": {
                   "name": "Router API [EKS]",
@@ -93,7 +93,7 @@ spec:
                   "description": "Mainstream publishing application",
                   "home_uri": "https://publisher.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://publisher.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": ["view_all"]
+                  "permissions": ["view_all","govuk_editor","welsh_editor"]
                 },
                 "publishing-api": {
                   "name": "Publishing API [EKS]",
@@ -109,7 +109,7 @@ spec:
                   "description": "Mainstream Whitehall application",
                   "home_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": []
+                  "permissions": ["Coronavirus Travel Editor","Editor","Export data","frob the widgets","GDS Admin","GDS Editor","Import CSVs","Managing Editor","Upload Executable File Attachments","VIP Editor","World Editor","World Writer"]
                 }
               }
           - name: API_USERS
@@ -179,13 +179,21 @@ spec:
                     { "application_slug": "publishing-api" }
                   ]
                 },
-                "smart-answers": {
+                "smartanswers": {
                   "name": "Smart Answers",
-                  "username": "smart-anwsers",
-                  "email": "smart-answers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "username": "smartanwsers",
+                  "email": "smartanswers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
                     { "application_slug": "link-checker-api" },
                     { "application_slug": "publishing-api" }
+                  ]
+                },
+                "finder-frontend": {
+                  "name": "Finder Frontend",
+                  "username": "finder-frontend",
+                  "email": "finder-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "email-alert-api" }
                   ]
                 }
               }

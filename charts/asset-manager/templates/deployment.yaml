@@ -12,13 +12,12 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "govuk-rails-app.labels" . | nindent 8 }}
+        {{- include "asset-manager.labels" . | nindent 8 }}
         app: {{ .Release.Name }}
     spec:
       containers:
         - name: {{ .Release.Name }}
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
@@ -57,9 +56,13 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
+        - name: {{ .Release.Name }}-clamav
+          image: "{{ .Values.clamImage.repository }}:{{ .Values.clamImage.tag }}"
+          ports:
+            - name: tcp
+              containerPort: {{ .Values.clamPort }}
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
-          imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
           ports:
             - name: http
               containerPort: {{ .Values.nginxPort }}
@@ -80,21 +83,14 @@ spec:
             failureThreshold: 3
             successThreshold: 1
           volumeMounts:
-          - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+          - name: {{ .Release.Name }}-nginx-conf
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
-          {{- with .Values.nginxExtraVolumeMounts }}
-          {{ . | toYaml | trim | nindent 10 }}
-          {{- end }}
-      enableServiceLinks: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
       volumes:
-      - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+      - name: {{ .Release.Name }}-nginx-conf
         configMap:
-          name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-      {{- with .Values.nginxExtraVolumes }}
-      {{ . | toYaml | trim | nindent 6 }}
-      {{- end }}
+          name: {{ .Release.Name }}-nginx-conf

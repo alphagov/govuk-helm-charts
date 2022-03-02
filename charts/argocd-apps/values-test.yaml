@@ -240,12 +240,30 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    uploadAssets:
+      enabled: false
     ingress:
       enabled: true
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
       hosts:
       - name: www-origin.eks.test.govuk.digital
+    nginxConfigMap:
+      create: false
+      name: router-nginx-conf
+    nginxExtraVolumeMounts:
+      - name: router-nginx-conf
+        mountPath: /usr/share/nginx/html/robots.txt
+        subPath: robots.txt
+      - name: router-nginx-htpasswd
+        mountPath: /etc/nginx/htpasswd
+    nginxExtraVolumes:
+      - name: router-nginx-htpasswd
+        secret:
+          secretName: router-nginx-htpasswd
+    nginxImage: &router-nginx-image
+      tag: stable-perl
+      pullPolicy: Always
     appProbes: &router-app-probes
       startupProbe: &router-probe
         httpGet:
@@ -322,6 +340,9 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
+    uploadAssets:
+      enabled: false
+    nginxImage: *router-nginx-image
     appProbes: *router-app-probes
     appResources:
       limits:
@@ -518,6 +539,11 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-finder-frontend-email-alert-api
+            key: bearer_token
 - name: collections
   helmValues:
     appImage:
@@ -745,7 +771,7 @@ applications:
           secretKeyRef:
             name: email-alert-auth
             key: token
-- name: smart-answers
+- name: smartanswers
   helmValues:
     appImage:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smart-answers
@@ -757,25 +783,30 @@ applications:
       - name: COMPANIES_HOUSE_API_KEY
         valueFrom:
           secretKeyRef:
-            name: smart-answers-companies-house
+            name: smartanswers-companies-house
             key: api_key
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-smart-answers-link-checker-api
+            name: signon-token-smartanswers-link-checker-api
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-smart-answers-publishing-api
+            name: signon-token-smartanswers-publishing-api
             key: bearer_token
       - name: ZENDESK_CLIENT_USERNAME
         valueFrom:
           secretKeyRef:
-            name: smart-answers-zendesk-client
+            name: smartanswers-zendesk-client
             key: username
       - name: ZENDESK_CLIENT_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: smart-answers-zendesk-client
+            name: smartanswers-zendesk-client
             key: password

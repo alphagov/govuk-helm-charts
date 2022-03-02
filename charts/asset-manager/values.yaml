@@ -1,4 +1,4 @@
-# Default/example values for a Rails application.
+# Values for Asset-manager Rails application.
 
 service:
   type: NodePort
@@ -6,7 +6,7 @@ service:
   port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
@@ -21,15 +21,11 @@ ingress:
 replicaCount: 1
 
 # workerEnabled should be true if the app uses Sidekiq, false otherwise.
-workerEnabled: false
+workerEnabled: true
 workerReplicaCount: 1
-
-# dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
-dbMigrationEnabled: false
 
 appImage:
   repository: ""  # Dummy value, overridden in ArgoCD config.
-  pullPolicy: Always
   tag: latest
 appPort: 3000
 
@@ -44,26 +40,36 @@ nginxImage:
   pullPolicy: Always
   tag: stable
 nginxPort: 8080
-nginxConfigMap:
-  create: true
-nginxExtraVolumeMounts: []
-nginxExtraVolumes: []
+
+clamImage:
+  repository: clamav/clamav
+  pullPolicy: Always
+  tag: stable
+clamPort: 3310
 
 appResources:
   limits:
     cpu: 1
-    memory: 1Gi
+    memory: 2Gi
   requests:
     cpu: 500m
-    memory: 512Mi
+    memory: 2Gi
 
 workerResources:
   limits:
     cpu: 1
-    memory: 1Gi
+    memory: 2Gi
   requests:
     cpu: 500m
-    memory: 512Mi
+    memory: 2Gi
+
+clamResources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
 
 # dnsConfig is passed directly into the pod specs in the app and worker
 # deployment templates.
@@ -72,7 +78,3 @@ dnsConfig: {}
 # extraEnv:
 #  - name: RETICULATE_SPLINES
 #    value: "true"
-
-govukEnvironment: test
-uploadAssets:
-  enabled: true

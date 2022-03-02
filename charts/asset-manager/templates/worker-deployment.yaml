@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-worker
   labels:
-    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    {{- include "asset-manager.labels" . | nindent 4 }}
     app.kubernetes.io/component: worker
     app: {{ .Release.Name }}-worker
 spec:
@@ -15,7 +15,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "govuk-rails-app.labels" . | nindent 8 }}
+        {{- include "asset-manager.labels" . | nindent 8 }}
         app.kubernetes.io/component: worker
         app: {{ .Release.Name }}-worker
     spec:
@@ -37,7 +37,6 @@ spec:
           {{- end }}
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
-      enableServiceLinks: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
