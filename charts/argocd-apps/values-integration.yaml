@@ -448,6 +448,9 @@ applications:
     appImage:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/static
       tag: latest  # To be edited by automation (not yet implemented).
+    nginxConfigMap:
+      create: false
+      name: static-nginx-conf
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
