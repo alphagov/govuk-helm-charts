@@ -115,6 +115,14 @@ spec:
           - name: API_USERS
             value: |-
               {
+                "collections": {
+                  "name": "Collections",
+                  "username": "collections",
+                  "email": "collections@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "email-alert-api" }
+                  ]
+                },
                 "content-store": {
                   "name": "Content Store",
                   "username": "content-store",
