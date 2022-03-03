@@ -810,3 +810,50 @@ applications:
           secretKeyRef:
             name: smartanswers-zendesk-client
             key: password
+- name: feedback
+  helmValues:
+    appImage:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/feedback
+      tag: latest  # To be edited by automation (not yet implemented).
+    replicaCount: 1
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: SUPPORT_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-support-bearer-feedback
+            key: bearer_token
+      - name: SUPPORT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-support-api-bearer-token-feedback
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publishing-api-bearer-feedback
+            key: bearer_token
+      - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: sheet_id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: client_email
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: private_key
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-notify
+            key: GOVUK_NOTIFY_API_KEY
