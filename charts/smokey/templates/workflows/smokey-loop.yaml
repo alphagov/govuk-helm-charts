@@ -3,7 +3,7 @@ kind: CronWorkflow
 metadata:
   name: smokey-loop
 spec:
-  schedule: "*/3 9-17 * * 1-5"
+  schedule: "*/10 9-17 * * 1-5"
   timezone: Europe/London
   concurrencyPolicy: Replace
   workflowSpec:
