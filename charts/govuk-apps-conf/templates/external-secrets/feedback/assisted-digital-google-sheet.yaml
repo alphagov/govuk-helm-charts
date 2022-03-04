@@ -1,0 +1,20 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: feedback-assisted-digital-google-sheet
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+      Google service account for accessing the spreadsheet for Assisted Digital feedback,
+      plus the ID of the sheet itself.
+      https://github.com/alphagov/feedback/blob/264cd13/docs/assisted_digital_feedback.md
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: feedback-assisted-digital-google-sheet
+  dataFrom:
+    - key: govuk/feedback/assisted-digital-google-sheet
