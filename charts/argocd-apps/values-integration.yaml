@@ -684,6 +684,7 @@ applications:
       - name: asset-manager.eks.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
+    nfsServer: assets.blue.integration.govuk-internal.digital
     extraEnv:
       - name: ASSET_MANAGER_CLAMSCAN_PATH
         value: /usr/bin/clamscan  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing

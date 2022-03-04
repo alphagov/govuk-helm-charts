@@ -1,4 +1,4 @@
-# Values for Asset-manager Rails application.
+# Integration values for Asset-manager Rails application.
 
 service:
   type: NodePort
@@ -71,13 +71,12 @@ clamResources:
     cpu: 500m
     memory: 1Gi
 
-# nfsServer is the address of the NFSv4 (or Amazon EFS) server where uploaded
-nfsServer: ""
+nfsServer: assets.blue.integration.govuk-internal.digital
 
 # dnsConfig is passed directly into the pod specs in the app and worker
 # deployment templates.
 dnsConfig: {}
 
-# extraEnv:
+extraEnv:
 #  - name: RETICULATE_SPLINES
 #    value: "true"
