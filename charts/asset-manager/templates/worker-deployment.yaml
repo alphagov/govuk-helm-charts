@@ -35,10 +35,18 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-asset-uploads-efs
+              mountPath: /var/apps/
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
+      volumes:
+      - name: {{ .Release.Name }}-asset-uploads-efs
+        nfs: 
+          server: "{{ required "An NFS server is required!" .Values.nfsServer }}"
+          path: /
 {{- end }}

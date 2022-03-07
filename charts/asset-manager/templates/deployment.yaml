@@ -18,6 +18,9 @@ spec:
       containers:
         - name: {{ .Release.Name }}
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          volumeMounts:
+            - name: {{ .Release.Name }}-asset-uploads-efs
+              mountPath: /var/apps/
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
@@ -94,3 +97,7 @@ spec:
       - name: {{ .Release.Name }}-nginx-conf
         configMap:
           name: {{ .Release.Name }}-nginx-conf
+      - name: {{ .Release.Name }}-asset-uploads-efs
+        nfs: 
+          server: "{{ required "An NFS server is required!" .Values.nfsServer }}"
+          path: /
