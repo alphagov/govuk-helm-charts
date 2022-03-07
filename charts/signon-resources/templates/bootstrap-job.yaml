@@ -11,7 +11,7 @@ spec:
       serviceAccountName: signon-secrets-bootstrapper
       containers:
       - name: bootstrap-signon-resources
-        image: "{{ .Values.common.image.repository }}:{{ .Values.common.image.tag }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command: ["bundle"]
         args: ["exec", "rake", "bootstrap:signon"]
         env:
