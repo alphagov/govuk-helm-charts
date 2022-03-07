@@ -513,7 +513,8 @@ applications:
   chartPath: charts/signon-resources
   helmValues:
     image:
-      tag: 0.0.14
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon-resources
+      tag: bfafc5fff8a2541bbc5611667b8aa4d108f305b9
 - name: info-frontend
   helmValues:
     appImage:
