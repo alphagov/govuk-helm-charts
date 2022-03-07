@@ -1,8 +1,7 @@
 common:
   image:
-    # TODO: Replace with ECR once image CI is set up
-    repository: govuk/signon-bootstrap
-    tag: 0.0.14
+    repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon-resources
+    tag: latest
 
 govukEnvironment: test
 govukDomainExternal: govuk.digital
