@@ -245,6 +245,7 @@ applications:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
       hosts:
       - name: www-origin.eks.integration.govuk.digital
+      - name: www-eks.integration.publishing.service.gov.uk
     nginxConfigMap:
       create: false
       name: router-nginx-conf
