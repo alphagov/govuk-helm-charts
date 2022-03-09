@@ -859,6 +859,8 @@ applications:
             key: GOVUK_NOTIFY_API_KEY
 - name: search-api
   helmValues:
+    uploadAssets:
+      enabled: false
     replicaCount: 1
     extraEnv:
       - name: AWS_REGION
