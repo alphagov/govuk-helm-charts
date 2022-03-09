@@ -103,14 +103,6 @@ spec:
                   "redirect_uri": "https://publishing-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 },
-                "search-api": {
-                  "name": "Search API",
-                  "secret_name": "signon-app-search-api",
-                  "description": "Search API for GOV.UK",
-                  "home_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": ["ltr_training","manage_search_indices"]
-                },
                 "whitehall-eks": {
                   "name": "Whitehall [EKS]",
                   "secret_name": "signon-app-whitehall-eks",

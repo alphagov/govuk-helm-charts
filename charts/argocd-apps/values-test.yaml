@@ -876,12 +876,12 @@ applications:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-app-search-api
+            name: signon-app-search-api-eks
             key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-search-api
+            name: signon-app-search-api-eks
             key: oauth_secret
       - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
         valueFrom:
@@ -921,7 +921,7 @@ applications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-search-api-publishing-api
+            name: signon-token-search-api-eks-publishing-api
             key: bearer_token
       - name: RABBITMQ_HOSTS
         value: rabbitmq.integration.govuk-internal.digital
