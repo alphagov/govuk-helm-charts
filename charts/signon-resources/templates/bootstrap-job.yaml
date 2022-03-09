@@ -179,7 +179,7 @@ spec:
                     { "application_slug": "email-alert-api", "permissions": ["internal_app"] },
                     { "application_slug": "link-checker-api" },
                     { "application_slug": "publishing-api" },
-                    { "application_slug": "search-api", "permissions": ["manage_search_indices"] }
+                    { "application_slug": "search-api-eks", "permissions": ["manage_search_indices"] }
                   ]
                 },
                 "manuals-frontend": {
