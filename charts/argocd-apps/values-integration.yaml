@@ -13,9 +13,6 @@ applications:
   chartPath: charts/smokey
 - name: publisher
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publisher
-      tag: latest  # To be edited by automation (not yet implemented).
     dbMigrationEnabled: true
     workerEnabled: true
     ingress:
@@ -109,9 +106,6 @@ applications:
         value: 123e4567-e89b-12d3-a456-426614174000
 - name: publishing-api
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/publishing-api
-      tag: latest  # To be edited by automation (not yet implemented).
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
@@ -190,9 +184,6 @@ applications:
             key: DATABASE_URL
 - name: signon
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon
-      tag: latest  # To be edited by automation (not yet implemented).
     dbMigrationEnabled: true
     workerEnabled: true
     ingress:
@@ -233,9 +224,6 @@ applications:
             key: token
 - name: router
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     uploadAssets:
       enabled: false
@@ -332,10 +320,8 @@ applications:
       - name: BACKEND_URL_search-api
         value: "http://search-api"
 - name: draft-router
+  repoName: router
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/router
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     uploadAssets:
       enabled: false
@@ -393,9 +379,6 @@ applications:
         value: "http://search-api"
 - name: authenticating-proxy
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/authenticating-proxy
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     ingress:
       enabled: true
@@ -438,9 +421,6 @@ applications:
             key: SECRET_KEY_BASE
 - name: frontend
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/frontend
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
@@ -457,9 +437,6 @@ applications:
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: static
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/static
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
@@ -475,9 +452,6 @@ applications:
         value: /var/apps/static
 - name: content-store
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/content-store
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: ROUTER_API_BEARER_TOKEN
@@ -511,15 +485,8 @@ applications:
         value: content-store
 - name: signon-resources
   chartPath: charts/signon-resources
-  helmValues:
-    image:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon-resources
-      tag: bfafc5fff8a2541bbc5611667b8aa4d108f305b9
 - name: info-frontend
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/info-frontend
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
@@ -529,9 +496,6 @@ applications:
             key: SECRET_KEY_BASE
 - name: finder-frontend
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/finder-frontend
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
@@ -549,9 +513,6 @@ applications:
 
 - name: collections
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/collections
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
@@ -567,10 +528,8 @@ applications:
             name: signon-token-collections-email-alert-api
             key: bearer_token
 - name: whitehall-admin
+  repoName: whitehall
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
-      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
     dbMigrationEnabled: true
     workerEnabled: true
     ingress:
@@ -641,26 +600,19 @@ applications:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
 - name: whitehall-frontend
+  repoName: whitehall
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
-      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       *whitehall-envs
 - name: draft-whitehall-frontend
+  repoName: whitehall
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
-      tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       *whitehall-envs
 - name: government-frontend
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/government-frontend
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
@@ -673,9 +625,6 @@ applications:
 - name: asset-manager
   chartPath: charts/asset-manager
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/asset-manager
-      tag: latest  # TODO: To be edited by automation (not yet implemented).
     workerEnabled: true
     ingress:
       enabled: true
@@ -738,9 +687,6 @@ applications:
         value: govuk-assets-integration-test
 - name: contacts-admin
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/contacts-admin
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
@@ -750,9 +696,6 @@ applications:
             key: SECRET_KEY_BASE
 - name: manuals-frontend
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/manuals-frontend
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
@@ -767,9 +710,6 @@ applications:
             key: bearer_token
 - name: email-alert-frontend
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/email-alert-frontend
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SUBSCRIPTION_MANAGEMENT_ENABLED
@@ -802,10 +742,8 @@ applications:
             name: email-alert-auth
             key: token
 - name: smartanswers
+  repoName: smart-answers
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smart-answers
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: EXPOSE_GOVSPEAK
@@ -842,9 +780,6 @@ applications:
             key: password
 - name: feedback
   helmValues:
-    appImage:
-      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/feedback
-      tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE

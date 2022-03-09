@@ -1,4 +1,5 @@
 {{ range .Values.applications }}
+{{- $reponame := .repoName | default .name }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -25,6 +26,9 @@ spec:
         {{- if .ingressHostname }}
         {{- include "govukIngress" (dict "name" .name "host" (tpl .ingressHostname $)) | indent 8 }}
         {{- end }}
+        appImage:
+          repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}
+          tag: {{ $.Files.Get (printf "image-tags/%s/%s" $.Values.globalHelmValues.govukEnvironment $reponame) }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
