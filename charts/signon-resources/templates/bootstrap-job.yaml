@@ -118,6 +118,14 @@ spec:
                   "home_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["Coronavirus Travel Editor","Editor","Export data","GDS Admin","GDS Editor","Import CSVs","Managing Editor","Upload Executable File Attachments","VIP Editor","World Editor","World Writer"]
+                },
+                "search-api-eks": {
+                  "name": "Search API [EKS]",
+                  "secret_name": "signon-app-search-api",
+                  "description": "Search API of GOV.UK",
+                  "home_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": ["signin", "ltr_training", "manage_search_indices"]
                 }
               }
           - name: API_USERS
@@ -216,6 +224,14 @@ spec:
                   "bearer_tokens": [
                     { "application_slug": "account-api", "permissions": ["internal_app"] },
                     { "application_slug": "email-alert-api", "permissions": ["internal_app"] }
+                  ]
+                },
+                "search-api-eks": {
+                  "name": "Search API",
+                  "username": "search-api",
+                  "email": "search-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api" }
                   ]
                 }
               }
