@@ -822,3 +822,85 @@ applications:
           secretKeyRef:
             name: feedback-notify
             key: GOVUK_NOTIFY_API_KEY
+- name: search-api
+  helmValues:
+    replicaCount: 1
+    extraEnv:
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_RELEVANCY_BUCKET_NAME
+        value: govuk-integration-search-relevancy
+      - name: AWS_S3_SITEMAPS_BUCKET_NAME
+        value: govuk-integration-sitemaps
+      - name: ELASTICSEARCH_URI
+        value: https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
+      - name: ENABLE_LTR
+        value: "true"
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-search-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-search-api
+            key: oauth_secret
+      - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: govuk-view-id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: client-email
+      - name: GOOGLE_EXPORT_ACCOUNT_ID
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: export-account-id
+      - name: GOOGLE_EXPORT_CUSTOM_DATA_SOURCE_ID
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: export-custom-data-source-id
+      - name: GOOGLE_EXPORT_WEB_PROPERTY_ID
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: export-web-property-id
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: private-key
+      - name: GOOGLE_BIGQUERY_CREDENTIALS
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-bigquery
+            key: credentials
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-search-api-publishing-api
+            key: bearer_token
+      - name: RABBITMQ_HOSTS
+        value: rabbitmq.integration.govuk-internal.digital
+      - name: RABBITMQ_VHOST
+        value: /
+      - name: RABBITMQ_USER
+        valueFrom:
+          secretKeyRef:
+            name: search-api-rabbitmq
+            key: user
+      - name: RABBITMQ_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: search-api-rabbitmq
+            key: password
+      - name: TENSORFLOW_SAGEMAKER_ENDPOINT
+        value: govuk-integration-search-ltr-endpoint
+      - name: TENSORFLOW_SAGEMAKER_VARIANTS
+        value: null  # value is empty
