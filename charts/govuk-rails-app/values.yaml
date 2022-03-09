@@ -4,6 +4,7 @@ service:
   type: NodePort
   annotations: {}
   port: 80
+  metrics: 9394
 
 ingress:
   enabled: false
@@ -76,3 +77,5 @@ dnsConfig: {}
 govukEnvironment: test
 uploadAssets:
   enabled: true
+
+metricsPort: 9394
