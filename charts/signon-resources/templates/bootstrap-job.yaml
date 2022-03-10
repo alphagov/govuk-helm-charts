@@ -113,7 +113,7 @@ spec:
                 },
                 "search-api-eks": {
                   "name": "Search API [EKS]",
-                  "secret_name": "signon-app-search-api",
+                  "secret_name": "signon-app-search-api-eks",
                   "description": "Search API of GOV.UK",
                   "home_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
