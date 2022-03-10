@@ -305,7 +305,7 @@ applications:
       - name: BACKEND_URL_static
         value: "http://static"
       - name: BACKEND_URL_whitehall-frontend
-        value: "http://whitehall-frontend.apps.svc.cluster.local"
+        value: "http://whitehall-frontend"
       - name: BACKEND_URL_account-api
         value: "http://account-api"
       - name: BACKEND_URL_feedback
