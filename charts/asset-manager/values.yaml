@@ -25,7 +25,7 @@ workerEnabled: true
 workerReplicaCount: 1
 
 appImage:
-  repository: ""  # Dummy value, overridden in ArgoCD config.
+  repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/asset-manager"  # Dummy value, overridden in ArgoCD config.
   tag: latest
 appPort: 3000
 
@@ -72,7 +72,7 @@ clamResources:
     memory: 1Gi
 
 # nfsServer is the address of the NFSv4 (or Amazon EFS) server where uploaded
-nfsServer: ""
+nfsServer: "nfs-server"
 
 # dnsConfig is passed directly into the pod specs in the app and worker
 # deployment templates.

@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: {{ .Release.Name }}-upload-assets
-        image: "{{ required "Valid .Values.appImage.repository required!" .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
+        image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
         # TODO: remove this horrible hack of installing awscli inside the
         # container by building it (or a smaller equivalent) into the base
         # image. Better still: have the build process emit the assets and just

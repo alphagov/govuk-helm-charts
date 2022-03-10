@@ -27,7 +27,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ $jobName }}
-        image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command: ["bundle"]
         args: ["exec", "rails", "db:migrate"]
         envFrom:

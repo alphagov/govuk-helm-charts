@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           command: ["bundle"]
           args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
           envFrom:
