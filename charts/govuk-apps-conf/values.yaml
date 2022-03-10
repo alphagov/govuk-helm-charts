@@ -1,6 +1,7 @@
 govukEnvironment: test
 internalDomainSuffix: apps.svc.cluster.local
 externalDomainSuffix: eks.test.govuk.digital
+publishingServiceDomainSuffix: test.publishing.service.gov.uk
 ec2InternalDomainSuffix: govuk-internal.digital
 externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.

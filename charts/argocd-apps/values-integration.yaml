@@ -1,6 +1,7 @@
 globalHelmValues:
   govukEnvironment: integration
   externalDomainSuffix: eks.integration.govuk.digital
+  publishingServiceDomainSuffix: integration.publishing.service.gov.uk
 
 applications:
 - name: argo-workflows
