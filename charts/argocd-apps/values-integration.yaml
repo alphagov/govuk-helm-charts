@@ -533,6 +533,9 @@ applications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
+    uploadAssets: &whitehall-upload-assets
+      path: "/app/public/assets/whitehall"
+      s3Directory: "whitehall"
     ingress:
       enabled: true
       annotations:
@@ -604,14 +607,14 @@ applications:
   repoName: whitehall
   helmValues:
     replicaCount: 1
-    extraEnv:
-      *whitehall-envs
+    uploadAssets: *whitehall-upload-assets
+    extraEnv: *whitehall-envs
 - name: draft-whitehall-frontend
   repoName: whitehall
   helmValues:
     replicaCount: 1
-    extraEnv:
-      *whitehall-envs
+    uploadAssets: *whitehall-upload-assets
+    extraEnv: *whitehall-envs
 - name: government-frontend
   helmValues:
     replicaCount: 1
