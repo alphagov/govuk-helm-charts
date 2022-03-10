@@ -9,9 +9,6 @@ metadata:
   name: {{ .Release.Name }}
   namespace: monitoring
 spec:
-  endpoints:
-  - port: metrics
-    scheme: http
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -19,4 +16,4 @@ spec:
     matchNames: 
     - apps
   podMetricsEndpoints:
-  - targetPort: {{ .Values.metricsPort }}
+  - targetPort: metrics
