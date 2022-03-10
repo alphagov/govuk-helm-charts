@@ -29,9 +29,6 @@ data:
       upstream {{ .Release.Name }} {
         server 127.0.0.1:{{ .Values.appPort }};
       }
-      upstream metrics {
-        server 127.0.0.1:{{ .Values.metricsPort}};
-      }
 
       server {
         listen {{ .Values.nginxPort }};
@@ -54,12 +51,6 @@ data:
           add_header         Cache-Control max-age=31536000;
           proxy_intercept_errors on;
           proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
-        }
-        location /metrics {
-          proxy_set_header   Host $http_host;
-          proxy_set_header   X-Real-IP $remote_addr;
-          proxy_pass         http://metrics;
-          proxy_redirect     off;
         }
 
         # Endpoint that isn't cached, which is used to assert that an external
