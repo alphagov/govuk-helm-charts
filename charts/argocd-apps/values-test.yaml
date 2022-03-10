@@ -2,6 +2,7 @@ globalHelmValues:
   govukEnvironment: test
   govukStack: pink  # TODO: eliminate the need for govukStack
   externalDomainSuffix: eks.test.govuk.digital
+  publishingServiceDomainSuffix: test.publishing.service.gov.uk
 
 applications:
 - name: argo-workflows

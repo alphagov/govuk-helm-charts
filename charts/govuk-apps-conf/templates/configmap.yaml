@@ -10,7 +10,7 @@ data:
   ASSET_HOST: https://www.{{ .Values.externalDomainSuffix }}
   GOVUK_APP_DOMAIN: {{ .Values.internalDomainSuffix }}
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.externalDomainSuffix }}
-  GOVUK_ASSET_ROOT: https://assets.{{ .Values.externalDomainSuffix }}
+  GOVUK_ASSET_ROOT: https://assets.{{ .Values.publishingServiceDomainSuffix }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
   GOVUK_ENVIRONMENT_NAME: {{ .Values.govukEnvironment }}
   GOVUK_WEBSITE_ROOT: https://www.{{ .Values.externalDomainSuffix }}
