@@ -7,7 +7,7 @@ metadata:
 data:
   {{- /* TODO: omit namespace from these user-facing URLs in the default namespace. */}}
   {{- /* TODO: delete PLEK_SERVICE_*_URI once Plek can construct http:// internal URLs. */}}
-  ASSET_HOST: https://www-origin.{{ .Values.externalDomainSuffix }}
+  ASSET_HOST: https://www.{{ .Values.externalDomainSuffix }}
   GOVUK_APP_DOMAIN: {{ .Values.internalDomainSuffix }}
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.externalDomainSuffix }}
   GOVUK_ASSET_ROOT: https://assets.{{ .Values.externalDomainSuffix }}
