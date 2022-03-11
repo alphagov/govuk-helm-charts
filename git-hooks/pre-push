@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# @link https://gist.github.com/vlucas/8009a5edadf8d0ff7430
+#
+# Called by "git push" after it has checked the remote status,
+# but before anything has been pushed.
+#
+# If this script exits with a non-zero status nothing will be pushed.
+#
+# Steps to install, from the root directory of your repo...
+# 1. Copy the file into your repo at `.git/hooks/pre-push`
+# 2. Set executable permissions, run `chmod +x .git/hooks/pre-push`
+# 3. Or, use `rake hooks:pre_push` to install
+#
+# Try a push to main, you should get a message `*** [Policy] Never push code directly to...`
+#
+# The commands below will not be allowed...
+# `git push origin main`
+# `git push --force origin main`
+# `git push --delete origin main`
+#
+# Set the environment variable $REALLY_PUSH_TO_MAIN to bypass this pre-push
+# hook, i.e. `REALLY_PUSH_TO_MAIN=1 git push origin main`. Note: this is only
+# intended for use in automation (i.e. CI/CD).
+
+protected_branch='main'
+
+policy="\n\n[Policy] You cannot push code directly to the "$protected_branch" branch. (Prevented with pre-push hook.)\n\t  Use REALLY_PUSH_TO_MAIN=1 to override this policy.\n\n"
+
+current_branch=$(git branch --show-current)
+
+push_command=$(ps -ocommand= -p $PPID)
+
+is_destructive='force|delete|\-f'
+
+will_remove_protected_branch=':'$protected_branch
+
+do_exit(){
+  echo -e $policy
+  exit 1
+}
+
+if [[ $push_command =~ $is_destructive ]] && [ $current_branch = $protected_branch ]; then
+  do_exit
+fi
+
+if [[ $push_command =~ $is_destructive ]] && [[ $push_command =~ $protected_branch ]]; then
+  do_exit
+fi
+
+if [[ $push_command =~ $will_remove_protected_branch ]]; then
+  do_exit
+fi
+
+# Prevent ALL pushes to protected_branch, unless $REALLY_PUSH_TO_MAIN is set.
+if [[ $push_command =~ $protected_branch ]] || [ $current_branch = $protected_branch ]; then
+  if [[ -z $REALLY_PUSH_TO_MAIN ]]; then
+    do_exit
+  fi
+fi
+
+unset do_exit
+
+exit 0

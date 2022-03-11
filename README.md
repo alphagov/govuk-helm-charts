@@ -1,3 +1,10 @@
+# GOV.UK Helm Charts
+
+## Local development
+
+1. Clone the repository
+1. Configure git hooks: `git config core.hooksPath git-hooks`
+
 ## Usage
 
 [Helm](https://helm.sh) must be installed to use the charts.  Please refer to
