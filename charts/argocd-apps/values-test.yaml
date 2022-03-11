@@ -564,6 +564,9 @@ applications:
       tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
     dbMigrationEnabled: true
     workerEnabled: true
+    uploadAssets: &whitehall-upload-assets
+      path: "/app/public/assets/whitehall"
+      s3Directory: "whitehall"
     ingress:
       enabled: true
       annotations:
@@ -637,16 +640,16 @@ applications:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
       tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
     replicaCount: 1
-    extraEnv:
-      *whitehall-envs
+    uploadAssets: *whitehall-upload-assets
+    extraEnv: *whitehall-envs
 - name: draft-whitehall-frontend
   helmValues:
     appImage:
       repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/whitehall
       tag: f01a5161aa0d93b2efdd0775c61081695f12447a  # TODO: To be edited by automation (not yet implemented).
     replicaCount: 1
-    extraEnv:
-      *whitehall-envs
+    uploadAssets: *whitehall-upload-assets
+    extraEnv: *whitehall-envs
 - name: government-frontend
   helmValues:
     appImage:
