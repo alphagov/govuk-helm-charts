@@ -33,3 +33,22 @@ jobs:
 
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yml
+
+      - name: Helm template
+        run: |
+          mkdir helm-dist
+          for c in $(ls charts)
+          do
+            helm template "${c}" "charts/${c}" --output-dir helm-dist
+          done
+
+      - name: Login to Github Packages
+        run: echo "${{ github.token }}" | docker login https://ghcr.io -u ${GITHUB_ACTOR} --password-stdin
+
+      - name: kubeconform
+        uses: docker://ghcr.io/yannh/kubeconform:v0.4.13
+        with:
+          entrypoint: '/kubeconform'
+          args: '-schema-location default
+          -schema-location "./schemas/{{ .ResourceKind }}_{{ .ResourceAPIVersion }}.json"
+          -summary helm-dist'

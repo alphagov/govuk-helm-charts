@@ -46,7 +46,7 @@ spec:
       {{- end }}
       volumes:
       - name: {{ .Release.Name }}-asset-uploads-efs
-        nfs: 
-          server: "{{ required "An NFS server is required!" .Values.nfsServer }}"
+        nfs:
+          server: "{{ .Values.nfsServer }}"
           path: /
 {{- end }}

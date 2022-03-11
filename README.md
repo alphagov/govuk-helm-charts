@@ -22,5 +22,10 @@ To uninstall the chart:
 
     helm delete my-<chart-name>
 
+## Schemas
+
+Refer to `schemas/README.md` for guidance on the schema that the Kubernetes
+manifests are validated against.
+
 [GOV.UK Kubernetes Cluster User Docs]: https://govuk-k8s-user-docs.publishing.service.gov.uk
 [#govuk-replatforming]: https://gds.slack.com/channels/govuk-replatforming
