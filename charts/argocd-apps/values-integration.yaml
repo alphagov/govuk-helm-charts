@@ -306,8 +306,9 @@ applications:
         value: "http://static"
       - name: BACKEND_URL_whitehall-frontend
         value: "http://whitehall-frontend"
+        # TODO: switch back to in-cluster account-api once it's fully working (similarly for draft).
       - name: BACKEND_URL_account-api
-        value: "http://account-api"
+        value: "https://account-api.integration.govuk-internal.digital"
       - name: BACKEND_URL_feedback
         value: "http://feedback"
       - name: BACKEND_URL_finder-frontend
@@ -317,9 +318,10 @@ applications:
       - name: BACKEND_URL_licencefinder
         value: "http://licencefinder"
       - name: BACKEND_URL_licensify
-        value: "https://licensify.integration.publishing.service.gov.uk"
+        value: "https://licensify.integration.govuk-internal.digital"
+        # TODO: switch back to in-cluster search-api once it's fully working (similarly for draft).
       - name: BACKEND_URL_search-api
-        value: "http://search-api"
+        value: "https://search-api.integration.govuk-internal.digital"
 - name: draft-router
   repoName: router
   helmValues:
@@ -365,7 +367,7 @@ applications:
       - name: BACKEND_URL_whitehall-frontend
         value: "http://draft-whitehall-frontend"
       - name: BACKEND_URL_account-api
-        value: "http://account-api"
+        value: "https://account-api.integration.govuk-internal.digital"
       - name: BACKEND_URL_feedback
         value: "http://feedback"
       - name: BACKEND_URL_finder-frontend
@@ -375,9 +377,9 @@ applications:
       - name: BACKEND_URL_licencefinder
         value: "http://licencefinder"
       - name: BACKEND_URL_licensify
-        value: "https://licensify.integration.publishing.service.gov.uk"
+        value: "https://licensify.integration.govuk-internal.digital"
       - name: BACKEND_URL_search-api
-        value: "http://search-api"
+        value: "https://search-api.integration.govuk-internal.digital"
 - name: authenticating-proxy
   helmValues:
     replicaCount: 1
