@@ -1,6 +1,6 @@
 globalHelmValues:
   govukEnvironment: integration
-  externalDomainSuffix: eks.integration.govuk.digital
+  externalDomainSuffix: pink.integration.govuk.digital
   publishingServiceDomainSuffix: integration.publishing.service.gov.uk
 
 applications:
@@ -21,7 +21,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: publisher
       hosts:
-      - name: publisher.eks.integration.govuk.digital
+      - name: publisher.pink.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     extraEnv:
@@ -86,7 +86,7 @@ applications:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
       - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        value: redis://shared-redis-govuk.pink.integration.govuk-internal.digital
       - name: EMAIL_GROUP_BUSINESS
         value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
       - name: EMAIL_GROUP_CITIZEN
@@ -162,7 +162,7 @@ applications:
       - name: RABBITMQ_USER
         value: publishing_api
       - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        value: redis://shared-redis-govuk.pink.integration.govuk-internal.digital
       - name: EVENT_LOG_AWS_BUCKETNAME
         value: govuk-publishing-api-event-log-integration
       - name: EVENT_LOG_AWS_ACCESS_ID
@@ -192,7 +192,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: signon
       hosts:
-      - name: signon.eks.integration.govuk.digital
+      - name: signon.pink.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     extraEnv:
@@ -217,7 +217,7 @@ applications:
             name: signon-mysql
             key: DATABASE_URL
       - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        value: redis://shared-redis-govuk.pink.integration.govuk-internal.digital
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
@@ -233,7 +233,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
       hosts:
-      - name: www-origin.eks.integration.govuk.digital
+      - name: www-origin.pink.integration.govuk.digital
     nginxConfigMap:
       create: false
       name: router-nginx-conf
@@ -386,7 +386,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: draft-origin
       hosts:
-      - name: draft-origin.eks.integration.govuk.digital
+      - name: draft-origin.pink.integration.govuk.digital
     dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
       searches:
         - blue.integration.govuk-internal.digital
@@ -435,7 +435,7 @@ applications:
             name: signon-token-frontend-publishing-api
             key: bearer_token
       - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+        value: frontend-memcached-govuk.pink.integration.govuk-internal.digital
 - name: static
   helmValues:
     replicaCount: 1
@@ -446,7 +446,7 @@ applications:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
       - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        value: redis://shared-redis-govuk.pink.integration.govuk-internal.digital
       - name: GA_UNIVERSAL_ID
         value: UA-26179049-22
       - name: GOVUK_APP_ROOT
@@ -505,7 +505,7 @@ applications:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
       - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+        value: frontend-memcached-govuk.pink.integration.govuk-internal.digital
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -522,7 +522,7 @@ applications:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
       - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+        value: frontend-memcached-govuk.pink.integration.govuk-internal.digital
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -541,7 +541,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
       hosts:
-      - name: whitehall-admin.eks.integration.govuk.digital
+      - name: whitehall-admin.pink.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     extraEnv: &whitehall-envs
@@ -590,9 +590,9 @@ applications:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
       - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        value: redis://shared-redis-govuk.pink.integration.govuk-internal.digital
       - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+        value: frontend-memcached-govuk.pink.integration.govuk-internal.digital
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -625,7 +625,7 @@ applications:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
       - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+        value: frontend-memcached-govuk.pink.integration.govuk-internal.digital
 - name: asset-manager
   chartPath: charts/asset-manager
   helmValues:
@@ -635,7 +635,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: asset-manager
       hosts:
-      - name: asset-manager.eks.integration.govuk.digital
+      - name: asset-manager.pink.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     nfsServer: assets.blue.integration.govuk-internal.digital
@@ -669,7 +669,7 @@ applications:
             name: asset-manager-docdb
             key: MONGODB_URI
       - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        value: redis://shared-redis-govuk.pink.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
@@ -719,7 +719,7 @@ applications:
       - name: SUBSCRIPTION_MANAGEMENT_ENABLED
         value: "yes"
       - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        value: redis://shared-redis-govuk.pink.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:

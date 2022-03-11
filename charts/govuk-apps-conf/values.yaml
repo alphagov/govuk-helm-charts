@@ -1,6 +1,6 @@
 govukEnvironment: test
 internalDomainSuffix: apps.svc.cluster.local
-externalDomainSuffix: eks.test.govuk.digital
+externalDomainSuffix: pink.test.govuk.digital
 publishingServiceDomainSuffix: test.publishing.service.gov.uk
 ec2InternalDomainSuffix: govuk-internal.digital
 externalSecrets:

@@ -22,9 +22,9 @@ spec:
         - name: ENVIRONMENT
           value: "{{ .Values.govukEnvironment }}"
         - name: GOVUK_APP_DOMAIN
-          value: "{{ (printf "eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
+          value: "{{ (printf "pink.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
         - name: GOVUK_WEBSITE_ROOT
-          value: "{{ (printf "https://www-origin.eks.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
+          value: "{{ (printf "https://www-origin.pink.%s.%s" .Values.govukEnvironment .Values.govukDomainExternal) }}"
         - name: SIGNON_EMAIL
           value: "signon@alphagov.co.uk"
         - name: SIGNON_PASSWORD
