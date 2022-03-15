@@ -118,6 +118,14 @@ spec:
                   "home_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["signin", "ltr_training", "manage_search_indices"]
+                },
+                "hmrc-manuals-api-eks": {
+                  "name": "HMRC Manuals API [EKS]",
+                  "secret_name": "signon-app-hmrc-manuals-api",
+                  "description": "API for allowing HMRC to publish redacted manuals to GOV.UK",
+                  "home_uri": "https://hmrc-manuals-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://hmrc-manuals-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": ["signin"]
                 }
               }
           - name: API_USERS
@@ -222,6 +230,14 @@ spec:
                   "name": "Search API",
                   "username": "search-api",
                   "email": "search-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api" }
+                  ]
+                },
+                "hmrc-manuals-api-eks": {
+                  "name": "HMRC Manuals API",
+                  "username": "hmrc-manuals-api",
+                  "email": "hmrc-manuals-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
                     { "application_slug": "publishing-api" }
                   ]
