@@ -632,7 +632,6 @@ applications:
   chartPath: charts/asset-manager
   helmValues:
     workerEnabled: true
-    nginxProxyReadTimeout: 60s
     ingress:
       enabled: true
       annotations:
@@ -915,6 +914,7 @@ applications:
         value: null  # value is empty
 - name: hmrc-manuals-api
   helmValues:
+    nginxProxyReadTimeout: 300s
     uploadAssets:
       enabled: false
     replicaCount: 1
@@ -934,7 +934,7 @@ applications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-hmrc-manuals-api-publishing-api
+            name: signon-token-hmrc-manuals-api-eks-publishing-api
             key: bearer_token
       - name: PUBLISH_TOPICS
         value: "1"
