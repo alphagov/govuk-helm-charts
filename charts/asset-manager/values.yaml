@@ -40,6 +40,8 @@ nginxImage:
   pullPolicy: Always
   tag: stable
 nginxPort: 8080
+nginxProxyConnectTimeout: 1s
+nginxProxyReadTimeout: 15s
 
 clamImage:
   repository: clamav/clamav
