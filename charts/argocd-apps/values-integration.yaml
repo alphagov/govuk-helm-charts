@@ -796,17 +796,17 @@ applications:
       - name: SUPPORT_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-support-bearer-feedback
+            name: signon-token-feedback-support
             key: bearer_token
       - name: SUPPORT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-support-api-bearer-token-feedback
+            name: signon-token-feedback-support-api
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-publishing-api-bearer-feedback
+            name: signon-token-feedback-publishing-api
             key: bearer_token
       - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
         valueFrom:
