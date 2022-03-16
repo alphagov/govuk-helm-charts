@@ -945,3 +945,18 @@ applications:
         value: govuk-integration-search-ltr-endpoint
       - name: TENSORFLOW_SAGEMAKER_VARIANTS
         value: null  # value is empty
+- name: license-finder
+  helmValues:
+    replicaCount: 
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-license-finder-publishing-api
+            key: bearer_token
+            

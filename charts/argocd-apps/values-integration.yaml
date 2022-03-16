@@ -796,17 +796,17 @@ applications:
       - name: SUPPORT_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-support-bearer-feedback
+            name: signon-token-feedback-support
             key: bearer_token
       - name: SUPPORT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-support-api-bearer-token-feedback
+            name: signon-token-feedback-support-api
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-publishing-api-bearer-feedback
+            name: signon-token-feedback-publishing-api
             key: bearer_token
       - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
         valueFrom:
@@ -912,3 +912,18 @@ applications:
         value: govuk-integration-search-ltr-endpoint
       - name: TENSORFLOW_SAGEMAKER_VARIANTS
         value: null  # value is empty
+- name: license-finder
+  helmValues:
+    replicaCount: 
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-license-finder-publishing-api
+            key: bearer_token
+            
