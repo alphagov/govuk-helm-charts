@@ -44,6 +44,7 @@ data:
         proxy_set_header   X-Forwarded-Server $host;
         proxy_set_header   X-Forwarded-Host $http_host;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_read_timeout 20s;
 
         {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
         auth_basic "Enter the GOV.UK username/password (not your personal username/password)";
@@ -99,6 +100,13 @@ data:
         location = /dla-ending/google6db9c061ce178960.html {
           add_header Content-Type text/html;
           return 200 '';
+        }
+
+        location ~ ^/apply-for-a-licence/? {
+          # Set proxy timeout to 50 seconds as a quick fix for problems
+          # where civica QueryPayments calls are taking too long.
+          proxy_read_timeout 50s;
+          proxy_pass http://router;
         }
       }
     }
