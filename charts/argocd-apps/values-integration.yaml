@@ -632,6 +632,7 @@ applications:
   chartPath: charts/asset-manager
   helmValues:
     workerEnabled: true
+    nginxProxyReadTimeout: 60s
     ingress:
       enabled: true
       annotations:
