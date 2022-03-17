@@ -984,3 +984,21 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+- name: router-api
+  helmValues:
+    uploadAssets:
+      enabled: false
+    replicaCount: 1
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-router-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-router-api
+            key: oauth_secret
+      - name: MONGODB_URI
+        value: mongodb://router-backend-1.pink.test.govuk-internal.digital,router-backend-2.pink.test.govuk-internal.digital,router-backend-3.pink.test.govuk-internal.digital/router
