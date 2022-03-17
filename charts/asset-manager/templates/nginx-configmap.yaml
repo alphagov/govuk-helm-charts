@@ -30,7 +30,9 @@ data:
       }
 
       server {
-        listen {{ .Values.nginxPort }};
+        listen                {{ .Values.nginxPort }};
+        proxy_connect_timeout {{ .Values.nginxProxyConnectTimeout }};
+        proxy_read_timeout    {{ .Values.nginxProxyReadTimeout }};
 
         location / {
           proxy_set_header   Host $http_host;

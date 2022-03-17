@@ -912,3 +912,29 @@ applications:
         value: govuk-integration-search-ltr-endpoint
       - name: TENSORFLOW_SAGEMAKER_VARIANTS
         value: null  # value is empty
+- name: hmrc-manuals-api
+  helmValues:
+    nginxProxyReadTimeout: 300s
+    uploadAssets:
+      enabled: false
+    replicaCount: 1
+    extraEnv:
+      - name: ALLOW_UNKNOWN_HMRC_MANUAL_SLUGS
+        value: "1"
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-hmrc-manuals-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-hmrc-manuals-api
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-hmrc-manuals-api-eks-publishing-api
+            key: bearer_token
+      - name: PUBLISH_TOPICS
+        value: "1"
