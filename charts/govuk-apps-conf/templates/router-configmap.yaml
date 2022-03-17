@@ -108,6 +108,19 @@ data:
           proxy_read_timeout 50s;
           proxy_pass http://router;
         }
+
+        # Error pages
+        error_page 404 /404.html;
+
+        charset utf-8;
+
+        location /404.html {
+          # Set Cache-Control headers on 404 pages since we overide those set by apps.
+          # So that we dont fall through to the default provided by the CDN.
+          add_header Cache-Control "public, max-age=30" always;
+          proxy_pass https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com/error_pages/404.html;
+          internal;
+        }
       }
     }
   robots.txt: |-
