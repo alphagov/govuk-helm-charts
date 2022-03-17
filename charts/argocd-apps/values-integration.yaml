@@ -7,6 +7,8 @@ applications:
 - name: argo-workflows
   chartPath: charts/argo-workflows
   postSyncWorkflowEnabled: "false"
+  helmValues:
+    nextEnvironment: staging
 - name: cluster-secrets
   chartPath: charts/cluster-secrets
   postSyncWorkflowEnabled: "false"

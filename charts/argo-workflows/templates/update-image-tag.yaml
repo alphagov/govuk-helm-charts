@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: update-image-tag
+spec:
+  entrypoint: update-image-tag 
+  arguments:
+    parameters:
+      - name: imageTag
+      - name: environment
+      - name: application
+  templates:
+    - name: update-image-tag
+      inputs:
+        parameters:
+          - name: imageTag
+          - name: environment
+          - name: application
+        artifacts:
+          - name: govuk-helm-charts
+            path: /govuk-helm-charts
+            git:
+              repo: https://github.com/alphagov/govuk-helm-charts.git
+              depth: 1
+              usernameSecret:
+                name: govuk-ci-github-creds
+                key: token
+              passwordSecret:
+                name: govuk-ci-github-creds
+                key: email
+      script:
+        image: bitnami/minideb:latest
+        command: [/bin/bash]
+        env:
+          - name: GIT_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: govuk-ci-github-creds
+                key: email
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: govuk-ci-github-creds
+                key: token
+          - name: IMAGE_TAG
+            value: "{{"{{inputs.parameters.imageTag}}"}}"
+          - name: ENVIRONMENT
+            value: "{{"{{inputs.parameters.environment}}"}}"
+          - name: APPLICATION
+            value: "{{"{{inputs.parameters.application}}"}}"
+        source: |
+          {{- .Files.Get "scripts/update-image-tag.sh" | nindent 14 }}
