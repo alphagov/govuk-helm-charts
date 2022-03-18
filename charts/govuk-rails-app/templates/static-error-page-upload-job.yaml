@@ -5,7 +5,7 @@ To debug this template, run `helm template . --name-template=static`.
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: static-error-page-upload
+  name: upload-static-error-pages
   annotations:
     argocd.argoproj.io/hook: PostSync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
@@ -14,7 +14,7 @@ spec:
   template:
     spec:
       containers:
-        - name: static-error-page-upload
+        - name: upload-static-error-pages
           # TODO: find a way to keep this up-to-date
           image: amazon/aws-cli:2.4.25
           env:
@@ -24,6 +24,6 @@ spec:
             - "/bin/sh"
             - "-c"
             - |-
-              {{- .Files.Get "static-error-page-upload.sh" | nindent 14 }}
+              {{- .Files.Get "upload-static-error-pages.sh" | nindent 14 }}
       restartPolicy: Never
 {{- end }}
