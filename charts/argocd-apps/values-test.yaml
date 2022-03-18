@@ -1002,3 +1002,8 @@ applications:
             key: oauth_secret
       - name: MONGODB_URI
         value: mongodb://router-backend-1.pink.test.govuk-internal.digital,router-backend-2.pink.test.govuk-internal.digital,router-backend-3.pink.test.govuk-internal.digital/router
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
