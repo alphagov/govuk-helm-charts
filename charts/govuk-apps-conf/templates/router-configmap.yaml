@@ -45,6 +45,7 @@ data:
         proxy_set_header   X-Forwarded-Host $http_host;
         proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_read_timeout 20s;
+        proxy_intercept_errors on;
 
         {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
         auth_basic "Enter the GOV.UK username/password (not your personal username/password)";
@@ -110,15 +111,13 @@ data:
         }
 
         # Error pages
-        error_page 404 /404.html;
-
         charset utf-8;
 
-        location /404.html {
-          # Set Cache-Control headers on 404 pages since we overide those set by apps.
-          # So that we dont fall through to the default provided by the CDN.
-          add_header Cache-Control "public, max-age=30" always;
-          proxy_pass https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com/error_pages/404.html;
+        {{- range(list 400 401 403 404 405 406 410 422 429 500 502 503 504) }}
+        
+        error_page {{ . }} /{{ . }}.html;
+        location /{{ . }}.html {
+          proxy_pass https://govuk-app-assets-{{ $.Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com/error_pages/{{ . }}.html;
           internal;
           proxy_set_header   Authorization "";
           proxy_set_header   Connection "";
@@ -128,7 +127,14 @@ data:
           proxy_hide_header  x-amz-request-id;
           proxy_hide_header  x-amz-server-side-encryption;
           proxy_hide_header  x-amz-version-id;
+
+          {{- if eq . 404 }}
+          # Set Cache-Control headers on 404 pages since we overide those set by apps.
+          # So that we dont fall through to the default provided by the CDN.
+          add_header Cache-Control "public, max-age=30" always;
+          {{- end }}
         }
+        {{- end }}
       }
     }
   robots.txt: |-
