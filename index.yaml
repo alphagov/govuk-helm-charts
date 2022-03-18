@@ -2,6 +2,14 @@ apiVersion: v1
 entries:
   argo-services:
   - apiVersion: v2
+    created: "2022-03-18T12:26:45.358711696Z"
+    description: Installs Argo service configuration (cd, events, notifications, workflows)
+    digest: 94ef7fbbb3c8c76d32e59e468189765fe7fe4275517754c6c504c15daa58682d
+    name: argo-services
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-services-0.1.4/argo-services-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
     created: "2021-11-18T15:01:21.312380017Z"
     description: Installs Argo service configuration (cd, events, notifications, workflows)
     digest: 24ee39eecf54a7b310dff6cc44452ffe8032d45f37563b1230507be005ac0513
@@ -1181,4 +1189,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-03-01T17:28:21.152606193Z"
+generated: "2022-03-18T12:26:46.256591872Z"
