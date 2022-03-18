@@ -7,10 +7,13 @@ globalHelmValues:
 applications:
 - name: argo-workflows
   chartPath: charts/argo-workflows
+  postSyncWorkflowEnabled: "false"
 - name: cluster-secrets
   chartPath: charts/cluster-secrets
+  postSyncWorkflowEnabled: "false"
 - name: govuk-apps-conf
   chartPath: charts/govuk-apps-conf
+  postSyncWorkflowEnabled: "false"
 - name: smokey
   chartPath: charts/smokey
 - name: publisher
@@ -513,6 +516,7 @@ applications:
             key: MONGODB_URI
 - name: signon-resources
   chartPath: charts/signon-resources
+  postSyncWorkflowEnabled: "false"
   helmValues:
     image:
       tag: 0.0.14
