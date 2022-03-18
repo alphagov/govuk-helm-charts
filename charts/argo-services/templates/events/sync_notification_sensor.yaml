@@ -39,12 +39,17 @@ spec:
             src:
               dependencyName: sync-notification
               dataKey: body.slackChannel
+          - dest: metadata.generateName
+            src:
+              dependencyName: sync-notification
+              dataKey: body.application
+            operation: prepend
         source:
           resource:
             apiVersion: argoproj.io/v1alpha1
             kind: Workflow
             metadata:
-              generateName: post-sync-
+              generateName: -post-sync-
               namespace: {{ .Values.workflowsNamespace }}
             spec:
               arguments:
