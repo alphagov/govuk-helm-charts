@@ -156,6 +156,16 @@ spec:
                     { "application_slug": "publishing-api" }
                   ]
                 },
+                "feedback": {
+                  "name": "Feedback",
+                  "username": "feedback",
+                  "email": "feedback@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api" },
+                    { "application_slug": "support-api" },
+                    { "application_slug": "support", "permissions": ["api_users"] }
+                  ]
+                },
                 "frontend": {
                   "name": "Frontend",
                   "username": "frontend",
