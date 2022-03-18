@@ -16,4 +16,4 @@ spec:
     matchNames: 
     - apps
   podMetricsEndpoints:
-  - targetPort: metrics
+  - port: metrics
