@@ -126,6 +126,14 @@ spec:
                   "home_uri": "https://hmrc-manuals-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://hmrc-manuals-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["signin"]
+                },
+                "router-api-eks": {
+                  "name": "Router API [EKS]",
+                  "secret_name": "signon-app-router-api",
+                  "description": "Manages the Router database",
+                  "home_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": ["signin"]
                 }
               }
           - name: API_USERS
