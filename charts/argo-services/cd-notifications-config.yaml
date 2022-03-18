@@ -53,7 +53,7 @@ template.send-slack: |
 trigger.on-deployed: |
   - send: ["send-argo-events-webhook"]
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
-      == 'Healthy'"
+      == 'Healthy' and app.metadata.annotations['postSyncWorkflowEnabled'] == 'true' "
 trigger.sync-operation-change: |
   - oncePer: "app.status.operationState.syncResult.revision"
     send: ["send-slack"]

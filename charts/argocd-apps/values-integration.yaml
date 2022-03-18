@@ -6,10 +6,13 @@ globalHelmValues:
 applications:
 - name: argo-workflows
   chartPath: charts/argo-workflows
+  postSyncWorkflowEnabled: "false"
 - name: cluster-secrets
   chartPath: charts/cluster-secrets
+  postSyncWorkflowEnabled: "false"
 - name: govuk-apps-conf
   chartPath: charts/govuk-apps-conf
+  postSyncWorkflowEnabled: "false"
 - name: smokey
   chartPath: charts/smokey
 - name: publisher
@@ -488,6 +491,7 @@ applications:
         value: content-store
 - name: signon-resources
   chartPath: charts/signon-resources
+  postSyncWorkflowEnabled: "false"
 - name: info-frontend
   helmValues:
     replicaCount: 1
