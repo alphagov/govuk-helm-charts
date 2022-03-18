@@ -13,19 +13,17 @@ spec:
       containers:
       - name: {{ .Release.Name }}-upload-assets
         image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
-        # TODO: remove this horrible hack of installing awscli inside the
-        # container by building it (or a smaller equivalent) into the base
-        # image. Better still: have the build process emit the assets and just
-        # copy them to the serving bucket here, without involving the app image.
+        env:
+        - name: ASSETS_SOURCE_PATH
+          value: {{ .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}
+        - name: ASSETS_DEST_DIR
+          value: {{ .Values.uploadAssets.s3Directory | default .Release.Name }}
+        - name: GOVUK_ENVIRONMENT
+          value: {{ .Values.govukEnvironment }}
         command:
         - "sh"
         - "-c"
-        - |
-          ASSETS_PATH="{{ .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}"
-          [ -d "${ASSETS_PATH}" ] && \
-          apt-get update && \
-          apt-get install -y awscli && \
-          aws s3 sync ${ASSETS_PATH} \
-            s3://govuk-app-assets-{{ .Values.govukEnvironment }}/assets/{{ .Values.uploadAssets.s3Directory | default .Release.Name }}/
+        - |-
+          {{- .Files.Get "upload-assets.sh" | nindent 10 }}
       restartPolicy: Never
 {{- end }}
