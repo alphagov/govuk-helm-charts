@@ -27,11 +27,20 @@ spec:
               parameters:
                 - name: extra-args
                   value: "{{" and @app-{{workflow.parameters.application}}"}}"
-          # TODO: Promote releases
-          # - name: promote-release
-          #   templateRef:
-          #     name: promote-release
-          #     template: promote-release
+          - name: promote-release
+            depends: smoke-test.Succeeded
+            templateRef:
+              name: promote-release
+              template: update-image-tag
+            arguments:
+              parameters:
+                - name: imageTag
+                  value: "{{"{{workflow.parameters.commitSha}}"}}"
+                - name: environment
+                  value: "{{ .Values.nextEnvironment }}"
+                - name: application
+                  value: "{{"{{workflow.parameters.application}}"}}"
+
     - name: exit-handler
       steps:
       - - templateRef:
