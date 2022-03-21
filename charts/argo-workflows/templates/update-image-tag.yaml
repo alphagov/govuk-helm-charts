@@ -16,18 +16,6 @@ spec:
           - name: imageTag
           - name: environment
           - name: application
-        artifacts:
-          - name: govuk-helm-charts
-            path: /govuk-helm-charts
-            git:
-              repo: https://github.com/alphagov/govuk-helm-charts.git
-              depth: 1
-              usernameSecret:
-                name: govuk-ci-github-creds
-                key: token
-              passwordSecret:
-                name: govuk-ci-github-creds
-                key: email
       script:
         image: bitnami/minideb:latest
         command: [/bin/bash]

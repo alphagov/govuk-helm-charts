@@ -1,12 +1,15 @@
 #!/bin/bash
 apt-get update && apt-get install -y git
 
-git config --global user.email "${GIT_EMAIL}"
-git config --global user.name govuk-ci
-
+GIT_NAME=govuk-ci
+REPO="https://${GIT_NAME}:${GITHUB_TOKEN}@github.com/alphagov/govuk-helm-charts.git"
 BRANCH="update-image-tag/${APPLICATION}/${ENVIRONMENT}/${IMAGE_TAG}"
 FILE="charts/argocd-apps/image-tags/${ENVIRONMENT}/${APPLICATION}"
 
+git config --global user.email "${GIT_EMAIL}"
+git config --global user.name "${GIT_NAME}"
+
+git clone --depth 1 --branch main "${REPO}"
 cd "govuk-helm-charts" || exit 1
 
 LATEST_GIT_SHA=$(git rev-parse main)
@@ -16,7 +19,7 @@ if [ "${LATEST_GIT_SHA}" == "${IMAGE_TAG}" ]; then
 
   git checkout -b "${BRANCH}"
 
-  echo "${IMAGE_TAG}" >"{$FILE}"
+  echo "${IMAGE_TAG}" > "{$FILE}"
 
   git add "${FILE}"
   git commit -m "Deploy ${APPLICATION}:${IMAGE_TAG} to ${ENVIRONMENT}"
