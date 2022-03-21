@@ -20,11 +20,11 @@ spec:
         image: bitnami/minideb:latest
         command: [/bin/bash]
         env:
-          - name: GIT_EMAIL
+          - name: GIT_NAME
             valueFrom:
               secretKeyRef:
                 name: govuk-ci-github-creds
-                key: email
+                key: username
           - name: GITHUB_TOKEN
             valueFrom:
               secretKeyRef:
