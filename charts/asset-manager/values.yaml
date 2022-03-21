@@ -25,7 +25,7 @@ workerEnabled: true
 workerReplicaCount: 1
 
 appImage:
-  repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/asset-manager"  # Dummy value, overridden in ArgoCD config.
+  repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/asset-manager"
   tag: latest
 appPort: 3000
 
@@ -43,19 +43,13 @@ nginxPort: 8080
 nginxProxyConnectTimeout: 1s
 nginxProxyReadTimeout: 15s
 
-clamImage:
-  repository: clamav/clamav
-  pullPolicy: Always
-  tag: stable
-clamPort: 3310
-
 appResources:
   limits:
     cpu: 1
-    memory: 2Gi
+    memory: 1Gi
   requests:
     cpu: 500m
-    memory: 2Gi
+    memory: 1Gi
 
 workerResources:
   limits:
@@ -64,14 +58,6 @@ workerResources:
   requests:
     cpu: 500m
     memory: 2Gi
-
-clamResources:
-  limits:
-    cpu: 1
-    memory: 2Gi
-  requests:
-    cpu: 500m
-    memory: 1Gi
 
 # nfsServer is the address of the NFSv4 (or Amazon EFS) server where uploaded
 nfsServer: "nfs-server"
