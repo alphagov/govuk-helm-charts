@@ -30,7 +30,7 @@ spec:
           - name: promote-release
             depends: smoke-test.Succeeded
             templateRef:
-              name: promote-release
+              name: update-image-tag
               template: update-image-tag
             arguments:
               parameters:
@@ -43,16 +43,17 @@ spec:
 
     - name: exit-handler
       steps:
-      - - templateRef:
-            name: notify-slack
-            template: notify-slack
-          arguments:
-            parameters:
-              - name: slackChannel
-                # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
-                # send to team slack channel.
-                value: "govuk-deploy-alerts"
-              - name: text
-                value: "\
-                  post-sync job ({{"{{workflow.name}}"}}) for <{{"{{workflow.parameters.argoUrl}}"}}|{{"{{workflow.parameters.application}}"}}> in {{ .Values.govukEnvironment }} {{"{{workflow.status}}"}} \
-                  (revision <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}>)."
+        - - name: notify-slack
+            templateRef:
+              name: notify-slack
+              template: notify-slack
+            arguments:
+              parameters:
+                - name: slackChannel
+                  # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
+                  # send to team slack channel.
+                  value: "govuk-deploy-alerts"
+                - name: text
+                  value: "\
+                    post-sync job ({{"{{workflow.name}}"}}) for <{{"{{workflow.parameters.argoUrl}}"}}|{{"{{workflow.parameters.application}}"}}> in {{ .Values.govukEnvironment }} {{"{{workflow.status}}"}} \
+                    (revision <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}>)."
