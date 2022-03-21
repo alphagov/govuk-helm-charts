@@ -19,6 +19,9 @@ spec:
         app.kubernetes.io/component: worker
         app: {{ .Release.Name }}-worker
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -38,6 +41,8 @@ spec:
           volumeMounts:
             - name: {{ .Release.Name }}-asset-uploads-efs
               mountPath: /var/apps/
+          securityContext:
+            allowPrivilegeEscalation: false
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
       {{- with .Values.dnsConfig }}
