@@ -1,0 +1,17 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: govuk-ci-github-creds
+  annotations:
+    a8r.io/description: >
+       Personal access token for govuk-ci GitHub user 
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-ci-github-creds
+    creationPolicy: Owner
+  dataFrom:
+    - key: govuk/github/govuk-ci
