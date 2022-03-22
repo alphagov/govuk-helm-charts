@@ -26,7 +26,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: publisher
       hosts:
-      - name: publisher.eks.integration.govuk.digital
+      - publisher.eks.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     extraEnv:
@@ -197,7 +197,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: signon
       hosts:
-      - name: signon.eks.integration.govuk.digital
+      - signon.eks.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     extraEnv:
@@ -238,7 +238,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
       hosts:
-      - name: www-origin.eks.integration.govuk.digital
+      - www-origin.eks.integration.govuk.digital
     nginxConfigMap:
       create: false
       name: router-nginx-conf
@@ -393,7 +393,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: draft-origin
       hosts:
-      - name: draft-origin.eks.integration.govuk.digital
+      - draft-origin.eks.integration.govuk.digital
     dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
       searches:
         - blue.integration.govuk-internal.digital
@@ -549,7 +549,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
       hosts:
-      - name: whitehall-admin.eks.integration.govuk.digital
+      - whitehall-admin.eks.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     extraEnv: &whitehall-envs
@@ -643,7 +643,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: asset-manager
       hosts:
-      - name: asset-manager.eks.integration.govuk.digital
+      - asset-manager.eks.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     nfsServer: assets.blue.integration.govuk-internal.digital
