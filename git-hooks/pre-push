@@ -25,7 +25,7 @@
 
 protected_branch='main'
 
-policy="\n\n[Policy] You cannot push code directly to the "$protected_branch" branch. (Prevented with pre-push hook.)\n\t  Use REALLY_PUSH_TO_MAIN=1 to override this policy.\n\n"
+policy="\n\n[Policy] You cannot push code directly to the \"${protected_branch}\" branch. (Prevented with pre-push hook.)\n\t  Use REALLY_PUSH_TO_MAIN=1 to override this policy.\n\n"
 
 current_branch=$(git branch --show-current)
 
@@ -33,28 +33,28 @@ push_command=$(ps -ocommand= -p $PPID)
 
 is_destructive='force|delete|\-f'
 
-will_remove_protected_branch=':'$protected_branch
+will_remove_protected_branch=":${protected_branch}"
 
 do_exit(){
-  echo -e $policy
+  echo -e "${policy}"
   exit 1
 }
 
-if [[ $push_command =~ $is_destructive ]] && [ $current_branch = $protected_branch ]; then
+if [[ "${push_command}" =~ ${is_destructive} && "${current_branch}" = "${protected_branch}" ]]; then
   do_exit
 fi
 
-if [[ $push_command =~ $is_destructive ]] && [[ $push_command =~ $protected_branch ]]; then
+if [[ "${push_command}" =~ ${is_destructive} && "${push_command}" =~ ${protected_branch} ]]; then
   do_exit
 fi
 
-if [[ $push_command =~ $will_remove_protected_branch ]]; then
+if [[ "${push_command}" =~ ${will_remove_protected_branch} ]]; then
   do_exit
 fi
 
 # Prevent ALL pushes to protected_branch, unless $REALLY_PUSH_TO_MAIN is set.
-if [[ $push_command =~ $protected_branch ]] || [ $current_branch = $protected_branch ]; then
-  if [[ -z $REALLY_PUSH_TO_MAIN ]]; then
+if [[ "${push_command}" =~ ${protected_branch} || "${current_branch}" = "${protected_branch}" ]]; then
+  if [[ -z "${REALLY_PUSH_TO_MAIN}" ]]; then
     do_exit
   fi
 fi
