@@ -262,6 +262,6 @@ spec:
                 }
               }
           - name: SIGNON_API_ENDPOINT
-            value: http://signon.apps.{{.Values.clusterDomain}}/api/v1
+            value: http://signon/api/v1
           - name: GOVUK_PUBLISHING_DOMAIN
-            value: {{.Values.govukEnvironment}}.{{.Values.govukPublishingDomain}}
+            value: {{.Values.publishingServiceDomainSuffix}}
