@@ -119,6 +119,22 @@ spec:
                   "redirect_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["signin", "ltr_training", "manage_search_indices"]
                 },
+                "support": {
+                  "name": "Support",
+                  "secret_name": "signon-app-support",
+                  "description": "Raise support requests",
+                  "home_uri": "https://support.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://support.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
+                  "permissions": ["signin", "api_users", "campaign_requesters", "content_requesters", "feedex", "feedex_exporters", "feedex_reviews", "single_points_of_contact", "user_managers"]
+                },
+                "support-api": {
+                  "name": "Support API",
+                  "secret_name": "signon-app-support-api",
+                  "description": "Stores and retrieves anonymous feedback about pages on GOV.UK.",
+                  "home_uri": "https://support-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://support-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
+                  "permissions": ["signin"]
+                },
                 "hmrc-manuals-api-eks": {
                   "name": "HMRC Manuals API [EKS]",
                   "secret_name": "signon-app-hmrc-manuals-api",
