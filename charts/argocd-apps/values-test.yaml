@@ -826,6 +826,14 @@ applications:
       tag: latest  # To be edited by automation (not yet implemented).
     replicaCount: 1
     extraEnv:
+      - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
+        value: 93109fea-34d9-4c38-ac7e-1ebc75e7416b
+      - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
+        value: 47cef7ea-0849-48aa-9676-0ee0f7baa4ae
+      - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
+        value: fee22233-2f28-4b0b-8b6c-4410979f2275
+      - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
+        value: eb9ba220-7d74-4aab-975a-bdbe718f69a3
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
