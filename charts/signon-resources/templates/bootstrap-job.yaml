@@ -51,16 +51,16 @@ spec:
                   "name": "Email Alert API",
                   "secret_name": "signon-app-email-alert-api",
                   "description": "API to manage GOV.UK email subscriptions",
-                  "home_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://email-alert-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://email-alert-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": ["internal_app","status_updates"]
                 },
                 "router-api": {
                   "name": "Router API",
                   "secret_name": "signon-app-router-api",
                   "description": "Manages the Router database",
-                  "home_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://router-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://router-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": []
                 },
                 "asset-manager": {
@@ -99,8 +99,8 @@ spec:
                   "name": "Publishing API",
                   "secret_name": "signon-app-publishing-api",
                   "description": "Central store for all publishing content on GOV.UK",
-                  "home_uri": "https://publishing-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://publishing-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://publishing-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://publishing-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 },
                 "whitehall-eks": {
