@@ -15,9 +15,8 @@ ingress:
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
   hosts:
-  - name:
-    path: /
-    pathType: Prefix
+    - www.example.com
+  additionalAllowedHostnames: []
 
 replicaCount: 1
 
