@@ -613,6 +613,11 @@ applications:
             key: SECRET_KEY_BASE
 - name: whitehall-frontend
   repoName: whitehall
+  appResources:
+    limits:
+      memory: 2Gi
+    requests:
+      memory: 1.5Gi
   helmValues:
     replicaCount: 1
     uploadAssets: *whitehall-upload-assets
