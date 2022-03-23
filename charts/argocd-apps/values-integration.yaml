@@ -233,6 +233,13 @@ applications:
     replicaCount: 1
     uploadAssets:
       enabled: false
+    appResources:
+      limits:
+        cpu: 3
+        memory: 2Gi
+      requests:
+        cpu: 2
+        memory: 1Gi
     ingress:
       enabled: true
       annotations:
@@ -274,13 +281,6 @@ applications:
           port: 3001
         failureThreshold: 2
         periodSeconds: 5
-    appResources:
-      limits:
-        cpu: 1
-        memory: 1.5Gi
-      requests:
-        cpu: 500m
-        memory: 1Gi
     extraEnv:
       - name: ROUTER_PUBADDR
         value: ":3000"
