@@ -643,7 +643,7 @@ applications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: asset-manager
       hosts:
-      - asset-manager.eks.integration.govuk.digital
+      - name: asset-manager.eks.integration.govuk.digital
     replicaCount: 1
     workerReplicaCount: 1
     nfsServer: assets.blue.integration.govuk-internal.digital
