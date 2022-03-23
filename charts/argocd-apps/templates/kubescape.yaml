@@ -1,0 +1,41 @@
+{{- $kubescapesecret := (lookup "v1" "secret" "cluster-services" "govuk-kubescape") }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubescape
+  {{- if has $.Values.govukEnvironment (list "test" "integration") }}
+  {{- /* Clean up k8s resources on chart deletion in non-prod only. */}}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  {{- end }}
+  annotations:
+    slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
+    notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
+    postSyncWorkflowEnabled: "false"
+spec:
+  project: govuk
+  source:
+    repoURL: https://armosec.github.io/armo-helm/
+    chart: armo/armo-cluster-components
+    targetRevision: 1.6.9
+    helm:
+      # Environment-specific Helm values. These take precedence over the app
+      # chart's values.yaml.
+      values: |
+        {{- if $kubescapesecret.data }}
+        accountGuid: {{ (lookup "v1" "secret" "cluster-services" "govuk-kubescape").data.accountGuid | default "not found" }}
+        {{- end }}
+        clusterName: govuk-integration
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: armo-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - ApplyOutOfSyncOnly=true
+---
