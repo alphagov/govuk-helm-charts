@@ -33,12 +33,12 @@ applications:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-app-publisher-eks
+            name: signon-app-publisher
             key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-publisher-eks
+            name: signon-app-publisher
             key: oauth_secret
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
@@ -439,7 +439,7 @@ applications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-frontend-publishing-api
+            name: signon-token-frontend-publishing-api-ec2
             key: bearer_token
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
@@ -465,7 +465,7 @@ applications:
       - name: ROUTER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-content-store-router-api
+            name: signon-token-content-store-router-api-ec2
             key: bearer_token
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -517,7 +517,7 @@ applications:
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-finder-frontend-email-alert-api
+            name: signon-token-finder-frontend-email-alert-api-ec2
             key: bearer_token
 
 - name: collections
@@ -534,7 +534,7 @@ applications:
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-collections-email-alert-api
+            name: signon-token-collections-email-alert-api-ec2
             key: bearer_token
 - name: whitehall-admin
   repoName: whitehall
@@ -558,17 +558,17 @@ applications:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-app-whitehall-eks
+            name: signon-app-whitehall
             key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-whitehall-eks
+            name: signon-app-whitehall
             key: oauth_secret
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-whitehall-asset-manager
+            name: signon-token-whitehall-asset-manager-ec2
             key: bearer_token
       - name: GOVUK_NOTIFY_API_KEY
         valueFrom:
@@ -583,7 +583,7 @@ applications:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-whitehall-link-checker-api
+            name: signon-token-whitehall-link-checker-api-ec2
             key: bearer_token
       - name: LINK_CHECKER_API_SECRET_TOKEN
         valueFrom:
@@ -593,7 +593,7 @@ applications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-whitehall-publishing-api
+            name: signon-token-whitehall-publishing-api-ec2
             key: bearer_token
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
@@ -718,7 +718,7 @@ applications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-manuals-frontend-publishing-api
+            name: signon-token-manuals-frontend-publishing-api-ec2
             key: bearer_token
 - name: email-alert-frontend
   helmValues:
@@ -736,17 +736,17 @@ applications:
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-email-alert-frontend-account-api
+            name: signon-token-email-alert-frontend-account-api-ec2
             key: bearer_token
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-email-alert-frontend-email-alert-api
+            name: signon-token-email-alert-frontend-email-alert-api-ec2
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-email-alert-frontend-publishing-api
+            name: signon-token-email-alert-frontend-publishing-api-ec2
             key: bearer_token
       - name: EMAIL_ALERT_AUTH_TOKEN
         valueFrom:
@@ -768,12 +768,12 @@ applications:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-smartanswers-link-checker-api
+            name: signon-token-smartanswers-link-checker-api-ec2
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-smartanswers-publishing-api
+            name: signon-token-smartanswers-publishing-api-ec2
             key: bearer_token
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -810,17 +810,17 @@ applications:
       - name: SUPPORT_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-feedback-support
+            name: signon-token-feedback-support-ec2
             key: bearer_token
       - name: SUPPORT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-feedback-support-api
+            name: signon-token-feedback-support-api-ec2
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-feedback-publishing-api
+            name: signon-token-feedback-publishing-api-ec2
             key: bearer_token
       - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
         valueFrom:
@@ -861,12 +861,12 @@ applications:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-app-search-api-eks
+            name: signon-app-search-api
             key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-search-api-eks
+            name: signon-app-search-api
             key: oauth_secret
       - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
         valueFrom:
@@ -906,7 +906,7 @@ applications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-search-api-eks-publishing-api
+            name: signon-token-search-api-publishing-api
             key: bearer_token
       - name: RABBITMQ_HOSTS
         value: rabbitmq.integration.govuk-internal.digital
@@ -948,7 +948,7 @@ applications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-hmrc-manuals-api-eks-publishing-api
+            name: signon-token-hmrc-manuals-api-publishing-api
             key: bearer_token
       - name: PUBLISH_TOPICS
         value: "1"

@@ -16,11 +16,13 @@ data:
   GOVUK_WEBSITE_ROOT: https://www.{{ .Values.externalDomainSuffix }}
   # TODO: switch back to in-cluster Account API once it's fully working.
   PLEK_SERVICE_ACCOUNT_API_URI: https://account-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
+  PLEK_SERVICE_ASSET_MANAGER_URI: https://asset-manager.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_CONTENT_STORE_URI: https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_DRAFT_ORIGIN_URI: https://draft-origin.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_EMAIL_ALERT_API_URI: https://email-alert-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_FRONTEND_URI: http://frontend.{{ .Values.internalDomainSuffix }}
-  PLEK_SERVICE_PUBLISHING_API_URI: http://publishing-api.{{ .Values.internalDomainSuffix }}
+  PLEK_SERVICE_LINK_CHECKER_API_URI: https://link-checker-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
+  PLEK_SERVICE_PUBLISHING_API_URI: https://publishing-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_ROUTER_API_URI: https://router-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   # TODO: switch back to in-cluster Search API once it's fully working.
   PLEK_SERVICE_SEARCH_URI: https://search-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
