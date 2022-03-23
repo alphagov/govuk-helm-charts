@@ -4,6 +4,4 @@ appImage:
 
 govukEnvironment: test
 govukDomainExternal: govuk.digital
-clusterDomain: svc.cluster.local
-
-govukPublishingDomain: publishing.service.gov.uk
+publishingServiceDomainSuffix: test.publishing.service.gov.uk

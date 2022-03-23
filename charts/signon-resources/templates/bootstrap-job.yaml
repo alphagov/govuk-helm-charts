@@ -1,3 +1,47 @@
+# This job creates objects in GOV.UK Signon which are needed for end-user and
+# app-to-app authentication/authorisation. It creates:
+#
+# - Signon Doorkeeper::Application objects
+# - Signon ApiUser objects
+# - Signon Application authorisations (essentially OAuth bearer tokens).
+# - Kubernetes secrets to store the OAuth secret keys and bearer tokens
+#   associated with the above objects.
+#
+# The APPLICATIONS environment variable:
+#
+# - defines Signon Application objects which will be created if they don't
+#   exist (based on the name field).
+#
+# - declares Signon Application objects which already exist (based on the name
+#   field), so that they can be referred to in the API_USERS environment
+#   variable. The description and permissions fields are updated if they differ
+#   from what is in Signon. Other fields such as `home_uri` and `redirect_uri`
+#   are not updated (but this may change in future; check the [source code]).
+#
+# The API_USERS environment variable:
+#
+# - defines Signon ApiUser objects which will be created if they don't exist
+#   (based on the `email` field).
+#
+# - authorises the ApiUser to use the set of apps listed in its `bearer_tokens`
+#   field and grants the corresponding permissions (if any).
+#
+# - ignores any changes to an authorisation if the corresponding Kubernetes
+#   secret already exists (based on the name, which follows the pattern
+#   `signon-token-${username}-${application_slug}`.
+#
+# The keys of the JSON objects in the APPLICATIONS and API_USERS environment
+# variables, referred to as slugs, are internal to the bootstrap script and are
+# not used within Signon itself. Their purpose is:
+#
+# - to allow API users to refer to Applications in order to define which
+#   Applications an API user should have access to, and therefore which bearer
+#   tokens and secrets should be created.
+#
+# - to help construct human-readable names for the Kubernetes secrets which the
+#   script creates.
+#
+# [source code]: https://github.com/alphagov/govuk-infrastructure/search?q=Signon%3A%3AClient%3A%3AApplicationAlreadyCreated+-path%3Aspec
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -51,16 +95,16 @@ spec:
                   "name": "Email Alert API",
                   "secret_name": "signon-app-email-alert-api",
                   "description": "API to manage GOV.UK email subscriptions",
-                  "home_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://email-alert-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://email-alert-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://email-alert-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": ["internal_app","status_updates"]
                 },
                 "router-api": {
                   "name": "Router API",
                   "secret_name": "signon-app-router-api",
                   "description": "Manages the Router database",
-                  "home_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://router-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://router-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": []
                 },
                 "asset-manager": {
@@ -99,8 +143,8 @@ spec:
                   "name": "Publishing API",
                   "secret_name": "signon-app-publishing-api",
                   "description": "Central store for all publishing content on GOV.UK",
-                  "home_uri": "https://publishing-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://publishing-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "home_uri": "https://publishing-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://publishing-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 },
                 "whitehall-eks": {
@@ -118,6 +162,22 @@ spec:
                   "home_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["signin", "ltr_training", "manage_search_indices"]
+                },
+                "support": {
+                  "name": "Support",
+                  "secret_name": "signon-app-support",
+                  "description": "Raise support requests",
+                  "home_uri": "https://support.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://support.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
+                  "permissions": ["signin", "api_users", "campaign_requesters", "content_requesters", "feedex", "feedex_exporters", "feedex_reviews", "single_points_of_contact", "user_managers"]
+                },
+                "support-api": {
+                  "name": "Support API",
+                  "secret_name": "signon-app-support-api",
+                  "description": "Stores and retrieves anonymous feedback about pages on GOV.UK.",
+                  "home_uri": "https://support-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://support-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
+                  "permissions": ["signin"]
                 },
                 "hmrc-manuals-api-eks": {
                   "name": "HMRC Manuals API [EKS]",
@@ -262,6 +322,6 @@ spec:
                 }
               }
           - name: SIGNON_API_ENDPOINT
-            value: http://signon.apps.{{.Values.clusterDomain}}/api/v1
+            value: http://signon/api/v1
           - name: GOVUK_PUBLISHING_DOMAIN
-            value: {{.Values.govukEnvironment}}.{{.Values.govukPublishingDomain}}
+            value: {{.Values.publishingServiceDomainSuffix}}
