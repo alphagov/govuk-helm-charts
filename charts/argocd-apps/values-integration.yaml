@@ -461,6 +461,8 @@ applications:
 - name: content-store
   helmValues:
     replicaCount: 1
+    uploadAssets:
+      enabled: false
     extraEnv:
       - name: ROUTER_API_BEARER_TOKEN
         valueFrom:
