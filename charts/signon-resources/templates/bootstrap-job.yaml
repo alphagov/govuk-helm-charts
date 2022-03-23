@@ -250,7 +250,7 @@ spec:
                   "username": "collections",
                   "email": "collections@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "email-alert-api", "permissions": ["internal_app"] }
+                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] }
                   ]
                 },
                 "content-store": {
@@ -258,8 +258,8 @@ spec:
                   "username": "content-store",
                   "email": "content-store@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "router-api" },
-                    { "application_slug": "publishing-api" }
+                    { "application_slug": "router-api-ec2" },
+                    { "application_slug": "publishing-api-ec2" }
                   ]
                 },
                 "feedback": {
@@ -267,9 +267,9 @@ spec:
                   "username": "feedback",
                   "email": "feedback@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "publishing-api" },
-                    { "application_slug": "support-api" },
-                    { "application_slug": "support", "permissions": ["api_users"] }
+                    { "application_slug": "publishing-api-ec2" },
+                    { "application_slug": "support-api-ec2" },
+                    { "application_slug": "support-ec2", "permissions": ["api_users"] }
                   ]
                 },
                 "frontend": {
@@ -277,9 +277,9 @@ spec:
                   "username": "frontend",
                   "email": "frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "publishing-api" },
-                    { "application_slug": "email-alert-api", "permissions": ["internal_app"] },
-                    { "application_slug": "account-api", "permissions": ["internal_app"] }
+                    { "application_slug": "publishing-api-ec2" },
+                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] },
+                    { "application_slug": "account-api-ec2", "permissions": ["internal_app"] }
                   ]
                 },
                 "publisher": {
@@ -287,9 +287,9 @@ spec:
                   "username": "publisher",
                   "email": "publisher@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "publishing-api" },
-                    { "application_slug": "link-checker-api" },
-                    { "application_slug": "asset-manager" }
+                    { "application_slug": "publishing-api-ec2" },
+                    { "application_slug": "link-checker-api-ec2" },
+                    { "application_slug": "asset-manager-ec2" }
                   ]
                 },
                 "publishing-api": {
@@ -307,11 +307,11 @@ spec:
                   "username": "whitehall",
                   "email": "whitehall@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "asset-manager" },
-                    { "application_slug": "email-alert-api", "permissions": ["internal_app"] },
-                    { "application_slug": "link-checker-api" },
-                    { "application_slug": "publishing-api" },
-                    { "application_slug": "search-api", "permissions": ["manage_search_indices"] }
+                    { "application_slug": "asset-manager-ec2" },
+                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] },
+                    { "application_slug": "link-checker-api-ec2" },
+                    { "application_slug": "publishing-api-ec2" },
+                    { "application_slug": "search-api-ec2", "permissions": ["manage_search_indices"] }
                   ]
                 },
                 "manuals-frontend": {
@@ -319,7 +319,7 @@ spec:
                   "username": "manuals-frontend",
                   "email": "manuals-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "publishing-api" }
+                    { "application_slug": "publishing-api-ec2" }
                   ]
                 },
                 "email-alert-frontend": {
@@ -327,9 +327,9 @@ spec:
                   "username": "email-alert-frontend",
                   "email": "email-alert-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "account-api", "permissions": ["internal_app"] },
-                    { "application_slug": "email-alert-api", "permissions": ["internal_app"] },
-                    { "application_slug": "publishing-api" }
+                    { "application_slug": "account-api-ec2", "permissions": ["internal_app"] },
+                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] },
+                    { "application_slug": "publishing-api-ec2" }
                   ]
                 },
                 "smartanswers": {
@@ -337,8 +337,8 @@ spec:
                   "username": "smartanwsers",
                   "email": "smartanswers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "link-checker-api" },
-                    { "application_slug": "publishing-api" }
+                    { "application_slug": "link-checker-api-ec2" },
+                    { "application_slug": "publishing-api-ec2" }
                   ]
                 },
                 "finder-frontend": {
@@ -346,8 +346,8 @@ spec:
                   "username": "finder-frontend",
                   "email": "finder-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "account-api", "permissions": ["internal_app"] },
-                    { "application_slug": "email-alert-api", "permissions": ["internal_app"] }
+                    { "application_slug": "account-api-ec2", "permissions": ["internal_app"] },
+                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] }
                   ]
                 },
                 "search-api": {
