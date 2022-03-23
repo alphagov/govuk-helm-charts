@@ -696,7 +696,7 @@ applications:
       - name: AWS_REGION
         value: eu-west-1
       - name: AWS_S3_BUCKET_NAME
-        value: govuk-assets-integration-test
+        value: govuk-assets-integration
 - name: contacts-admin
   helmValues:
     replicaCount: 1
