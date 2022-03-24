@@ -18,11 +18,11 @@ ingress:
   - path: /
     pathType: Prefix
 
-replicaCount: 1
+replicaCount: 2
 
 # workerEnabled should be true if the app uses Sidekiq, false otherwise.
 workerEnabled: false
-workerReplicaCount: 1
+workerReplicaCount: 2
 
 # dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
 dbMigrationEnabled: false
