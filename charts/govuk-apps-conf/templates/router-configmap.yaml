@@ -87,6 +87,11 @@ data:
           rewrite ^(.*)$ $scheme://$host$uri_lowercase permanent;
         }
 
+        # If slug contains mixed cases, then return 404
+        location ~ ^\/(?=.*[A-Z])(?=.*[a-z]).*$ {
+          return 404;
+        }
+
         location = /robots.txt {
           root /usr/share/nginx/html;
         }
@@ -114,7 +119,7 @@ data:
         charset utf-8;
 
         {{- range(list 400 401 403 404 405 406 410 422 429 500 502 503 504) }}
-        
+
         error_page {{ . }} /{{ . }}.html;
         location /{{ . }}.html {
           proxy_pass https://govuk-app-assets-{{ $.Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com/error_pages/{{ . }}.html;
