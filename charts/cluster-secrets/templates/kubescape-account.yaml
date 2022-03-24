@@ -2,6 +2,7 @@ apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: kubescape-account
+  namespace: "{{ .Values.clusterServicesNamespace }}"
   annotations:
     a8r.io/description: >
        Info about our Armosec Kubescape account 
