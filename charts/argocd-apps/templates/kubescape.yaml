@@ -1,9 +1,10 @@
+{{- if .Values.kubescape }}
 {{- $kubescapesecret := (lookup "v1" "secret" "cluster-services" "govuk-kubescape") }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: kubescape
-  {{- if has $.Values.govukEnvironment (list "test" "integration") }}
+  {{- if has .Values.globalHelmValues.govukEnvironment (list "test" "integration") }}
   {{- /* Clean up k8s resources on chart deletion in non-prod only. */}}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -17,7 +18,7 @@ spec:
   source:
     repoURL: https://armosec.github.io/armo-helm/
     chart: armo/armo-cluster-components
-    targetRevision: 1.6.9
+    targetRevision: {{ .Values.kubescape.version }}
     helm:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
@@ -25,7 +26,7 @@ spec:
         {{- if $kubescapesecret.data }}
         accountGuid: {{ (lookup "v1" "secret" "cluster-services" "govuk-kubescape").data.accountGuid | default "not found" }}
         {{- end }}
-        clusterName: govuk-integration
+        clusterName: govuk-{{ .Values.globalHelmValues.govukEnvironment }}
   destination:
     server: https://kubernetes.default.svc
     namespace: armo-system
@@ -39,3 +40,4 @@ spec:
     - PruneLast=true
     - ApplyOutOfSyncOnly=true
 ---
+{{- end }}

@@ -1011,3 +1011,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+
+kubescape:
+  version: 1.6.9
