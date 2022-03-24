@@ -92,11 +92,6 @@ data:
           return 404;
         }
 
-        # If slug has trailing URL, direct after trimming
-        location ~ ^\/(.+)\/$ {
-          rewrite ^\/(.+)\/$ $scheme://$host/$1 permanent;
-        }
-
         location = /robots.txt {
           root /usr/share/nginx/html;
         }
