@@ -27,7 +27,6 @@ applications:
         alb.ingress.kubernetes.io/load-balancer-name: publisher
       hosts:
       - publisher.eks.integration.govuk.digital
-    replicaCount: 1
     workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
@@ -116,7 +115,6 @@ applications:
     uploadAssets:
       enabled: false
     workerEnabled: true
-    replicaCount: 1
     workerReplicaCount: 1
     appProbes: {}
     appResources:
@@ -198,7 +196,6 @@ applications:
         alb.ingress.kubernetes.io/load-balancer-name: signon
       hosts:
       - signon.eks.integration.govuk.digital
-    replicaCount: 1
     workerReplicaCount: 1
     extraEnv:
       - name: DEVISE_PEPPER
@@ -230,7 +227,6 @@ applications:
             key: token
 - name: router
   helmValues:
-    replicaCount: 1
     uploadAssets:
       enabled: false
     appResources:
@@ -330,7 +326,6 @@ applications:
 - name: draft-router
   repoName: router
   helmValues:
-    replicaCount: 1
     uploadAssets:
       enabled: false
     nginxImage: *router-nginx-image
@@ -387,7 +382,6 @@ applications:
         value: "https://search-api.integration.govuk-internal.digital"
 - name: authenticating-proxy
   helmValues:
-    replicaCount: 1
     ingress:
       enabled: true
       annotations:
@@ -429,7 +423,6 @@ applications:
             key: SECRET_KEY_BASE
 - name: frontend
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -445,7 +438,6 @@ applications:
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: static
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -460,7 +452,6 @@ applications:
         value: /var/apps/static
 - name: content-store
   helmValues:
-    replicaCount: 1
     uploadAssets:
       enabled: false
     extraEnv:
@@ -498,7 +489,6 @@ applications:
   postSyncWorkflowEnabled: "false"
 - name: info-frontend
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -507,7 +497,6 @@ applications:
             key: SECRET_KEY_BASE
 - name: finder-frontend
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -524,7 +513,6 @@ applications:
 
 - name: collections
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -552,7 +540,6 @@ applications:
         alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
       hosts:
       - whitehall-admin.eks.integration.govuk.digital
-    replicaCount: 1
     workerReplicaCount: 1
     extraEnv: &whitehall-envs
       - name: NODE_ENV
@@ -621,18 +608,15 @@ applications:
     requests:
       memory: 1.5Gi
   helmValues:
-    replicaCount: 1
     uploadAssets: *whitehall-upload-assets
     extraEnv: *whitehall-envs
 - name: draft-whitehall-frontend
   repoName: whitehall
   helmValues:
-    replicaCount: 1
     uploadAssets: *whitehall-upload-assets
     extraEnv: *whitehall-envs
 - name: government-frontend
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -651,7 +635,6 @@ applications:
         alb.ingress.kubernetes.io/load-balancer-name: asset-manager
       hosts:
       - name: asset-manager.eks.integration.govuk.digital
-    replicaCount: 1
     workerReplicaCount: 1
     nfsServer: assets.blue.integration.govuk-internal.digital
     extraEnv:
@@ -706,7 +689,6 @@ applications:
         value: govuk-assets-integration
 - name: contacts-admin
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -715,7 +697,6 @@ applications:
             key: SECRET_KEY_BASE
 - name: manuals-frontend
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -729,7 +710,6 @@ applications:
             key: bearer_token
 - name: email-alert-frontend
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SUBSCRIPTION_MANAGEMENT_ENABLED
         value: "yes"
@@ -763,7 +743,6 @@ applications:
 - name: smartanswers
   repoName: smart-answers
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: EXPOSE_GOVSPEAK
         value: "1"
@@ -799,7 +778,6 @@ applications:
             key: password
 - name: feedback
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
         value: 93109fea-34d9-4c38-ac7e-1ebc75e7416b
@@ -853,7 +831,6 @@ applications:
   helmValues:
     uploadAssets:
       enabled: false
-    replicaCount: 1
     extraEnv:
       - name: AWS_REGION
         value: eu-west-1
@@ -938,7 +915,6 @@ applications:
     nginxProxyReadTimeout: 300s
     uploadAssets:
       enabled: false
-    replicaCount: 1
     extraEnv:
       - name: ALLOW_UNKNOWN_HMRC_MANUAL_SLUGS
         value: "1"
@@ -963,7 +939,6 @@ applications:
   helmValues:
     uploadAssets:
       enabled: false
-    replicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -984,7 +959,6 @@ applications:
             key: SECRET_KEY_BASE
 - name: service-manual-frontend
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
