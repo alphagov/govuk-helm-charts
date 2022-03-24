@@ -17,7 +17,7 @@ spec:
   project: govuk
   source:
     repoURL: https://armosec.github.io/armo-helm/
-    chart: armo/armo-cluster-components
+    chart: armo-cluster-components
     targetRevision: {{ .Values.kubescape.version }}
     helm:
       # Environment-specific Helm values. These take precedence over the app
