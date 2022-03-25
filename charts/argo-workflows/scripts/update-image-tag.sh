@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
 apt-get update && apt-get install -y git curl
 
@@ -20,9 +21,8 @@ cd "govuk-helm-charts" || exit 1
 
 LATEST_GIT_SHA=$(git rev-parse main)
 
-if [ "${LATEST_GIT_SHA}" == "${IMAGE_TAG}" ]; then
-  echo "Modifying Helm Charts repo..."
-
+# Relies on the assumption the IMAGE_TAG is a commit SHA
+if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
   git checkout -b "${BRANCH}"
 
   echo "${IMAGE_TAG}" > "{$FILE}"
