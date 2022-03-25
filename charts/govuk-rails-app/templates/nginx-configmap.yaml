@@ -63,11 +63,11 @@ data:
           add_header cache-control "max-age=0,no-store,no-cache";
           return 200 '{"message": "Tweet tweet"}\n';
         }
-      }
 
-      # Endpoint for liveness and readiness checks of the nginx container.
-      location = /readyz {
-        return 200 'ok\n';
+        # Endpoint for liveness and readiness checks of the nginx container.
+        location = /readyz {
+          return 200 'ok\n';
+        }
       }
     }
 {{- end }}
