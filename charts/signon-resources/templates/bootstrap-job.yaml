@@ -365,6 +365,14 @@ spec:
                   "bearer_tokens": [
                     { "application_slug": "publishing-api" }
                   ]
+                },
+                "licence-finder": {
+                  "name": "Licence Finder",
+                  "username": "licence-finder",
+                  "email": "licence-finder@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api-ec2", "permissions": ["internal_app"] }
+                  ]
                 }
               }
           - name: SIGNON_API_ENDPOINT

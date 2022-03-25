@@ -1016,6 +1016,23 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+- name: licence-finder
+  helmValues:
+    replicaCount: 1
+    uploadAssets:
+      path: "/app/public/assets/licencefinder"
+      s3Directory: "licencefinder"
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-licence-finder-publishing-api
+            key: bearer_token
 
 kubescape:
   version: 1.6.9
