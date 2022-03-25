@@ -80,6 +80,11 @@ data:
           return 200 '{"message": "Tweet tweet"}\n';
         }
 
+        # Endpoint for liveness and readiness checks of the nginx container.
+        location = /readyz {
+          return 200 'ok\n';
+        }
+
         # If slug contains no lowercase letters then lowercase it
         # eg www.gov.uk/GOVERNMENT/GUIDANCE -> www.gov.uk/government/guidance
         # eg WWW.GOV.UK/GOVERNMENT/GUIDANCE -> www.gov.uk/government/guidance
