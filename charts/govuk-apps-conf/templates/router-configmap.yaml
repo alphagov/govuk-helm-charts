@@ -97,6 +97,11 @@ data:
           rewrite ^\/(.+)\/$ $scheme://$host/$1 permanent;
         }
 
+        # If slug has trailing fullstop, direct after trimming
+        location ~ ^\/(.+)\.$ {
+          rewrite ^\/(.+)\.$ $scheme://$host/$1 permanent;
+        }
+
         location = /robots.txt {
           root /usr/share/nginx/html;
         }
