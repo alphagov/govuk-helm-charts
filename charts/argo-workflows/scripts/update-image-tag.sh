@@ -1,14 +1,15 @@
 #!/bin/bash
 apt-get update && apt-get install -y git
 
-REPO="https://${GIT_NAME}:${GITHUB_TOKEN}@github.com/alphagov/govuk-helm-charts.git"
 BRANCH="update-image-tag/${APPLICATION}/${ENVIRONMENT}/${IMAGE_TAG}"
 FILE="charts/argocd-apps/image-tags/${ENVIRONMENT}/${APPLICATION}"
 
 git config --global user.email "${GIT_NAME}@digital.cabinet-office.gov.uk"
 git config --global user.name "${GIT_NAME}"
 
-git clone --depth 1 --branch main "${REPO}"
+gh auth setup-git
+gh repo clone alphagov/govuk-helm-charts -- --depth 1 --branch main
+
 cd "govuk-helm-charts" || exit 1
 
 LATEST_GIT_SHA=$(git rev-parse main)
