@@ -1,22 +1,31 @@
-#!/bin/bash
-apt-get update && apt-get install -y git
+#!/usr/bin/env bash
+set -euo pipefail
 
-git config --global user.email "${GIT_EMAIL}"
-git config --global user.name govuk-ci
+apt-get update && apt-get install -y git curl
+
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+apt-get update && apt-get install -y gh
 
 BRANCH="update-image-tag/${APPLICATION}/${ENVIRONMENT}/${IMAGE_TAG}"
 FILE="charts/argocd-apps/image-tags/${ENVIRONMENT}/${APPLICATION}"
+
+git config --global user.email "${GIT_NAME}@digital.cabinet-office.gov.uk"
+git config --global user.name "${GIT_NAME}"
+
+gh auth setup-git
+gh repo clone alphagov/govuk-helm-charts -- --depth 1 --branch main
 
 cd "govuk-helm-charts" || exit 1
 
 LATEST_GIT_SHA=$(git rev-parse main)
 
-if [ "${LATEST_GIT_SHA}" == "${IMAGE_TAG}" ]; then
-  echo "Modifying Helm Charts repo..."
-
+# Relies on the assumption the IMAGE_TAG is a commit SHA
+if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
   git checkout -b "${BRANCH}"
 
-  echo "${IMAGE_TAG}" >"{$FILE}"
+  echo "${IMAGE_TAG}" > "{$FILE}"
 
   git add "${FILE}"
   git commit -m "Deploy ${APPLICATION}:${IMAGE_TAG} to ${ENVIRONMENT}"
