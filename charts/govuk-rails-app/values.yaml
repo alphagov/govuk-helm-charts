@@ -4,7 +4,6 @@ service:
   type: NodePort
   annotations: {}
   port: 80
-  metrics: 9394
 
 ingress:
   enabled: false
