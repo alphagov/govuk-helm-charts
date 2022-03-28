@@ -152,6 +152,12 @@ data:
           # Set Cache-Control headers on 404 pages since we overide those set by apps.
           # So that we dont fall through to the default provided by the CDN.
           add_header Cache-Control "public, max-age=30" always;
+
+          # Required since the `return` directive in an `if` block above
+          # interferes with the 304 functionality of Fastly so this disables
+          # this Fastly functionality
+          proxy_hide_header  ETag;
+          proxy_hide_header  Last-Modified;
           {{- end }}
         }
         {{- end }}
