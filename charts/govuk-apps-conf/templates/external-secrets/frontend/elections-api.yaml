@@ -1,0 +1,18 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: frontend-elections-api
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+  annotations:
+    a8r.io/description: >
+      Credentials used by Frontend to access external Elections API service
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: frontend-elections-api
+  dataFrom:
+    - key: govuk/frontend/elections-api

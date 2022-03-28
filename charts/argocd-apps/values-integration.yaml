@@ -436,6 +436,33 @@ applications:
             key: bearer_token
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+      - name: GOVUK_PERSONALISATION_MANAGE_URI
+        value: https://integration.account.gov.uk?link=manage-account
+      - name: ELECTIONS_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: key
+      - name: ELECTIONS_API_URL
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: url
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-account-api-ec2
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-email-alert-api-ec2
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-publishing-api-ec2
+            key: bearer_token
 - name: static
   helmValues:
     extraEnv:
