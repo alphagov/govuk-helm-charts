@@ -1,5 +1,4 @@
 {{- if .Values.kubescape }}
-{{- $kubescapesecret := (lookup "v1" "secret" "cluster-services" "govuk-kubescape") }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -23,9 +22,7 @@ spec:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
       values: |
-        {{- if $kubescapesecret.data }}
-        accountGuid: {{ (lookup "v1" "secret" "cluster-services" "govuk-kubescape").data.accountGuid | default "not found" }}
-        {{- end }}
+        accountGuid: OVERRIDE_THIS
         clusterName: govuk-{{ .Values.globalHelmValues.govukEnvironment }}
   destination:
     server: https://kubernetes.default.svc
