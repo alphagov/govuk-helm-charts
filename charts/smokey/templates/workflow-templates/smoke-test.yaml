@@ -51,3 +51,8 @@ spec:
             secretKeyRef:
               name: smokey
               key: auth_password
+        - name: BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-smokey-asset-manager
+              key: bearer_token

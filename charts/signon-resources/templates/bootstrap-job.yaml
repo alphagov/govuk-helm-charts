@@ -302,6 +302,14 @@ spec:
                     { "application_slug": "router-api" }
                   ]
                 },
+                "smokey": {
+                  "name": "Smokey",
+                  "username": "smokey”,
+                  "email": "smokey@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "asset-manager" }
+                  ]
+                },
                 "whitehall": {
                   "name": "Whitehall",
                   "username": "whitehall",
