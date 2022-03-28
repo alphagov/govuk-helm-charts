@@ -982,6 +982,3 @@ applications:
           secretKeyRef:
             name: signon-token-licence-finder-publishing-api-ec2
             key: bearer_token
-
-kubescape:
-  version: 1.6.9
