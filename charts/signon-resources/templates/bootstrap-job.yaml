@@ -371,7 +371,7 @@ spec:
                   "username": "licence-finder",
                   "email": "licence-finder@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
-                    { "application_slug": "publishing-api-ec2", "permissions": ["internal_app"] }
+                    { "application_slug": "publishing-api-ec2" }
                   ]
                 }
               }
