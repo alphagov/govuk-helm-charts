@@ -1033,6 +1033,3 @@ applications:
           secretKeyRef:
             name: signon-token-licence-finder-publishing-api
             key: bearer_token
-
-kubescape:
-  version: 1.6.9
