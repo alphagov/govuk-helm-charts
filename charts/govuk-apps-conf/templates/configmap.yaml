@@ -13,6 +13,7 @@ data:
   GOVUK_ASSET_ROOT: https://assets.{{ .Values.publishingServiceDomainSuffix }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
   GOVUK_ENVIRONMENT_NAME: {{ .Values.govukEnvironment }}
+  GOVUK_PROMETHEUS_EXPORTER: "true"
   GOVUK_WEBSITE_ROOT: https://www.{{ .Values.externalDomainSuffix }}
   # TODO: switch back to in-cluster Account API once it's fully working.
   PLEK_SERVICE_ACCOUNT_API_URI: https://account-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
