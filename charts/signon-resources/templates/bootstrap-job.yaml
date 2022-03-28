@@ -304,7 +304,7 @@ spec:
                 },
                 "smokey": {
                   "name": "Smokey",
-                  "username": "smokey”,
+                  "username": "smokey",
                   "email": "smokey@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
                     { "application_slug": "asset-manager" }
