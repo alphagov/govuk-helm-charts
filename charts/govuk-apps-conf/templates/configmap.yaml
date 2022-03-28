@@ -27,6 +27,7 @@ data:
   PLEK_SERVICE_MAPIT_URI: https://mapit.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_IMMINENCE_URI: https://imminence.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_LOCAL_LINKS_MANAGER_URI: https://local-links-manager.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
+  PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   # TODO: switch back to in-cluster Search API once it's fully working.
   PLEK_SERVICE_SEARCH_URI: https://search-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_SIGNON_URI: http://signon.{{ .Values.externalDomainSuffix }}
