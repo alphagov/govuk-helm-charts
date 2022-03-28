@@ -25,7 +25,7 @@ LATEST_GIT_SHA=$(git rev-parse main)
 if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
   git checkout -b "${BRANCH}"
 
-  echo "${IMAGE_TAG}" > "{$FILE}"
+  echo "${IMAGE_TAG}" > "${FILE}"
 
   git add "${FILE}"
   git commit -m "Deploy ${APPLICATION}:${IMAGE_TAG} to ${ENVIRONMENT}"
