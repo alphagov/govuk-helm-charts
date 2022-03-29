@@ -994,7 +994,6 @@ applications:
 - name: licencefinder
   repoName: licence-finder
   helmValues:
-    replicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
