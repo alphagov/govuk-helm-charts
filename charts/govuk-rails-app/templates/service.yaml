@@ -16,8 +16,5 @@ spec:
     - name: app
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.nginxPort }}
-    - name: metrics
-      port: {{ .Values.service.metrics }}
-      targetPort: {{ .Values.metricsPort }}
   selector:
     app: {{ .Release.Name }}
