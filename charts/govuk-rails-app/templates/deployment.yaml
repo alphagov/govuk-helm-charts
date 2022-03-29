@@ -67,7 +67,7 @@ spec:
               containerPort: {{ .Values.nginxPort }}
           livenessProbe:
             httpGet:
-              path: /__canary__
+              path: /readyz
               port: http
             initialDelaySeconds: 2
             failureThreshold: 3
@@ -75,7 +75,7 @@ spec:
             timeoutSeconds: 20
           readinessProbe:
             httpGet:
-              path: /__canary__
+              path: /readyz
               port: http
             initialDelaySeconds: 2
             failureThreshold: 2
