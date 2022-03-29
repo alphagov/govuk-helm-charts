@@ -255,9 +255,6 @@ applications:
       - name: router-nginx-htpasswd
         secret:
           secretName: router-nginx-htpasswd
-    nginxImage: &router-nginx-image
-      tag: stable-perl
-      pullPolicy: Always
     appProbes: &router-app-probes
       startupProbe: &router-probe
         httpGet:
@@ -328,7 +325,6 @@ applications:
   helmValues:
     uploadAssets:
       enabled: false
-    nginxImage: *router-nginx-image
     appProbes: *router-app-probes
     appResources:
       limits:
@@ -664,6 +660,9 @@ applications:
       - name: asset-manager.eks.integration.govuk.digital
     workerReplicaCount: 1
     nfsServer: assets.blue.integration.govuk-internal.digital
+    nginxConfigMap:
+      create: false
+      name: asset-manager-nginx-conf
     extraEnv:
       - name: ASSET_MANAGER_CLAMSCAN_PATH
         value: /usr/bin/clamscan  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing

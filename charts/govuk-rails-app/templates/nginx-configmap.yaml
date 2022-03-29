@@ -10,7 +10,7 @@ data:
   nginx.conf: |-
     user nginx;
 
-    error_log  /var/log/nginx/error.log warn;
+    error_log  /dev/stderr warn;
     pid        /var/run/nginx.pid;
 
     events {
@@ -26,6 +26,36 @@ data:
       sendfile        on;
       keepalive_timeout  65;
 
+      # Set GOVUK-Request-Id if not set
+      # See http://nginx.org/en/docs/http/ngx_http_perl_module.html
+      perl_modules perl/lib;
+      perl_set $govuk_request_id '
+        sub {
+          my $r = shift;
+          my $current_header = $r->header_in("GOVUK-Request-Id");
+          if (defined $current_header && $current_header ne "") {
+            return $current_header;
+          } else {
+            my $pid = $r->variable("pid");
+            my $msec = $r->variable("msec");
+            my $remote_addr = $r->variable("remote_addr");
+            my $request_length = $r->variable("request_length");
+            return "$pid-$msec-$remote_addr-$request_length";
+          }
+        }
+      ';
+
+      # This map creates a $sts_default variable for later use.
+      # If this header is already set by upstream, then $sts_default will
+      # be an empty string, which will later lead to:
+      #    add_header Strict-Transport-Security ''
+      # which will be ignored according to http://serverfault.com/a/598106
+      # If the header is not set by upstream, then $sts_default will be set
+      # and later uses in add_header will be effective.
+      map $upstream_http_strict_transport_security $sts_default {
+       '' "max-age=31536000; preload";
+      }
+
       upstream {{ .Release.Name }} {
         server 127.0.0.1:{{ .Values.appPort }};
       }
@@ -35,12 +65,21 @@ data:
         proxy_connect_timeout {{ .Values.nginxProxyConnectTimeout }};
         proxy_read_timeout    {{ .Values.nginxProxyReadTimeout }};
 
+        add_header Strict-Transport-Security $sts_default;
+        add_header Permissions-Policy interest-cohort=();
+        proxy_set_header GOVUK-Request-Id $govuk_request_id;
+
+        {{- if ne .Values.govukEnvironment "production" -}}
+        add_header X-Robots-Tag "noindex";
+        {{- end -}}
+
         location / {
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
           proxy_pass         http://{{ .Release.Name }};
           proxy_redirect     off;
         }
+
         location /assets {
           proxy_set_header   Authorization "";
           proxy_set_header   Connection "";
@@ -53,6 +92,19 @@ data:
           add_header         Cache-Control max-age=31536000;
           proxy_intercept_errors on;
           proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
+
+          location ~ "-[0-9a-f]{32,}\." {
+            expires max;
+            add_header Cache-Control "public, immutable";
+            add_header Surrogate-Key "assets assets-{{ .Release.Name }}";
+
+            # Set CORS allow origin for fonts only
+            location ~* \.(eot|otf|ttf|woff|woff2)$ {
+              add_header Access-Control-Allow-Origin "*";
+              add_header Access-Control-Allow-Methods "GET, OPTIONS";
+              add_header Access-Control-Allow-Headers "origin, authorization";
+            }
+          }
         }
 
         # Endpoint that isn't cached, which is used to assert that an external
