@@ -41,7 +41,7 @@ appProbes: {}
 nginxImage:
   repository: nginx
   pullPolicy: Always
-  tag: stable
+  tag: stable-perl
 nginxPort: 8080
 nginxProxyConnectTimeout: 1s
 nginxProxyReadTimeout: 15s
