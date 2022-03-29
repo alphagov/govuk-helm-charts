@@ -1,7 +1,8 @@
 name: linting
 on: [push]
 jobs:
-  test:
+  chart-testing:
+    name: Chart testing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
