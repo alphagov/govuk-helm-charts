@@ -246,7 +246,7 @@ spec:
             value: |-
               {
                 "collections": {
-                  "name": "Collections",
+                  "name": "Collections [EKS]",
                   "username": "collections",
                   "email": "collections@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -254,7 +254,7 @@ spec:
                   ]
                 },
                 "content-store": {
-                  "name": "Content Store",
+                  "name": "Content Store [EKS]",
                   "username": "content-store",
                   "email": "content-store@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -263,7 +263,7 @@ spec:
                   ]
                 },
                 "email-alert-frontend": {
-                  "name": "Email Alert Frontend",
+                  "name": "Email Alert Frontend [EKS]",
                   "username": "email-alert-frontend",
                   "email": "email-alert-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -273,7 +273,7 @@ spec:
                   ]
                 },
                 "feedback": {
-                  "name": "Feedback",
+                  "name": "Feedback [EKS]",
                   "username": "feedback",
                   "email": "feedback@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -283,7 +283,7 @@ spec:
                   ]
                 },
                 "finder-frontend": {
-                  "name": "Finder Frontend",
+                  "name": "Finder Frontend [EKS]",
                   "username": "finder-frontend",
                   "email": "finder-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -292,7 +292,7 @@ spec:
                   ]
                 },
                 "frontend": {
-                  "name": "Frontend",
+                  "name": "Frontend [EKS]",
                   "username": "frontend",
                   "email": "frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -302,7 +302,7 @@ spec:
                   ]
                 },
                 "hmrc-manuals-api": {
-                  "name": "HMRC Manuals API",
+                  "name": "HMRC Manuals API [EKS]",
                   "username": "hmrc-manuals-api",
                   "email": "hmrc-manuals-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -310,7 +310,7 @@ spec:
                   ]
                 },
                 "licence-finder": {
-                  "name": "Licence Finder",
+                  "name": "Licence Finder [EKS]",
                   "username": "licence-finder",
                   "email": "licence-finder@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -318,7 +318,7 @@ spec:
                   ]
                 },
                 "manuals-frontend": {
-                  "name": "Manuals Frontend",
+                  "name": "Manuals Frontend [EKS]",
                   "username": "manuals-frontend",
                   "email": "manuals-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -326,7 +326,7 @@ spec:
                   ]
                 },
                 "publisher": {
-                  "name": "Publisher",
+                  "name": "Publisher [EKS]",
                   "username": "publisher",
                   "email": "publisher@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -336,7 +336,7 @@ spec:
                   ]
                 },
                 "publishing-api": {
-                  "name": "Publishing API",
+                  "name": "Publishing API [EKS]",
                   "username": "publishing-api",
                   "email": "publishing-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -346,7 +346,7 @@ spec:
                   ]
                 },
                 "search-api": {
-                  "name": "Search API",
+                  "name": "Search API [EKS]",
                   "username": "search-api",
                   "email": "search-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -354,7 +354,7 @@ spec:
                   ]
                 },
                 "smartanswers": {
-                  "name": "Smart Answers",
+                  "name": "Smart Answers [EKS]",
                   "username": "smartanwsers",
                   "email": "smartanswers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -363,7 +363,7 @@ spec:
                   ]
                 },
                 "smokey": {
-                  "name": "Smokey",
+                  "name": "Smokey [EKS]",
                   "username": "smokey",
                   "email": "smokey@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -371,7 +371,7 @@ spec:
                   ]
                 },
                 "whitehall": {
-                  "name": "Whitehall",
+                  "name": "Whitehall [EKS]",
                   "username": "whitehall",
                   "email": "whitehall@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
