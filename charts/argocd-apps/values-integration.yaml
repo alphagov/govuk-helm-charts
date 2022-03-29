@@ -992,12 +992,10 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-- name: licence-finder
+- name: licencefinder
+  repoName: licence-finder
   helmValues:
     replicaCount: 1
-    uploadAssets:
-      path: "/app/public/assets/licencefinder"
-      s3Directory: "licencefinder"
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
