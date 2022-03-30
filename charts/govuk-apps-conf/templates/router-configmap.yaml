@@ -106,9 +106,13 @@ data:
           proxy_hide_header  x-amz-request-id;
           proxy_hide_header  x-amz-server-side-encryption;
           proxy_hide_header  x-amz-version-id;
-          add_header         Cache-Control max-age=31536000;
           proxy_intercept_errors on;
           proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
+
+          add_header Cache-Control max-age=31536000;
+          add_header "Access-Control-Allow-Origin" "*";
+          add_header "Access-Control-Allow-Methods" "GET, OPTIONS";
+          add_header "Access-Control-Allow-Headers" "origin, authorization";
         }
 
         # Endpoint that isn't cached, which is used to assert that an external
