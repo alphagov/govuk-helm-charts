@@ -75,6 +75,30 @@ spec:
                   "redirect_uri": "https://account-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": ["internal_app", "update_protected_attributes"]
                 },
+                "asset-manager": {
+                  "name": "Asset Manager [EKS]",
+                  "secret_name": "signon-app-asset-manager",
+                  "description": "Manages assets",
+                  "home_uri": "https://asset-manager.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://asset-manager.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                },
+                "asset-manager-ec2": {
+                  "name": "Asset Manager",
+                  "secret_name": "signon-app-asset-manager-ec2",
+                  "description": "Manages assets",
+                  "home_uri": "https://asset-manager.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://asset-manager.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
+                  "permissions": []
+                },
+                "authenticating-proxy": {
+                  "name": "Content Preview (aka Authenticating Proxy) [EKS]",
+                  "secret_name": "signon-app-authenticating-proxy",
+                  "description": "Provides authenticated access to draft content on GOV.UK",
+                  "home_uri": "https://draft-origin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://draft-origin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                },
                 "content-store": {
                   "name": "Content Store [EKS]",
                   "secret_name": "signon-app-content-store",
@@ -99,36 +123,12 @@ spec:
                   "redirect_uri": "https://email-alert-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": ["internal_app", "status_updates"]
                 },
-                "router-api-ec2": {
-                  "name": "Router API",
-                  "secret_name": "signon-app-router-api-ec2",
-                  "description": "Manages the Router database",
-                  "home_uri": "https://router-api.{{ .Values.publishingServiceDomainSuffix }}",
-                  "redirect_uri": "https://router-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
-                  "permissions": []
-                },
-                "asset-manager-ec2": {
-                  "name": "Asset Manager",
-                  "secret_name": "signon-app-asset-manager-ec2",
-                  "description": "Manages assets",
-                  "home_uri": "https://asset-manager.{{ .Values.publishingServiceDomainSuffix }}",
-                  "redirect_uri": "https://asset-manager.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
-                  "permissions": []
-                },
-                "asset-manager": {
-                  "name": "Asset Manager [EKS]",
-                  "secret_name": "signon-app-asset-manager",
-                  "description": "Manages assets",
-                  "home_uri": "https://asset-manager.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://asset-manager.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": []
-                },
-                "authenticating-proxy": {
-                  "name": "Content Preview (aka Authenticating Proxy) [EKS]",
-                  "secret_name": "signon-app-authenticating-proxy",
-                  "description": "Provides authenticated access to draft content on GOV.UK",
-                  "home_uri": "https://draft-origin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://draft-origin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                "hmrc-manuals-api": {
+                  "name": "HMRC Manuals API [EKS]",
+                  "secret_name": "signon-app-hmrc-manuals-api",
+                  "description": "API for allowing HMRC to publish redacted manuals to GOV.UK",
+                  "home_uri": "https://hmrc-manuals-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://hmrc-manuals-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": []
                 },
                 "link-checker-api-ec2": {
@@ -147,14 +147,6 @@ spec:
                   "redirect_uri": "https://publisher.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["govuk_editor", "skip_review", "welsh_editor"]
                 },
-                "publishing-api-ec2": {
-                  "name": "Publishing API",
-                  "secret_name": "signon-app-publishing-api-ec2",
-                  "description": "Central store for all publishing content on GOV.UK",
-                  "home_uri": "https://publishing-api.{{ .Values.publishingServiceDomainSuffix }}",
-                  "redirect_uri": "https://publishing-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
-                  "permissions": ["view_all"]
-                },
                 "publishing-api": {
                   "name": "Publishing API [EKS]",
                   "secret_name": "signon-app-publishing-api",
@@ -163,34 +155,29 @@ spec:
                   "redirect_uri": "https://publishing-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
                   "permissions": ["view_all"]
                 },
-                "whitehall": {
-                  "name": "Whitehall [EKS]",
-                  "secret_name": "signon-app-whitehall",
-                  "description": "Create and manage non-mainstream content on GOV.UK",
-                  "home_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": [
-                    "Coronavirus Travel Editor",
-                    "Editor",
-                    "Export data",
-                    "GDS Admin",
-                    "GDS Editor",
-                    "Import CSVs",
-                    "Managing Editor",
-                    "Preview Design System",
-                    "Upload Executable File Attachments",
-                    "VIP Editor",
-                    "World Editor",
-                    "World Writer"
-                  ]
+                "publishing-api-ec2": {
+                  "name": "Publishing API",
+                  "secret_name": "signon-app-publishing-api-ec2",
+                  "description": "Central store for all publishing content on GOV.UK",
+                  "home_uri": "https://publishing-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://publishing-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
+                  "permissions": ["view_all"]
                 },
-                "search-api-ec2": {
-                  "name": "Search API",
-                  "secret_name": "signon-app-search-api-ec2",
-                  "description": "Search API for GOV.UK",
-                  "home_uri": "https://search-api.{{ .Values.publishingServiceDomainSuffix }}",
-                  "redirect_uri": "https://search-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
-                  "permissions": ["ltr_training", "manage_search_indices"]
+                "router-api": {
+                  "name": "Router API [EKS]",
+                  "secret_name": "signon-app-router-api",
+                  "description": "Manages the Router database",
+                  "home_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": []
+                },
+                "router-api-ec2": {
+                  "name": "Router API",
+                  "secret_name": "signon-app-router-api-ec2",
+                  "description": "Manages the Router database",
+                  "home_uri": "https://router-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://router-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
+                  "permissions": []
                 },
                 "search-api": {
                   "name": "Search API [EKS]",
@@ -198,6 +185,14 @@ spec:
                   "description": "Search API for GOV.UK",
                   "home_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "redirect_uri": "https://search-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": ["ltr_training", "manage_search_indices"]
+                },
+                "search-api-ec2": {
+                  "name": "Search API",
+                  "secret_name": "signon-app-search-api-ec2",
+                  "description": "Search API for GOV.UK",
+                  "home_uri": "https://search-api.{{ .Values.publishingServiceDomainSuffix }}",
+                  "redirect_uri": "https://search-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": ["ltr_training", "manage_search_indices"]
                 },
                 "support-ec2": {
@@ -225,28 +220,33 @@ spec:
                   "redirect_uri": "https://support-api.{{ .Values.publishingServiceDomainSuffix }}/auth/gds/callback",
                   "permissions": []
                 },
-                "hmrc-manuals-api": {
-                  "name": "HMRC Manuals API [EKS]",
-                  "secret_name": "signon-app-hmrc-manuals-api",
-                  "description": "API for allowing HMRC to publish redacted manuals to GOV.UK",
-                  "home_uri": "https://hmrc-manuals-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://hmrc-manuals-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": []
-                },
-                "router-api": {
-                  "name": "Router API [EKS]",
-                  "secret_name": "signon-app-router-api",
-                  "description": "Manages the Router database",
-                  "home_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "redirect_uri": "https://router-api.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
-                  "permissions": []
+                "whitehall": {
+                  "name": "Whitehall [EKS]",
+                  "secret_name": "signon-app-whitehall",
+                  "description": "Create and manage non-mainstream content on GOV.UK",
+                  "home_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "redirect_uri": "https://whitehall-admin.eks.{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}/auth/gds/callback",
+                  "permissions": [
+                    "Coronavirus Travel Editor",
+                    "Editor",
+                    "Export data",
+                    "GDS Admin",
+                    "GDS Editor",
+                    "Import CSVs",
+                    "Managing Editor",
+                    "Preview Design System",
+                    "Upload Executable File Attachments",
+                    "VIP Editor",
+                    "World Editor",
+                    "World Writer"
+                  ]
                 }
               }
           - name: API_USERS
             value: |-
               {
                 "collections": {
-                  "name": "Collections",
+                  "name": "Collections [EKS]",
                   "username": "collections",
                   "email": "collections@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -254,7 +254,7 @@ spec:
                   ]
                 },
                 "content-store": {
-                  "name": "Content Store",
+                  "name": "Content Store [EKS]",
                   "username": "content-store",
                   "email": "content-store@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -262,8 +262,18 @@ spec:
                     { "application_slug": "publishing-api-ec2" }
                   ]
                 },
+                "email-alert-frontend": {
+                  "name": "Email Alert Frontend [EKS]",
+                  "username": "email-alert-frontend",
+                  "email": "email-alert-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "account-api-ec2", "permissions": ["internal_app"] },
+                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] },
+                    { "application_slug": "publishing-api-ec2" }
+                  ]
+                },
                 "feedback": {
-                  "name": "Feedback",
+                  "name": "Feedback [EKS]",
                   "username": "feedback",
                   "email": "feedback@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -272,8 +282,17 @@ spec:
                     { "application_slug": "support-ec2", "permissions": ["api_users"] }
                   ]
                 },
+                "finder-frontend": {
+                  "name": "Finder Frontend [EKS]",
+                  "username": "finder-frontend",
+                  "email": "finder-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "account-api-ec2", "permissions": ["internal_app"] },
+                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] }
+                  ]
+                },
                 "frontend": {
-                  "name": "Frontend",
+                  "name": "Frontend [EKS]",
                   "username": "frontend",
                   "email": "frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -282,8 +301,32 @@ spec:
                     { "application_slug": "account-api-ec2", "permissions": ["internal_app"] }
                   ]
                 },
+                "hmrc-manuals-api": {
+                  "name": "HMRC Manuals API [EKS]",
+                  "username": "hmrc-manuals-api",
+                  "email": "hmrc-manuals-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api" }
+                  ]
+                },
+                "licence-finder": {
+                  "name": "Licence Finder [EKS]",
+                  "username": "licence-finder",
+                  "email": "licence-finder@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api-ec2" }
+                  ]
+                },
+                "manuals-frontend": {
+                  "name": "Manuals Frontend [EKS]",
+                  "username": "manuals-frontend",
+                  "email": "manuals-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api-ec2" }
+                  ]
+                },
                 "publisher": {
-                  "name": "Publisher",
+                  "name": "Publisher [EKS]",
                   "username": "publisher",
                   "email": "publisher@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -293,7 +336,7 @@ spec:
                   ]
                 },
                 "publishing-api": {
-                  "name": "Publishing API",
+                  "name": "Publishing API [EKS]",
                   "username": "publishing-api",
                   "email": "publishing-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -302,8 +345,25 @@ spec:
                     { "application_slug": "router-api" }
                   ]
                 },
+                "search-api": {
+                  "name": "Search API [EKS]",
+                  "username": "search-api",
+                  "email": "search-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "publishing-api" }
+                  ]
+                },
+                "smartanswers": {
+                  "name": "Smart Answers [EKS]",
+                  "username": "smartanwsers",
+                  "email": "smartanswers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
+                  "bearer_tokens": [
+                    { "application_slug": "link-checker-api-ec2" },
+                    { "application_slug": "publishing-api-ec2" }
+                  ]
+                },
                 "smokey": {
-                  "name": "Smokey",
+                  "name": "Smokey [EKS]",
                   "username": "smokey",
                   "email": "smokey@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -311,7 +371,7 @@ spec:
                   ]
                 },
                 "whitehall": {
-                  "name": "Whitehall",
+                  "name": "Whitehall [EKS]",
                   "username": "whitehall",
                   "email": "whitehall@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
                   "bearer_tokens": [
@@ -320,66 +380,6 @@ spec:
                     { "application_slug": "link-checker-api-ec2" },
                     { "application_slug": "publishing-api-ec2" },
                     { "application_slug": "search-api-ec2", "permissions": ["manage_search_indices"] }
-                  ]
-                },
-                "manuals-frontend": {
-                  "name": "Manuals Frontend",
-                  "username": "manuals-frontend",
-                  "email": "manuals-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "bearer_tokens": [
-                    { "application_slug": "publishing-api-ec2" }
-                  ]
-                },
-                "email-alert-frontend": {
-                  "name": "Email Alert Frontend",
-                  "username": "email-alert-frontend",
-                  "email": "email-alert-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "bearer_tokens": [
-                    { "application_slug": "account-api-ec2", "permissions": ["internal_app"] },
-                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] },
-                    { "application_slug": "publishing-api-ec2" }
-                  ]
-                },
-                "smartanswers": {
-                  "name": "Smart Answers",
-                  "username": "smartanwsers",
-                  "email": "smartanswers@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "bearer_tokens": [
-                    { "application_slug": "link-checker-api-ec2" },
-                    { "application_slug": "publishing-api-ec2" }
-                  ]
-                },
-                "finder-frontend": {
-                  "name": "Finder Frontend",
-                  "username": "finder-frontend",
-                  "email": "finder-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "bearer_tokens": [
-                    { "application_slug": "account-api-ec2", "permissions": ["internal_app"] },
-                    { "application_slug": "email-alert-api-ec2", "permissions": ["internal_app"] }
-                  ]
-                },
-                "search-api": {
-                  "name": "Search API",
-                  "username": "search-api",
-                  "email": "search-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "bearer_tokens": [
-                    { "application_slug": "publishing-api" }
-                  ]
-                },
-                "hmrc-manuals-api": {
-                  "name": "HMRC Manuals API",
-                  "username": "hmrc-manuals-api",
-                  "email": "hmrc-manuals-api@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "bearer_tokens": [
-                    { "application_slug": "publishing-api" }
-                  ]
-                },
-                "licence-finder": {
-                  "name": "Licence Finder",
-                  "username": "licence-finder",
-                  "email": "licence-finder@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "bearer_tokens": [
-                    { "application_slug": "publishing-api-ec2" }
                   ]
                 }
               }
