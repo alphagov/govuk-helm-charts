@@ -995,6 +995,15 @@ applications:
   repoName: licence-finder
   helmValues:
     extraEnv:
+      # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
+      # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
+      - name: ELASTICSEARCH_URI
+        value: "https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com"
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          mongo-1.integration.govuk-internal.digital,\
+          mongo-2.integration.govuk-internal.digital,\
+          mongo-3.integration.govuk-internal.digital/licence_finder_production"
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
