@@ -34,6 +34,11 @@ spec:
             configMapKeyRef:
               name: govuk-apps-env
               key: GOVUK_WEBSITE_ROOT
+        - name: GOVUK_APP_DOMAIN_EXTERNAL
+          valueFrom:
+            configMapKeyRef:
+              name: govuk-apps-env
+              key: GOVUK_APP_DOMAIN_EXTERNAL
         - name: SIGNON_EMAIL
           value: "signon@alphagov.co.uk"
         - name: SIGNON_PASSWORD
