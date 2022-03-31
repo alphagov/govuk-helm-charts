@@ -65,33 +65,39 @@ spec:
             - name: http
               containerPort: {{ .Values.nginxPort }}
           livenessProbe:
-            tcpSocket:
+            httpGet:
+              path: /readyz
               port: http
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 10
-            failureThreshold: 6
-            successThreshold: 1
-          readinessProbe:
-            tcpSocket:
-              port: http
-            initialDelaySeconds: 5
-            timeoutSeconds: 3
-            periodSeconds: 5
+            initialDelaySeconds: 2
             failureThreshold: 3
-            successThreshold: 1
+            periodSeconds: 5
+            timeoutSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 2
+            failureThreshold: 2
+            periodSeconds: 5
+            timeoutSeconds: 15
           volumeMounts:
-          - name: {{ .Release.Name }}-nginx-conf
+          - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
+          {{- with .Values.nginxExtraVolumeMounts }}
+          {{ . | toYaml | trim | nindent 10 }}
+          {{- end }}
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
       volumes:
-      - name: {{ .Release.Name }}-nginx-conf
+      - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
         configMap:
-          name: {{ .Release.Name }}-nginx-conf
+          name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+      {{- with .Values.nginxExtraVolumes }}
+      {{ . | toYaml | trim | nindent 6 }}
+      {{- end }}
       - name: {{ .Release.Name }}-asset-uploads-efs
         nfs:
           server: {{ .Values.nfsServer }}
