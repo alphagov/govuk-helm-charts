@@ -41,6 +41,8 @@ spec:
           volumeMounts:
             - name: {{ .Release.Name }}-asset-uploads-efs
               mountPath: /var/apps/
+            - name: clam-virus-db
+              mountPath: /var/lib/clamav
           securityContext:
             allowPrivilegeEscalation: false
           # TODO: consider implementing a liveness probe for Sidekiq
@@ -48,17 +50,16 @@ spec:
         - name: clamdb
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           command: ["/bin/sh"]
-          args: ["-c", "freshclam -d"]
+          args: ["-c", "freshclam -d --stdout --foreground"]
+          {{- with .Values.workerResources }}
           resources:
-            requests:
-               memory: "64Mi"
-               cpu: "250m"
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: clam-virus-db
               mountPath: /var/lib/clamav
+          securityContext:
+            allowPrivilegeEscalation: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
