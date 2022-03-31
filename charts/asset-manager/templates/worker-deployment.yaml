@@ -45,6 +45,20 @@ spec:
             allowPrivilegeEscalation: false
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
+        - name: clamdb
+          image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          command: ["/bin/sh"]
+          args: ["-c", "freshclam -d"]
+          resources:
+            requests:
+               memory: "64Mi"
+               cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: clam-virus-db
+              mountPath: /var/lib/clamav
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
@@ -54,4 +68,6 @@ spec:
         nfs:
           server: "{{ .Values.nfsServer }}"
           path: /
+      - name: clam-virus-db
+        emptyDir: {}
 {{- end }}
