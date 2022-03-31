@@ -39,9 +39,9 @@ appPort: 3000
 appProbes: {}
 
 nginxImage:
-  repository: nginx
+  repository: nginxinc
   pullPolicy: Always
-  tag: stable-perl
+  tag: nginx-unprivileged
 nginxPort: 8080
 nginxProxyConnectTimeout: 1s
 nginxProxyReadTimeout: 15s
