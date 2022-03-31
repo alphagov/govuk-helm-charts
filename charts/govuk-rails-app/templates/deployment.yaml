@@ -65,9 +65,6 @@ spec:
             allowPrivilegeEscalation: false
             runAsUser: 2000
             runAsGroup: 3000
-          volumeMounts:
-            - name: {{ (printf "%s-app-log" .Release.Name) }}
-              mountPath: /var/log/
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
@@ -109,5 +106,3 @@ spec:
       {{- with .Values.nginxExtraVolumes }}
       {{ . | toYaml | trim | nindent 6 }}
       {{- end }}
-      - name: {{ (printf "%s-app-log" .Release.Name) }}
-        emptyDir: {}
