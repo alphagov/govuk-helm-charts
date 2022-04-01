@@ -23,6 +23,42 @@ data:
         server localhost:3000;
       }
 
+      log_format timed_combined '$remote_addr - $remote_user [$time_local]  '
+        '"$request" $status $body_bytes_sent '
+        '"$http_referer" "$http_user_agent" '
+        '$request_time $upstream_response_time '
+        '$gzip_ratio $sent_http_x_cache $sent_http_location $http_host '
+        '$ssl_protocol $ssl_cipher '
+        '$http_x_forwarded_for';
+    
+      log_format json_event '{ "@timestamp": "$time_iso8601", '
+                           '"remote_addr": "$remote_addr", '
+                           '"remote_user": "$remote_user", '
+                           '"body_bytes_sent": $body_bytes_sent, '
+                           '"bytes_sent": $bytes_sent, '
+                           '"request_time": $request_time, '
+                           '"upstream_response_time": "$upstream_response_time", '
+                           '"upstream_addr": "$upstream_addr", '
+                           '"gzip_ratio": "$gzip_ratio", '
+                           '"sent_http_x_cache": "$sent_http_x_cache", '
+                           '"sent_http_location": "$sent_http_location", '
+                           '"sent_http_content_type": "$sent_http_content_type", '
+                           '"http_host": "$http_host", '
+                           '"server_name": "$server_name", '
+                           '"server_port": "$server_port", '
+                           '"status": $status, '
+                           '"request": "$request", '
+                           '"request_method": "$request_method", '
+                           '"http_referrer": "$http_referer", '
+                           '"http_user_agent": "$http_user_agent", '
+                           '"govuk_request_id": "$http_govuk_request_id", '
+                           '"govuk_original_url": "$http_govuk_original_url", '
+                           '"govuk_dependency_resolution_source_content_id": "$http_govuk_dependency_resolution_source_content_id", '
+                           '"varnish_id": "$http_x_varnish", '
+                           '"ssl_protocol": "$ssl_protocol", '
+                           '"ssl_cipher": "$ssl_cipher", '
+                           '"http_x_forwarded_for": "$http_x_forwarded_for" }';
+
       # Set GOVUK-Request-Id if not set
       # See http://nginx.org/en/docs/http/ngx_http_perl_module.html
       perl_modules perl/lib;
