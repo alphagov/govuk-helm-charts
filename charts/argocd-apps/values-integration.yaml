@@ -461,8 +461,6 @@ applications:
             key: bearer_token
 - name: static
   helmValues:
-  uploadAssets:
-    path: /app/public/assets/
     securityContext:
       runAsNonRoot: false
       appContainer: false
