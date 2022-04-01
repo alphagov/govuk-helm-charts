@@ -461,6 +461,8 @@ applications:
             key: bearer_token
 - name: static
   helmValues:
+    securityContext:
+      runAsNonRoot: false
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
