@@ -16,6 +16,7 @@ spec:
       - name: argoUrl
       - name: slackChannel
       - name: repoName
+      - name: imageTag
   templates:
     - name: handle-sync-event
       dag:
@@ -43,6 +44,8 @@ spec:
                   value: "{{"{{workflow.parameters.application}}"}}"
                 - name: repoName
                   value: "{{"{{workflow.parameters.repoName}}"}}"
+                - name: imageTag
+                  value: "{{"{{workflow.parameters.imageTag}}"}}"
 
     - name: exit-handler
       steps:
