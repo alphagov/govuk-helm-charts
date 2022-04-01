@@ -61,10 +61,12 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
+          {{- if .Values.securityContext.appContainer }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 2000
             runAsGroup: 3000
+          {{- end }}
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}

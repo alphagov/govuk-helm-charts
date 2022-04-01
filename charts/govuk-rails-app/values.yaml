@@ -82,3 +82,4 @@ metricsPort: 9394
 
 securityContext:
   runAsNonRoot: true
+  appContainer: true
