@@ -39,6 +39,10 @@ spec:
             src:
               dependencyName: sync-notification
               dataKey: body.slackChannel
+          - dest: spec.arguments.parameters.5.value
+            src:
+              dependencyName: sync-notification
+              dataKey: body.repoName
           - dest: metadata.generateName
             src:
               dependencyName: sync-notification
@@ -60,5 +64,6 @@ spec:
                 - name: commitUrl
                 - name: argoUrl
                 - name: slackChannel
+                - name: repoName
               workflowTemplateRef:
                 name: post-sync

@@ -15,6 +15,7 @@ spec:
       - name: commitUrl
       - name: argoUrl
       - name: slackChannel
+      - name: repoName
   templates:
     - name: handle-sync-event
       dag:
@@ -40,6 +41,8 @@ spec:
                   value: "{{ .Values.nextEnvironment }}"
                 - name: application
                   value: "{{"{{workflow.parameters.application}}"}}"
+                - name: repoName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
 
     - name: exit-handler
       steps:

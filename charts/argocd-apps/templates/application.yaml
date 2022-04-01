@@ -11,6 +11,7 @@ metadata:
   {{- end }}
   annotations:
     slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
+    repoName: "{{ $reponame }}"
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
     postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
 spec:
