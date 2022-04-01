@@ -36,12 +36,16 @@ appPort: 3000
 appProbes: {}
 
 nginxImage:
-  repository: nginx
+  repository: nginxinc/nginx-unprivileged
   pullPolicy: Always
-  tag: stable
+  tag: stable-perl
 nginxPort: 8080
 nginxProxyConnectTimeout: 1s
 nginxProxyReadTimeout: 15s
+nginxConfigMap:
+  create: true
+nginxExtraVolumeMounts: []
+nginxExtraVolumes: []
 
 appResources:
   limits:
