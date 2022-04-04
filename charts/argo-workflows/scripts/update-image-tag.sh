@@ -10,7 +10,7 @@ apt-get update && apt-get install -y gh
 
 BRANCH="update-image-tag/${APPLICATION}/${ENVIRONMENT}/${IMAGE_TAG}"
 FILE="charts/argocd-apps/image-tags/${ENVIRONMENT}/${REPO_NAME}"
-LATEST_GIT_SHA=$("git ls-remote https://github.com/alphagov/${REPO_NAME} HEAD | cut -f 1")
+LATEST_GIT_SHA=$(git ls-remote "https://github.com/alphagov/${REPO_NAME}" HEAD | cut -f 1)
 
 git config --global user.email "${GIT_NAME}@digital.cabinet-office.gov.uk"
 git config --global user.name "${GIT_NAME}"
