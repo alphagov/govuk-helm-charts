@@ -12,7 +12,7 @@ data:
     load_module /usr/lib/nginx/modules/ngx_http_perl_module.so;
 
     error_log  /dev/stderr warn;
-    pid        /var/run/nginx.pid;
+    pid        /tmp/nginx.pid;
 
     events {
       worker_connections  1024;
