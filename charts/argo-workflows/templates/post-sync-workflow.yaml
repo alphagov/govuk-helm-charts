@@ -12,7 +12,6 @@ spec:
     parameters:
       - name: application
       - name: commitSha
-      - name: commitUrl
       - name: argoUrl
       - name: slackChannel
       - name: repoName
@@ -62,4 +61,4 @@ spec:
                 - name: text
                   value: "\
                     post-sync job ({{"{{workflow.name}}"}}) for <{{"{{workflow.parameters.argoUrl}}"}}|{{"{{workflow.parameters.application}}"}}> in {{ .Values.govukEnvironment }} {{"{{workflow.status}}"}} \
-                    (revision <{{"{{workflow.parameters.commitUrl}}"}}|{{"{{workflow.parameters.commitSha}}"}}>)."
+                    (revision <https://github.com/alphagov/govuk-helm-charts/commits/{{"{{workflow.parameters.commitSha}}"}}|{{"{{workflow.parameters.commitSha}}"}}>)."

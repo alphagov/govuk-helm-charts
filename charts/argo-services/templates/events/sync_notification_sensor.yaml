@@ -30,20 +30,16 @@ spec:
           - dest: spec.arguments.parameters.2.value
             src:
               dependencyName: sync-notification
-              dataKey: body.commitUrl
+              dataKey: body.argoUrl
           - dest: spec.arguments.parameters.3.value
             src:
               dependencyName: sync-notification
-              dataKey: body.argoUrl
+              dataKey: body.slackChannel
           - dest: spec.arguments.parameters.4.value
             src:
               dependencyName: sync-notification
-              dataKey: body.slackChannel
-          - dest: spec.arguments.parameters.5.value
-            src:
-              dependencyName: sync-notification
               dataKey: body.repoName
-          - dest: spec.arguments.parameters.6.value
+          - dest: spec.arguments.parameters.5.value
             src:
               dependencyName: sync-notification
               dataKey: body.imageTag
@@ -65,7 +61,6 @@ spec:
                 # values overridden by sync-notification payload
                 - name: application
                 - name: commitSha
-                - name: commitUrl
                 - name: argoUrl
                 - name: slackChannel
                 - name: repoName

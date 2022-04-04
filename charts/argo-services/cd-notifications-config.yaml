@@ -19,7 +19,6 @@ template.send-argo-events-webhook: |
           "application": "{{.app.metadata.name}}",
           "state": "{{.app.status.operationState.phase}}",
           "commitSha": "{{.app.status.sync.revision}}",
-          "commitUrl": "https://github.com/alphagov/govuk-helm-charts/commits/{{.app.status.sync.revision}}",
           "argoUrl": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
           "slackChannel": "{{.app.metadata.annotations.slackChannel}}",
           "repoName": "{{.app.metadata.annotations.repoName}}",
