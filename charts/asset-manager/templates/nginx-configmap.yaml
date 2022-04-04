@@ -19,8 +19,8 @@ data:
     }
 
     http {
-      upstream asset-manager-proxy {
-        server localhost:3000;
+      upstream {{ .Release.Name }} {
+        server 127.0.0.1:{{ .Values.appPort }};
       }
 
       # This map creates a $sts_default variable for later use.
@@ -97,7 +97,7 @@ data:
 
         add_header Permissions-Policy interest-cohort=();
 
-        listen 80;
+        listen {{ .Values.nginxPort }};
 
         proxy_set_header Host $http_host;
 
@@ -118,8 +118,7 @@ data:
         }
 
         location @app {
-          proxy_pass http://asset-manager-proxy;
-
+          proxy_pass http://{{ .Release.Name }};
         }
 
         client_max_body_size 500m;
