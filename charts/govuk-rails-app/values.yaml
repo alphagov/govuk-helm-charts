@@ -81,5 +81,5 @@ uploadAssets:
 metricsPort: 9394
 
 securityContext:
-  runAsNonRoot: true
-  appContainer: true
+  runAsNonRoot: false
+  appContainer: false
