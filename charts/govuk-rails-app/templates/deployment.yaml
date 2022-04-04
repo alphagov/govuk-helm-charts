@@ -64,7 +64,7 @@ spec:
           {{- if .Values.securityContext.appContainer }}
           securityContext:
             allowPrivilegeEscalation: false
-            runAsUser: 2000
+            runAsUser: appuser
             runAsGroup: 3000
           {{- end }}
         - name: {{ .Release.Name }}-nginx
