@@ -36,8 +36,6 @@ spec:
               template: update-image-tag
             arguments:
               parameters:
-                - name: imageTag
-                  value: "{{"{{workflow.parameters.commitSha}}"}}"
                 - name: environment
                   value: "{{ .Values.nextEnvironment }}"
                 - name: application
