@@ -10,8 +10,6 @@ spec:
   backoffLimit: 2  # Retry once, in case of network error.
   template:
     spec:
-      securityContext:
-        runAsNonRoot: false
       containers:
       - name: {{ .Release.Name }}-upload-assets
         image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
@@ -27,7 +25,5 @@ spec:
         - "-c"
         - |-
           {{- .Files.Get "upload-assets.sh" | nindent 10 }}
-        securityContext:
-          allowPrivilegeEscalation: true      
       restartPolicy: Never
 {{- end }}
