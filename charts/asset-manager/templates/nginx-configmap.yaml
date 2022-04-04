@@ -212,5 +212,10 @@ data:
           # Download the file and send it to client
           proxy_pass $download_url;
         }
+
+        # Endpoint for liveness and readiness checks of the nginx container.
+        location = /readyz {
+          return 200 'ok\n';
+        }
       }
     }
