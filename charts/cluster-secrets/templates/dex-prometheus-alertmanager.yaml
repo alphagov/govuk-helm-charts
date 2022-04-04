@@ -1,0 +1,87 @@
+{{- range .Values.dexAlertManagerSecretsNamespaces}}
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: govuk-dex-alert-manager
+  namespace: "{{ . }}"
+  annotations:
+    a8r.io/description: >
+      Contains the OAuth secret which allows the Alert Manager ingress to
+      require user authentication with Dex (https://dexidp.io/), a federated
+      OpenID Connect provider. The requirement that users be authenticated is
+      specified via the alb.ingress.kubernetes.io/auth-type annotation on the
+      Ingress spec, which makes aws-load-balancer-controller configure an
+      authenticate-oidc action on the ALB that it creates.
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-dex-alert-manager
+    creationPolicy: Owner
+  dataFrom:
+  - key: govuk/dex/alert-manager
+{{- end }}
+{{- range .Values.dexPrometheusSecretsNamespaces}}
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: govuk-dex-prometheus
+  namespace: "{{ . }}"
+  annotations:
+    a8r.io/description: >
+      Contains the OAuth secret which allows the Prometheus ingress to
+      require user authentication with Dex (https://dexidp.io/), a federated
+      OpenID Connect provider. The requirement that users be authenticated is
+      specified via the alb.ingress.kubernetes.io/auth-type annotation on the
+      Ingress spec, which makes aws-load-balancer-controller configure an
+      authenticate-oidc action on the ALB that it creates.
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-dex-prometheus
+    creationPolicy: Owner
+  dataFrom:
+  - key: govuk/dex/prometheus
+{{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prom-stack-oidc-secrets-reader
+  namespace: {{ .Values.monitoringNamespace }}
+  a8r.io/description: >
+    Allows reading the OIDC OAuth secrets which are ultimately needed by the
+    load balancers which serve the Prometheus and Alert Manager ingresses.
+rules:
+- apiGroups:
+  - ""
+  resourceNames:
+  - govuk-dex-prometheus
+  - govuk-dex-alert-manager
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: aws-lb-controller-reads-prom-stack-oidc-secrets
+  namespace: {{ .Values.monitoringNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prom-stack-oidc-secrets-reader
+subjects:
+- kind: ServiceAccount
+  name: aws-load-balancer-controller
+  namespace: {{ .Values.clusterServicesNamespace }}

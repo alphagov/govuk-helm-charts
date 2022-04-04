@@ -1,4 +1,9 @@
 clusterServicesNamespace: cluster-services
+monitoringNamespace: monitoring
+# TODO: remove these and just use monitoringNamespace in templates now that
+# we're using a Role and RoleBinding to allow aws-load-balancer-controller to
+# read just the secrets that it needs, and therefore no longer need to
+# duplicate the secrets. (Might need to add a Role/RoleBinding for Grafana.)
 dexGrafanaSecretsNamespaces: ["cluster-services", "monitoring"]
 dexPrometheusSecretsNamespaces: ["cluster-services", "monitoring"]
 dexAlertManagerSecretsNamespaces: ["cluster-services", "monitoring"]
