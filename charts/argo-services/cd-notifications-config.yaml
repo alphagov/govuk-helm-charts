@@ -23,7 +23,7 @@ template.send-argo-events-webhook: |
           "argoUrl": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
           "slackChannel": "{{.app.metadata.annotations.slackChannel}}",
           "repoName": "{{.app.metadata.annotations.repoName}}",
-          "imageTag": "{{.app.metadata.annotations.imageTag}}",
+          "imageTag": "{{.app.metadata.annotations.imageTag}}"
         }
       method: "POST"
       path: "/argocd"
