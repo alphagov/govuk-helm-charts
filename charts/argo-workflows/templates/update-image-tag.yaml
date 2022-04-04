@@ -9,6 +9,8 @@ spec:
       - name: imageTag
       - name: environment
       - name: application
+      - name: repoName
+      - name: imageTag
   templates:
     - name: update-image-tag
       inputs:
@@ -16,6 +18,8 @@ spec:
           - name: imageTag
           - name: environment
           - name: application
+          - name: repoName
+          - name: imageTag
       script:
         image: bitnami/minideb:latest
         command: [/bin/bash]
@@ -36,5 +40,7 @@ spec:
             value: "{{"{{inputs.parameters.environment}}"}}"
           - name: APPLICATION
             value: "{{"{{inputs.parameters.application}}"}}"
+          - name: REPO_NAME
+            value: "{{"{{inputs.parameters.repoName}}"}}"
         source: |
           {{- .Files.Get "scripts/update-image-tag.sh" | nindent 14 }}

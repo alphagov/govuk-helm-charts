@@ -1,5 +1,6 @@
 {{ range .Values.applications }}
 {{- $reponame := .repoName | default .name }}
+{{- $imageTag := $.Files.Get (printf "image-tags/%s/%s" $.Values.globalHelmValues.govukEnvironment $reponame) | trim }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -11,6 +12,8 @@ metadata:
   {{- end }}
   annotations:
     slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
+    repoName: "{{ $reponame }}"
+    imageTag: "{{ $imageTag }}"
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
     postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
 spec:
@@ -29,7 +32,7 @@ spec:
         {{- end }}
         appImage:
           repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}
-          tag: {{ $.Files.Get (printf "image-tags/%s/%s" $.Values.globalHelmValues.govukEnvironment $reponame) | trim }}
+          tag: {{ $imageTag }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
