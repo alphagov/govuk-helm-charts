@@ -62,12 +62,12 @@ data:
        '' "max-age=31536000; preload";
       }
 
-      upstream {{ .Release.Name }} {
-        server 127.0.0.1:{{ .Values.appPort }};
+      upstream router {
+        server 127.0.0.1:3000;
       }
 
       server {
-        listen {{ .Values.nginxPort }};
+        listen 8080;
 
         proxy_set_header   Host $http_host;
         proxy_set_header   X-Real-IP $remote_addr;
@@ -93,7 +93,7 @@ data:
         {{- end }}
 
         location / {
-          proxy_pass         http://{{ .Release.Name }};
+          proxy_pass         http://router;
           proxy_redirect     off;
         }
 
