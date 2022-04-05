@@ -56,9 +56,10 @@ kind: Role
 metadata:
   name: prom-stack-oidc-secrets-reader
   namespace: {{ .Values.monitoringNamespace }}
-  a8r.io/description: >
-    Allows reading the OIDC OAuth secrets which are ultimately needed by the
-    load balancers which serve the Prometheus and Alert Manager ingresses.
+  annotations:
+    a8r.io/description: >
+      Allows reading the OIDC OAuth secrets which are ultimately needed by the
+      load balancers which serve the Prometheus and Alert Manager ingresses.
 rules:
 - apiGroups:
   - ""
