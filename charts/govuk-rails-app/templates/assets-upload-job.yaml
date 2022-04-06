@@ -5,7 +5,6 @@ metadata:
   name: {{ .Release.Name }}-upload-assets
   annotations:
     argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
   backoffLimit: 2  # Retry once, in case of network error.
   template:
