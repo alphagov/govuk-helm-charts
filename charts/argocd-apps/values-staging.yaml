@@ -63,13 +63,13 @@ applications:
   helmValues:
     extraEnv:
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
-        value: 93109fea-34d9-4c38-ac7e-1ebc75e7416b
+        value: d33f7857-7514-4458-81b9-0995f48e2ac5
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
-        value: 47cef7ea-0849-48aa-9676-0ee0f7baa4ae
+        value: b67971ed-a249-4afa-b05e-9adad9da551a
       - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
-        value: fee22233-2f28-4b0b-8b6c-4410979f2275
+        value: d1f54751-80a8-420a-9077-d34c7d6cc734
       - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
-        value: eb9ba220-7d74-4aab-975a-bdbe718f69a3
+        value: 8a8d98c0-42c8-4f56-b61f-77c89417a171
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
@@ -140,6 +140,8 @@ applications:
             key: bearer_token
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 2844a647-6bf1-4b01-a25c-569d2cc00849
       - name: GOVUK_PERSONALISATION_MANAGE_URI
         value: https://staging.account.gov.uk?link=manage-account
       - name: ELECTIONS_API_KEY
@@ -187,7 +189,7 @@ applications:
       # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
       # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
       - name: ELASTICSEARCH_URI
-        value: "https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com"
+        value: "https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com"
       - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
         value: "mongodb://\
           mongo-1.staging.govuk-internal.digital,\
@@ -334,6 +336,15 @@ applications:
       - signon.eks.staging.govuk.digital
     workerReplicaCount: 1
     extraEnv:
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 112842bb-d8a4-4511-90de-57dc5c8f27ec
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: signon-mysql
+            key: DATABASE_URL
       - name: DEVISE_PEPPER
         valueFrom:
           secretKeyRef:
@@ -349,13 +360,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: signon-mysql
-            key: DATABASE_URL
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
@@ -376,8 +380,6 @@ applications:
   repoName: smart-answers
   helmValues:
     extraEnv:
-      - name: EXPOSE_GOVSPEAK
-        value: "1"
       - name: COMPANIES_HOUSE_API_KEY
         valueFrom:
           secretKeyRef:
@@ -439,7 +441,7 @@ applications:
       path: "/app/public/assets/whitehall"
       s3Directory: "whitehall"
     extraEnv: &whitehall-envs
-      - name: NODE_ENV
+      - name: NODE_ENV  # TODO: move NODE_ENV=production to the Dockerfile
         value: production
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -481,8 +483,10 @@ applications:
           secretKeyRef:
             name: signon-token-whitehall-publishing-api-ec2
             key: bearer_token
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-staging-whitehall-csvs
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: 112842bb-d8a4-4511-90de-57dc5c8f27ec
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: MEMCACHE_SERVERS
