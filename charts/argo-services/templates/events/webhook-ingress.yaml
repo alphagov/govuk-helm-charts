@@ -1,0 +1,32 @@
+{{ if .Values.enableWebhookIngress }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argo-events-ingress
+  labels:
+    app.kubernetes.io/component: server
+  annotations:
+    alb.ingress.kubernetes.io/group.name: argo-events 
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/load-balancer-name: "argo-events"
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    external-dns.alpha.kubernetes.io/hostname: "{{ .Values.argoEventsHost }}"
+spec:
+  tls:
+    - hosts:
+        - "{{ .Values.argoEventsHost }}"
+  rules:
+    - host: "{{ .Values.argoEventsHost }}"
+      http:
+        paths:
+          - path: "/argocd"
+            pathType: "Prefix"
+            backend:
+              service:
+                name: argo-events-service
+                port:
+                  number: 12000
+{{- end }}

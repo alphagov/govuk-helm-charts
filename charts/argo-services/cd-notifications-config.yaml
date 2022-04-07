@@ -5,7 +5,7 @@ service.webhook.argo_events: |
   headers:
   - name: "Content-Type"
     value: "application/json"
-  url: "http://sync-notification-eventsource-svc.cluster-services.svc.cluster.local:12000"
+  url: "http://argo-events-service.cluster-services.svc.cluster.local:12000"
 service.webhook.slack_webhook: |
   headers:
   - name: "Content-Type"
