@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fastly-exporter.fullname" . }}
+  labels:
+    {{- include "fastly-exporter.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "fastly-exporter.selectorLabels" . | nindent 4 }}
