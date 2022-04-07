@@ -31,7 +31,7 @@ applications:
   helmValues:
     extraEnv:
       - name: SUBSCRIPTION_MANAGEMENT_ENABLED
-        value: "yes"
+        value: "yes"  # non-prod only
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: SECRET_KEY_BASE
@@ -338,6 +338,8 @@ applications:
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 112842bb-d8a4-4511-90de-57dc5c8f27ec
+      - name: INSTANCE_NAME
+        value: staging
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: DATABASE_URL

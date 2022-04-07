@@ -911,7 +911,9 @@ applications:
     workerReplicaCount: 1
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-      - value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: INSTANCE_NAME
+        value: integration
       - name: DEVISE_PEPPER
         valueFrom:
           secretKeyRef:
