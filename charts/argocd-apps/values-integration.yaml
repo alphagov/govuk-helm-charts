@@ -418,8 +418,6 @@ applications:
 - name: frontend
   helmValues:
     extraEnv:
-      - name: GOVUK_PERSONALISATION_MANAGE_URI
-        value: https://integration.account.gov.uk?link=manage-account
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 1fc69d3a-09a2-40f9-852b-03f6fcef5340
       - name: MEMCACHE_SERVERS
@@ -911,7 +909,9 @@ applications:
     workerReplicaCount: 1
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-      - value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: INSTANCE_NAME
+        value: integration
       - name: DEVISE_PEPPER
         valueFrom:
           secretKeyRef:
