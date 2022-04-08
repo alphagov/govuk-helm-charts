@@ -9,9 +9,6 @@ applications:
   postSyncWorkflowEnabled: "false"
   helmValues:
     nextEnvironment: staging
-- name: cluster-secrets
-  chartPath: charts/cluster-secrets
-  postSyncWorkflowEnabled: "false"
 - name: collections
   helmValues:
     extraEnv:

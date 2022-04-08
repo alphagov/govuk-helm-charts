@@ -115,9 +115,6 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-- name: cluster-secrets
-  chartPath: charts/cluster-secrets
-  postSyncWorkflowEnabled: "false"
 - name: collections
   helmValues:
     extraEnv:
