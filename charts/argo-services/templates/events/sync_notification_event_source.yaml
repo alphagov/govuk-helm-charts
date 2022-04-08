@@ -8,3 +8,6 @@ spec:
       port: "12000"
       endpoint: /argocd
       method: POST
+      authSecret:
+        name: argocd-notifications-secret
+        key: argo_events_webhook_token

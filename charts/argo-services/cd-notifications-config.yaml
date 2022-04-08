@@ -5,6 +5,8 @@ service.webhook.argo_events: |
   headers:
   - name: "Content-Type"
     value: "application/json"
+  - name: Authorization
+    value: Bearer $argo_events_webhook_token
   url: "http://argo-events-service.cluster-services.svc.cluster.local:12000"
 service.webhook.slack_webhook: |
   headers:
