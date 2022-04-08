@@ -1,0 +1,19 @@
+apiVersion: external-secrets.io/v1alpha1
+kind: ExternalSecret
+metadata:
+  name: govuk-fastly-api
+  namespace: monitoring
+  annotations:
+    a8r.io/description: >
+      This secret contains the Fastly API token which fastly-exporter to expose
+      Fastly metrics to Prometheus
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-fastly-api
+    creationPolicy: Owner
+  dataFrom:
+  - key: govuk/fastly/api
