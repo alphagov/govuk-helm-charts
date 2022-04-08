@@ -7,7 +7,7 @@ spec:
     serviceAccountName: operate-workflow-sa
   dependencies:
   - name: update-image-tag
-    eventSourceName: sync-notification
+    eventSourceName: webhook
     eventName: update-image-tag
   triggers:
   - template:

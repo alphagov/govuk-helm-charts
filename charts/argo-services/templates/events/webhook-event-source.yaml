@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: EventSource
 metadata:
-  name: sync-notification
+  name: webhook
 spec:
   webhook:
-    argocd:
+    post-sync:
       port: "12000"
-      endpoint: /argocd
+      endpoint: /post-sync
       method: POST
       authSecret:
         name: argocd-notifications-secret

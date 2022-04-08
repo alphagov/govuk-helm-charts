@@ -27,7 +27,7 @@ template.send-argo-events-webhook: |
           "imageTag": "{{.app.metadata.annotations.imageTag}}"
         }
       method: "POST"
-      path: "/argocd"
+      path: "/post-sync"
 template.send-slack: |
   webhook:
     slack_webhook:
