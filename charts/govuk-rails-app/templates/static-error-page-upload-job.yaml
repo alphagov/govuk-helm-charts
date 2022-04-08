@@ -8,17 +8,14 @@ metadata:
   name: upload-static-error-pages
   annotations:
     argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
-  backoffLimit: 2
   template:
     spec:
       securityContext:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       containers:
         - name: upload-static-error-pages
-          # TODO: find a way to keep this up-to-date
-          image: amazon/aws-cli:2.4.25
+          image: public.ecr.aws/bitnami/aws-cli
           env:
             - name: GOVUK_ENVIRONMENT
               value: {{ .Values.govukEnvironment }}
