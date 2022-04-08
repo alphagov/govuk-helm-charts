@@ -22,11 +22,11 @@ spec:
     - host: "{{ .Values.argoEventsHost }}"
       http:
         paths:
-          - path: "/argocd"
+          - path: "/update-image-tag"
             pathType: "Prefix"
             backend:
               service:
                 name: argo-events-service
                 port:
-                  number: 12000
+                  number: 12001
 {{- end }}

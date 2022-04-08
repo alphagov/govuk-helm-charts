@@ -11,3 +11,10 @@ spec:
       authSecret:
         name: argocd-notifications-secret
         key: argo_events_webhook_token
+    update-image-tag:
+      port: "12001"
+      endpoint: /update-image-tag
+      method: POST
+      authSecret:
+        name: argocd-notifications-secret
+        key: argo_events_webhook_token
