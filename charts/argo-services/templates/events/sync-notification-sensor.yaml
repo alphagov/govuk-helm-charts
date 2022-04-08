@@ -7,8 +7,8 @@ spec:
     serviceAccountName: operate-workflow-sa
   dependencies:
   - name: sync-notification
-    eventSourceName: sync-notification
-    eventName: argocd
+    eventSourceName: webhook
+    eventName: post-sync
   triggers:
   - template:
       name: trigger

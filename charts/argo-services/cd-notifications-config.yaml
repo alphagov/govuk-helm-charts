@@ -5,7 +5,9 @@ service.webhook.argo_events: |
   headers:
   - name: "Content-Type"
     value: "application/json"
-  url: "http://sync-notification-eventsource-svc.cluster-services.svc.cluster.local:12000"
+  - name: Authorization
+    value: Bearer $argo_events_webhook_token
+  url: "http://argo-events-service.cluster-services.svc.cluster.local:12000"
 service.webhook.slack_webhook: |
   headers:
   - name: "Content-Type"
@@ -25,7 +27,7 @@ template.send-argo-events-webhook: |
           "imageTag": "{{.app.metadata.annotations.imageTag}}"
         }
       method: "POST"
-      path: "/argocd"
+      path: "/post-sync"
 template.send-slack: |
   webhook:
     slack_webhook:
