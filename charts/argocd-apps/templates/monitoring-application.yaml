@@ -1,0 +1,48 @@
+{{ range .Values.monitoringApplications }}
+{{- $reponame := .repoName | default .name }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  {{- if has $.Values.globalHelmValues.govukEnvironment (list "test" "integration") }}
+  {{- /* Clean up k8s resources on chart deletion in non-prod only. */}}
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  {{- end }}
+  annotations:
+    slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
+    repoName: "{{ $reponame }}"
+    imageTag: ""
+    notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
+    postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "false" }}"
+spec:
+  project: {{ $.Values.monitoringNamespace }}
+  source:
+    repoURL: 'git@github.com/alphagov/govuk-helm-charts'
+    path: "{{ .chartPath }}"
+    targetRevision: {{ .targetRevision | default "HEAD" }}
+    helm:
+      # Environment-specific Helm values. These take precedence over the app
+      # chart's values.yaml.
+      values: |
+        {{- toYaml $.Values.globalHelmValues | nindent 8 }}
+        {{- if .ingressHostname }}
+        {{- include "govukIngress" (dict "name" .name "host" (tpl .ingressHostname $)) | indent 8 }}
+        {{- end }}
+        {{- with .helmValues }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ $.Values.monitoringNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - ApplyOutOfSyncOnly=true
+---
+{{ end }}

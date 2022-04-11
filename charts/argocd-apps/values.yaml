@@ -12,3 +12,8 @@ globalHelmValues:
   internalDomainSuffix: apps.svc.cluster.local
 appsNamespace: apps
 applications: []
+
+monitoringNamespace: monitoring
+monitoringApplications:
+  - name: grafana-dashboards
+    chartPath: charts/grafana-dashboards
