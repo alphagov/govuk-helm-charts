@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: webhook
+spec:
+  webhook:
+    post-sync:
+      port: "12000"
+      endpoint: /post-sync
+      method: POST
+      authSecret:
+        name: argocd-notifications-secret
+        key: argo_events_webhook_token
+    update-image-tag:
+      port: "12001"
+      endpoint: /update-image-tag
+      method: POST
+      authSecret:
+        name: argocd-notifications-secret
+        key: argo_events_webhook_token

@@ -4,19 +4,533 @@ globalHelmValues:
   publishingServiceDomainSuffix: integration.publishing.service.gov.uk
 
 applications:
+- name: asset-manager
+  chartPath: charts/asset-manager
+  helmValues:
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: asset-manager
+      hosts:
+      - name: asset-manager.eks.integration.govuk.digital
+    workerReplicaCount: 1
+    nfsServer: assets.blue.integration.govuk-internal.digital
+    nginxConfigMap:
+      create: false
+      name: asset-manager-nginx-conf
+    extraEnv:
+      - name: ASSET_MANAGER_CLAMSCAN_PATH
+        value: /usr/bin/clamscan  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-asset-manager
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-asset-manager
+            key: oauth_secret
+      - name: GOVUK_APP_NAME
+        value: asset-manager
+      - name: GOVUK_APP_ROOT
+        value: /var/apps/static
+      - name: GOVUK_STATSD_PREFIX
+        value: asset-manager
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: asset-manager-docdb
+            key: MONGODB_URI
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: AWS_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: asset-manager-aws-access-key
+            key: AWS_ACCESS_KEY
+      - name: AWS_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: asset-manager-aws-secret-key
+            key: AWS_SECRET_KEY
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-assets-integration
 - name: argo-workflows
   chartPath: charts/argo-workflows
   postSyncWorkflowEnabled: "false"
   helmValues:
     nextEnvironment: staging
-- name: cluster-secrets
-  chartPath: charts/cluster-secrets
-  postSyncWorkflowEnabled: "false"
+- name: authenticating-proxy
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: draft-origin
+      hosts:
+      - draft-origin.eks.integration.govuk.digital
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - blue.integration.govuk-internal.digital
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-authenticating-proxy
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-authenticating-proxy
+            key: oauth_secret
+      - name: GOVUK_UPSTREAM_URI
+        value: "http://draft-router"
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: MONGODB_URI  # TODO: this will need to become a secret when moving to DocDB.
+        value: "mongodb://\
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3/authenticating_proxy_production"
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: collections
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-collections-email-alert-api-ec2
+            key: bearer_token
+- name: contacts-admin
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: content-store
+  helmValues:
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: ROUTER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-store-router-api-ec2
+            key: bearer_token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-store
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-store
+            key: oauth_secret
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: DEFAULT_TTL
+        value: "1800"
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          mongo-1.integration.govuk-internal.digital,\
+          mongo-2.integration.govuk-internal.digital,\
+          mongo-3.integration.govuk-internal.digital/content_store_production"
+      - name: GOVUK_APP_NAME
+        value: content-store
+- name: draft-router
+  repoName: router
+  helmValues:
+  securityContext:
+    runAsNonRoot: false
+    appContainer: true
+    uploadAssets:
+      enabled: false
+    appProbes: &router-app-probes
+      startupProbe: &router-probe
+        httpGet:
+          path: /healthcheck
+          port: 3001
+        failureThreshold: 10
+        periodSeconds: 1
+        timeoutSeconds: 1
+      livenessProbe:
+        <<: *router-probe
+        failureThreshold: 3
+        periodSeconds: 5
+      readinessProbe:
+        <<: *router-probe
+        httpGet:
+          path: /healthcheck
+          port: 3001
+        failureThreshold: 2
+        periodSeconds: 5
+    appResources:
+      limits:
+        cpu: 1
+        memory: 1.5Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    extraEnv:
+      - name: ROUTER_PUBADDR
+        value: ":3000"
+      - name: ROUTER_APIADDR
+        value: ":3001"
+      - name: ROUTER_MONGO_URL  # Hostnames should match those shown in MongoDB rs.status().
+        value: &router_mongo_hosts "\
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3"
+      - name: ROUTER_MONGO_DB
+        value: draft_router
+      - name: BACKEND_URL_collections
+        value: "http://draft-collections"
+      - name: BACKEND_URL_content-store
+        value: "http://draft-content-store"
+      - name: BACKEND_URL_email-alert-frontend
+        value: "http://draft-email-alert-frontend"
+      - name: BACKEND_URL_frontend
+        value: "http://draft-frontend"
+      - name: BACKEND_URL_government-frontend
+        value: "http://draft-government-frontend"
+      - name: BACKEND_URL_manuals-frontend
+        value: "http://draft-manuals-frontend"
+      - name: BACKEND_URL_service-manual-frontend
+        value: "http://draft-service-manual-frontend"
+      - name: BACKEND_URL_smartanswers
+        value: "http://draft-smartanswers"
+      - name: BACKEND_URL_static
+        value: "http://draft-static"
+      - name: BACKEND_URL_whitehall-frontend
+        value: "http://draft-whitehall-frontend"
+      - name: BACKEND_URL_account-api
+        value: "https://account-api.integration.govuk-internal.digital"
+      - name: BACKEND_URL_feedback
+        value: "http://feedback"
+      - name: BACKEND_URL_finder-frontend
+        value: "http://finder-frontend"
+      - name: BACKEND_URL_info-frontend
+        value: "http://info-frontend"
+      - name: BACKEND_URL_licencefinder
+        value: "http://licencefinder"
+      - name: BACKEND_URL_licensify
+        value: "https://licensify.integration.govuk-internal.digital"
+      - name: BACKEND_URL_search-api
+        value: "https://search-api.integration.govuk-internal.digital"
+- name: draft-whitehall-frontend
+  repoName: whitehall
+  helmValues:
+    uploadAssets: &whitehall-upload-assets
+      path: "/app/public/assets/whitehall"
+      s3Directory: "whitehall"
+    extraEnv: &whitehall-envs
+      - name: NODE_ENV
+        value: production
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_secret
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-asset-manager-ec2
+            key: bearer_token
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-link-checker-api-ec2
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: publisher-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-publishing-api-ec2
+            key: bearer_token
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-mysql
+            key: DATABASE_URL
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: email-alert-frontend
+  helmValues:
+    extraEnv:
+      - name: SUBSCRIPTION_MANAGEMENT_ENABLED
+        value: "yes"
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-account-api-ec2
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-email-alert-api-ec2
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-publishing-api-ec2
+            key: bearer_token
+      - name: EMAIL_ALERT_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-auth
+            key: token
+- name: feedback
+  helmValues:
+    extraEnv:
+      - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
+        value: 93109fea-34d9-4c38-ac7e-1ebc75e7416b
+      - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
+        value: 47cef7ea-0849-48aa-9676-0ee0f7baa4ae
+      - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
+        value: fee22233-2f28-4b0b-8b6c-4410979f2275
+      - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
+        value: eb9ba220-7d74-4aab-975a-bdbe718f69a3
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: SUPPORT_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-feedback-support-ec2
+            key: bearer_token
+      - name: SUPPORT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-feedback-support-api-ec2
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-feedback-publishing-api-ec2
+            key: bearer_token
+      - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: sheet_id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: client_email
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: private_key
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-notify
+            key: GOVUK_NOTIFY_API_KEY
+- name: finder-frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-finder-frontend-email-alert-api-ec2
+            key: bearer_token
+- name: frontend
+  helmValues:
+    extraEnv:
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 1fc69d3a-09a2-40f9-852b-03f6fcef5340
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-publishing-api-ec2
+            key: bearer_token
+      - name: ELECTIONS_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: key
+      - name: ELECTIONS_API_URL
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: url
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-account-api-ec2
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-email-alert-api-ec2
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-publishing-api-ec2
+            key: bearer_token
+- name: government-frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
 - name: govuk-apps-conf
   chartPath: charts/govuk-apps-conf
   postSyncWorkflowEnabled: "false"
-- name: smokey
-  chartPath: charts/smokey
+- name: hmrc-manuals-api
+  helmValues:
+    nginxProxyReadTimeout: 300s
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: ALLOW_UNKNOWN_HMRC_MANUAL_SLUGS
+        value: "1"
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-hmrc-manuals-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-hmrc-manuals-api
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-hmrc-manuals-api-publishing-api
+            key: bearer_token
+      - name: PUBLISH_TOPICS
+        value: "1"
+- name: licencefinder
+  repoName: licence-finder
+  helmValues:
+    extraEnv:
+      # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
+      # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
+      - name: ELASTICSEARCH_URI
+        value: "https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com"
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          mongo-1.integration.govuk-internal.digital,\
+          mongo-2.integration.govuk-internal.digital,\
+          mongo-3.integration.govuk-internal.digital/licence_finder_production"
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-licence-finder-publishing-api-ec2
+            key: bearer_token
+- name: manuals-frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-manuals-frontend-publishing-api-ec2
+            key: bearer_token
 - name: publisher
   helmValues:
     dbMigrationEnabled: true
@@ -108,7 +622,7 @@ applications:
       - name: FACT_CHECK_REPLY_TO_ID
         value: govuk-fact-check-integration@digital.cabinet-office.gov.uk
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 123e4567-e89b-12d3-a456-426614174000
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
 - name: publishing-api
   helmValues:
     dbMigrationEnabled: true
@@ -186,45 +700,34 @@ applications:
           secretKeyRef:
             name: publishing-api-postgres
             key: DATABASE_URL
-- name: signon
+- name: router-api
   helmValues:
-    dbMigrationEnabled: true
-    workerEnabled: true
-    ingress:
-      enabled: true
-      annotations:
-        alb.ingress.kubernetes.io/load-balancer-name: signon
-      hosts:
-      - signon.eks.integration.govuk.digital
-    workerReplicaCount: 1
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - blue.integration.govuk-internal.digital
+    uploadAssets:
+      enabled: false
     extraEnv:
-      - name: DEVISE_PEPPER
+      - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-devise-pepper
-            key: DEVISE_PEPPER
-      - name: DEVISE_SECRET_KEY
+            name: signon-app-router-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-devise-secret
-            key: DEVISE_SECRET_KEY
+            name: signon-app-router-api
+            key: oauth_secret
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3/router"
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: signon-mysql
-            key: DATABASE_URL
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: SIGNON_ADMIN_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: signon-auth-token
-            key: token
 - name: router
   helmValues:
     uploadAssets:
@@ -258,35 +761,14 @@ applications:
       - name: router-nginx-htpasswd
         secret:
           secretName: router-nginx-htpasswd
-    appProbes: &router-app-probes
-      startupProbe: &router-probe
-        httpGet:
-          path: /healthcheck
-          port: 3001
-        failureThreshold: 10
-        periodSeconds: 1
-        timeoutSeconds: 1
-      livenessProbe:
-        <<: *router-probe
-        failureThreshold: 3
-        periodSeconds: 5
-      readinessProbe:
-        <<: *router-probe
-        httpGet:
-          path: /healthcheck
-          port: 3001
-        failureThreshold: 2
-        periodSeconds: 5
+    appProbes: *router-app-probes
     extraEnv:
       - name: ROUTER_PUBADDR
         value: ":3000"
       - name: ROUTER_APIADDR
         value: ":3001"
-      - name: ROUTER_MONGO_URL  # Hostnames should match those shown in MongoDB rs.status().
-        value: &router_mongo_hosts "\
-          router-backend-1,\
-          router-backend-2,\
-          router-backend-3"
+      - name: ROUTER_MONGO_URL
+        value: *router_mongo_hosts
       - name: BACKEND_URL_collections
         value: "http://collections"
       - name: BACKEND_URL_content-store
@@ -323,545 +805,6 @@ applications:
         # TODO: switch back to in-cluster search-api once it's fully working (similarly for draft).
       - name: BACKEND_URL_search-api
         value: "https://search-api.integration.govuk-internal.digital"
-- name: draft-router
-  repoName: router
-  helmValues:
-    uploadAssets:
-      enabled: false
-    appProbes: *router-app-probes
-    appResources:
-      limits:
-        cpu: 1
-        memory: 1.5Gi
-      requests:
-        cpu: 500m
-        memory: 1Gi
-    extraEnv:
-      - name: ROUTER_PUBADDR
-        value: ":3000"
-      - name: ROUTER_APIADDR
-        value: ":3001"
-      - name: ROUTER_MONGO_URL
-        value: *router_mongo_hosts
-      - name: ROUTER_MONGO_DB
-        value: draft_router
-      - name: BACKEND_URL_collections
-        value: "http://draft-collections"
-      - name: BACKEND_URL_content-store
-        value: "http://draft-content-store"
-      - name: BACKEND_URL_email-alert-frontend
-        value: "http://draft-email-alert-frontend"
-      - name: BACKEND_URL_frontend
-        value: "http://draft-frontend"
-      - name: BACKEND_URL_government-frontend
-        value: "http://draft-government-frontend"
-      - name: BACKEND_URL_manuals-frontend
-        value: "http://draft-manuals-frontend"
-      - name: BACKEND_URL_service-manual-frontend
-        value: "http://draft-service-manual-frontend"
-      - name: BACKEND_URL_smartanswers
-        value: "http://draft-smartanswers"
-      - name: BACKEND_URL_static
-        value: "http://draft-static"
-      - name: BACKEND_URL_whitehall-frontend
-        value: "http://draft-whitehall-frontend"
-      - name: BACKEND_URL_account-api
-        value: "https://account-api.integration.govuk-internal.digital"
-      - name: BACKEND_URL_feedback
-        value: "http://feedback"
-      - name: BACKEND_URL_finder-frontend
-        value: "http://finder-frontend"
-      - name: BACKEND_URL_info-frontend
-        value: "http://info-frontend"
-      - name: BACKEND_URL_licencefinder
-        value: "http://licencefinder"
-      - name: BACKEND_URL_licensify
-        value: "https://licensify.integration.govuk-internal.digital"
-      - name: BACKEND_URL_search-api
-        value: "https://search-api.integration.govuk-internal.digital"
-- name: authenticating-proxy
-  helmValues:
-    ingress:
-      enabled: true
-      annotations:
-        alb.ingress.kubernetes.io/load-balancer-name: draft-origin
-      hosts:
-      - draft-origin.eks.integration.govuk.digital
-    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
-      searches:
-        - blue.integration.govuk-internal.digital
-    uploadAssets:
-      enabled: false
-    extraEnv:
-      - name: GDS_SSO_OAUTH_ID
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-authenticating-proxy
-            key: oauth_id
-      - name: GDS_SSO_OAUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-authenticating-proxy
-            key: oauth_secret
-      - name: GOVUK_UPSTREAM_URI
-        value: "http://draft-router"
-      - name: JWT_AUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: authenticating-proxy-jwt-auth-secret
-            key: JWT_AUTH_SECRET
-      - name: MONGODB_URI  # TODO: this will need to become a secret when moving to DocDB.
-        value: "mongodb://\
-          router-backend-1,\
-          router-backend-2,\
-          router-backend-3/authenticating_proxy_production"
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-- name: frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-frontend-publishing-api-ec2
-            key: bearer_token
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-      - name: GOVUK_PERSONALISATION_MANAGE_URI
-        value: https://integration.account.gov.uk?link=manage-account
-      - name: ELECTIONS_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: frontend-elections-api
-            key: key
-      - name: ELECTIONS_API_URL
-        valueFrom:
-          secretKeyRef:
-            name: frontend-elections-api
-            key: url
-      - name: ACCOUNT_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-frontend-account-api-ec2
-            key: bearer_token
-      - name: EMAIL_ALERT_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-frontend-email-alert-api-ec2
-            key: bearer_token
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-frontend-publishing-api-ec2
-            key: bearer_token
-- name: static
-  helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: GA_UNIVERSAL_ID
-        value: UA-26179049-22
-      - name: GOVUK_APP_ROOT
-        value: /var/apps/static
-- name: content-store
-  helmValues:
-    uploadAssets:
-      enabled: false
-    extraEnv:
-      - name: ROUTER_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-content-store-router-api-ec2
-            key: bearer_token
-      - name: GDS_SSO_OAUTH_ID
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-content-store
-            key: oauth_id
-      - name: GDS_SSO_OAUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-content-store
-            key: oauth_secret
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: DEFAULT_TTL
-        value: "1800"
-      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-        value: "mongodb://\
-          mongo-1.integration.govuk-internal.digital,\
-          mongo-2.integration.govuk-internal.digital,\
-          mongo-3.integration.govuk-internal.digital/content_store_production"
-      - name: GOVUK_APP_NAME
-        value: content-store
-- name: signon-resources
-  chartPath: charts/signon-resources
-  postSyncWorkflowEnabled: "false"
-- name: info-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-- name: finder-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-      - name: EMAIL_ALERT_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-finder-frontend-email-alert-api-ec2
-            key: bearer_token
-
-- name: collections
-  helmValues:
-  securityContext:
-    runAsNonRoot: false
-    appContainer: true
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-      - name: EMAIL_ALERT_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-collections-email-alert-api-ec2
-            key: bearer_token
-- name: whitehall-admin
-  repoName: whitehall
-  helmValues:
-    dbMigrationEnabled: true
-    workerEnabled: true
-    uploadAssets: &whitehall-upload-assets
-      path: "/app/public/assets/whitehall"
-      s3Directory: "whitehall"
-    ingress:
-      enabled: true
-      annotations:
-        alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
-      hosts:
-      - whitehall-admin.eks.integration.govuk.digital
-    workerReplicaCount: 1
-    extraEnv: &whitehall-envs
-      - name: NODE_ENV
-        value: production
-      - name: GDS_SSO_OAUTH_ID
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-whitehall
-            key: oauth_id
-      - name: GDS_SSO_OAUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-whitehall
-            key: oauth_secret
-      - name: ASSET_MANAGER_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-whitehall-asset-manager-ec2
-            key: bearer_token
-      - name: GOVUK_NOTIFY_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: publisher-notify
-            key: GOVUK_NOTIFY_API_KEY
-      - name: JWT_AUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: authenticating-proxy-jwt-auth-secret
-            key: JWT_AUTH_SECRET
-      - name: LINK_CHECKER_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-whitehall-link-checker-api-ec2
-            key: bearer_token
-      - name: LINK_CHECKER_API_SECRET_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: publisher-link-checker-api-callback-token
-            key: LINK_CHECKER_API_SECRET_TOKEN
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-whitehall-publishing-api-ec2
-            key: bearer_token
-      - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-      - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: whitehall-mysql
-            key: DATABASE_URL
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-- name: whitehall-frontend
-  repoName: whitehall
-  appResources:
-    limits:
-      memory: 2Gi
-    requests:
-      memory: 1.5Gi
-  helmValues:
-    uploadAssets: *whitehall-upload-assets
-    extraEnv: *whitehall-envs
-- name: draft-whitehall-frontend
-  repoName: whitehall
-  helmValues:
-    uploadAssets: *whitehall-upload-assets
-    extraEnv: *whitehall-envs
-- name: government-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-- name: asset-manager
-  chartPath: charts/asset-manager
-  helmValues:
-    workerEnabled: true
-    ingress:
-      enabled: true
-      annotations:
-        alb.ingress.kubernetes.io/load-balancer-name: asset-manager
-      hosts:
-      - name: asset-manager.eks.integration.govuk.digital
-    workerReplicaCount: 1
-    nfsServer: assets.blue.integration.govuk-internal.digital
-    nginxConfigMap:
-      create: false
-      name: asset-manager-nginx-conf
-    extraEnv:
-      - name: ASSET_MANAGER_CLAMSCAN_PATH
-        value: /usr/bin/clamscan  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing
-      - name: GDS_SSO_OAUTH_ID
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-asset-manager
-            key: oauth_id
-      - name: GDS_SSO_OAUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-asset-manager
-            key: oauth_secret
-      - name: GOVUK_APP_NAME
-        value: asset-manager
-      - name: GOVUK_APP_ROOT
-        value: /var/apps/static
-      - name: GOVUK_STATSD_PREFIX
-        value: asset-manager
-      - name: JWT_AUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: authenticating-proxy-jwt-auth-secret
-            key: JWT_AUTH_SECRET
-      - name: MONGODB_URI
-        valueFrom:
-          secretKeyRef:
-            name: asset-manager-docdb
-            key: MONGODB_URI
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: AWS_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: asset-manager-aws-access-key
-            key: AWS_ACCESS_KEY
-      - name: AWS_SECRET_KEY
-        valueFrom:
-          secretKeyRef:
-            name: asset-manager-aws-secret-key
-            key: AWS_SECRET_KEY
-      - name: AWS_REGION
-        value: eu-west-1
-      - name: AWS_S3_BUCKET_NAME
-        value: govuk-assets-integration
-- name: contacts-admin
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-- name: manuals-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-manuals-frontend-publishing-api-ec2
-            key: bearer_token
-- name: email-alert-frontend
-  helmValues:
-    extraEnv:
-      - name: SUBSCRIPTION_MANAGEMENT_ENABLED
-        value: "yes"
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: ACCOUNT_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-email-alert-frontend-account-api-ec2
-            key: bearer_token
-      - name: EMAIL_ALERT_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-email-alert-frontend-email-alert-api-ec2
-            key: bearer_token
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-email-alert-frontend-publishing-api-ec2
-            key: bearer_token
-      - name: EMAIL_ALERT_AUTH_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: email-alert-auth
-            key: token
-- name: smartanswers
-  repoName: smart-answers
-  helmValues:
-    extraEnv:
-      - name: EXPOSE_GOVSPEAK
-        value: "1"
-      - name: COMPANIES_HOUSE_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: smartanswers-companies-house
-            key: api_key
-      - name: LINK_CHECKER_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-smartanswers-link-checker-api-ec2
-            key: bearer_token
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-smartanswers-publishing-api-ec2
-            key: bearer_token
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: ZENDESK_CLIENT_USERNAME
-        valueFrom:
-          secretKeyRef:
-            name: smartanswers-zendesk-client
-            key: username
-      - name: ZENDESK_CLIENT_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: smartanswers-zendesk-client
-            key: password
-- name: feedback
-  helmValues:
-    extraEnv:
-      - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
-        value: 93109fea-34d9-4c38-ac7e-1ebc75e7416b
-      - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
-        value: 47cef7ea-0849-48aa-9676-0ee0f7baa4ae
-      - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
-        value: fee22233-2f28-4b0b-8b6c-4410979f2275
-      - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
-        value: eb9ba220-7d74-4aab-975a-bdbe718f69a3
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: SUPPORT_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-feedback-support-ec2
-            key: bearer_token
-      - name: SUPPORT_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-feedback-support-api-ec2
-            key: bearer_token
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-feedback-publishing-api-ec2
-            key: bearer_token
-      - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
-        valueFrom:
-          secretKeyRef:
-            name: feedback-assisted-digital-google-sheet
-            key: sheet_id
-      - name: GOOGLE_CLIENT_EMAIL
-        valueFrom:
-          secretKeyRef:
-            name: feedback-assisted-digital-google-sheet
-            key: client_email
-      - name: GOOGLE_PRIVATE_KEY
-        valueFrom:
-          secretKeyRef:
-            name: feedback-assisted-digital-google-sheet
-            key: private_key
-      - name: GOVUK_NOTIFY_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: feedback-notify
-            key: GOVUK_NOTIFY_API_KEY
 - name: search-api
   helmValues:
     uploadAssets:
@@ -945,59 +888,6 @@ applications:
         value: govuk-integration-search-ltr-endpoint
       - name: TENSORFLOW_SAGEMAKER_VARIANTS
         value: null  # value is empty
-- name: hmrc-manuals-api
-  helmValues:
-    nginxProxyReadTimeout: 300s
-    uploadAssets:
-      enabled: false
-    extraEnv:
-      - name: ALLOW_UNKNOWN_HMRC_MANUAL_SLUGS
-        value: "1"
-      - name: GDS_SSO_OAUTH_ID
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-hmrc-manuals-api
-            key: oauth_id
-      - name: GDS_SSO_OAUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-hmrc-manuals-api
-            key: oauth_secret
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-hmrc-manuals-api-publishing-api
-            key: bearer_token
-      - name: PUBLISH_TOPICS
-        value: "1"
-- name: router-api
-  helmValues:
-    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
-      searches:
-        - blue.integration.govuk-internal.digital
-    uploadAssets:
-      enabled: false
-    extraEnv:
-      - name: GDS_SSO_OAUTH_ID
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-router-api
-            key: oauth_id
-      - name: GDS_SSO_OAUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-router-api
-            key: oauth_secret
-      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-        value: "mongodb://\
-          router-backend-1,\
-          router-backend-2,\
-          router-backend-3/router"
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
 - name: service-manual-frontend
   helmValues:
     extraEnv:
@@ -1006,26 +896,136 @@ applications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-- name: licencefinder
-  repoName: licence-finder
+- name: signon
   helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: signon
+      hosts:
+      - signon.eks.integration.govuk.digital
+    workerReplicaCount: 1
     extraEnv:
-      # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
-      # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
-      - name: ELASTICSEARCH_URI
-        value: "https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com"
-      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-        value: "mongodb://\
-          mongo-1.integration.govuk-internal.digital,\
-          mongo-2.integration.govuk-internal.digital,\
-          mongo-3.integration.govuk-internal.digital/licence_finder_production"
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: INSTANCE_NAME
+        value: integration
+      - name: DEVISE_PEPPER
+        valueFrom:
+          secretKeyRef:
+            name: signon-devise-pepper
+            key: DEVISE_PEPPER
+      - name: DEVISE_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: signon-devise-secret
+            key: DEVISE_SECRET_KEY
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: signon-mysql
+            key: DATABASE_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SIGNON_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: signon-auth-token
+            key: token
+- name: signon-resources
+  chartPath: charts/signon-resources
+  postSyncWorkflowEnabled: "false"
+- name: info-frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: smartanswers
+  repoName: smart-answers
+  helmValues:
+    extraEnv:
+      - name: EXPOSE_GOVSPEAK
+        value: "1"
+      - name: COMPANIES_HOUSE_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: smartanswers-companies-house
+            key: api_key
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-smartanswers-link-checker-api-ec2
+            key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-licence-finder-publishing-api-ec2
+            name: signon-token-smartanswers-publishing-api-ec2
             key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: ZENDESK_CLIENT_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: smartanswers-zendesk-client
+            key: username
+      - name: ZENDESK_CLIENT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: smartanswers-zendesk-client
+            key: password
+- name: smokey
+  chartPath: charts/smokey
+- name: static
+  helmValues:
+    securityContext:
+      runAsNonRoot: false
+      appContainer: false
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: GA_UNIVERSAL_ID
+        value: UA-26179049-22
+      - name: GOVUK_APP_ROOT
+        value: /var/apps/static
+- name: whitehall-admin
+  repoName: whitehall
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    uploadAssets: *whitehall-upload-assets
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
+      hosts:
+      - whitehall-admin.eks.integration.govuk.digital
+    workerReplicaCount: 1
+    extraEnv: *whitehall-envs
+- name: whitehall-frontend
+  repoName: whitehall
+  appResources:
+    limits:
+      memory: 2Gi
+    requests:
+      memory: 1.5Gi
+  helmValues:
+    uploadAssets: *whitehall-upload-assets
+    extraEnv: *whitehall-envs

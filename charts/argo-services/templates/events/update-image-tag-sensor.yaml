@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: update-image-tag
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  dependencies:
+  - name: update-image-tag
+    eventSourceName: webhook
+    eventName: update-image-tag
+  triggers:
+  - template:
+      name: trigger
+      argoWorkflow:
+        group: argoproj.io
+        version: v1alpha1
+        resource: workflows
+        operation: submit
+        namespace: {{ .Values.workflowsNamespace }}
+        parameters:
+          - dest: spec.arguments.parameters.0.value
+            src:
+              dependencyName: update-image-tag
+              dataKey: body.environment
+          - dest: spec.arguments.parameters.1.value
+            src:
+              dependencyName: update-image-tag
+              dataKey: body.application
+          - dest: spec.arguments.parameters.2.value
+            src:
+              dependencyName: update-image-tag
+              dataKey: body.repoName
+          - dest: spec.arguments.parameters.3.value
+            src:
+              dependencyName: update-image-tag
+              dataKey: body.imageTag
+          - dest: metadata.generateName
+            src:
+              dependencyName: update-image-tag
+              dataKey: body.application
+            operation: prepend
+        source:
+          resource:
+            apiVersion: argoproj.io/v1alpha1
+            kind: Workflow
+            metadata:
+              generateName: -update-image-tag-
+              namespace: {{ .Values.workflowsNamespace }}
+            spec:
+              arguments:
+                parameters:
+                  - name: environment
+                  - name: application
+                  - name: repoName
+                  - name: imageTag
+              workflowTemplateRef:
+                name: update-image-tag
