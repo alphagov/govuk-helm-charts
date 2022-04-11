@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: govuk-grafana-database
-  namespace: monitoring
+  namespace: {{ .Values.monitoringNamespace }}
   annotations:
     a8r.io/description: >
       This secret contains credentials for Grafana to connect to its database

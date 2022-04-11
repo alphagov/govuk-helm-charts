@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-github
-  namespace: "{{ .Values.clusterServicesNamespace }}"
+  namespace: {{ .Values.clusterServicesNamespace }}
   annotations:
     a8r.io/description: >
       This secret is used to allow Dex (https://dexidp.io/), a federated

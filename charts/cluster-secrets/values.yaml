@@ -1,5 +1,6 @@
 clusterServicesNamespace: cluster-services
 monitoringNamespace: monitoring
+appsNamespace: apps
 # TODO: remove these and just use monitoringNamespace in templates now that
 # we're using a Role and RoleBinding to allow aws-load-balancer-controller to
 # read just the secrets that it needs, and therefore no longer need to

@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: govuk-fastly-api
-  namespace: monitoring
+  namespace: {{ .Values.monitoringNamespace }}
   annotations:
     a8r.io/description: >
       This secret contains the Fastly API token which fastly-exporter to expose
