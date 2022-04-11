@@ -1,4 +1,4 @@
-{{ range .Values.applications }}
+{{ range .Values.govukApplications }}
 {{- $reponame := .repoName | default .name }}
 {{- $imageTag := $.Files.Get (printf "image-tags/%s/%s" $.Values.globalHelmValues.govukEnvironment $reponame) | trim }}
 apiVersion: argoproj.io/v1alpha1
