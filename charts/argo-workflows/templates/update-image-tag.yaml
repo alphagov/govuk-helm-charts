@@ -7,7 +7,6 @@ spec:
   arguments:
     parameters:
       - name: environment
-      - name: application
       - name: repoName
       - name: imageTag
   templates:
@@ -15,7 +14,6 @@ spec:
       inputs:
         parameters:
           - name: environment
-          - name: application
           - name: repoName
           - name: imageTag
       script:
@@ -36,8 +34,6 @@ spec:
             value: "{{"{{inputs.parameters.imageTag}}"}}"
           - name: ENVIRONMENT
             value: "{{"{{inputs.parameters.environment}}"}}"
-          - name: APPLICATION
-            value: "{{"{{inputs.parameters.application}}"}}"
           - name: REPO_NAME
             value: "{{"{{inputs.parameters.repoName}}"}}"
         source: |

@@ -26,19 +26,15 @@ spec:
           - dest: spec.arguments.parameters.1.value
             src:
               dependencyName: update-image-tag
-              dataKey: body.application
-          - dest: spec.arguments.parameters.2.value
-            src:
-              dependencyName: update-image-tag
               dataKey: body.repoName
-          - dest: spec.arguments.parameters.3.value
+          - dest: spec.arguments.parameters.2.value
             src:
               dependencyName: update-image-tag
               dataKey: body.imageTag
           - dest: metadata.generateName
             src:
               dependencyName: update-image-tag
-              dataKey: body.application
+              dataKey: body.repoName
             operation: prepend
         source:
           resource:
@@ -51,7 +47,6 @@ spec:
               arguments:
                 parameters:
                   - name: environment
-                  - name: application
                   - name: repoName
                   - name: imageTag
               workflowTemplateRef:

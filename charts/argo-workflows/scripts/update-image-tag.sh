@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BRANCH="update-image-tag/${APPLICATION}/${ENVIRONMENT}/${IMAGE_TAG}"
+BRANCH="update-image-tag/${REPO_NAME}/${ENVIRONMENT}/${IMAGE_TAG}"
 FILE="charts/argocd-apps/image-tags/${ENVIRONMENT}/${REPO_NAME}"
 LATEST_GIT_SHA=$(git ls-remote "https://github.com/alphagov/${REPO_NAME}" HEAD | cut -f 1)
 
@@ -20,7 +20,7 @@ if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
   echo "${IMAGE_TAG}" > "${FILE}"
 
   git add "${FILE}"
-  git commit -m "Deploy ${APPLICATION}:${IMAGE_TAG} to ${ENVIRONMENT}"
+  git commit -m "Update ${REPO_NAME} image tag to ${IMAGE_TAG} for ${ENVIRONMENT}"
 
   git push -u origin "${BRANCH}"
   gh api repos/alphagov/govuk-helm-charts/merges -f head="${BRANCH}" -f base=main
