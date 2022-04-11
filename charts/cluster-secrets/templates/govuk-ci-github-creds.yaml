@@ -2,6 +2,7 @@ apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: govuk-ci-github-creds
+  namespace: {{ .Values.appsNamespace }}
   annotations:
     a8r.io/description: >
        Personal access token for govuk-ci GitHub user 

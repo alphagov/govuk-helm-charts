@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-argocd
-  namespace: "{{ .Values.clusterServicesNamespace }}"
+  namespace: {{ .Values.clusterServicesNamespace }}
   labels:
     app.kubernetes.io/part-of: argocd
   annotations:
