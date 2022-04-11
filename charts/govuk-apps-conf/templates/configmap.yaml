@@ -15,6 +15,14 @@ data:
   GOVUK_ENVIRONMENT_NAME: {{ .Values.govukEnvironment }}
   GOVUK_PROMETHEUS_EXPORTER: "true"
   GOVUK_WEBSITE_ROOT: https://www.{{ .Values.externalDomainSuffix }}
+  {{- if eq .Values.govukEnvironment "production" }}
+  GOVUK_PERSONALISATION_MANAGE_URI: "https://account.gov.uk?link=manage-account"
+  GOVUK_PERSONALISATION_SECURITY_URI: "https://account.gov.uk?link=security-privacy"
+  {{- else }}
+  GOVUK_PERSONALISATION_MANAGE_URI: "https://integration.account.gov.uk?link=manage-account"
+  GOVUK_PERSONALISATION_SECURITY_URI: "https://integration.account.gov.uk?link=security-privacy"
+  {{- end }}
+  GOVUK_PERSONALISATION_FEEDBACK_URI: https://signin.account.gov.uk/support
   # TODO: switch back to in-cluster Account API once it's fully working.
   PLEK_SERVICE_ACCOUNT_API_URI: https://account-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_ASSET_MANAGER_URI: https://asset-manager.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}

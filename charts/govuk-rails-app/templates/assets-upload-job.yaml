@@ -1,29 +1,37 @@
 {{- if .Values.uploadAssets.enabled -}}
+{{- $destDir := .Values.uploadAssets.s3Directory | default .Release.Name }}
+{{- $sourcePath := .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Release.Name }}-upload-assets
   annotations:
     argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
-  backoffLimit: 2  # Retry once, in case of network error.
   template:
     spec:
+      initContainers:
+      - name: {{ .Release.Name }}-copy-assets-for-upload
+        image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
+        command:
+        - sh
+        - -c
+        - "cp -R {{ $sourcePath }}/* /assets-to-upload"
+        volumeMounts: &volumeMounts
+        - name: assets-to-upload
+          mountPath: /assets-to-upload
       containers:
       - name: {{ .Release.Name }}-upload-assets
-        image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
-        env:
-        - name: ASSETS_SOURCE_PATH
-          value: {{ .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}
-        - name: ASSETS_DEST_DIR
-          value: {{ .Values.uploadAssets.s3Directory | default .Release.Name }}
-        - name: GOVUK_ENVIRONMENT
-          value: {{ .Values.govukEnvironment }}
+        image: public.ecr.aws/bitnami/aws-cli
         command:
-        - "sh"
-        - "-c"
-        - |-
-          {{- .Files.Get "upload-assets.sh" | nindent 10 }}
+        - aws
+        - s3
+        - sync
+        - /assets-to-upload
+        - "{{- printf "s3://govuk-app-assets-%s/assets/%s/" .Values.govukEnvironment $destDir }}"
+        volumeMounts: *volumeMounts
       restartPolicy: Never
+      volumes:
+      - name: assets-to-upload
+        emptyDir: {}
 {{- end }}
