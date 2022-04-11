@@ -15,8 +15,6 @@ spec:
         {{- include "govuk-rails-app.labels" . | nindent 8 }}
         app: {{ .Release.Name }}
     spec:
-      securityContext:
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -62,10 +60,10 @@ spec:
             periodSeconds: 5
           {{- end }}
           {{- if .Values.securityContext.appContainer }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsUser: 2000
-            runAsGroup: 3000
+           securityContext:
+              allowPrivilegeEscalation: false
+              runAsUser: 1001
+              runAsGroup: 1001
           {{- end }}
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
