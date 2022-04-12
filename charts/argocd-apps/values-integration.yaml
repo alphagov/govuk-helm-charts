@@ -117,9 +117,6 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: collections
   helmValues:
-    securityContext:
-      runAsNonRoot: true
-      appContainer: true
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -990,9 +987,6 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
