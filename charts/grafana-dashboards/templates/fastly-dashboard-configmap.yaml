@@ -3,7 +3,9 @@ kind: ConfigMap
 metadata:
   name: fastly-dashboards
   labels:
-    grafana_dashboard: "fastly"
+    # This label key and value pair must exist for the Grafana sidecar to detect this configmap
+    # Ref: https://github.com/prometheus-community/helm-charts/blob/47c064f180319f721867f43bf1814100e2141255/charts/kube-prometheus-stack/values.yaml#L719
+    grafana_dashboard: "1"
 data:
   # Original source of the dashboard is: https://github.com/mrnetops/fastly-dashboards/blob/main/grafana/provisioning/dashboards/Fastly-Dashboard.json
   # with some modifications to fit GOV.UK needs
