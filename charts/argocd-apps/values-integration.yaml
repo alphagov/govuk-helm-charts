@@ -118,7 +118,7 @@ applications:
 - name: collections
   helmValues:
   securityContext:
-    runAsNonRoot: false
+    runAsNonRoot: true
     appContainer: true
     extraEnv:
       - name: SECRET_KEY_BASE

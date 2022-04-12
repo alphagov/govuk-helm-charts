@@ -16,7 +16,7 @@ spec:
         app: {{ .Release.Name }}
     spec:
       securityContext:
-        runAsNonRoot: true
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       containers:
         - name: {{ .Release.Name }}
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
