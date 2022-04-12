@@ -815,6 +815,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/govuk-rails-app-0.1.0/govuk-rails-app-0.1.0.tgz
     version: 0.1.0
+  grafana-dashboards:
+  - apiVersion: v2
+    created: "2022-04-12T09:33:02.69739904Z"
+    description: A Helm chart which adds Grafana Dashboards
+    digest: 03e589d37611495fd70b53393c4d55851482d858294ef3573a3d87dc666af613
+    name: grafana-dashboards
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/grafana-dashboards-0.1.0/grafana-dashboards-0.1.0.tgz
+    version: 0.1.0
   ingress-class:
   - apiVersion: v2
     created: "2021-12-01T11:11:08.071769417Z"
@@ -1255,4 +1265,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-04-11T15:11:42.690619979Z"
+generated: "2022-04-12T09:33:02.697906542Z"
