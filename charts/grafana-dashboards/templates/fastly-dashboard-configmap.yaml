@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastly-dashboards
+  labels:
+    grafana_dashboard: "fastly"
+data:
+  # Original source of the dashboard is: https://github.com/mrnetops/fastly-dashboards/blob/main/grafana/provisioning/dashboards/Fastly-Dashboard.json
+  # with some modifications to fit GOV.UK needs
+  fastly.json: |
+    {{- .Files.Get "fastly-dashboard.json" | nindent 4 }}
