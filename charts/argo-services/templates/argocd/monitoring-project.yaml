@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: monitoring
+  finalizers:
+    # Ensure that project is not deleted until it is not referenced by any application
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    notifications.argoproj.io/subscribe.sync-operation-change.slack_webhook: ""
+spec:
+  description: ArgoCD project containing monitoring applications.
+
+  sourceRepos:
+  - '*'
+
+  # Deny all cluster-scoped resources from being created, except for Namespace
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+
+  destinations:
+  - namespace: "*"
+    server: https://kubernetes.default.svc
+
+  orphanedResources:
+    warn: false
