@@ -252,6 +252,9 @@ govukApplications:
 - name: draft-whitehall-frontend
   repoName: whitehall
   helmValues:
+    securityContext: &disable-non-root
+      runAsNonRoot: false
+      appContainer: false
     uploadAssets: &whitehall-upload-assets
       path: "/app/public/assets/whitehall"
       s3Directory: "whitehall"
@@ -622,6 +625,7 @@ govukApplications:
         value: 759acac6-da53-4a19-b591-b7538c7c39de
 - name: publishing-api
   helmValues:
+    securityContext: *disable-non-root
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
@@ -804,6 +808,7 @@ govukApplications:
         value: "https://search-api.integration.govuk-internal.digital"
 - name: search-api
   helmValues:
+    securityContext: *disable-non-root
     uploadAssets:
       enabled: false
     extraEnv:
@@ -895,6 +900,7 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: signon
   helmValues:
+    securityContext: *disable-non-root
     dbMigrationEnabled: true
     workerEnabled: true
     ingress:
@@ -950,6 +956,7 @@ govukApplications:
 - name: smartanswers
   repoName: smart-answers
   helmValues:
+    securityContext: *disable-non-root
     extraEnv:
       - name: EXPOSE_GOVSPEAK
         value: "1"
@@ -1002,6 +1009,7 @@ govukApplications:
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
+    securityContext: *disable-non-root
     dbMigrationEnabled: true
     workerEnabled: true
     uploadAssets: *whitehall-upload-assets
@@ -1021,5 +1029,6 @@ govukApplications:
     requests:
       memory: 1.5Gi
   helmValues:
+    securityContext: *disable-non-root
     uploadAssets: *whitehall-upload-assets
     extraEnv: *whitehall-envs
