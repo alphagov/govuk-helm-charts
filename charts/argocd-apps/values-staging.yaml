@@ -3,7 +3,7 @@ globalHelmValues:
   externalDomainSuffix: eks.staging.govuk.digital
   publishingServiceDomainSuffix: staging.publishing.service.gov.uk
 
-applications:
+govukApplications:
 - name: argo-workflows
   chartPath: charts/argo-workflows
   postSyncWorkflowEnabled: "false"

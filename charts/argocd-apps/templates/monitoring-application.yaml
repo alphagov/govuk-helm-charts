@@ -1,6 +1,5 @@
-{{ range .Values.applications }}
+{{ range .Values.monitoringApplications }}
 {{- $reponame := .repoName | default .name }}
-{{- $imageTag := $.Files.Get (printf "image-tags/%s/%s" $.Values.globalHelmValues.govukEnvironment $reponame) | trim }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -13,14 +12,14 @@ metadata:
   annotations:
     slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
     repoName: "{{ $reponame }}"
-    imageTag: "{{ $imageTag }}"
+    imageTag: ""
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
-    postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
+    postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "false" }}"
 spec:
-  project: govuk
+  project: {{ $.Values.monitoringNamespace }}
   source:
     repoURL: 'git@github.com/alphagov/govuk-helm-charts'
-    path: "{{ .chartPath | default (printf "charts/govuk-rails-app") }}"
+    path: "{{ .chartPath }}"
     targetRevision: {{ .targetRevision | default "HEAD" }}
     helm:
       # Environment-specific Helm values. These take precedence over the app
@@ -30,15 +29,12 @@ spec:
         {{- if .ingressHostname }}
         {{- include "govukIngress" (dict "name" .name "host" (tpl .ingressHostname $)) | indent 8 }}
         {{- end }}
-        appImage:
-          repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}
-          tag: {{ $imageTag }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{ $.Values.appsNamespace }}
+    namespace: {{ $.Values.monitoringNamespace }}
   syncPolicy:
     automated:
       prune: true

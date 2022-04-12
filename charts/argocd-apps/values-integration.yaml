@@ -3,7 +3,7 @@ globalHelmValues:
   externalDomainSuffix: eks.integration.govuk.digital
   publishingServiceDomainSuffix: integration.publishing.service.gov.uk
 
-applications:
+govukApplications:
 - name: asset-manager
   chartPath: charts/asset-manager
   helmValues:

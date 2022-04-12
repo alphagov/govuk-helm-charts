@@ -11,4 +11,9 @@ globalHelmValues:
   # TODO: delete internalDomainSuffix once Plek handles empty GOVUK_APP_DOMAIN.
   internalDomainSuffix: apps.svc.cluster.local
 appsNamespace: apps
-applications: []
+govukApplications: []
+
+monitoringNamespace: monitoring
+monitoringApplications:
+  - name: grafana-dashboards
+    chartPath: charts/grafana-dashboards
