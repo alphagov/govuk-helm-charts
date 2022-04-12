@@ -64,8 +64,8 @@ spec:
           {{- if .Values.securityContext.appContainer }}
           securityContext:
             allowPrivilegeEscalation: false
-            runAsUser: 2000
-            runAsGroup: 3000
+            runAsUser: 1001
+            runAsGroup: 1001
           {{- end }}
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
