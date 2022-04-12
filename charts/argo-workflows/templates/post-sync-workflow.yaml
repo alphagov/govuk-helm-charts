@@ -37,8 +37,6 @@ spec:
               parameters:
                 - name: environment
                   value: "{{ .Values.nextEnvironment }}"
-                - name: application
-                  value: "{{"{{workflow.parameters.application}}"}}"
                 - name: repoName
                   value: "{{"{{workflow.parameters.repoName}}"}}"
                 - name: imageTag
