@@ -19,6 +19,8 @@ spec:
         app.kubernetes.io/component: worker
         app: {{ .Release.Name }}-worker
     spec:
+      securityContext:
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       containers:
         - name: app
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -34,6 +36,12 @@ spec:
           {{- with .Values.workerResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.securityContext.appContainer }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
           {{- end }}
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
