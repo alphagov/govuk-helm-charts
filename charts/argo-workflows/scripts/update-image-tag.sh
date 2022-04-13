@@ -29,5 +29,5 @@ if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]; then
   echo "Done!"
 else
   echo "Image tag not updated for ${ENVIRONMENT}: image tag not the latest commit on main."
-  exit 1
+  exit 0
 fi
