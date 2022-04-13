@@ -321,6 +321,9 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: signon
   helmValues:
+    securityContext:
+      runAsNonRoot: false
+      appContainer: false
     dbMigrationEnabled: true
     workerEnabled: true
     ingress:
@@ -376,6 +379,9 @@ govukApplications:
 - name: smartanswers
   repoName: smart-answers
   helmValues:
+    securityContext:
+      runAsNonRoot: false
+      appContainer: false
     extraEnv:
       - name: COMPANIES_HOUSE_API_KEY
         valueFrom:
@@ -434,6 +440,9 @@ govukApplications:
     requests:
       memory: 1.5Gi
   helmValues:
+    securityContext:
+      runAsNonRoot: false
+      appContainer: false
     uploadAssets: &whitehall-upload-assets
       path: "/app/public/assets/whitehall"
       s3Directory: "whitehall"
