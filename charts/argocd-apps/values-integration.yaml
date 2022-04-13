@@ -994,6 +994,7 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
+    securityContext: *disable-non-root
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
