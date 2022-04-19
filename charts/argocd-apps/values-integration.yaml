@@ -685,8 +685,6 @@ govukApplications:
         value: govuk-publishing-api-event-log-integration
       - name: EVENT_LOG_AWS_ACCESS_ID
         value: unset  # TODO: Set up Event Log S3 Bucket (not in terraform)
-      - name: EVENT_LOG_AWS_SECRET_KEY
-        value: unset  # TODO: Set up Event Log S3 Bucket (not in terraform)
       - name: EVENT_LOG_AWS_USERNAME
         value: govuk-publishing-api-event-log_user
       - name: GOVUK_CONTENT_SCHEMAS_PATH
