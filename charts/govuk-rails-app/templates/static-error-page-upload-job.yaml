@@ -13,6 +13,8 @@ spec:
   backoffLimit: 2
   template:
     spec:
+      securityContext:
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       containers:
         - name: upload-static-error-pages
           # TODO: find a way to keep this up-to-date

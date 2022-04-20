@@ -24,6 +24,8 @@ spec:
         {{- include "govuk-rails-app.labels" . | nindent 8 }}
         app.kubernetes.io/component: web
     spec:
+      securityContext:
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       restartPolicy: Never
       containers:
       - name: {{ $jobName }}
@@ -40,5 +42,11 @@ spec:
         {{- with .Values.appResources }}
         resources:
           {{- . | toYaml | trim | nindent 12 }}
+        {{- end }}
+        {{- if .Values.securityContext.appContainer }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1001
+          runAsGroup: 1001
         {{- end }}
 {{- end }}

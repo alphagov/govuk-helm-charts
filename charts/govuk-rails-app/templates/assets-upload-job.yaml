@@ -10,6 +10,8 @@ metadata:
 spec:
   template:
     spec:
+      securityContext:
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       initContainers:
       - name: {{ .Release.Name }}-copy-assets-for-upload
         image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
@@ -20,6 +22,12 @@ spec:
         volumeMounts: &volumeMounts
         - name: assets-to-upload
           mountPath: /assets-to-upload
+        {{- if .Values.securityContext.appContainer }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1001
+          runAsGroup: 1001
+        {{- end }}
       containers:
       - name: {{ .Release.Name }}-upload-assets
         image: public.ecr.aws/bitnami/aws-cli
