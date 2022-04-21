@@ -1,3 +1,6 @@
 govukEnvironment:
 argocdUrl:
 workflowsNamespace: apps
+rbacTeams:
+  read_only: gov-uk
+  read_write: gov-uk-production
