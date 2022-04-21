@@ -26,9 +26,6 @@ spec:
       # chart's values.yaml.
       values: |
         {{- toYaml $.Values.globalHelmValues | nindent 8 }}
-        {{- if .ingressHostname }}
-        {{- include "govukIngress" (dict "name" .name "host" (tpl .ingressHostname $)) | indent 8 }}
-        {{- end }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
