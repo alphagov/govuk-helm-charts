@@ -2,5 +2,5 @@ govukEnvironment:
 argocdUrl:
 workflowsNamespace: apps
 rbacTeams:
-  read_only: gov-uk
-  read_write: gov-uk-production
+  read_only: alphagov:gov-uk
+  read_write: alphagov:gov-uk-production
