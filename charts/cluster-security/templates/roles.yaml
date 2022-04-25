@@ -1,8 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: psp-baseline
-  namespace: default
   labels:
     kubernetes.io/cluster-service: "true"
     eks.amazonaws.com/component: pod-security-policy

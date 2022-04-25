@@ -1,17 +1,30 @@
-# This role binding allows all pods in the 'default' namespace to use the baseline PSP.
+# This role binding allows all pods in the 'default' and 'apps' namespace to use the baseline PSP.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: psp-baseline-namespaces
-  namespace: default
-  labels:
-    kubernetes.io/cluster-service: "true"
-    eks.amazonaws.com/component: pod-security-policy
+  name: psp-baseline-rolebinding
+  namespace: apps
 roleRef:
-  kind: Role
-  name: psp-baseline
   apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: psp-baseline
 subjects:
 - kind: Group
   name: system:authenticated
+  namespace: apps
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: psp-baseline-rolebinding
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: psp-baseline
+subjects:
+- kind: Group
+  name: system:authenticated
+  namespace: default
   apiGroup: rbac.authorization.k8s.io
