@@ -958,11 +958,6 @@ govukApplications:
     extraEnv:
       - name: EXPOSE_GOVSPEAK
         value: "1"
-      - name: COMPANIES_HOUSE_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: smartanswers-companies-house
-            key: api_key
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
