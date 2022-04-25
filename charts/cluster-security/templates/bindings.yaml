@@ -28,4 +28,3 @@ subjects:
   name: system:authenticated
   namespace: default
   apiGroup: rbac.authorization.k8s.io
-  
