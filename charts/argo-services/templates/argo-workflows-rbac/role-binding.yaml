@@ -4,7 +4,7 @@ metadata:
   name: argo-workflows-read-only
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: argo-workflows-read-only
 subjects:
   - kind: ServiceAccount
@@ -17,7 +17,7 @@ metadata:
   name: argo-workflows-read-write
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: argo-workflows-read-write
 subjects:
   - kind: ServiceAccount
