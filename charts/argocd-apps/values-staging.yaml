@@ -499,7 +499,7 @@ govukApplications:
       - name: GOVUK_NOTIFY_API_KEY
         valueFrom:
           secretKeyRef:
-            name: publisher-notify
+            name: whitehall-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: JWT_AUTH_SECRET
         valueFrom:
@@ -514,7 +514,7 @@ govukApplications:
       - name: LINK_CHECKER_API_SECRET_TOKEN
         valueFrom:
           secretKeyRef:
-            name: publisher-link-checker-api-callback-token
+            name: whitehall-link-checker-api-callback-token
             key: LINK_CHECKER_API_SECRET_TOKEN
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
