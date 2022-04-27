@@ -9,6 +9,8 @@ spec:
       - name: environment
       - name: repoName
       - name: imageTag
+      - name: manualCommit
+        default: "false"
   templates:
     - name: update-image-tag
       inputs:
@@ -16,6 +18,7 @@ spec:
           - name: environment
           - name: repoName
           - name: imageTag
+          - name: manualCommit
       script:
         image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
         command: [/bin/bash]
@@ -36,5 +39,7 @@ spec:
             value: "{{"{{inputs.parameters.environment}}"}}"
           - name: REPO_NAME
             value: "{{"{{inputs.parameters.repoName}}"}}"
+          - name: MANUAL_COMMIT
+            value: "{{"{{inputs.parameters.manualCommit}}"}}"
         source: |
           {{- .Files.Get "scripts/update-image-tag.sh" | nindent 14 }}
