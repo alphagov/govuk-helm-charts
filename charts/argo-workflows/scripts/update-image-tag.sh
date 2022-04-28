@@ -14,7 +14,7 @@ gh repo clone alphagov/govuk-helm-charts -- --depth 1 --branch main
 cd "govuk-helm-charts" || exit 1
 
 # Relies on the assumption the IMAGE_TAG is a commit SHA
-if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ] || [ "${MANUAL_COMMIT}" = true ]; then
+if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ] || [ "${MANUAL_DEPLOY}" = true ]; then
   git checkout -b "${BRANCH}"
 
   echo "${IMAGE_TAG}" > "${FILE}"
