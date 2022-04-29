@@ -6,16 +6,7 @@ rules:
 - apiGroups:
   - argoproj.io
   resources:
-  - workflows
-  - workflows/finalizers
-  - workfloweventbindings
-  - workfloweventbindings/finalizers
-  - workflowtemplates
-  - workflowtemplates/finalizers
-  - cronworkflows
-  - cronworkflows/finalizers
-  - clusterworkflowtemplates
-  - clusterworkflowtemplates/finalizers
+  - '*'
   verbs:
   - get
   - list
@@ -29,18 +20,7 @@ rules:
 - apiGroups:
   - argoproj.io
   resources:
-  - workflows
-  - workflows/finalizers
-  - workfloweventbindings
-  - workfloweventbindings/finalizers
-  - workflowtasksets
-  - workflowtasksets/finalizers
-  - workflowtemplates
-  - workflowtemplates/finalizers
-  - cronworkflows
-  - cronworkflows/finalizers
-  - clusterworkflowtemplates
-  - clusterworkflowtemplates/finalizers
+  - '*'
   verbs:
   - create
   - delete
