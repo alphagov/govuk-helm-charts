@@ -1,13 +1,27 @@
-apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: psp-baseline
-  labels:
-    kubernetes.io/cluster-service: "true"
-    eks.amazonaws.com/component: pod-security-policy
 rules:
-- apiGroups: ['policy']
-  resources: ['podsecuritypolicies']
-  verbs:     ['use']
+- apiGroups:
+  - extensions
+  resources:
+  - podsecuritypolicies
   resourceNames:
   - psp-baseline
+  verbs:
+  - use
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: psp-privileged
+rules:
+- apiGroups:
+  - extensions
+  resources:
+  - podsecuritypolicies
+  resourceNames:
+  - psp-privileged
+  verbs:
+  - use

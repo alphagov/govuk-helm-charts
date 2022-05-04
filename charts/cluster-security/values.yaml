@@ -1,0 +1,12 @@
+baselineNamespaces:
+  - apps
+  - default
+
+privilegedNamespaces:
+  - armo-system
+  - cluster-services
+  - kube-node-lease
+  - kube-public
+  - kube-system
+  - kubescape-host-scanner
+  - monitoring
