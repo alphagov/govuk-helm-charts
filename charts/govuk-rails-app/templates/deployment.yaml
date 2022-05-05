@@ -93,6 +93,8 @@ spec:
           - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
             mountPath: /etc/nginx/nginx.conf
             subPath: nginx.conf
+          - name: tmp
+            mountPath: /tmp
           {{- with .Values.nginxExtraVolumeMounts }}
           {{ . | toYaml | trim | nindent 10 }}
           {{- end }}
@@ -105,6 +107,8 @@ spec:
       - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
         configMap:
           name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+      - name: tmp
+        emptyDir: {}
       {{- with .Values.nginxExtraVolumes }}
       {{ . | toYaml | trim | nindent 6 }}
       {{- end }}
