@@ -625,7 +625,7 @@ govukApplications:
         value: 759acac6-da53-4a19-b591-b7538c7c39de
 - name: publishing-api
   helmValues:
-    securityContext: *disable-non-root
+    # securityContext: *disable-non-root
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
@@ -988,7 +988,7 @@ govukApplications:
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
-    securityContext: *disable-non-root
+    # securityContext: *disable-non-root
     dbMigrationEnabled: true
     workerEnabled: true
     uploadAssets: *whitehall-upload-assets
