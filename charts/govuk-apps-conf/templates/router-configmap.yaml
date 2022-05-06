@@ -22,6 +22,9 @@ data:
       include       /etc/nginx/mime.types;
       default_type  application/octet-stream;
 
+      client_body_temp_path /tmp/client_temp;
+      proxy_temp_path       /tmp/proxy_temp_path;
+
       server_tokens off;
 
       sendfile        on;
