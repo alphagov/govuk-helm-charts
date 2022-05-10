@@ -15,6 +15,8 @@ spec:
         {{- include "asset-manager.labels" . | nindent 8 }}
         app: {{ .Release.Name }}
     spec:
+      securityContext:
+        runAsNonRoot: true
       containers:
         - name: {{ .Release.Name }}
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -59,6 +61,10 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
