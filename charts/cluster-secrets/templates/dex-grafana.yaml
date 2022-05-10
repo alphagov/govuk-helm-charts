@@ -6,7 +6,7 @@ metadata:
   name: govuk-dex-grafana
   namespace: "{{ . }}"
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       This secret contains the OAUTH secret which allows Grafana to
       authenticate with Dex (https://dexidp.io/), a federated
       OpenID connect provider

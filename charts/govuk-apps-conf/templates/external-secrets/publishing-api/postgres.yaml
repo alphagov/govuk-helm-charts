@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Connection string for Publishing API DB hosted in RDS
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}

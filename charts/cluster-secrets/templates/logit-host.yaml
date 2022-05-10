@@ -4,7 +4,7 @@ metadata:
   name: logit-host
   namespace: {{ .Values.clusterServicesNamespace }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Logstash endpoint where Filebeat (which runs as a daemonset) will send
       logs to. The `host` field is the "Logstash endpoint" under "Logstash
       Inputs" for the relevant stack (e.g. "GOV.UK Staging EKS") in the LogIt

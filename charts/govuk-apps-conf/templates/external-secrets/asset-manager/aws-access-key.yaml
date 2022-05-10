@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       AWS access key to access AWS Asset-manager S3 bucket.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}

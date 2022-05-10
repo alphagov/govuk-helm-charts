@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Google service account for accessing the spreadsheet for Assisted Digital feedback,
       plus the ID of the sheet itself.
       https://github.com/alphagov/feedback/blob/264cd13/docs/assisted_digital_feedback.md

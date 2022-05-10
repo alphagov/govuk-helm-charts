@@ -6,7 +6,7 @@ metadata:
   name: govuk-dex-alert-manager
   namespace: "{{ . }}"
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Contains the OAuth secret which allows the Alert Manager ingress to
       require user authentication with Dex (https://dexidp.io/), a federated
       OpenID Connect provider. The requirement that users be authenticated is
@@ -32,7 +32,7 @@ metadata:
   name: govuk-dex-prometheus
   namespace: "{{ . }}"
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Contains the OAuth secret which allows the Prometheus ingress to
       require user authentication with Dex (https://dexidp.io/), a federated
       OpenID Connect provider. The requirement that users be authenticated is
@@ -57,7 +57,7 @@ metadata:
   name: prom-stack-oidc-secrets-reader
   namespace: {{ .Values.monitoringNamespace }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Allows reading the OIDC OAuth secrets which are ultimately needed by the
       load balancers which serve the Prometheus and Alert Manager ingresses.
 rules:

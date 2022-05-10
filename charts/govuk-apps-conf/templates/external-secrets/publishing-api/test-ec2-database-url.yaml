@@ -7,7 +7,7 @@ metadata:
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Connection string for Publishing API DB hosted in EC2.
       !!! IMPORTANT: This should only be used by the TEST AWS environment !!!
 spec:
