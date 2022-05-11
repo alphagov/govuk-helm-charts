@@ -45,6 +45,8 @@ spec:
               mountPath: /var/lib/clamav
           securityContext:
             allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
         - name: clamdb
@@ -60,6 +62,8 @@ spec:
               mountPath: /var/lib/clamav
           securityContext:
             allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}

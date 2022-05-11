@@ -59,6 +59,10 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
         - name: {{ .Release.Name }}-nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
