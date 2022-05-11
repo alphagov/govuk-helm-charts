@@ -66,6 +66,22 @@ workerResources:
     cpu: 500m
     memory: 512Mi
 
+jobResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+nginxResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
 # dnsConfig is passed directly into the pod specs in the app and worker
 # deployment templates.
 dnsConfig: {}
