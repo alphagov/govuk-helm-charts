@@ -43,3 +43,12 @@ spec:
             value: "{{"{{inputs.parameters.manualDeploy}}"}}"
         source: |
           {{- .Files.Get "scripts/update-image-tag.sh" | nindent 14 }}
+  podSpecPatch: |
+    containers:
+      - resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi

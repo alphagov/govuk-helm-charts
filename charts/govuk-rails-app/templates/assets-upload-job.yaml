@@ -37,6 +37,10 @@ spec:
         - sync
         - /assets-to-upload
         - "{{- printf "s3://govuk-app-assets-%s/assets/%s/" .Values.govukEnvironment $destDir }}"
+        {{- with .Values.jobResources }}
+        resources:
+          {{- . | toYaml | trim | nindent 12 }}
+        {{- end }}
         volumeMounts: *volumeMounts
       restartPolicy: Never
       volumes:

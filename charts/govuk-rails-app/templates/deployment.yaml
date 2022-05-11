@@ -89,6 +89,10 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
             timeoutSeconds: 15
+          {{- with .Values.nginxResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           volumeMounts:
           - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
             mountPath: /etc/nginx/nginx.conf

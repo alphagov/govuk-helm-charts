@@ -27,5 +27,9 @@ spec:
             - "-c"
             - |-
               {{- .Files.Get "upload-static-error-pages.sh" | nindent 14 }}
+          {{- with .Values.jobResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
       restartPolicy: Never
 {{- end }}
