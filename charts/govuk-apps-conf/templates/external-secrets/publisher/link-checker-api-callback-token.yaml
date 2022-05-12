@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Publisher uses this for verification of batch-completion webhook
       (i.e. callback) requests from Link Checker API. See
       https://github.com/alphagov/link-checker-api/blob/main/docs/api.md#verifying-the-webhook-request

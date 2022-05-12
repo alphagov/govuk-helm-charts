@@ -4,7 +4,7 @@ metadata:
   name: govuk-dex-github
   namespace: {{ .Values.clusterServicesNamespace }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       This secret is used to allow Dex (https://dexidp.io/), a federated
       OpenID connect provider, to use GitHub as an identity provider
 spec:

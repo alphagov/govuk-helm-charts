@@ -4,7 +4,7 @@ metadata:
   name: govuk-ci-github-creds
   namespace: {{ .Values.appsNamespace }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
        Personal access token for govuk-ci GitHub user 
 spec:
   refreshInterval: 1h

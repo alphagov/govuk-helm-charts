@@ -4,7 +4,7 @@ metadata:
   name: govuk-fastly-api
   namespace: {{ .Values.monitoringNamespace }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       This secret contains the Fastly API token which fastly-exporter to expose
       Fastly metrics to Prometheus
 spec:

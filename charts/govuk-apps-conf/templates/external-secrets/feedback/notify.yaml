@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       The GOV.UK Notify API key belonging to Feedback.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}

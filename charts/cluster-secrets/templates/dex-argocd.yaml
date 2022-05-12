@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/part-of: argocd
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       This secret contains the OAUTH secret which allows ArgoCD to
       authenticate with Dex (https://dexidp.io/), a federated
       OpenID connect provider

@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       Username and password for the factcheck Gmail account. See
       https://github.com/alphagov/publisher/blob/main/docs/fact-checking.md
 spec:

@@ -4,7 +4,7 @@ metadata:
   name: govuk-grafana-database
   namespace: {{ .Values.monitoringNamespace }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       This secret contains credentials for Grafana to connect to its database
 spec:
   refreshInterval: 1h

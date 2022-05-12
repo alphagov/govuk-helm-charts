@@ -4,7 +4,7 @@ metadata:
   name: slack-webhook-url
   namespace: {{ .Values.appsNamespace }}
   annotations:
-    a8r.io/description: >
+    kubernetes.io/description: >
       This secret contains the slack webhook to post on Slack
 spec:
   refreshInterval: 1h
