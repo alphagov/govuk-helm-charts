@@ -57,7 +57,8 @@ jobs:
           args: '-kubernetes-version ${{ steps.vars.outputs.kubernetes_version }}
           -schema-location default
           -schema-location "./schemas/{{ .ResourceKind }}_{{ .ResourceAPIVersion }}.json"
-          -summary helm-dist'
+          -summary
+          helm-dist'
 
   shellcheck:
     name: Shellcheck
