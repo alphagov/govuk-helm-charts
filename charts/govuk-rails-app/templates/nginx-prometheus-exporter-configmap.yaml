@@ -1,0 +1,33 @@
+{{- if .Values.nginxPrometheusExporter }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-nginx-prometheus-exporter-conf
+  labels:
+    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: monitoring
+data:
+  config.hcl: |-
+    listen {
+      port = 4040
+    }
+
+    namespace "nginx" {
+      source = {
+        syslog {
+          listen_address = "udp://127.0.0.1:{{ .Values.syslogPort }}"
+          format = "auto"
+          tags = [
+            "nginx"
+          ]
+        }
+      }
+
+      format = "$remote_addr - $remote_user [$time_local]  \"$request\" $status $body_bytes_sent \"$http_referer\" \"$http_user_agent\" $request_time $upstream_response_time $gzip_ratio $sent_http_x_cache $sent_http_location $http_host $ssl_protocol $ssl_cipher $http_x_forwarded_for"
+
+
+      labels {
+        app = "{{ .Release.Name }}"
+      }
+    }
+{{- end }}

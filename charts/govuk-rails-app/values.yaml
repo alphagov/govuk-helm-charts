@@ -99,3 +99,15 @@ metricsPort: 9394
 securityContext:
   runAsNonRoot: true
   appContainer: true
+
+nginxPrometheusExporter: true
+nginxExporterPort: 4040
+syslogPort: 8123
+
+nginxPrometheusExporterResources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

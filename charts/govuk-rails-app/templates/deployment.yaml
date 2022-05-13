@@ -102,6 +102,39 @@ spec:
           {{- with .Values.nginxExtraVolumeMounts }}
           {{ . | toYaml | trim | nindent 10 }}
           {{- end }}
+        {{- if .Values.nginxPrometheusExporter }}
+        - name: nginx-prometheus-exporter
+          image: quay.io/martinhelmich/prometheus-nginxlog-exporter:v1.9.2
+          args: ["-config-file", "/etc/prometheus-nginxlog-exporter/config.hcl"]
+          ports:
+            - name: nginxMetrics
+              containerPort: {{ .Values.nginxExporterPort }}
+            - name: syslog
+              containerPort: {{ .Values.syslogPort }}
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: nginxMetrics
+            initialDelaySeconds: 2
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: nginxMetrics
+            initialDelaySeconds: 2
+            failureThreshold: 2
+            periodSeconds: 5
+            timeoutSeconds: 15
+          {{- with .Values.nginxPrometheusExporterResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-nginx-prometheus-exporter-config
+              mountPath: /etc/prometheus-nginxlog-exporter
+          {{- end }}
       enableServiceLinks: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
@@ -113,6 +146,11 @@ spec:
           name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
       - name: tmp
         emptyDir: {}
+      {{- if .Values.nginxPrometheusExporter }}
+      - name: {{ .Release.Name }}-nginx-prometheus-exporter-config
+        configMap:
+          name: {{ .Release.Name }}-nginx-prometheus-exporter-conf
+      {{- end }}
       {{- with .Values.nginxExtraVolumes }}
       {{ . | toYaml | trim | nindent 6 }}
       {{- end }}
