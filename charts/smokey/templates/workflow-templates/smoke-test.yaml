@@ -40,22 +40,15 @@ spec:
               name: govuk-apps-env
               key: GOVUK_APP_DOMAIN_EXTERNAL
         - name: SIGNON_EMAIL
-          value: "signon@alphagov.co.uk"
+          valueFrom:
+            secretKeyRef:
+              name: smokey-signon-account
+              key: email
         - name: SIGNON_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: smokey
-              key: signon_password
-        - name: AUTH_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: smokey
-              key: auth_username
-        - name: AUTH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: smokey
-              key: auth_password
+              name: smokey-signon-account
+              key: password
         - name: BEARER_TOKEN
           valueFrom:
             secretKeyRef:
