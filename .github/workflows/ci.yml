@@ -46,15 +46,15 @@ jobs:
       - name: Login to Github Packages
         run: echo "${{ github.token }}" | docker login https://ghcr.io -u ${GITHUB_ACTOR} --password-stdin
 
-      - name: Set kubernetes_version var
+      - name: Read Kubernetes version from /kubernetes_version
         id: vars
-        run: "echo ::set-output name=kubernetes_version::$(cat .kubernetes_version)"
+        run: "grep KUBERNETES_VERSION kubernetes_version >> $GITHUB_ENV"
 
       - name: kubeconform
         uses: docker://ghcr.io/yannh/kubeconform:v0.4.13
         with:
           entrypoint: '/kubeconform'
-          args: '-kubernetes-version ${{ steps.vars.outputs.kubernetes_version }}
+          args: '-kubernetes-version ${{ env.KUBERNETES_VERSION }}
           -schema-location default
           -schema-location "./schemas/{{ .ResourceKind }}_{{ .ResourceAPIVersion }}.json"
           -summary
