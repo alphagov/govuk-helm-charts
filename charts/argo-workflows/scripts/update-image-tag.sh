@@ -13,11 +13,14 @@ gh repo clone alphagov/govuk-helm-charts -- --depth 1 --branch main
 
 cd "govuk-helm-charts" || exit 1
 
+# Exit successfully if image tag already set
+if [[ $(<"${FILE}") = "${IMAGE_TAG}" ]]; then
+  echo "Image tag already set as ${IMAGE_TAG}"
 # Relies on the assumption the IMAGE_TAG is a commit SHA
-if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ] || [ "${MANUAL_DEPLOY}" = true ]; then
+elif [[ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]] || [[ "${MANUAL_DEPLOY}" = true ]]; then
   git checkout -b "${BRANCH}"
 
-  echo "${IMAGE_TAG}" > "${FILE}"
+  echo "${IMAGE_TAG}" >"${FILE}"
 
   git add "${FILE}"
   git commit -m "Update ${REPO_NAME} image tag to ${IMAGE_TAG} for ${ENVIRONMENT}"
@@ -29,5 +32,4 @@ if [ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ] || [ "${MANUAL_DEPLOY}" = true ]; th
   echo "Done!"
 else
   echo "Image tag not updated for ${ENVIRONMENT}: image tag not the latest commit on main."
-  exit 0
 fi
