@@ -185,7 +185,7 @@ data:
 
           # Licensify sends custom 500 errors, and we need to send No-Fallback: true
           # to prevent the CDN from falling back to the mirror site.
-          # FIXME: Put this in the Licensify nginx config when
+          # TODO: Put this in the Licensify nginx config when
           # we have it running on EKS
           add_header No-Fallback true always;
         }
