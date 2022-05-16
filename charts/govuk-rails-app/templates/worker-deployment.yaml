@@ -50,4 +50,5 @@ spec:
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
+      revisionHistoryLimit: 5
 {{- end }}
