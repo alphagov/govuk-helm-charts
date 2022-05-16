@@ -87,6 +87,10 @@ data:
         add_header Strict-Transport-Security $sts_default;
         proxy_set_header GOVUK-Request-Id $govuk_request_id;
 
+        # Hide some internal headers
+        proxy_hide_header X-Rack-Cache;
+        proxy_hide_header X-Runtime;
+
         {{- if ne .Values.govukEnvironment "production" -}}
         add_header X-Robots-Tag "noindex";
         {{- end -}}
@@ -178,6 +182,12 @@ data:
           # where civica QueryPayments calls are taking too long.
           proxy_read_timeout 50s;
           proxy_pass http://router;
+
+          # Licensify sends custom 500 errors, and we need to send No-Fallback: true
+          # to prevent the CDN from falling back to the mirror site.
+          # TODO: Put this in the Licensify nginx config when
+          # we have it running on EKS
+          add_header No-Fallback true always;
         }
 
         # Error pages
