@@ -113,6 +113,8 @@ spec:
           name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
       - name: tmp
         emptyDir: {}
+      revisionHistoryLimit: 5
       {{- with .Values.nginxExtraVolumes }}
       {{ . | toYaml | trim | nindent 6 }}
       {{- end }}
+      revisionHistoryLimit: 5
