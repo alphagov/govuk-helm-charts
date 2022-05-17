@@ -65,12 +65,12 @@ govukApplications:
       - name: AWS_ACCESS_KEY
         valueFrom:
           secretKeyRef:
-            name: asset-manager-aws-access-key
+            name: asset-manager-s3
             key: AWS_ACCESS_KEY
       - name: AWS_SECRET_KEY
         valueFrom:
           secretKeyRef:
-            name: asset-manager-aws-secret-key
+            name: asset-manager-s3
             key: AWS_SECRET_KEY
       - name: AWS_REGION
         value: eu-west-1

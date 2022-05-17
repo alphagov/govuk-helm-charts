@@ -2,19 +2,22 @@
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
-  name: publisher-notify
+  name: asset-manager-s3
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      The GOV.UK Notify API key belonging to Publisher.
+      TODO: use an IAM policy attached to the node instance profile role or
+      IRSA instead of long-lived credentials. AWS access key ID and secret for
+      Asset Manager to read/write the govuk-assets-$env S3 bucket. Fields are
+      AWS_ACCESS_KEY and AWS_SECRET_KEY.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
     name: aws-secretsmanager
     kind: ClusterSecretStore
   target:
-    name: publisher-notify
+    name: asset-manager-s3
   dataFrom:
-    - key: govuk/publisher/notify
+    - key: govuk/asset-manager/s3
 {{- end }}

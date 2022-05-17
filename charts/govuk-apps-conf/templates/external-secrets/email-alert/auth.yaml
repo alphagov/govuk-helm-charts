@@ -6,7 +6,9 @@ metadata:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-       Token used to validate messages in email-alert-frontend/api
+      Symmetric key used for encrypting and decrypting messages shared
+      between email-alert-frontend and email-alert-api. Field name is
+      EMAIL_ALERT_AUTH_TOKEN.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
