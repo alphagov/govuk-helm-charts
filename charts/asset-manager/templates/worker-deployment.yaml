@@ -9,6 +9,7 @@ metadata:
     app: {{ .Release.Name }}-worker
 spec:
   replicas: {{ .Values.workerReplicas }}
+  revisionHistoryLimit: 5
   selector:
     matchLabels:
       app: {{ .Release.Name }}-worker
@@ -75,5 +76,4 @@ spec:
           path: /
       - name: clam-virus-db
         emptyDir: {}
-      revisionHistoryLimit: 5
 {{- end }}

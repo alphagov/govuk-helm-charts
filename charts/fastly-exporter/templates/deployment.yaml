@@ -6,6 +6,7 @@ metadata:
     {{- include "fastly-exporter.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 5
   selector:
     matchLabels:
       {{- include "fastly-exporter.selectorLabels" . | nindent 6 }}
@@ -64,4 +65,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      revisionHistoryLimit: 5

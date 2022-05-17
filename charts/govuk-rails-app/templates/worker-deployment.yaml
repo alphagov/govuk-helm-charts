@@ -9,6 +9,7 @@ metadata:
     app: {{ .Release.Name }}-worker
 spec:
   replicas: {{ .Values.workerReplicas }}
+  revisionHistoryLimit: 5
   selector:
     matchLabels:
       app: {{ .Release.Name }}-worker
@@ -50,5 +51,4 @@ spec:
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
-      revisionHistoryLimit: 5
 {{- end }}

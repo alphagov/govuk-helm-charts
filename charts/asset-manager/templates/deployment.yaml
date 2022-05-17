@@ -6,6 +6,7 @@ metadata:
     app: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 5
   selector:
     matchLabels:
       app: {{ .Release.Name }}
@@ -110,4 +111,3 @@ spec:
         nfs:
           server: {{ .Values.nfsServer }}
           path: /
-      revisionHistoryLimit: 5
