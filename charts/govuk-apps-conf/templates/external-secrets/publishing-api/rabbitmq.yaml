@@ -1,3 +1,4 @@
+{{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
@@ -16,3 +17,4 @@ spec:
     name: publishing-api-rabbitmq
   dataFrom:
     - key: govuk/common/rabbitmq-govuk
+{{- end }}

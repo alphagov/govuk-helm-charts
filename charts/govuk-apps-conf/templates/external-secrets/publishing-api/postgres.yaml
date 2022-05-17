@@ -1,3 +1,4 @@
+{{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
 apiVersion: external-secrets.io/v1alpha1
 kind: ExternalSecret
 metadata:
@@ -19,3 +20,4 @@ spec:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/publishing_api_production'
   dataFrom:
     - key: govuk/publishing-api/postgres
+{{- end }}
