@@ -16,6 +16,7 @@ spec:
         {{- include "govuk-rails-app.labels" . | nindent 8 }}
         app: {{ .Release.Name }}
     spec:
+      automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       containers:
