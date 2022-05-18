@@ -12,10 +12,14 @@ spec:
   template:
     spec:
       securityContext:
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
       containers:
         - name: upload-static-error-pages
-          image: public.ecr.aws/bitnami/aws-cli
+          image: public.ecr.aws/bitnami/aws-cli:2
+          securityContext:
+            allowPrivilegeEscalation: false
           env:
             - name: GOVUK_ENVIRONMENT
               value: {{ .Values.govukEnvironment }}
