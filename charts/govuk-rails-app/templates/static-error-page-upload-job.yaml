@@ -1,13 +1,13 @@
-{{- /*
-To debug this template, run `helm template . --name-template=static`.
-*/}}
-{{- if eq .Release.Name "static" }}
+{{- if or .Values.uploadStaticErrorPagesEnabled (eq .Release.Name "static") }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: upload-static-error-pages
+  name: {{ .Release.Name }}-upload-error-pages
   annotations:
     argocd.argoproj.io/hook: PostSync
+    kubernetes.io/description: >
+      Fetch "static" error pages from the Static service and upload them to S3.
+      ArgoCD runs this job after each deployment of the Static app.
 spec:
   template:
     spec:
@@ -19,6 +19,8 @@ spec:
           env:
             - name: GOVUK_ENVIRONMENT
               value: {{ .Values.govukEnvironment }}
+            - name: SERVICE
+              value: {{ .Release.Name }}
           command:
             - "/bin/sh"
             - "-c"
