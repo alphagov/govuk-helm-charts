@@ -302,12 +302,10 @@
       }
     }
   ],
-  "refresh": "",
+  "refresh": "10s",
   "schemaVersion": 35,
   "style": "dark",
-  "tags": [
-    "demo"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
