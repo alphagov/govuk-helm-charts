@@ -20,7 +20,6 @@ spec:
         app.kubernetes.io/component: worker
         app: {{ .Release.Name }}-worker
     spec:
-      automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       containers:
