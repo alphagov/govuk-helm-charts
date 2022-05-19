@@ -8,7 +8,7 @@ govukApplications:
   chartPath: charts/argo-workflows
   postSyncWorkflowEnabled: "false"
   helmValues:
-    nextEnvironment: staging
+    nextEnvironment: production
 - name: collections
   helmValues:
     extraEnv:
