@@ -3,4 +3,4 @@ argocdUrl:
 workflowsNamespace: apps
 rbacTeams:
   read_only: alphagov:gov-uk
-  read_write: alphagov:gov-uk-production
+  read_write: alphagov:gov-uk-production-deploy
