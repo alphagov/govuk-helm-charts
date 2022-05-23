@@ -25,6 +25,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
+            - name: metrics
+              containerPort: {{ .Values.metricsPort }}
           envFrom:
           - configMapRef:
               name: govuk-apps-env
