@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    app: {{ .Release.Name }}
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/name: prometheus-operator
+    app.kubernetes.io/part-of: kube-prometheus
+  name: {{ .Release.Name }}
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  namespaceSelector: 
+    matchNames: 
+    - apps
+  podMetricsEndpoints:
+  - port: metrics

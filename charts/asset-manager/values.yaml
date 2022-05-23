@@ -73,3 +73,5 @@ dnsConfig: {}
 # extraEnv:
 #  - name: RETICULATE_SPLINES
 #    value: "true"
+
+metricsPort: 9394
