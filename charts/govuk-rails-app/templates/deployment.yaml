@@ -20,7 +20,7 @@ spec:
       securityContext:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       containers:
-        - name: {{ .Release.Name }}
+        - name: app
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           ports:
@@ -69,7 +69,7 @@ spec:
             runAsUser: 1001
             runAsGroup: 1001
           {{- end }}
-        - name: {{ .Release.Name }}-nginx
+        - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
           ports:
