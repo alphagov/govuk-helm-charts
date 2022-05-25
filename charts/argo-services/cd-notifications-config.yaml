@@ -13,6 +13,9 @@ service.webhook.slack_webhook: |
   - name: "Content-Type"
     value: "application/json"
   url: "$slack_url"
+service.grafana: |
+  apiUrl: http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local/api
+  apiKey: $grafana_api_key
 template.send-argo-events-webhook: |
   webhook:
     argo_events:
@@ -53,6 +56,13 @@ template.send-slack: |
           }]
         }
       method: "POST"
+template.send-grafana: |
+  message: |
+    "Application {{.app.metadata.name}} is now running new version of deployments manifests. Revision: {{.app.status.sync.revision}}"
+trigger.deployment: |
+  - oncePer: "app.status.operationState.syncResult.revision"
+    send: ["send-grafana"]
+    when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'"
 trigger.on-deployed: |
   - send: ["send-argo-events-webhook"]
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status

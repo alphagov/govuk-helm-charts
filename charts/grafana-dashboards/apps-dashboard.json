@@ -8,14 +8,16 @@
           "uid": "grafana"
         },
         "enable": true,
-        "hide": true,
+        "hide": false,
         "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
+        "name": "Deployments",
         "target": {
           "limit": 100,
           "matchAny": false,
-          "tags": [],
-          "type": "dashboard"
+          "tags": [
+            "$app", "deployment"
+          ],
+          "type": "tags"
         },
         "type": "dashboard"
       }
@@ -25,8 +27,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 37,
-  "iteration": 1652709705140,
+  "iteration": 1653320477417,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -425,6 +426,6 @@
   "timezone": "browser",
   "title": "App: request rates, errors, durations",
   "uid": "000000109",
-  "version": 41,
+  "version": 42,
   "weekStart": ""
 }

@@ -15,6 +15,7 @@ metadata:
     repoName: "{{ $reponame }}"
     imageTag: "{{ $imageTag }}"
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
+    notifications.argoproj.io/subscribe.deployment.grafana: "deployment|{{ .name }}"
     postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
 spec:
   project: govuk
