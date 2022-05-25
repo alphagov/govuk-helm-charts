@@ -28,27 +28,27 @@ spec:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
       restartPolicy: Never
       containers:
-      - name: {{ $jobName }}
-        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-        command: ["bundle"]
-        args: ["exec", "rails", "db:migrate"]
-        envFrom:
+        - name: {{ $jobName }}
+          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          command: ["bundle"]
+          args: ["exec", "rails", "db:migrate"]
+          envFrom:
           - configMapRef:
-              name: govuk-apps-env
-        env:
-          - name: SENTRY_RELEASE
-            value: "{{ .Values.appImage.tag }}"
-        {{- with .Values.extraEnv }}
-          {{- . | toYaml | trim | nindent 12 }}
-        {{- end }}
-        {{- with .Values.appResources }}
-        resources:
-          {{- . | toYaml | trim | nindent 12 }}
-        {{- end }}
-        {{- if .Values.securityContext.appContainer }}
-        securityContext:
-          allowPrivilegeEscalation: false
-          runAsUser: 1001
-          runAsGroup: 1001
-        {{- end }}
+            name: govuk-apps-env
+          env:
+            - name: SENTRY_RELEASE
+              value: "{{ .Values.appImage.tag }}"
+          {{- with .Values.extraEnv }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          {{- if .Values.securityContext.appContainer }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
+          {{- end }}
 {{- end }}
