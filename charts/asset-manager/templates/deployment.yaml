@@ -17,7 +17,7 @@ spec:
         app: {{ .Release.Name }}
     spec:
       containers:
-        - name: {{ .Release.Name }}
+        - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           volumeMounts:
             - name: {{ .Release.Name }}-asset-uploads-efs
@@ -66,7 +66,7 @@ spec:
             allowPrivilegeEscalation: false
             runAsUser: 1001
             runAsGroup: 1001
-        - name: {{ .Release.Name }}-nginx
+        - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
             - name: http

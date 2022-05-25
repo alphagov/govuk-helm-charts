@@ -50,7 +50,7 @@ spec:
             runAsGroup: 1001
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
-        - name: clamdb
+        - name: freshclam
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           command: ["/bin/sh"]
           args: ["-c", "freshclam -d --stdout --foreground"]
