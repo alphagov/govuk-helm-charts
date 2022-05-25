@@ -36,6 +36,8 @@ spec:
           - configMapRef:
               name: govuk-apps-env
         env:
+          - name: SENTRY_RELEASE
+            value: "{{ .Values.appImage.tag }}"
         {{- with .Values.extraEnv }}
           {{- . | toYaml | trim | nindent 12 }}
         {{- end }}
