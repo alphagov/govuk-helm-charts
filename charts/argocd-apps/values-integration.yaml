@@ -627,7 +627,6 @@ govukApplications:
       enabled: false
     workerEnabled: true
     workerReplicaCount: 1
-    appProbes: {}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
