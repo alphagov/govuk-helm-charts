@@ -7,7 +7,7 @@ metadata:
     app.kubernetes.io/name: prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus
   name: {{ .Release.Name }}
-  namespace: monitoring
+  namespace: apps
 spec:
   selector:
     matchLabels:
