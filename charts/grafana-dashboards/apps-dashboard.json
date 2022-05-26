@@ -15,7 +15,8 @@
           "limit": 100,
           "matchAny": false,
           "tags": [
-            "$app", "deployment"
+            "$app",
+            "deployment"
           ],
           "type": "tags"
         },
@@ -27,7 +28,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "iteration": 1653320477417,
+  "iteration": 1653573951592,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -38,6 +39,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -65,7 +70,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.5",
+      "pluginVersion": "8.5.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -80,7 +85,7 @@
             "uid": "prometheus"
           },
           "exemplar": true,
-          "expr": "sum(rate(http_requests_total{container=\"${app}\"}[1m]))",
+          "expr": "sum(rate(http_requests_total{job=\"${namespace}/${app}\"}[1m]))",
           "interval": "",
           "legendFormat": "${app}",
           "refId": "A",
@@ -129,6 +134,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "description": "HTTP Request Errors",
       "fill": 0,
       "fillGradient": 0,
@@ -157,7 +166,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.5",
+      "pluginVersion": "8.5.0",
       "pointradius": 1,
       "points": true,
       "renderer": "flot",
@@ -172,7 +181,7 @@
             "uid": "prometheus"
           },
           "exemplar": true,
-          "expr": "sum(rate(http_requests_total{container=\"${app}\", status=~\"${error_status}\"}[1m])) or vector(0)",
+          "expr": "sum(rate(http_requests_total{job=\"${namespace}/${app}\", status=~\"${error_status}\"}[1m])) or vector(0)",
           "interval": "",
           "legendFormat": "${app}",
           "refId": "A",
@@ -219,6 +228,10 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "description": "Time in Millisecond to process a request",
       "fill": 1,
       "fillGradient": 0,
@@ -247,7 +260,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.5",
+      "pluginVersion": "8.5.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -262,7 +275,7 @@
             "uid": "prometheus"
           },
           "exemplar": true,
-          "expr": "avg(http_request_duration_seconds{container=\"${app}\",quantile=~\"${quantile}\"}) BY (quantile)",
+          "expr": "avg(http_request_duration_seconds{job=\"${namespace}/${app}\",quantile=~\"${quantile}\"}) BY (quantile)",
           "instant": false,
           "interval": "",
           "legendFormat": "{{quantile}} quantile $app",
@@ -304,35 +317,28 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 35,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "hide": 2,
-        "name": "namespace",
-        "query": "apps",
-        "skipUrlSync": false,
-        "type": "constant"
-      },
-      {
         "current": {
           "selected": false,
-          "text": "government-frontend",
-          "value": "government-frontend"
+          "text": "apps",
+          "value": "apps"
         },
-        "definition": "label_values(http_request_duration_seconds, container)",
+        "definition": "label_values(http_requests_total,namespace)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
-        "name": "app",
+        "name": "namespace",
         "options": [],
         "query": {
-          "query": "label_values(http_request_duration_seconds, container)",
+          "query": "label_values(http_requests_total,namespace)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 2,
+        "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -340,15 +346,41 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "0.9"
-          ],
-          "value": [
-            "0.9"
-          ]
+          "selected": false,
+          "text": "government-frontend",
+          "value": "government-frontend"
         },
-        "definition": "label_values(http_request_duration_seconds{container=\"${app}\"}, quantile)",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(http_request_duration_seconds{namespace=\"${namespace}\"}, job)",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "app",
+        "options": [],
+        "query": {
+          "query": "label_values(http_request_duration_seconds{namespace=\"${namespace}\"}, job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": ".*/(.*)",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(http_request_duration_seconds{job=\"${namespace}/${app}\"}, quantile)",
         "hide": 0,
         "includeAll": true,
         "label": "quantile",
@@ -356,7 +388,7 @@
         "name": "quantile",
         "options": [],
         "query": {
-          "query": "label_values(http_request_duration_seconds{container=\"${app}\"}, quantile)",
+          "query": "label_values(http_request_duration_seconds{job=\"${namespace}/${app}\"}, quantile)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -375,7 +407,11 @@
             "$__all"
           ]
         },
-        "definition": "label_values(http_requests_total{container=\"${app}\"}, status)",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(http_requests_total{job=\"${namespace}/${app}\"}, status)",
         "description": "HTTP error status",
         "hide": 0,
         "includeAll": true,
@@ -384,7 +420,7 @@
         "name": "error_status",
         "options": [],
         "query": {
-          "query": "label_values(http_requests_total{container=\"${app}\"}, status)",
+          "query": "label_values(http_requests_total{job=\"${namespace}/${app}\"}, status)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -426,6 +462,6 @@
   "timezone": "browser",
   "title": "App: request rates, errors, durations",
   "uid": "000000109",
-  "version": 42,
+  "version": 43,
   "weekStart": ""
 }
