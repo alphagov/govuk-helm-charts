@@ -77,9 +77,9 @@ data:
         add_header Permissions-Policy interest-cohort=();
         proxy_set_header GOVUK-Request-Id $govuk_request_id;
 
-        {{- if ne .Values.govukEnvironment "production" -}}
+        {{- if ( or (ne .Values.govukEnvironment "production") (eq .Values.nginxDenyCrawlers true ) ) }}
         add_header X-Robots-Tag "noindex";
-        {{- end -}}
+        {{- end }}
 
         location / {
           proxy_set_header   Host $http_host;

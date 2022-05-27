@@ -203,6 +203,9 @@ govukApplications:
           port: 3001
         failureThreshold: 2
         periodSeconds: 5
+    nginxConfigMap:
+      create: false
+      name: draft-router-nginx-conf
     extraEnv:
       - name: ROUTER_PUBADDR
         value: ":3000"
@@ -730,7 +733,7 @@ govukApplications:
       - www-origin.eks.integration.govuk.digital
     nginxConfigMap:
       create: false
-      name: router-nginx-conf
+      name: live-router-nginx-conf
     nginxExtraVolumeMounts:
       - name: router-nginx-conf
         mountPath: /usr/share/nginx/html/robots.txt
@@ -983,6 +986,7 @@ govukApplications:
     dbMigrationEnabled: true
     workerEnabled: true
     uploadAssets: *whitehall-upload-assets
+    nginxDenyCrawlers: true
     ingress:
       enabled: true
       annotations:
