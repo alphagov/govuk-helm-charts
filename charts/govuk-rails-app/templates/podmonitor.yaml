@@ -1,12 +1,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  labels:
-    app: {{ .Release.Name }}
-    app.kubernetes.io/component: controller
-    app.kubernetes.io/name: prometheus-operator
-    app.kubernetes.io/part-of: kube-prometheus
   name: {{ .Release.Name }}
+  labels:
+    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    app: {{ .Release.Name }}
 spec:
   selector:
     matchLabels:
