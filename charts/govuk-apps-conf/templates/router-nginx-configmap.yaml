@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: router-nginx-conf-draft
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+data:
+  nginx.conf: |-
+    {{- include "govuk-apps-conf.router-nginx-config" ( mergeOverwrite . ( dict "Stack" "draft" ) ) | nindent 4 }}
+  robots.txt: |-
+      User-agent: *
+      Disallow: /
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: router-nginx-conf-live
+  labels:
+    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+data:
+  nginx.conf: |-
+    {{- include "govuk-apps-conf.router-nginx-config" ( mergeOverwrite . ( dict "Stack" "live" ) ) | nindent 4 }}
+  robots.txt: |-
+    {{- if eq .Values.govukEnvironment "production" }}
+      {{- $.Files.Get "www-production-robots.txt" | nindent 4 }}
+    {{- else }}
+      User-agent: *
+      Disallow: /
+    {{- end }}

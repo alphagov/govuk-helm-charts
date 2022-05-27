@@ -49,6 +49,7 @@ nginxConfigMap:
   create: true
 nginxExtraVolumeMounts: []
 nginxExtraVolumes: []
+nginxDenyCrawlers: false
 
 appResources:
   limits:
