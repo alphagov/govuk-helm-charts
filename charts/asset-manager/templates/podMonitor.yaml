@@ -7,13 +7,9 @@ metadata:
     app.kubernetes.io/name: prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus
   name: {{ .Release.Name }}
-  namespace: monitoring
 spec:
   selector:
     matchLabels:
       app: {{ .Release.Name }}
-  namespaceSelector: 
-    matchNames: 
-    - apps
   podMetricsEndpoints:
   - port: metrics
