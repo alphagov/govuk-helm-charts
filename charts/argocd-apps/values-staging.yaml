@@ -273,7 +273,7 @@ govukApplications:
       - www-origin.eks.staging.govuk.digital
     nginxConfigMap:
       create: false
-      name: router-nginx-conf-live
+      name: live-router-nginx-conf
     nginxExtraVolumeMounts:
       - name: router-nginx-conf
         mountPath: /usr/share/nginx/html/robots.txt

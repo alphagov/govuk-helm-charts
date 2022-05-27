@@ -205,7 +205,7 @@ govukApplications:
         periodSeconds: 5
     nginxConfigMap:
       create: false
-      name: router-nginx-conf-draft
+      name: draft-router-nginx-conf
     extraEnv:
       - name: ROUTER_PUBADDR
         value: ":3000"
@@ -733,7 +733,7 @@ govukApplications:
       - www-origin.eks.integration.govuk.digital
     nginxConfigMap:
       create: false
-      name: router-nginx-conf-live
+      name: live-router-nginx-conf
     nginxExtraVolumeMounts:
       - name: router-nginx-conf
         mountPath: /usr/share/nginx/html/robots.txt

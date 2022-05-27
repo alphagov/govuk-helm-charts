@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: router-nginx-conf-draft
+  name: draft-router-nginx-conf
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
@@ -15,7 +15,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: router-nginx-conf-live
+  name: live-router-nginx-conf
   labels:
     {{- include "govuk-apps-conf.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
