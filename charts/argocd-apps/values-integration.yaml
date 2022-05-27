@@ -735,7 +735,7 @@ govukApplications:
       create: false
       name: live-router-nginx-conf
     nginxExtraVolumeMounts:
-      - name: router-nginx-conf
+      - name: live-router-nginx-conf
         mountPath: /usr/share/nginx/html/robots.txt
         subPath: robots.txt
       - name: router-nginx-htpasswd
