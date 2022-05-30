@@ -282,7 +282,7 @@ govukApplications:
       startupProbe: &router-probe
         httpGet:
           path: /healthcheck
-          port: 3001
+          port: 9394
         failureThreshold: 10
         periodSeconds: 1
         timeoutSeconds: 1
@@ -294,14 +294,14 @@ govukApplications:
         <<: *router-probe
         httpGet:
           path: /healthcheck
-          port: 3001
+          port: 9394
         failureThreshold: 2
         periodSeconds: 5
     extraEnv:
       - name: ROUTER_PUBADDR
         value: ":3000"
       - name: ROUTER_APIADDR
-        value: ":3001"
+        value: ":9394"
       - name: ROUTER_MONGO_URL
         value: &router_mongo_hosts "\
           router-backend-1,\
