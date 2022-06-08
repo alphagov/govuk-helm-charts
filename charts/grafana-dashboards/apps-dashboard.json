@@ -85,11 +85,10 @@
             "uid": "prometheus"
           },
           "exemplar": true,
-          "expr": "sum(rate(http_requests_total{job=\"${namespace}/${app}\"}[1m]))",
+          "expr": "sum(rate(http_requests_total{job=\"${namespace}/${app}\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "${app}",
-          "refId": "A",
-          "target": "alias(scaleToSeconds(apps.backend.backend_01.counters.requests.count, 1), 'Requests/s')"
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -181,11 +180,10 @@
             "uid": "prometheus"
           },
           "exemplar": true,
-          "expr": "sum(rate(http_requests_total{job=\"${namespace}/${app}\", status=~\"${error_status}\"}[1m])) or vector(0)",
+          "expr": "sum(rate(http_requests_total{job=\"${namespace}/${app}\", status=~\"${error_status}\"}[$__rate_interval])) or vector(0)",
           "interval": "",
           "legendFormat": "${app}",
-          "refId": "A",
-          "target": "aliasByNode(apps.fakesite.web_server_01.counters.request_status.{code_500,code_400}.count, 5)"
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -338,7 +336,7 @@
           "query": "label_values(http_requests_total,namespace)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -462,6 +460,6 @@
   "timezone": "browser",
   "title": "App: request rates, errors, durations",
   "uid": "000000109",
-  "version": 43,
+  "version": 44,
   "weekStart": ""
 }
