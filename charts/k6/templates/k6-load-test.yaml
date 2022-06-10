@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: k6-load-test
+spec:
+  entrypoint: k6-load-test
+  templates:
+    - name: k6-load-test
+      container:
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        command:
+          - "k6 run --vus 10 --duration 30s "
+          - |
+            {{- .Files.Get "script.js" | nindent 14 }}
