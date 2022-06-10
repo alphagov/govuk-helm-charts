@@ -32,7 +32,7 @@ data:
 
       sendfile        on;
       keepalive_timeout  65;
-      
+
       upstream {{ .Release.Name }} {
         server 127.0.0.1:{{ .Values.appPort }};
       }
@@ -55,7 +55,7 @@ data:
         '$gzip_ratio $sent_http_x_cache $sent_http_location $http_host '
         '$ssl_protocol $ssl_cipher '
         '$http_x_forwarded_for';
-    
+
       log_format json_event '{ "@timestamp": "$time_iso8601", '
                            '"remote_addr": "$remote_addr", '
                            '"remote_user": "$remote_user", '
@@ -110,6 +110,7 @@ data:
         add_header Strict-Transport-Security $sts_default;
 
         add_header Permissions-Policy interest-cohort=();
+        add_header X-Content-Type-Options "nosniff" always;
 
         listen {{ .Values.nginxPort }};
 

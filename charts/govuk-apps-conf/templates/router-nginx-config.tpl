@@ -87,6 +87,7 @@ http {
     {{- end }}
 
     add_header Permissions-Policy interest-cohort=();
+    add_header X-Content-Type-Options "nosniff" always;
 
     {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
     auth_basic "Enter the GOV.UK username/password (not your personal username/password)";
