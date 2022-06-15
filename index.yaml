@@ -908,6 +908,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.0/ingress-class-0.1.0.tgz
     version: 0.1.0
+  prometheus-rules:
+  - apiVersion: v2
+    created: "2022-06-15T10:56:55.165033997Z"
+    description: A Helm chart for Prometheus rules
+    digest: 25ffff30cfe9bcd28956271c35d747b206596fd5d5a41c4fca450071448ab374
+    name: prometheus-rules
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/prometheus-rules-0.1.0/prometheus-rules-0.1.0.tgz
+    version: 0.1.0
   publisher:
   - apiVersion: v2
     created: "2022-02-03T16:05:04.417523605Z"
@@ -1329,4 +1339,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-05-19T10:57:19.596979541Z"
+generated: "2022-06-15T10:56:55.165558304Z"
