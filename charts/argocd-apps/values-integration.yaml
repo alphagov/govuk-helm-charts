@@ -720,6 +720,7 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: router
   helmValues:
+    alertEnabled: true
     uploadAssets:
       enabled: false
     dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.

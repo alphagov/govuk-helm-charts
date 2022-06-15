@@ -1,0 +1,12 @@
+{{- if .Values.alertEnabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Release.Name }}-rules
+  namespace: monitoring
+spec:
+  groups: 
+    - name: CoreAlerts
+      rules:
+      {{ .Values.rules | nindent 6 }}
+{{- end }}
