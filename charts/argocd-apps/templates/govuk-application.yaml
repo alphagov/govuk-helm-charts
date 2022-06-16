@@ -33,11 +33,10 @@ spec:
           tag: {{ $imageTag }}
         rules: |
             {{- $filename := (printf "rules/%s-alerts.yaml" "router" ) -}}
-            {{ $filename }}
             # {{- $alerts := (regexSplit "\n" ($.Files.Get $filename) -1) -}}
             # {{ $alerts }}
-            # {{- range $i, $v := slice $alerts 3 }}
-            # {{ $v }}{{- end }}
+            # {#{- range $i, $v := slice $alerts 3 }}
+            # {#{ $v }}{#{- end }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
