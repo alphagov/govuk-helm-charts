@@ -4,6 +4,10 @@ kind: PrometheusRule
 metadata:
   name: {{ .Release.Name }}-rules
   namespace: monitoring
+  labels:
+    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    release: prometheus
+    app: {{ .Release.Name }}
 spec:
   groups: 
     - name: CoreAlerts
