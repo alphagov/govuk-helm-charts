@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: govuk-rules
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  groups: 
+    - name: CoreAlerts
+      rules:
+      {{- range $path, $_ :=  .Files.Glob  "rules/*/alerts.yaml" }}
+        {{- $alerts := (splitList "\n" ($.Files.Get $path)) -}}
+        {{- range $i, $v := $alerts }}
+        {{ if gt $i 2 }}{{ $v }}{{- end }}{{- end }}
+      {{ end }}

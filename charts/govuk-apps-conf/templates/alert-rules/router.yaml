@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: router-alert-rules
+  namespace: monitoring
+  labels:
+    release: prometheus
+    app: router
+spec:
+  {{- $.Files.Get "rules/router/alerts.yaml" | nindent 2}}
+  
