@@ -97,6 +97,9 @@ uploadAssets:
 
 metricsPort: 9394
 
+alertEnabled: false
+rules: ""
+
 securityContext:
   runAsNonRoot: true
   appContainer: true

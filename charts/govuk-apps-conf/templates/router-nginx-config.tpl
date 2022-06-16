@@ -93,7 +93,18 @@ http {
     auth_basic_user_file /etc/nginx/htpasswd/htpasswd;
     {{- end }}
 
+    # Strip cookies headers for all requests by default
     location / {
+      proxy_pass         http://router;
+      proxy_redirect     off;
+      proxy_hide_header  Set-Cookie;
+      proxy_set_header   Cookie '';
+    }
+
+    # Allow cookie headers to pass for services that require them
+    # Requests for these services will use this location as nginx will select the most
+    # specific location directive for a given request
+    location ~* ^/(?!apply-for-a-licence|email|brexit-eu-funding|find-coronavirus-support) {
       proxy_pass         http://router;
       proxy_redirect     off;
     }

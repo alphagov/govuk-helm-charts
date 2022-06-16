@@ -31,6 +31,11 @@ spec:
         appImage:
           repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}
           tag: {{ $imageTag }}
+        rules: |
+            {{- $filename := (printf "rules/%s-alerts.yaml" $reponame ) -}}
+            {{- $alerts := (splitList "\n" ($.Files.Get $filename)) -}}
+            {{- range $i, $v := $alerts }}
+            {{ if gt $i 2 }}{{ $v }}{{- end }}{{- end }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
