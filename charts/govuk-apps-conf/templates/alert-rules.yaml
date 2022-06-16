@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Release.Name }}-rules
+  namespace: monitoring
+spec:
+  groups: 
+    - name: CoreAlerts
+      rules:
+            {{ $currentScope := .}}
+            {{ range $path, $_ :=  .Files.Glob  "templates/alert-rules/router/alerts.yaml" }}
+            {{- with $currentScope}}
+            {{- $alerts := (splitList "\n" ($.Files.Get $path)) -}}
+            {{- range $i, $v := $alerts }}
+            {{ if gt $i 2 }}{{ $v }}{{- end }}{{- end }}
+            {{- end }}
+{{ end }}
