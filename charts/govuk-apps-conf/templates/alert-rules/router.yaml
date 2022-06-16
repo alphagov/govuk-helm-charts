@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: router-alert-rules
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  groups: 
+    - name: CoreAlerts
+      rules:
+      {{- $alerts := (splitList "\n" ($.Files.Get "rules/router/alerts.yaml")) -}}
+      {{- range $i, $v := $alerts }}
+      {{ if gt $i 2 }}{{ $v }}{{- end }}{{- end }}
