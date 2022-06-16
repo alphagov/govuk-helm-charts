@@ -228,8 +228,6 @@ govukApplications:
         value: "http://draft-frontend"
       - name: BACKEND_URL_government-frontend
         value: "http://draft-government-frontend"
-      - name: BACKEND_URL_service-manual-frontend
-        value: "http://draft-service-manual-frontend"
       - name: BACKEND_URL_smartanswers
         value: "http://draft-smartanswers"
       - name: BACKEND_URL_static
@@ -747,8 +745,6 @@ govukApplications:
         value: "http://frontend"
       - name: BACKEND_URL_government-frontend
         value: "http://government-frontend"
-      - name: BACKEND_URL_service-manual-frontend
-        value: "http://service-manual-frontend"
       - name: BACKEND_URL_smartanswers
         value: "http://smartanswers"
       - name: BACKEND_URL_static
@@ -854,14 +850,6 @@ govukApplications:
         value: govuk-integration-search-ltr-endpoint
       - name: TENSORFLOW_SAGEMAKER_VARIANTS
         value: null  # value is empty
-- name: service-manual-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
 - name: signon
   helmValues:
     dbMigrationEnabled: true

@@ -304,8 +304,6 @@ govukApplications:
         value: "http://frontend"
       - name: BACKEND_URL_government-frontend
         value: "http://government-frontend"
-      - name: BACKEND_URL_service-manual-frontend
-        value: "http://service-manual-frontend"
       - name: BACKEND_URL_smartanswers
         value: "http://smartanswers"
       - name: BACKEND_URL_static
@@ -328,14 +326,6 @@ govukApplications:
         # TODO: switch back to in-cluster search-api once it's fully working (similarly for draft).
       - name: BACKEND_URL_search-api
         value: "https://search-api.staging.govuk-internal.digital"
-- name: service-manual-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
 - name: signon
   helmValues:
     securityContext:
