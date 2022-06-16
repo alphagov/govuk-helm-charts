@@ -200,19 +200,6 @@ govukApplications:
           secretKeyRef:
             name: signon-token-licence-finder-publishing-api-ec2
             key: bearer_token
-- name: manuals-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-manuals-frontend-publishing-api-ec2
-            key: bearer_token
 - name: router
   helmValues:
     uploadAssets:
@@ -317,8 +304,6 @@ govukApplications:
         value: "http://frontend"
       - name: BACKEND_URL_government-frontend
         value: "http://government-frontend"
-      - name: BACKEND_URL_manuals-frontend
-        value: "http://manuals-frontend"
       - name: BACKEND_URL_service-manual-frontend
         value: "http://service-manual-frontend"
       - name: BACKEND_URL_smartanswers

@@ -317,14 +317,6 @@ spec:
                     { "application_slug": "publishing-api-ec2" }
                   ]
                 },
-                "manuals-frontend": {
-                  "name": "Manuals Frontend [EKS]",
-                  "username": "manuals-frontend",
-                  "email": "manuals-frontend@{{ .Values.govukEnvironment }}.{{ .Values.govukDomainExternal }}",
-                  "bearer_tokens": [
-                    { "application_slug": "publishing-api-ec2" }
-                  ]
-                },
                 "publisher": {
                   "name": "Publisher [EKS]",
                   "username": "publisher",
