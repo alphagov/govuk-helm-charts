@@ -8,5 +8,5 @@ spec:
   groups: 
     - name: CoreAlerts
       rules:
-      {{ .Values.alertRules | nindent 6 }}
+      {{ .Values.rules | nindent 6 }}
 {{- end }}
