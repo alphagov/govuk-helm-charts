@@ -7,9 +7,4 @@ metadata:
     release: prometheus
     app: router
 spec:
-  groups: 
-    - name: CoreAlerts
-      rules:
-      {{- $alerts := (splitList "\n" ($.Files.Get "rules/router/alerts.yaml")) -}}
-      {{- range $i, $v := $alerts }}
-      {{ if gt $i 2 }}{{ $v }}{{- end }}{{- end }}
+  {{- $.Files.Get "rules/router/alerts.yaml" | nindent 2}}
