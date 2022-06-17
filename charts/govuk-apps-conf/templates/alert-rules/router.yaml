@@ -5,6 +5,7 @@ metadata:
   namespace: monitoring
   labels:
     release: prometheus
+    app: router
 spec:
   groups: 
     - name: CoreAlerts
