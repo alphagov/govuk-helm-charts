@@ -8,4 +8,3 @@ metadata:
     app: router
 spec:
   {{- $.Files.Get "rules/router/alerts.yaml" | nindent 2}}
-  
