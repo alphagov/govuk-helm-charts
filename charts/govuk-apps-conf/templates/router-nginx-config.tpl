@@ -105,7 +105,7 @@ http {
     # Allow cookie headers to pass for services that require them
     # Requests for these services will use this location as nginx will select the most
     # specific location directive for a given request
-    location ~* ^/(?!apply-for-a-licence|email|brexit-eu-funding|find-coronavirus-support) {
+    location ~* ^/(apply-for-a-licence|email|sign-in\/callback) {
       proxy_pass         http://router;
       proxy_redirect     off;
     }
