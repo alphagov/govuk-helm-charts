@@ -1,0 +1,523 @@
+globalHelmValues:
+  govukEnvironment: production
+  externalDomainSuffix: eks.production.govuk.digital
+  publishingServiceDomainSuffix: publishing.service.gov.uk
+
+govukApplications:
+- name: argo-workflows
+  chartPath: charts/argo-workflows
+  postSyncWorkflowEnabled: "false"
+  # TODO: Handle case where production doesn't promote deployments
+  helmValues:
+    nextEnvironment: ""
+- name: collections
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-collections-email-alert-api-ec2
+            key: bearer_token
+- name: email-alert-frontend
+  helmValues:
+    extraEnv:
+      - name: SUBSCRIPTION_MANAGEMENT_ENABLED
+        # TODO: Check we need to remove this for prod
+        value: "yes"  # non-prod only
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-account-api-ec2
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-email-alert-api-ec2
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-frontend-publishing-api-ec2
+            key: bearer_token
+      - name: EMAIL_ALERT_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-auth
+            key: token
+- name: feedback
+  helmValues:
+    extraEnv:
+      - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
+        value: b5baae45-0a68-4b63-91a1-66b05640d27e 
+      - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
+        value: ceefedd7-3214-4774-8b57-f27c89aac90d
+      - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
+        value: e8b2d8a6-db5f-4346-9fbd-49b16b531e1c
+      - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
+        value: 54168fa9-3946-4860-a2f8-27ddbb14babe
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: SUPPORT_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-feedback-support-ec2
+            key: bearer_token
+      - name: SUPPORT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-feedback-support-api-ec2
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-feedback-publishing-api-ec2
+            key: bearer_token
+      - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: sheet_id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: client_email
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-assisted-digital-google-sheet
+            key: private_key
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: feedback-notify
+            key: GOVUK_NOTIFY_API_KEY
+- name: finder-frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-finder-frontend-email-alert-api-ec2
+            key: bearer_token
+- name: frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-publishing-api-ec2
+            key: bearer_token
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: cb633abc-6ae6-4843-ae6f-82ca500b6de2
+      - name: ELECTIONS_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: key
+      - name: ELECTIONS_API_URL
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: url
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-account-api-ec2
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-email-alert-api-ec2
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-publishing-api-ec2
+            key: bearer_token
+- name: government-frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+- name: govuk-apps-conf
+  chartPath: charts/govuk-apps-conf
+  postSyncWorkflowEnabled: "false"
+- name: licencefinder
+  repoName: licence-finder
+  helmValues:
+    extraEnv:
+      # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
+      # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
+      - name: ELASTICSEARCH_URI
+        value: "https://vpc-blue-elasticsearch6-domain-2hnib7uydv3tgebhabx74gdelq.eu-west-1.es.amazonaws.com"
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          mongo-1.production.govuk-internal.digital,\
+          mongo-2.production.govuk-internal.digital,\
+          mongo-3.production.govuk-internal.digital/licence_finder_production"
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-licence-finder-publishing-api-ec2
+            key: bearer_token
+- name: router
+  helmValues:
+    uploadAssets:
+      enabled: false
+    appResources:
+      limits:
+        cpu: 3
+        memory: 2Gi
+      requests:
+        cpu: 2
+        memory: 1Gi
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - blue.production.govuk-internal.digital
+    ingress:
+      enabled: true
+      annotations:
+        # This is the union of these two lists:
+        # - https://sites.google.com/a/digital.cabinet-office.gov.uk/gds/working-at-the-white-chapel-building/gds-internal-it/gds-internal-it-network-public-ip-addresses
+        # - https://api.fastly.com/public-ip-list
+        # TODO: move this ACL into Terraform by defining a security group in TF
+        # (using the Fastly TF provider to fetch the Fastly netblocks from
+        # their API, plus the GDS netblocks), passing the security group ID
+        # into the chart and associating it with the ALB using the
+        # alb.ingress.kubernetes.io/security-groups annotation.
+        alb.ingress.kubernetes.io/inbound-cidrs: >-
+          213.86.153.211/32,
+          213.86.153.212/32,
+          213.86.153.213/32,
+          213.86.153.214/32,
+          213.86.153.231/32,
+          213.86.153.235/32,
+          213.86.153.236/32,
+          213.86.153.237/32,
+          51.149.8.0/25,
+          51.149.8.128/29,
+          23.235.32.0/20,
+          43.249.72.0/22,
+          103.244.50.0/24,
+          103.245.222.0/23,
+          103.245.224.0/24,
+          104.156.80.0/20,
+          140.248.64.0/18,
+          140.248.128.0/17,
+          146.75.0.0/17,
+          151.101.0.0/16,
+          157.52.64.0/18,
+          167.82.0.0/17,
+          167.82.128.0/20,
+          167.82.160.0/20,
+          167.82.224.0/20,
+          172.111.64.0/18,
+          185.31.16.0/22,
+          199.27.72.0/21,
+          199.232.0.0/16
+        alb.ingress.kubernetes.io/load-balancer-name: www-origin
+      hosts:
+      - www-origin.eks.production.govuk.digital
+    nginxConfigMap:
+      create: false
+      name: live-router-nginx-conf
+    nginxExtraVolumeMounts:
+      - name: live-router-nginx-conf
+        mountPath: /usr/share/nginx/html/robots.txt
+        subPath: robots.txt
+    appProbes: &router-app-probes
+      startupProbe: &router-probe
+        httpGet:
+          path: /healthcheck
+          port: 9394
+        failureThreshold: 10
+        periodSeconds: 1
+        timeoutSeconds: 1
+      livenessProbe:
+        <<: *router-probe
+        failureThreshold: 3
+        periodSeconds: 5
+      readinessProbe:
+        <<: *router-probe
+        httpGet:
+          path: /healthcheck
+          port: 9394
+        failureThreshold: 2
+        periodSeconds: 5
+    extraEnv:
+      - name: ROUTER_PUBADDR
+        value: ":3000"
+      - name: ROUTER_APIADDR
+        value: ":9394"
+      - name: ROUTER_MONGO_URL
+        value: &router_mongo_hosts "\
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3"
+      - name: BACKEND_URL_collections
+        value: "http://collections"
+      - name: BACKEND_URL_content-store
+        value: "http://content-store"
+      - name: BACKEND_URL_email-alert-frontend
+        value: "http://email-alert-frontend"
+      - name: BACKEND_URL_frontend
+        value: "http://frontend"
+      - name: BACKEND_URL_government-frontend
+        value: "http://government-frontend"
+      - name: BACKEND_URL_service-manual-frontend
+        value: "http://service-manual-frontend"
+      - name: BACKEND_URL_smartanswers
+        value: "http://smartanswers"
+      - name: BACKEND_URL_static
+        value: "http://static"
+      - name: BACKEND_URL_whitehall-frontend
+        value: "http://whitehall-frontend"
+        # TODO: switch back to in-cluster account-api once it's fully working (similarly for draft).
+      - name: BACKEND_URL_account-api
+        value: "https://account-api.production.govuk-internal.digital"
+      - name: BACKEND_URL_feedback
+        value: "http://feedback"
+      - name: BACKEND_URL_finder-frontend
+        value: "http://finder-frontend"
+      - name: BACKEND_URL_info-frontend
+        value: "http://info-frontend"
+      - name: BACKEND_URL_licencefinder
+        value: "http://licencefinder"
+      - name: BACKEND_URL_licensify
+        value: "https://licensify.production.govuk-internal.digital"
+        # TODO: switch back to in-cluster search-api once it's fully working (similarly for draft).
+      - name: BACKEND_URL_search-api
+        value: "https://search-api.production.govuk-internal.digital"
+- name: service-manual-frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: signon
+  helmValues:
+    securityContext:
+      runAsNonRoot: false
+      appContainer: false
+    dbMigrationEnabled: false
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: signon
+      hosts:
+      - signon.eks.production.govuk.digital
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: e00e89f5-b622-4dcb-8f30-e6c70231a940
+      - name: INSTANCE_NAME
+        value: production
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: signon-mysql
+            key: DATABASE_URL
+      - name: DEVISE_PEPPER
+        valueFrom:
+          secretKeyRef:
+            name: signon-devise-pepper
+            key: DEVISE_PEPPER
+      - name: DEVISE_SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: signon-devise-secret
+            key: DEVISE_SECRET_KEY
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: SIGNON_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: signon-auth-token
+            key: token
+- name: signon-resources
+  chartPath: charts/signon-resources
+  postSyncWorkflowEnabled: "false"
+- name: info-frontend
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: smartanswers
+  repoName: smart-answers
+  helmValues:
+    securityContext:
+      runAsNonRoot: false
+      appContainer: false
+    extraEnv:
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-smartanswers-link-checker-api-ec2
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-smartanswers-publishing-api-ec2
+            key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: ZENDESK_CLIENT_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: smartanswers-zendesk-client
+            key: username
+      - name: ZENDESK_CLIENT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: smartanswers-zendesk-client
+            key: password
+- name: smokey
+  chartPath: charts/smokey
+- name: static
+  helmValues:
+    securityContext:
+      runAsNonRoot: false
+      appContainer: false
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+      - name: GA_UNIVERSAL_ID
+        value: UA-26179049-1
+      - name: GOVUK_APP_ROOT
+        value: /var/apps/static
+- name: whitehall-frontend
+  repoName: whitehall
+  appResources:
+    limits:
+      memory: 2Gi
+    requests:
+      memory: 1.5Gi
+  helmValues:
+    securityContext:
+      runAsNonRoot: false
+      appContainer: false
+    uploadAssets: &whitehall-upload-assets
+      path: "/app/public/assets/whitehall"
+      s3Directory: "whitehall"
+    extraEnv: &whitehall-envs
+      - name: NODE_ENV  # TODO: move NODE_ENV=production to the Dockerfile
+        value: production
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_secret
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-asset-manager-ec2
+            key: bearer_token
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-link-checker-api-ec2
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-publishing-api-ec2
+            key: bearer_token
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-production-whitehall-csvs
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: e00e89f5-b622-4dcb-8f30-e6c70231a940
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-mysql
+            key: DATABASE_URL
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
