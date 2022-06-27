@@ -2,4 +2,4 @@
 
 - Install Prometheus on your machine - `brew install prometheus`
 
-- Run `promtool test rules test.yml` in this folder.
+- Run `promtool test rules tests.yaml` in the folder containing tests.yaml.

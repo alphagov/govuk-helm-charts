@@ -15,14 +15,14 @@ tests:
       # Unit test for alerting rules.
       alert_rule_test:
           - eval_time: 11m
-            alertname: RouterBackendHandlerResponseErrorRate
+            alertname: RouterBackendHandlerResponse5xxErrorRate
             exp_alerts:
                 # This alert will trigger when the apps/router error ratio is >0.1 for more than 10 minutes.
                 - exp_labels:
                       severity: critical
                   exp_annotations:
-                      summary: "High error rate for apps/router"
-                      description: "apps/router has high error rate for more than 10 minutes."
+                      summary: "High 5xx error rate for apps/router"
+                      description: "apps/router has high 5xx error rate for more than 10 minutes."
 
     # Control test, should pass without any alerts triggered.   
     - interval: 1m
@@ -36,6 +36,6 @@ tests:
       # Unit test for alerting rules.
       alert_rule_test:
           - eval_time: 11m
-            alertname: RouterBackendHandlerResponseErrorRate
+            alertname: RouterBackendHandlerResponse5xxErrorRate
             exp_alerts:
                 #No alerts triggered.
