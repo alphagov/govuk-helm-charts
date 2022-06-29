@@ -1,0 +1,123 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "definitions": {
+      "duration": {
+        "type": ["string", "null"],
+        "pattern": "^([0-9]+y)?([0-9]+w)?([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?([0-9]+ms)?$",
+        "minLength": 1
+      }
+    },
+    "required": [
+      "apiVersion",
+      "kind",
+      "metadata",
+      "spec"
+    ],
+    "properties": {
+      "apiVersion": {
+        "type": "string"
+      },
+      "kind": {
+        "type": "string"
+      },
+      "metadata": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "namespace": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "namespace"
+        ]
+      },
+      "spec": {
+        "type": "object",
+        "properties": {
+          "groups": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "rules": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "alert": {
+                            "description": "The name of the alert. Must be a valid metric name.",
+                            "type": "string"
+                          },
+                          "expr": {
+                            "description": "The PromQL expression to evaluate. Every evaluation cycle this is evaluated at the current time, and all resultant time series become pending/firing alerts.",
+                            "type": "string"
+                          },
+                          "for": {
+                            "description": "Alerts are considered firing once they have been returned for this long. Alerts which have not yet fired for long enough are considered pending.",
+                            "$ref": "#/definitions/duration"
+                          },
+                          "labels": {
+                            "type": "object",
+                            "description": "Labels to add or overwrite for each alert.",
+                            "properties": {
+                              "severity": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "severity"
+                            ]
+                          },
+                          "annotations": {
+                            "type": "object",
+                            "description": "Annotations to add to each alert.",
+                            "properties": {
+                              "summary": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "summary",
+                              "description"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "alert",
+                          "expr",
+                          "for",
+                          "labels",
+                          "annotations"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "name",
+                  "rules"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "groups"
+        ]
+      }
+    }
+  }
+  
