@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: govuk-grafana-database
@@ -15,4 +15,5 @@ spec:
     name: govuk-grafana-database
     creationPolicy: Owner
   dataFrom:
-  - key: govuk/grafana/database
+    - extract:
+        key: govuk/grafana/database

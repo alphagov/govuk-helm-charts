@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: frontend-elections-api
@@ -15,4 +15,5 @@ spec:
   target:
     name: frontend-elections-api
   dataFrom:
-    - key: govuk/frontend/elections-api
+    - extract:
+        key: govuk/frontend/elections-api

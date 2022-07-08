@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: email-alert-auth
@@ -17,4 +17,5 @@ spec:
   target:
     name: email-alert-auth
   dataFrom:
-    - key: govuk/email-alert/auth
+    - extract:
+        key: govuk/email-alert/auth

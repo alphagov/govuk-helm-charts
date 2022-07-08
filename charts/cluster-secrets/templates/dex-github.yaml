@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-github
@@ -16,4 +16,5 @@ spec:
     name: govuk-dex-github
     creationPolicy: Owner
   dataFrom:
-  - key: govuk/dex/github
+    - extract:
+        key: govuk/dex/github

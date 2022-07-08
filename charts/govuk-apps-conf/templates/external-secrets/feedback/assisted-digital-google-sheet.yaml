@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: feedback-assisted-digital-google-sheet
@@ -17,4 +17,5 @@ spec:
   target:
     name: feedback-assisted-digital-google-sheet
   dataFrom:
-    - key: govuk/feedback/assisted-digital-google-sheet
+    - extract:
+        key: govuk/feedback/assisted-digital-google-sheet

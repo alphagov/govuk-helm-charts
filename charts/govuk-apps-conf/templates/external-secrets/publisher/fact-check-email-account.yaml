@@ -1,5 +1,5 @@
 {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: publisher-fact-check-email-account
@@ -17,5 +17,6 @@ spec:
   target:
     name: publisher-fact-check-email-account
   dataFrom:
-    - key: govuk/publisher/fact-check-email-account
+    - extract:
+        key: govuk/publisher/fact-check-email-account
 {{- end }}

@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: signon-mysql
@@ -18,4 +18,5 @@ spec:
       data:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/mysql-conn-string.tpl" | trim }}/signon_production'
   dataFrom:
-    - key: govuk/signon/mysql
+    - extract:
+        key: govuk/signon/mysql

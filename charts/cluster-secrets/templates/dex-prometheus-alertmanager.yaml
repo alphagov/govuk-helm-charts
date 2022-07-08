@@ -1,6 +1,6 @@
 {{- range .Values.dexAlertManagerSecretsNamespaces}}
 ---
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-alert-manager
@@ -22,11 +22,12 @@ spec:
     name: govuk-dex-alert-manager
     creationPolicy: Owner
   dataFrom:
-  - key: govuk/dex/alert-manager
+  - extract:
+      key: govuk/dex/alert-manager
 {{- end }}
 {{- range .Values.dexPrometheusSecretsNamespaces}}
 ---
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-prometheus
@@ -48,7 +49,8 @@ spec:
     name: govuk-dex-prometheus
     creationPolicy: Owner
   dataFrom:
-  - key: govuk/dex/prometheus
+    - extract:
+        key: govuk/dex/prometheus
 {{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1

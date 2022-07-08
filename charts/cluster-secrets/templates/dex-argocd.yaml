@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-argocd
@@ -19,4 +19,5 @@ spec:
     name: govuk-dex-argocd
     creationPolicy: Owner
   dataFrom:
-  - key: govuk/dex/argocd
+  - extract:
+      key: govuk/dex/argocd

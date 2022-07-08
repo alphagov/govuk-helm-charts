@@ -1,5 +1,5 @@
 {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: publisher-docdb
@@ -19,5 +19,6 @@ spec:
       data:
         MONGODB_URI: '{{ $.Files.Get "externalsecrets-templates/mongo-conn-string.tpl" | trim }}/govuk_content_production'
   dataFrom:
-    - key: govuk/common/shared-documentdb
+    - extract:
+        key: govuk/common/shared-documentdb
 {{- end }}
