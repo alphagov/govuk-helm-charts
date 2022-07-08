@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: whitehall-notify
@@ -15,4 +15,5 @@ spec:
   target:
     name: whitehall-notify
   dataFrom:
-    - key: govuk/whitehall/notify
+    - extract:
+        key: govuk/whitehall/notify

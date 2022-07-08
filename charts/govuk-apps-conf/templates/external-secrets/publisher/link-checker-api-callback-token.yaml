@@ -1,5 +1,5 @@
 {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: publisher-link-checker-api-callback-token
@@ -18,5 +18,6 @@ spec:
   target:
     name: publisher-link-checker-api-callback-token
   dataFrom:
-    - key: govuk/publisher/link-checker-api-callback-token
+    - extract:
+        key: govuk/publisher/link-checker-api-callback-token
 {{- end }}

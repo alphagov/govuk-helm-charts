@@ -1,5 +1,5 @@
 {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: publishing-api-sentry-dsn
@@ -16,5 +16,6 @@ spec:
   target:
     name: publishing-api-sentry-dsn
   dataFrom:
-    - key: govuk/common/publishing-api-sentry-dsn
+    - extract:
+        key: govuk/common/publishing-api-sentry-dsn
 {{- end }}

@@ -1,5 +1,5 @@
 {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: publisher-notify
@@ -16,5 +16,6 @@ spec:
   target:
     name: publisher-notify
   dataFrom:
-    - key: govuk/publisher/notify
+    - extract:
+        key: govuk/publisher/notify
 {{- end }}

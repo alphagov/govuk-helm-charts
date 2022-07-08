@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: slack-webhook-url
@@ -15,4 +15,5 @@ spec:
     name: slack-webhook-url
     creationPolicy: Owner
   dataFrom:
-  - key: govuk/slack-webhook-url
+    - extract:
+        key: govuk/slack-webhook-url

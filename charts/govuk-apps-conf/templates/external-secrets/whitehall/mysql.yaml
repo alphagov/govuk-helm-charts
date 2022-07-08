@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: whitehall-mysql
@@ -18,4 +18,5 @@ spec:
       data:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/mysql-conn-string.tpl" | trim }}/whitehall_production'
   dataFrom:
-    - key: govuk/whitehall/mysql-primary
+    - extract:
+        key: govuk/whitehall/mysql-primary

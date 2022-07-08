@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: logit-host
@@ -20,4 +20,5 @@ spec:
     name: logit-host
     creationPolicy: Owner
   dataFrom:
-  - key: govuk/logit-host
+    - extract:
+        key: govuk/logit-host

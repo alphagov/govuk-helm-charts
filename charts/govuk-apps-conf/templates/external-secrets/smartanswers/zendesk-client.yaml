@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: smartanswers-zendesk-client
@@ -15,4 +15,5 @@ spec:
   target:
     name: smartanswers-zendesk-client
   dataFrom:
-    - key: govuk/smartanswers/zendesk-client
+    - extract:
+        key: govuk/smartanswers/zendesk-client

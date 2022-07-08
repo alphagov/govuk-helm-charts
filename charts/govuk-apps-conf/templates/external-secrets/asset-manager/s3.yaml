@@ -1,5 +1,5 @@
 {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: asset-manager-s3
@@ -19,5 +19,6 @@ spec:
   target:
     name: asset-manager-s3
   dataFrom:
-    - key: govuk/asset-manager/s3
+    - extract:
+        key: govuk/asset-manager/s3
 {{- end }}

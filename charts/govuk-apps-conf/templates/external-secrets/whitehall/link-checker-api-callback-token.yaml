@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: whitehall-link-checker-api-callback-token
@@ -17,4 +17,5 @@ spec:
   target:
     name: whitehall-link-checker-api-callback-token
   dataFrom:
-    - key: govuk/whitehall/link-checker-api-callback-token
+    - extract:
+        key: govuk/whitehall/link-checker-api-callback-token

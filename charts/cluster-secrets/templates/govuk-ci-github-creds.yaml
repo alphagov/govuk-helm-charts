@@ -1,11 +1,11 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: govuk-ci-github-creds
   namespace: {{ .Values.appsNamespace }}
   annotations:
     kubernetes.io/description: >
-       Personal access token for govuk-ci GitHub user 
+       Personal access token for govuk-ci GitHub user
 spec:
   refreshInterval: 1h
   secretStoreRef:
@@ -15,4 +15,5 @@ spec:
     name: govuk-ci-github-creds
     creationPolicy: Owner
   dataFrom:
-    - key: govuk/github/govuk-ci
+    - extract:
+        key: govuk/github/govuk-ci

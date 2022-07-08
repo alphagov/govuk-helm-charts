@@ -1,5 +1,5 @@
 {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: search-api-rabbitmq
@@ -16,5 +16,6 @@ spec:
   target:
     name: search-api-rabbitmq
   dataFrom:
-    - key: govuk/search-api/rabbitmq
+    - extract:
+        key: govuk/search-api/rabbitmq
 {{- end }}

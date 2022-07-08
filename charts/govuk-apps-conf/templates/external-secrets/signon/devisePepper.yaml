@@ -1,4 +1,4 @@
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: signon-devise-pepper
@@ -15,4 +15,5 @@ spec:
   target:
     name: signon-devise-pepper
   dataFrom:
-    - key: govuk/signon/devise-pepper
+    - extract:
+        key: govuk/signon/devise-pepper

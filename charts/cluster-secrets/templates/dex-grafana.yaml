@@ -1,6 +1,6 @@
 {{- range .Values.dexGrafanaSecretsNamespaces}}
 ---
-apiVersion: external-secrets.io/v1alpha1
+apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-grafana
@@ -19,5 +19,6 @@ spec:
     name: govuk-dex-grafana
     creationPolicy: Owner
   dataFrom:
-  - key: govuk/dex/grafana
+    - extract:
+        key: govuk/dex/grafana
 {{- end }}
