@@ -20,7 +20,7 @@ if [[ $(<"${FILE}") = "${IMAGE_TAG}" ]]; then
 elif [[ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]] || [[ "${MANUAL_DEPLOY}" = true ]]; then
   git checkout -b "${BRANCH}"
 
-  echo "${IMAGE_TAG}" >"${FILE}"
+  tag="${IMAGE_TAG}" yq -i '.image_tag = env(tag)' "${FILE}"
 
   git add "${FILE}"
   git commit -m "Update ${REPO_NAME} image tag to ${IMAGE_TAG} for ${ENVIRONMENT}"
