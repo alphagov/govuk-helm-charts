@@ -1,6 +1,7 @@
 {{ range .Values.govukApplications }}
 {{- $reponame := .repoName | default .name }}
-{{- $imageTag := $.Files.Get (printf "image-tags/%s/%s" $.Values.globalHelmValues.govukEnvironment $reponame) | trim }}
+{{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.globalHelmValues.govukEnvironment $reponame) | fromYaml }}
+{{- $imageTag := $imageTagConfig.image_tag }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
