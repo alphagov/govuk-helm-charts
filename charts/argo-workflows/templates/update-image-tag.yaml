@@ -3,7 +3,7 @@ kind: WorkflowTemplate
 metadata:
   name: update-image-tag
 spec:
-  entrypoint: update-image-tag 
+  entrypoint: update-image-tag
   arguments:
     parameters:
       - name: environment
