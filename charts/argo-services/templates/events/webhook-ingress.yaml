@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/component: server
   annotations:
-    alb.ingress.kubernetes.io/group.name: argo-events 
+    alb.ingress.kubernetes.io/group.name: argo-events
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
@@ -29,4 +29,11 @@ spec:
                 name: argo-events-service
                 port:
                   number: 12001
+          - path: "/set-automatic-deploys-enabled"
+            pathType: "Prefix"
+            backend:
+              service:
+                name: argo-events-service
+                port:
+                  number: 12002
 {{- end }}

@@ -11,5 +11,8 @@ spec:
     - name: update-image-tag
       port: 12001
       targetPort: 12001
+    - name: set-automatic-deploys-enabled
+      port: 12002
+      targetPort: 12002
   selector:
     eventsource-name: webhook
