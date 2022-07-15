@@ -22,7 +22,7 @@ disable_automatic_deploys() {
 
   if [[ "$(git status --porcelain)" ]]; then
       git add "${FILE}"
-      commit "Disabled automatic deploys for ${REPO_NAME} with image tag ${IMAGE_TAG} for ${ENVIRONMENT}"
+      git commit -m "Disabled automatic deploys for ${REPO_NAME} with image tag ${IMAGE_TAG} for ${ENVIRONMENT}"
       CHANGED=true
   fi
 }
