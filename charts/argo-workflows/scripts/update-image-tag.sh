@@ -4,6 +4,7 @@ set -euo pipefail
 BRANCH="update-image-tag/${REPO_NAME}/${ENVIRONMENT}/${IMAGE_TAG}"
 FILE="charts/argocd-apps/image-tags/${ENVIRONMENT}/${REPO_NAME}"
 LATEST_GIT_SHA=$(git ls-remote "https://github.com/alphagov/${REPO_NAME}" HEAD | cut -f 1)
+CHANGED=false
 
 change_image_tag() {
   git checkout -b "${BRANCH}"
@@ -13,11 +14,17 @@ change_image_tag() {
   git add "${FILE}"
   git commit -m "Update ${REPO_NAME} image tag to ${IMAGE_TAG} for ${ENVIRONMENT}"
 
-  git push -u origin "${BRANCH}"
-  gh api repos/alphagov/govuk-helm-charts/merges -f head="${BRANCH}" -f base=main
-  git push origin --delete "${BRANCH}"
+  CHANGED=true
+}
 
-  echo "Pushed image_tag change to GitHub"
+disable_automatic_deploys() {
+  yq -i '.automatic_deploys_enabled = "false"' "${FILE}"
+
+  if [[ "$(git status --porcelain)" ]]; then
+      git add "${FILE}"
+      commit "Disabled automatic deploys for ${REPO_NAME} with image tag ${IMAGE_TAG} for ${ENVIRONMENT}"
+      CHANGED=true
+  fi
 }
 
 git config --global user.email "${GIT_NAME}@digital.cabinet-office.gov.uk"
@@ -27,6 +34,10 @@ gh auth setup-git
 gh repo clone alphagov/govuk-helm-charts -- --depth 1 --branch main
 
 cd "govuk-helm-charts" || exit 1
+
+if [[ "${MANUAL_DEPLOY}" = true ]]; then
+  disable_automatic_deploys
+fi
 
 # Exit successfully if image tag already set
 current_image_tag="$(yq '.image_tag' "${FILE}")"
@@ -49,4 +60,12 @@ elif [[ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]]; then
 
 else
   echo "Image tag not updated for ${ENVIRONMENT}: image tag not the latest commit on main."
+fi
+
+if [[ "${CHANGED}" ]]; then
+  git push -u origin "${BRANCH}"
+  gh api repos/alphagov/govuk-helm-charts/merges -f head="${BRANCH}" -f base=main
+  git push origin --delete "${BRANCH}"
+
+  echo "Pushed changes to GitHub"
 fi
