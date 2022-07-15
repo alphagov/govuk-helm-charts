@@ -18,3 +18,10 @@ spec:
       authSecret:
         name: argocd-notifications-secret
         key: argo_events_webhook_token
+    set-automatic-deploys-enabled:
+      port: "12002"
+      endpoint: /set-automatic-deploys-enabled
+      method: POST
+      authSecret:
+        name: argocd-notifications-secret
+        key: argo_events_webhook_token
