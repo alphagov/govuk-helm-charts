@@ -111,6 +111,13 @@ govukApplications:
             key: GOVUK_NOTIFY_API_KEY
 - name: finder-frontend
   helmValues:
+    appResources:
+      limits:
+        cpu: 4
+        memory: 1Gi
+      requests:
+        cpu: 2
+        memory: 512Mi
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -124,8 +131,17 @@ govukApplications:
           secretKeyRef:
             name: signon-token-finder-frontend-email-alert-api-ec2
             key: bearer_token
+      - name: WEB_CONCURRENCY
+        value: '4'
 - name: frontend
   helmValues:
+    appResources:
+      limits:
+        cpu: 4
+        memory: 1Gi
+      requests:
+        cpu: 2
+        memory: 512Mi
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -166,6 +182,8 @@ govukApplications:
           secretKeyRef:
             name: signon-token-frontend-publishing-api-ec2
             key: bearer_token
+      - name: WEB_CONCURRENCY
+        value: '4'
 - name: government-frontend
   helmValues:
     extraEnv:
