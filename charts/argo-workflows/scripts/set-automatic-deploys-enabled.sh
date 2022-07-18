@@ -54,7 +54,7 @@ git checkout -b "${BRANCH}"
 update_image_tag
 set_automatic_deploys_enabled
 
-if "${CHANGED}"; then
+if [[ "${CHANGED}" -ne 0 ]]; then
   git push -u origin "${BRANCH}"
   gh api repos/alphagov/govuk-helm-charts/merges -f head="${BRANCH}" -f base=main
   git push origin --delete "${BRANCH}"
