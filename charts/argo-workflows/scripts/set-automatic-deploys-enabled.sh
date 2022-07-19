@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BRANCH="update-image-tag/${REPO_NAME}/${ENVIRONMENT}/${IMAGE_TAG}/${AUTOMATIC_DEPLOYS_ENABLED}"
+BRANCH="update-image-tag/${REPO_NAME}/${ENVIRONMENT}/${AUTOMATIC_DEPLOYS_ENABLED}"
+if [[ -n "${IMAGE_TAG}" ]]; then
+  BRANCH="update-image-tag/${REPO_NAME}/${ENVIRONMENT}/${AUTOMATIC_DEPLOYS_ENABLED}/${IMAGE_TAG}"
+fi
+
 FILE="charts/argocd-apps/image-tags/${ENVIRONMENT}/${REPO_NAME}"
 CHANGED=false
 
@@ -21,7 +25,7 @@ commit() {
 }
 
 update_image_tag() {
-  if [[ -z "${IMAGE_TAG}" ]]; then
+  if [[ -n "${IMAGE_TAG}" ]]; then
     yq -i '.image_tag = env(IMAGE_TAG)' "${FILE}"
 
     if [[ "$(git status --porcelain)" ]]; then
