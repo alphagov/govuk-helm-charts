@@ -1,4 +1,4 @@
 apiVersion: v2
 name: argo-services
 description: Installs Argo service configuration (cd, events, notifications, workflows)
-version: 0.1.16
+version: 0.1.17
