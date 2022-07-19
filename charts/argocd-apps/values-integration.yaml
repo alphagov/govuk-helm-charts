@@ -78,6 +78,7 @@ govukApplications:
         value: govuk-assets-integration
 - name: argo-workflows
   chartPath: charts/argo-workflows
+  targetRevision: github-deployment-api
   postSyncWorkflowEnabled: "false"
   helmValues:
     nextEnvironment: staging
