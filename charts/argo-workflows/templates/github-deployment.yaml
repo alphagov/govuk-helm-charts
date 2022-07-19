@@ -4,6 +4,7 @@ metadata:
   name: deploy
 spec:
   entrypoint: deploy
+  onExit: update-deployment-status
   retryStrategy:
     limit: "3"
     expression: "asInt(lastRetry.exitCode) > 1"
@@ -62,3 +63,57 @@ spec:
                   value: "{{"{{workflow.parameters.repo}}"}}"
                 - name: imageTag
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
+                - name: manualDeploy
+                  value: "true"
+    - name: exit-handler
+      steps:
+      - - name: failure
+          template: failure
+          when: "{{workflow.status}} == Failed"
+        - name: error
+          template: error
+          when: "{{workflow.status}} == Error"
+    - name: failure
+      templateRef:
+        name: set-github-deployment-status 
+        template: set-github-deployment-status
+      arguments:
+        parameters:
+          - name: owner
+            value: "alphagov"
+          - name: repo
+            value: "{{"{{workflow.parameters.repo}}"}}"
+          - name: deploymentId
+            value: "{{"{{workflow.parameters.deploymentId}}"}}"
+          - name: status
+            value: "failure"
+          - name: description
+            value: ""
+          - name: environment
+            value: "{{"{{workflow.parameters.environment}}"}}"
+          - name: environmentUrl
+            value: ""
+          - name: logUrl
+            value: ""
+    - name: error
+      templateRef:
+        name: set-github-deployment-status 
+        template: set-github-deployment-status
+      arguments:
+        parameters:
+          - name: owner
+            value: "alphagov"
+          - name: repo
+            value: "{{"{{workflow.parameters.repo}}"}}"
+          - name: deploymentId
+            value: "{{"{{workflow.parameters.deploymentId}}"}}"
+          - name: status
+            value: "error"
+          - name: description
+            value: ""
+          - name: environment
+            value: "{{"{{workflow.parameters.environment}}"}}"
+          - name: environmentUrl
+            value: ""
+          - name: logUrl
+            value: ""

@@ -17,3 +17,5 @@ spec:
       insecure: false
       active: true
       contentType: "json"
+      filter:
+        expression: "body.deployment.environment in ['production', 'staging', 'integration']"
