@@ -1,0 +1,63 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: deployments
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  dependencies:
+  - name: github-deployments
+    eventSourceName: github
+    eventName: deployments
+  triggers:
+  - template:
+      name: trigger
+      argoWorkflow:
+        group: argoproj.io
+        version: v1alpha1
+        resource: workflows
+        operation: submit
+        namespace: {{ .Values.workflowsNamespace }}
+        parameters:
+          - dest: spec.arguments.parameters.0.value
+            src:
+              dependencyName: github-deployments
+              dataKey: body.deployment.environment
+          - dest: spec.arguments.parameters.1.value
+            src:
+              dependencyName: github-deployments
+              dataKey: body.repository.name
+          - dest: spec.arguments.parameters.2.value
+            src:
+              dependencyName: github-deployments
+              dataKey: body.deployment.sha
+          - dest: spec.arguments.parameters.3.value
+            src:
+              dependencyName: github-deployments
+              dataKey: body.deployment.creator.login
+          - dest: spec.arguments.parameters.4.value
+            src:
+              dependencyName: github-deployments
+              dataKey: body.deployment.id
+          - dest: metadata.generateName
+            src:
+              dependencyName: github-deployments
+              dataKey: body.repository.name
+            operation: prepend
+        source:
+          resource:
+            apiVersion: argoproj.io/v1alpha1
+            kind: Workflow
+            metadata:
+              generateName: -deploy-
+              namespace: {{ .Values.workflowsNamespace }}
+            spec:
+              arguments:
+                parameters:
+                  - name: environment
+                  - name: repo
+                  - name: imageTag
+                  - name: githubUsername
+                  - name: deploymentId
+              workflowTemplateRef:
+                name: deploy

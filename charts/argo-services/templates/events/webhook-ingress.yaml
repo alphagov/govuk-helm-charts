@@ -36,4 +36,11 @@ spec:
                 name: argo-events-service
                 port:
                   number: 12002
+          - path: "/github-deployments"
+            pathType: "Prefix"
+            backend:
+              service:
+                name: argo-events-github-service
+                port:
+                  number: 13000
 {{- end }}

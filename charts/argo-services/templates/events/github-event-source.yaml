@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: github
+spec:
+  github:
+    deployments:
+      organizations: ["alphagov"]
+      webhook:
+        endpoint: "/github-deployments"
+        port: "13000"
+        method: "POST"
+      events: ["deployment"]
+      webhookSecret:
+        name: argocd-notifications-secret
+        key: argo_events_webhook_token
+      insecure: false
+      active: true
+      contentType: "json"

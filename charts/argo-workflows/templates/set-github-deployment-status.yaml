@@ -1,0 +1,69 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: set-github-deployment-status
+spec:
+  entrypoint: set-github-deployment-status
+  arguments:
+    parameters:
+      - name: owner
+      - name: repo
+      - name: deploymentId
+      - name: status
+      - name: description
+      - name: environment
+      - name: environmentUrl
+      - name: logUrl
+  templates:
+    - name: set-github-deployment-status
+      inputs:
+        parameters:
+          - name: owner
+          - name: repo
+          - name: deploymentId
+          - name: status
+          - name: description
+          - name: environment
+          - name: environmentUrl
+          - name: logUrl
+      script:
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
+        command: [/bin/bash]
+        env:
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: govuk-ci-github-creds
+                key: token
+          - name: OWNER
+            value: "{{"{{inputs.parameters.owner}}"}}"
+          - name: REPO
+            value: "{{"{{inputs.parameters.repo}}"}}"
+          - name: DEPLOYMENT_ID
+            value: "{{"{{inputs.parameters.deploymentId}}"}}"
+          - name: STATUS
+            value: "{{"{{inputs.parameters.status}}"}}"
+          - name: DESCRIPTION
+            value: "{{"{{inputs.parameters.description}}"}}"
+          - name: ENVIRONMENT
+            value: "{{"{{inputs.parameters.environment}}"}}"
+          - name: ENVIRONMENT_URL
+            value: "{{"{{inputs.parameters.environmentUrl}}"}}"
+          - name: LOG_URL
+            value: "{{"{{inputs.parameters.logUrl}}"}}"
+        source: | 
+          gh api "/repos/${OWNER}/${REPO}/deployments/${DEPLOYMENT_ID}/statuses" \
+            -f environment="${ENVIRONMENT}" \
+            -f state="${STATUS}" \
+            -f description="${DESCRIPTION}" \
+            -f environment_url="${ENVIRONMENT_URL}" \
+            -f log_url="${LOG_URL}"
+  podSpecPatch: |
+    containers:
+      - resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi

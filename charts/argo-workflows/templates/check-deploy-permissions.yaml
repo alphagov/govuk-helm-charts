@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: check-deploy-permissions
+spec:
+  entrypoint: check-deploy-permissions
+  arguments:
+    parameters:
+      - name: githubUsername
+  templates:
+    - name: check-deploy-permissions
+      inputs:
+        parameters:
+          - name: githubUsername
+      script:
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
+        command: [/bin/bash]
+        env:
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: govuk-ci-github-creds
+                key: token
+          - name: GITHUB_USERNAME
+            value: "{{"{{inputs.parameters.githubUsername}}"}}"
+        source: |
+          DEPLOY_TEAM_NAME="gov-uk-production-deploy"
+          DEPLOY_TEAM_MEMBERSHIP=$(gh api /orgs/alphagov/teams/${DEPLOY_TEAM_NAME}/memberships/${GITHUB_USERNAME} -q ".state")
+
+          if [[ "${DEPLOY_TEAM_MEMBERSHIP}" != "active" ]]; then
+            echo "ERROR: Insufficient permissions to deploy. '${GITHUB_USERNAME}' must be a member of the 'GOV.UK Production Deploy' GitHub team."
+            exit 1
+          fi
+  podSpecPatch: |
+    containers:
+      - resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi

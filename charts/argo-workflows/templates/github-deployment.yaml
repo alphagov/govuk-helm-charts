@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: deploy
+spec:
+  entrypoint: deploy
+  retryStrategy:
+    limit: "3"
+    expression: "asInt(lastRetry.exitCode) > 1"
+  arguments:
+    parameters:
+      - name: deploymentId
+      - name: environment
+      - name: repo
+      - name: imageTag
+      - name: githubUsername
+  templates:
+    - name: deploy
+      dag:
+        tasks:
+          - name: check-deploy-permissions
+            templateRef:
+              name: check-deploy-permissions
+              template: check-deploy-permissions
+            arguments:
+              parameters:
+                - name: githubUsername
+                  value: "{{"{{workflow.parameters.githubUsername}}"}}"
+          - name: set-github-deployment-status
+            depends: check-deploy-permissions.Succeeded
+            templateRef:
+              name: set-github-deployment-status 
+              template: set-github-deployment-status
+            arguments:
+              parameters:
+                - name: owner
+                  value: "alphagov"
+                - name: repo
+                  value: "{{"{{workflow.parameters.repo}}"}}"
+                - name: deploymentId
+                  value: "{{"{{workflow.parameters.deploymentId}}"}}"
+                - name: status
+                  value: "in_progress"
+                - name: description
+                  value: ""
+                - name: environment
+                  value: "{{"{{workflow.parameters.environment}}"}}"
+                - name: environmentUrl
+                  value: ""
+                - name: logUrl
+                  value: ""
+          - name: update-image-tag
+            depends: set-github-deployment-status.Succeeded
+            templateRef:
+              name: update-image-tag
+              template: update-image-tag
+            arguments:
+              parameters:
+                - name: environment
+                  value: "{{"{{workflow.parameters.environment}}"}}"
+                - name: repoName
+                  value: "{{"{{workflow.parameters.repo}}"}}"
+                - name: imageTag
+                  value: "{{"{{workflow.parameters.imageTag}}"}}"
