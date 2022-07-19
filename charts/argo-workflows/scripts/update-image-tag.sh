@@ -62,7 +62,7 @@ else
   echo "Image tag not updated for ${ENVIRONMENT}: image tag not the latest commit on main."
 fi
 
-if [[ "${CHANGED}" -ne 0 ]]; then
+if [[ "${CHANGED}" = true ]]; then
   git push -u origin "${BRANCH}"
   gh api repos/alphagov/govuk-helm-charts/merges -f head="${BRANCH}" -f base=main
   git push origin --delete "${BRANCH}"
