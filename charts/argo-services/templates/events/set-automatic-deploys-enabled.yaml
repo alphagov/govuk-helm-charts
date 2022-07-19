@@ -37,7 +37,7 @@ spec:
               dataKey: body.automaticDeploysEnabled
           - dest: metadata.generateName
             src:
-              dependencyName: update-image-tag
+              dependencyName: set-automatic-deploys-enabled
               dataKey: body.repoName
             operation: prepend
         source:
