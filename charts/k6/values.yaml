@@ -1,0 +1,4 @@
+appImage:
+  repository: grafana/k6
+  pullPolicy: Always
+  tag: latest
