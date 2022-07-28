@@ -18,7 +18,7 @@ change_image_tag() {
 }
 
 disable_automatic_deploys() {
-  yq -i '.automatic_deploys_enabled = "false"' "${FILE}"
+  yq -i '.automatic_deploys_enabled = false' "${FILE}"
 
   if [[ "$(git status --porcelain)" ]]; then
       git add "${FILE}"
