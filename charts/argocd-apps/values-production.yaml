@@ -186,6 +186,13 @@ govukApplications:
         value: '4'
 - name: government-frontend
   helmValues:
+    appResources:
+      limits:
+        cpu: 2
+        memory: 1Gi
+      requests:
+        cpu: 1
+        memory: 512Mi
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
