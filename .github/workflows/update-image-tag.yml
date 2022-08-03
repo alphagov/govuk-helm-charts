@@ -1,0 +1,76 @@
+name: Update image tag
+
+on:
+  repository_dispatch:
+    types: [update-image-tag]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image tag to deploy'
+        required: true
+        type: string
+      repo:
+        description: 'The application repository'
+        required: true
+        type: string
+        default: 'collections'
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+        - integration
+        - staging
+        - production
+        default: 'integration'
+      manual_deploy:
+        description: 'Manual deploy'
+        required: true
+        type: boolean
+
+jobs:
+  update-image-tag:
+
+    permissions: write-all
+    runs-on: ubuntu-latest
+    env:
+      repo: ${{ github.event.client_payload.repository || inputs.repo }}
+      image_tag: ${{ github.event.client_payload.image_tag || inputs.image_tag }}
+      environment: ${{ github.event.client_payload.environment || inputs.environment }}
+      branch: "update-image-tag/${{ env.repo }}/${{ env.environment }}/${{ env.image_tag }}"
+      config_file: "charts/argocd-apps/image-tags/${{ env.environment }}/${{ env.repo }}"
+      manual_deploy: ${{ github.event.client_payload.manual_deploy || inputs.manual_deploy }}
+    steps:
+      - uses: chrisdickinson/setup-yq@latest
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get latest commit SHA for repository
+        id: get-sha
+        run: |
+          LATEST_COMMIT_SHA=$(git ls-remote "https://github.com/alphagov/${repo}" HEAD | cut -f 1)
+          echo "::set-output name=latest_commit_sha::${LATEST_COMMIT_SHA}"
+
+      - name: Update image tag
+        id: update-image-tag
+        if: ${{ steps.get-sha.outputs.latest_commit_sha }} == ${{ env.image_tag }} || ${{ env.manual_deploy }}
+        run: |
+          git checkout -b "${branch}"
+
+          yq -i '.image_tag = env(image_tag)' "${config_file}"
+
+          UPDATED=$([-z git status --porcelain] && echo 'true' || echo 'false')
+          echo "::set-output name=updated::${UPDATED}"
+
+      - name: Push changes
+        if: ${{ steps.update-image-tag.outputs.updated }}
+        run: |
+          git add "${config_file}"
+          git commit -m "Update ${repo} image tag to ${image_tag} for ${environment}"
+
+          git push -u origin "${branch}"
+          gh api repos/alphagov/govuk-helm-charts/merges -f head="${branch}" -f base=main
+          git push origin --delete "${branch}"
+
+          echo "Pushed changes to GitHub"
