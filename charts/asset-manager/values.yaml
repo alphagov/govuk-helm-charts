@@ -45,7 +45,7 @@ nginxProxyReadTimeout: 15s
 nginxConfigMap:
   create: true
 nginxExtraVolumeMounts: []
-nginxExtraVolumes: []
+extraVolumes: []
 
 appResources:
   limits:

@@ -123,6 +123,6 @@ spec:
           name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
       - name: tmp
         emptyDir: {}
-      {{- with .Values.nginxExtraVolumes }}
-      {{ . | toYaml | trim | nindent 6 }}
+      {{- with .Values.extraVolumes }}
+        {{ . | toYaml | trim | nindent 6 }}
       {{- end }}

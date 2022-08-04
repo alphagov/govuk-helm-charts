@@ -727,7 +727,7 @@ govukApplications:
         subPath: robots.txt
       - name: router-nginx-htpasswd
         mountPath: /etc/nginx/htpasswd
-    nginxExtraVolumes:
+    extraVolumes:
       - name: router-nginx-htpasswd
         secret:
           secretName: router-nginx-htpasswd
