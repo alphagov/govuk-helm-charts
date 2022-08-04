@@ -64,7 +64,7 @@ workerResources:
     memory: 2Gi
 
 # nfsServer is the address of the NFSv4 (or Amazon EFS) server where uploaded
-nfsServer: "nfs-server"
+nfsServer: "assets"
 
 # dnsConfig is passed directly into the pod specs in the app and worker
 # deployment templates.

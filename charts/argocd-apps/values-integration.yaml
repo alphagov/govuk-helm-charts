@@ -22,7 +22,7 @@ govukApplications:
       hosts:
       - name: asset-manager.eks.integration.govuk.digital
     workerReplicaCount: 1
-    nfsServer: assets.blue.integration.govuk-internal.digital
+    nfsServer: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
       name: asset-manager-nginx-conf
@@ -980,6 +980,14 @@ govukApplications:
       - whitehall-admin.eks.integration.govuk.digital
     workerReplicaCount: 1
     extraEnv: *whitehall-envs
+    extraVolumes:
+      - name: asset-uploads-efs
+        nfs:
+          server: *assets-nfs
+          path: /whitehall  # TODO: does this work on an new/empty EFS instance?
+    appExtraVolumeMounts:
+      - name: asset-uploads-efs
+        mountPath: /uploads
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:

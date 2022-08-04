@@ -73,7 +73,7 @@ spec:
           {{- end }}
           {{- with .Values.appExtraVolumeMounts }}
           volumeMounts:
-            {{ . | toYaml | trim | nindent 12 }}
+            {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
@@ -128,5 +128,5 @@ spec:
       - name: tmp
         emptyDir: {}
       {{- with .Values.extraVolumes }}
-        {{ . | toYaml | trim | nindent 6 }}
+        {{- . | toYaml | trim | nindent 6 }}
       {{- end }}

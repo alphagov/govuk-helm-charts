@@ -26,8 +26,8 @@ workerReplicaCount: 2
 # dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
 dbMigrationEnabled: false
 
-# extraVolumes defines Volumes on the app Pods (in both the worker Deployment
-# and the regular Deployment).
+# extraVolumes defines Volumes on the app Pods (in both deployment.yaml and
+# worker-deployment.yaml).
 extraVolumes: []
 
 appImage:
@@ -35,8 +35,8 @@ appImage:
   pullPolicy: Always
   tag: latest
 appPort: 3000
-# appExtraVolumeMounts defines VolumeMounts on the app container (in both the
-# regular Deployment and the worker Deployment).
+# appExtraVolumeMounts defines VolumeMounts on the app container (in both
+# deployment.yaml and worker-deployment.yaml).
 appExtraVolumeMounts: []
 
 # appProbes defines liveness/readiness/startup probes for the app container.
