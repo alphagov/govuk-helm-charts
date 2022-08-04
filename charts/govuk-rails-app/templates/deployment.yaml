@@ -71,6 +71,10 @@ spec:
             runAsUser: 1001
             runAsGroup: 1001
           {{- end }}
+          {{- with .Values.appExtraVolumeMounts }}
+          volumeMounts:
+            {{ . | toYaml | trim | nindent 12 }}
+          {{- end }}
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}

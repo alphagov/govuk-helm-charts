@@ -51,6 +51,10 @@ spec:
             runAsUser: 1001
             runAsGroup: 1001
           {{- end }}
+          {{- with .Values.appExtraVolumeMounts }}
+          volumeMounts:
+            {{ . | toYaml | trim | nindent 12 }}
+          {{- end }}
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
       enableServiceLinks: false
