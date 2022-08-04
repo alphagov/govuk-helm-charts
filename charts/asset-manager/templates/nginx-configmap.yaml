@@ -7,8 +7,7 @@ metadata:
     app.kubernetes.io/component: web
 data:
   nginx.conf: |-
-    user nginx;
-
+  
     error_log /dev/stderr warn;
     pid /tmp/nginx.pid;
 
