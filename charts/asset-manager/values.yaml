@@ -36,7 +36,7 @@ appPort: 3000
 appProbes: {}
 
 nginxImage:
-  repository: nginxinc/nginx-unprivileged
+  repository: public.ecr.aws/nginx/nginx
   pullPolicy: Always
   tag: stable-perl
 nginxPort: 8080

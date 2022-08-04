@@ -89,6 +89,10 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
             timeoutSeconds: 15
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1001
+            runAsGroup: 1001
           volumeMounts:
           - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
             mountPath: /etc/nginx/nginx.conf
