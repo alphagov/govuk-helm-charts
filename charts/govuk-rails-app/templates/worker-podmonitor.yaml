@@ -1,0 +1,15 @@
+{{- if .Values.workerEnabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ .Release.Name }}-worker
+  labels:
+    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    app: {{ .Release.Name }}-worker
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-worker
+  podMetricsEndpoints:
+  - port: metrics
+{{- end }}
