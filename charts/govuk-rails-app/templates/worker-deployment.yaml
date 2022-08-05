@@ -26,6 +26,10 @@ spec:
       containers:
         - name: app
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metricsPort }}
           command: ["bundle"]
           args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
           envFrom:
