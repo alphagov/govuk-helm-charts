@@ -2,6 +2,13 @@ globalHelmValues:
   govukEnvironment: production
   externalDomainSuffix: eks.production.govuk.digital
   publishingServiceDomainSuffix: publishing.service.gov.uk
+  appResources:
+    limits:
+      cpu: 1
+      memory: 1500Mi
+    requests:
+      cpu: 0.1
+      memory: 800Mi
 
 govukApplications:
 - name: argo-workflows
@@ -143,6 +150,10 @@ govukApplications:
         cpu: 2
         memory: 512Mi
     extraEnv:
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: cb633abc-6ae6-4843-ae6f-82ca500b6de2
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.production.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
@@ -153,10 +164,6 @@ govukApplications:
           secretKeyRef:
             name: signon-token-frontend-publishing-api-ec2
             key: bearer_token
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.production.govuk-internal.digital
-      - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: cb633abc-6ae6-4843-ae6f-82ca500b6de2
       - name: ELECTIONS_API_KEY
         valueFrom:
           secretKeyRef:
@@ -365,9 +372,6 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: signon
   helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
     dbMigrationEnabled: false
     workerEnabled: true
     ingress:
@@ -423,9 +427,6 @@ govukApplications:
 - name: smartanswers
   repoName: smart-answers
   helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
     extraEnv:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
@@ -456,9 +457,6 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
