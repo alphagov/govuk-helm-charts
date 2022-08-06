@@ -65,12 +65,10 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
-          {{- if .Values.securityContext.appContainer }}
           securityContext:
-            allowPrivilegeEscalation: false
-            runAsUser: 1001
-            runAsGroup: 1001
-          {{- end }}
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
           {{- with .Values.appExtraVolumeMounts }}
           volumeMounts:
             {{- . | toYaml | trim | nindent 12 }}

@@ -475,9 +475,6 @@ govukApplications:
     requests:
       memory: 1.5Gi
   helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
     uploadAssets: &whitehall-upload-assets
       path: "/app/public/assets/whitehall"
       s3Directory: "whitehall"

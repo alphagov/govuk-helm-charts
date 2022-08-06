@@ -105,4 +105,6 @@ metricsPort: 9394
 
 securityContext:
   runAsNonRoot: true
-  appContainer: true
+  allowPrivilegeEscalation: false
+  runAsUser: 1001
+  runAsGroup: 1001

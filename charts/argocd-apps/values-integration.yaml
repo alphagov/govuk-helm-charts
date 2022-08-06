@@ -968,6 +968,12 @@ govukApplications:
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
+    securityContext:
+      # Use the same uid/gid for NFS permissions as the old stack, so that
+      # files uploaded by whitehall-admin on k8s can be processed by
+      # whitehall-admin on EC2 and vice versa. 2899 is the "deploy" user.
+      runAsUser: 2899
+      runAsGroup: 2899
     dbMigrationEnabled: true
     workerEnabled: true
     uploadAssets: *whitehall-upload-assets
