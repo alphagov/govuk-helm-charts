@@ -965,6 +965,37 @@ govukApplications:
         value: UA-26179049-22
       - name: GOVUK_APP_ROOT
         value: /var/apps/static
+- name: govuk-replatform-test-app
+  repoName: govuk-replatform-test-app
+  helmValues:
+    uploadAssets:
+      enabled: false
+    appPort: 9292
+    appProbes:
+      startupProbe: &test-probe
+        httpGet:
+          path: /healthcheck/live
+          port: 9292
+        failureThreshold: 10
+        periodSeconds: 1
+        timeoutSeconds: 1
+      livenessProbe:
+        <<: *test-probe
+        failureThreshold: 3
+        periodSeconds: 5
+      readinessProbe:
+        <<: *test-probe
+        failureThreshold: 2
+        periodSeconds: 5
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: govuk-replatform-test-app
+      hosts:
+      - govuk-replatform-test-app.eks.integration.govuk.digital
+    extraEnv:
+      - name: HELM_MESSAGE
+        value: your_helm_message
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
