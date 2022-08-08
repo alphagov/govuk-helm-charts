@@ -2,6 +2,13 @@ globalHelmValues:
   govukEnvironment: staging
   externalDomainSuffix: eks.staging.govuk.digital
   publishingServiceDomainSuffix: staging.publishing.service.gov.uk
+  appResources:
+    limits:
+      cpu: 1
+      memory: 1500Mi
+    requests:
+      cpu: 0.1
+      memory: 800Mi
 
 govukApplications:
 - name: argo-workflows
@@ -141,6 +148,10 @@ govukApplications:
         cpu: 2
         memory: 512Mi
     extraEnv:
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 2844a647-6bf1-4b01-a25c-569d2cc00849
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
@@ -151,10 +162,6 @@ govukApplications:
           secretKeyRef:
             name: signon-token-frontend-publishing-api-ec2
             key: bearer_token
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
-      - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 2844a647-6bf1-4b01-a25c-569d2cc00849
       - name: ELECTIONS_API_KEY
         valueFrom:
           secretKeyRef:
@@ -363,9 +370,6 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: signon
   helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
     dbMigrationEnabled: true
     workerEnabled: true
     ingress:
@@ -380,8 +384,6 @@ govukApplications:
         value: 112842bb-d8a4-4511-90de-57dc5c8f27ec
       - name: INSTANCE_NAME
         value: staging
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -402,6 +404,8 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
@@ -421,9 +425,6 @@ govukApplications:
 - name: smartanswers
   repoName: smart-answers
   helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
     extraEnv:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
@@ -454,9 +455,6 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
-    securityContext:
-      runAsNonRoot: false
-      appContainer: false
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:

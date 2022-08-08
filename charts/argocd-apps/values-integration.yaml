@@ -878,6 +878,11 @@ govukApplications:
         value: 759acac6-da53-4a19-b591-b7538c7c39de
       - name: INSTANCE_NAME
         value: integration
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: signon-mysql
+            key: DATABASE_URL
       - name: DEVISE_PEPPER
         valueFrom:
           secretKeyRef:
@@ -893,11 +898,6 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: signon-mysql
-            key: DATABASE_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: SIGNON_ADMIN_PASSWORD
