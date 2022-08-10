@@ -16,6 +16,11 @@ spec:
         {{- include "asset-manager.labels" . | nindent 8 }}
         app: {{ .Release.Name }}
     spec:
+      securityContext:
+        allowPrivilegeEscalation: false
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
       containers:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -64,10 +69,6 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsUser: 1001
-            runAsGroup: 1001
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
@@ -89,10 +90,6 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
             timeoutSeconds: 15
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsUser: 1001
-            runAsGroup: 1001
           volumeMounts:
           - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
             mountPath: /etc/nginx/nginx.conf
