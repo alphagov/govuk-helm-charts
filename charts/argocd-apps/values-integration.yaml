@@ -42,7 +42,7 @@ govukApplications:
       - name: GOVUK_APP_NAME
         value: asset-manager
       - name: GOVUK_APP_ROOT
-        value: /var/apps/static
+        value: /var/apps/asset-manager
       - name: GOVUK_STATSD_PREFIX
         value: asset-manager
       - name: JWT_AUTH_SECRET
