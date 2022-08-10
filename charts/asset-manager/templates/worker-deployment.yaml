@@ -23,10 +23,10 @@ spec:
       securityContext:
         seccompProfile:
           type: RuntimeDefault
-        allowPrivilegeEscalation: false
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
+        # Asset Manager needs to run as 2899 since it shares the same NFS volume with 
+        # EC2 counterpart
+        runAsUser: 2899
+        runAsGroup: 2899
       containers:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -54,6 +54,8 @@ spec:
               mountPath: /var/apps/
             - name: clam-virus-db
               mountPath: /var/lib/clamav
+          securityContext:
+            allowPrivilegeEscalation: false
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
         - name: freshclam
@@ -67,6 +69,8 @@ spec:
           volumeMounts:
             - name: clam-virus-db
               mountPath: /var/lib/clamav
+          securityContext:
+            allowPrivilegeEscalation: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}

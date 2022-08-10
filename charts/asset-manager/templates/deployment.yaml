@@ -17,10 +17,8 @@ spec:
         app: {{ .Release.Name }}
     spec:
       securityContext:
-        allowPrivilegeEscalation: false
         runAsUser: 1001
         runAsGroup: 1001
-        fsGroup: 1001
       containers:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -69,6 +67,12 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            # Asset Manager needs to run as 2899 since it shares the same NFS volume with
+            # EC2 counterpart
+            runAsUser: 2899
+            runAsGroup: 2899
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
@@ -99,6 +103,8 @@ spec:
           {{- with .Values.nginxExtraVolumeMounts }}
           {{ . | toYaml | trim | nindent 10 }}
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
