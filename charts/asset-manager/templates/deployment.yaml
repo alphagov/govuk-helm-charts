@@ -17,7 +17,6 @@ spec:
         app: {{ .Release.Name }}
     spec:
       securityContext:
-        allowPrivilegeEscalation: false
         runAsUser: 1001
         runAsGroup: 1001
         fsGroup: 1001
@@ -69,6 +68,8 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
@@ -99,6 +100,8 @@ spec:
           {{- with .Values.nginxExtraVolumeMounts }}
           {{ . | toYaml | trim | nindent 10 }}
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
