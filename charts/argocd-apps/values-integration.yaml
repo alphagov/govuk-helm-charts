@@ -43,6 +43,8 @@ govukApplications:
         value: asset-manager
       - name: GOVUK_APP_ROOT
         value: /var/apps/asset-manager
+      - name: GOVUK_ASSET_ROOT  # testing in isolation
+        value: https://asset-manager.eks.integration.govuk.digital
       - name: GOVUK_STATSD_PREFIX
         value: asset-manager
       - name: JWT_AUTH_SECRET
