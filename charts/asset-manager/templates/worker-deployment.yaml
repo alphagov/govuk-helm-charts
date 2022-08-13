@@ -1,4 +1,3 @@
-{{- if .Values.workerEnabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -51,7 +50,7 @@ spec:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: {{ .Release.Name }}-asset-uploads-efs
+            - name: assets-efs
               mountPath: /var/apps/
             - name: clam-virus-db
               mountPath: /var/lib/clamav
@@ -62,23 +61,23 @@ spec:
             allowPrivilegeEscalation: false
           # TODO: consider implementing a liveness probe for Sidekiq
           # e.g. https://github.com/arturictus/sidekiq_alive
-        - name: freshclam
+        - name: clamd
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-          command: ["/bin/sh"]
-          args: ["-c", "freshclam -d --stdout --foreground"]
-          {{- with .Values.workerResources }}
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+          command: ["clamd"]
+          args: ["-d"]
+          {{- with .Values.clamdResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: assets-efs
+              mountPath: /var/apps/
             - name: clam-virus-db
               mountPath: /var/lib/clamav
             - name: clamd-conf
               mountPath: /etc/clamav/clamd.conf
               subPath: clamd.conf
-            - name: freshclam-conf
-              mountPath: /etc/clamav/freshclam.conf
-              subPath: freshclam.conf
           securityContext:
             allowPrivilegeEscalation: false
       {{- with .Values.dnsConfig }}
@@ -86,16 +85,17 @@ spec:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
       volumes:
-      - name: {{ .Release.Name }}-asset-uploads-efs
+      - name: assets-efs
         nfs:
-          server: "{{ .Values.nfsServer }}"
+          server: "{{ .Values.assetManagerNFS }}"
           path: /
       - name: clam-virus-db
-        emptyDir: {}
+        nfs:
+          server: "{{ .Values.clamavNFS }}"
+          path: /
       - name: clamd-conf
         configMap:
           name: {{ .Release.Name }}-clamd-conf
       - name: freshclam-conf
         configMap:
           name: {{ .Release.Name }}-freshclam-conf
-{{- end }}

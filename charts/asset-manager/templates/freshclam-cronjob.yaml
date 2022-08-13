@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-freshclam
+spec:
+  schedule: "19 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- include "asset-manager.freshclam.podspec" . | indent 8 }}
+          restartPolicy: Never

@@ -23,7 +23,7 @@ spec:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           volumeMounts:
-            - name: {{ .Release.Name }}-asset-uploads-efs
+            - name: assets-efs
               mountPath: /var/apps/
           ports:
             - name: http
@@ -118,7 +118,7 @@ spec:
       {{- with .Values.extraVolumes }}
         {{ . | toYaml | trim | nindent 6 }}
       {{- end }}
-      - name: {{ .Release.Name }}-asset-uploads-efs
+      - name: assets-efs
         nfs:
-          server: {{ .Values.nfsServer }}
+          server: {{ .Values.assetManagerNFS }}
           path: /

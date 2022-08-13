@@ -1,0 +1,41 @@
+{{- define "asset-manager.freshclam.podspec" }}
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+    # Asset Manager needs to run as 2899 since it shares the same NFS volume with
+    # EC2 counterpart
+    runAsUser: 2899
+    runAsGroup: 2899
+    fsGroup: 2899
+  containers:
+    - name: freshclam
+      image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+      imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+      command: ["freshclam"]
+      {{ with .Values.freshclamResources }}
+      resources:
+        {{- . | toYaml | trim | nindent 15 }}
+      {{ end }}
+      volumeMounts:
+        - name: clam-virus-db
+          mountPath: /var/lib/clamav
+        - name: clamd-conf
+          mountPath: /etc/clamav/clamd.conf
+          subPath: clamd.conf
+        - name: freshclam-conf
+          mountPath: /etc/clamav/freshclam.conf
+          subPath: freshclam.conf
+      securityContext:
+        allowPrivilegeEscalation: false
+  volumes:
+  - name: clam-virus-db
+    nfs:
+      server: "{{ .Values.clamavNFS }}"
+      path: /
+  - name: clamd-conf
+    configMap:
+      name: {{ .Release.Name }}-clamd-conf
+  - name: freshclam-conf
+    configMap:
+      name: {{ .Release.Name }}-freshclam-conf
+{{- end }}
