@@ -65,11 +65,13 @@ spec:
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
-          {{- if .Values.securityContext.appContainer }}
           securityContext:
-            allowPrivilegeEscalation: false
-            runAsUser: 1001
-            runAsGroup: 1001
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+          {{- with .Values.appExtraVolumeMounts }}
+          volumeMounts:
+            {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
@@ -123,6 +125,6 @@ spec:
           name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
       - name: tmp
         emptyDir: {}
-      {{- with .Values.nginxExtraVolumes }}
-      {{ . | toYaml | trim | nindent 6 }}
+      {{- with .Values.extraVolumes }}
+        {{- . | toYaml | trim | nindent 6 }}
       {{- end }}
