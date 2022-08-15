@@ -99,12 +99,10 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          {{- if .Values.securityContext.appContainer }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 1001
             runAsGroup: 1001
-          {{- end }}
           volumeMounts:
           - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
             mountPath: /etc/nginx/nginx.conf

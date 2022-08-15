@@ -45,10 +45,8 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          {{- if .Values.securityContext.appContainer }}
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 1001
             runAsGroup: 1001
-          {{- end }}
 {{- end }}
