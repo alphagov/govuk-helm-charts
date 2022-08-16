@@ -9,4 +9,3 @@ spec:
       template:
         spec:
           {{- include "asset-manager.freshclam.podspec" . | indent 8 }}
-          restartPolicy: Never
