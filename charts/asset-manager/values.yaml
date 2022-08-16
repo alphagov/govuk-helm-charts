@@ -20,8 +20,6 @@ ingress:
 
 replicaCount: 1
 
-# workerEnabled should be true if the app uses Sidekiq, false otherwise.
-workerEnabled: true
 workerReplicaCount: 1
 
 appImage:
@@ -63,8 +61,26 @@ workerResources:
     cpu: 500m
     memory: 2Gi
 
-# nfsServer is the address of the NFSv4 (or Amazon EFS) server where uploaded
-nfsServer: "assets"
+freshclamResources:
+  limits:
+    cpu: 1
+    memory: 512Mi
+  requests:
+    cpu: 500m
+    memory: 256Mi
+
+clamdResources:
+  limits:
+    cpu: 1
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 2Gi
+
+# assetManagerNFS is the address of the NFSv4 (or Amazon EFS) server where uploaded
+assetManagerNFS: "asset-manager-efs.dev.gov.uk"
+# assetManagerNFS is the address of the NFSv4 (or Amazon EFS) server where Clamav stores virus database
+clamavNFS: "clamav-efs.dev.gov.uk"
 
 # dnsConfig is passed directly into the pod specs in the app and worker
 # deployment templates.

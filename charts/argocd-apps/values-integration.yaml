@@ -22,13 +22,14 @@ govukApplications:
       hosts:
       - name: asset-manager.eks.integration.govuk.digital
     workerReplicaCount: 1
-    nfsServer: &assets-nfs assets.blue.integration.govuk-internal.digital
+    assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
+    clamavNFS: clamav-db-govuk.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
       name: asset-manager-nginx-conf
     extraEnv:
       - name: ASSET_MANAGER_CLAMSCAN_PATH
-        value: /usr/bin/clamscan  # TODO: Clamscan hasn't been tested yet, will update it to correct values after testing
+        value: /usr/bin/clamdscan
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:

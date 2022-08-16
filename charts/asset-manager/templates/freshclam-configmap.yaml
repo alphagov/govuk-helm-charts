@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-freshclam-conf
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app.kubernetes.io/component: web
+    app.kubernetes.io/component: freshclam
 data:
   freshclam.conf: |-
 
