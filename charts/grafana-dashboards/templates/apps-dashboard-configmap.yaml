@@ -8,7 +8,5 @@ metadata:
     grafana_dashboard: "1"
     namespace: monitoring
 data:
-  # Original source of the dashboard is: https://github.com/mrnetops/fastly-dashboards/blob/main/grafana/provisioning/dashboards/Fastly-Dashboard.json
-  # with some modifications to fit GOV.UK needs
-  dashboard.json: |-
+  apps.json: |-
     {{- .Files.Get "apps-dashboard.json" | nindent 4 }}
