@@ -408,6 +408,10 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+      - name: SIGNON_APPS_URI_SUB_PATTERN
+        value: publishing.service.gov.uk
+      - name: SIGNON_APPS_URI_SUB_REPLACEMENT
+        value: eks.production.govuk.digital
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
