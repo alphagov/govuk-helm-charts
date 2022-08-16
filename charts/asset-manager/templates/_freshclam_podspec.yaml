@@ -38,4 +38,5 @@
   - name: freshclam-conf
     configMap:
       name: {{ .Release.Name }}-freshclam-conf
+  restartPolicy: Never
 {{- end }}
