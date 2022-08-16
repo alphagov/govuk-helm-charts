@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: clamav-db
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: clamav-db-efs-sc
+  resources:
+    requests:
+      storage: 1Gi

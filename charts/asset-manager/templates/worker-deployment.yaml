@@ -90,9 +90,8 @@ spec:
           server: "{{ .Values.assetManagerNFS }}"
           path: /
       - name: clam-virus-db
-        nfs:
-          server: "{{ .Values.clamavNFS }}"
-          path: /
+        persistentVolumeClaim:
+          claimName: clamav-db
       - name: clamd-conf
         configMap:
           name: {{ .Release.Name }}-clamd-conf
