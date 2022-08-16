@@ -79,7 +79,7 @@ clamdResources:
 
 # assetManagerNFS is the address of the NFSv4 (or Amazon EFS) server where uploaded
 assetManagerNFS: "asset-manager-efs.dev.gov.uk"
-# assetManagerNFS is the address of the NFSv4 (or Amazon EFS) server where Clamav stores virus database
+# clamavNFS is the address of the NFSv4 (or Amazon EFS) server where Clamav stores virus database
 clamavNFS: "clamav-efs.dev.gov.uk"
 
 # dnsConfig is passed directly into the pod specs in the app and worker
