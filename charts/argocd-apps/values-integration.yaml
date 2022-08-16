@@ -23,7 +23,6 @@ govukApplications:
       - name: asset-manager.eks.integration.govuk.digital
     workerReplicaCount: 1
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
-    clamavNFS: clamav-db-govuk.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
       name: asset-manager-nginx-conf
