@@ -18,6 +18,8 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
       restartPolicy: Never
       containers:
         - name: dbmigrate
@@ -39,6 +41,4 @@ spec:
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
-            runAsUser: 1001
-            runAsGroup: 1001
 {{- end }}
