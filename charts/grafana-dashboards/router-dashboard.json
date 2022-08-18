@@ -28,8 +28,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 128,
-  "iteration": 1654617570894,
+  "id": 402,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -72,7 +71,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.5.0",
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -169,7 +168,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.5.0",
+      "pluginVersion": "9.0.5",
       "pointradius": 1,
       "points": true,
       "renderer": "flot",
@@ -226,52 +225,36 @@
       }
     },
     {
-      "aliasColors": {
-        "Errors": "#E24D42"
+      "cards": {},
+      "color": {
+        "cardColor": "#b4ff00",
+        "colorScale": "sqrt",
+        "colorScheme": "interpolateOranges",
+        "exponent": 0.5,
+        "mode": "spectrum"
       },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
+      "dataFormat": "timeseries",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
       },
       "description": "Time in Millisecond to process a request",
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 24,
         "x": 0,
         "y": 13
       },
-      "hiddenSeries": false,
+      "heatmap": {},
+      "hideZeroBuckets": false,
+      "highlightCards": true,
       "id": 1,
       "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
+        "show": false
       },
-      "lines": true,
-      "linewidth": 1,
       "links": [],
-      "nullPointMode": "connected",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.5.0",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "9.0.5",
+      "reverseYBuckets": false,
       "targets": [
         {
           "datasource": {
@@ -287,38 +270,21 @@
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
       "title": "Request Duration",
       "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
         "show": true,
-        "values": []
+        "showHistogram": false
       },
-      "yaxes": [
-        {
-          "$$hashKey": "object:108",
-          "format": "s",
-          "label": "Time (s)",
-          "logBase": 1,
-          "show": true
-        },
-        {
-          "$$hashKey": "object:109",
-          "format": "short",
-          "logBase": 1,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false
-      }
+      "type": "heatmap",
+      "xAxis": {
+        "show": true
+      },
+      "yAxis": {
+        "format": "s",
+        "logBase": 1,
+        "show": true
+      },
+      "yBucketBound": "auto"
     }
   ],
   "refresh": "10s",
@@ -357,10 +323,10 @@
         "current": {
           "selected": true,
           "text": [
-            "collections"
+            "government-frontend"
           ],
           "value": [
-            "collections"
+            "government-frontend"
           ]
         },
         "datasource": {
@@ -385,27 +351,23 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": [
-            "0.99"
-          ],
-          "value": [
-            "0.99"
-          ]
+          "selected": false,
+          "text": "0.95",
+          "value": "0.95"
         },
         "hide": 0,
         "includeAll": false,
         "label": "quantile",
-        "multi": true,
+        "multi": false,
         "name": "quantile",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "0.99",
             "value": "0.99"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "0.95",
             "value": "0.95"
           },
@@ -500,6 +462,6 @@
   "timezone": "browser",
   "title": "Router: request rates, errors, durations",
   "uid": "uBEWkijnz",
-  "version": 20,
+  "version": 66947,
   "weekStart": ""
 }
