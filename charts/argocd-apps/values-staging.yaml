@@ -123,6 +123,7 @@ govukApplications:
       requests:
         cpu: 2
         memory: 512Mi
+    replicaCount: 3
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
