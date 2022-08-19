@@ -902,6 +902,10 @@ govukApplications:
             key: SECRET_KEY_BASE
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SIGNON_APPS_URI_SUB_PATTERN
+        value: integration.publishing.service.gov.uk
+      - name: SIGNON_APPS_URI_SUB_REPLACEMENT
+        value: eks.integration.govuk.digital
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
