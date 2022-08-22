@@ -667,11 +667,6 @@ govukApplications:
         value: govuk-publishing-api-event-log_user
       - name: GOVUK_CONTENT_SCHEMAS_PATH
         value: /govuk-content-schemas
-      - name: SENTRY_DSN
-        valueFrom:
-          secretKeyRef:
-            name: publishing-api-sentry-dsn
-            key: dsn
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
