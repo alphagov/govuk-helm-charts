@@ -36,6 +36,11 @@ spec:
           env:
             - name: PORT
               value: "{{ .Values.appPort }}"
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-sentry-dsn
+                  key: dsn
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
           {{- with .Values.extraEnv }}
