@@ -73,7 +73,7 @@ data:
                            '"status": $status, '
                            '"request": "$request", '
                            '"request_method": "$request_method", '
-                           '"http_referrer": "$http_referer", '
+                           '"http_referer": "$http_referer", '
                            '"http_user_agent": "$http_user_agent", '
                            '"govuk_request_id": "$http_govuk_request_id", '
                            '"govuk_original_url": "$http_govuk_original_url", '
