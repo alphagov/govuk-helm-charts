@@ -60,6 +60,34 @@ http {
     '' "max-age=31536000; preload";
   }
 
+  log_format json_event '{ "@timestamp": "$time_iso8601", '
+                       '"remote_addr": "$remote_addr", '
+                       '"remote_user": "$remote_user", '
+                       '"body_bytes_sent": $body_bytes_sent, '
+                       '"bytes_sent": $bytes_sent, '
+                       '"request_time": $request_time, '
+                       '"upstream_response_time": "$upstream_response_time", '
+                       '"upstream_addr": "$upstream_addr", '
+                       '"gzip_ratio": "$gzip_ratio", '
+                       '"sent_http_x_cache": "$sent_http_x_cache", '
+                       '"sent_http_location": "$sent_http_location", '
+                       '"sent_http_content_type": "$sent_http_content_type", '
+                       '"http_host": "$http_host", '
+                       '"server_name": "$server_name", '
+                       '"server_port": "$server_port", '
+                       '"status": $status, '
+                       '"request": "$request", '
+                       '"request_method": "$request_method", '
+                       '"http_referer": "$http_referer", '
+                       '"http_user_agent": "$http_user_agent", '
+                       '"govuk_request_id": "$http_govuk_request_id", '
+                       '"govuk_original_url": "$http_govuk_original_url", '
+                       '"govuk_dependency_resolution_source_content_id": "$http_govuk_dependency_resolution_source_content_id", '
+                       '"varnish_id": "$http_x_varnish", '
+                       '"ssl_protocol": "$ssl_protocol", '
+                       '"ssl_cipher": "$ssl_cipher", '
+                       '"http_x_forwarded_for": "$http_x_forwarded_for" }';
+
   upstream router {
     server 127.0.0.1:3000;
   }
@@ -75,6 +103,8 @@ http {
     proxy_read_timeout 20s;
     proxy_intercept_errors on;
 
+    access_log /dev/stdout json_event;
+    error_log /dev/stderr;
 
     add_header Strict-Transport-Security $sts_default;
     proxy_set_header GOVUK-Request-Id $govuk_request_id;
