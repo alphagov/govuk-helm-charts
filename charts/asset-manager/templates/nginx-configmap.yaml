@@ -47,14 +47,6 @@ data:
         '' "max-age=31536000; preload";
       }
 
-      log_format timed_combined '$remote_addr - $remote_user [$time_local]  '
-        '"$request" $status $body_bytes_sent '
-        '"$http_referer" "$http_user_agent" '
-        '$request_time $upstream_response_time '
-        '$gzip_ratio $sent_http_x_cache $sent_http_location $http_host '
-        '$ssl_protocol $ssl_cipher '
-        '$http_x_forwarded_for';
-
       log_format json_event '{ "@timestamp": "$time_iso8601", '
                            '"remote_addr": "$remote_addr", '
                            '"remote_user": "$remote_user", '
@@ -123,7 +115,6 @@ data:
         proxy_connect_timeout 1s;
         proxy_read_timeout 60;
 
-        access_log /dev/stderr timed_combined;
         access_log /dev/stdout json_event;
         error_log /dev/stderr;
 
