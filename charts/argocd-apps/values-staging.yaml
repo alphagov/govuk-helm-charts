@@ -483,11 +483,32 @@ govukApplications:
         memory: 2Gi
         cpu: "1"
     appProbes:
+      startupProbe:
+        failureThreshold: 10
+        httpGet:
+          path: /healthcheck/live
+          port: http
+          scheme: HTTP
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 15
       livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthcheck/live
+          port: http
+          scheme: HTTP
         periodSeconds: 10
+        successThreshold: 1
         timeoutSeconds: 30
       readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthcheck/live
+          port: http
+          scheme: HTTP
         periodSeconds: 10
+        successThreshold: 1
         timeoutSeconds: 30
     nginxProxyReadTimeout: 30
     uploadAssets: &whitehall-upload-assets
