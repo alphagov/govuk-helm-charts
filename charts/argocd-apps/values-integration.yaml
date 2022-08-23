@@ -967,6 +967,8 @@ govukApplications:
 - name: govuk-replatform-test-app
   repoName: govuk-replatform-test-app
   helmValues:
+    sentry:
+      enabled: false
     uploadAssets:
       enabled: false
     appPort: 9292
