@@ -9,6 +9,7 @@ globalHelmValues:
     requests:
       cpu: 0.1
       memory: 800Mi
+  replicaCount: 3
 
 govukApplications:
 - name: argo-workflows
