@@ -474,12 +474,22 @@ govukApplications:
         value: /var/apps/static
 - name: whitehall-frontend
   repoName: whitehall
-  appResources:
-    limits:
-      memory: 2Gi
-    requests:
-      memory: 1.5Gi
   helmValues:
+    appResources:
+      limits:
+        memory: 4Gi
+        cpu: "2"
+      requests:
+        memory: 2Gi
+        cpu: "1"
+    appProbes:
+      livenessProbe:
+        periodSeconds: 10
+        timeoutSeconds: 30
+      readinessProbe:
+        periodSeconds: 10
+        timeoutSeconds: 30
+    nginxProxyReadTimeout: 30
     uploadAssets: &whitehall-upload-assets
       path: "/app/public/assets/whitehall"
       s3Directory: "whitehall"
