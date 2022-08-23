@@ -332,7 +332,7 @@ govukApplications:
       - name: BACKEND_URL_collections
         value: "http://collections"
       - name: BACKEND_URL_content-store
-        value: "http://content-store"
+        value: "https://content-store.production.govuk-internal.digital"
       - name: BACKEND_URL_email-alert-frontend
         value: "http://email-alert-frontend"
       - name: BACKEND_URL_frontend

@@ -223,7 +223,7 @@ govukApplications:
       - name: BACKEND_URL_collections
         value: "http://draft-collections"
       - name: BACKEND_URL_content-store
-        value: "http://draft-content-store"
+        value: "https://draft-content-store.integration.govuk-internal.digital"
       - name: BACKEND_URL_email-alert-frontend
         value: "http://draft-email-alert-frontend"
       - name: BACKEND_URL_frontend
@@ -737,7 +737,7 @@ govukApplications:
       - name: BACKEND_URL_collections
         value: "http://collections"
       - name: BACKEND_URL_content-store
-        value: "http://content-store"
+        value: "https://content-store.integration.govuk-internal.digital"
       - name: BACKEND_URL_email-alert-frontend
         value: "http://email-alert-frontend"
       - name: BACKEND_URL_frontend
