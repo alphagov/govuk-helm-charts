@@ -28,6 +28,7 @@ spec:
               parameters:
                 - name: extra-args
                   value: "{{" and @app-{{workflow.parameters.application}}"}}"
+          {{ if .Values.nextEnvironment }}
           - name: promote-release
             depends: smoke-test.Succeeded
             templateRef:
@@ -41,6 +42,7 @@ spec:
                   value: "{{"{{workflow.parameters.repoName}}"}}"
                 - name: imageTag
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
+          {{- end }}
 
     - name: exit-handler
       steps:
