@@ -2,6 +2,7 @@ globalHelmValues:
   govukEnvironment: production
   externalDomainSuffix: eks.production.govuk.digital
   publishingServiceDomainSuffix: publishing.service.gov.uk
+  assetDomain: gov.uk
   appResources:
     limits:
       cpu: 1
@@ -70,7 +71,7 @@ govukApplications:
   helmValues:
     extraEnv:
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
-        value: b5baae45-0a68-4b63-91a1-66b05640d27e 
+        value: b5baae45-0a68-4b63-91a1-66b05640d27e
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
         value: ceefedd7-3214-4774-8b57-f27c89aac90d
       - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
