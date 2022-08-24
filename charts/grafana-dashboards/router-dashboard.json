@@ -28,7 +28,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 402,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -87,11 +86,23 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(router_backend_handler_response_duration_seconds_count{job=\"${namespace}/router\", backend_id=\"${backend_app}\"}[$__rate_interval]))",
+          "expr": "sum(rate(router_backend_handler_response_duration_seconds_count{job=\"${namespace}/router\", backend_id=~\"${backend_app}\"}[$__rate_interval])) by (backend_id)",
           "interval": "",
-          "legendFormat": "${backend_app}",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(router_backend_handler_response_duration_seconds_count{job=\"${namespace}/router\"}[$__rate_interval]))",
+          "hide": false,
+          "legendFormat": "all",
+          "range": true,
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -184,11 +195,23 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(router_backend_handler_response_duration_seconds_count{job=\"${namespace}/router\", backend_id=\"${backend_app}\",response_code=~\"${error_status}\"}[$__rate_interval])) or vector(0)",
+          "expr": "sum(rate(router_backend_handler_response_duration_seconds_count{job=\"${namespace}/router\", backend_id =~ \"${backend_app}\",response_code=~\"${error_status}\"}[$__rate_interval])) by (backend_id)\n",
           "interval": "",
-          "legendFormat": "${backend_app}",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(router_backend_handler_response_duration_seconds_count{job=\"${namespace}/router\",response_code=~\"${error_status}\"}[$__rate_interval])) or vector(0)",
+          "hide": false,
+          "legendFormat": "all",
+          "range": true,
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -263,10 +286,10 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(${quantile}, sum(rate(router_backend_handler_response_duration_seconds_bucket{job=\"${namespace}/router\", backend_id=\"${backend_app}\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(${quantile}, sum(rate(router_backend_handler_response_duration_seconds_bucket{job=\"${namespace}/router\", backend_id=~\"${backend_app}\"}[$__rate_interval])) by (le))",
           "instant": false,
           "interval": "",
-          "legendFormat": "${quantile} quantile ${backend_app}",
+          "legendFormat": "__auto",
           "refId": "A"
         }
       ],
@@ -280,7 +303,7 @@
         "show": true
       },
       "yAxis": {
-        "format": "s",
+        "format": "short",
         "logBase": 1,
         "show": true
       },
@@ -320,13 +343,14 @@
         "type": "query"
       },
       {
+        "allValue": "",
         "current": {
           "selected": true,
           "text": [
-            "government-frontend"
+            "All"
           ],
           "value": [
-            "government-frontend"
+            "$__all"
           ]
         },
         "datasource": {
@@ -351,9 +375,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "0.95",
-          "value": "0.95"
+          "selected": true,
+          "text": "0.99",
+          "value": "0.99"
         },
         "hide": 0,
         "includeAll": false,
@@ -362,12 +386,12 @@
         "name": "quantile",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "0.99",
             "value": "0.99"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "0.95",
             "value": "0.95"
           },
@@ -411,7 +435,7 @@
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "definition": "label_values(router_backend_handler_response_duration_seconds_count{namespace=\"${namespace}\", backend_id=\"${backend_app}\"}, response_code)",
+        "definition": "label_values(router_backend_handler_response_duration_seconds_count{namespace=\"${namespace}\"}, response_code)",
         "description": "HTTP error status",
         "hide": 0,
         "includeAll": true,
@@ -420,7 +444,7 @@
         "name": "error_status",
         "options": [],
         "query": {
-          "query": "label_values(router_backend_handler_response_duration_seconds_count{namespace=\"${namespace}\", backend_id=\"${backend_app}\"}, response_code)",
+          "query": "label_values(router_backend_handler_response_duration_seconds_count{namespace=\"${namespace}\"}, response_code)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -462,6 +486,6 @@
   "timezone": "browser",
   "title": "Router: request rates, errors, durations",
   "uid": "uBEWkijnz",
-  "version": 66947,
+  "version": 10,
   "weekStart": ""
 }
