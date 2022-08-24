@@ -49,6 +49,11 @@ http {
     }
   ';
 
+  upstream assets_s3 {
+    server govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
+    server www-origin.{{ .Values.publishingServiceDomainSuffix }} backup;
+  }
+
   # This map creates a $sts_default variable for later use.
   # If this header is already set by upstream, then $sts_default will
   # be an empty string, which will later lead to:
@@ -174,13 +179,17 @@ http {
       proxy_set_header   Authorization "";
       proxy_set_header   Connection "";
       proxy_set_header   X-Real-IP $remote_addr;  # TODO: pass the actual end-client address
+      proxy_set_header   X-Forwarded-Server $host;
+      proxy_set_header   X-Forwarded-Host $http_host;
+      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_hide_header  x-amz-id-2;
       proxy_hide_header  x-amz-meta-server-side-encryption;
       proxy_hide_header  x-amz-request-id;
       proxy_hide_header  x-amz-server-side-encryption;
       proxy_hide_header  x-amz-version-id;
       proxy_intercept_errors on;
-      proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
+      proxy_pass         https://assets_s3;
+      proxy_next_upstream http_404;
 
       add_header Cache-Control "max-age=31536000, public, immutable";
       add_header "Access-Control-Allow-Origin" "*";
