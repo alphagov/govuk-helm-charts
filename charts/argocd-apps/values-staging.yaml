@@ -2,6 +2,7 @@ globalHelmValues:
   govukEnvironment: staging
   externalDomainSuffix: eks.staging.govuk.digital
   publishingServiceDomainSuffix: staging.publishing.service.gov.uk
+  assetDomain: staging.publishing.service.gov.uk
   appResources:
     limits:
       cpu: 1

@@ -2,6 +2,7 @@ globalHelmValues:
   govukEnvironment: integration
   externalDomainSuffix: eks.integration.govuk.digital
   publishingServiceDomainSuffix: integration.publishing.service.gov.uk
+  assetDomain: integration.publishing.service.gov.uk
   appResources:
     limits:
       cpu: 1
