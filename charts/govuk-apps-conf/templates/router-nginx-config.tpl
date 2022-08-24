@@ -94,12 +94,36 @@ http {
     auth_basic_user_file /etc/nginx/htpasswd/htpasswd;
     {{- end }}
 
-    # Strip cookies headers for all requests by default
+    # The directives in this block don't apply when one of the more specific
+    # top-level location blocks (see further down) matches.
     location / {
+      # Strip cookie headers by default.
       proxy_pass         http://router;
       proxy_redirect     off;
       proxy_hide_header  Set-Cookie;
       proxy_set_header   Cookie '';
+
+      # If slug is ALL CAPS then lowercase it, e.g.:
+      #   /GOVERNMENT/GUIDANCE -> /government/guidance
+      #   /GoVeRnMeNt/gUiDaNcE -> /GoVeRnMeNt/gUiDaNcE (but see next rule below)
+      location ~ ^\/[A-Z]+[A-Z\W\d]+$ {
+        rewrite ^(.*)$ $scheme://$host$uri_lowercase permanent;
+      }
+
+      # If slug contains mIxEd CaSe, then return 404.
+      location ~ ^\/(?=.*[A-Z])(?=.*[a-z]).*$ {
+        return 404;
+      }
+
+      # If slug has trailing URL, direct after trimming.
+      location ~ ^\/(.+)\/$ {
+        rewrite ^\/(.+)\/$ $scheme://$host/$1 permanent;
+      }
+
+      # If slug has trailing fullstop, direct after trimming.
+      location ~ ^\/(.+)\.$ {
+        rewrite ^\/(.+)\.$ $scheme://$host/$1 permanent;
+      }
     }
 
     # Allow cookie headers to pass for services that require them
@@ -140,28 +164,6 @@ http {
     # Endpoint for liveness and readiness checks of the nginx container.
     location = /readyz {
       return 200 'ok\n';
-    }
-
-    # If slug contains no lowercase letters then lowercase it
-    # eg www.gov.uk/GOVERNMENT/GUIDANCE -> www.gov.uk/government/guidance
-    # eg WWW.GOV.UK/GOVERNMENT/GUIDANCE -> www.gov.uk/government/guidance
-    location ~ ^\/[A-Z]+[A-Z\W\d]+$ {
-      rewrite ^(.*)$ $scheme://$host$uri_lowercase permanent;
-    }
-
-    # If slug contains mixed cases, then return 404
-    location ~ ^\/(?=.*[A-Z])(?=.*[a-z]).*$ {
-      return 404;
-    }
-
-    # If slug has trailing URL, direct after trimming
-    location ~ ^\/(.+)\/$ {
-      rewrite ^\/(.+)\/$ $scheme://$host/$1 permanent;
-    }
-
-    # If slug has trailing fullstop, direct after trimming
-    location ~ ^\/(.+)\.$ {
-      rewrite ^\/(.+)\.$ $scheme://$host/$1 permanent;
     }
 
     location = /robots.txt {
