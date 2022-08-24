@@ -95,11 +95,6 @@ http {
   server {
     listen 8080;
 
-    proxy_set_header   Host $http_host;
-    proxy_set_header   X-Real-IP $remote_addr;
-    proxy_set_header   X-Forwarded-Server $host;
-    proxy_set_header   X-Forwarded-Host $http_host;
-    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_read_timeout 20s;
     proxy_intercept_errors on;
 
@@ -131,6 +126,12 @@ http {
       proxy_pass         http://router;
       proxy_redirect     off;
       proxy_hide_header  Set-Cookie;
+
+      proxy_set_header   Host $http_host;
+      proxy_set_header   X-Real-IP $remote_addr;
+      proxy_set_header   X-Forwarded-Server $host;
+      proxy_set_header   X-Forwarded-Host $http_host;
+      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header   Cookie '';
 
       # If slug is ALL CAPS then lowercase it, e.g.:
@@ -162,6 +163,11 @@ http {
     location ~* ^/(apply-for-a-licence|email|sign-in\/callback) {
       proxy_pass         http://router;
       proxy_redirect     off;
+      proxy_set_header   Host $http_host;
+      proxy_set_header   X-Real-IP $remote_addr;
+      proxy_set_header   X-Forwarded-Server $host;
+      proxy_set_header   X-Forwarded-Host $http_host;
+      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
     location /assets {
@@ -217,6 +223,11 @@ http {
       # where civica QueryPayments calls are taking too long.
       proxy_read_timeout 50s;
       proxy_pass http://router;
+      proxy_set_header   Host $http_host;
+      proxy_set_header   X-Real-IP $remote_addr;
+      proxy_set_header   X-Forwarded-Server $host;
+      proxy_set_header   X-Forwarded-Host $http_host;
+      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
 
       # Licensify sends custom 500 errors, and we need to send No-Fallback: true
       # to prevent the CDN from falling back to the mirror site.
