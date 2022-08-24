@@ -182,6 +182,8 @@ http {
       proxy_set_header   X-Forwarded-Server $host;
       proxy_set_header   X-Forwarded-Host $http_host;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+      # TODO: Remove workaround after traffic experiment
+      proxy_set_header   Host 'govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com';
       proxy_hide_header  x-amz-id-2;
       proxy_hide_header  x-amz-meta-server-side-encryption;
       proxy_hide_header  x-amz-request-id;
