@@ -29,6 +29,11 @@ spec:
             configMapKeyRef:
               name: govuk-apps-env
               key: GOVUK_APP_DOMAIN
+        - name: ASSET_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: govuk-apps-env
+              key: ASSET_HOST
         - name: GOVUK_ASSET_ROOT
           valueFrom:
             configMapKeyRef:
