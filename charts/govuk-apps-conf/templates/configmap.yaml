@@ -25,7 +25,7 @@ data:
   GOVUK_PERSONALISATION_FEEDBACK_URI: https://signin.account.gov.uk/support
   # TODO: switch back to in-cluster Account API once it's fully working.
   PLEK_SERVICE_ACCOUNT_API_URI: https://account-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_ASSETS: https://assets.{{ .Values.publishingServiceDomainSuffix }}
+  PLEK_SERVICE_ASSETS_URI: https://assets.{{ .Values.publishingServiceDomainSuffix }}
   PLEK_SERVICE_ASSET_MANAGER_URI: https://asset-manager.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_CONTENT_STORE_URI: https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_DRAFT_ORIGIN_URI: https://draft-origin.{{ .Values.externalDomainSuffix }}
