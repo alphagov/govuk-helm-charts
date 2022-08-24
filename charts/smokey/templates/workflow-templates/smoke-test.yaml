@@ -61,3 +61,7 @@ spec:
               key: bearer_token
         - name: PLEK_SERVICE_ASSET_MANAGER_URI
           value: http://asset-manager.{{ .Values.internalDomainSuffix }}
+        - name: PLEK_SERVICE_ASSETS_URI
+          value: https://assets.{{ .Values.publishingServiceDomainSuffix }}
+        - name: PLEK_SERVICE_ASSETS_ORIGIN_URI
+          value: https://assets-origin.{{ .Values.publishingServiceDomainSuffix }}
