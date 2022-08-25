@@ -37,9 +37,6 @@ govukApplications:
 - name: email-alert-frontend
   helmValues:
     extraEnv:
-      - name: SUBSCRIPTION_MANAGEMENT_ENABLED
-        # TODO: Check we need to remove this for prod
-        value: "yes"  # non-prod only
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       - name: SECRET_KEY_BASE
@@ -375,7 +372,7 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: signon
   helmValues:
-    dbMigrationEnabled: false
+    dbMigrationEnabled: false # TODO: Enable before launch.
     workerEnabled: true
     ingress:
       enabled: true
