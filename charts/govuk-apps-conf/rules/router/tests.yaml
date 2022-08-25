@@ -19,7 +19,7 @@ tests:
             exp_alerts:
                 # This alert will trigger when the apps/router error ratio is >0.1 for more than 10 minutes.
                 - exp_labels:
-                      severity: critical
+                      severity: page
                   exp_annotations:
                       summary: "High 5xx error rate for apps/router"
                       description: "apps/router has high 5xx error rate for more than 10 minutes."
