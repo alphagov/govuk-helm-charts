@@ -17,16 +17,6 @@ change_image_tag() {
   CHANGED=true
 }
 
-disable_automatic_deploys() {
-  yq -i '.automatic_deploys_enabled = false' "${FILE}"
-
-  if [[ "$(git status --porcelain)" ]]; then
-      git add "${FILE}"
-      git commit -m "Disabled automatic deploys for ${REPO_NAME} with image tag ${IMAGE_TAG} for ${ENVIRONMENT}"
-      CHANGED=true
-  fi
-}
-
 git config --global user.email "${GIT_NAME}@digital.cabinet-office.gov.uk"
 git config --global user.name "${GIT_NAME}"
 
@@ -34,10 +24,6 @@ gh auth setup-git
 gh repo clone alphagov/govuk-helm-charts -- --depth 1 --branch main
 
 cd "govuk-helm-charts" || exit 1
-
-if [[ "${MANUAL_DEPLOY}" = true ]]; then
-  disable_automatic_deploys
-fi
 
 # Exit successfully if image tag already set
 current_image_tag="$(yq '.image_tag' "${FILE}")"
