@@ -50,8 +50,8 @@ http {
   ';
 
   upstream assets_s3 {
-    server govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com:443;
-    server www-origin.{{ .Values.publishingServiceDomainSuffix }}:443 backup;
+    server govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
+    server www-origin.{{ .Values.publishingServiceDomainSuffix }} backup;
   }
 
   # This map creates a $sts_default variable for later use.
