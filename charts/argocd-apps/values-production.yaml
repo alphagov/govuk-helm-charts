@@ -517,8 +517,6 @@ govukApplications:
     extraEnv: &whitehall-envs
       - name: NODE_ENV  # TODO: move NODE_ENV=production to the Dockerfile
         value: production
-      - name: ASSET_HOST
-        value: https://www.gov.uk
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
