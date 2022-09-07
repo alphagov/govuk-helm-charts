@@ -6,7 +6,7 @@ metadata:
     {{- include "asset-manager.labels" . | nindent 4 }}
     app.kubernetes.io/component: clamav-pvc
   annotations:
-    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-options: Prune=false
 spec:
   accessModes:
     - ReadWriteMany
