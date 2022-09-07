@@ -261,8 +261,6 @@ govukApplications:
     extraEnv: &whitehall-envs
       - name: NODE_ENV
         value: production
-      - name: ASSET_HOST
-        value: https://www.integration.publishing.service.gov.uk
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
