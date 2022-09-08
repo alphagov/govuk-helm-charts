@@ -5,6 +5,8 @@ metadata:
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
     app.kubernetes.io/component: clamav-pvc
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   accessModes:
     - ReadWriteMany

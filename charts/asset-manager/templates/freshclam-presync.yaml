@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-update-freshclam
   annotations:
-    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   template:
     spec:
