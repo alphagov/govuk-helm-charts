@@ -30,7 +30,7 @@
   volumes:
   - name: clam-virus-db
     persistentVolumeClaim:
-        claimName: clamav-db
+      claimName: clamav-db-efs
   - name: clamd-conf
     configMap:
       name: {{ .Release.Name }}-clamd-conf
