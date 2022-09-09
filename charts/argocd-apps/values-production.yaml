@@ -1,6 +1,6 @@
 globalHelmValues:
   govukEnvironment: production
-  externalDomainSuffix: eks.production.govuk.digital
+  externalDomainSuffix: gov.uk
   publishingServiceDomainSuffix: publishing.service.gov.uk
   appResources:
     limits:
