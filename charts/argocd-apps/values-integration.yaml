@@ -710,6 +710,7 @@ govukApplications:
     ingress:
       enabled: true
       annotations:
+        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
         alb.ingress.kubernetes.io/healthcheck-path: /readyz
       hosts:
