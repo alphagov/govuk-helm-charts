@@ -1,7 +1,0 @@
-appImage:
-  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/signon-resources
-  tag: latest
-
-govukEnvironment: test
-govukDomainExternal: govuk.digital
-publishingServiceDomainSuffix: test.publishing.service.gov.uk
