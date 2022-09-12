@@ -908,9 +908,6 @@ govukApplications:
           secretKeyRef:
             name: signon-auth-token
             key: token
-- name: signon-resources
-  chartPath: charts/signon-resources
-  postSyncWorkflowEnabled: "false"
 - name: info-frontend
   helmValues:
     extraEnv:
