@@ -47,6 +47,7 @@ spec:
     - name: exit-handler
       steps:
         - - name: notify-slack
+            when: "{{"{{workflow.status}}"}} != Succeeded"
             templateRef:
               name: notify-slack
               template: notify-slack
