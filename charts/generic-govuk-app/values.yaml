@@ -117,3 +117,6 @@ securityContext:
 sentry:
   enabled: true
   createSecret: true
+
+govukAppsEnv:
+  enabled: true

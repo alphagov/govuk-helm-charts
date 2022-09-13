@@ -505,6 +505,9 @@ govukApplications:
     uploadAssets:
       enabled: false
     appPort: 9292
+    appsNamespace: tutorials
+    govukAppsEnv:
+      enabled: false
     appProbes:
       startupProbe: &test-probe
         httpGet:
@@ -528,24 +531,10 @@ govukApplications:
       hosts:
       - govuk-replatform-test-app.eks.integration.govuk.digital
     extraEnv:
-      - name: HELM_MESSAGE_1
-        value: your_helm_message_1
-      - name: HELM_MESSAGE_2
-        value: your_helm_message_2
-      - name: HELM_MESSAGE_3
-        value: your_helm_message_3
-      - name: HELM_MESSAGE_4
-        value: your_helm_message_4
-      - name: HELM_MESSAGE_5
-        value: your_helm_message_5
-      - name: HELM_MESSAGE_6
-        value: your_helm_message_6
-      - name: HELM_MESSAGE_7
-        value: your_helm_message_7
-      - name: HELM_MESSAGE_8
-        value: your_helm_message_8
-      - name: HELM_MESSAGE_9
-        value: your_helm_message_9
+      - name: ENV_MESSAGE_EXAMPLE
+        value: message_by_example
+      - name: ENV_MESSAGE_OTHER
+        value: message_by_other
 - name: licencefinder
   repoName: licence-finder
   helmValues:

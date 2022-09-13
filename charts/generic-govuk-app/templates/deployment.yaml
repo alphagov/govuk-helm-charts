@@ -31,8 +31,10 @@ spec:
             - name: metrics
               containerPort: {{ .Values.metricsPort }}
           envFrom:
+          {{- if .Values.govukAppsEnv.enabled }}
           - configMapRef:
               name: govuk-apps-env
+          {{- end }}
           env:
             - name: PORT
               value: "{{ .Values.appPort }}"
