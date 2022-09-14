@@ -472,6 +472,12 @@ govukApplications:
   postSyncWorkflowEnabled: "false"
 - name: hmrc-manuals-api
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: hmrc-manuals-api
+      hosts:
+      - hmrc-manuals-api.eks.integration.govuk.digital
     nginxProxyReadTimeout: 300s
     uploadAssets:
       enabled: false
