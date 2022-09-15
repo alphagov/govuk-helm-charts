@@ -281,6 +281,8 @@ govukApplications:
         failureThreshold: 2
         periodSeconds: 5
     extraEnv:
+      - name: SENTRY_ENVIRONMENT
+        value: "production-eks"
       - name: ROUTER_PUBADDR
         value: ":3000"
       - name: ROUTER_APIADDR
