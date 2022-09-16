@@ -139,6 +139,14 @@ govukApplications:
           secretKeyRef:
             name: signon-token-collections-email-alert-api-ec2
             key: bearer_token
+- name: collections-publisher
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: contacts-admin
   helmValues:
     extraEnv:
@@ -557,6 +565,14 @@ govukApplications:
           secretKeyRef:
             name: signon-token-licence-finder-publishing-api-ec2
             key: bearer_token
+- name: manuals-publisher
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: publisher
   helmValues:
     dbMigrationEnabled: true
@@ -1004,6 +1020,14 @@ govukApplications:
         value: UA-26179049-22
       - name: GOVUK_APP_ROOT
         value: /var/apps/static
+- name: travel-advice-publisher
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: govuk-replatform-test-app
   repoName: govuk-replatform-test-app
   helmValues:
