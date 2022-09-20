@@ -1,0 +1,52 @@
+{{- range .Values.cronRakeTasks }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
+  labels:
+    {{- include "govuk-rails-app.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: app
+spec:
+  schedule: "{{ .schedule }}"
+  jobTemplate:
+    metadata:
+      name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
+      labels:
+        {{- include "govuk-rails-app.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: app
+    spec:
+      template:
+        metadata:
+          name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
+          labels:
+            {{- include "govuk-rails-app.labels" $ | nindent 12 }}
+            app.kubernetes.io/component: app
+        spec:
+          securityContext:
+            runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ $.Values.securityContext.runAsUser }}
+            runAsGroup: {{ $.Values.securityContext.runAsGroup }}
+          restartPolicy: Never
+          serviceAccountName: {{ .serviceAccount }}
+          containers:
+            - name: rake-task
+              image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+              command: ["bundle"]
+              args: ["exec", "rails", "{{ .task }}"]
+              envFrom:
+              - configMapRef:
+                  name: govuk-apps-env
+              env:
+                - name: SENTRY_RELEASE
+                  value: "{{ $.Values.appImage.tag }}"
+              {{- with $.Values.extraEnv }}
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              {{- with $.Values.appResources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+{{- end }}
