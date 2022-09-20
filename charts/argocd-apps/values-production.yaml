@@ -252,6 +252,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-production-aws-logging,access_logs.s3.prefix=elb/www-origin-eks
       hosts:
       - www-origin.eks.production.govuk.digital
     nginxConfigMap:
