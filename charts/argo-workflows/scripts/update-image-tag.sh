@@ -17,13 +17,6 @@ change_image_tag() {
   CHANGED=true
 }
 
-add_image_deployment_tag() {
-  aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin "$ECR_REGISTRY"
-  MANIFEST=$(aws ecr batch-get-image --repository-name "${REPO_NAME}" --image-ids imageTag="${IMAGE_TAG}" --region eu-west-1 --query 'images[].imageManifest' --output json)
-  # Every image that has a tag will then have 'deployed-to-${ENVIRONMENT}' tag added as well.
-  aws ecr put-image --repository-name "${REPO_NAME}" --image-tag "deployed-to-${ENVIRONMENT}" --image-manifest "$MANIFEST"
-}
-
 git config --global user.email "${GIT_NAME}@digital.cabinet-office.gov.uk"
 git config --global user.name "${GIT_NAME}"
 
@@ -47,7 +40,6 @@ elif [[ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]]; then
   # Auto deploys are enabled unless explicitly set to "false" (case insensitive).
   if [[ "${auto_deploys,,}" != "false" ]]; then
     change_image_tag
-    add_image_deployment_tag
   else
     echo "Did not update image tag because automatic_deploys_enabled is set to false for app"
   fi
