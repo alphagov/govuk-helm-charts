@@ -346,6 +346,15 @@ govukApplications:
       hosts:
       - signon.eks.production.govuk.digital
     workerReplicaCount: 1
+    cronRakeTasks:
+      - name: "kubernetes-sync-app-secrets"
+        task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
+        schedule: "0 */1 * * *"
+        serviceAccount: signon
+      - name: "kubernetes-sync-token-secrets"
+        task: "kubernetes:sync_token_secrets[signon-secrets-sync-conf]"
+        schedule: "0 */1 * * *"
+        serviceAccount: signon
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: e00e89f5-b622-4dcb-8f30-e6c70231a940
