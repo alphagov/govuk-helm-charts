@@ -42,7 +42,7 @@ spec:
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Release.Name }}-sentry
+                  name: {{ .Values.repoName }}-sentry
                   key: dsn
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
