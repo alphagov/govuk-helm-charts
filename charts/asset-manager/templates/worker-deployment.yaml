@@ -84,6 +84,7 @@ spec:
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
+      enableServiceLinks: false
       volumes:
       - name: assets-efs
         nfs:

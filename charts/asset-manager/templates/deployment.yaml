@@ -116,6 +116,7 @@ spec:
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
+      enableServiceLinks: false
       volumes:
       - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
         configMap:
