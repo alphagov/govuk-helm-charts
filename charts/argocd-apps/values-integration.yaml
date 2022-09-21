@@ -193,6 +193,8 @@ govukApplications:
   repoName: content-store
   helmValues:
     <<: *content-store
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
     extraEnv:
       - name: ROUTER_API_BEARER_TOKEN
         valueFrom:
@@ -226,6 +228,8 @@ govukApplications:
 - name: draft-router
   repoName: router
   helmValues:
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
     uploadAssets:
       enabled: false
     appProbes: &router-app-probes
@@ -760,6 +764,8 @@ govukApplications:
   repoName: router-api
   helmValues:
     <<: *router-api
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1091,6 +1097,8 @@ govukApplications:
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
     securityContext:
       # Use the same uid/gid for NFS permissions as the old stack, so that
       # files uploaded by whitehall-admin on k8s can be processed by
@@ -1120,6 +1128,11 @@ govukApplications:
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
+    # TODO: make whitehall-frontend the pattern app and have
+    # draft-whitehall-frontend and whitehall-admin inherit from it (instead of
+    # the other way around like it is now).
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
     uploadAssets: *whitehall-upload-assets
     extraEnv: *whitehall-envs
     appResources:

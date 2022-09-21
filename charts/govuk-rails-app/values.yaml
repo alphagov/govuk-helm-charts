@@ -111,3 +111,4 @@ securityContext:
 
 sentry:
   enabled: true
+  createSecret: true
