@@ -89,3 +89,7 @@ dnsConfig: {}
 #    value: "true"
 
 metricsPort: 9394
+
+sentry:
+  enabled: true
+  createSecret: true
