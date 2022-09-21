@@ -190,6 +190,7 @@ govukApplications:
       - name: GOVUK_APP_NAME
         value: content-store
 - name: draft-content-store
+  repoName: content-store
   helmValues:
     <<: *content-store
     extraEnv:
