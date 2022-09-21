@@ -729,7 +729,7 @@ govukApplications:
             name: publishing-api-postgres
             key: DATABASE_URL
 - name: router-api
-  helmValues:
+  helmValues: &router-api
     dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
       searches:
         - blue.integration.govuk-internal.digital
@@ -751,6 +751,31 @@ govukApplications:
           router-backend-1,\
           router-backend-2,\
           router-backend-3/router"
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+- name: draft-router-api
+  repoName: router-api
+  helmValues:
+    <<: *router-api
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-draft-router-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-draft-router-api
+            key: oauth_secret
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3/draft_router"
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
