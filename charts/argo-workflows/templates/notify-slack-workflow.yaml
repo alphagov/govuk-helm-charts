@@ -22,9 +22,7 @@ spec:
         image: curlimages/curl
         command:
           - "curl"
-          - "-X"
-          - "POST"
-          - "--data-urlencode"
+          - "--json"
           # The double template tags {{"{{}}"}} is because Helm and Argo
           # use the same templating syntax.
           - >-
