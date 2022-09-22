@@ -26,9 +26,9 @@ spec:
           - >
               payload={
                 "channel": "#{{"{{inputs.parameters.slackChannel}}"}}",
-                "username": "Argo",
+                "username": "Argo Workflows",
                 "text": "{{"{{inputs.parameters.text}}"}}",
-                "icon_emoji": ":argocd:"
+                "icon_emoji": ":argo:"
               }
           - "$(SLACK_WEBHOOK_ENDPOINT)"
         env:
