@@ -46,7 +46,7 @@ spec:
               value: "{{ .Values.appImage.tag }}"
             {{- end }}
           {{- with .Values.extraEnv }}
-            {{- . | toYaml | trim | nindent 12 }}
+            {{- (tpl (toYaml .) $) | trim | nindent 12 }}
           {{- end }}
           {{- with .Values.appResources }}
           resources:
