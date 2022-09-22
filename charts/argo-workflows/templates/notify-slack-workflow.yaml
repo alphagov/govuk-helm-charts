@@ -8,12 +8,16 @@ spec:
     parameters:
       - name: slackChannel
       - name: text
+      - name: blocks
+        description: "Provide advanced formatting for a message using Slack's Block Kit"
+        default: ""
   templates:
     - name: notify-slack
       inputs:
         parameters:
         - name: slackChannel
         - name: text
+        - name: blocks
       container:
         image: curlimages/curl
         command:
@@ -23,11 +27,12 @@ spec:
           - "--data-urlencode"
           # The double template tags {{"{{}}"}} is because Helm and Argo
           # use the same templating syntax.
-          - >
-              payload={
+          - >-
+              {
                 "channel": "#{{"{{inputs.parameters.slackChannel}}"}}",
                 "username": "Argo Workflows",
                 "text": "{{"{{inputs.parameters.text}}"}}",
+                {{`{{= inputs.parameters.blocks != "" ? "\"blocks\": " + inputs.parameters.blocks + "," : "" }}`}}
                 "icon_emoji": ":argo:"
               }
           - "$(SLACK_WEBHOOK_ENDPOINT)"
