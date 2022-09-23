@@ -223,6 +223,20 @@ govukApplications:
           mongo-1.integration.govuk-internal.digital,\
           mongo-2.integration.govuk-internal.digital,\
           mongo-3.integration.govuk-internal.digital/draft_content_store_production"
+      # Draft apps use draft backends by default so that any misconfiguration
+      # leads to obvious errors rather than draft content being unknowingly
+      # made public.
+      # TODO: fix Plek so that we don't need all this error-prone config for
+      # each draft app.
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+      # https://github.com/alphagov/govuk-puppet/pull/10316/commits/899ac50
+      - name: PLEK_SERVICE_SIGNON_API_URI
+        value: https://signon.{{ .Values.externalDomainSuffix }}
+      - name: PLEK_SERVICE_FEEDBACK_URI
+        value: http://feedback
+      - name: PLEK_SERVICE_INFO_FRONTEND_URI
+        value: http://support
       - name: GOVUK_APP_NAME
         value: content-store
 - name: draft-router
