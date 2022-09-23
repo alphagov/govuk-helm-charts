@@ -84,9 +84,14 @@ assetManagerNFS: "asset-manager-efs.dev.gov.uk"
 # deployment templates.
 dnsConfig: {}
 
-# extraEnv:
+# extraEnv is a list of (name, value) pairs representing additional environment
+# variables to pass to app containers. extraEnv is evaluated through `tpl`, so
+# Helm values can be substituted using Go template syntax. Use sparingly.
+extraEnv: {}
 #  - name: RETICULATE_SPLINES
 #    value: "true"
+#  - name: SPLINE_SERVER
+#    value: "https://splines.{{ .Values.externalDomain }}"
 
 metricsPort: 9394
 
