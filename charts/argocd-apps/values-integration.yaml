@@ -231,7 +231,7 @@ govukApplications:
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
       # https://github.com/alphagov/govuk-puppet/pull/10316/commits/899ac50
-      - name: PLEK_SERVICE_SIGNON_API_URI
+      - name: PLEK_SERVICE_SIGNON_URI
         value: https://signon.{{ .Values.externalDomainSuffix }}
       - name: PLEK_SERVICE_FEEDBACK_URI
         value: http://feedback
