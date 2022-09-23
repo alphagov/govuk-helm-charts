@@ -1,3 +1,5 @@
+# After modifying this configmap, you will need to restart deployments (kubectl
+# rollout restart) in order to pick up changes to environment variables.
 apiVersion: v1
 kind: ConfigMap
 metadata:
