@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: deploy-image
+spec:
+  entrypoint: deploy-image
+  onExit: exit-handler
+  arguments:
+    parameters:
+      - name: environment
+      - name: repoName
+      - name: imageTag
+      - name: manualDeploy
+  templates:
+    - name: deploy-image
+      steps:
+        - - name: update-image-tag
+            templateRef:
+              name: update-image-tag
+              template: update-image-tag
+            arguments:
+              parameters:
+                - name: environment
+                  value: "{{"{{workflow.parameters.environment}}"}}"
+                - name: repoName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
+                - name: imageTag
+                  value: "{{"{{workflow.parameters.imageTag}}"}}"
+                - name: manualDeploy
+                  value: "{{"{{workflow.parameters.manualDeploy}}"}}"
+
+    - name: exit-handler
+      steps:
+        - - name: notify-slack
+            when: "{{"{{workflow.status}}"}} != Succeeded"
+            templateRef:
+              name: notify-slack
+              template: notify-slack
+            arguments:
+              parameters:
+                - name: slackChannel
+                  # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
+                  # send to team slack channel.
+                  value: "govuk-deploy-alerts"
+                - name: text
+                  value: "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} in {{"{{workflow.parameters.environment}}"}} has {{"{{= sprig.lower(workflow.status) }}"}}."

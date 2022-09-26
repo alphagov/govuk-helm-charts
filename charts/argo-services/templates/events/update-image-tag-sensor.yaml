@@ -45,7 +45,7 @@ spec:
             apiVersion: argoproj.io/v1alpha1
             kind: Workflow
             metadata:
-              generateName: -update-image-tag-
+              generateName: -deploy-image-
               namespace: {{ .Values.workflowsNamespace }}
             spec:
               arguments:
@@ -55,4 +55,4 @@ spec:
                   - name: imageTag
                   - name: manualDeploy
               workflowTemplateRef:
-                name: update-image-tag
+                name: deploy-image
