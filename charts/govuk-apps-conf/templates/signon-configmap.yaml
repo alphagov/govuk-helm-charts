@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: signon-secrets-sync-conf
+  namespace: apps
+data:
+  app_names: |
+    [
+      "Account API",
+      "Asset Manager",
+      "Collections publisher",
+      "Contacts",
+      "Content Preview",
+      "Content Publisher",
+      "Content Store",
+      "Content Tagger",
+      "Draft Content Store",
+      "Draft Router API",
+      "Email Alert API",
+      "HMRC Manuals API",
+      "Imminence",
+      "Link Checker API",
+      "Local Links Manager",
+      "Manuals Publisher",
+      "Publisher",
+      "Publishing API",
+      "Release",
+      "Router API",
+      "Search admin",
+      "Search API",
+      "Service Manual Publisher",
+      "Short URL Manager",
+      "Special Route Publisher",
+      "Specialist Publisher",
+      "Support",
+      "Support API",
+      "Travel Advice Publisher",
+      "Whitehall"
+    ]
+  api_user_emails: |
+    [
+      "govuk-accounts-developers+account-api@digital.cabinet-office.gov.uk",
+      "collections@alphagov.co.uk",
+      "collections-publisher@alphagov.co.uk",
+      "contacts@alphagov.co.uk",
+      "content-publisher@alphagov.co.uk",
+      "content-store@alphagov.co.uk",
+      "content-tagger@alphagov.co.uk",
+      "draft-content-store@alphagov.co.uk",
+      "email-alert-api@alphagov.co.uk",
+      "emailalertfrontend@alphagov.co.uk",
+      "email-alert-service@alphagov.co.uk",
+      "feedback@alphagov.co.uk",
+      "finder-frontend@alphagov.co.uk",
+      "frontend@alphagov.co.uk",
+      "government-frontend@alphagov.co.uk",
+      "hmrc-manuals-api@alphagov.co.uk",
+      "info-frontend@alphagov.co.uk",
+      "licencefinder@alphagov.co.uk",
+      "local-links-manager@alphagov.co.uk",
+      "manuals-publisher@alphagov.co.uk",
+      "need-api@alphagov.co.uk",
+      "publisher@alphagov.co.uk",
+      "publishing-api@alphagov.co.uk",
+      "searchadmin@alphagov.co.uk",
+      "service-manual-publisher@alphagov.co.uk",
+      "short-url-manager@alphagov.co.uk",
+      "smartanswers@alphagov.co.uk",
+      "special-route-publisher@alphagov.co.uk",
+      "static@alphagov.co.uk",
+      "support@alphagov.co.uk",
+      "travel-advice-publisher@alphagov.co.uk",
+      "whitehall@alphagov.co.uk"
+    ]
