@@ -18,10 +18,10 @@ change_image_tag() {
 }
 
 add_image_deployment_tag() {
-  aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin "$ECR_REGISTRY"
-  MANIFEST=$(aws ecr batch-get-image --repository-name "${REPO_NAME}" --image-ids imageTag="${IMAGE_TAG}" --region eu-west-1 --query 'images[].imageManifest' --output json)
+  aws ecr get-login-password --region eu-west-1 | podman login --username AWS --password-stdin "$ECR_REGISTRY"
+  MANIFEST=$(aws ecr batch-get-image --registry-id "172025368201" --repository-name "${REPO_NAME}" --image-ids imageTag="${IMAGE_TAG}" --region eu-west-1 --query 'images[].imageManifest' --output text)
   # Every image that has a tag will then have 'deployed-to-${ENVIRONMENT}' tag added as well.
-  aws ecr put-image --repository-name "${REPO_NAME}" --image-tag "deployed-to-${ENVIRONMENT}" --image-manifest "$MANIFEST"
+  aws ecr put-image --registry-id "172025368201" --repository-name "${REPO_NAME}" --image-tag "deployed-to-${ENVIRONMENT}" --image-manifest "$MANIFEST"
 }
 
 git config --global user.email "${GIT_NAME}@digital.cabinet-office.gov.uk"

@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: update-image-tag
+  serviceAccountName: argo-workflow
 spec:
   entrypoint: update-image-tag
   arguments:
