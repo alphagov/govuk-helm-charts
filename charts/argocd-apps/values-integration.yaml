@@ -137,7 +137,7 @@ govukApplications:
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-collections-email-alert-api-ec2
+            name: signon-token-collections-email-alert-api
             key: bearer_token
 - name: collections-publisher
   helmValues:
@@ -163,7 +163,7 @@ govukApplications:
       - name: ROUTER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-content-store-router-api-ec2
+            name: signon-token-content-store-router-api
             key: bearer_token
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -334,7 +334,7 @@ govukApplications:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-whitehall-asset-manager-ec2
+            name: signon-token-whitehall-asset-manager
             key: bearer_token
       - name: GOVUK_NOTIFY_API_KEY
         valueFrom:
@@ -349,7 +349,7 @@ govukApplications:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-whitehall-link-checker-api-ec2
+            name: signon-token-whitehall-link-checker-api
             key: bearer_token
       - name: LINK_CHECKER_API_SECRET_TOKEN
         valueFrom:
@@ -359,7 +359,7 @@ govukApplications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-whitehall-publishing-api-ec2
+            name: signon-token-whitehall-publishing-api
             key: bearer_token
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
@@ -392,17 +392,17 @@ govukApplications:
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-email-alert-frontend-account-api-ec2
+            name: signon-token-email-alert-frontend-account-api
             key: bearer_token
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-email-alert-frontend-email-alert-api-ec2
+            name: signon-token-email-alert-frontend-email-alert-api
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-email-alert-frontend-publishing-api-ec2
+            name: signon-token-email-alert-frontend-publishing-api
             key: bearer_token
       - name: EMAIL_ALERT_AUTH_TOKEN
         valueFrom:
@@ -428,17 +428,17 @@ govukApplications:
       - name: SUPPORT_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-feedback-support-ec2
+            name: signon-token-feedback-support
             key: bearer_token
       - name: SUPPORT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-feedback-support-api-ec2
+            name: signon-token-feedback-support-api
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-feedback-publishing-api-ec2
+            name: signon-token-feedback-publishing-api
             key: bearer_token
       - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
         valueFrom:
@@ -473,7 +473,7 @@ govukApplications:
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-finder-frontend-email-alert-api-ec2
+            name: signon-token-finder-frontend-email-alert-api
             key: bearer_token
 - name: frontend
   helmValues:
@@ -490,7 +490,7 @@ govukApplications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-frontend-publishing-api-ec2
+            name: signon-token-frontend-publishing-api
             key: bearer_token
       - name: ELECTIONS_API_KEY
         valueFrom:
@@ -505,17 +505,17 @@ govukApplications:
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-frontend-account-api-ec2
+            name: signon-token-frontend-account-api
             key: bearer_token
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-frontend-email-alert-api-ec2
+            name: signon-token-frontend-email-alert-api
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-frontend-publishing-api-ec2
+            name: signon-token-frontend-publishing-api
             key: bearer_token
 - name: government-frontend
   helmValues:
@@ -582,7 +582,7 @@ govukApplications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-licence-finder-publishing-api-ec2
+            name: signon-token-licence-finder-publishing-api
             key: bearer_token
 - name: manuals-publisher
   helmValues:
@@ -617,12 +617,12 @@ govukApplications:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-publisher-asset-manager-ec2
+            name: signon-token-publisher-asset-manager
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-publisher-publishing-api-ec2
+            name: signon-token-publisher-publishing-api
             key: bearer_token
       - name: FACT_CHECK_USERNAME
         valueFrom:
@@ -647,7 +647,7 @@ govukApplications:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-publisher-link-checker-api-ec2
+            name: signon-token-publisher-link-checker-api
             key: bearer_token
       - name: LINK_CHECKER_API_SECRET_TOKEN
         valueFrom:
@@ -1038,12 +1038,12 @@ govukApplications:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-smartanswers-link-checker-api-ec2
+            name: signon-token-smartanswers-link-checker-api
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-smartanswers-publishing-api-ec2
+            name: signon-token-smartanswers-publishing-api
             key: bearer_token
       - name: SECRET_KEY_BASE
         valueFrom:
