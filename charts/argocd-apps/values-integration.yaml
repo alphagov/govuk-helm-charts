@@ -153,7 +153,7 @@ govukApplications:
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-colections-publisher
+            name: signon-app-collections-publisher
             key: oauth_secret
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
