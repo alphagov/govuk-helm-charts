@@ -1092,7 +1092,7 @@ govukApplications:
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
-            name: service-manual-publisher-mysql
+            name: service-manual-publisher-postgres
             key: DATABASE_URL
       - name: HTTP_USERNAME
         value: betademo
