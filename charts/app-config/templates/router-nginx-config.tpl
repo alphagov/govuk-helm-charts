@@ -49,6 +49,12 @@ http {
     }
   ';
 
+  # Map the passed in X-Forwarded-Host if present and default to the server host otherwise.
+  map $http_x_forwarded_host $proxy_add_x_forwarded_host {
+    default $http_x_forwarded_host;
+    ''      $http_host;
+  }
+
   # This map creates a $sts_default variable for later use.
   # If this header is already set by upstream, then $sts_default will
   # be an empty string, which will later lead to:
@@ -130,7 +136,7 @@ http {
       proxy_set_header   Host $http_host;
       proxy_set_header   X-Real-IP $remote_addr;
       proxy_set_header   X-Forwarded-Server $host;
-      proxy_set_header   X-Forwarded-Host $http_host;
+      proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header   Cookie '';
 
@@ -166,7 +172,7 @@ http {
       proxy_set_header   Host $http_host;
       proxy_set_header   X-Real-IP $remote_addr;
       proxy_set_header   X-Forwarded-Server $host;
-      proxy_set_header   X-Forwarded-Host $http_host;
+      proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
@@ -226,7 +232,7 @@ http {
       proxy_set_header   Host $http_host;
       proxy_set_header   X-Real-IP $remote_addr;
       proxy_set_header   X-Forwarded-Server $host;
-      proxy_set_header   X-Forwarded-Host $http_host;
+      proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
 
       # Licensify sends custom 500 errors, and we need to send No-Fallback: true
