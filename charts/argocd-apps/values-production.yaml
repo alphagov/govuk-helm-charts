@@ -407,12 +407,12 @@ govukApplications:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-smartanswers-link-checker-api
+            name: signon-token-smart-answers-link-checker-api
             key: bearer_token
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-smartanswers-publishing-api
+            name: signon-token-smart-answers-publishing-api
             key: bearer_token
       - name: SECRET_KEY_BASE
         valueFrom:
