@@ -14,8 +14,8 @@ appResources:
 # Individual apps to be deployed by ArgoCD, and any values specific to those
 # apps.
 govukApplications:
-- name: argo-workflows
-  chartPath: charts/argo-workflows
+- name: argo-services
+  chartPath: charts/argo-services
   postSyncWorkflowEnabled: "false"
   helmValues:
     nextEnvironment: production
