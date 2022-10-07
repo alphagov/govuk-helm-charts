@@ -1,0 +1,4 @@
+apiVersion: v2
+name: argo-bootstrap
+description: Bootstaps ArgoCD with initial configuration
+version: 0.1.0
