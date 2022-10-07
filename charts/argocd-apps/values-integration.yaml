@@ -1109,6 +1109,7 @@ govukApplications:
       enabled: true
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: signon
+        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
       hosts:
       - signon.eks.integration.govuk.digital
     workerReplicaCount: 1
