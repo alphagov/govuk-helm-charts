@@ -1,5 +1,6 @@
+# https://argo-cd.readthedocs.io/en/stable/operator-manual/cluster-bootstrapping/
 # https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/
 apiVersion: v2
 name: app-config
-description: Installs ArgoCD applications into the cluster-services namespace
+description: Configuration of apps managed by ArgoCD.
 version: 0.5.8

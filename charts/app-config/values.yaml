@@ -1,18 +1,23 @@
-# Default values for the app-config chart. Setting a value here will set it
-# for all app charts in all environments.
+# Default values for the app-config chart.
 #
-# See values-${env}.yaml for per-environment values for app charts.
+# Setting a value here will set it for all app charts in all environments,
+# though values can still be overridden per-app and/or per-environment.
+#
+# See values-${env}.yaml for per-environment and per-app values.
 
-# Helm values applied to every app chart.
-globalHelmValues:
-  govukEnvironment: ""
-  govukStack: blue  # TODO: eliminate the need for govukStack.
-  externalDomainSuffix: ""
-  # TODO: delete internalDomainSuffix once Plek handles empty GOVUK_APP_DOMAIN.
-  internalDomainSuffix: apps.svc.cluster.local
 appsNamespace: apps
 govukApplications: []
 
+govukEnvironment: test
+govukStack: blue  # TODO: eliminate govukStack as it's no longer needed.
+ec2InternalDomainSuffix: govuk-internal.digital
+externalDomainSuffix: eks.test.govuk.digital
+publishingServiceDomainSuffix: test.publishing.service.gov.uk
+
+externalSecrets:
+  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
+
+# TODO: move monitoring out of here into its own chart.
 monitoringNamespace: monitoring
 monitoringApplications:
   - name: grafana-dashboards
