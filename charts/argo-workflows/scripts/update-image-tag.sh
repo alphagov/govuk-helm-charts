@@ -2,7 +2,7 @@
 set -euo pipefail
 
 BRANCH="update-image-tag/${REPO_NAME}/${ENVIRONMENT}/${IMAGE_TAG}"
-FILE="charts/argocd-apps/image-tags/${ENVIRONMENT}/${REPO_NAME}"
+FILE="charts/app-config/image-tags/${ENVIRONMENT}/${REPO_NAME}"
 LATEST_GIT_SHA=$(git ls-remote "https://github.com/alphagov/${REPO_NAME}" HEAD | cut -f 1)
 CHANGED=false
 

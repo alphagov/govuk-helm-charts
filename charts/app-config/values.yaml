@@ -1,4 +1,4 @@
-# Default values for the argocd-apps chart. Setting a value here will set it
+# Default values for the app-config chart. Setting a value here will set it
 # for all app charts in all environments.
 #
 # See values-${env}.yaml for per-environment values for app charts.
