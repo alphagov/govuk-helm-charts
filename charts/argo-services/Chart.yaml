@@ -1,4 +1,4 @@
 apiVersion: v2
 name: argo-services
 description: Configures Argo services such as workflows, events, notifications
-version: 0.0.1
+version: 1.0.0
