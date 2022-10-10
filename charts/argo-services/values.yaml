@@ -1,1 +1,10 @@
 govukEnvironment: test
+argocdUrl:
+argoWorkflowsUrl:
+argoEventsHost:
+nextEnvironment:
+workflowsNamespace:
+enableWebhookIngress: false
+rbacTeams:
+  read_only:
+  read_write:

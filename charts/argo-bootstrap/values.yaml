@@ -1,6 +1,7 @@
 govukEnvironment:
 argocdUrl:
-workflowsNamespace: apps
+argoWorkflowsUrl:
+argoEventsHost:
 rbacTeams:
-  read_only: alphagov:gov-uk
-  read_write: alphagov:gov-uk-production-deploy
+  read_only:
+  read_write:
