@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-nginx-conf
   labels:
-    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
 data:
   nginx.conf: |-

@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "govuk-rails-app.labels" . | nindent 8 }}
+        {{- include "generic-govuk-app.labels" . | nindent 8 }}
         app: {{ .Release.Name }}
     spec:
       automountServiceAccountToken: false

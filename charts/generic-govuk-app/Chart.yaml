@@ -1,5 +1,5 @@
 apiVersion: v2
-name: govuk-rails-app
+name: generic-govuk-app
 description: A Helm chart for GOV.UK Rails app
 type: application
 version: 0.1.4

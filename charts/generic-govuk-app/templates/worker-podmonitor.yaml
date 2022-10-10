@@ -4,7 +4,7 @@ kind: PodMonitor
 metadata:
   name: {{ .Release.Name }}-worker
   labels:
-    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app: {{ .Release.Name }}-worker
 spec:
   selector:

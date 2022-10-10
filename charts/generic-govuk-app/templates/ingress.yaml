@@ -6,7 +6,7 @@ kind: Ingress
 metadata:
   name: {{ .Values.ingress.name | default .Release.Name }}
   labels:
-    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
