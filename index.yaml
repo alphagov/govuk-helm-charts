@@ -9,7 +9,24 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/app-config-1.0.0/app-config-1.0.0.tgz
     version: 1.0.0
+  argo-bootstrap:
+  - apiVersion: v2
+    created: "2022-10-10T14:51:02.155010627Z"
+    description: Bootstaps ArgoCD with initial configuration
+    digest: c92dec85a1da777e3372677624c9b507f0c701008f8feec464e35f0c9bde29d3
+    name: argo-bootstrap
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-bootstrap-0.1.0/argo-bootstrap-0.1.0.tgz
+    version: 0.1.0
   argo-services:
+  - apiVersion: v2
+    created: "2022-10-10T14:51:02.323318694Z"
+    description: Configures Argo services such as workflows, events, notifications
+    digest: 9fb0064a38865342cb9c9d25df5b279f12fb880429b103889f601b2d54267c5a
+    name: argo-services
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-services-1.0.0/argo-services-1.0.0.tgz
+    version: 1.0.0
   - apiVersion: v2
     created: "2022-09-29T16:09:41.341379854Z"
     description: Installs Argo service configuration (cd, events, notifications, workflows)
@@ -1380,4 +1397,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-10-10T12:09:34.832458993Z"
+generated: "2022-10-10T14:51:02.323606195Z"
