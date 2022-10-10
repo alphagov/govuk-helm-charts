@@ -2,7 +2,7 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: publishing-api-postgres
+  name: service-manual-publisher-postgres
   labels:
     {{- include "app-config.labels" . | nindent 4 }}
   annotations:
