@@ -1,5 +1,14 @@
 apiVersion: v1
 entries:
+  app-config:
+  - apiVersion: v2
+    created: "2022-10-10T12:09:34.831809788Z"
+    description: Configuration of apps managed by ArgoCD.
+    digest: 754537fca0eea1a288c6b588c2020be0b9d12b574114dc8e0de97cbeaf34903e
+    name: app-config
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/app-config-1.0.0/app-config-1.0.0.tgz
+    version: 1.0.0
   argo-services:
   - apiVersion: v2
     created: "2022-09-29T16:09:41.341379854Z"
@@ -1371,4 +1380,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-09-29T16:09:42.556441994Z"
+generated: "2022-10-10T12:09:34.832458993Z"
