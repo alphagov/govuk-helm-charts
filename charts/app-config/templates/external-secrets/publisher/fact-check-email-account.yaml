@@ -4,7 +4,7 @@ kind: ExternalSecret
 metadata:
   name: publisher-fact-check-email-account
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Username and password for the factcheck Gmail account. See

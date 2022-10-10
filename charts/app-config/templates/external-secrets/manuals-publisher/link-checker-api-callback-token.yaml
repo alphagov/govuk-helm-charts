@@ -3,7 +3,7 @@ kind: ExternalSecret
 metadata:
   name: manuals-publisher-link-checker-api-callback-token
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Manuals publisher uses this for verification of batch-completion webhook

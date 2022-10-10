@@ -3,7 +3,7 @@ kind: ExternalSecret
 metadata:
   name: collections-publisher-mysql
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Credentials for Collections publisher to connect to MYSQL.

@@ -1,4 +1,4 @@
-{{- define "govuk-apps-conf.router-nginx-config" -}}
+{{- define "app-config.router-nginx-config" -}}
 user nginx;
 
 load_module /usr/lib/nginx/modules/ngx_http_perl_module.so;

@@ -4,7 +4,7 @@ kind: ExternalSecret
 metadata:
   name: manuals-publisher-docdb
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Credentials for Manuals publisher to connect to DocumentDB (MongoDB).

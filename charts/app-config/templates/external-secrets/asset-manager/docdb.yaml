@@ -4,7 +4,7 @@ kind: ExternalSecret
 metadata:
   name: asset-manager-docdb
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Credentials for Asset Manager to connect to DocumentDB (MongoDB).
