@@ -848,6 +848,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/frontend-0.3.0/frontend-0.3.0.tgz
     version: 0.3.0
+  generic-govuk-app:
+  - apiVersion: v2
+    created: "2022-10-10T15:43:58.683129956Z"
+    description: A reusable Helm chart suitable for most GOV.UK apps.
+    digest: b9844d04b5fc77cd8cf255c259c4c0606ef480ebbe4d477856e64b8a87ed0a73
+    name: generic-govuk-app
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/generic-govuk-app-1.0.0/generic-govuk-app-1.0.0.tgz
+    version: 1.0.0
   govuk-apps-conf:
   - apiVersion: v2
     created: "2022-02-04T10:22:33.1892999Z"
@@ -1397,4 +1407,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-10-10T14:51:02.323606195Z"
+generated: "2022-10-10T15:43:58.683438654Z"
