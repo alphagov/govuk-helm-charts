@@ -574,9 +574,6 @@ govukApplications:
             key: SECRET_KEY_BASE
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-- name: govuk-apps-conf
-  chartPath: charts/govuk-apps-conf
-  postSyncWorkflowEnabled: "false"
 - name: hmrc-manuals-api
   helmValues:
     ingress:
