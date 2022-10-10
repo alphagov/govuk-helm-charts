@@ -9,6 +9,9 @@ metadata:
   name: govuk-apps-env
   labels:
     {{- include "app-config.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Environment variables applied to every GOV.UK app.
 data:
   GOVUK_APP_DOMAIN: ""
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.externalDomainSuffix }}
@@ -25,7 +28,7 @@ data:
   GOVUK_PERSONALISATION_SECURITY_URI: "https://integration.account.gov.uk?link=security-privacy"
   {{- end }}
   GOVUK_WEBSITE_ROOT: https://www.{{ .Values.externalDomainSuffix }}
-  PLEK_UNPREFIXABLE_DOMAINS: feedback,imminence,info-frontend,licensify,local-links-manager,search,signon
+  PLEK_UNPREFIXABLE_DOMAINS: account-api,feedback,imminence,info-frontend,licensify,local-links-manager,search,signon
   PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS: "true"
   RAILS_LOG_TO_STDOUT: "true"
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
