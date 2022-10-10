@@ -81,11 +81,12 @@ govukApplications:
         value: eu-west-1
       - name: AWS_S3_BUCKET_NAME
         value: govuk-assets-integration
-- name: argo-workflows
-  chartPath: charts/argo-workflows
+- name: argo-services
+  chartPath: charts/argo-services
   postSyncWorkflowEnabled: "false"
   helmValues:
     nextEnvironment: staging
+    enableWorkflowIngress: true
 - name: authenticating-proxy
   helmValues:
     ingress:

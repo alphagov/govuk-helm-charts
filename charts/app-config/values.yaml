@@ -22,3 +22,5 @@ monitoringNamespace: monitoring
 monitoringApplications:
   - name: grafana-dashboards
     chartPath: charts/grafana-dashboards
+
+workflowsNamespace: apps

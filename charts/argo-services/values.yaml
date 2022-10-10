@@ -1,6 +1,10 @@
-govukEnvironment:
+govukEnvironment: test
 argocdUrl:
-workflowsNamespace: apps
+argoWorkflowsUrl:
+argoEventsHost:
+nextEnvironment:
+workflowsNamespace:
+enableWebhookIngress: false
 rbacTeams:
-  read_only: alphagov:gov-uk
-  read_write: alphagov:gov-uk-production-deploy
+  read_only:
+  read_write:
