@@ -5,4 +5,4 @@ metadata:
 data:
   context: |
     argocdUrl: "{{ .Values.argocdUrl }}"
-{{ .Files.Get "cd-notifications-config.yaml" | indent 2 }}
+{{ .Files.Get "config/argocd-notifications-config.yaml" | indent 2 }}
