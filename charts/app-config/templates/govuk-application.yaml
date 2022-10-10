@@ -22,7 +22,7 @@ spec:
   project: govuk
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
-    path: "{{ .chartPath | default (printf "charts/generic-govuk-app") }}"
+    path: "{{ .chartPath | default "charts/generic-govuk-app" }}"
     targetRevision: {{ .targetRevision | default "HEAD" }}
     helm:
       # Environment-specific Helm values. These take precedence over the app
