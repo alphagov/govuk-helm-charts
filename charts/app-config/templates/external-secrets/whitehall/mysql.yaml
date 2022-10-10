@@ -3,7 +3,7 @@ kind: ExternalSecret
 metadata:
   name: whitehall-mysql
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Credentials for Whitehall to connect to MYSQL.

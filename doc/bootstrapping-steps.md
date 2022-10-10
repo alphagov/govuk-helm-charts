@@ -10,5 +10,5 @@ run the following commands against the cluster.
   ```
 
 2. Manually create all of secrets specified as ExternalSecrets in AWS
-  SecretsManager. E.g. see charts/govuk-apps-conf/templates/external-secrets/*.yaml
+  SecretsManager. E.g. see charts/app-config/templates/external-secrets/*.yaml
   and charts/cluster-secrets/*.yaml

@@ -3,7 +3,7 @@ kind: ExternalSecret
 metadata:
   name: service-manual-publisher-notify
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       The GOV.UK Notify API key belonging to Service manual publisher.

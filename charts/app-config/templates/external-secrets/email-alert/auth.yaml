@@ -3,7 +3,7 @@ kind: ExternalSecret
 metadata:
   name: email-alert-auth
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Symmetric key used for encrypting and decrypting messages shared

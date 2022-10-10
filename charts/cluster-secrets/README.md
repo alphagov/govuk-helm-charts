@@ -2,7 +2,7 @@ The `cluster-secrets` chart defines ExternalSecrets for **cluster-wide services*
 
 Please avoid adding ExternalSecrets for apps to this chart. Apps'
 ExternalSecrets belong in the apps' own charts, or in
-[../govuk-apps-conf](../govuk-apps-conf) for apps which use the generic
+[../app-config](../app-config) for apps which use the generic
 `govuk-rails-app` chart.
 
 **This chart is deployed by the `cluster-services` Terraform module, not by

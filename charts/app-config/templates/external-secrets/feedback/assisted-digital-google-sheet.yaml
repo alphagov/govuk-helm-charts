@@ -3,7 +3,7 @@ kind: ExternalSecret
 metadata:
   name: feedback-assisted-digital-google-sheet
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Google service account for accessing the spreadsheet for Assisted Digital feedback,

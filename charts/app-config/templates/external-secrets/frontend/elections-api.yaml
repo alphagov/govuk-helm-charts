@@ -3,7 +3,7 @@ kind: ExternalSecret
 metadata:
   name: frontend-elections-api
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Credentials used by Frontend to access external Elections API service

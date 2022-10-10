@@ -4,7 +4,7 @@ kind: ExternalSecret
 metadata:
   name: publishing-api-postgres
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Connection string for Publishing API DB hosted in RDS

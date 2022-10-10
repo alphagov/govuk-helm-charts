@@ -4,7 +4,7 @@ kind: ExternalSecret
 metadata:
   name: search-api-rabbitmq
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
       Credentials used by search-api to access RabbitMQ

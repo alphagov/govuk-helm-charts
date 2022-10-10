@@ -8,7 +8,7 @@ kind: ConfigMap
 metadata:
   name: govuk-apps-env
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
 data:
   GOVUK_APP_DOMAIN: ""
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.externalDomainSuffix }}

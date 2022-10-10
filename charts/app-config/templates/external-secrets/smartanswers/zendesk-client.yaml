@@ -3,7 +3,7 @@ kind: ExternalSecret
 metadata:
   name: smartanswers-zendesk-client
   labels:
-    {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+    {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
        Username/Password used by Smart-answers to access Zendesk
