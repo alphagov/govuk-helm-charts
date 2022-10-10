@@ -1,0 +1,5 @@
+apiVersion: v2
+name: monitoring-config
+description: "Monitoring configuration: Prometheus rules, alerts and Grafana dashboards."
+type: application
+version: 0.1.0
