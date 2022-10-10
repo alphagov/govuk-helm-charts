@@ -1,15 +1,18 @@
-globalHelmValues:
-  govukEnvironment: integration
-  externalDomainSuffix: eks.integration.govuk.digital
-  publishingServiceDomainSuffix: integration.publishing.service.gov.uk
-  appResources:
-    limits:
-      cpu: 1
-      memory: 1500Mi
-    requests:
-      cpu: 0.1
-      memory: 800Mi
+# Defaults for all apps in this environment. These can be overridden for
+# individual apps below.
+govukEnvironment: integration
+externalDomainSuffix: eks.integration.govuk.digital
+publishingServiceDomainSuffix: integration.publishing.service.gov.uk
+appResources:
+  limits:
+    cpu: 1
+    memory: 1500Mi
+  requests:
+    cpu: 0.1
+    memory: 800Mi
 
+# Individual apps to be deployed by ArgoCD, and any values specific to those
+# apps.
 govukApplications:
 - name: asset-manager
   chartPath: charts/asset-manager

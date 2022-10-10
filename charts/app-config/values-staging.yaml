@@ -1,15 +1,18 @@
-globalHelmValues:
-  govukEnvironment: staging
-  externalDomainSuffix: eks.staging.govuk.digital
-  publishingServiceDomainSuffix: staging.publishing.service.gov.uk
-  appResources:
-    limits:
-      cpu: 1
-      memory: 1500Mi
-    requests:
-      cpu: 0.1
-      memory: 800Mi
+# Defaults for all apps in this environment. These can be overridden for
+# individual apps below.
+govukEnvironment: staging
+externalDomainSuffix: eks.staging.govuk.digital
+publishingServiceDomainSuffix: staging.publishing.service.gov.uk
+appResources:
+  limits:
+    cpu: 1
+    memory: 1500Mi
+  requests:
+    cpu: 0.1
+    memory: 800Mi
 
+# Individual apps to be deployed by ArgoCD, and any values specific to those
+# apps.
 govukApplications:
 - name: argo-workflows
   chartPath: charts/argo-workflows

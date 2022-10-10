@@ -1,12 +1,12 @@
 {{ range .Values.govukApplications }}
 {{- $reponame := .repoName | default .name }}
-{{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.globalHelmValues.govukEnvironment $reponame) | fromYaml }}
+{{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.govukEnvironment $reponame) | fromYaml }}
 {{- $imageTag := $imageTagConfig.image_tag }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ .name }}
-  {{- if has $.Values.globalHelmValues.govukEnvironment (list "test" "integration") }}
+  {{- if has $.Values.govukEnvironment (list "test" "integration") }}
   {{- /* Clean up k8s resources on chart deletion in non-prod only. */}}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -21,14 +21,14 @@ metadata:
 spec:
   project: govuk
   source:
-    repoURL: 'git@github.com/alphagov/govuk-helm-charts'
+    repoURL: git@github.com/alphagov/govuk-helm-charts
     path: "{{ .chartPath | default (printf "charts/govuk-rails-app") }}"
     targetRevision: {{ .targetRevision | default "HEAD" }}
     helm:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
       values: |
-        {{- toYaml $.Values.globalHelmValues | nindent 8 }}
+        {{- toYaml (omit $.Values "govukApplications" "monitoringApplications") | nindent 8 }}
         repoName: {{ $reponame }}
         appImage:
           repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}

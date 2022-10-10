@@ -1,0 +1,24 @@
+# Default values for the app-config chart.
+#
+# Setting a value here will set it for all app charts in all environments,
+# though values can still be overridden per-app and/or per-environment.
+#
+# See values-${env}.yaml for per-environment and per-app values.
+
+appsNamespace: apps
+govukApplications: []
+
+govukEnvironment: test
+govukStack: blue  # TODO: eliminate govukStack as it's no longer needed.
+ec2InternalDomainSuffix: govuk-internal.digital
+externalDomainSuffix: eks.test.govuk.digital
+publishingServiceDomainSuffix: test.publishing.service.gov.uk
+
+externalSecrets:
+  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
+
+# TODO: move monitoring out of here into its own chart.
+monitoringNamespace: monitoring
+monitoringApplications:
+  - name: grafana-dashboards
+    chartPath: charts/grafana-dashboards

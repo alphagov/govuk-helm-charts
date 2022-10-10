@@ -4,7 +4,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: {{ .name }}
-  {{- if has $.Values.globalHelmValues.govukEnvironment (list "test" "integration") }}
+  {{- if has $.Values.govukEnvironment (list "test" "integration") }}
   {{- /* Clean up k8s resources on chart deletion in non-prod only. */}}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
@@ -25,7 +25,7 @@ spec:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
       values: |
-        {{- toYaml $.Values.globalHelmValues | nindent 8 }}
+        {{- toYaml (omit $.Values "govukApplications" "monitoringApplications") | nindent 8 }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
