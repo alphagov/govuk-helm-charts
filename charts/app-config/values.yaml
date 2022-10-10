@@ -6,6 +6,7 @@
 # See values-${env}.yaml for per-environment and per-app values.
 
 appsNamespace: apps
+argoNamespace: cluster-services
 govukApplications: []
 
 govukEnvironment: test
