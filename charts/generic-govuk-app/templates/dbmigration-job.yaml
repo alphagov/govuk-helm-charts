@@ -4,7 +4,7 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-dbmigrate
   labels:
-    {{- include "govuk-rails-app.labels" . | nindent 4 }}
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: dbmigrate
   annotations:
     argocd.argoproj.io/hook: PreSync
@@ -13,7 +13,7 @@ spec:
     metadata:
       name: {{ .Release.Name }}-dbmigrate
       labels:
-        {{- include "govuk-rails-app.labels" . | nindent 8 }}
+        {{- include "generic-govuk-app.labels" . | nindent 8 }}
         app.kubernetes.io/component: dbmigrate
     spec:
       securityContext:

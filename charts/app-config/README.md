@@ -9,7 +9,7 @@ App configuration belongs in this chart if it is:
 
  - common to several GOV.UK applications.
  - app-specific but not able to be put in the app's own chart, for example
-   because the app uses the generic `govuk-rails-app` chart.
+   because the app uses the `generic-govuk-app` chart.
 
 This includes:
 

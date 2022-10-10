@@ -5,7 +5,7 @@ kind: CronJob
 metadata:
   name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
   labels:
-    {{- include "govuk-rails-app.labels" $ | nindent 4 }}
+    {{- include "generic-govuk-app.labels" $ | nindent 4 }}
     app.kubernetes.io/component: app
 spec:
   schedule: "{{ .schedule }}"
@@ -13,14 +13,14 @@ spec:
     metadata:
       name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
       labels:
-        {{- include "govuk-rails-app.labels" $ | nindent 8 }}
+        {{- include "generic-govuk-app.labels" $ | nindent 8 }}
         app.kubernetes.io/component: app
     spec:
       template:
         metadata:
           name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
           labels:
-            {{- include "govuk-rails-app.labels" $ | nindent 12 }}
+            {{- include "generic-govuk-app.labels" $ | nindent 12 }}
             app.kubernetes.io/component: app
         spec:
           securityContext:
