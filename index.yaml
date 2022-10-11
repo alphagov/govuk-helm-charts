@@ -11,6 +11,14 @@ entries:
     version: 1.0.0
   argo-bootstrap:
   - apiVersion: v2
+    created: "2022-10-11T09:17:33.34371528Z"
+    description: Bootstraps ArgoCD with initial configuration
+    digest: 63efb3a91b64b1da60fe7917da0c3c9bad331c92a7a2f87f0731f234c22d67a3
+    name: argo-bootstrap
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-bootstrap-0.2.0/argo-bootstrap-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     created: "2022-10-10T14:51:02.155010627Z"
     description: Bootstaps ArgoCD with initial configuration
     digest: c92dec85a1da777e3372677624c9b507f0c701008f8feec464e35f0c9bde29d3
@@ -1407,4 +1415,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-10-10T15:43:58.683438654Z"
+generated: "2022-10-11T09:17:33.344097987Z"
