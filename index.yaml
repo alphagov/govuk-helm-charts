@@ -992,6 +992,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/ingress-class-0.1.0/ingress-class-0.1.0.tgz
     version: 0.1.0
+  monitoring-config:
+  - apiVersion: v2
+    created: "2022-10-12T14:32:54.879939805Z"
+    description: 'Monitoring configuration: Prometheus rules, alerts and Grafana dashboards.'
+    digest: 616b67ef22d2267c6b412d86aef9a2f913068bc6be163fd76c8d783cb27095a4
+    name: monitoring-config
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/monitoring-config-0.1.0/monitoring-config-0.1.0.tgz
+    version: 0.1.0
   prometheus-rules:
   - apiVersion: v2
     created: "2022-06-15T10:56:55.165033997Z"
@@ -1423,4 +1433,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-10-11T16:42:17.779296472Z"
+generated: "2022-10-12T14:32:54.880869415Z"
