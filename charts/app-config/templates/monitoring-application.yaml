@@ -2,6 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: monitoring-config
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
   finalizers:
   - resources-finalizer.argocd.argoproj.io
   annotations:
