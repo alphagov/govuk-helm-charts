@@ -13,7 +13,7 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
   {{- end }}
   annotations:
-    slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
+    slackChannel: "{{ .slackChannel }}"
     repoName: "{{ $reponame }}"
     imageTag: "{{ $imageTag }}"
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""

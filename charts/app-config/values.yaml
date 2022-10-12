@@ -10,6 +10,8 @@ argoNamespace: cluster-services
 monitoringNamespace: monitoring
 workflowsNamespace: apps
 
+slackChannel: govuk-deploy-alerts
+
 govukApplications: []
 govukEnvironment: test
 govukStack: blue  # TODO: eliminate govukStack as it's no longer needed.
