@@ -21,7 +21,7 @@ externalSecrets:
 # TODO: move monitoring out of here into its own chart.
 monitoringNamespace: monitoring
 monitoringApplications:
-  - name: grafana-dashboards
-    chartPath: charts/grafana-dashboards
+  - name: monitoring-config
+    chartPath: charts/monitoring-config
 
 workflowsNamespace: apps
