@@ -338,7 +338,7 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: signon
   helmValues:
-    dbMigrationEnabled: false # TODO: Enable before launch.
+    dbMigrationEnabled: false  # TODO: Enable before launch.
     workerEnabled: true
     ingress:
       enabled: true
