@@ -13,7 +13,7 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
   {{- end }}
   annotations:
-    slackChannel: "{{ .slackChannel | default "govuk-deploy-alerts" }}"
+    slackChannel: "{{ .slackChannel }}"
     repoName: "{{ $reponame }}"
     imageTag: "{{ $imageTag }}"
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
@@ -29,7 +29,7 @@ spec:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
       values: |
-        {{- toYaml (omit $.Values "govukApplications" "monitoringApplications") | nindent 8 }}
+        {{- toYaml (omit $.Values "govukApplications") | nindent 8 }}
         repoName: {{ $reponame }}
         appImage:
           repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}

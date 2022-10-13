@@ -7,8 +7,12 @@
 
 appsNamespace: apps
 argoNamespace: cluster-services
-govukApplications: []
+monitoringNamespace: monitoring
+workflowsNamespace: apps
 
+slackChannel: govuk-deploy-alerts
+
+govukApplications: []
 govukEnvironment: test
 govukStack: blue  # TODO: eliminate govukStack as it's no longer needed.
 ec2InternalDomainSuffix: govuk-internal.digital
@@ -17,11 +21,3 @@ publishingServiceDomainSuffix: test.publishing.service.gov.uk
 
 externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.
-
-# TODO: move monitoring out of here into its own chart.
-monitoringNamespace: monitoring
-monitoringApplications:
-  - name: monitoring-config
-    chartPath: charts/monitoring-config
-
-workflowsNamespace: apps
