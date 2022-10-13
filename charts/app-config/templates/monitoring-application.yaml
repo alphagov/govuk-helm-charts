@@ -6,7 +6,7 @@ metadata:
   annotations:
     repoName: monitoring-config
 spec:
-  project: monitoring-config
+  project: monitoring
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
     path: charts/monitoring-config
