@@ -20,6 +20,11 @@ http {
   uwsgi_temp_path       /tmp/uwsgi_temp;
   scgi_temp_path        /tmp/scgi_temp;
 
+  proxy_buffer_size 16k;  # Max total size of response headers.
+  # n * m = max response size before spooling to disk. p95 response size should
+  # fit comfortably within this in order to avoid performance issues.
+  proxy_buffers 24 16k;
+
   server_tokens off;
 
   sendfile        on;
