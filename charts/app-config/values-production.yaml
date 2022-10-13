@@ -21,6 +21,7 @@ govukApplications:
   # TODO: Handle case where production doesn't promote deployments
   helmValues:
     nextEnvironment: ""
+    enableWebhookIngress: true
 - name: collections
   helmValues:
     extraEnv:
