@@ -86,7 +86,6 @@ govukApplications:
   postSyncWorkflowEnabled: "false"
   helmValues:
     nextEnvironment: staging
-    enableWebhookIngress: true
 - name: authenticating-proxy
   helmValues:
     ingress:
