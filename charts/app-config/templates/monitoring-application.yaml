@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: monitoring-config
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
   annotations:
     repoName: monitoring-config
 spec:
