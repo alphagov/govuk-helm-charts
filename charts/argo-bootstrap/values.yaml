@@ -6,3 +6,7 @@ argoEventsHost:
 rbacTeams:
   read_only:
   read_write:
+iamRoleServiceAccounts:
+  tagImageWorkflow:
+    name:
+    iamRoleArn:
