@@ -6,7 +6,9 @@ metadata:
     {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      Devise pepper authentication solution belonging to Signon.
+      Random, secret data which Devise appends to passwords before hashing.
+      This needs to be consistent between all instances of Signon which share
+      the same database.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
