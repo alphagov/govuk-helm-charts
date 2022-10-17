@@ -50,7 +50,7 @@ spec:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Deploy image workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                          "text": "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
                       },
                       "accessory": {
                         "type": "button",
