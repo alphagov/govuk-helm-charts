@@ -1127,6 +1127,16 @@ govukApplications:
         value: 759acac6-da53-4a19-b591-b7538c7c39de
       - name: INSTANCE_NAME
         value: integration
+      - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+        valueFrom:
+          secretKeyRef:
+            name: active-record-encryption
+            key: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+      - name: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+        valueFrom:
+          secretKeyRef:
+            name: active-record-encryption
+            key: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
