@@ -8,11 +8,6 @@ service.webhook.argo_events: |
   - name: Authorization
     value: Bearer $argo_events_webhook_token
   url: "http://argo-events-service.apps.svc.cluster.local:12000"
-service.webhook.slack_webhook: |
-  headers:
-  - name: "Content-Type"
-    value: "application/json"
-  url: "$slack_url"
 service.grafana: |
   apiUrl: http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local/api
   apiKey: $grafana_api_key
@@ -31,31 +26,6 @@ template.send-argo-events-webhook: |
         }
       method: "POST"
       path: "/post-sync"
-template.send-slack: |
-  webhook:
-    slack_webhook:
-      body: |
-        {
-          "attachments": [{
-            "title": "{{.app.metadata.name}}",
-            "title_link": "{{.context.argocdUrl}}/applications/"{{.app.metadata.name}}",
-            {{- if eq .app.status.operationState.phase "Succeeded" -}}
-            "color": "#18be52",
-            {{- else if eq .app.status.operationState.phase "Running" -}}
-            "color": "#beb618",
-            {{- else if or (eq .app.status.operationState.phase "Error") (eq .app.status.operationState.phase "Failed") -}}
-            "color": "#be1b18",
-            {{- else -}}
-            "color": "#183cbe",
-            {{- end -}}
-            "fields": [{
-              "title": "state",
-              "value": "{{.app.status.operationState.phase}}",
-              "short": true
-            }]
-          }]
-        }
-      method: "POST"
 template.send-grafana: |
   message: |
     "Application {{.app.metadata.name}} is now running new version of deployments manifests. Revision: {{.app.status.sync.revision}}"
@@ -67,14 +37,3 @@ trigger.on-deployed: |
   - send: ["send-argo-events-webhook"]
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
       == 'Healthy' and app.metadata.annotations['postSyncWorkflowEnabled'] == 'true' "
-trigger.sync-operation-change: |
-  - oncePer: "app.status.operationState.syncResult.revision"
-    send: ["send-slack"]
-    when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
-      == 'Healthy'"
-  - oncePer: "app.status.operationState.syncResult.revision"
-    send: ["send-slack"]
-    when: "app.status.operationState.phase in ['Running']"
-  - oncePer: "app.status.operationState.syncResult.revision"
-    send: ["send-slack"]
-    when: "app.status.operationState.phase in ['Error', 'Failed']"
