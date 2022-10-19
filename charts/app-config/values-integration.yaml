@@ -526,7 +526,7 @@ govukApplications:
   helmValues:
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 1fc69d3a-09a2-40f9-852b-03f6fcef5340
+        value: &frontend-notify-template 1fc69d3a-09a2-40f9-852b-03f6fcef5340
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
@@ -564,6 +564,48 @@ govukApplications:
           secretKeyRef:
             name: signon-token-frontend-publishing-api
             key: bearer_token
+- name: draft-frontend
+  repoName: frontend
+  helmValues:
+    sentry:
+      createSecret: false
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *frontend-notify-template
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-account-api
+            key: bearer_token
+      - name: ELECTIONS_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: key
+      - name: ELECTIONS_API_URL
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: url
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-email-alert-api
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-publishing-api
+            key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: government-frontend
   helmValues:
     extraEnv:
