@@ -1095,12 +1095,15 @@ govukApplications:
             name: service-manual-publisher-postgres
             key: DATABASE_URL
       - name: HTTP_USERNAME
-        value: betademo
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: username
       - name: HTTP_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: service-manual-publisher-http-password
-            key: HTTP_PASSWORD
+            name: basic-auth
+            key: password
 - name: signon
   helmValues:
     dbMigrationEnabled: true
