@@ -103,12 +103,12 @@ govukApplications:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-app-authenticating-proxy
+            name: signon-app-content-preview
             key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-authenticating-proxy
+            name: signon-app-content-preview
             key: oauth_secret
       - name: GOVUK_UPSTREAM_URI
         value: "http://draft-router"
