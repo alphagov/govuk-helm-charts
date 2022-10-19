@@ -236,6 +236,39 @@ govukApplications:
           mongo-3.integration.govuk-internal.digital/content_store_production"
       - name: GOVUK_APP_NAME
         value: content-store
+- name: content-tagger
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-tagger
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-tagger
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-tagger-publishing-api
+            key: bearer_token
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-tagger-postgres
+            key: DATABASE_URL
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: draft-content-store
   repoName: content-store
   helmValues:
@@ -628,6 +661,123 @@ govukApplications:
           secretKeyRef:
             name: signon-token-licence-finder-publishing-api
             key: bearer_token
+- name: link-checker-api
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-link-checker-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-link-checker-api
+            key: oauth_secret
+      - name: GOOGLE_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: link-checker-api-google-api-key
+            key: GOOGLE_API_KEY
+      - name: GOVUK_BASIC_AUTH_CREDENTIALS
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: password
+      - name: GOVUK_USER
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: username
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: link-checker-api-postgres
+            key: DATABASE_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+- name: local-links-manager
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: govuk-view-id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: client-email
+      - name: GOOGLE_EXPORT_ACCOUNT_ID
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: export-account-id
+      - name: GOOGLE_EXPORT_CUSTOM_DATA_IMPORT_SOURCE_ID
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: export-custom-data-import-source-id
+      - name: GOOGLE_EXPORT_TRACKER_ID
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: export-tracker-id
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: private-key
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-local-links-manager
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-local-links-manager
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-local-links-manager-publishing-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-local-links-manager-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: RUN_LINK_GA_EXPORT
+        value: false
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-postgres
 - name: manuals-publisher
   helmValues:
     workerEnabled: true
@@ -962,6 +1112,46 @@ govukApplications:
         # TODO: switch back to in-cluster search-api once it's fully working (similarly for draft).
       - name: BACKEND_URL_search-api
         value: "https://search-api.integration.govuk-internal.digital"
+- name: search-admin
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-search-admin
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-search-admin
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-search-admin-publishing-api
+            key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: search-admin-publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: search-admin-mysql
+            key: DATABASE_URL
 - name: search-api
   helmValues:
     uploadAssets:
@@ -1226,6 +1416,186 @@ govukApplications:
         value: UA-26179049-22
       - name: GOVUK_APP_ROOT
         value: /var/apps/static
+- name: support
+  helmValues:
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-support-publishing-api
+            key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-support
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-support
+            key: oauth_secret
+      - name: SUPPORT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-support-support-api
+            key: bearer_token
+      - name: ZENDESK_CLIENT_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: username
+      - name: ZENDESK_CLIENT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: password
+      - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: ticket_email
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: support-aws
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-aws
+            key: secret_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-integration-support-api-csvs
+- name: support-api
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-support-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-support-api
+            key: oauth_secret
+      - name: PP_DATA_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-support-api-pp-data
+            key: bearer_token
+      - name: PP_DATA_URL
+        value: ""
+      - name: ZENDESK_CLIENT_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: username
+      - name: ZENDESK_CLIENT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: password
+      - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: ticket_email
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: support-aws
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-aws
+            key: secret_key
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-integration-support-api-csvs
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-api-publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: support-api-postgres
+            key: DATABASE_URL
+- name: transition
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-transition
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-transition
+            key: oauth_secret
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: transition-aws
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: transition-aws
+            key: secret_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: BASIC_AUTH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: password
+      - name: BASIC_AUTH_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: username
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: transition-postgres
+            key: DATABASE_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: travel-advice-publisher
   helmValues:
     workerEnabled: true
