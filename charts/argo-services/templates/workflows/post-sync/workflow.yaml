@@ -31,9 +31,7 @@ spec:
           {{ if .Values.nextEnvironment }}
           - name: promote-release
             depends: smoke-test.Succeeded
-            templateRef:
-              name: update-image-tag
-              template: update-image-tag
+            template: send-webhook
             arguments:
               parameters:
                 - name: environment
@@ -42,7 +40,41 @@ spec:
                   value: "{{"{{workflow.parameters.repoName}}"}}"
                 - name: imageTag
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
+                - name: manualDeploy
+                  value: "false"
           {{- end }}
+
+    - name: send-webhook
+      inputs:
+        parameters:
+        - name: environment
+        - name: repoName
+        - name: imageTag
+        - name: manualDeploy
+      script:
+        image: curlimages/curl
+        command:
+          - sh
+        source: >
+          curl -s "${WEBHOOK_URL}/update-image-tag" \
+            -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
+            --json '{
+              "environment": "{{"{{inputs.parameters.environment}}"}}",
+              "repoName": "{{"{{inputs.parameters.repoName}}"}}",
+              "imageTag": "{{"{{inputs.parameters.imageTag}}"}}",
+              "manualDeploy": "{{"{{inputs.parameters.manualDeploy}}"}}"
+            }'
+        env:
+          - name: WEBHOOK_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: deploy-image-webhook-endpoint
+                key: token
+          - name: WEBHOOK_URL
+            valueFrom:
+              secretKeyRef:
+                name: deploy-image-webhook-endpoint
+                key: url
 
     - name: exit-handler
       steps:
