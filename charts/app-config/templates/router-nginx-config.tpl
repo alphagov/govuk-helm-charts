@@ -125,9 +125,11 @@ http {
     add_header Permissions-Policy interest-cohort=();
     add_header X-Content-Type-Options "nosniff" always;
 
+    {{- if ne .Stack "draft" }}
     {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
     auth_basic "Enter the GOV.UK username/password (not your personal username/password)";
     auth_basic_user_file /etc/nginx/htpasswd/htpasswd;
+    {{- end }}
     {{- end }}
 
     # The directives in this block don't apply when one of the more specific
