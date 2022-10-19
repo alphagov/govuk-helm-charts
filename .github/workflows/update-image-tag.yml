@@ -50,7 +50,7 @@ jobs:
         id: get-sha
         run: |
           LATEST_COMMIT_SHA=$(git ls-remote "https://github.com/alphagov/${repo}" HEAD | cut -f 1)
-          echo "::set-output name=latest_commit_sha::${LATEST_COMMIT_SHA}"
+          echo "latest_commit_sha=${LATEST_COMMIT_SHA}" >> "${GITHUB_OUTPUT}"
 
       - name: Update image tag
         id: update-image-tag
@@ -61,7 +61,7 @@ jobs:
           yq -i '.image_tag = env(image_tag)' "${config_file}"
 
           UPDATED=$([-z git status --porcelain] && echo 'true' || echo 'false')
-          echo "::set-output name=updated::${UPDATED}"
+          echo "updated=${UPDATED}" >> "${GITHUB_OUTPUT}"
 
       - name: Push changes
         if: ${{ steps.update-image-tag.outputs.updated }}
