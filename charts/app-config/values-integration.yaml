@@ -778,6 +778,7 @@ govukApplications:
         valueFrom:
           secretKeyRef:
             name: local-links-manager-postgres
+            key: DATABASE_URL
 - name: manuals-publisher
   helmValues:
     workerEnabled: true
@@ -1493,13 +1494,6 @@ govukApplications:
           secretKeyRef:
             name: signon-app-support-api
             key: oauth_secret
-      - name: PP_DATA_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-support-api-pp-data
-            key: bearer_token
-      - name: PP_DATA_URL
-        value: ""
       - name: ZENDESK_CLIENT_USERNAME
         valueFrom:
           secretKeyRef:
