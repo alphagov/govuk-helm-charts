@@ -1454,6 +1454,69 @@ govukApplications:
         value: UA-26179049-22
       - name: GOVUK_APP_ROOT
         value: /var/apps/static
+- name: specialist-publisher
+  helmValues:
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-specialist-publisher-asset-manager
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-specialist-publisher-email-alert-api
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-specialist-publisher-publishing-api
+            key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-specialist-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-specialist-publisher
+            key: oauth_secret
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: specialist-publisher-aws
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: specialist-publisher-aws
+            key: secret_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-integration-specialist-publisher-csvs
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: specialist-publisher-docdb
+            key: MONGODB_URI
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-api-publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: support
   helmValues:
     workerEnabled: true
