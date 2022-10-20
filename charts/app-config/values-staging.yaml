@@ -156,15 +156,12 @@ govukApplications:
         value: 2844a647-6bf1-4b01-a25c-569d2cc00849
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
-      - name: SECRET_KEY_BASE
+      - name: WEB_CONCURRENCY
+        value: '4'
+      - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-frontend-publishing-api
+            name: signon-token-frontend-account-api
             key: bearer_token
       - name: ELECTIONS_API_KEY
         valueFrom:
@@ -176,11 +173,6 @@ govukApplications:
           secretKeyRef:
             name: frontend-elections-api
             key: url
-      - name: ACCOUNT_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-frontend-account-api
-            key: bearer_token
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -191,8 +183,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-frontend-publishing-api
             key: bearer_token
-      - name: WEB_CONCURRENCY
-        value: '4'
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: government-frontend
   helmValues:
     appResources:
