@@ -28,7 +28,7 @@ spec:
             runAsUser: {{ $.Values.securityContext.runAsUser }}
             runAsGroup: {{ $.Values.securityContext.runAsGroup }}
           restartPolicy: Never
-          serviceAccountName: {{ .serviceAccount }}
+          {{- if .serviceAccount }}serviceAccountName: {{ .serviceAccount }}{{- end }}
           containers:
             - name: rake-task
               image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
