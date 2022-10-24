@@ -343,7 +343,7 @@ govukApplications:
       hosts:
       - signon.eks.production.govuk.digital
     workerReplicaCount: 1
-    cronRakeTasks:
+    cronTasks:
       - name: "kubernetes-sync-app-secrets"
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
         schedule: "0 */1 * * *"
