@@ -120,6 +120,10 @@ govukApplications:
             key: GOVUK_NOTIFY_API_KEY
 - name: finder-frontend
   helmValues:
+    cronTasks:
+      - name: registries-refresh
+        task: "registries:cache_refresh"
+        schedule: "15 * * * *"
     appResources:
       limits:
         cpu: 4
@@ -352,6 +356,9 @@ govukApplications:
         task: "kubernetes:sync_token_secrets[signon-secrets-sync-conf]"
         schedule: "0 */1 * * *"
         serviceAccount: signon
+      - name: "delete-event-logs"
+        task: "event_log:delete_logs_older_than_two_years"
+        schedule: "15 1 * * *"
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: e00e89f5-b622-4dcb-8f30-e6c70231a940

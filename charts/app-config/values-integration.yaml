@@ -196,6 +196,10 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: contacts-admin
   helmValues:
+    cronTasks:
+      - name: org-import
+        task: "organisations:import"
+        schedule: "0 3 * * *"
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -204,6 +208,10 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: content-store
   helmValues: &content-store
+    cronTasks:
+      - name: report-delays
+        task: "publishing_delay_report:report_delays"
+        schedule: "15 2 * * *"
     uploadAssets:
       enabled: false
     extraEnv:
@@ -542,6 +550,10 @@ govukApplications:
             key: GOVUK_NOTIFY_API_KEY
 - name: finder-frontend
   helmValues:
+    cronTasks:
+      - name: registries-refresh
+        task: "registries:cache_refresh"
+        schedule: "15 * * * *"
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -743,6 +755,22 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: local-links-manager
   helmValues:
+    cronTasks:
+      - name: import-interact
+        task: "import:service_interactions:import_all"
+        schedule: "0 1 * * *"
+      - name: check-links
+        task: "check-links"
+        schedule: "0 2 * * *"
+      - name: export-links
+        task: "export:links:all"
+        schedule: "0 3 * * *"
+      - name: import-ga
+        task: "import:google_analytics"
+        schedule: "0 5 * * *"
+      - name: import-ga-bad-links
+        task: "import:google_analytics:bad_links"
+        schedule: "0 6 * * *"
     dbMigrationEnabled: true
     workerEnabled: true
     workerReplicaCount: 1
@@ -872,6 +900,13 @@ govukApplications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
+    cronTasks:
+      - name: reports-generate
+        task: "reports:generate"
+        schedule: "0 * * * *"
+      - name: mail-fetcher
+        command: "script/mail_fetcher"
+        schedule: "*/5 * * * *"
     ingress:
       enabled: true
       annotations:
@@ -967,6 +1002,10 @@ govukApplications:
       enabled: false
     workerEnabled: true
     workerReplicaCount: 1
+    cronTasks:
+      - name: heartbeat
+        task: "heartbeat_messages:send"
+        schedule: "* * * * *"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1642,6 +1681,19 @@ govukApplications:
             key: DATABASE_URL
 - name: transition
   helmValues:
+    cronTasks:
+      - name: import-dns
+        task: "import:dns_details"
+        schedule: "0 07-19 * * 1-5"
+      - name: clear-expired-sessions
+        task: "clear_expired_sessions"
+        schedule: "0 3 * * *"
+      - name: clear-old-mappings
+        task: "clear_old_mappings_batches"
+        schedule: "0 3 * * *"
+      - name: refresh-materialized
+        task: "import:hits:refresh_materialized"
+        schedule: "30 0,12 * * *"
     dbMigrationEnabled: true
     workerEnabled: true
     workerReplicaCount: 1
@@ -1786,6 +1838,13 @@ govukApplications:
       # whitehall-admin on EC2 and vice versa. 2899 is the "deploy" user.
       runAsUser: 2899
       runAsGroup: 2899
+    cronTasks:
+      - name: index-consultations
+        task: "search:index:consultations"
+        schedule: "0 2-22 * * *"
+      - name: taxonomy-rebuild
+        task: "taxonomy:rebuild_cache"
+        schedule: "*/10 7-20 * * *"
     dbMigrationEnabled: true
     workerEnabled: true
     uploadAssets: *whitehall-upload-assets
