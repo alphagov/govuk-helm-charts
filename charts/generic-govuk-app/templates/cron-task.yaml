@@ -1,9 +1,9 @@
-{{- range .Values.cronRakeTasks }}
+{{- range .Values.cronTasks }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
+  name: "{{ $.Release.Name }}-{{ .name }}-cron-task"
   labels:
     {{- include "generic-govuk-app.labels" $ | nindent 4 }}
     app.kubernetes.io/component: app
@@ -11,14 +11,14 @@ spec:
   schedule: "{{ .schedule }}"
   jobTemplate:
     metadata:
-      name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
+      name: "{{ $.Release.Name }}-{{ .name }}-cron-task"
       labels:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
         app.kubernetes.io/component: app
     spec:
       template:
         metadata:
-          name: "{{ $.Release.Name }}-{{ .name }}-rake-task"
+          name: "{{ $.Release.Name }}-{{ .name }}-cron-task"
           labels:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
             app.kubernetes.io/component: app
@@ -30,10 +30,15 @@ spec:
           restartPolicy: Never
           {{ if .serviceAccount }}serviceAccountName: {{ .serviceAccount }}{{- end }}
           containers:
-            - name: rake-task
+            - name: cron-task
               image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+              {{- if .task }}
               command: ["bundle"]
               args: ["exec", "rails", "{{ .task }}"]
+              {{- else if .command }}
+              command: ["/bin/bash"]
+              args: ["-c", "{{ .command }}"]
+              {{- end }}
               envFrom:
               - configMapRef:
                   name: govuk-apps-env
