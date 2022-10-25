@@ -38,7 +38,6 @@ data:
 
   # Services which remain in EC2 for a while after "MVP launch".
   PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_MAPIT_URI: https://mapit.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
 
   {{- /* Special-case hackery for running frontends in k8s but APIs/backends in EC2. */}}
   {{- /* TODO: get rid of this before launch. */}}
