@@ -1006,7 +1006,10 @@ govukApplications:
             name: publishing-api-rabbitmq
             key: password
       - name: RABBITMQ_USER
-        value: publishing_api
+        valueFrom:
+          secretKeyRef:
+            name: publishing-api-rabbitmq
+            key: user
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: EVENT_LOG_AWS_BUCKETNAME
