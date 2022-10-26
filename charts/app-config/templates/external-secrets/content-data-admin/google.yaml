@@ -1,0 +1,21 @@
+{{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: content-data-admin-google
+  labels:
+    {{- include "app-config.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Google secrets used by Content data admin.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: content-data-admin-google
+  dataFrom:
+    - extract:
+        key: govuk/content-data-admin/google
+{{- end }}
