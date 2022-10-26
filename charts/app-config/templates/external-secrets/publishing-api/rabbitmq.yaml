@@ -1,4 +1,3 @@
-{{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
@@ -7,7 +6,7 @@ metadata:
     {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      RabbitMQ credentials for publishing-api.
+      RabbitMQ user and password for publishing-api.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
@@ -17,5 +16,4 @@ spec:
     name: publishing-api-rabbitmq
   dataFrom:
     - extract:
-        key: govuk/common/rabbitmq-govuk
-{{- end }}
+        key: govuk/publishing-api/rabbitmq
