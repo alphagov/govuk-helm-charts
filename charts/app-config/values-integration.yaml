@@ -1005,7 +1005,7 @@ govukApplications:
     cronTasks:
       - name: heartbeat
         task: "heartbeat_messages:send"
-        schedule: "* * * * *"
+        schedule: "*/4 * * * *"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
