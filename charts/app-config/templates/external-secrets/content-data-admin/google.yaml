@@ -2,20 +2,20 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: content-data-admin-google
+  name: content-data-admin-google-tag-manager
   labels:
     {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      Google secrets used by Content data admin.
+      Google tag manager secrets used by Content data admin.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
     name: aws-secretsmanager
     kind: ClusterSecretStore
   target:
-    name: content-data-admin-google
+    name: content-data-admin-google-tag-manager
   dataFrom:
     - extract:
-        key: govuk/content-data-admin/google
+        key: govuk/content-data-admin/google-tag-manager
 {{- end }}
