@@ -145,6 +145,8 @@ govukApplications:
 - name: collections-publisher
   helmValues:
     dbMigrationEnabled: true
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -388,6 +390,8 @@ govukApplications:
 - name: content-tagger
   helmValues:
     dbMigrationEnabled: true
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -881,6 +885,8 @@ govukApplications:
 - name: link-checker-api
   helmValues:
     dbMigrationEnabled: true
+    uploadAssets:
+      enabled: false
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -1050,6 +1056,8 @@ govukApplications:
             key: api-secret
 - name: manuals-publisher
   helmValues:
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -1392,6 +1400,8 @@ govukApplications:
 - name: search-admin
   helmValues:
     dbMigrationEnabled: true
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -1522,6 +1532,8 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: service-manual-publisher
   helmValues:
+    uploadAssets:
+      path: /app/public/assets
     dbMigrationEnabled: true
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
@@ -1695,6 +1707,8 @@ govukApplications:
         value: /var/apps/static
 - name: specialist-publisher
   helmValues:
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -1758,6 +1772,8 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: support
   helmValues:
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -1820,6 +1836,8 @@ govukApplications:
 - name: support-api
   helmValues:
     dbMigrationEnabled: true
+    uploadAssets:
+      enabled: false
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -1895,6 +1913,8 @@ govukApplications:
         task: "import:hits:refresh_materialized"
         schedule: "30 0,12 * * *"
     dbMigrationEnabled: true
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -1944,6 +1964,8 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: travel-advice-publisher
   helmValues:
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
