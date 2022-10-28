@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/component: worker
     app: {{ .Release.Name }}-worker
 spec:
-  replicas: {{ .Values.workerReplicas }}
+  replicas: {{ .Values.workerReplicaCount }}
   revisionHistoryLimit: 5
   selector:
     matchLabels:
