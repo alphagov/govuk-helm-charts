@@ -206,6 +206,147 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+- name: content-data-admin
+  helmValues:
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: CONTENT_DATA_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-data-admin-content-data-api
+            key: bearer_token
+      - name: GOOGLE_TAG_MANAGER_ID
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-google-tag-manager
+            key: manager-id
+      - name: GOOGLE_TAG_MANAGER_PREVIEW
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-google-tag-manager
+            key: manager-preview
+      - name: GOOGLE_TAG_MANAGER_AUTH
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-google-tag-manager
+            key: manager-auth
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-data-admin
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-data-admin
+            key: oauth_secret
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-aws
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-aws
+            key: secret_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_CSV_EXPORT_BUCKET_NAME
+        value: govuk-integration-content-data-csvs
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-postgres
+            key: DATABASE_URL
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+- name: content-data-api
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-google-analytics
+            key: view-id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-google-analytics
+            key: client-email
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-google-analytics
+            key: private-key
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-data-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-data-api
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-data-api-publishing-api
+            key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-postgres
+            key: DATABASE_URL
+      - name: SUPPORT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-data-api-support-api
+            key: bearer_token
+      - name: RABBITMQ_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-rabbitmq
+            key: password
+      - name: RABBITMQ_USER
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-rabbitmq
+            key: user
+      - name: RABBITMQ_HOSTS
+        value: rabbitmq
+      - name: RABBITMQ_VHOST
+        value: /
+      - name: RABBITMQ_QUEUE
+        value: content_data_api
+      - name: RABBITMQ_QUEUE_BULK
+        value: content_data_api_govuk_importer
+      - name: RABBITMQ_QUEUE_DEAD
+        value: content_data_api_dead_letter_queue
 - name: content-store
   helmValues: &content-store
     cronTasks:
@@ -687,6 +828,33 @@ govukApplications:
             key: bearer_token
       - name: PUBLISH_TOPICS
         value: "1"
+- name: imminence
+  helmValues:
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-imminence
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-imminence
+            key: oauth_secret
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: imminence-docdb
+            key: MONGODB_URI
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: licencefinder
   repoName: licence-finder
   helmValues:
@@ -844,6 +1012,42 @@ govukApplications:
           secretKeyRef:
             name: local-links-manager-postgres
             key: DATABASE_URL
+- name: locations-api
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workerReplicaCount: 1
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-locations-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-locations-api
+            key: oauth_secret
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: locations-api-postgres
+            key: DATABASE_URL
+      - name: OS_PLACES_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: locations-api-os-places
+            key: api-key
+      - name: OS_PLACES_API_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: locations-api-os-places
+            key: api-secret
 - name: manuals-publisher
   helmValues:
     workerEnabled: true
