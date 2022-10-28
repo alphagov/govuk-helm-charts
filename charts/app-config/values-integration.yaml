@@ -3,6 +3,7 @@
 govukEnvironment: integration
 externalDomainSuffix: eks.integration.govuk.digital
 publishingServiceDomainSuffix: integration.publishing.service.gov.uk
+workerReplicaCount: 1
 appResources:
   limits:
     cpu: 1
@@ -24,7 +25,6 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: asset-manager
       hosts:
       - name: asset-manager.eks.integration.govuk.digital
-    workerReplicaCount: 1
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
@@ -146,7 +146,6 @@ govukApplications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -211,7 +210,6 @@ govukApplications:
 - name: content-data-admin
   helmValues:
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: CONTENT_DATA_API_BEARER_TOKEN
         valueFrom:
@@ -280,7 +278,6 @@ govukApplications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
         valueFrom:
@@ -391,7 +388,6 @@ govukApplications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -833,7 +829,6 @@ govukApplications:
 - name: imminence
   helmValues:
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -884,7 +879,6 @@ govukApplications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -943,7 +937,6 @@ govukApplications:
         schedule: "0 6 * * *"
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
         valueFrom:
@@ -1018,7 +1011,6 @@ govukApplications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -1053,7 +1045,6 @@ govukApplications:
 - name: manuals-publisher
   helmValues:
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
@@ -1119,7 +1110,6 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: publisher
       hosts:
       - publisher.eks.integration.govuk.digital
-    workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1207,7 +1197,6 @@ govukApplications:
     uploadAssets:
       enabled: false
     workerEnabled: true
-    workerReplicaCount: 1
     cronTasks:
       - name: heartbeat
         task: "heartbeat_messages:send"
@@ -1395,7 +1384,6 @@ govukApplications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1584,7 +1572,6 @@ govukApplications:
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
       hosts:
       - signon.eks.integration.govuk.digital
-    workerReplicaCount: 1
     cronTasks:
       - name: "kubernetes-sync-app-secrets"
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
@@ -1698,7 +1685,6 @@ govukApplications:
 - name: specialist-publisher
   helmValues:
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
@@ -1761,7 +1747,6 @@ govukApplications:
 - name: support
   helmValues:
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
@@ -1823,7 +1808,6 @@ govukApplications:
   helmValues:
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1898,7 +1882,6 @@ govukApplications:
         schedule: "30 0,12 * * *"
     dbMigrationEnabled: true
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1947,7 +1930,6 @@ govukApplications:
 - name: travel-advice-publisher
   helmValues:
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
@@ -2057,7 +2039,6 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
       hosts:
       - whitehall-admin.eks.integration.govuk.digital
-    workerReplicaCount: 1
     extraEnv: *whitehall-envs
     extraVolumes:
       - name: asset-uploads-efs
