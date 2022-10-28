@@ -206,6 +206,8 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: content-data-admin
   helmValues:
     workerEnabled: true
