@@ -36,6 +36,11 @@ spec:
               dependencyName: set-automatic-deploys-enabled
               dataKey: body.repoName
             operation: prepend
+          - dest: metadata.generateName
+            src:
+              dependencyName: set-automatic-deploys-enabled
+              dataKey: body.environment
+            operation: append
         source:
           resource:
             apiVersion: argoproj.io/v1alpha1

@@ -40,6 +40,11 @@ spec:
               dependencyName: update-image-tag
               dataKey: body.repoName
             operation: prepend
+          - dest: metadata.generateName
+            src:
+              dependencyName: update-image-tag
+              dataKey: body.environment
+            operation: append
         source:
           resource:
             apiVersion: argoproj.io/v1alpha1
