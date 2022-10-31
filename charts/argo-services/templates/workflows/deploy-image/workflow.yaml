@@ -57,14 +57,14 @@ spec:
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
                 - name: text
-                  value: "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} in {{"{{workflow.parameters.environment}}"}} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                  value: "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} to {{"{{workflow.parameters.environment}}"}} has {{"{{= sprig.lower(workflow.status) }}"}}."
                 - name: blocks
                   value: |
                     [{
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                          "text": "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} to {{"{{workflow.parameters.environment}}"}} has {{"{{= sprig.lower(workflow.status) }}"}}."
                       },
                       "accessory": {
                         "type": "button",
