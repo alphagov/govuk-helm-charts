@@ -1420,7 +1420,7 @@ govukApplications:
       - name: GOVUK_NOTIFY_API_KEY
         valueFrom:
           secretKeyRef:
-            name: search-admin-publisher-notify
+            name: search-admin-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
@@ -1752,7 +1752,7 @@ govukApplications:
       - name: GOVUK_NOTIFY_API_KEY
         valueFrom:
           secretKeyRef:
-            name: support-api-publisher-notify
+            name: support-api-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
