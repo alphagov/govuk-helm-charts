@@ -1031,16 +1031,6 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: GDS_SSO_OAUTH_ID
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-locations-api
-            key: oauth_id
-      - name: GDS_SSO_OAUTH_SECRET
-        valueFrom:
-          secretKeyRef:
-            name: signon-app-locations-api
-            key: oauth_secret
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -1056,6 +1046,8 @@ govukApplications:
           secretKeyRef:
             name: locations-api-os-places
             key: api-secret
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: manuals-publisher
   helmValues:
     uploadAssets:
