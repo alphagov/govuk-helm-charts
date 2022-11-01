@@ -211,6 +211,8 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: content-data-admin
   helmValues:
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     extraEnv:
       - name: CONTENT_DATA_API_BEARER_TOKEN
@@ -278,6 +280,8 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: content-data-api
   helmValues:
+    uploadAssets:
+      enabled: false
     dbMigrationEnabled: true
     workerEnabled: true
     extraEnv:
@@ -832,6 +836,8 @@ govukApplications:
         value: "1"
 - name: imminence
   helmValues:
+    uploadAssets:
+      path: /app/public/assets
     workerEnabled: true
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
@@ -1015,6 +1021,8 @@ govukApplications:
             key: DATABASE_URL
 - name: locations-api
   helmValues:
+    uploadAssets:
+      enabled: false
     dbMigrationEnabled: true
     workerEnabled: true
     extraEnv:
