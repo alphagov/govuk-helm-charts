@@ -243,12 +243,12 @@ govukApplications:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-app-content-data-admin
+            name: signon-app-content-data-beta
             key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-content-data-admin
+            name: signon-app-content-data-beta
             key: oauth_secret
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
