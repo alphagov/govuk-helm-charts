@@ -313,7 +313,7 @@ govukApplications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-content-data-api-publishing-api
+            name: signon-token-content-performance-manager-publishing-api
             key: bearer_token
       - name: SECRET_KEY_BASE
         valueFrom:
