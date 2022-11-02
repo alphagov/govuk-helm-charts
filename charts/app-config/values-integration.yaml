@@ -1013,7 +1013,7 @@ govukApplications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: RUN_LINK_GA_EXPORT
-        value: false
+        value: "false"
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
