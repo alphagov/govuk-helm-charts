@@ -481,6 +481,9 @@ govukApplications:
       createSecret: false  # Sentry DSNs are per repo.
     uploadAssets:
       enabled: false
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - blue.integration.govuk-internal.digital
     appProbes: &router-app-probes
       startupProbe: &router-probe
         httpGet:
