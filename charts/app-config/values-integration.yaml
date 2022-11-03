@@ -807,6 +807,10 @@ govukApplications:
 - name: draft-government-frontend
   repoName: government-frontend
   helmValues:
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
+    uploadAssets:
+      enabled: false
     extraEnv:
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
