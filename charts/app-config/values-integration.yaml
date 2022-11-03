@@ -805,6 +805,7 @@ govukApplications:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
 - name: draft-government-frontend
+  repoName: government-frontend
   helmValues:
     extraEnv:
       - name: PLEK_HOSTNAME_PREFIX
