@@ -2006,29 +2006,11 @@ govukApplications:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
 - name: govuk-replatform-test-app
-  repoName: govuk-replatform-test-app
   helmValues:
     sentry:
       enabled: false
     uploadAssets:
       enabled: false
-    appPort: 9292
-    appProbes:
-      startupProbe: &test-probe
-        httpGet:
-          path: /healthcheck/live
-          port: 9292
-        failureThreshold: 10
-        periodSeconds: 1
-        timeoutSeconds: 1
-      livenessProbe:
-        <<: *test-probe
-        failureThreshold: 3
-        periodSeconds: 5
-      readinessProbe:
-        <<: *test-probe
-        failureThreshold: 2
-        periodSeconds: 5
     ingress:
       enabled: true
       annotations:
@@ -2036,8 +2018,10 @@ govukApplications:
       hosts:
       - govuk-replatform-test-app.eks.integration.govuk.digital
     extraEnv:
-      - name: HELM_MESSAGE
-        value: your_helm_message
+      - name: ENV_MESSAGE_EXAMPLE
+        value: message_by_example
+      - name: ENV_MESSAGE_OTHER
+        value: message_by_other
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
