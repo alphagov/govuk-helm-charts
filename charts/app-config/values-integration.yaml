@@ -804,8 +804,16 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+- name: draft-government-frontend
+  helmValues:
+    extraEnv:
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: hmrc-manuals-api
   helmValues:
     ingress:
