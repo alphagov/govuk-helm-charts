@@ -2008,23 +2008,6 @@ govukApplications:
       enabled: false
     uploadAssets:
       enabled: false
-    appPort: 9292
-    appProbes:
-      startupProbe: &test-probe
-        httpGet:
-          path: /healthcheck/live
-          port: 9292
-        failureThreshold: 10
-        periodSeconds: 1
-        timeoutSeconds: 1
-      livenessProbe:
-        <<: *test-probe
-        failureThreshold: 3
-        periodSeconds: 5
-      readinessProbe:
-        <<: *test-probe
-        failureThreshold: 2
-        periodSeconds: 5
     ingress:
       enabled: true
       annotations:
