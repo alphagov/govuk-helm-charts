@@ -456,8 +456,6 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       - name: GA_UNIVERSAL_ID
         value: UA-26179049-1
-      - name: GOVUK_APP_ROOT
-        value: /var/apps/static
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:

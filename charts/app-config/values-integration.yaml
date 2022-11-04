@@ -42,10 +42,6 @@ govukApplications:
           secretKeyRef:
             name: signon-app-asset-manager
             key: oauth_secret
-      - name: GOVUK_APP_NAME
-        value: asset-manager
-      - name: GOVUK_APP_ROOT
-        value: /var/apps/asset-manager
       - name: GOVUK_ASSET_ROOT  # testing in isolation
         value: https://asset-manager.eks.integration.govuk.digital
       - name: GOVUK_STATSD_PREFIX
@@ -388,8 +384,6 @@ govukApplications:
           mongo-1.integration.govuk-internal.digital,\
           mongo-2.integration.govuk-internal.digital,\
           mongo-3.integration.govuk-internal.digital/content_store_production"
-      - name: GOVUK_APP_NAME
-        value: content-store
 - name: content-tagger
   helmValues:
     dbMigrationEnabled: true
@@ -472,8 +466,6 @@ govukApplications:
         value: http://feedback
       - name: PLEK_SERVICE_INFO_FRONTEND_URI
         value: http://support
-      - name: GOVUK_APP_NAME
-        value: content-store
 - name: draft-router
   repoName: router
   helmValues:
@@ -1792,8 +1784,6 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: GA_UNIVERSAL_ID
         value: &ga-universal-id UA-26179049-22
-      - name: GOVUK_APP_ROOT
-        value: /var/apps/static
 - name: draft-static
   repoName: static
   helmValues:
@@ -1815,8 +1805,6 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: GA_UNIVERSAL_ID
         value: *ga-universal-id
-      - name: GOVUK_APP_ROOT
-        value: /var/apps/static
 - name: specialist-publisher
   helmValues:
     uploadAssets:
