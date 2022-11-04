@@ -1775,15 +1775,28 @@ govukApplications:
 - name: static
   helmValues:
     extraEnv:
+      # These GA/GTM values are not secrets (not even the the gtm_auth one).
+      # https://github.com/alphagov/govuk-puppet/pull/8041
+      - name: GA_UNIVERSAL_ID
+        value: &ga-universal-id UA-26179049-22
+      - name: GOOGLE_TAG_MANAGER_ID
+        value: &static-gtm-id GTM-MG7HG5W
+      - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only.
+        value: &static-gtm-auth C7iYdcsOlYgGmiUJjZKrHQ
+      - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only.
+        value: &static-gtm-preview env-4
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-static-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: GA_UNIVERSAL_ID
-        value: &ga-universal-id UA-26179049-22
 - name: draft-static
   repoName: static
   helmValues:
@@ -1796,15 +1809,26 @@ govukApplications:
         value: "1"
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
+      - name: GA_UNIVERSAL_ID
+        value: *ga-universal-id
+      - name: GOOGLE_TAG_MANAGER_ID
+        value: *static-gtm-id
+      - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only.
+        value: *static-gtm-auth
+      - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only.
+        value: *static-gtm-preview
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-static-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: GA_UNIVERSAL_ID
-        value: *ga-universal-id
 - name: specialist-publisher
   helmValues:
     uploadAssets:
