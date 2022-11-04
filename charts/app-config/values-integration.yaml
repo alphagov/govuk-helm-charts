@@ -1709,7 +1709,30 @@ govukApplications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: GA_UNIVERSAL_ID
-        value: UA-26179049-22
+        value: &ga-universal-id UA-26179049-22
+      - name: GOVUK_APP_ROOT
+        value: /var/apps/static
+- name: draft-static
+  repoName: static
+  helmValues:
+    sentry:
+      createSecret: false
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: DRAFT_ENVIRONMENT
+        value: "1"
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: GA_UNIVERSAL_ID
+        value: *ga-universal-id
       - name: GOVUK_APP_ROOT
         value: /var/apps/static
 - name: specialist-publisher
