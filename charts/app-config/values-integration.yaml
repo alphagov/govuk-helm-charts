@@ -799,6 +799,8 @@ govukApplications:
 - name: government-frontend
   helmValues:
     extraEnv:
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
@@ -812,6 +814,8 @@ govukApplications:
     uploadAssets:
       enabled: false
     extraEnv:
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
       - name: SECRET_KEY_BASE
