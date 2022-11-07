@@ -216,21 +216,14 @@ govukApplications:
           secretKeyRef:
             name: signon-token-content-data-admin-content-data-api
             key: bearer_token
-      - name: GOOGLE_TAG_MANAGER_ID
-        valueFrom:
-          secretKeyRef:
-            name: content-data-admin-google-tag-manager
-            key: manager-id
-      - name: GOOGLE_TAG_MANAGER_PREVIEW
-        valueFrom:
-          secretKeyRef:
-            name: content-data-admin-google-tag-manager
-            key: manager-preview
+      # These GA/GTM values are not secrets (not even the the gtm_auth one).
+      # https://github.com/alphagov/govuk-puppet/pull/8041
       - name: GOOGLE_TAG_MANAGER_AUTH
-        valueFrom:
-          secretKeyRef:
-            name: content-data-admin-google-tag-manager
-            key: manager-auth
+        value: wFyiBTovFhDv5qMe_LXt7Q
+      - name: GOOGLE_TAG_MANAGER_ID
+        value: GTM-NZG8SF2
+      - name: GOOGLE_TAG_MANAGER_PREVIEW
+        value: env-7
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
