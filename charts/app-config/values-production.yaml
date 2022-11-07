@@ -447,15 +447,23 @@ govukApplications:
 - name: static
   helmValues:
     extraEnv:
+      # These GA/GTM values are not secrets.
+      - name: GA_UNIVERSAL_ID
+        value: &ga-universal-id UA-26179049-1
+      - name: GOOGLE_TAG_MANAGER_ID
+        value: &static-gtm-id GTM-MG7HG5W
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-static-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
-      - name: GA_UNIVERSAL_ID
-        value: UA-26179049-1
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
