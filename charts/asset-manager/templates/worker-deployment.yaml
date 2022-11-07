@@ -26,7 +26,6 @@ spec:
         # EC2 counterpart
         runAsUser: 2899
         runAsGroup: 2899
-        fsGroup: 2899
       containers:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
