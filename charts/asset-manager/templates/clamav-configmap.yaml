@@ -9,29 +9,27 @@ metadata:
     argocd.argoproj.io/hook: PreSync
 data:
   clamd.conf: |
-    LogTime yes
-    LogSyslog yes
-    LogVerbose yes
+    # If it's too big to scan, fail it.
+    AlertExceedsMax yes
+    # Avoid RAM spikes on reload. Scanning tasks are async anyway.
+    ConcurrentDatabaseReload no
     ExtendedDetectionInfo yes
-    TCPSocket 3310
-    TCPAddr 127.0.0.1
-    MaxConnectionQueueLength 50
-    StreamMaxLength 50M
-    MaxThreads 20
-    ReadTimeout 120
-    DetectPUA no
-    AlgorithmicDetection yes
-    ScanPE yes
-    ScanELF yes
-    ScanOLE2 yes
-    OLE2BlockMacros no
-    ScanPDF yes
-    ScanMail yes
-    MaxScanSize 250M
-    MaxFileSize 105M
-    TemporaryDirectory /tmp
-  freshclam.conf: |
+    Foreground yes
     LogTime yes
     LogVerbose yes
-    LogSyslog yes
-    DatabaseMirror database.clamav.net
+    # Whitehall and Specialist Publisher allow up to 500 MB uploads. Keep in
+    # sync with StreamMaxLen, because clamdscan streams when connecting via TCP
+    # (as opposed to UNIX socket).
+    MaxFileSize 500M
+    MaxScanSize 1200M
+    MaxThreads 20
+    SelfCheck 900
+    StreamMaxLength 500M
+    TCPAddr 127.0.0.1
+    TCPSocket 3310
+  freshclam.conf: |
+    Foreground yes
+    LogTime yes
+    LogVerbose yes
+    # Avoid peaky RAM usage. clamd will complain anyway if something's wrong with the database.
+    TestDatabases no

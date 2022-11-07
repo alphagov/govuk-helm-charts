@@ -64,7 +64,7 @@ spec:
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           command: ["clamd"]
-          args: ["-F"]
+          args: ["--foreground"]
           {{- with .Values.clamdResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
