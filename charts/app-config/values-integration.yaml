@@ -63,16 +63,6 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: AWS_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: asset-manager-s3
-            key: AWS_ACCESS_KEY
-      - name: AWS_SECRET_KEY
-        valueFrom:
-          secretKeyRef:
-            name: asset-manager-s3
-            key: AWS_SECRET_KEY
       - name: AWS_REGION
         value: eu-west-1
       - name: AWS_S3_BUCKET_NAME
