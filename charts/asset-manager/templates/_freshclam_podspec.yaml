@@ -19,12 +19,8 @@
       volumeMounts:
         - name: clam-virus-db
           mountPath: /var/lib/clamav
-        - name: clamd-conf
-          mountPath: /etc/clamav/clamd.conf
-          subPath: clamd.conf
-        - name: freshclam-conf
-          mountPath: /etc/clamav/freshclam.conf
-          subPath: freshclam.conf
+        - name: etc-clamav
+          mountPath: /etc/clamav
       securityContext:
         allowPrivilegeEscalation: false
   volumes:
@@ -32,11 +28,8 @@
     nfs:
       server: "{{ .Values.assetManagerNFS }}"
       path: /asset-manager/clamav-db
-  - name: clamd-conf
+  - name: etc-clamav
     configMap:
-      name: {{ .Release.Name }}-clamd-conf
-  - name: freshclam-conf
-    configMap:
-      name: {{ .Release.Name }}-freshclam-conf
+      name: {{ .Release.Name }}-etc-clamav
   restartPolicy: Never
 {{- end }}

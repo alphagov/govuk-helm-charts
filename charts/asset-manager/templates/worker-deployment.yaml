@@ -54,9 +54,8 @@ spec:
               mountPath: /var/apps/
             - name: clam-virus-db
               mountPath: /var/lib/clamav
-            - name: clamd-conf
-              mountPath: /etc/clamav/clamd.conf
-              subPath: clamd.conf
+            - name: etc-clamav
+              mountPath: /etc/clamav
           securityContext:
             allowPrivilegeEscalation: false
           # TODO: consider implementing a liveness probe for Sidekiq
@@ -75,9 +74,8 @@ spec:
               mountPath: /var/apps/
             - name: clam-virus-db
               mountPath: /var/lib/clamav
-            - name: clamd-conf
-              mountPath: /etc/clamav/clamd.conf
-              subPath: clamd.conf
+            - name: etc-clamav
+              mountPath: /etc/clamav
           securityContext:
             allowPrivilegeEscalation: false
       {{- with .Values.dnsConfig }}
@@ -94,9 +92,6 @@ spec:
         nfs:
           server: "{{ .Values.assetManagerNFS }}"
           path: /asset-manager/clamav-db
-      - name: clamd-conf
+      - name: etc-clamav
         configMap:
-          name: {{ .Release.Name }}-clamd-conf
-      - name: freshclam-conf
-        configMap:
-          name: {{ .Release.Name }}-freshclam-conf
+          name: {{ .Release.Name }}-etc-clamav

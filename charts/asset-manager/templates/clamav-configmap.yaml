@@ -1,15 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-clamd-conf
+  name: {{ .Release.Name }}-etc-clamav
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
     app.kubernetes.io/component: clamd
   annotations:
     argocd.argoproj.io/hook: PreSync
 data:
-  clamd.conf: |-
-
+  clamd.conf: |
     LogTime yes
     LogSyslog yes
     LogVerbose yes
@@ -31,3 +30,8 @@ data:
     MaxScanSize 250M
     MaxFileSize 105M
     TemporaryDirectory /tmp
+  freshclam.conf: |
+    LogTime yes
+    LogVerbose yes
+    LogSyslog yes
+    DatabaseMirror database.clamav.net
