@@ -20,25 +20,30 @@ spec:
         app: {{ .Release.Name }}-worker
     spec:
       securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
         seccompProfile:
           type: RuntimeDefault
-        # Asset Manager needs to run as 2899 since it shares the same NFS volume with
-        # EC2 counterpart
-        runAsUser: 2899
-        runAsGroup: 2899
       containers:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+          command: ["bundle"]
+          args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
           ports:
             - name: metrics
               containerPort: {{ .Values.metricsPort }}
-          command: ["bundle"]
-          args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
+          volumeMounts:
+            - name: asset-manager-efs
+              mountPath: &uploads-path /mnt/asset-manager
+            - name: etc-clamav
+              mountPath: /etc/clamav
           envFrom:
             - configMapRef:
                 name: govuk-apps-env
           env:
+            - name: GOVUK_UPLOADS_ROOT
+              value: *uploads-path
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
           {{- with .Values.extraEnv }}
@@ -48,17 +53,12 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          volumeMounts:
-            - name: assets-efs
-              mountPath: /var/apps/
-            - name: clam-virus-db
-              mountPath: /var/lib/clamav
-            - name: etc-clamav
-              mountPath: /etc/clamav
           securityContext:
             allowPrivilegeEscalation: false
-          # TODO: consider implementing a liveness probe for Sidekiq
-          # e.g. https://github.com/arturictus/sidekiq_alive
+            # Asset Manager needs to run as 2899 since it shares an NFS volume
+            # with its EC2 counterpart.
+            runAsUser: 2899
+            runAsGroup: 2899
         - name: clamd
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
@@ -69,8 +69,8 @@ spec:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: assets-efs
-              mountPath: /var/apps/
+            - name: asset-manager-efs
+              mountPath: *uploads-path
             - name: clam-virus-db
               mountPath: /var/lib/clamav
             - name: etc-clamav
@@ -83,14 +83,15 @@ spec:
       {{- end }}
       enableServiceLinks: false
       volumes:
-      - name: assets-efs
+      - name: asset-manager-efs
         nfs:
           server: "{{ .Values.assetManagerNFS }}"
-          path: /
+          path: /asset-manager
       - name: clam-virus-db
         nfs:
           server: "{{ .Values.assetManagerNFS }}"
-          path: /asset-manager/clamav-db
+          path: /clamav-db
+          readOnly: true
       - name: etc-clamav
         configMap:
           name: {{ .Release.Name }}-etc-clamav

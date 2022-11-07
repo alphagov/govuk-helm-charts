@@ -2,10 +2,8 @@
   securityContext:
     seccompProfile:
       type: RuntimeDefault
-    # Asset Manager needs to run as 2899 since it shares the same NFS volume with
-    # EC2 counterpart
-    runAsUser: 2899
-    runAsGroup: 2899
+    runAsUser: 1001
+    runAsGroup: 1001
   containers:
     - name: freshclam
       image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -26,7 +24,7 @@
   - name: clam-virus-db
     nfs:
       server: "{{ .Values.assetManagerNFS }}"
-      path: /asset-manager/clamav-db
+      path: /clamav-db
   - name: etc-clamav
     configMap:
       name: {{ .Release.Name }}-etc-clamav
