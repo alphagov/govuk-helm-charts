@@ -587,9 +587,9 @@ govukApplications:
     extraEnv:
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
-        secretKeyRef:
-          name: signon-token-email-alert-api-account-api
-          key: bearer_token
+          secretKeyRef:
+            name: signon-token-email-alert-api-account-api
+            key: bearer_token
       - name: EMAIL_ALERT_AUTH_TOKEN
         valueFrom:
           secretKeyRef:
@@ -621,9 +621,9 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
-        secretKeyRef:
-          name: rails-secret-key-base
-          key: SECRET_KEY_BASE
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: WEB_CONCURRENCY
         value: '10'
 - name: email-alert-frontend
