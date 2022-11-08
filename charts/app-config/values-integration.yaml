@@ -582,23 +582,12 @@ govukApplications:
 - name: email-alert-api
   helmValues:
     workerEnabled: true
-    workerReplicaCount: 1
     extraEnv:
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
         secretKeyRef:
           name: signon-token-email-alert-api-account-api
           key: bearer_token
-      - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: email-alert-api-aws
-            key: access_key
-      - name: AWS_SECRET_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: email-alert-api-aws
-            key: secret_key
       - name: EMAIL_ALERT_AUTH_TOKEN
         valueFrom:
           secretKeyRef:
