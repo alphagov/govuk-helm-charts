@@ -1,4 +1,3 @@
-{{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
@@ -18,4 +17,3 @@ spec:
   dataFrom:
     - extract:
         key: govuk/content-data-api/google-analytics
-{{- end }}
