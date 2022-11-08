@@ -6,7 +6,8 @@ metadata:
     {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      RabbitMQ user and password for email alert service.
+      RabbitMQ connection string for email-alert-service. Fields in
+      SecretsManager are username, password, host, port.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
@@ -14,6 +15,9 @@ spec:
     kind: ClusterSecretStore
   target:
     name: email-alert-service-rabbitmq
+    template:
+      data:
+        RABBITMQ_URL: '{{ $.Files.Get "externalsecrets-templates/amqp-conn-string.tpl" | trim }}'
   dataFrom:
     - extract:
         key: govuk/email-alert-service/rabbitmq

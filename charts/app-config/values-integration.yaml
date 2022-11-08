@@ -309,20 +309,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-content-data-api-support-api
             key: bearer_token
-      - name: RABBITMQ_PASSWORD
+      - name: RABBITMQ_URL
         valueFrom:
           secretKeyRef:
             name: content-data-api-rabbitmq
-            key: password
-      - name: RABBITMQ_USER
-        valueFrom:
-          secretKeyRef:
-            name: content-data-api-rabbitmq
-            key: user
-      - name: RABBITMQ_HOSTS
-        value: rabbitmq
-      - name: RABBITMQ_VHOST
-        value: /
+            key: RABBITMQ_URL
       - name: RABBITMQ_QUEUE
         value: content_data_api
       - name: RABBITMQ_QUEUE_BULK
@@ -684,18 +675,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-email-alert-service-email-alert-api
             key: bearer_token
-      - name: RABBITMQ_HOSTS
-        value: rabbitmq.integration.govuk-internal.digital
-      - name: RABBITMQ_PASSWORD
+      - name: RABBITMQ_URL
         valueFrom:
           secretKeyRef:
             name: email-alert-service-rabbitmq
-            key: password
-      - name: RABBITMQ_USER
-        valueFrom:
-          secretKeyRef:
-            name: email-alert-service-rabbitmq
-            key: user
+            key: RABBITMQ_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: feedback
@@ -1566,20 +1550,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-search-api-publishing-api
             key: bearer_token
-      - name: RABBITMQ_HOSTS
-        value: rabbitmq.integration.govuk-internal.digital
-      - name: RABBITMQ_VHOST
-        value: /
-      - name: RABBITMQ_USER
+      - name: RABBITMQ_URL
         valueFrom:
           secretKeyRef:
             name: search-api-rabbitmq
-            key: user
-      - name: RABBITMQ_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: search-api-rabbitmq
-            key: password
+            key: RABBITMQ_URL
       - name: TENSORFLOW_SAGEMAKER_ENDPOINT
         value: govuk-integration-search-ltr-endpoint
       - name: TENSORFLOW_SAGEMAKER_VARIANTS
