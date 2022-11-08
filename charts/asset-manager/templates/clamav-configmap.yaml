@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-etc-clamav
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app.kubernetes.io/component: clamd
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+data:
+  clamd.conf: |
+    # If it's too big to scan, fail it.
+    AlertExceedsMax yes
+    # Avoid RAM spikes on reload. Scanning tasks are async anyway.
+    ConcurrentDatabaseReload no
+    ExtendedDetectionInfo yes
+    Foreground yes
+    LogTime yes
+    LogVerbose yes
+    # Whitehall and Specialist Publisher allow up to 500 MB uploads. Keep in
+    # sync with StreamMaxLen, because clamdscan streams when connecting via TCP
+    # (as opposed to UNIX socket).
+    MaxFileSize 500M
+    MaxScanSize 1200M
+    MaxThreads 20
+    SelfCheck 900
+    StreamMaxLength 500M
+    TCPAddr 127.0.0.1
+    TCPSocket 3310
+  freshclam.conf: |
+    Foreground yes
+    LogTime yes
+    LogVerbose yes
+    # Avoid peaky RAM usage. clamd will complain anyway if something's wrong with the database.
+    TestDatabases no

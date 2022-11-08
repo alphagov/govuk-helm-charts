@@ -23,8 +23,8 @@ spec:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           volumeMounts:
-            - name: assets-efs
-              mountPath: /var/apps/
+            - name: asset-manager-efs
+              mountPath: &uploads-path /mnt/asset-manager
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
@@ -34,6 +34,8 @@ spec:
           - configMapRef:
               name: govuk-apps-env
           env:
+            - name: GOVUK_UPLOADS_ROOT
+              value: *uploads-path
             - name: PORT
               value: "{{ .Values.appPort }}"
             {{- if .Values.sentry.enabled }}
@@ -126,7 +128,7 @@ spec:
       {{- with .Values.extraVolumes }}
         {{ . | toYaml | trim | nindent 6 }}
       {{- end }}
-      - name: assets-efs
+      - name: asset-manager-efs
         nfs:
           server: {{ .Values.assetManagerNFS }}
-          path: /
+          path: /asset-manager
