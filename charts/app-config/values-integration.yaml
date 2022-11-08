@@ -612,11 +612,6 @@ govukApplications:
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 1fc69d3a-09a2-40f9-852b-03f6fcef5340
-      - name: PUBLISHING_API_BEARER_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: signon-token-email-alert-api-publishing-api
-            key: bearer_token
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
