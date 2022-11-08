@@ -44,8 +44,6 @@ govukApplications:
             key: oauth_secret
       - name: GOVUK_ASSET_ROOT  # testing in isolation
         value: https://asset-manager.eks.integration.govuk.digital
-      - name: GOVUK_STATSD_PREFIX
-        value: asset-manager
       - name: JWT_AUTH_SECRET
         valueFrom:
           secretKeyRef:
