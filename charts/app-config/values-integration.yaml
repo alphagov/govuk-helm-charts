@@ -581,6 +581,8 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: email-alert-api
   helmValues:
+    uploadAssets:
+      enabled: false
     workerEnabled: true
     workerReplicaCount: 1
     extraEnv:
@@ -669,6 +671,8 @@ govukApplications:
             key: token
 - name: email-alert-service
   helmValues:
+    uploadAssets:
+      enabled: false
     extraEnv:
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
