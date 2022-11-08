@@ -6,7 +6,8 @@ metadata:
     {{- include "app-config.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      RabbitMQ connection string for publishing-api.
+      RabbitMQ connection string for publishing-api. Fields in SecretsManager
+      are username, password, host, port.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
