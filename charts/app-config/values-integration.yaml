@@ -22,10 +22,10 @@ govukApplications:
     ingress:
       enabled: true
       annotations:
-        alb.ingress.kubernetes.io/load-balancer-name: asset-manager
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
       hosts:
-      - name: asset-manager.eks.integration.govuk.digital
+      - name: assets-origin.eks.integration.govuk.digital
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
@@ -44,7 +44,7 @@ govukApplications:
             name: signon-app-asset-manager
             key: oauth_secret
       - name: GOVUK_ASSET_ROOT  # testing in isolation
-        value: https://asset-manager.eks.integration.govuk.digital
+        value: https://assets-origin.eks.integration.govuk.digital
       - name: JWT_AUTH_SECRET
         valueFrom:
           secretKeyRef:
