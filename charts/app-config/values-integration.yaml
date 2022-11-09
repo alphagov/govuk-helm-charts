@@ -581,6 +581,7 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: email-alert-api
   helmValues:
+    dbMigrationEnabled: true
     uploadAssets:
       enabled: false
     workerEnabled: true
