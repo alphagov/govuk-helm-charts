@@ -23,6 +23,7 @@ govukApplications:
       enabled: true
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: asset-manager
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
       hosts:
       - name: asset-manager.eks.integration.govuk.digital
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
