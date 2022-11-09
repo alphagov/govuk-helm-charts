@@ -591,6 +591,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-email-alert-api-account-api
             key: bearer_token
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-api-postgres
+            key: DATABASE_URL
       - name: EMAIL_ALERT_AUTH_TOKEN
         valueFrom:
           secretKeyRef:
