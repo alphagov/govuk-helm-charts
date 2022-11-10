@@ -27,6 +27,7 @@ spec:
           mountPath: /assets-to-upload
         securityContext:
           allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
       containers:
       - name: {{ .Release.Name }}-upload-assets
         image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
@@ -41,6 +42,9 @@ spec:
           {{- . | toYaml | trim | nindent 12 }}
         {{- end }}
         volumeMounts: *volumeMounts
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
       restartPolicy: Never
       volumes:
       - name: assets-to-upload

@@ -20,6 +20,7 @@ spec:
           image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
           env:
             - name: GOVUK_ENVIRONMENT
               value: {{ .Values.govukEnvironment }}
