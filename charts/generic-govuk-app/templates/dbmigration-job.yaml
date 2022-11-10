@@ -16,6 +16,7 @@ spec:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
         app.kubernetes.io/component: dbmigrate
     spec:
+      automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}

@@ -11,6 +11,7 @@ metadata:
 spec:
   template:
     spec:
+      automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
         runAsNonRoot: true

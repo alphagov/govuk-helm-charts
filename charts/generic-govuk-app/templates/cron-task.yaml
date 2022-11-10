@@ -23,6 +23,7 @@ spec:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
             app.kubernetes.io/component: app
         spec:
+          automountServiceAccountToken: false
           enableServiceLinks: false
           securityContext:
             runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
