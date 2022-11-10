@@ -17,6 +17,9 @@ spec:
         runAsNonRoot: true
         runAsUser: 1001
         runAsGroup: 1001
+      volumes:
+        - name: tmp
+          emptyDir: {}
       containers:
         - name: upload-static-error-pages
           image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
@@ -37,5 +40,8 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
       restartPolicy: Never
 {{- end }}

@@ -35,10 +35,15 @@ spec:
             - name: metrics
               containerPort: {{ .Values.metricsPort }}
           volumeMounts:
+            - name: app-tmp
+              mountPath: /tmp
             - name: asset-manager-efs
               mountPath: &uploads-path /mnt/asset-manager
             - name: etc-clamav
               mountPath: /etc/clamav
+            {{- with .Values.appExtraVolumeMounts }}
+              {{ . | toYaml | trim | nindent 12 }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: govuk-apps-env
@@ -47,9 +52,9 @@ spec:
               value: *uploads-path
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
-          {{- with .Values.extraEnv }}
-            {{- (tpl (toYaml .) $) | trim | nindent 12 }}
-          {{- end }}
+            {{- with .Values.extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
           {{- with .Values.workerResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
@@ -75,6 +80,8 @@ spec:
               mountPath: *uploads-path
             - name: clam-virus-db
               mountPath: /var/lib/clamav
+            - name: clamd-tmp
+              mountPath: /tmp
             - name: etc-clamav
               mountPath: /etc/clamav
           securityContext:
@@ -86,15 +93,22 @@ spec:
       {{- end }}
       enableServiceLinks: false
       volumes:
-      - name: asset-manager-efs
-        nfs:
-          server: "{{ .Values.assetManagerNFS }}"
-          path: /asset-manager
-      - name: clam-virus-db
-        nfs:
-          server: "{{ .Values.assetManagerNFS }}"
-          path: /clamav-db
-          readOnly: true
-      - name: etc-clamav
-        configMap:
-          name: {{ .Release.Name }}-etc-clamav
+        - name: app-tmp
+          emptyDir: {}
+        - name: clamd-tmp
+          emptyDir: {}
+        - name: asset-manager-efs
+          nfs:
+            server: "{{ .Values.assetManagerNFS }}"
+            path: /asset-manager
+        - name: clam-virus-db
+          nfs:
+            server: "{{ .Values.assetManagerNFS }}"
+            path: /clamav-db
+            readOnly: true
+        - name: etc-clamav
+          configMap:
+            name: {{ .Release.Name }}-etc-clamav
+        {{- with .Values.extraVolumes }}
+          {{ . | toYaml | trim | nindent 8 }}
+        {{- end }}

@@ -31,6 +31,12 @@ spec:
             runAsGroup: {{ $.Values.securityContext.runAsGroup }}
           restartPolicy: Never
           {{ if .serviceAccount }}serviceAccountName: {{ .serviceAccount }}{{- end }}
+          volumes:
+            - name: app-tmp
+              emptyDir: {}
+            {{- with $.Values.extraVolumes }}
+              {{- . | toYaml | trim | nindent 12 }}
+            {{- end }}
           containers:
             - name: cron-task
               image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
@@ -42,14 +48,14 @@ spec:
               args: ["-c", "{{ .command }}"]
               {{- end }}
               envFrom:
-              - configMapRef:
-                  name: govuk-apps-env
+                - configMapRef:
+                    name: govuk-apps-env
               env:
                 - name: SENTRY_RELEASE
                   value: "{{ $.Values.appImage.tag }}"
-              {{- with $.Values.extraEnv }}
-                {{- . | toYaml | trim | nindent 16 }}
-              {{- end }}
+                {{- with $.Values.extraEnv }}
+                  {{- . | toYaml | trim | nindent 16 }}
+                {{- end }}
               {{- with $.Values.appResources }}
               resources:
                 {{- . | toYaml | trim | nindent 16 }}
@@ -57,4 +63,10 @@ spec:
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: app-tmp
+                  mountPath: /tmp
+                {{- with $.Values.appExtraVolumeMounts }}
+                  {{- . | toYaml | trim | nindent 16 }}
+                {{- end }}
 {{- end }}
