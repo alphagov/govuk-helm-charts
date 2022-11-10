@@ -19,6 +19,7 @@ spec:
         app.kubernetes.io/component: worker
         app: {{ .Release.Name }}-worker
     spec:
+      automountServiceAccountToken: false
       securityContext:
         runAsUser: 1001
         runAsGroup: 1001
