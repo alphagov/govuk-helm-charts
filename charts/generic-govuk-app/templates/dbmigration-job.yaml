@@ -16,6 +16,7 @@ spec:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
         app.kubernetes.io/component: dbmigrate
     spec:
+      enableServiceLinks: false
       securityContext:
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
         runAsUser: {{ .Values.securityContext.runAsUser }}

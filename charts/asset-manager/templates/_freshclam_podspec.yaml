@@ -18,6 +18,7 @@
           mountPath: /var/lib/clamav
         - name: etc-clamav
           mountPath: /etc/clamav
+      enableServiceLinks: false
       securityContext:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
