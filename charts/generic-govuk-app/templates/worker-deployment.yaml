@@ -56,6 +56,7 @@ spec:
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+            readOnlyRootFilesystem: true
           {{- with .Values.appExtraVolumeMounts }}
           volumeMounts:
             {{- . | toYaml | trim | nindent 12 }}

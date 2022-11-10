@@ -20,6 +20,7 @@
           mountPath: /etc/clamav
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
   volumes:
   - name: clam-virus-db
     nfs:

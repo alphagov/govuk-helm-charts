@@ -78,6 +78,7 @@ spec:
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             # Asset Manager needs to run as 2899 since it shares the same NFS volume with
             # EC2 counterpart
             runAsUser: 2899
@@ -114,6 +115,7 @@ spec:
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
