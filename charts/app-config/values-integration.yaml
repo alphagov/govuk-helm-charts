@@ -1023,7 +1023,6 @@ govukApplications:
     dbMigrationEnabled: true
     uploadAssets:
       path: /app/public/assets
-    workerEnabled: true
     extraEnv:
       - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
         valueFrom:
