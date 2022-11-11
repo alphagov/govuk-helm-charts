@@ -97,13 +97,14 @@ data:
 
       server {
         server_name asset-manager asset-manager.*  ;
+        listen {{ .Values.nginxPort }};
+
         # Send the Strict-Transport-Security header
         add_header Strict-Transport-Security $sts_default;
 
         add_header Permissions-Policy interest-cohort=();
         add_header X-Content-Type-Options "nosniff" always;
 
-        listen {{ .Values.nginxPort }};
 
         proxy_set_header Host $http_host;
 
