@@ -28,6 +28,7 @@ data:
     TCPAddr 127.0.0.1
     TCPSocket 3310
   freshclam.conf: |
+    DatabaseMirror database.clamav.net
     Foreground yes
     LogTime yes
     LogVerbose yes
