@@ -68,6 +68,7 @@ govukApplications:
         value: govuk-assets-integration
 - name: argo-services
   chartPath: charts/argo-services
+  namespace: cluster-services
   postSyncWorkflowEnabled: "false"
   helmValues:
     nextEnvironment: staging

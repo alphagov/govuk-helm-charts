@@ -17,6 +17,7 @@ replicaCount: 3
 govukApplications:
 - name: argo-services
   chartPath: charts/argo-services
+  namespace: cluster-services
   postSyncWorkflowEnabled: "false"
   # TODO: Handle case where production doesn't promote deployments
   helmValues:
