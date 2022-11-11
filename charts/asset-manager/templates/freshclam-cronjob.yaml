@@ -8,4 +8,4 @@ spec:
     spec:
       template:
         spec:
-          {{- include "asset-manager.freshclam.podspec" . | indent 8 }}
+          {{- include "asset-manager.freshclam.podspec" . | indent 10 }}

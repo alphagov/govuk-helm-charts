@@ -17,37 +17,37 @@ spec:
         runAsUser: {{ .Values.securityContext.runAsUser }}
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
       initContainers:
-      - name: {{ .Release.Name }}-copy-assets-for-upload
-        image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
-        command:
-        - sh
-        - -c
-        - "cp -R {{ $sourcePath }}/* /assets-to-upload"
-        volumeMounts: &volumeMounts
-        - name: assets-to-upload
-          mountPath: /assets-to-upload
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+        - name: {{ .Release.Name }}-copy-assets-for-upload
+          image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
+          command:
+            - sh
+            - -c
+            - "cp -R {{ $sourcePath }}/* /assets-to-upload"
+          volumeMounts: &volumeMounts
+            - name: assets-to-upload
+              mountPath: /assets-to-upload
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
       containers:
-      - name: {{ .Release.Name }}-upload-assets
-        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
-        command:
-        - aws
-        - s3
-        - sync
-        - /assets-to-upload
-        - "{{- printf "s3://govuk-app-assets-%s/assets/%s/" .Values.govukEnvironment $destDir }}"
-        {{- with .Values.jobResources }}
-        resources:
-          {{- . | toYaml | trim | nindent 12 }}
-        {{- end }}
-        volumeMounts: *volumeMounts
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+        - name: {{ .Release.Name }}-upload-assets
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
+          command:
+            - aws
+            - s3
+            - sync
+            - /assets-to-upload
+            - "{{- printf "s3://govuk-app-assets-%s/assets/%s/" .Values.govukEnvironment $destDir }}"
+          {{- with .Values.jobResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          volumeMounts: *volumeMounts
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
       restartPolicy: Never
       volumes:
-      - name: assets-to-upload
-        emptyDir: {}
+        - name: assets-to-upload
+          emptyDir: {}
 {{- end }}

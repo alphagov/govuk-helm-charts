@@ -24,16 +24,21 @@ spec:
         - name: app
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           volumeMounts:
+            - name: app-tmp
+              mountPath: /tmp
             - name: asset-manager-efs
               mountPath: &uploads-path /mnt/asset-manager
+            {{- with .Values.appExtraVolumeMounts }}
+              {{ . | toYaml | trim | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.appPort }}
             - name: metrics
               containerPort: {{ .Values.metricsPort }}
           envFrom:
-          - configMapRef:
-              name: govuk-apps-env
+            - configMapRef:
+                name: govuk-apps-env
           env:
             - name: GOVUK_UPLOADS_ROOT
               value: *uploads-path
@@ -48,15 +53,15 @@ spec:
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
             {{- end }}
-          {{- with .Values.extraEnv }}
-            {{- (tpl (toYaml .) $) | trim | nindent 12 }}
-          {{- end }}
+            {{- with .Values.extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
           {{- with .Values.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          {{- if .Values.appProbes }}
-          {{- .Values.appProbes | toYaml | trim | nindent 10 }}
+          {{- with .Values.appProbes }}
+            {{- . | toYaml | trim | nindent 10 }}
           {{- else }}
           startupProbe: &app-probe  # TODO: check the Rails apps aren't picky about the Host header.
             httpGet:
@@ -106,14 +111,14 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 15
           volumeMounts:
-          - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-            mountPath: /etc/nginx/nginx.conf
-            subPath: nginx.conf
-          - name: tmp
-            mountPath: /tmp
-          {{- with .Values.nginxExtraVolumeMounts }}
-            {{ . | toYaml | trim | nindent 10 }}
-          {{- end }}
+            - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: nginx-tmp
+              mountPath: /tmp
+            {{- with .Values.nginxExtraVolumeMounts }}
+              {{ . | toYaml | trim | nindent 12 }}
+            {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
@@ -123,15 +128,17 @@ spec:
       {{- end }}
       enableServiceLinks: false
       volumes:
-      - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-        configMap:
-          name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-      - name: tmp
-        emptyDir: {}
-      {{- with .Values.extraVolumes }}
-        {{ . | toYaml | trim | nindent 6 }}
-      {{- end }}
-      - name: asset-manager-efs
-        nfs:
-          server: {{ .Values.assetManagerNFS }}
-          path: /asset-manager
+        - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+          configMap:
+            name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+        - name: app-tmp
+          emptyDir: {}
+        - name: nginx-tmp
+          emptyDir: {}
+        - name: asset-manager-efs
+          nfs:
+            server: {{ .Values.assetManagerNFS }}
+            path: /asset-manager
+        {{- with .Values.extraVolumes }}
+          {{ . | toYaml | trim | nindent 8 }}
+        {{- end }}

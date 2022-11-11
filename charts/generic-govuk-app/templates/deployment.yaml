@@ -31,8 +31,8 @@ spec:
             - name: metrics
               containerPort: {{ .Values.metricsPort }}
           envFrom:
-          - configMapRef:
-              name: govuk-apps-env
+            - configMapRef:
+                name: govuk-apps-env
           env:
             - name: PORT
               value: "{{ .Values.appPort }}"
@@ -45,15 +45,15 @@ spec:
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
             {{- end }}
-          {{- with .Values.extraEnv }}
-            {{- (tpl (toYaml .) $) | trim | nindent 12 }}
-          {{- end }}
+            {{- with .Values.extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
           {{- with .Values.appResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          {{- if .Values.appProbes }}
-          {{- .Values.appProbes | toYaml | trim | nindent 10 }}
+          {{- with .Values.appProbes }}
+            {{- . | toYaml | trim | nindent 10 }}
           {{- else }}
           startupProbe: &app-probe  # TODO: check the Rails apps aren't picky about the Host header.
             httpGet:
@@ -77,10 +77,12 @@ spec:
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
             readOnlyRootFilesystem: true
-          {{- with .Values.appExtraVolumeMounts }}
           volumeMounts:
-            {{- . | toYaml | trim | nindent 12 }}
-          {{- end }}
+            - name: app-tmp
+              mountPath: /tmp
+            {{- with .Values.appExtraVolumeMounts }}
+              {{- . | toYaml | trim | nindent 12 }}
+            {{- end }}
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
@@ -111,25 +113,27 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
           volumeMounts:
-          - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-            mountPath: /etc/nginx/nginx.conf
-            subPath: nginx.conf
-          - name: tmp
-            mountPath: /tmp
-          {{- with .Values.nginxExtraVolumeMounts }}
-          {{ . | toYaml | trim | nindent 10 }}
-          {{- end }}
+            - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: nginx-tmp
+              mountPath: /tmp
+            {{- with .Values.nginxExtraVolumeMounts }}
+              {{ . | toYaml | trim | nindent 12 }}
+            {{- end }}
       enableServiceLinks: false
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
       volumes:
-      - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-        configMap:
-          name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-      - name: tmp
-        emptyDir: {}
-      {{- with .Values.extraVolumes }}
-        {{- . | toYaml | trim | nindent 6 }}
-      {{- end }}
+        - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+          configMap:
+            name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+        - name: app-tmp
+          emptyDir: {}
+        - name: nginx-tmp
+          emptyDir: {}
+        {{- with .Values.extraVolumes }}
+          {{- . | toYaml | trim | nindent 8 }}
+        {{- end }}

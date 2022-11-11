@@ -7,4 +7,4 @@ metadata:
 spec:
   template:
     spec:
-      {{- include "asset-manager.freshclam.podspec" . | indent 4 }}
+      {{- include "asset-manager.freshclam.podspec" . | indent 6 }}
