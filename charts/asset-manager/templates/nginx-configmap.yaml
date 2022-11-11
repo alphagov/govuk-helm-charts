@@ -97,18 +97,20 @@ data:
 
       server {
         server_name asset-manager asset-manager.*  ;
+        listen {{ .Values.nginxPort }};
+
         # Send the Strict-Transport-Security header
         add_header Strict-Transport-Security $sts_default;
 
         add_header Permissions-Policy interest-cohort=();
         add_header X-Content-Type-Options "nosniff" always;
 
-        listen {{ .Values.nginxPort }};
 
         proxy_set_header Host $http_host;
 
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Forwarded-Host $proxy_add_x_forwarded_host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header GOVUK-Request-Id $govuk_request_id;
         proxy_redirect off;
@@ -119,6 +121,10 @@ data:
         error_log /dev/stderr;
 
         location / {
+          proxy_busy_buffers_size 16k;
+          proxy_buffers 8 8k;
+          proxy_buffer_size 8k;
+
           try_files $uri/index.html $uri.html $uri @app;
         }
 
@@ -229,6 +235,11 @@ data:
         # Endpoint for liveness and readiness checks of the nginx container.
         location = /readyz {
           return 200 'ok\n';
+        }
+
+        # Google site verification
+        location /googlec908b3bc32386239.html {
+          return 200 'google-site-verification: googlec908b3bc32386239.html';
         }
       }
     }
