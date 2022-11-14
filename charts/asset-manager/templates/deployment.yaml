@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
     app: {{ .Release.Name }}
+    app.kubernetes.io/component: app
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 5
@@ -15,14 +17,45 @@ spec:
       labels:
         {{- include "asset-manager.labels" . | nindent 8 }}
         app: {{ .Release.Name }}
+        app.kubernetes.io/component: app
     spec:
       automountServiceAccountToken: false
+      enableServiceLinks: false
       securityContext:
+        fsGroup: &old-ec2-deploy-uid 2899
         runAsUser: 1001
         runAsGroup: 1001
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      {{- with .Values.dnsConfig }}
+      dnsConfig:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+          configMap:
+            name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+        - name: app-tmp
+          emptyDir: {}
+        - name: nginx-tmp
+          emptyDir: {}
+        - name: asset-manager-efs
+          nfs:
+            server: {{ .Values.assetManagerNFS }}
+            path: /asset-manager
+        {{- with .Values.extraVolumes }}
+          {{ . | toYaml | trim | nindent 8 }}
+        {{- end }}
       containers:
         - name: app
-          image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          image: "{{ required "appImage.repository is required" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.appPort }}
+            - name: metrics
+              containerPort: {{ .Values.metricsPort }}
           volumeMounts:
             - name: app-tmp
               mountPath: /tmp
@@ -31,11 +64,6 @@ spec:
             {{- with .Values.appExtraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.appPort }}
-            - name: metrics
-              containerPort: {{ .Values.metricsPort }}
           envFrom:
             - configMapRef:
                 name: govuk-apps-env
@@ -85,10 +113,9 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
-            # Asset Manager needs to run as 2899 since it shares the same NFS volume with
-            # EC2 counterpart
-            runAsUser: 2899
-            runAsGroup: 2899
+            # Asset Manager shares an NFS volume with its EC2 counterpart.
+            runAsUser: *old-ec2-deploy-uid
+            runAsGroup: *old-ec2-deploy-uid
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
@@ -122,23 +149,3 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
-      {{- with .Values.dnsConfig }}
-      dnsConfig:
-        {{- . | toYaml | trim | nindent 8 }}
-      {{- end }}
-      enableServiceLinks: false
-      volumes:
-        - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-          configMap:
-            name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-        - name: app-tmp
-          emptyDir: {}
-        - name: nginx-tmp
-          emptyDir: {}
-        - name: asset-manager-efs
-          nfs:
-            server: {{ .Values.assetManagerNFS }}
-            path: /asset-manager
-        {{- with .Values.extraVolumes }}
-          {{ . | toYaml | trim | nindent 8 }}
-        {{- end }}
