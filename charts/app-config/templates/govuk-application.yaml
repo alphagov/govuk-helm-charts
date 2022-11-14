@@ -34,6 +34,7 @@ spec:
         appImage:
           repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}
           tag: {{ $imageTag }}
+          pullPolicy: {{ .appImagePullPolicy | default "IfNotPresent" }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

@@ -4,8 +4,8 @@ metadata:
   name: {{ .Release.Name }}-worker
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app.kubernetes.io/component: worker
     app: {{ .Release.Name }}-worker
+    app.kubernetes.io/component: worker
 spec:
   replicas: {{ .Values.workerReplicaCount }}
   revisionHistoryLimit: 5
@@ -16,18 +16,45 @@ spec:
     metadata:
       labels:
         {{- include "asset-manager.labels" . | nindent 8 }}
-        app.kubernetes.io/component: worker
         app: {{ .Release.Name }}-worker
+        app.kubernetes.io/component: worker
     spec:
       automountServiceAccountToken: false
+      enableServiceLinks: false
       securityContext:
+        fsGroup: &old-ec2-deploy-uid 2899
         runAsUser: 1001
         runAsGroup: 1001
+        runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+      {{- with .Values.dnsConfig }}
+      dnsConfig:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: app-tmp
+          emptyDir: {}
+        - name: clamd-tmp
+          emptyDir: {}
+        - name: asset-manager-efs
+          nfs:
+            server: "{{ .Values.assetManagerNFS }}"
+            path: /asset-manager
+        - name: clam-virus-db
+          nfs:
+            server: "{{ .Values.assetManagerNFS }}"
+            path: /clamav-db
+            readOnly: true
+        - name: etc-clamav
+          configMap:
+            name: {{ .Release.Name }}-etc-clamav
+        {{- with .Values.extraVolumes }}
+          {{ . | toYaml | trim | nindent 8 }}
+        {{- end }}
       containers:
         - name: app
-          image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          image: "{{ required "appImage.repository is required" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           command: ["bundle"]
           args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
@@ -62,10 +89,9 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
-            # Asset Manager needs to run as 2899 since it shares an NFS volume
-            # with its EC2 counterpart.
-            runAsUser: 2899
-            runAsGroup: 2899
+            # Asset Manager shares an NFS volume with its EC2 counterpart.
+            runAsUser: *old-ec2-deploy-uid
+            runAsGroup: *old-ec2-deploy-uid
         - name: clamd
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
@@ -87,28 +113,3 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
-      {{- with .Values.dnsConfig }}
-      dnsConfig:
-        {{- . | toYaml | trim | nindent 8 }}
-      {{- end }}
-      enableServiceLinks: false
-      volumes:
-        - name: app-tmp
-          emptyDir: {}
-        - name: clamd-tmp
-          emptyDir: {}
-        - name: asset-manager-efs
-          nfs:
-            server: "{{ .Values.assetManagerNFS }}"
-            path: /asset-manager
-        - name: clam-virus-db
-          nfs:
-            server: "{{ .Values.assetManagerNFS }}"
-            path: /clamav-db
-            readOnly: true
-        - name: etc-clamav
-          configMap:
-            name: {{ .Release.Name }}-etc-clamav
-        {{- with .Values.extraVolumes }}
-          {{ . | toYaml | trim | nindent 8 }}
-        {{- end }}

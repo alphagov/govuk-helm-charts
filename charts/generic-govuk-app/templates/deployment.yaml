@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   labels:
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app: {{ .Release.Name }}
+    app.kubernetes.io/component: app
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 5
@@ -15,12 +17,30 @@ spec:
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
         app: {{ .Release.Name }}
+        app.kubernetes.io/component: app
     spec:
       automountServiceAccountToken: false
+      enableServiceLinks: false
       securityContext:
+        fsGroup: {{ .Values.securityContext.runAsGroup }}
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
+      {{- with .Values.dnsConfig }}
+      dnsConfig:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+          configMap:
+            name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+        - name: app-tmp
+          emptyDir: {}
+        - name: nginx-tmp
+          emptyDir: {}
+        {{- with .Values.extraVolumes }}
+          {{- . | toYaml | trim | nindent 8 }}
+        {{- end }}
       containers:
         - name: app
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -121,19 +141,3 @@ spec:
             {{- with .Values.nginxExtraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
-      enableServiceLinks: false
-      {{- with .Values.dnsConfig }}
-      dnsConfig:
-        {{- . | toYaml | trim | nindent 8 }}
-      {{- end }}
-      volumes:
-        - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-          configMap:
-            name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
-        - name: app-tmp
-          emptyDir: {}
-        - name: nginx-tmp
-          emptyDir: {}
-        {{- with .Values.extraVolumes }}
-          {{- . | toYaml | trim | nindent 8 }}
-        {{- end }}
