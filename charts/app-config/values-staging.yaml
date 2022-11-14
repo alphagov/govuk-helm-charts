@@ -35,6 +35,54 @@ govukApplications:
           secretKeyRef:
             name: signon-token-collections-email-alert-api
             key: bearer_token
+- name: email-alert-api
+  helmValues:
+    dbMigrationEnabled: true
+    uploadAssets:
+      enabled: false
+    workerEnabled: true
+    extraEnv:
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-api-account-api
+            key: bearer_token
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-api-postgres
+            key: DATABASE_URL
+      - name: EMAIL_ALERT_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-auth
+            key: token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-email-alert-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-email-alert-api
+            key: oauth_secret
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-api-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 1fc69d3a-09a2-40f9-852b-03f6fcef5340
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: WEB_CONCURRENCY
+        value: '10'
 - name: email-alert-frontend
   helmValues:
     extraEnv:
@@ -67,6 +115,35 @@ govukApplications:
           secretKeyRef:
             name: email-alert-auth
             key: token
+- name: email-alert-service
+  helmValues:
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-service-email-alert-api
+            key: bearer_token
+      - name: RABBITMQ_HOSTS
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-service-rabbitmq
+            key: host
+      - name: RABBITMQ_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-service-rabbitmq
+            key: password
+      - name: RABBITMQ_USER
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-service-rabbitmq
+            key: username
+      - name: RABBITMQ_VHOST
+        value: /
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: feedback
   helmValues:
     extraEnv:
