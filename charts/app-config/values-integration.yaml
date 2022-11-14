@@ -23,9 +23,14 @@ govukApplications:
       enabled: true
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '10'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
       hosts:
       - name: assets-origin.eks.integration.govuk.digital
+        path: /government/uploads/
+      - name: assets-origin.eks.integration.govuk.digital
+        path: /media/
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
@@ -1758,6 +1763,16 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
+    ingress:
+      rules:
+        - host: assets-origin.eks.integration.govuk.digital
+          path: /
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '30'
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
       # https://github.com/alphagov/govuk-puppet/pull/8041
@@ -2179,6 +2194,21 @@ govukApplications:
     # TODO: make whitehall-frontend the pattern app and have
     # draft-whitehall-frontend and whitehall-admin inherit from it (instead of
     # the other way around like it is now).
+    ingress:
+      rules:
+        - host: assets-origin.eks.integration.govuk.digital
+          path: /government/placeholder/
+        - host: assets-origin.eks.integration.govuk.digital
+          path: /assets/whitehall/
+        - host: assets-origin.eks.integration.govuk.digital
+          path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
+          pathType: ImplementationSpecific
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '20'
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
     uploadAssets: *whitehall-upload-assets

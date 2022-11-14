@@ -23,7 +23,8 @@ spec:
   {{- end }}
   rules:
     {{- range .Values.ingress.rules }}
-    - http:
+    - host: {{ .host }}
+      http:
         paths:
           - path: {{ default "/" .path }}
             pathType: {{ default "Prefix" .pathType }}
