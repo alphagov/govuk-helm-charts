@@ -121,9 +121,10 @@ data:
         error_log /dev/stderr;
 
         location / {
-          proxy_busy_buffers_size 16k;
-          proxy_buffers 8 8k;
-          proxy_buffer_size 8k;
+          proxy_buffer_size 16k;  # Max total size of response headers.
+          # n * m = max response size before spooling to disk. p95 response size should
+          # fit comfortably within this in order to avoid performance issues.
+          proxy_buffers 24 16k;
 
           try_files $uri/index.html $uri.html $uri @app;
         }
