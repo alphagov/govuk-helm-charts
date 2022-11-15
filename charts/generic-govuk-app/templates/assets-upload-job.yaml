@@ -8,6 +8,8 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreSync
 spec:
+  activeDeadlineSeconds: 900
+  backoffLimit: 2
   template:
     spec:
       automountServiceAccountToken: false
