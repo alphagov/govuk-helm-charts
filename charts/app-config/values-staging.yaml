@@ -350,11 +350,11 @@ govukApplications:
     cronTasks:
       - name: "kubernetes-sync-app-secrets"
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
-        schedule: "0 */1 * * *"
+        schedule: "5 1 * * *"
         serviceAccount: signon
       - name: "kubernetes-sync-token-secrets"
         task: "kubernetes:sync_token_secrets[signon-secrets-sync-conf]"
-        schedule: "0 */1 * * *"
+        schedule: "5 1 * * *"
         serviceAccount: signon
       - name: "delete-event-logs"
         task: "event_log:delete_logs_older_than_two_years"
