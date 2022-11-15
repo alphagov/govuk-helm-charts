@@ -1,36 +1,42 @@
 {{- define "asset-manager.freshclam.podspec" }}
-activeDeadlineSeconds: 1800
-automountServiceAccountToken: false
-enableServiceLinks: false
-securityContext:
-  seccompProfile:
-    type: RuntimeDefault
-  runAsUser: 1001
-  runAsGroup: 1001
-containers:
-  - name: freshclam
-    image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-    imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
-    command: ["freshclam"]
-    {{ with .Values.freshclamResources }}
-    resources:
-      {{- . | toYaml | trim | nindent 8 }}
-    {{ end }}
-    volumeMounts:
-      - name: clam-virus-db
-        mountPath: /var/lib/clamav
-      - name: etc-clamav
-        mountPath: /etc/clamav
-    securityContext:
-      allowPrivilegeEscalation: false
-      readOnlyRootFilesystem: true
-volumes:
-  - name: clam-virus-db
-    nfs:
-      server: "{{ .Values.assetManagerNFS }}"
-      path: /clamav-db
-  - name: etc-clamav
-    configMap:
-      name: {{ .Release.Name }}-etc-clamav
-restartPolicy: Never
+metadata:
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ .Release.Name }}
+    app.kubernetes.io/component: freshclam
+spec:
+  activeDeadlineSeconds: 1800
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
+    runAsUser: 1001
+    runAsGroup: 1001
+  containers:
+    - name: freshclam
+      image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+      imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+      command: ["freshclam"]
+      {{ with .Values.freshclamResources }}
+      resources:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{ end }}
+      volumeMounts:
+        - name: clam-virus-db
+          mountPath: /var/lib/clamav
+        - name: etc-clamav
+          mountPath: /etc/clamav
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+  volumes:
+    - name: clam-virus-db
+      nfs:
+        server: "{{ .Values.assetManagerNFS }}"
+        path: /clamav-db
+    - name: etc-clamav
+      configMap:
+        name: {{ .Release.Name }}-etc-clamav
+  restartPolicy: Never
 {{- end }}
