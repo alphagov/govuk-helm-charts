@@ -6,8 +6,7 @@ metadata:
     {{- include "asset-manager.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
 data:
-  nginx.conf: |-
-  
+  nginx.conf: |
     error_log /dev/stderr warn;
     pid /tmp/nginx.pid;
 
@@ -34,6 +33,12 @@ data:
 
       upstream {{ .Release.Name }} {
         server 127.0.0.1:{{ .Values.appPort }};
+      }
+
+      # Map the passed in X-Forwarded-Host if present and default to the server host otherwise.
+      map $http_x_forwarded_host $proxy_add_x_forwarded_host {
+        default $http_x_forwarded_host;
+        ''      $http_host;
       }
 
       # This map creates a $sts_default variable for later use.
