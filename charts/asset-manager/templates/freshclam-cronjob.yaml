@@ -6,6 +6,7 @@ spec:
   schedule: "19 * * * *"
   jobTemplate:
     spec:
+      backoffLimit: 1
       template:
         spec:
           {{- include "asset-manager.freshclam.podspec" . | indent 10 }}

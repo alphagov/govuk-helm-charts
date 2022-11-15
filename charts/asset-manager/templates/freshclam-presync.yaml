@@ -5,6 +5,7 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreSync
 spec:
+  backoffLimit: 2
   template:
     spec:
       {{- include "asset-manager.freshclam.podspec" . | indent 6 }}

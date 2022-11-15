@@ -1,4 +1,5 @@
 {{- define "asset-manager.freshclam.podspec" }}
+activeDeadlineSeconds: 1800
 automountServiceAccountToken: false
 enableServiceLinks: false
 securityContext:
