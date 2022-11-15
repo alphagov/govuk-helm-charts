@@ -9,7 +9,7 @@ metadata:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
   annotations:
-    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+    {{- (tpl (toYaml .Values.ingress.annotations) .) | trim | nindent 4 }}
     {{- if .Values.ingress.hosts }}
     external-dns.alpha.kubernetes.io/hostname: {{ join "," .Values.ingress.hosts }}
     {{- end }}
