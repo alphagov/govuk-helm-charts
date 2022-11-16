@@ -23,7 +23,7 @@ spec:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
             app.kubernetes.io/component: app
         spec:
-          automountServiceAccountToken: false
+          automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
           enableServiceLinks: false
           securityContext:
             fsGroup: {{ $.Values.securityContext.runAsGroup }}
