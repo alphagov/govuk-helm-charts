@@ -375,6 +375,9 @@ govukApplications:
           mongo-1.integration.govuk-internal.digital,\
           mongo-2.integration.govuk-internal.digital,\
           mongo-3.integration.govuk-internal.digital/content_store_production"
+      # TODO: remove this flag after launch (see https://github.com/alphagov/content-store/blob/4c6e16a9/app/models/route_set.rb#L70)
+      - name: NO_SET_ROUTER_BACKEND_ADDRESS_ON_PUBLISH
+        value: "1"
 - name: content-tagger
   helmValues:
     dbMigrationEnabled: true
@@ -443,6 +446,8 @@ govukApplications:
           mongo-1.integration.govuk-internal.digital,\
           mongo-2.integration.govuk-internal.digital,\
           mongo-3.integration.govuk-internal.digital/draft_content_store_production"
+      - name: NO_SET_ROUTER_BACKEND_ADDRESS_ON_PUBLISH
+        value: "1"
       # Draft apps use draft backends by default so that any misconfiguration
       # leads to obvious errors rather than draft content being unknowingly
       # made public.
