@@ -1127,6 +1127,8 @@ govukApplications:
           secretKeyRef:
             name: locations-api-os-places
             key: api-secret
+      - name: OS_PLACES_API_POSTCODES_PER_SECOND
+        value: "1"
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: manuals-publisher
