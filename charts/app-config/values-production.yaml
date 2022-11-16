@@ -465,6 +465,8 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+      - name: USE_TMPDIR_PAGE_CACHE
+        value: "true"
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
