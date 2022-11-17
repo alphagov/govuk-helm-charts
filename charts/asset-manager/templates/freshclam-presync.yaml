@@ -4,7 +4,11 @@ metadata:
   name: {{ .Release.Name }}-update-freshclam
   annotations:
     argocd.argoproj.io/hook: PreSync
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ .Release.Name }}
+    app.kubernetes.io/component: freshclam
 spec:
+  backoffLimit: 2
   template:
-    spec:
-      {{- include "asset-manager.freshclam.podspec" . | indent 6 }}
+    {{- include "asset-manager.freshclam.podspec" . | indent 4 }}

@@ -3,12 +3,17 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ .Release.Name }}-upload-error-pages
+  labels:
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: upload-error-pages
   annotations:
     argocd.argoproj.io/hook: PostSync
     kubernetes.io/description: >
       Fetch "static" error pages from the Static service and upload them to S3.
       ArgoCD runs this job after each deployment of the Static app.
 spec:
+  activeDeadlineSeconds: 900
+  backoffLimit: 2
   template:
     spec:
       automountServiceAccountToken: false
