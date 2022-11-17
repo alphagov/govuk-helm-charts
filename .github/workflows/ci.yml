@@ -40,7 +40,7 @@ jobs:
         run: "grep KUBERNETES_VERSION kubernetes_version >> $GITHUB_ENV"
 
       - name: kubeconform
-        uses: docker://ghcr.io/yannh/kubeconform:v0.4.13
+        uses: docker://ghcr.io/yannh/kubeconform:v0.5.0
         with:
           entrypoint: /kubeconform
           args: >
@@ -54,6 +54,6 @@ jobs:
     name: Shellcheck
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Run ShellCheck
       uses: ludeeus/action-shellcheck@94e0aab03ca135d11a35e5bfc14e6746dc56e7e9  # 1.1.0
