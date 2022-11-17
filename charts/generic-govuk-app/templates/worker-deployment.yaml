@@ -38,41 +38,43 @@ spec:
           {{- . | toYaml | trim | nindent 8 }}
         {{- end }}
       containers:
-        - name: app
-          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
-          command: ["bundle"]
-          args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
+        {{- range .Values.workers }}
+        - name: {{ .name }}
+          image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+          imagePullPolicy: {{ $.Values.appImage.pullPolicy | default "Always" }}
+          command:
+            {{- .command | toYaml | nindent 12 }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.metricsPort }}
+              containerPort: {{ $.Values.metricsPort }}
           envFrom:
             - configMapRef:
                 name: govuk-apps-env
           env:
-            {{- if .Values.sentry.enabled }}
+            {{- if $.Values.sentry.enabled }}
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.repoName }}-sentry
+                  name: {{ $.Values.repoName }}-sentry
                   key: dsn
             - name: SENTRY_RELEASE
-              value: "{{ .Values.appImage.tag }}"
+              value: "{{ $.Values.appImage.tag }}"
             {{- end }}
-            {{- with .Values.extraEnv }}
+            {{- with $.Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
-          {{- with .Values.workerResources }}
+          {{- with $.Values.workerResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           securityContext:
-            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+            allowPrivilegeEscalation: {{ $.Values.securityContext.allowPrivilegeEscalation }}
             readOnlyRootFilesystem: true
           volumeMounts:
             - name: app-tmp
               mountPath: /tmp
-            {{- with .Values.appExtraVolumeMounts }}
+            {{- with $.Values.appExtraVolumeMounts }}
               {{- . | toYaml | trim | nindent 12 }}
             {{- end }}
+        {{- end }}
 {{- end }}

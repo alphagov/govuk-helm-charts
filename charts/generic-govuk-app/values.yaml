@@ -22,6 +22,11 @@ replicaCount: 2
 # workerEnabled should be true if the app uses Sidekiq, false otherwise.
 workerEnabled: false
 workerReplicaCount: 2
+workers:
+- command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
+  name: worker
+# appEnabled determines if web app should run.
+appEnabled: true
 
 # dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
 dbMigrationEnabled: false
