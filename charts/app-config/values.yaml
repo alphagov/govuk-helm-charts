@@ -14,7 +14,6 @@ slackChannel: govuk-deploy-alerts
 
 govukApplications: []
 govukEnvironment: test
-govukStack: blue  # TODO: eliminate govukStack as it's no longer needed.
 ec2InternalDomainSuffix: govuk-internal.digital
 externalDomainSuffix: eks.test.govuk.digital
 publishingServiceDomainSuffix: test.publishing.service.gov.uk
