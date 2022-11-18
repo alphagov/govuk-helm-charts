@@ -1212,6 +1212,40 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+- name: maslow
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: maslow
+      hosts:
+      - maslow.eks.integration.govuk.digital
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-maslow
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-maslow
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-maslow-publishing-api
+            key: bearer_token
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: maslow-docdb
+            key: MONGODB_URI
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: publisher
   helmValues:
     dbMigrationEnabled: true
