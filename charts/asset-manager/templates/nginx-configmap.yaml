@@ -80,8 +80,7 @@ data:
                            '"ssl_protocol": "$ssl_protocol", '
                            '"status": $status, '
                            '"upstream_addr": "$upstream_addr", '
-                           '"upstream_response_time": "$upstream_response_time", '
-                           '"varnish_id": "$http_x_varnish" }';
+                           '"upstream_response_time": "$upstream_response_time" }';
 
       # Set GOVUK-Request-Id if not set
       # See http://nginx.org/en/docs/http/ngx_http_perl_module.html

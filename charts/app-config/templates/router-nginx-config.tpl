@@ -99,8 +99,7 @@ http {
                        '"ssl_protocol": "$ssl_protocol", '
                        '"status": $status, '
                        '"upstream_addr": "$upstream_addr", '
-                       '"upstream_response_time": "$upstream_response_time", '
-                       '"varnish_id": "$http_x_varnish" }';
+                       '"upstream_response_time": "$upstream_response_time" }';
 
   upstream router {
     server 127.0.0.1:3000;
