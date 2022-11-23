@@ -1353,7 +1353,7 @@ govukApplications:
       - name: EVENT_LOG_AWS_USERNAME
         value: govuk-publishing-api-event-log_user
       - name: GOVUK_CONTENT_SCHEMAS_PATH
-        value: /govuk-content-schemas
+        value: /app/content_schemas
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
