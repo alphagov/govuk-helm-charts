@@ -3,6 +3,7 @@
 govukEnvironment: production
 externalDomainSuffix: gov.uk
 publishingServiceDomainSuffix: publishing.service.gov.uk
+assetsDomain: assets-eks.publishing.service.gov.uk
 appResources:
   limits:
     cpu: 1
@@ -15,6 +16,65 @@ replicaCount: 3
 # Individual apps to be deployed by ArgoCD, and any values specific to those
 # apps.
 govukApplications:
+- name: asset-manager
+  chartPath: charts/asset-manager
+  helmValues:
+    # TODO: Re-enable eventually when we want to support publishing assets in Production.
+    # workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '20'
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-production-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
+      hosts:
+      - name: assets-origin.eks.production.govuk.digital
+        path: /government/uploads/
+      - name: assets-origin.eks.production.govuk.digital
+        path: /media/
+    assetManagerNFS: &assets-nfs assets.blue.production.govuk-internal.digital
+    nginxConfigMap:
+      create: false
+      name: asset-manager-nginx-conf
+    extraEnv:
+      - name: ASSET_MANAGER_CLAMSCAN_PATH
+        value: /usr/bin/clamdscan
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-asset-manager
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-asset-manager
+            key: oauth_secret
+      - name: GOVUK_ASSET_ROOT  # testing in isolation
+        value: https://assets.publishing.service.gov.uk
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: asset-manager-docdb
+            key: MONGODB_URI
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-assets-production
 - name: argo-services
   chartPath: charts/argo-services
   namespace: cluster-services
