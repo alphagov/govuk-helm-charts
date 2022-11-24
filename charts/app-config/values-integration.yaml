@@ -25,7 +25,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
-        alb.ingress.kubernetes.io/group.order: '10'
+        alb.ingress.kubernetes.io/group.order: '20'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
@@ -2234,7 +2234,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
-        alb.ingress.kubernetes.io/group.order: '20'
+        alb.ingress.kubernetes.io/group.order: '10'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
