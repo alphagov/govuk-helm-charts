@@ -509,6 +509,18 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
+    ingress:
+      rules:
+        - host: assets-origin.eks.production.govuk.digital
+          path: /
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '30'
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-production-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
     extraEnv:
       # These GA/GTM values are not secrets.
       - name: GA_UNIVERSAL_ID
@@ -532,6 +544,23 @@ govukApplications:
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
+    ingress:
+      rules:
+        - host: assets-origin.eks.production.govuk.digital
+          path: /government/placeholder/
+        - host: assets-origin.eks.production.govuk.digital
+          path: /assets/whitehall/
+        - host: assets-origin.eks.production.govuk.digital
+          path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
+          pathType: ImplementationSpecific
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '10'
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-production-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
     appResources:
       limits:
         memory: 4Gi
