@@ -3,6 +3,7 @@
 govukEnvironment: staging
 externalDomainSuffix: eks.staging.govuk.digital
 publishingServiceDomainSuffix: staging.publishing.service.gov.uk
+assetsDomain: assets-eks.staging.publishing.service.gov.uk
 appResources:
   limits:
     cpu: 1
@@ -14,6 +15,64 @@ appResources:
 # Individual apps to be deployed by ArgoCD, and any values specific to those
 # apps.
 govukApplications:
+- name: asset-manager
+  chartPath: charts/asset-manager
+  helmValues:
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '20'
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
+      hosts:
+      - name: assets-origin.eks.staging.govuk.digital
+        path: /government/uploads/
+      - name: assets-origin.eks.staging.govuk.digital
+        path: /media/
+    assetManagerNFS: &assets-nfs assets.blue.staging.govuk-internal.digital
+    nginxConfigMap:
+      create: false
+      name: asset-manager-nginx-conf
+    extraEnv:
+      - name: ASSET_MANAGER_CLAMSCAN_PATH
+        value: /usr/bin/clamdscan
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-asset-manager
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-asset-manager
+            key: oauth_secret
+      - name: GOVUK_ASSET_ROOT  # testing in isolation
+        value: https://assets.staging.publishing.service.gov.uk
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: asset-manager-docdb
+            key: MONGODB_URI
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-assets-staging
 - name: argo-services
   chartPath: charts/argo-services
   namespace: cluster-services
@@ -446,6 +505,18 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
+    ingress:
+      rules:
+        - host: assets-origin.eks.staging.govuk.digital
+          path: /
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '30'
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
       # https://github.com/alphagov/govuk-puppet/pull/8041
@@ -474,6 +545,23 @@ govukApplications:
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
+    ingress:
+      rules:
+        - host: assets-origin.eks.staging.govuk.digital
+          path: /government/placeholder/
+        - host: assets-origin.eks.staging.govuk.digital
+          path: /assets/whitehall/
+        - host: assets-origin.eks.staging.govuk.digital
+          path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
+          pathType: ImplementationSpecific
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '10'
+        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
     appResources:
       limits:
         memory: 4Gi
