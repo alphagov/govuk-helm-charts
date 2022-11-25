@@ -168,6 +168,11 @@ data:
         location = /readyz {
           return 200 'ok\n';
         }
+
+
+        {{- if .Values.nginxConfigMap.extraConf }}
+        include       /etc/nginx/extra-nginx.conf;
+        {{- end }}
       }
     }
 {{- end }}

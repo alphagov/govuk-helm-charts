@@ -542,6 +542,16 @@ govukApplications:
             key: SECRET_KEY_BASE
       - name: USE_TMPDIR_PAGE_CACHE
         value: "true"
+    nginxConfigMap:
+      extraConf: true
+    nginxExtraVolumeMounts:
+      - name: static-extra-nginx-conf
+        mountPath: /etc/nginx/extra-nginx.conf
+        subPath: extra-nginx.conf
+    extraVolumes:
+      - name: static-extra-nginx-conf
+        configMap:
+          name: static-extra-nginx-conf
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
