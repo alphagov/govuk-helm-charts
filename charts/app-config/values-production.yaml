@@ -3,7 +3,7 @@
 govukEnvironment: production
 externalDomainSuffix: gov.uk
 publishingServiceDomainSuffix: publishing.service.gov.uk
-assetsDomain: assets-eks.publishing.service.gov.uk
+assetsDomain: assets.publishing.service.gov.uk
 appResources:
   limits:
     cpu: 1

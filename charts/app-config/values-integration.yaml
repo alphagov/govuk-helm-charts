@@ -3,7 +3,7 @@
 govukEnvironment: integration
 externalDomainSuffix: eks.integration.govuk.digital
 publishingServiceDomainSuffix: integration.publishing.service.gov.uk
-assetsDomain: assets-eks.integration.publishing.service.gov.uk
+assetsDomain: assets.integration.publishing.service.gov.uk
 workerReplicaCount: 1
 appResources:
   limits:
