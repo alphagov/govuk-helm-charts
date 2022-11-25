@@ -127,6 +127,9 @@ data:
         access_log /dev/stdout json_event;
         error_log /dev/stderr;
 
+        # Add as an ALB rule and direct to whitehall service
+        rewrite ^/government/assets/(.*)$ /assets/whitehall/$1 permanent;
+
         location / {
           proxy_buffer_size 16k;  # Max total size of response headers.
           # n * m = max response size before spooling to disk. p95 response size should
