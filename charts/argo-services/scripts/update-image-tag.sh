@@ -35,7 +35,7 @@ elif [[ "${MANUAL_DEPLOY}" = true ]]; then
 
 # If automatic deploys, check automatic_deploys_enabled before proceeding.
 # Relies on the assumption the IMAGE_TAG is a commit SHA
-elif [[ "${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]]; then
+elif [[ "release-${LATEST_GIT_SHA}" = "${IMAGE_TAG}" ]]; then
   auto_deploys="$(yq '.automatic_deploys_enabled' "${FILE}")"
   # Auto deploys are enabled unless explicitly set to "false" (case insensitive).
   if [[ "${auto_deploys,,}" != "false" ]]; then
