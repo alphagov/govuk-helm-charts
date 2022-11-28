@@ -3,7 +3,7 @@
 govukEnvironment: staging
 externalDomainSuffix: eks.staging.govuk.digital
 publishingServiceDomainSuffix: staging.publishing.service.gov.uk
-assetsDomain: assets-eks.staging.publishing.service.gov.uk
+assetsDomain: assets.staging.publishing.service.gov.uk
 appResources:
   limits:
     cpu: 1
