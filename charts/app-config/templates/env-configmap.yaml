@@ -47,6 +47,7 @@ data:
   PLEK_SERVICE_CONTENT_STORE_URI: https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_EMAIL_ALERT_API_URI: https://email-alert-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_LINK_CHECKER_API_URI: https://link-checker-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
+  PLEK_SERVICE_LOCATIONS_API_URI: https://locations-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_ROUTER_API_URI: https://router-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_IMMINENCE_URI: https://imminence.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_LOCAL_LINKS_MANAGER_URI: https://local-links-manager.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
