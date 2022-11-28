@@ -1,7 +1,7 @@
 # Defaults for all apps in this environment. These can be overridden for
 # individual apps below.
 govukEnvironment: staging
-externalDomainSuffix: eks.staging.govuk.digital
+externalDomainSuffix: staging.publishing.service.gov.uk
 publishingServiceDomainSuffix: staging.publishing.service.gov.uk
 assetsDomain: assets.staging.publishing.service.gov.uk
 appResources:
