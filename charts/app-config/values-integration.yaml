@@ -1784,6 +1784,7 @@ govukApplications:
             key: password
 - name: smokey
   chartPath: charts/smokey
+  namespace: cluster-services
 - name: static
   helmValues:
     ingress:
