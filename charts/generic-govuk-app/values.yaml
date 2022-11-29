@@ -65,10 +65,10 @@ nginxDenyCrawlers: false
 appResources:
   limits:
     cpu: 1
-    memory: 1Gi
+    memory: 1500Mi
   requests:
     cpu: 500m
-    memory: 512Mi
+    memory: 800Mi
 
 workerResources:
   limits:
