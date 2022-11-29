@@ -262,10 +262,10 @@ govukApplications:
     appResources:
       limits:
         cpu: 2
-        memory: 1500Mi
+        memory: 2Gi
       requests:
         cpu: 1
-        memory: 1Gi
+        memory: 1500Mi
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
