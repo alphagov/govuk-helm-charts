@@ -24,6 +24,7 @@ spec:
             templateRef:
               name: smoke-test
               template: smoke-test
+              clusterScope: true
             arguments:
               parameters:
                 - name: extra-args
