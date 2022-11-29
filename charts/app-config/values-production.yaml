@@ -190,10 +190,10 @@ govukApplications:
     appResources:
       limits:
         cpu: 4
-        memory: 1500Mi
+        memory: 2000Mi
       requests:
         cpu: 2
-        memory: 1Gi
+        memory: 1500Mi
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
