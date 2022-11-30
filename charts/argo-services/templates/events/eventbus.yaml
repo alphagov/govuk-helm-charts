@@ -3,6 +3,5 @@ kind: EventBus
 metadata:
   name: default
 spec:
-  nats:
-    native:
-      auth: token
+  jetstream:
+    version: 2.9.8
