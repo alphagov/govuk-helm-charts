@@ -7,7 +7,7 @@ service.webhook.argo_events: |
     value: "application/json"
   - name: Authorization
     value: Bearer $argo_events_webhook_token
-  url: "http://argo-events-service.cluster-services.svc.cluster.local:12000"
+  url: "http://argo-events-service.apps.svc.cluster.local:12000"
 service.grafana: |
   apiUrl: http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local/api
   apiKey: $grafana_api_key

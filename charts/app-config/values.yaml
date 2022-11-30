@@ -8,7 +8,7 @@
 appsNamespace: apps
 argoNamespace: cluster-services
 monitoringNamespace: monitoring
-workflowsNamespace: cluster-services
+workflowsNamespace: apps
 
 slackChannel: govuk-deploy-alerts
 
