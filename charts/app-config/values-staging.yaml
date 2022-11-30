@@ -314,6 +314,8 @@ govukApplications:
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/www-origin-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field":"host-header","hostHeaderConfig":{"values":["www.{{ .Values.externalDomainSuffix }}", "www.{{ .Values.publishingServiceDomainSuffix }}"]}}]
       hosts:
       - www-origin.eks.staging.govuk.digital
     nginxConfigMap:
