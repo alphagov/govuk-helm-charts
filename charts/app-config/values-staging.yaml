@@ -104,7 +104,7 @@ govukApplications:
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
-            name: rails-secret-key-base
+            name: email-alert-rails-secret-key-base
             key: SECRET_KEY_BASE
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
