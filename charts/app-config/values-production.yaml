@@ -4,6 +4,9 @@ govukEnvironment: production
 externalDomainSuffix: gov.uk
 publishingServiceDomainSuffix: publishing.service.gov.uk
 assetsDomain: assets.publishing.service.gov.uk
+# TODO: Remove once fully migrated to EKS
+assetsTestDomain: assets-eks.production.publishing.service.gov.uk
+
 replicaCount: 3
 
 # Individual apps to be deployed by ArgoCD, and any values specific to those
@@ -22,7 +25,7 @@ govukApplications:
         alb.ingress.kubernetes.io/group.order: '20'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-production-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.assetsTestDomain }}"]}}]
       hosts:
       - name: assets-origin.eks.production.govuk.digital
         path: /government/uploads/
@@ -522,7 +525,7 @@ govukApplications:
         alb.ingress.kubernetes.io/group.order: '30'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-production-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.assetsTestDomain }}"]}}]
     extraEnv:
       # These GA/GTM values are not secrets.
       - name: GA_UNIVERSAL_ID
@@ -569,7 +572,7 @@ govukApplications:
         alb.ingress.kubernetes.io/group.order: '10'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-production-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.assetsTestDomain }}"]}}]
     appResources:
       limits:
         memory: 4Gi
