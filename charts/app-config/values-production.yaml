@@ -324,7 +324,7 @@ govukApplications:
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field":"host-header","hostHeaderConfig":{"values":["www.{{ .Values.externalDomainSuffix }}", "{{ .Values.wwwTestDomain }}"]}}]
       hosts:
-      - www-origin.eks.production.govuk.digital
+        - name: www-origin.eks.production.govuk.digital
     nginxConfigMap:
       create: false
       name: live-router-nginx-conf
@@ -416,7 +416,7 @@ govukApplications:
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:eu-west-1:172025368201:regional/webacl/backend-temp/335a5c5d-ef97-44b3-8cdf-5cedae034a74
       hosts:
-      - signon.eks.production.govuk.digital
+        - name: signon.eks.production.govuk.digital
     workerReplicaCount: 1
     cronTasks:
       - name: "kubernetes-sync-app-secrets"
@@ -518,8 +518,8 @@ govukApplications:
 - name: static
   helmValues:
     ingress:
-      rules:
-        - host: assets-origin.eks.production.govuk.digital
+      hosts:
+        - name: assets-origin.eks.production.govuk.digital
           path: /
       enabled: true
       annotations:
@@ -560,12 +560,12 @@ govukApplications:
   repoName: whitehall
   helmValues:
     ingress:
-      rules:
-        - host: assets-origin.eks.production.govuk.digital
+      hosts:
+        - name: assets-origin.eks.production.govuk.digital
           path: /government/placeholder/
-        - host: assets-origin.eks.production.govuk.digital
+        - name: assets-origin.eks.production.govuk.digital
           path: /assets/whitehall/
-        - host: assets-origin.eks.production.govuk.digital
+        - name: assets-origin.eks.production.govuk.digital
           path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
           pathType: ImplementationSpecific
       enabled: true

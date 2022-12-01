@@ -1,6 +1,11 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := .Release.Name -}}
 {{- $svcPort := .Values.service.port -}}
+{{- $hostnames := list -}}
+{{- range .Values.ingress.hosts }}
+  {{- $hostnames = append $hostnames .name -}}
+{{- end }}
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -11,19 +16,19 @@ metadata:
   annotations:
     {{- (tpl (toYaml .Values.ingress.annotations) .) | trim | nindent 4 }}
     {{- if .Values.ingress.hosts }}
-    external-dns.alpha.kubernetes.io/hostname: {{ join "," .Values.ingress.hosts }}
+    external-dns.alpha.kubernetes.io/hostname: {{ join "," (uniq $hostnames) }}
     {{- end }}
 spec:
-  {{- if .Values.ingress.hosts }}
+  {{- if .Values.ingress.tls }}
   tls:
     - hosts:
-        {{- range .Values.ingress.hosts }}
+        {{- range .Values.ingress.tls }}
         - {{ . | quote }}
         {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.rules }}
-    - host: {{ .host }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .name }}
       http:
         paths:
           - path: {{ default "/" .path }}
