@@ -10,20 +10,17 @@ metadata:
     app.kubernetes.io/component: web
   annotations:
     {{- (tpl (toYaml .Values.ingress.annotations) .) | trim | nindent 4 }}
-    {{- if .Values.ingress.hosts }}
-    external-dns.alpha.kubernetes.io/hostname: {{ join "," .Values.ingress.hosts }}
-    {{- end }}
 spec:
-  {{- if .Values.ingress.hosts }}
+  {{- if .Values.ingress.tls }}
   tls:
     - hosts:
-        {{- range .Values.ingress.hosts }}
+        {{- range .Values.ingress.tls }}
         - {{ . | quote }}
         {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingress.rules }}
-    - host: {{ .host }}
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .name }}
       http:
         paths:
           - path: {{ default "/" .path }}

@@ -92,7 +92,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: draft-origin
       hosts:
-      - draft-origin.eks.integration.govuk.digital
+        - name: draft-origin.eks.integration.govuk.digital
     dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
       searches:
         - blue.integration.govuk-internal.digital
@@ -914,7 +914,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: hmrc-manuals-api
       hosts:
-      - hmrc-manuals-api.eks.integration.govuk.digital
+      - name: hmrc-manuals-api.eks.integration.govuk.digital
     nginxProxyReadTimeout: 300s
     uploadAssets:
       enabled: false
@@ -1224,7 +1224,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: publisher
       hosts:
-      - publisher.eks.integration.govuk.digital
+        - name: publisher.eks.integration.govuk.digital
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1439,7 +1439,7 @@ govukApplications:
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field":"host-header","hostHeaderConfig":{"values":["www.{{ .Values.publishingServiceDomainSuffix }}", "{{ .Values.wwwTestDomain }}"]}}]
       hosts:
-      - www-origin.eks.integration.govuk.digital
+        - name: www-origin.eks.integration.govuk.digital
     nginxConfigMap:
       create: false
       name: live-router-nginx-conf
@@ -1692,7 +1692,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: signon
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
       hosts:
-      - signon.eks.integration.govuk.digital
+        - name: signon.eks.integration.govuk.digital
     cronTasks:
       - name: "kubernetes-sync-app-secrets"
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
@@ -1792,8 +1792,8 @@ govukApplications:
 - name: static
   helmValues:
     ingress:
-      rules:
-        - host: assets-origin.eks.integration.govuk.digital
+      hosts:
+        - name: assets-origin.eks.integration.govuk.digital
           path: /
       enabled: true
       annotations:
@@ -2186,7 +2186,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: govuk-replatform-test-app
       hosts:
-      - govuk-replatform-test-app.eks.integration.govuk.digital
+        - name: govuk-replatform-test-app.eks.integration.govuk.digital
     extraEnv:
       - name: ENV_MESSAGE_EXAMPLE
         value: message_by_example
@@ -2219,7 +2219,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
       hosts:
-      - whitehall-admin.eks.integration.govuk.digital
+        - name: whitehall-admin.eks.integration.govuk.digital
     extraEnv: *whitehall-envs
     extraVolumes:
       - name: asset-uploads-efs
@@ -2236,12 +2236,12 @@ govukApplications:
     # draft-whitehall-frontend and whitehall-admin inherit from it (instead of
     # the other way around like it is now).
     ingress:
-      rules:
-        - host: assets-origin.eks.integration.govuk.digital
+      hosts:
+        - name: assets-origin.eks.integration.govuk.digital
           path: /government/placeholder/
-        - host: assets-origin.eks.integration.govuk.digital
+        - name: assets-origin.eks.integration.govuk.digital
           path: /assets/whitehall/
-        - host: assets-origin.eks.integration.govuk.digital
+        - name: assets-origin.eks.integration.govuk.digital
           path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
           pathType: ImplementationSpecific
       enabled: true
