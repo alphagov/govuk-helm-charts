@@ -33,8 +33,8 @@ data:
   RAILS_LOG_TO_STDOUT: "true"
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
 
-  # TODO: remove once assets serving path is in place (https://trello.com/c/NxNtX9JE).
   PLEK_SERVICE_ASSETS_URI: https://assets.{{ .Values.publishingServiceDomainSuffix }}
+  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingServiceDomainSuffix }}
 
   # Services which remain in EC2 for a while after "MVP launch".
   PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
