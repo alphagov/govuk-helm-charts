@@ -1296,14 +1296,12 @@ govukApplications:
         value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
       - name: EMAIL_GROUP_FORCE_PUBLISH_ALERTS
         value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
-      - name: FACT_CHECK_ADDRESS_FORMAT
-        value: factcheck+integration-{id}@alphagov.co.uk
       - name: FACT_CHECK_SUBJECT_PREFIX
-        value: integration
+        value: dev
       - name: FACT_CHECK_REPLY_TO_ADDRESS
         value: govuk-fact-check-integration@digital.cabinet-office.gov.uk
       - name: FACT_CHECK_REPLY_TO_ID
-        value: govuk-fact-check-integration@digital.cabinet-office.gov.uk
+        value: 6b6ee566-54f2-48f6-98c4-21a373e6dea2
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
 - name: publishing-api
