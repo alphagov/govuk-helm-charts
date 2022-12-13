@@ -144,8 +144,6 @@ govukApplications:
 - name: collections-publisher
   helmValues:
     dbMigrationEnabled: true
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
     ingress:
       enabled: true
