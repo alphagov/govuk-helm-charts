@@ -2196,6 +2196,8 @@ govukApplications:
         value: message_by_example
       - name: ENV_MESSAGE_OTHER
         value: message_by_other
+      - name: PETER_ENV_MESSAGE
+        value: test
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
