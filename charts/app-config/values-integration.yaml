@@ -946,6 +946,9 @@ govukApplications:
         value: "1"
 - name: imminence
   helmValues:
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - blue.integration.govuk-internal.digital
     uploadAssets:
       path: /app/public/assets
     workerEnabled: true
@@ -963,10 +966,7 @@ govukApplications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: MONGODB_URI
-        valueFrom:
-          secretKeyRef:
-            name: imminence-docdb
-            key: MONGODB_URI
+        value: "mongodb://mongo-1,mongo-2,mongo-3/imminence_production"
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
