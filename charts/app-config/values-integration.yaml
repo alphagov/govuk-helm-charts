@@ -2194,7 +2194,7 @@ govukApplications:
     extraEnv:
       - name: ENV_MESSAGE_EXAMPLE
         value: message_by_example
-      - name: ENV_MESSAGE_OTHER
+      - name: ENV_MESSAGE_MAHMUD
         value: message_by_other
       - name: PETER_ENV_MESSAGE
         value: test
