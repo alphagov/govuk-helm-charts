@@ -146,6 +146,7 @@ govukApplications:
     dbMigrationEnabled: true
     uploadAssets:
       path: /app/public/assets
+      s3Directory: assets/
     workerEnabled: true
     ingress:
       enabled: true

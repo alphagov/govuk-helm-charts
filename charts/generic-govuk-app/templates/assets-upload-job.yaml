@@ -1,5 +1,5 @@
 {{- if .Values.uploadAssets.enabled -}}
-{{- $destDir := .Values.uploadAssets.s3Directory | default .Release.Name }}
+{{- $destDir := .Values.uploadAssets.s3Directory | default (printf  "assets/%s/" .Release.Name) }}
 {{- $sourcePath := .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Release.Name) }}
 apiVersion: batch/v1
 kind: Job
@@ -42,7 +42,7 @@ spec:
             - s3
             - sync
             - /assets-to-upload
-            - "{{- printf "s3://govuk-app-assets-%s/assets/%s/" .Values.govukEnvironment $destDir }}"
+            - "{{- printf "s3://govuk-app-assets-%s/%s" .Values.govukEnvironment $destDir }}"
           {{- with .Values.jobResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
