@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    job-name: chris-k6
+  name: chris-k6
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        job-name: chris-k6
+    spec:
+      volumes:
+      - name: scripts
+        configMap:
+          name: chris-k6-scripts
+      containers:
+      - command:
+        - k6
+        - run
+        - /scripts/government-frontend.js
+        image: grafana/k6
+        imagePullPolicy: Always
+        name: chris-k6
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+      restartPolicy: Never
