@@ -1235,7 +1235,7 @@ govukApplications:
       annotations:
         alb.ingress.kubernetes.io/load-balancer-name: maslow
       hosts:
-      - maslow.eks.integration.govuk.digital
+        - name: maslow.eks.integration.govuk.digital
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
