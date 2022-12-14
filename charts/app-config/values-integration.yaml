@@ -424,6 +424,23 @@ govukApplications:
             key: SECRET_KEY_BASE
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+- name: draft-collections
+  helmValues:
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-collections-email-alert-api
+            key: bearer_token
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+      - name: PLEK_SERVICE_LICENSIFY_URI
+        value: https://licensify.integration.govuk-internal.digital
 - name: draft-content-store
   repoName: content-store
   helmValues:
