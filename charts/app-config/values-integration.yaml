@@ -427,6 +427,10 @@ govukApplications:
 - name: draft-collections
   repoName: collections
   helmValues:
+    sentry:
+      createSecret: false
+    uploadAssets:
+      enabled: false
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
