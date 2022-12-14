@@ -425,8 +425,8 @@ govukApplications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: draft-collections
+  repoName: collections
   helmValues:
-    repoName: collections
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
