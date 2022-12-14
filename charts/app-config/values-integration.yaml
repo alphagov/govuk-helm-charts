@@ -426,6 +426,7 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: draft-collections
   helmValues:
+    repoName: collections
     extraEnv:
       - name: SECRET_KEY_BASE
         valueFrom:
@@ -439,8 +440,6 @@ govukApplications:
             key: bearer_token
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
-      - name: PLEK_SERVICE_LICENSIFY_URI
-        value: https://licensify.integration.govuk-internal.digital
 - name: draft-content-store
   repoName: content-store
   helmValues:
