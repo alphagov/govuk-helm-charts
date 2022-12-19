@@ -1608,11 +1608,11 @@ govukApplications:
     workers:
       - command: ["sidekiq", "-C", "config/sidekiq.yml"]
         name: worker
-      - command: ['rake', 'message_queues:listen_to_publishing_queue']
+      - command: ['rake', 'message_queue:listen_to_publishing_queue']
         name: publishing-queue-listener
-      - command: ['rake', 'message_queues:insert_data_into_govuk']
+      - command: ['rake', 'message_queue:insert_data_into_govuk']
         name: govuk-index-queue-listener
-      - command: ['rake', 'message_queues:bulk_insert_data_into_govuk']
+      - command: ['rake', 'message_queue:bulk_insert_data_into_govuk']
         name: bulk-reindex-queue-listener
     extraEnv:
       - name: AWS_REGION
