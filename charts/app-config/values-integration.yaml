@@ -280,6 +280,13 @@ govukApplications:
       enabled: false
     dbMigrationEnabled: true
     workerEnabled: true
+    workers:
+      - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+        name: worker
+      - command: ['rake', 'publishing_api:consumer']
+        name: publishing-api-consumer
+      - command: ['rake', 'publishing_api:bulk_import_consumer']
+        name: bulk-import-publishing-api-consumer
     extraEnv:
       - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
         valueFrom:
@@ -1597,6 +1604,16 @@ govukApplications:
   helmValues:
     uploadAssets:
       enabled: false
+    workerEnabled: true
+    workers:
+      - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+        name: worker
+      - command: ['rake', 'message_queues:listen_to_publishing_queue']
+        name: publishing-queue-listener
+      - command: ['rake', 'message_queues:insert_data_into_govuk']
+        name: govuk-index-queue-listener
+      - command: ['rake', 'message_queues:bulk_insert_data_into_govuk']
+        name: bulk-reindex-queue-listener
     extraEnv:
       - name: AWS_REGION
         value: eu-west-1
