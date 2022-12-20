@@ -1692,6 +1692,8 @@ govukApplications:
           secretKeyRef:
             name: search-api-rabbitmq
             key: password
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: TENSORFLOW_SAGEMAKER_ENDPOINT
         value: govuk-integration-search-ltr-endpoint
 - name: service-manual-frontend
