@@ -97,6 +97,83 @@ govukApplications:
           secretKeyRef:
             name: signon-token-collections-email-alert-api
             key: bearer_token
+- name: collections-publisher
+   helmValues:
+     dbMigrationEnabled: true
+     workerEnabled: true
+     ingress:
+       enabled: true
+       annotations:
+         alb.ingress.kubernetes.io/load-balancer-name: collections-publisher
+       hosts:
+         - name: collections-publisher.eks.staging.govuk.digital
+     extraEnv:
+       - name: GDS_SSO_OAUTH_ID
+         valueFrom:
+           secretKeyRef:
+             name: signon-app-collections-publisher
+             key: oauth_id
+       - name: GDS_SSO_OAUTH_SECRET
+         valueFrom:
+           secretKeyRef:
+             name: signon-app-collections-publisher
+             key: oauth_secret
+       - name: LINK_CHECKER_API_BEARER_TOKEN
+         valueFrom:
+           secretKeyRef:
+             name: signon-token-collections-publisher-link-checker-api
+             key: bearer_token
+       - name: PUBLISHING_API_BEARER_TOKEN
+         valueFrom:
+           secretKeyRef:
+             name: signon-token-collections-publisher-publishing-api
+             key: bearer_token
+       - name: JWT_AUTH_SECRET
+         valueFrom:
+           secretKeyRef:
+             name: authenticating-proxy-jwt-auth-secret
+             key: JWT_AUTH_SECRET
+       - name: GOVUK_NOTIFY_API_KEY
+         valueFrom:
+           secretKeyRef:
+             name: collections-publisher-notify
+             key: GOVUK_NOTIFY_API_KEY
+       - name: GOVUK_NOTIFY_TEMPLATE_ID
+         value: 112842bb-d8a4-4511-90de-57dc5c8f27ec
+       - name: PUBLISH_WITHOUT_2I_EMAIL
+         value: mainstream-publisher-notifications-staging@digital.cabinet-office.gov.uk
+       - name: DATABASE_URL
+         valueFrom:
+           secretKeyRef:
+             name: collections-publisher-mysql
+             key: DATABASE_URL
+       - name: REDIS_URL
+         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+       - name: SECRET_KEY_BASE
+         valueFrom:
+           secretKeyRef:
+             name: rails-secret-key-base
+             key: SECRET_KEY_BASE
+ - name: draft-collections
+   repoName: collections
+   helmValues:
+     sentry:
+       createSecret: false
+     uploadAssets:
+       enabled: false
+     extraEnv:
+       - name: SECRET_KEY_BASE
+         valueFrom:
+           secretKeyRef:
+             name: rails-secret-key-base
+             key: SECRET_KEY_BASE
+       - name: EMAIL_ALERT_API_BEARER_TOKEN
+         valueFrom:
+           secretKeyRef:
+             name: signon-token-collections-email-alert-api
+             key: bearer_token
+       - name: PLEK_HOSTNAME_PREFIX
+         value: draft-
 - name: email-alert-frontend
   helmValues:
     extraEnv:
