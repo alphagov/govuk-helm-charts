@@ -1176,8 +1176,6 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: manuals-publisher
   helmValues:
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
     ingress:
       enabled: true
