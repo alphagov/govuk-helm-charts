@@ -1935,6 +1935,12 @@ govukApplications:
     uploadAssets:
       path: /app/public/assets
     workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: specialist-publisher
+      hosts:
+        - name: specialist-publisher.eks.integration.govuk.digital
     extraEnv:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
