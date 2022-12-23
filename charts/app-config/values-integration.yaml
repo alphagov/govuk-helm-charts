@@ -1698,8 +1698,6 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: service-manual-publisher
   helmValues:
-    uploadAssets:
-      path: /app/public/assets
     dbMigrationEnabled: true
     ingress:
       enabled: true
@@ -1944,8 +1942,6 @@ govukApplications:
         value: "true"
 - name: specialist-publisher
   helmValues:
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
     ingress:
       enabled: true
@@ -2203,8 +2199,6 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: travel-advice-publisher
   helmValues:
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
     ingress:
       enabled: true
