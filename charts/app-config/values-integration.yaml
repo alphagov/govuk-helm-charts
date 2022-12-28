@@ -335,23 +335,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-content-data-api-support-api
             key: bearer_token
-      - name: RABBITMQ_PASSWORD
+      - name: RABBITMQ_URL
         valueFrom:
           secretKeyRef:
             name: content-data-api-rabbitmq
-            key: password
-      - name: RABBITMQ_USER
-        valueFrom:
-          secretKeyRef:
-            name: content-data-api-rabbitmq
-            key: username
-      - name: RABBITMQ_HOSTS
-        valueFrom:
-          secretKeyRef:
-            name: content-data-api-rabbitmq
-            key: host
-      - name: RABBITMQ_VHOST
-        value: /
+            key: RABBITMQ_URL
       - name: RABBITMQ_QUEUE
         value: content_data_api
       - name: RABBITMQ_QUEUE_BULK
@@ -731,23 +719,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-email-alert-service-email-alert-api
             key: bearer_token
-      - name: RABBITMQ_HOSTS
+      - name: RABBITMQ_URL
         valueFrom:
           secretKeyRef:
             name: email-alert-service-rabbitmq
-            key: host
-      - name: RABBITMQ_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: email-alert-service-rabbitmq
-            key: password
-      - name: RABBITMQ_USER
-        valueFrom:
-          secretKeyRef:
-            name: email-alert-service-rabbitmq
-            key: username
-      - name: RABBITMQ_VHOST
-        value: /
+            key: RABBITMQ_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: feedback
@@ -1667,23 +1643,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-search-api-publishing-api
             key: bearer_token
-      - name: RABBITMQ_HOSTS
+      - name: RABBITMQ_URL
         valueFrom:
           secretKeyRef:
             name: search-api-rabbitmq
-            key: host
-      - name: RABBITMQ_VHOST
-        value: /
-      - name: RABBITMQ_USER
-        valueFrom:
-          secretKeyRef:
-            name: search-api-rabbitmq
-            key: username
-      - name: RABBITMQ_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: search-api-rabbitmq
-            key: password
+            key: RABBITMQ_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: TENSORFLOW_SAGEMAKER_ENDPOINT
