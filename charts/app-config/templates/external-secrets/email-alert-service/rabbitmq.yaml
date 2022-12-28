@@ -15,6 +15,9 @@ spec:
     kind: ClusterSecretStore
   target:
     name: email-alert-service-rabbitmq
+    template:
+      data:
+        RABBITMQ_URL: '{{ $.Files.Get "externalsecrets-templates/amqp-conn-string.tpl" | trim }}'
   dataFrom:
     - extract:
         key: govuk/email-alert-service/rabbitmq
