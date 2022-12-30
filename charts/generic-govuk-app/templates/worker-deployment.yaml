@@ -1,23 +1,24 @@
 {{- if .Values.workerEnabled -}}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-worker
+  name: {{ $fullName }}-worker
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
-    app: {{ .Release.Name }}-worker
+    app: {{ $fullName }}-worker
     app.kubernetes.io/component: worker
 spec:
   replicas: {{ .Values.workerReplicaCount }}
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-worker
+      app: {{ $fullName }}-worker
   template:
     metadata:
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
-        app: {{ .Release.Name }}-worker
+        app: {{ $fullName }}-worker
         app.kubernetes.io/component: worker
     spec:
       automountServiceAccountToken: false

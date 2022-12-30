@@ -517,6 +517,7 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
+    uploadStaticErrorPagesEnabled: true
     ingress:
       hosts:
         - name: assets-origin.eks.production.govuk.digital

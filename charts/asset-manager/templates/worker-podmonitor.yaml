@@ -1,15 +1,16 @@
 {{- if .Values.workerEnabled -}}
+{{- $fullName := include "asset-manager.fullname" . }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: {{ .Release.Name }}-worker
+  name: {{ $fullName }}-worker
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app: {{ .Release.Name }}-worker
+    app: {{ $fullName }}-worker
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-worker
+      app: {{ $fullName }}-worker
   podMetricsEndpoints:
   - port: metrics
 {{- end }}

@@ -1,22 +1,23 @@
+{{- $fullName := include "asset-manager.fullname" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-worker
+  name: {{ $fullName }}-worker
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app: {{ .Release.Name }}-worker
+    app: {{ $fullName }}-worker
     app.kubernetes.io/component: worker
 spec:
   replicas: {{ .Values.workerReplicaCount }}
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-worker
+      app: {{ $fullName }}-worker
   template:
     metadata:
       labels:
         {{- include "asset-manager.labels" . | nindent 8 }}
-        app: {{ .Release.Name }}-worker
+        app: {{ $fullName }}-worker
         app.kubernetes.io/component: worker
     spec:
       automountServiceAccountToken: false
@@ -48,7 +49,7 @@ spec:
             readOnly: true
         - name: etc-clamav
           configMap:
-            name: {{ .Release.Name }}-etc-clamav
+            name: {{ $fullName }}-etc-clamav
         {{- with .Values.extraVolumes }}
           {{ . | toYaml | trim | nindent 8 }}
         {{- end }}

@@ -1,23 +1,24 @@
 {{- if .Values.appEnabled -}}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ $fullName }}
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
-    app: {{ .Release.Name }}
+    app: {{ $fullName }}
     app.kubernetes.io/component: app
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 5
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ $fullName }}
   template:
     metadata:
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
-        app: {{ .Release.Name }}
+        app: {{ $fullName }}
         app.kubernetes.io/component: app
     spec:
       automountServiceAccountToken: false
@@ -32,9 +33,9 @@ spec:
         {{- . | toYaml | trim | nindent 8 }}
       {{- end }}
       volumes:
-        - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+        - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" $fullName) }}
           configMap:
-            name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+            name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" $fullName) }}
         - name: app-tmp
           emptyDir: {}
         - name: nginx-tmp
@@ -134,7 +135,7 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
           volumeMounts:
-            - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" .Release.Name) }}
+            - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
             - name: nginx-tmp

@@ -1,8 +1,9 @@
-{{- if or .Values.uploadStaticErrorPagesEnabled (eq .Release.Name "static") }}
+{{- if .Values.uploadStaticErrorPagesEnabled }}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-upload-error-pages
+  name: {{ $fullName }}-upload-error-pages
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: upload-error-pages
@@ -35,7 +36,7 @@ spec:
             - name: GOVUK_ENVIRONMENT
               value: {{ .Values.govukEnvironment }}
             - name: SERVICE
-              value: {{ .Release.Name }}
+              value: {{ $fullName }}
           command:
             - "/bin/bash"
             - "-c"

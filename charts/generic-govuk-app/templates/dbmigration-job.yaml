@@ -1,8 +1,9 @@
 {{- if .Values.dbMigrationEnabled -}}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-dbmigrate
+  name: {{ $fullName }}-dbmigrate
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: dbmigrate
@@ -13,7 +14,7 @@ spec:
   backoffLimit: 2
   template:
     metadata:
-      name: {{ .Release.Name }}-dbmigrate
+      name: {{ $fullName }}-dbmigrate
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
         app.kubernetes.io/component: dbmigrate

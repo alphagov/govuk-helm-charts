@@ -1,7 +1,8 @@
+{{- $fullName := include "asset-manager.fullname" . }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-nginx-conf
+  name: {{ $fullName }}-nginx-conf
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
@@ -31,7 +32,7 @@ data:
       sendfile        on;
       keepalive_timeout  65;
 
-      upstream {{ .Release.Name }} {
+      upstream {{ $fullName }} {
         server 127.0.0.1:{{ .Values.appPort }};
       }
 
@@ -140,7 +141,7 @@ data:
         }
 
         location @app {
-          proxy_pass http://{{ .Release.Name }};
+          proxy_pass http://{{ $fullName }};
         }
 
         client_max_body_size 500m;

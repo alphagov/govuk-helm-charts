@@ -1,9 +1,10 @@
+{{- $fullName := include "generic-govuk-app.fullname" . }}
 {{- range .Values.cronTasks }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: "{{ $.Release.Name }}-{{ .name }}-cron-task"
+  name: "{{ $fullName }}-{{ .name }}-cron-task"
   labels:
     {{- include "generic-govuk-app.labels" $ | nindent 4 }}
     app.kubernetes.io/component: app
@@ -11,7 +12,7 @@ spec:
   schedule: "{{ .schedule }}"
   jobTemplate:
     metadata:
-      name: "{{ $.Release.Name }}-{{ .name }}-cron-task"
+      name: "{{ $fullName }}-{{ .name }}-cron-task"
       labels:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
         app.kubernetes.io/component: app
@@ -19,7 +20,7 @@ spec:
       backoffLimit: 1
       template:
         metadata:
-          name: "{{ $.Release.Name }}-{{ .name }}-cron-task"
+          name: "{{ $fullName }}-{{ .name }}-cron-task"
           labels:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
             app.kubernetes.io/component: app

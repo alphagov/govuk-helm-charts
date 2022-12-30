@@ -964,6 +964,10 @@ govukApplications:
 - name: licencefinder
   repoName: licence-finder
   helmValues:
+    uploadAssets:
+      # https://github.com/alphagov/licence-finder/blob/e60ad6b/config/application.rb#L35
+      path: /app/public/assets/licencefinder
+      s3Directory: "licencefinder"
     extraEnv:
       # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
       # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
@@ -1794,6 +1798,10 @@ govukApplications:
 - name: smartanswers
   repoName: smart-answers
   helmValues:
+    uploadAssets:
+      # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
+      path: /app/public/assets/smartanswers
+      s3Directory: "smartanswers"
     extraEnv:
       - name: EXPOSE_GOVSPEAK
         value: "1"
@@ -1826,6 +1834,7 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
+    uploadStaticErrorPagesEnabled: true
     ingress:
       hosts:
         - name: assets-origin.eks.integration.govuk.digital
