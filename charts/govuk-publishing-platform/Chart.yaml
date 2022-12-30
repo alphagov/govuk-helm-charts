@@ -1,0 +1,37 @@
+apiVersion: v2
+name: govuk-publishing-platform
+description: Parent chart for the whole GOV.UK stack
+type: application
+version: 0.1.0
+sources:
+  - https://github.com/alphagov/govuk-helm-charts/
+dependencies:
+  - name: app-config
+    repository: file://../app-config
+    version: ">=0"
+  - alias: frontend
+    name: generic-govuk-app
+    repository: file://../generic-govuk-app
+    tags: [frontend]
+    version: ">=0"
+  - alias: frontend-memcached
+    name: memcached
+    repository: https://charts.bitnami.com/bitnami
+    tags: [frontend]
+    version: "~6"
+  - alias: mysql
+    name: mariadb
+    repository: https://charts.bitnami.com/bitnami
+    version: "~11"
+  - name: redis
+    repository: https://charts.bitnami.com/bitnami
+    version: "~17"
+  - alias: router
+    name: generic-govuk-app
+    repository: file://../generic-govuk-app
+    tags: [frontend]
+    version: ">=0"
+  - alias: signon
+    name: generic-govuk-app
+    repository: file://../generic-govuk-app
+    version: ">=0"
