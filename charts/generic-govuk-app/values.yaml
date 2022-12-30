@@ -112,6 +112,10 @@ uploadAssets:
   enabled: true
 
 metricsPort: 9394
+monitoring:
+  # monitoring.enabled determines whether PodMonitor and other Prometheus
+  # Operator custom resources are to be created or not.
+  enabled: false
 
 securityContext:
   runAsNonRoot: true
