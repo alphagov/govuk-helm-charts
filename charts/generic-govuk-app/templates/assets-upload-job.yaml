@@ -25,6 +25,7 @@ spec:
       initContainers:
         - name: copy-assets-for-upload
           image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           command:
             - sh
             - -c
