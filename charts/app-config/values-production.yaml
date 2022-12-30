@@ -132,6 +132,9 @@ govukApplications:
           secretKeyRef:
             name: email-alert-auth
             key: token
+- name: external-secrets
+  chartPath: charts/external-secrets
+  postSyncWorkflowEnabled: "false"
 - name: feedback
   helmValues:
     extraEnv:

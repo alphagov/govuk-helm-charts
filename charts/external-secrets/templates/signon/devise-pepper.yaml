@@ -1,0 +1,21 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: signon-devise-pepper
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Random, secret data which Devise appends to passwords before hashing.
+      This needs to be consistent between all instances of Signon which share
+      the same database.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: signon-devise-pepper
+  dataFrom:
+    - extract:
+        key: govuk/signon/devise-pepper
