@@ -126,6 +126,12 @@ data:
           proxy_redirect     off;
         }
 
+{{- if .Values.serveRailsAssetsFromFilesystem }}
+        location /assets {
+          alias /assets/;
+          autoindex off;
+        }
+{{- else if .Values.proxyRailsAssetsToS3 }}
         location /assets {
           proxy_set_header   Authorization "";
           proxy_set_header   Connection "";
@@ -154,6 +160,7 @@ data:
             }
           }
         }
+{{- end }}
 
         # Endpoint that isn't cached, which is used to assert that an external
         # service can receive a response from GOV.UK origin on www hostname. It
