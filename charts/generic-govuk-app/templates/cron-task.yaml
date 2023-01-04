@@ -43,9 +43,10 @@ spec:
           containers:
             - name: cron-task
               image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+              imagePullPolicy: {{ $.Values.appImage.pullPolicy | default "Always" }}
               {{- if .task }}
-              command: ["bundle"]
-              args: ["exec", "rails", "{{ .task }}"]
+              command: ["rails"]
+              args: ["{{ .task }}"]
               {{- else if .command }}
               command: ["/bin/bash"]
               args: ["-c", "{{ .command }}"]

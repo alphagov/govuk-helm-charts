@@ -38,6 +38,7 @@ spec:
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           command: ["rails"]
           args: ["db:prepare"]
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           envFrom:
             - configMapRef:
                 name: govuk-apps-env
