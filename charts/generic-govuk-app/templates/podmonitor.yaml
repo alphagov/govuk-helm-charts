@@ -1,3 +1,4 @@
+{{- if .Values.monitoring.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
@@ -11,3 +12,4 @@ spec:
       app: {{ .Release.Name }}
   podMetricsEndpoints:
   - port: metrics
+{{- end }}
