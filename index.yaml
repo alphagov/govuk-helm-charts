@@ -735,6 +735,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/content-store-0.3.0/content-store-0.3.0.tgz
     version: 0.3.0
+  external-secrets:
+  - apiVersion: v2
+    created: "2023-01-04T14:08:38.42518225Z"
+    description: GOV.UK ExternalSecrets resources for integration with AWS Secrets
+      Manager.
+    digest: 6ed875855d83f1d2c936b1a54a032561bf75cff7559b4cdea391e0ef287a9c2b
+    name: external-secrets
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/external-secrets-1.0.0/external-secrets-1.0.0.tgz
+    version: 1.0.0
   fastly-exporter:
   - apiVersion: v2
     created: "2022-04-08T09:21:48.190013337Z"
@@ -1433,4 +1443,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2022-10-12T14:32:54.880869415Z"
+generated: "2023-01-04T14:08:38.907230335Z"
