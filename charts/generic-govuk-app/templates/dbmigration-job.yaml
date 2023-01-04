@@ -35,8 +35,8 @@ spec:
       containers:
         - name: dbmigrate
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-          command: ["bundle"]
-          args: ["exec", "rails", "db:migrate"]
+          command: ["rails"]
+          args: ["db:prepare"]
           envFrom:
             - configMapRef:
                 name: govuk-apps-env
