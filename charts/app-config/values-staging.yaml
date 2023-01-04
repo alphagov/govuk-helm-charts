@@ -510,6 +510,7 @@ govukApplications:
   chartPath: charts/smokey
 - name: static
   helmValues:
+    uploadStaticErrorPagesEnabled: true
     ingress:
       hosts:
         - name: assets-origin.eks.staging.govuk.digital

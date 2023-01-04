@@ -1,8 +1,9 @@
 {{- if .Values.nginxConfigMap.create }}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-nginx-conf
+  name: {{ $fullName }}-nginx-conf
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
@@ -98,7 +99,7 @@ data:
                            '"upstream_addr": "$upstream_addr", '
                            '"upstream_response_time": "$upstream_response_time" }';
 
-      upstream {{ .Release.Name }} {
+      upstream {{ $fullName }} {
         server 127.0.0.1:{{ .Values.appPort }};
       }
 
@@ -122,7 +123,7 @@ data:
         location / {
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
-          proxy_pass         http://{{ .Release.Name }};
+          proxy_pass         http://{{ $fullName }};
           proxy_redirect     off;
         }
 
@@ -148,7 +149,7 @@ data:
           location ~ "-[0-9a-f]{32,}\." {
             expires max;
             add_header Cache-Control "public, immutable";
-            add_header Surrogate-Key "assets assets-{{ .Release.Name }}";
+            add_header Surrogate-Key "assets assets-{{ $fullName }}";
             proxy_pass https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
 
             # Set CORS allow origin for fonts only

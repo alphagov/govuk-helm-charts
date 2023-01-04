@@ -1,15 +1,16 @@
+{{- $fullName := include "asset-manager.fullname" . }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   labels:
-    app: {{ .Release.Name }}
+    app: {{ $fullName }}
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: prometheus-operator
     app.kubernetes.io/part-of: kube-prometheus
-  name: {{ .Release.Name }}
+  name: {{ $fullName }}
 spec:
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: {{ $fullName }}
   podMetricsEndpoints:
   - port: metrics

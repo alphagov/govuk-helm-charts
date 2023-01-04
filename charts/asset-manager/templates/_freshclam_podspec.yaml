@@ -1,8 +1,9 @@
 {{- define "asset-manager.freshclam.podspec" }}
+{{- $fullName := include "asset-manager.fullname" . }}
 metadata:
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app: {{ .Release.Name }}
+    app: {{ $fullName }}
     app.kubernetes.io/component: freshclam
 spec:
   activeDeadlineSeconds: 1800
@@ -37,6 +38,6 @@ spec:
         path: /clamav-db
     - name: etc-clamav
       configMap:
-        name: {{ .Release.Name }}-etc-clamav
+        name: {{ $fullName }}-etc-clamav
   restartPolicy: Never
 {{- end }}

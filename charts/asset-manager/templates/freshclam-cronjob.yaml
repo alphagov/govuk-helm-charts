@@ -1,10 +1,11 @@
+{{- $fullName := include "asset-manager.fullname" . }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .Release.Name }}-freshclam
+  name: {{ $fullName }}-freshclam
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app: {{ .Release.Name }}
+    app: {{ $fullName }}
     app.kubernetes.io/component: freshclam
 spec:
   schedule: "19 * * * *"
@@ -12,7 +13,7 @@ spec:
     metadata:
       labels:
         {{- include "asset-manager.labels" . | nindent 8 }}
-        app: {{ .Release.Name }}
+        app: {{ $fullName }}
         app.kubernetes.io/component: freshclam
     spec:
       backoffLimit: 1
