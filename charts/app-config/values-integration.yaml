@@ -1667,6 +1667,21 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+- name: draft-service-manual-frontend
+  repoName: service-manual-frontend
+  helmValues:
+    sentry:
+      createSecret: false
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
 - name: service-manual-publisher
   helmValues:
     dbMigrationEnabled: true
