@@ -39,9 +39,24 @@ spec:
           emptyDir: {}
         - name: nginx-tmp
           emptyDir: {}
+        {{- if .Values.serveRailsAssetsFromFilesystem }}
+        - name: assets
+          emptyDir: {}
+        {{- end }}
         {{- with .Values.extraVolumes }}
           {{- . | toYaml | trim | nindent 8 }}
         {{- end }}
+      {{- if .Values.serveRailsAssetsFromFilesystem }}
+      initContainers:
+        - name: copy-assets
+          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+          {{- $sourcePath := .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Values.repoName) }}
+          command: ["cp", "-R", "{{ $sourcePath }}", "/assets"]
+          volumeMounts:
+            - name: assets
+              mountPath: /assets
+      {{- end }}
       containers:
         - name: app
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -139,6 +154,10 @@ spec:
               subPath: nginx.conf
             - name: nginx-tmp
               mountPath: /tmp
+            {{- if .Values.serveRailsAssetsFromFilesystem }}
+            - name: assets
+              mountPath: /assets
+            {{- end }}
             {{- with .Values.nginxExtraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
