@@ -1,0 +1,22 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: service-manual-publisher-postgres
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Connection string for Service manual publisher DB hosted in RDS
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: service-manual-publisher-postgres
+    template:
+      data:
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/service-manual-publisher_production'
+  dataFrom:
+    - extract:
+        key: govuk/service-manual-publisher/postgres

@@ -726,6 +726,9 @@ govukApplications:
             key: RABBITMQ_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+- name: external-secrets
+  chartPath: charts/external-secrets
+  postSyncWorkflowEnabled: "false"
 - name: feedback
   helmValues:
     extraEnv:

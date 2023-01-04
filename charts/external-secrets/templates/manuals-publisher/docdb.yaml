@@ -1,0 +1,22 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: manuals-publisher-docdb
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Credentials for Manuals publisher to connect to DocumentDB (MongoDB).
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: manuals-publisher-docdb
+    template:
+      data:
+        MONGODB_URI: '{{ $.Files.Get "externalsecrets-templates/mongo-conn-string.tpl" | trim }}/govuk_content_production'
+  dataFrom:
+    - extract:
+        key: govuk/common/shared-documentdb
