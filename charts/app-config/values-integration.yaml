@@ -200,6 +200,12 @@ govukApplications:
             key: SECRET_KEY_BASE
 - name: contacts-admin
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: contacts-admin
+      hosts:
+        - name: contacts-admin.eks.integration.govuk.digital
     cronTasks:
       - name: org-import
         task: "organisations:import"
@@ -214,6 +220,12 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: content-data-admin
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: content-data-admin
+      hosts:
+        - name: content-data-admin.eks.integration.govuk.digital
     uploadAssets:
       path: /app/public/assets
     workerEnabled: true
@@ -942,6 +954,12 @@ govukApplications:
         value: "1"
 - name: imminence
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: imminence
+      hosts:
+        - name: imminence.eks.integration.govuk.digital
     dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
       searches:
         - blue.integration.govuk-internal.digital
@@ -1041,6 +1059,12 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: local-links-manager
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: local-links-manager
+      hosts:
+        - name: local-links-manager.eks.integration.govuk.digital
     cronTasks:
       - name: import-interact
         task: "import:service_interactions:import_all"
