@@ -30,6 +30,7 @@ appEnabled: true
 
 # dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
 dbMigrationEnabled: false
+dbMigrationCommand: ["rails", "db:migrate"]
 
 # extraVolumes defines Volumes on the app Pods (in both deployment.yaml and
 # worker-deployment.yaml).
