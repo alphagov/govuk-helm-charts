@@ -36,8 +36,8 @@ spec:
       containers:
         - name: dbmigrate
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-          command: ["rails"]
-          args: ["db:prepare"]
+          command:
+            {{- .Values.dbMigrationCommand | toYaml | nindent 12 }}
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           envFrom:
             - configMapRef:
