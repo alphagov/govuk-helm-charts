@@ -57,8 +57,7 @@ spec:
         - name: app
           image: "{{ required "appImage.repository is required" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
-          command: ["bundle"]
-          args: ["exec", "sidekiq", "-C", "config/sidekiq.yml"]
+          command: ["sidekiq", "-C", "config/sidekiq.yml"]
           ports:
             - name: metrics
               containerPort: {{ .Values.metricsPort }}
