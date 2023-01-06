@@ -360,6 +360,78 @@ govukApplications:
         value: content_data_api_govuk_importer
       - name: RABBITMQ_QUEUE_DEAD
         value: content_data_api_dead_letter_queue
+- name: content-publisher
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: content-publisher
+      hosts:
+        - name: content-publisher.eks.integration.govuk.digital
+    extraEnv:
+      - name: AWS_REGION  # TODO: consider moving this to cm/govuk-apps-env?
+        value: eu-west-1
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-publisher-asset-manager
+            key: bearer_token
+      - name: AWS_S3_BUCKET
+        value: govuk-integration-content-publisher-activestorage
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-publisher-postgres
+            key: DATABASE_URL
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-publisher
+            key: oauth_secret
+      # These GTM values are not secrets (not even the the gtm_auth one).
+      # https://github.com/alphagov/govuk-puppet/pull/8041
+      - name: GOOGLE_TAG_MANAGER_ID
+        value: &static-gtm-id GTM-NQXC4TG
+      - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only.
+        value: &static-gtm-auth xTPyDeRcMiXFWvscgkLowg
+      - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only.
+        value: &static-gtm-preview env-6
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: content-publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-publisher-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: WHITEHALL_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-publisher-whitehall
+            key: bearer_token
 - name: content-store
   helmValues: &content-store
     cronTasks:
