@@ -22,6 +22,67 @@ appResources:
 # Individual apps to be deployed by ArgoCD, and any values specific to those
 # apps.
 govukApplications:
+- name: account-api
+  helmValues:
+    uploadAssets:
+      enabled: false
+    dbMigrationEnabled: true
+    workerEnabled: true
+    extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: account-api-postgres
+            key: DATABASE_URL
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-account-api-email-alert-api
+            key: bearer_token
+      - name: GOVUK_ACCOUNT_OAUTH_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: govuk-account-oauth
+            key: GOVUK_ACCOUNT_OAUTH_CLIENT_ID
+      - name: GOVUK_ACCOUNT_OAUTH_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: govuk-account-oauth
+            key: GOVUK_ACCOUNT_OAUTH_PRIVATE_KEY
+      - name: GOVUK_ACCOUNT_OAUTH_PROVIDER_URI
+        valueFrom:
+          secretKeyRef:
+            name: govuk-account-oauth
+            key: GOVUK_ACCOUNT_OAUTH_PROVIDER_URI
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: account-api-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 6074fdc2-03b3-4bb6-83fe-31220779c13b
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-account-api-publishing-api
+            key: bearer_token
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-account-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-account-api
+            key: oauth_secret
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: asset-manager
   chartPath: charts/asset-manager
   helmValues:
