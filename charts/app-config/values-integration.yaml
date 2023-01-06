@@ -1681,6 +1681,7 @@ govukApplications:
             key: DATABASE_URL
 - name: search-api
   helmValues:
+    nginxClientMaxBodySize: 20M
     uploadAssets:
       enabled: false
     workerEnabled: true
