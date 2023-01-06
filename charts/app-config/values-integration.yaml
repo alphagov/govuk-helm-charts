@@ -8,6 +8,8 @@ assetsDomain: assets.integration.publishing.service.gov.uk
 assetsTestDomain: assets-eks.integration.publishing.service.gov.uk
 wwwTestDomain: www.eks.integration.govuk.digital
 
+cspReportURI: https://csp-reporter.integration.publishing.service.gov.uk/report
+
 workerReplicaCount: 1
 appResources:
   limits:
