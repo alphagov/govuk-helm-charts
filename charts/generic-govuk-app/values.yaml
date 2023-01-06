@@ -58,6 +58,7 @@ nginxImage:
 nginxPort: 8080
 nginxProxyConnectTimeout: 1s
 nginxProxyReadTimeout: 15s
+nginxClientMaxBodySize: 1M
 nginxConfigMap:
   create: true
 nginxExtraVolumeMounts: []

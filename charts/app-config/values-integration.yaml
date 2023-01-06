@@ -363,6 +363,7 @@ govukApplications:
 - name: content-publisher
   helmValues:
     dbMigrationEnabled: true
+    nginxClientMaxBodySize: &max-upload-size 500M
     workerEnabled: true
     ingress:
       enabled: true
@@ -1261,6 +1262,7 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: manuals-publisher
   helmValues:
+    nginxClientMaxBodySize: &max-upload-size
     workerEnabled: true
     ingress:
       enabled: true
@@ -2035,6 +2037,7 @@ govukApplications:
         value: "true"
 - name: specialist-publisher
   helmValues:
+    nginxClientMaxBodySize: &max-upload-size
     workerEnabled: true
     ingress:
       enabled: true
@@ -2385,6 +2388,7 @@ govukApplications:
     dbMigrationEnabled: true
     workerEnabled: true
     uploadAssets: *whitehall-upload-assets
+    nginxClientMaxBodySize: &max-upload-size
     nginxDenyCrawlers: true
     ingress:
       enabled: true

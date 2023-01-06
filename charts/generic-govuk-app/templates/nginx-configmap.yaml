@@ -125,6 +125,7 @@ data:
           proxy_set_header   X-Real-IP $remote_addr;
           proxy_pass         http://{{ $fullName }};
           proxy_redirect     off;
+          client_max_body_size {{ .Values.nginxClientMaxBodySize }};
         }
 
 {{- if .Values.serveRailsAssetsFromFilesystem }}
