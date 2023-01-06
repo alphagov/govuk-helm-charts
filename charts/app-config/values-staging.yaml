@@ -8,6 +8,8 @@ assetsDomain: assets.staging.publishing.service.gov.uk
 assetsTestDomain: assets-eks.staging.publishing.service.gov.uk
 wwwTestDomain: www.eks.staging.govuk.digital
 
+cspReportURI: https://csp-reporter.staging.publishing.service.gov.uk/report
+
 appResources:
   limits:
     cpu: 1

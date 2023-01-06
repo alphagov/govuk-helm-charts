@@ -18,5 +18,8 @@ ec2InternalDomainSuffix: govuk-internal.digital
 externalDomainSuffix: eks.test.govuk.digital
 publishingServiceDomainSuffix: test.publishing.service.gov.uk
 
+cspReportOnly: true
+cspReportURI: ""
+
 monitoring:
   enabled: true
