@@ -2293,6 +2293,12 @@ govukApplications:
             key: DATABASE_URL
 - name: transition
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: transition
+      hosts:
+        - name: transition.eks.integration.govuk.digital
     cronTasks:
       - name: import-dns
         task: "import:dns_details"
