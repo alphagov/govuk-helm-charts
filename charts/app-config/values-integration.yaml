@@ -2313,8 +2313,6 @@ govukApplications:
         task: "import:hits:refresh_materialized"
         schedule: "30 0,12 * * *"
     dbMigrationEnabled: true
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
