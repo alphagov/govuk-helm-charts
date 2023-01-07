@@ -2330,16 +2330,6 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: transition-aws
-            key: access_key
-      - name: AWS_SECRET_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: transition-aws
-            key: secret_key
       - name: AWS_REGION
         value: eu-west-1
       - name: BASIC_AUTH_PASSWORD
