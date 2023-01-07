@@ -1099,8 +1099,6 @@ govukApplications:
     dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
       searches:
         - blue.integration.govuk-internal.digital
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
