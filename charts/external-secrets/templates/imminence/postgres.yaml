@@ -1,22 +1,22 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: imminence-docdb
+  name: imminence-postgres
   labels:
     {{- include "external-secrets.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      Credentials for Imminence to connect to DocumentDB (MongoDB).
+      Credentials for Imminence's Postgres DB hosted in RDS.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
     name: aws-secretsmanager
     kind: ClusterSecretStore
   target:
-    name: imminence-docdb
+    name: imminence-postgres
     template:
       data:
-        MONGODB_URI: '{{ $.Files.Get "externalsecrets-templates/mongo-conn-string.tpl" | trim }}/imminence_production'
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/postgis-conn-string.tpl" | trim }}/imminence_production'
   dataFrom:
     - extract:
-        key: govuk/common/shared-documentdb
+        key: govuk/imminence/postgres

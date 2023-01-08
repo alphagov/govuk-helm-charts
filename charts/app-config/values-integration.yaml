@@ -1101,6 +1101,11 @@ govukApplications:
         - blue.integration.govuk-internal.digital
     workerEnabled: true
     extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: imminence-postgres
+            key: DATABASE_URL
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
