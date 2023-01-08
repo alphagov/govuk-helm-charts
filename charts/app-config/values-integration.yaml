@@ -1218,8 +1218,6 @@ govukApplications:
         task: "export:google_analytics:bad_links"
         schedule: "0 6 * * *"
     dbMigrationEnabled: true
-    uploadAssets:
-      path: /app/public/assets
     extraEnv:
       - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
         valueFrom:
