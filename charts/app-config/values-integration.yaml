@@ -1214,8 +1214,8 @@ govukApplications:
       - name: import-ga
         task: "import:google_analytics"
         schedule: "0 5 * * *"
-      - name: import-ga-bad-links
-        task: "import:google_analytics:bad_links"
+      - name: export-ga-bad-links
+        task: "export:google_analytics:bad_links"
         schedule: "0 6 * * *"
     dbMigrationEnabled: true
     uploadAssets:
