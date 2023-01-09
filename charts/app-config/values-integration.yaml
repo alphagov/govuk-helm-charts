@@ -579,6 +579,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-content-tagger-publishing-api
             key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-tagger-email-alert-api
+            key: bearer_token
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
