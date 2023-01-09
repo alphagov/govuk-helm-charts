@@ -2123,6 +2123,51 @@ govukApplications:
             key: SECRET_KEY_BASE
       - name: USE_TMPDIR_PAGE_CACHE
         value: "true"
+- name: short-url-manager
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: short-url-manager
+      hosts:
+        - name: short-url-manager.eks.integration.govuk.digital
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-short-url-manager
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-short-url-manager
+            key: oauth_secret
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: short-url-manager-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: INSTANCE_NAME
+        value: integration
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: short-url-manager-docdb
+            key: MONGODB_URI
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-short-url-manager-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
 - name: specialist-publisher
   helmValues:
     nginxClientMaxBodySize: *max-upload-size
