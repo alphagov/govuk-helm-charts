@@ -2294,6 +2294,12 @@ govukApplications:
             key: DATABASE_URL
 - name: transition
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: transition
+      hosts:
+        - name: transition.eks.integration.govuk.digital
     cronTasks:
       - name: import-dns
         task: "import:dns_details"
@@ -2308,8 +2314,6 @@ govukApplications:
         task: "import:hits:refresh_materialized"
         schedule: "30 0,12 * * *"
     dbMigrationEnabled: true
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
@@ -2327,16 +2331,6 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
-      - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: transition-aws
-            key: access_key
-      - name: AWS_SECRET_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: transition-aws
-            key: secret_key
       - name: AWS_REGION
         value: eu-west-1
       - name: BASIC_AUTH_PASSWORD
