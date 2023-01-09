@@ -289,8 +289,6 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: content-data-admin
       hosts:
         - name: content-data.eks.integration.govuk.digital
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
     extraEnv:
       - name: CONTENT_DATA_API_BEARER_TOKEN
