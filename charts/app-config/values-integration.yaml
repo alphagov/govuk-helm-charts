@@ -465,6 +465,8 @@ govukApplications:
           secretKeyRef:
             name: content-publisher-postgres
             key: DATABASE_URL
+      - name: EMAIL_ADDRESS_OVERRIDE
+        value: content-publisher-notifications-integration@digital.cabinet-office.gov.uk
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
