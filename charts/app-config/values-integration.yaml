@@ -1728,9 +1728,13 @@ govukApplications:
 - name: search-admin
   helmValues:
     dbMigrationEnabled: true
-    uploadAssets:
-      path: /app/public/assets
     workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: search-admin
+      hosts:
+        - name: search-admin.eks.integration.govuk.digital
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
