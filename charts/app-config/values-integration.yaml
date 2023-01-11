@@ -2523,6 +2523,8 @@ govukApplications:
         value: message_by_example
       - name: ENV_MESSAGE_OTHER
         value: message_by_other
+      - name: ENV_MESSAGE_MURILO
+        value: message_by_murilo
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
