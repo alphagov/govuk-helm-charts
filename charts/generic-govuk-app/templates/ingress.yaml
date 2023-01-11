@@ -19,11 +19,14 @@ spec:
         {{- end }}
   {{- end }}
   rules:
+    {{- with .Values.ingress.rules }}
+      {{- . | toYaml | nindent 4 }}
+    {{- end }}
     {{- range .Values.ingress.hosts }}
-    - host: {{ .name }}
+    - host: {{ .name | quote }}
       http:
         paths:
-          - path: {{ default "/" .path }}
+          - path: {{ .path | default "/" | quote }}
             pathType: {{ default "Prefix" .pathType }}
             backend:
               service:

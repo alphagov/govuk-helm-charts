@@ -7,15 +7,20 @@ service:
 
 ingress:
   enabled: false
+  # ingress.annotations defines the base set of annotations for an app's Ingress.
+  #
+  # When deployed via ArgoCD using ../charts/app-config, these annotations are
+  # merged with the ones from the app's config in
+  # ../charts/app-config/values-$env.yaml.
+  #
+  # TODO: this feels a bit messy and unintuitive; move these into app-config
+  # and make it less surprising.
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: "443"
     alb.ingress.kubernetes.io/healthcheck-path: /readyz
-  rules:
-  - path: /
-    pathType: Prefix
 
 replicaCount: 2
 

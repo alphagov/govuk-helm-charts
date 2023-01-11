@@ -189,6 +189,31 @@ govukApplications:
           secretKeyRef:
             name: rails-secret-key-base
             key: SECRET_KEY_BASE
+- name: bouncer
+  helmValues:
+    uploadAssets:
+      enabled: false
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: bouncer
+        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+      rules:
+        - http:  # Match all hostnames.
+            paths:
+              - path: "/"
+                pathType: Prefix
+                backend:
+                  service:
+                    name: bouncer
+                    port:
+                      number: 80
+    extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: bouncer-postgres
+            key: DATABASE_URL
 - name: collections
   helmValues:
     extraEnv:
