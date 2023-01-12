@@ -674,6 +674,8 @@ govukApplications:
         value: govuk-staging-whitehall-csvs
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 112842bb-d8a4-4511-90de-57dc5c8f27ec
+      - name: EMAIL_ADDRESS_OVERRIDE
+        value: whitehall-emails-staging@digital.cabinet-office.gov.uk
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: MEMCACHE_SERVERS
