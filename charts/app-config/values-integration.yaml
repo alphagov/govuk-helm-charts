@@ -806,6 +806,8 @@ govukApplications:
             key: bearer_token
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: EMAIL_ADDRESS_OVERRIDE
+        value: whitehall-emails-integration@digital.cabinet-office.gov.uk
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: MEMCACHE_SERVERS
