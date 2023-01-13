@@ -46,7 +46,7 @@ data:
         sub {
           my $r = shift;
           my $current_header = $r->header_in("GOVUK-Request-Id");
-          if (defined $current_header && $current_header ne "") {
+          if (defined $current_header && $current_header ne "" && $current_header ne "-") {
             return $current_header;
           } else {
             my $pid = $r->variable("pid");
