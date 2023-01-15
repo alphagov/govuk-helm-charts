@@ -758,12 +758,7 @@ govukApplications:
 - name: draft-whitehall-frontend
   repoName: whitehall
   helmValues:
-    uploadAssets: &whitehall-upload-assets
-      path: "/app/public/assets/whitehall"
-      s3Directory: "whitehall"
     extraEnv: &whitehall-envs
-      - name: NODE_ENV
-        value: production
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -2590,7 +2585,6 @@ govukApplications:
           [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.assetsTestDomain }}"]}}]
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
-    uploadAssets: *whitehall-upload-assets
     extraEnv: *whitehall-envs
     appResources:
       limits:
