@@ -769,6 +769,8 @@ govukApplications:
           secretKeyRef:
             name: signon-app-whitehall
             key: oauth_secret
+      - name: GOVUK_UPLOADS_ROOT
+        value: &whitehall-uploads-path /uploads
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -2542,7 +2544,6 @@ govukApplications:
         schedule: "*/10 7-20 * * *"
     dbMigrationEnabled: true
     workerEnabled: true
-    uploadAssets: *whitehall-upload-assets
     nginxClientMaxBodySize: *max-upload-size
     nginxDenyCrawlers: true
     ingress:
@@ -2559,7 +2560,7 @@ govukApplications:
           path: /whitehall  # TODO: does this work on an new/empty EFS instance?
     appExtraVolumeMounts:
       - name: asset-uploads-efs
-        mountPath: /uploads
+        mountPath: *whitehall-uploads-path
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
