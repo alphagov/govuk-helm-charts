@@ -758,12 +758,7 @@ govukApplications:
 - name: draft-whitehall-frontend
   repoName: whitehall
   helmValues:
-    uploadAssets: &whitehall-upload-assets
-      path: "/app/public/assets/whitehall"
-      s3Directory: "whitehall"
     extraEnv: &whitehall-envs
-      - name: NODE_ENV
-        value: production
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -774,6 +769,8 @@ govukApplications:
           secretKeyRef:
             name: signon-app-whitehall
             key: oauth_secret
+      - name: GOVUK_UPLOADS_ROOT
+        value: &whitehall-uploads-path /uploads
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -2545,7 +2542,6 @@ govukApplications:
         schedule: "*/10 7-20 * * *"
     dbMigrationEnabled: true
     workerEnabled: true
-    uploadAssets: *whitehall-upload-assets
     nginxClientMaxBodySize: *max-upload-size
     nginxDenyCrawlers: true
     ingress:
@@ -2562,7 +2558,7 @@ govukApplications:
           path: /whitehall  # TODO: does this work on an new/empty EFS instance?
     appExtraVolumeMounts:
       - name: asset-uploads-efs
-        mountPath: /uploads
+        mountPath: *whitehall-uploads-path
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
@@ -2588,7 +2584,6 @@ govukApplications:
           [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.assetsTestDomain }}"]}}]
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
-    uploadAssets: *whitehall-upload-assets
     extraEnv: *whitehall-envs
     appResources:
       limits:
