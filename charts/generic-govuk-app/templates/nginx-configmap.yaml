@@ -113,7 +113,6 @@ data:
 
         add_header Strict-Transport-Security $sts_default;
         add_header Permissions-Policy interest-cohort=();
-        proxy_set_header GOVUK-Request-Id $govuk_request_id;
         add_header X-Content-Type-Options "nosniff" always;
 
         {{- if ( or (ne .Values.govukEnvironment "production") (eq .Values.nginxDenyCrawlers true ) ) }}
@@ -123,6 +122,7 @@ data:
         location / {
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
+          proxy_set_header GOVUK-Request-Id $govuk_request_id;
           proxy_pass         http://{{ $fullName }};
           proxy_redirect     off;
           client_max_body_size {{ .Values.nginxClientMaxBodySize }};
