@@ -858,6 +858,8 @@ govukApplications:
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: 1fc69d3a-09a2-40f9-852b-03f6fcef5340
+      - name: GOVUK_NOTIFY_RECIPIENTS
+        value: govuk_email_check@digital.cabinet-office.gov.uk
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
