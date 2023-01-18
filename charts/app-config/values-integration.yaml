@@ -2270,7 +2270,7 @@ govukApplications:
 - name: support
   helmValues:
     uploadAssets:
-      path: /app/public/assets
+      path: /app/public/assets/support
     workerEnabled: true
     extraEnv:
       - name: PUBLISHING_API_BEARER_TOKEN
