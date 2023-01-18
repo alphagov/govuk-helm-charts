@@ -2269,6 +2269,12 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 - name: support
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/load-balancer-name: support
+      hosts:
+        - name: support.eks.integration.govuk.digital
     uploadAssets:
       path: /app/public/assets
     workerEnabled: true
