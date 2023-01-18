@@ -626,12 +626,7 @@ govukApplications:
         successThreshold: 1
         timeoutSeconds: 30
     nginxProxyReadTimeout: 30
-    uploadAssets: &whitehall-upload-assets
-      path: "/app/public/assets/whitehall"
-      s3Directory: "whitehall"
     extraEnv: &whitehall-envs
-      - name: NODE_ENV  # TODO: move NODE_ENV=production to the Dockerfile
-        value: production
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
