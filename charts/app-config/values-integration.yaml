@@ -1339,6 +1339,8 @@ govukApplications:
         value: "false"
       - name: AWS_S3_ASSET_BUCKET_NAME
         value: "govuk-app-assets-integration"
+      - name: AWS_REGION
+        value: "eu-west-1"
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
