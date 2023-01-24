@@ -1263,7 +1263,7 @@ govukApplications:
         task: "check-links"
         schedule: "0 2 * * *"
       - name: export-links
-        task: "export:links:all"
+        task: "export:links:s3"
         schedule: "0 3 * * *"
       - name: import-ga
         task: "import:google_analytics"
@@ -1337,6 +1337,8 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: RUN_LINK_GA_EXPORT
         value: "false"
+      - name: AWS_S3_ASSET_BUCKET_NAME
+        value: "govuk-app-assets-integration"
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
