@@ -18,6 +18,13 @@ appResources:
     cpu: 0.1
     memory: 800Mi
 
+default-alb-ingress-annotations: &default-alb-ingress-annotations
+  alb.ingress.kubernetes.io/scheme: internet-facing
+  alb.ingress.kubernetes.io/target-type: ip
+  alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+  alb.ingress.kubernetes.io/ssl-redirect: "443"
+  alb.ingress.kubernetes.io/healthcheck-path: /readyz
+
 # Individual apps to be deployed by ArgoCD, and any values specific to those
 # apps.
 govukApplications:
@@ -28,6 +35,7 @@ govukApplications:
     ingress:
       enabled: true
       annotations:
+        <<: *default-alb-ingress-annotations
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '20'
@@ -321,6 +329,7 @@ govukApplications:
     ingress:
       enabled: true
       annotations:
+        <<: *default-alb-ingress-annotations
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/www-origin-eks
@@ -415,6 +424,7 @@ govukApplications:
     ingress:
       enabled: true
       annotations:
+        <<: *default-alb-ingress-annotations
         alb.ingress.kubernetes.io/load-balancer-name: signon
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
       hosts:
@@ -530,6 +540,7 @@ govukApplications:
           path: /
       enabled: true
       annotations:
+        <<: *default-alb-ingress-annotations
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '30'
@@ -582,6 +593,7 @@ govukApplications:
           pathType: ImplementationSpecific
       enabled: true
       annotations:
+        <<: *default-alb-ingress-annotations
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '10'
