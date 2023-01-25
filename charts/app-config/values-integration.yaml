@@ -204,7 +204,12 @@ govukApplications:
       enabled: false
     ingress:
       enabled: true
+      tls: {}
       annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+        alb.ingress.kubernetes.io/healthcheck-path: /readyz
         alb.ingress.kubernetes.io/load-balancer-name: bouncer
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
       rules:
