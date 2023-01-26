@@ -1,0 +1,82 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: smokey
+spec:
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 3
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    metadata:
+      name: smokey
+    spec:
+      activeDeadlineSeconds: 600
+      backoffLimit: 1
+      template:
+        spec:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          restartPolicy: Never
+          securityContext:
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+          volumes:
+          - emptyDir: {}
+            name: tmp
+          containers:
+          - args:
+            - cucumber
+            - --profile={{ .Values.govukEnvironment }}
+            - --strict-undefined
+            - --tags=not @notreplatforming and not @not{{ .Values.govukEnvironment }}
+            image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+            name: smokey
+            resources:
+              limits:
+                cpu: "2"
+                memory: 2Gi
+              requests:
+                cpu: "1"
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+            volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+            env:
+            - name: BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: bearer_token
+                  name: signon-token-smokey-asset-manager
+            - name: ENVIRONMENT
+              value: {{ .Values.govukEnvironment }}
+            - name: GOVUK_APP_DOMAIN
+              value: ""
+            - name: GOVUK_APP_DOMAIN_EXTERNAL
+              value: eks.{{ .Values.govukEnvironment }}.govuk.digital
+            - name: GOVUK_ASSET_ROOT
+              value: https://assets-eks.{{ .Values.govukEnvironment }}.publishing.service.gov.uk
+            - name: GOVUK_WEBSITE_ROOT
+              value: https://www.eks.{{ .Values.govukEnvironment }}.govuk.digital
+            - name: PLEK_SERVICE_ASSETS_URI
+              value: https://assets-eks.publishing.service.gov.uk
+            - name: PLEK_SERVICE_ASSETS_ORIGIN_URI
+              value: https://assets-origin.eks.{{ .Values.govukEnvironment }}.govuk.digital
+            - name: PLEK_SERVICE_CONTENT_DATA_ADMIN_URI
+              value: https://content-data.eks.{{ .Values.govukEnvironment }}.govuk.digital
+            - name: PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS
+              value: "1"
+            - name: SIGNON_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  key: email
+                  name: smokey-signon-account
+            - name: SIGNON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: smokey-signon-account
