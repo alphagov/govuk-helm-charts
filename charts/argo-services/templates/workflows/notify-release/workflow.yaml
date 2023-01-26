@@ -21,7 +21,7 @@ spec:
         command:
           - sh
         source: >
-          curl https://release.publishing.service.gov.uk/deployments \
+          curl http://release/deployments \
            -H "Authorization: Bearer ${RELEASE_API_TOKEN}" \
            --json '{
               "repo": "alphagov/{{"{{inputs.parameters.repositoryName}}"}}",
