@@ -1,5 +1,6 @@
 # Defaults for all apps in this environment. These can be overridden for
 # individual apps below.
+
 govukEnvironment: staging
 externalDomainSuffix: eks.staging.govuk.digital
 publishingServiceDomainSuffix: staging.publishing.service.gov.uk
@@ -25,8 +26,18 @@ default-alb-ingress-annotations: &default-alb-ingress-annotations
   alb.ingress.kubernetes.io/ssl-redirect: "443"
   alb.ingress.kubernetes.io/healthcheck-path: /readyz
 
+alb-ingress-www-waf-ruleset: &alb-ingress-www-waf-ruleset
+  alb.ingress.kubernetes.io/wafv2-acl-arn: >-
+    arn:aws:wafv2:eu-west-1:696911096973:regional/webacl/cache_public_web_acl/350c0e9c-6d40-419b-b5f7-ce2f92e64bfe
+
+alb-ingress-backend-waf-ruleset: &alb-ingress-backend-waf-ruleset
+  alb.ingress.kubernetes.io/wafv2-acl-arn: >-
+    arn:aws:wafv2:eu-west-1:696911096973:regional/webacl/backend_public_web_acl/c9585984-e065-462b-8e78-601aae0cabd8
+
+
 # Individual apps to be deployed by ArgoCD, and any values specific to those
 # apps.
+
 govukApplications:
 - name: asset-manager
   chartPath: charts/asset-manager
@@ -36,6 +47,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '20'
@@ -340,6 +352,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/www-origin-eks
@@ -437,6 +450,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: signon
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
       hosts:
@@ -557,6 +571,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '30'
@@ -611,6 +626,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '10'

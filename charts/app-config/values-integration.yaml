@@ -111,7 +111,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-www-waf-ruleset
-        alb.ingress.kubernetes.io/wafv2-acl-arn: "arn:aws:wafv2:eu-west-1:210287912431:regional/webacl/cache_public_web_acl/768d0100-1296-4047-ad74-e307c4836a10"
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '20'
