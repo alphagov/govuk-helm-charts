@@ -1,5 +1,6 @@
 # Defaults for all apps in this environment. These can be overridden for
 # individual apps below.
+
 govukEnvironment: integration
 externalDomainSuffix: eks.integration.govuk.digital
 publishingServiceDomainSuffix: integration.publishing.service.gov.uk
@@ -26,8 +27,18 @@ default-alb-ingress-annotations: &default-alb-ingress-annotations
   alb.ingress.kubernetes.io/ssl-redirect: "443"
   alb.ingress.kubernetes.io/healthcheck-path: /readyz
 
+alb-ingress-www-waf-ruleset: &alb-ingress-www-waf-ruleset
+  alb.ingress.kubernetes.io/wafv2-acl-arn: >-
+    arn:aws:wafv2:eu-west-1:210287912431:regional/webacl/cache_public_web_acl/768d0100-1296-4047-ad74-e307c4836a10
+
+alb-ingress-backend-waf-ruleset: &alb-ingress-backend-waf-ruleset
+  alb.ingress.kubernetes.io/wafv2-acl-arn: >-
+    arn:aws:wafv2:eu-west-1:210287912431:regional/webacl/backend_public_web_acl/b5f616fd-699e-4b44-8ea2-7afd6626aa98
+
+
 # Individual apps to be deployed by ArgoCD, and any values specific to those
 # apps.
+
 govukApplications:
 - name: account-api
   helmValues:
@@ -99,6 +110,8 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
+        alb.ingress.kubernetes.io/wafv2-acl-arn: "arn:aws:wafv2:eu-west-1:210287912431:regional/webacl/cache_public_web_acl/768d0100-1296-4047-ad74-e307c4836a10"
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '20'
@@ -165,6 +178,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: draft-origin
       hosts:
         - name: draft-origin.eks.integration.govuk.digital
@@ -210,6 +224,7 @@ govukApplications:
       enabled: true
       tls: {}
       annotations:
+        <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/scheme: internet-facing
         alb.ingress.kubernetes.io/target-type: ip
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
@@ -277,6 +292,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: collections-publisher
       hosts:
         - name: collections-publisher.eks.integration.govuk.digital
@@ -334,6 +350,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: contacts-admin
       hosts:
         - name: contacts-admin.eks.integration.govuk.digital
@@ -376,6 +393,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: content-data-admin
       hosts:
         - name: content-data.eks.integration.govuk.digital
@@ -520,6 +538,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: content-publisher
       hosts:
         - name: content-publisher.eks.integration.govuk.digital
@@ -674,6 +693,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: content-tagger
       hosts:
         - name: content-tagger.eks.integration.govuk.digital
@@ -1014,6 +1034,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: hmrc-manuals-api
       hosts:
       - name: hmrc-manuals-api.eks.integration.govuk.digital
@@ -1047,6 +1068,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: imminence
       hosts:
         - name: imminence.eks.integration.govuk.digital
@@ -1159,6 +1181,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: local-links-manager
       hosts:
         - name: local-links-manager.eks.integration.govuk.digital
@@ -1309,6 +1332,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: manuals-publisher
       hosts:
         - name: manuals-publisher.eks.integration.govuk.digital
@@ -1367,6 +1391,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: maslow
       hosts:
         - name: maslow.eks.integration.govuk.digital
@@ -1412,6 +1437,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: publisher
       hosts:
         - name: publisher.eks.integration.govuk.digital
@@ -1564,6 +1590,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: release
       hosts:
         - name: release.eks.integration.govuk.digital
@@ -1666,6 +1693,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/www-origin-eks
@@ -1813,6 +1841,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: search-admin
       hosts:
         - name: search-admin.eks.integration.govuk.digital
@@ -1973,6 +2002,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: service-manual-publisher
       hosts:
         - name: service-manual-publisher.eks.integration.govuk.digital
@@ -2033,6 +2063,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: signon
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
       hosts:
@@ -2151,6 +2182,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '30'
@@ -2231,6 +2263,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: short-url-manager
       hosts:
         - name: short-url-manager.eks.integration.govuk.digital
@@ -2280,6 +2313,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: specialist-publisher
       hosts:
         - name: specialist-publisher.eks.integration.govuk.digital
@@ -2349,6 +2383,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: support
       hosts:
         - name: support.eks.integration.govuk.digital
@@ -2485,6 +2520,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: transition
       hosts:
         - name: transition.eks.integration.govuk.digital
@@ -2546,6 +2582,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: travel-advice-publisher
       hosts:
         - name: travel-advice-publisher.eks.integration.govuk.digital
@@ -2608,6 +2645,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: govuk-replatform-test-app
       hosts:
         - name: govuk-replatform-test-app.eks.integration.govuk.digital
@@ -2643,6 +2681,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
       hosts:
         - name: whitehall-admin.eks.integration.govuk.digital
@@ -2730,6 +2769,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '10'
