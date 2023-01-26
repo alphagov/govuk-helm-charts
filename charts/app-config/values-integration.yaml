@@ -1693,9 +1693,8 @@ govukApplications:
         value: "http://static"
       - name: BACKEND_URL_whitehall-frontend
         value: "http://whitehall-frontend"
-        # TODO: switch back to in-cluster account-api once it's working.
       - name: BACKEND_URL_account-api
-        value: "https://account-api.integration.govuk-internal.digital"
+        value: "http://account-api"
       - name: BACKEND_URL_feedback
         value: "http://feedback"
       - name: BACKEND_URL_finder-frontend
@@ -1734,7 +1733,7 @@ govukApplications:
       - name: BACKEND_URL_collections
         value: "http://draft-collections"
       - name: BACKEND_URL_content-store
-        value: "https://draft-content-store.integration.govuk-internal.digital"
+        value: "http://draft-content-store"
       - name: BACKEND_URL_email-alert-frontend
         value: "http://draft-email-alert-frontend"
       - name: BACKEND_URL_frontend
@@ -1750,7 +1749,7 @@ govukApplications:
       - name: BACKEND_URL_whitehall-frontend
         value: "http://draft-whitehall-frontend"
       - name: BACKEND_URL_account-api
-        value: "https://account-api.integration.govuk-internal.digital"
+        value: "http://account-api"
       - name: BACKEND_URL_feedback
         value: "http://feedback"
       - name: BACKEND_URL_finder-frontend
@@ -1762,7 +1761,7 @@ govukApplications:
       - name: BACKEND_URL_licensify
         value: "https://licensify.integration.govuk-internal.digital"
       - name: BACKEND_URL_search-api
-        value: "https://search-api.integration.govuk-internal.digital"
+        value: "http://search-api"
 
 - name: search-admin
   helmValues:
