@@ -339,6 +339,48 @@ govukApplications:
             name: signon-token-licence-finder-publishing-api
             key: bearer_token
 
+- name: release
+  helmValues:
+    dbMigrationEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        alb.ingress.kubernetes.io/load-balancer-name: release
+      hosts:
+        - name: release.eks.production.govuk.digital
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-release
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-release
+            key: oauth_secret
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: release-mysql
+            key: DATABASE_URL
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: GITHUB_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: release-github
+            key: username
+      - name: GITHUB_ACCESS_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: release-github
+            key: token
+
 - name: router
   helmValues:
     uploadAssets:
