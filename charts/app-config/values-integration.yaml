@@ -8,6 +8,7 @@ assetsDomain: assets.integration.publishing.service.gov.uk
 
 # TODO: Remove once fully migrated to EKS
 testExternalDomainSuffix: eks.integration.govuk.digital
+testPublishingDomainSuffix: eks.integration.govuk.digital
 assetsTestDomain: assets-eks.integration.publishing.service.gov.uk
 
 cspReportURI: https://csp-reporter.integration.publishing.service.gov.uk/report

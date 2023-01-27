@@ -15,7 +15,7 @@ metadata:
 data:
   BOOTSNAP_READONLY: "1"
   GOVUK_APP_DOMAIN: ""
-  GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.externalDomainSuffix }}
+  GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.testPublishingDomainSuffix }}
   GOVUK_ASSET_ROOT: https://assets.{{ .Values.publishingServiceDomainSuffix }}
   GOVUK_CSP_REPORT_ONLY: {{ .Values.cspReportOnly | quote }}
   GOVUK_CSP_REPORT_URI: {{ .Values.cspReportURI | quote }}

@@ -8,6 +8,7 @@ assetsDomain: assets.staging.publishing.service.gov.uk
 
 # TODO: Remove once fully migrated to EKS
 testExternalDomainSuffix: eks.staging.govuk.digital
+testPublishingDomainSuffix: eks.staging.govuk.digital
 assetsTestDomain: assets-eks.staging.publishing.service.gov.uk
 
 cspReportURI: https://csp-reporter.staging.publishing.service.gov.uk/report
