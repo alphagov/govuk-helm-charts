@@ -2,7 +2,7 @@
 # individual apps below.
 
 govukEnvironment: integration
-externalDomainSuffix: eks.integration.govuk.digital
+externalDomainSuffix: integration.publishing.service.gov.uk
 publishingServiceDomainSuffix: integration.publishing.service.gov.uk
 assetsDomain: assets.integration.publishing.service.gov.uk
 
@@ -1698,7 +1698,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-integration-aws-logging,access_logs.s3.prefix=elb/www-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["www.{{ .Values.publishingServiceDomainSuffix }}", "www.{{ .Values.testExternalDomainSuffix }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":["www.{{ .Values.externalDomainSuffix }}", "www.{{ .Values.testExternalDomainSuffix }}"]}}]
       hosts:
         - name: www-origin.eks.integration.govuk.digital
     nginxConfigMap:
