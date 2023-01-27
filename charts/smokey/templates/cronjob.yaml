@@ -63,7 +63,7 @@ spec:
             - name: GOVUK_WEBSITE_ROOT
               value: https://www.eks.{{ .Values.govukEnvironment }}.govuk.digital
             - name: PLEK_SERVICE_ASSETS_URI
-              value: https://assets-eks.publishing.service.gov.uk
+              value: https://assets-eks.{{ .Values.govukEnvironment }}.publishing.service.gov.uk
             - name: PLEK_SERVICE_ASSETS_ORIGIN_URI
               value: https://assets-origin.eks.{{ .Values.govukEnvironment }}.govuk.digital
             - name: PLEK_SERVICE_CONTENT_DATA_ADMIN_URI
