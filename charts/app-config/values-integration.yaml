@@ -2392,18 +2392,25 @@ govukApplications:
       path: /app/public/assets/support
     workerEnabled: true
     extraEnv:
-      - name: PUBLISHING_API_BEARER_TOKEN
+      - name: AWS_ACCESS_KEY_ID
         valueFrom:
           secretKeyRef:
-            name: signon-token-support-publishing-api
-            key: bearer_token
-      - name: SECRET_KEY_BASE
+            name: support-aws
+            key: access_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-integration-support-api-csvs
+      - name: AWS_SECRET_ACCESS_KEY
         valueFrom:
           secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+            name: support-aws
+            key: secret_key
+      - name: EMERGENCY_CONTACT_DETAILS
+        valueFrom:
+          secretKeyRef:
+            name: emergency-contacts
+            key: emergency_contacts
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -2414,6 +2421,18 @@ govukApplications:
           secretKeyRef:
             name: signon-app-support
             key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-support-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: SUPPORT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -2434,20 +2453,6 @@ govukApplications:
           secretKeyRef:
             name: support-zendesk
             key: ticket_email
-      - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: support-aws
-            key: access_key
-      - name: AWS_SECRET_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: support-aws
-            key: secret_key
-      - name: AWS_REGION
-        value: eu-west-1
-      - name: AWS_S3_BUCKET_NAME
-        value: govuk-integration-support-api-csvs
 
 - name: support-api
   helmValues:
@@ -2456,6 +2461,25 @@ govukApplications:
       enabled: false
     workerEnabled: true
     extraEnv:
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: support-aws
+            key: access_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-integration-support-api-csvs
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-aws
+            key: secret_key
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: support-api-postgres
+            key: DATABASE_URL
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -2466,6 +2490,20 @@ govukApplications:
           secretKeyRef:
             name: signon-app-support-api
             key: oauth_secret
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-api-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
       - name: ZENDESK_CLIENT_USERNAME
         valueFrom:
           secretKeyRef:
@@ -2481,39 +2519,6 @@ govukApplications:
           secretKeyRef:
             name: support-zendesk
             key: ticket_email
-      - name: AWS_ACCESS_KEY_ID
-        valueFrom:
-          secretKeyRef:
-            name: support-aws
-            key: access_key
-      - name: AWS_REGION
-        value: eu-west-1
-      - name: AWS_SECRET_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            name: support-aws
-            key: secret_key
-      - name: AWS_S3_BUCKET_NAME
-        value: govuk-integration-support-api-csvs
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
-      - name: REDIS_URL
-        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: GOVUK_NOTIFY_API_KEY
-        valueFrom:
-          secretKeyRef:
-            name: support-api-notify
-            key: GOVUK_NOTIFY_API_KEY
-      - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
-      - name: DATABASE_URL
-        valueFrom:
-          secretKeyRef:
-            name: support-api-postgres
-            key: DATABASE_URL
 
 - name: transition
   helmValues:
