@@ -37,7 +37,8 @@ data:
   RAILS_LOG_TO_STDOUT: "true"
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
 
-  PLEK_SERVICE_ASSETS_URI: https://assets.{{ .Values.publishingDomainSuffix }}
+  # TODO: change testAssetsDomain to assetsDomain before launch.
+  PLEK_SERVICE_ASSETS_URI: https://{{ .Values.testAssetsDomain }}
   PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
 
   # Services which remain in EC2 for a while after "MVP launch".
