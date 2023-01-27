@@ -56,7 +56,6 @@ data:
   PLEK_SERVICE_IMMINENCE_URI: https://imminence.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_LOCAL_LINKS_MANAGER_URI: https://local-links-manager.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_SEARCH_API_URI: https://search-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_SIGNON_URI: https://signon.{{ .Values.externalDomainSuffix }}
   PLEK_SERVICE_SUPPORT_URI: https://support.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   PLEK_SERVICE_SUPPORT_API_URI: https://support-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
   {{- end }}
