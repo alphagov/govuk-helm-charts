@@ -16,7 +16,7 @@ data:
   BOOTSNAP_READONLY: "1"
   GOVUK_APP_DOMAIN: ""
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.testPublishingDomainSuffix }}
-  GOVUK_ASSET_ROOT: https://assets.{{ .Values.publishingServiceDomainSuffix }}
+  GOVUK_ASSET_ROOT: https://assets.{{ .Values.publishingDomainSuffix }}
   GOVUK_CSP_REPORT_ONLY: {{ .Values.cspReportOnly | quote }}
   GOVUK_CSP_REPORT_URI: {{ .Values.cspReportURI | quote }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
@@ -37,8 +37,8 @@ data:
   RAILS_LOG_TO_STDOUT: "true"
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
 
-  PLEK_SERVICE_ASSETS_URI: https://assets.{{ .Values.publishingServiceDomainSuffix }}
-  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingServiceDomainSuffix }}
+  PLEK_SERVICE_ASSETS_URI: https://assets.{{ .Values.publishingDomainSuffix }}
+  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
 
   # Services which remain in EC2 for a while after "MVP launch".
   PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}

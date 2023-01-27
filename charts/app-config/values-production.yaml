@@ -3,7 +3,7 @@
 
 govukEnvironment: production
 externalDomainSuffix: gov.uk
-publishingServiceDomainSuffix: publishing.service.gov.uk
+publishingDomainSuffix: publishing.service.gov.uk
 assetsDomain: assets.publishing.service.gov.uk
 
 # TODO: Remove once fully migrated to EKS
