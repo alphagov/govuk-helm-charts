@@ -42,6 +42,18 @@ spec:
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
                 - name: newTag
                   value: "deployed-to-{{"{{workflow.parameters.environment}}"}}"
+          - name: record-deployment-in-release
+            templateRef:
+              name: notify-release
+              template: notify-release
+            arguments:
+              parameters:
+                - name: environment
+                  value: "{{"{{workflow.parameters.environment}}"}}"
+                - name: repositoryName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
+                - name: commitSha
+                  value: "{{"{{= sprig.trimPrefix('release-', workflow.parameters.imageTag) }}"}}"
 
     - name: exit-handler
       steps:

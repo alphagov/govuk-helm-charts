@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: notify-release
+spec:
+  entrypoint: notify-release
+  arguments:
+    parameters:
+      - name: repositoryName
+      - name: commitSha
+      - name: environment
+  templates:
+    - name: notify-release
+      inputs:
+        parameters:
+        - name: repositoryName
+        - name: commitSha
+        - name: environment
+      script:
+        image: curlimages/curl
+        command:
+          - sh
+        source: >
+          curl http://release/deployments \
+           -H "Authorization: Bearer ${RELEASE_API_TOKEN}" \
+           --json '{
+              "repo": "alphagov/{{"{{inputs.parameters.repositoryName}}"}}",
+              "deployment": {
+                "environment": "{{"{{inputs.parameters.environment}}"}} EKS",
+                "deployed_sha": "{{"{{inputs.parameters.commitSha}}"}}",
+                "version": "{{"{{inputs.parameters.commitSha}}"}}"
+              }
+            }'
+        env:
+          - name: RELEASE_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: signon-token-argo-workflows-release
+                key: bearer_token
