@@ -2,12 +2,14 @@
 # individual apps below.
 
 govukEnvironment: staging
-externalDomainSuffix: eks.staging.govuk.digital
-publishingServiceDomainSuffix: staging.publishing.service.gov.uk
+externalDomainSuffix: staging.publishing.service.gov.uk
+publishingDomainSuffix: staging.publishing.service.gov.uk
 assetsDomain: assets.staging.publishing.service.gov.uk
+
 # TODO: Remove once fully migrated to EKS
-assetsTestDomain: assets-eks.staging.publishing.service.gov.uk
-wwwTestDomain: www.eks.staging.govuk.digital
+testExternalDomainSuffix: eks.staging.govuk.digital
+testPublishingDomainSuffix: eks.staging.govuk.digital
+testAssetsDomain: assets-eks.staging.publishing.service.gov.uk
 
 cspReportURI: https://csp-reporter.staging.publishing.service.gov.uk/report
 
@@ -53,7 +55,7 @@ govukApplications:
         alb.ingress.kubernetes.io/group.order: '20'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.assetsTestDomain }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
       hosts:
       - name: assets-origin.eks.staging.govuk.digital
         path: /government/uploads/
@@ -399,7 +401,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/www-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["www.{{ .Values.publishingServiceDomainSuffix }}", "{{ .Values.wwwTestDomain }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":["www.{{ .Values.externalDomainSuffix }}", "www.{{ .Values.testExternalDomainSuffix }}"]}}]
       hosts:
         - name: www-origin.eks.staging.govuk.digital
     nginxConfigMap:
@@ -619,7 +621,7 @@ govukApplications:
         alb.ingress.kubernetes.io/group.order: '30'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.assetsTestDomain }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
       # https://github.com/alphagov/govuk-puppet/pull/8041
@@ -674,7 +676,7 @@ govukApplications:
         alb.ingress.kubernetes.io/group.order: '10'
         alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.assetsTestDomain }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
     appResources:
       limits:
         memory: 4Gi

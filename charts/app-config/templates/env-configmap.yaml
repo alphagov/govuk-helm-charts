@@ -15,8 +15,8 @@ metadata:
 data:
   BOOTSNAP_READONLY: "1"
   GOVUK_APP_DOMAIN: ""
-  GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.externalDomainSuffix }}
-  GOVUK_ASSET_ROOT: https://assets.{{ .Values.publishingServiceDomainSuffix }}
+  GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.testPublishingDomainSuffix }}
+  GOVUK_ASSET_ROOT: https://assets.{{ .Values.publishingDomainSuffix }}
   GOVUK_CSP_REPORT_ONLY: {{ .Values.cspReportOnly | quote }}
   GOVUK_CSP_REPORT_URI: {{ .Values.cspReportURI | quote }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
@@ -31,14 +31,14 @@ data:
   GOVUK_PERSONALISATION_SECURITY_URI: "https://integration.account.gov.uk?link=security-privacy"
   {{- end }}
   GOVUK_SIDEKIQ_JSON_LOGGING: "1"
-  GOVUK_WEBSITE_ROOT: https://www.{{ .Values.externalDomainSuffix }}
+  GOVUK_WEBSITE_ROOT: https://www.{{ .Values.testExternalDomainSuffix }}
   PLEK_UNPREFIXABLE_HOSTS: account-api,feedback,imminence,info-frontend,licensify,local-links-manager,locations-api,search-api,signon
   PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS: "true"
   RAILS_LOG_TO_STDOUT: "true"
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
 
-  PLEK_SERVICE_ASSETS_URI: https://assets.{{ .Values.publishingServiceDomainSuffix }}
-  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingServiceDomainSuffix }}
+  PLEK_SERVICE_ASSETS_URI: https://assets.{{ .Values.publishingDomainSuffix }}
+  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
 
   # Services which remain in EC2 for a while after "MVP launch".
   PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}

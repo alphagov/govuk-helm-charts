@@ -62,6 +62,6 @@ spec:
         - name: PLEK_SERVICE_ASSET_MANAGER_URI
           value: http://asset-manager.{{ .Values.internalDomainSuffix }}
         - name: PLEK_SERVICE_ASSETS_URI
-          value: https://assets.{{ .Values.publishingServiceDomainSuffix }}
+          value: https://assets.{{ .Values.publishingDomainSuffix }}
         - name: PLEK_SERVICE_ASSETS_ORIGIN_URI
-          value: https://assets-origin.{{ .Values.publishingServiceDomainSuffix }}
+          value: https://assets-origin.{{ .Values.publishingDomainSuffix }}
