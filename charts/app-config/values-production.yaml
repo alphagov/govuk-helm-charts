@@ -348,6 +348,7 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: release
       hosts:
         - name: release.eks.production.govuk.digital
