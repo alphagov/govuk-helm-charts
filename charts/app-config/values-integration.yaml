@@ -1862,6 +1862,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-search-admin-publishing-api
             key: bearer_token
+      - name: SEARCH_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-search-admin-search-api
+            key: bearer_token
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
