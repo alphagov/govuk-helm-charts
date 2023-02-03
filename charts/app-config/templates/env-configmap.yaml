@@ -37,6 +37,11 @@ data:
   RAILS_LOG_TO_STDOUT: "true"
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}-eks
 
+  # Data sync period used by sentry to ignore application errors during that time. Only relevant to integration and staging.
+  {{- if ne .Values.govukEnvironment "production" }}
+  GOVUK_DATA_SYNC_PERIOD: "22:0-8:0"
+  {{- end }}
+
   # TODO: change testAssetsDomain to assetsDomain before launch.
   PLEK_SERVICE_ASSETS_URI: https://{{ .Values.testAssetsDomain }}
   PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
