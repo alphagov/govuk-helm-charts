@@ -2414,7 +2414,7 @@ govukApplications:
       - name: EMERGENCY_CONTACT_DETAILS
         valueFrom:
           secretKeyRef:
-            name: emergency-contacts
+            name: support-emergency-contacts
             key: emergency_contacts
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
