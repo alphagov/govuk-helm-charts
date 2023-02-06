@@ -782,6 +782,17 @@ govukApplications:
             key: SECRET_KEY_BASE
       - name: WEB_CONCURRENCY
         value: '10'
+    nginxConfigMap:
+      extraConf: |
+        location ~ ^/status-updates(/|$) {
+          limit_req zone=email_alert_api_public burst=20 nodelay;
+          proxy_pass http://email-alert-api;
+        }
+
+        location ~ ^/spam-reports(/|$) {
+          limit_req zone=email_alert_api_public burst=20 nodelay;
+          proxy_pass http://email-alert-api;
+        }
 
 - name: email-alert-frontend
   helmValues:
