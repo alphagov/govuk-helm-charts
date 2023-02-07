@@ -12,7 +12,7 @@ spec:
       name: smokey
     spec:
       activeDeadlineSeconds: 600
-      backoffLimit: 1
+      backoffLimit: 0
       template:
         spec:
           automountServiceAccountToken: false
