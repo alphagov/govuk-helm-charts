@@ -783,6 +783,9 @@ govukApplications:
       - name: WEB_CONCURRENCY
         value: '10'
     nginxConfigMap:
+      extraHttpConf: |
+        limit_req_zone $binary_remote_addr zone=email_alert_api_public:1M rate=50r/s;
+        limit_req_status 429;
       extraConf: |
         location ~ ^/status-updates(/|$) {
           limit_req zone=email_alert_api_public burst=20 nodelay;
