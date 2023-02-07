@@ -176,8 +176,8 @@ data:
         location = /readyz {
           return 200 'ok\n';
         }
-        {{- if .Values.nginxConfigMap.extraConf }}
-        {{ .Values.nginxConfigMap.extraConf | nindent 8 }}
+        {{- if .Values.nginxConfigMap.extraServerConf }}
+        {{ .Values.nginxConfigMap.extraServerConf | nindent 8 }}
         {{- end }}
       }
     }

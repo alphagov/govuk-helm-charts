@@ -786,7 +786,7 @@ govukApplications:
       extraHttpConf: |
         limit_req_zone $binary_remote_addr zone=email_alert_api_public:1M rate=50r/s;
         limit_req_status 429;
-      extraConf: |
+      extraServerConf: |
         location ~ ^/status-updates(/|$) {
           limit_req zone=email_alert_api_public burst=20 nodelay;
           proxy_pass http://email-alert-api;
@@ -1292,7 +1292,7 @@ govukApplications:
             name: local-links-manager-postgres
             key: DATABASE_URL
     nginxConfigMap:
-      extraConf: |
+      extraServerConf: |
         location /data {
           proxy_set_header   Authorization "";
           proxy_set_header   Connection "";
@@ -2235,7 +2235,7 @@ govukApplications:
       - name: USE_TMPDIR_PAGE_CACHE
         value: "true"
     nginxConfigMap:
-      extraConf: |
+      extraServerConf: |
         # 1stline use this URL in their zendesk template
         location = /static/gov.uk_logotype_crown.png {
           absolute_redirect off;
@@ -2397,7 +2397,7 @@ govukApplications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
     nginxConfigMap:
-      extraConf: |
+      extraServerConf: |
         client_max_body_size 500M;
 
         # Extended timeout to allow the processing of large attachments
