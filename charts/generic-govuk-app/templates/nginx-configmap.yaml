@@ -99,6 +99,10 @@ data:
                            '"upstream_addr": "$upstream_addr", '
                            '"upstream_response_time": "$upstream_response_time" }';
 
+      {{- if .Values.nginxConfigMap.extraHttpConf }}
+      {{ .Values.nginxConfigMap.extraHttpConf | nindent 4 }}
+      {{- end }}
+
       upstream {{ $fullName }} {
         server 127.0.0.1:{{ .Values.appPort }};
       }
