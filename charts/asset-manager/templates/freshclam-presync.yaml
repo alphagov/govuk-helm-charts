@@ -10,6 +10,6 @@ metadata:
     app: {{ $fullName }}
     app.kubernetes.io/component: freshclam
 spec:
-  backoffLimit: 2
+  backoffLimit: 1
   template:
     {{- include "asset-manager.freshclam.podspec" . | indent 4 }}

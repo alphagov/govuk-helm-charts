@@ -11,7 +11,7 @@ metadata:
     argocd.argoproj.io/hook: PreSync
 spec:
   activeDeadlineSeconds: 900
-  backoffLimit: 2
+  backoffLimit: 1
   template:
     metadata:
       name: {{ $fullName }}-dbmigrate
