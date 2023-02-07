@@ -248,10 +248,5 @@ data:
         location = /readyz {
           return 200 'ok\n';
         }
-
-        # Google site verification
-        location /googlec908b3bc32386239.html {
-          return 200 'google-site-verification: googlec908b3bc32386239.html';
-        }
       }
     }
