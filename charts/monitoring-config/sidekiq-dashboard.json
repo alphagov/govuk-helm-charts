@@ -138,6 +138,7 @@
           "custom": {
             "axisCenteredZero": false,
             "axisColorMode": "text",
+            "axisLabel": "hours : minutes : seconds",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -174,7 +175,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "dtdhms"
         },
         "overrides": []
       },
