@@ -207,9 +207,9 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "max by (job) (sidekiq_queue_latency_seconds{job=~\"${namespace}/${app}\"})",
+          "expr": "max by (job, queue) (sidekiq_queue_latency_seconds{job=~\"${namespace}/${app}\"})",
           "interval": "",
-          "legendFormat": "{{job}}",
+          "legendFormat": "{{job}}:{{queue}}",
           "range": true,
           "refId": "A"
         }
