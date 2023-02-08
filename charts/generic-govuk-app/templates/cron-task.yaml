@@ -17,7 +17,7 @@ spec:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
         app.kubernetes.io/component: app
     spec:
-      backoffLimit: 1
+      backoffLimit: 0
       template:
         metadata:
           name: "{{ $fullName }}-{{ .name }}-cron-task"

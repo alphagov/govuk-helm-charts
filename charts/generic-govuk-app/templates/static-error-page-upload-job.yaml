@@ -14,7 +14,7 @@ metadata:
       ArgoCD runs this job after each deployment of the Static app.
 spec:
   activeDeadlineSeconds: 900
-  backoffLimit: 2
+  backoffLimit: 1
   template:
     spec:
       automountServiceAccountToken: false
