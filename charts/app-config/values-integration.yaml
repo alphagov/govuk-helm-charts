@@ -1034,8 +1034,6 @@ govukApplications:
     uploadAssets:
       enabled: false
     extraEnv:
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
       - name: SECRET_KEY_BASE
@@ -2721,7 +2719,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
       hosts:
         - name: whitehall-admin.eks.integration.govuk.digital
-    extraEnv: &whitehall-envs
+    extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -2775,8 +2773,6 @@ govukApplications:
         value: whitehall-emails-integration@digital.cabinet-office.gov.uk
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -2820,7 +2816,72 @@ govukApplications:
           [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
-    extraEnv: *whitehall-envs
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_secret
+      - name: GOVUK_UPLOADS_ROOT
+        value: &whitehall-uploads-path /uploads
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-asset-manager
+            key: bearer_token
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-publishing-api
+            key: bearer_token
+      - name: RUMMAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-search-api
+            key: bearer_token
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: EMAIL_ADDRESS_OVERRIDE
+        value: whitehall-emails-integration@digital.cabinet-office.gov.uk
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-mysql
+            key: DATABASE_URL
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
     appResources:
       limits:
         cpu: 1
@@ -2831,4 +2892,67 @@ govukApplications:
 - name: draft-whitehall-frontend
   repoName: whitehall
   helmValues:
-    extraEnv: *whitehall-envs
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-whitehall
+            key: oauth_secret
+      - name: GOVUK_UPLOADS_ROOT
+        value: &whitehall-uploads-path /uploads
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-asset-manager
+            key: bearer_token
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-publishing-api
+            key: bearer_token
+      - name: RUMMAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-search-api
+            key: bearer_token
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 759acac6-da53-4a19-b591-b7538c7c39de
+      - name: EMAIL_ADDRESS_OVERRIDE
+        value: whitehall-emails-integration@digital.cabinet-office.gov.uk
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-mysql
+            key: DATABASE_URL
+      - name: SECRET_KEY_BASE
+        valueFrom:
+          secretKeyRef:
+            name: rails-secret-key-base
+            key: SECRET_KEY_BASE
