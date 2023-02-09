@@ -1,0 +1,23 @@
+{{- $fullName := include "generic-govuk-app.fullname" . }}
+{{- range .Values.extraServices }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  labels:
+    app: {{ $fullName }}
+{{ if $.Values.service.annotations }}
+  annotations:
+    {{- range $key, $value := $.Values.service.annotations }}
+    {{ $key }}: {{ $value }}
+    {{- end }}
+{{- end }}
+spec:
+  type: {{ $.Values.service.type }}
+  ports:
+    - name: app
+      port: {{ $.Values.service.port }}
+      targetPort: {{ $.Values.nginxPort }}
+  selector:
+    app: {{ $fullName }}
+{{- end }}
