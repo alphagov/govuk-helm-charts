@@ -7,7 +7,9 @@ metadata:
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
 spec:
+  jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:
       app: {{ $fullName }}

@@ -1,16 +1,18 @@
+{{- if .Values.monitoring.enabled }}
 {{- $fullName := include "asset-manager.fullname" . }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  labels:
-    app: {{ $fullName }}
-    app.kubernetes.io/component: controller
-    app.kubernetes.io/name: prometheus-operator
-    app.kubernetes.io/part-of: kube-prometheus
   name: {{ $fullName }}
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}-worker
 spec:
+  jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:
       app: {{ $fullName }}
   podMetricsEndpoints:
   - port: metrics
+{{- end }}

@@ -1,5 +1,4 @@
-{{- if .Values.workerEnabled -}}
-{{- if .Values.monitoring.enabled }}
+{{- if (and .Values.workerEnabled .Values.monitoring.enabled) -}}
 {{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -8,11 +7,12 @@ metadata:
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app: {{ $fullName }}-worker
+    app.kubernetes.io/name: {{ $fullName }}-worker
 spec:
+  jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:
       app: {{ $fullName }}-worker
   podMetricsEndpoints:
   - port: metrics
-{{- end }}
 {{- end }}
