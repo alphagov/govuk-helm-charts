@@ -5,6 +5,8 @@ metadata:
   name: {{ $fullName }}-etc-clamav
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
     app.kubernetes.io/component: clamd
   annotations:
     argocd.argoproj.io/hook: PreSync

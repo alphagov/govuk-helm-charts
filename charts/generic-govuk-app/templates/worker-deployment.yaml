@@ -7,6 +7,7 @@ metadata:
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
     app: {{ $fullName }}-worker
+    app.kubernetes.io/name: {{ $fullName }}-worker
     app.kubernetes.io/component: worker
 spec:
   replicas: {{ .Values.workerReplicaCount }}
@@ -19,6 +20,7 @@ spec:
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
         app: {{ $fullName }}-worker
+        app.kubernetes.io/name: {{ $fullName }}-worker
         app.kubernetes.io/component: worker
     spec:
       automountServiceAccountToken: false

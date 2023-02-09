@@ -7,7 +7,9 @@ metadata:
   name: "{{ $fullName }}-{{ .name }}-cron-task"
   labels:
     {{- include "generic-govuk-app.labels" $ | nindent 4 }}
-    app.kubernetes.io/component: app
+    app: "{{ $fullName }}-{{ .name }}-cron-task"
+    app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}-cron-task"
+    app.kubernetes.io/component: "{{ .name }}-cron-task"
 spec:
   schedule: "{{ .schedule }}"
   jobTemplate:
@@ -15,7 +17,7 @@ spec:
       name: "{{ $fullName }}-{{ .name }}-cron-task"
       labels:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
-        app.kubernetes.io/component: app
+        app.kubernetes.io/component: "{{ .name }}-cron-task"
     spec:
       backoffLimit: 0
       template:
@@ -23,7 +25,7 @@ spec:
           name: "{{ $fullName }}-{{ .name }}-cron-task"
           labels:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
-            app.kubernetes.io/component: app
+            app.kubernetes.io/component: "{{ .name }}-cron-task"
         spec:
           automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
           enableServiceLinks: false

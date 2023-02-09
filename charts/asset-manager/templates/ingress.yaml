@@ -7,7 +7,9 @@ metadata:
   name: {{ .Values.ingress.name | default $fullName }}
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app.kubernetes.io/component: web
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
   annotations:
     {{- (tpl (toYaml .Values.ingress.annotations) .) | trim | nindent 4 }}
 spec:

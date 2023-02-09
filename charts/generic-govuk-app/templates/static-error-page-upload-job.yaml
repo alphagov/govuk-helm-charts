@@ -6,6 +6,8 @@ metadata:
   name: {{ $fullName }}-upload-error-pages
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app: {{ $fullName }}-upload-error-pages
+    app.kubernetes.io/name: {{ $fullName }}-upload-error-pages
     app.kubernetes.io/component: upload-error-pages
   annotations:
     argocd.argoproj.io/hook: PostSync

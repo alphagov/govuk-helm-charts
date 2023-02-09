@@ -3,7 +3,8 @@
 metadata:
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app: {{ $fullName }}
+    app: {{ $fullName }}-freshclam
+    app.kubernetes.io/name: {{ $fullName }}-freshclam
     app.kubernetes.io/component: freshclam
 spec:
   activeDeadlineSeconds: 1800

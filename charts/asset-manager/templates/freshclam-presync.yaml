@@ -2,12 +2,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ $fullName }}-update-freshclam
+  name: {{ $fullName }}-freshclam
   annotations:
     argocd.argoproj.io/hook: PreSync
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app: {{ $fullName }}
+    app: {{ $fullName }}-freshclam
+    app.kubernetes.io/name: {{ $fullName }}-freshclam
     app.kubernetes.io/component: freshclam
 spec:
   backoffLimit: 1

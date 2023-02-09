@@ -6,6 +6,8 @@ metadata:
   name: {{ $fullName }}-dbmigrate
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app: {{ $fullName }}-dbmigrate
+    app.kubernetes.io/name: {{ $fullName }}-dbmigrate
     app.kubernetes.io/component: dbmigrate
   annotations:
     argocd.argoproj.io/hook: PreSync
@@ -17,6 +19,8 @@ spec:
       name: {{ $fullName }}-dbmigrate
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
+        app: {{ $fullName }}-dbmigrate
+        app.kubernetes.io/name: {{ $fullName }}-dbmigrate
         app.kubernetes.io/component: dbmigrate
     spec:
       automountServiceAccountToken: false
