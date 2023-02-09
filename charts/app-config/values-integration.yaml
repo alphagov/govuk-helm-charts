@@ -1831,7 +1831,7 @@ govukApplications:
       - name: BACKEND_URL_static
         value: "http://draft-static"
       - name: BACKEND_URL_whitehall-frontend
-        value: "http://draft-whitehall-frontend"
+        value: "http://whitehall-frontend"  # There is no draft version whitehall frontend
       - name: BACKEND_URL_account-api
         value: "http://account-api"
       - name: BACKEND_URL_feedback
