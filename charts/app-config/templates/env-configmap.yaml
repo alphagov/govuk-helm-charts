@@ -44,7 +44,7 @@ data:
 
   # TODO: change testAssetsDomain to assetsDomain before launch.
   PLEK_SERVICE_ASSETS_URI: https://{{ .Values.testAssetsDomain }}
-  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
+  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.testPublishingDomainSuffix }}
 
   # Services which remain in EC2 for a while after "MVP launch".
   PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
