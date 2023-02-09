@@ -2696,8 +2696,6 @@ govukApplications:
 - name: whitehall-admin
   repoName: whitehall
   helmValues:
-    sentry:
-      createSecret: false  # Sentry DSNs are per repo.
     securityContext:
       # Use the same uid/gid for NFS permissions as the old stack, so that
       # files uploaded by whitehall-admin on k8s can be processed by
