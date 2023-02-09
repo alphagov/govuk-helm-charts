@@ -2818,6 +2818,8 @@ govukApplications:
           [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
+    extraServices:
+      - name: draft-whitehall-frontend
     extraEnv:
       - name: JWT_AUTH_SECRET
         valueFrom:
