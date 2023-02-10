@@ -126,6 +126,11 @@ govukApplications:
           - path: /government/uploads/
           - path: /government/assets/
           - path: /media/
+      - name: draft-assets.eks.integration.govuk.digital
+        paths:
+          - path: /government/uploads/
+          - path: /government/assets/
+          - path: /media/
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
