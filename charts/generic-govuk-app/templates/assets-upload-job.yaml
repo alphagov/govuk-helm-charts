@@ -8,6 +8,8 @@ metadata:
   name: {{ $fullName }}-upload-assets
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app: {{ $fullName }}-upload-assets
+    app.kubernetes.io/name: {{ $fullName }}-upload-assets
     app.kubernetes.io/component: upload-assets
   annotations:
     argocd.argoproj.io/hook: PreSync

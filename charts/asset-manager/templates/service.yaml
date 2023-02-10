@@ -5,6 +5,8 @@ metadata:
   name: {{ $fullName }}
   labels:
     app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
 {{ if .Values.service.annotations }}
   annotations:
     {{- range $key, $value := .Values.service.annotations }}

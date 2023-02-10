@@ -5,7 +5,9 @@ metadata:
   name: {{ $fullName }}-nginx-conf
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
-    app.kubernetes.io/component: web
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: nginx
 data:
   nginx.conf: |
     error_log /dev/stderr warn;

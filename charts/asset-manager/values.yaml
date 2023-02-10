@@ -94,6 +94,10 @@ extraEnv: {}
 #    value: "https://splines.{{ .Values.externalDomain }}"
 
 metricsPort: 9394
+monitoring:
+  # monitoring.enabled determines whether PodMonitor and other Prometheus
+  # Operator custom resources are to be created or not.
+  enabled: false
 
 sentry:
   enabled: true

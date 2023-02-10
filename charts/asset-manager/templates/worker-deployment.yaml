@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
     app: {{ $fullName }}-worker
+    app.kubernetes.io/name: {{ $fullName }}-worker
     app.kubernetes.io/component: worker
 spec:
   replicas: {{ .Values.workerReplicaCount }}
@@ -18,6 +19,7 @@ spec:
       labels:
         {{- include "asset-manager.labels" . | nindent 8 }}
         app: {{ $fullName }}-worker
+        app.kubernetes.io/name: {{ $fullName }}-worker
         app.kubernetes.io/component: worker
     spec:
       automountServiceAccountToken: false
