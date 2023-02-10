@@ -131,6 +131,7 @@ govukApplications:
           - path: /government/uploads/
           - path: /government/assets/
           - path: /media/
+          - path: /auth/gds
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
