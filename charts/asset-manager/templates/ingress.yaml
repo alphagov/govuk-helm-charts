@@ -25,6 +25,7 @@ spec:
     - host: {{ .name }}
       http:
         paths:
+        {{- range .paths }}
           - path: {{ default "/" .path }}
             pathType: {{ default "Prefix" .pathType }}
             backend:
@@ -32,5 +33,6 @@ spec:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
+        {{- end }}
     {{- end }}
 {{- end }}
