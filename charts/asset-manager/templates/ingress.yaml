@@ -15,13 +15,10 @@ metadata:
 spec:
   {{- if .Values.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
     - hosts:
-        {{- range .hosts }}
+        {{- range .Values.ingress.tls }}
         - {{ . | quote }}
         {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
   {{- end }}
   rules:
     {{- range .Values.ingress.hosts }}
