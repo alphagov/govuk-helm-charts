@@ -122,11 +122,16 @@ govukApplications:
           [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
       hosts:
       - name: assets-origin.eks.integration.govuk.digital
-        path: /government/uploads/
-      - name: assets-origin.eks.integration.govuk.digital
-        path: /government/assets/
-      - name: assets-origin.eks.integration.govuk.digital
-        path: /media/
+        paths:
+          - path: /government/uploads/
+          - path: /government/assets/
+          - path: /media/
+      - name: draft-assets.eks.integration.govuk.digital
+        paths:
+          - path: /government/uploads/
+          - path: /government/assets/
+          - path: /media/
+          - path: /auth/gds
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
