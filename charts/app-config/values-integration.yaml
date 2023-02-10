@@ -1277,6 +1277,8 @@ govukApplications:
           secretKeyRef:
             name: local-links-manager-link-checker-api-callback-token
             key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
@@ -1425,6 +1427,8 @@ govukApplications:
           secretKeyRef:
             name: signon-app-maslow
             key: oauth_secret
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
