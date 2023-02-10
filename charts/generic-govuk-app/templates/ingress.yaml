@@ -25,7 +25,7 @@ spec:
       {{- . | toYaml | nindent 4 }}
     {{- end }}
     {{- range .Values.ingress.hosts }}
-    - host: {{ .name | quote }}
+    - host: {{ (tpl .name $) | quote }}
       http:
         paths:
           - path: {{ .path | default "/" | quote }}
