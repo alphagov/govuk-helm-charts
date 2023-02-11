@@ -52,10 +52,10 @@ govukApplications:
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
       hosts:
-      - name: assets-origin.eks.production.govuk.digital
-        path: /government/uploads/
-      - name: assets-origin.eks.production.govuk.digital
-        path: /media/
+        - name: assets-origin.eks.production.govuk.digital
+          paths:
+            - path: /government/uploads/
+            - path: /media/
     assetManagerNFS: &assets-nfs assets.blue.production.govuk-internal.digital
     nginxConfigMap:
       create: false
