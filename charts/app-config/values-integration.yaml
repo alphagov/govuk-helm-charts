@@ -205,12 +205,14 @@ govukApplications:
           ]}}]
       hosts:
         - name: draft-origin.{{ .Values.testExternalDomainSuffix }}
-    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
-      searches:
-        - blue.integration.govuk-internal.digital
     uploadAssets:
       enabled: false
     extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-postgres
+            key: DATABASE_URL
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -228,11 +230,6 @@ govukApplications:
           secretKeyRef:
             name: authenticating-proxy-jwt-auth-secret
             key: JWT_AUTH_SECRET
-      - name: MONGODB_URI  # TODO: this will need to become a secret when moving to DocDB.
-        value: "mongodb://\
-          router-backend-1,\
-          router-backend-2,\
-          router-backend-3/authenticating_proxy_production"
       - name: SECRET_KEY_BASE
         valueFrom:
           secretKeyRef:
