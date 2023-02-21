@@ -898,6 +898,8 @@ govukApplications:
           secretKeyRef:
             name: signon-token-email-alert-service-email-alert-api
             key: bearer_token
+      - name: GOVUK_PROMETHEUS_EXPORTER
+        value: force
       - name: RABBITMQ_URL
         valueFrom:
           secretKeyRef:
