@@ -126,9 +126,7 @@ govukApplications:
               "{{ .Values.assetsDomain }}",
               "{{ .Values.testAssetsDomain }}",
               "assets-origin.{{ .Values.publishingDomainSuffix }}",
-              "draft-assets.{{ .Values.publishingDomainSuffix }}",
-              "assets-origin.{{ .Values.testExternalDomainSuffix }}",
-              "draft-assets.{{ .Values.testExternalDomainSuffix }}"
+              "draft-assets.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
@@ -200,8 +198,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: draft-origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "draft-origin.{{ .Values.publishingDomainSuffix }}",
-              "draft-origin.{{ .Values.testExternalDomainSuffix }}"
+              "draft-origin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: draft-origin.{{ .Values.testExternalDomainSuffix }}
@@ -319,8 +316,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: collections-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "collections-publisher.{{ .Values.publishingDomainSuffix }}",
-              "collections-publisher.{{ .Values.testExternalDomainSuffix }}"
+              "collections-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: collections-publisher.{{ .Values.testExternalDomainSuffix }}
@@ -382,8 +378,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: contacts-admin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "contacts-admin.{{ .Values.publishingDomainSuffix }}",
-              "contacts-admin.{{ .Values.testExternalDomainSuffix }}"
+              "contacts-admin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: contacts-admin.{{ .Values.testExternalDomainSuffix }}
@@ -430,8 +425,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: content-data-admin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "content-data.{{ .Values.publishingDomainSuffix }}",
-              "content-data.{{ .Values.testExternalDomainSuffix }}"
+              "content-data.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: content-data.{{ .Values.testExternalDomainSuffix }}
@@ -580,8 +574,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: content-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "content-publisher.{{ .Values.publishingDomainSuffix }}",
-              "content-publisher.{{ .Values.testExternalDomainSuffix }}"
+              "content-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: content-publisher.{{ .Values.testExternalDomainSuffix }}
@@ -740,8 +733,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: content-tagger
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "content-tagger.{{ .Values.publishingDomainSuffix }}",
-              "content-tagger.{{ .Values.testExternalDomainSuffix }}"
+              "content-tagger.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: content-tagger.{{ .Values.testExternalDomainSuffix }}
@@ -1100,8 +1092,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: hmrc-manuals-api
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "hmrc-manuals-api.{{ .Values.publishingDomainSuffix }}",
-              "hmrc-manuals-api.{{ .Values.testExternalDomainSuffix }}"
+              "hmrc-manuals-api.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: hmrc-manuals-api.{{ .Values.testExternalDomainSuffix }}
@@ -1139,8 +1130,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: imminence
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "imminence.{{ .Values.publishingDomainSuffix }}",
-              "imminence.{{ .Values.testExternalDomainSuffix }}"
+              "imminence.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: imminence.{{ .Values.testExternalDomainSuffix }}
@@ -1257,8 +1247,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: local-links-manager
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "local-links-manager.{{ .Values.publishingDomainSuffix }}",
-              "local-links-manager.{{ .Values.testExternalDomainSuffix }}"
+              "local-links-manager.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: local-links-manager.{{ .Values.testExternalDomainSuffix }}
@@ -1415,8 +1404,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: manuals-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "manuals-publisher.{{ .Values.publishingDomainSuffix }}",
-              "manuals-publisher.{{ .Values.testExternalDomainSuffix }}"
+              "manuals-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: manuals-publisher.{{ .Values.testExternalDomainSuffix }}
@@ -1479,8 +1467,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: maslow
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "maslow.{{ .Values.publishingDomainSuffix }}",
-              "maslow.{{ .Values.testExternalDomainSuffix }}"
+              "maslow.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: maslow.{{ .Values.testExternalDomainSuffix }}
@@ -1532,8 +1519,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "publisher.{{ .Values.publishingDomainSuffix }}",
-              "publisher.{{ .Values.testExternalDomainSuffix }}"
+              "publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: publisher.{{ .Values.testExternalDomainSuffix }}
@@ -1690,8 +1676,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: release
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "release.{{ .Values.publishingDomainSuffix }}",
-              "release.{{ .Values.testExternalDomainSuffix }}"
+              "release.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: release.{{ .Values.testExternalDomainSuffix }}
@@ -1805,8 +1790,7 @@ govukApplications:
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.{{ .Values.externalDomainSuffix }}",
               "www-origin.{{ .Values.publishingDomainSuffix }}",
-              "www.{{ .Values.testExternalDomainSuffix }}",
-              "www-origin.{{ .Values.testExternalDomainSuffix }}"
+              "www.{{ .Values.testExternalDomainSuffix }}"
           ]}}]
       hosts:
         - name: www-origin.{{ .Values.testExternalDomainSuffix }}
@@ -1954,8 +1938,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: search-admin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "search-admin.{{ .Values.publishingDomainSuffix }}",
-              "search-admin.{{ .Values.testExternalDomainSuffix }}"
+              "search-admin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: search-admin.{{ .Values.testExternalDomainSuffix }}
@@ -2125,8 +2108,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: service-manual-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "service-manual-publisher.{{ .Values.publishingDomainSuffix }}",
-              "service-manual-publisher.{{ .Values.testExternalDomainSuffix }}"
+              "service-manual-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: service-manual-publisher.{{ .Values.testExternalDomainSuffix }}
@@ -2192,8 +2174,7 @@ govukApplications:
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "signon.{{ .Values.publishingDomainSuffix }}",
-              "signon.{{ .Values.testExternalDomainSuffix }}"
+              "signon.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: signon.{{ .Values.testExternalDomainSuffix }}
@@ -2402,8 +2383,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: short-url-manager
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "short-url-manager.{{ .Values.publishingDomainSuffix }}",
-              "short-url-manager.{{ .Values.testExternalDomainSuffix }}"
+              "short-url-manager.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: short-url-manager.{{ .Values.testExternalDomainSuffix }}
@@ -2457,8 +2437,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: specialist-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "specialist-publisher.{{ .Values.publishingDomainSuffix }}",
-              "specialist-publisher.{{ .Values.testExternalDomainSuffix }}"
+              "specialist-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: specialist-publisher.{{ .Values.testExternalDomainSuffix }}
@@ -2541,8 +2520,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: support
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "support.{{ .Values.publishingDomainSuffix }}",
-              "support.{{ .Values.testExternalDomainSuffix }}"
+              "support.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: support.{{ .Values.testExternalDomainSuffix }}
@@ -2688,8 +2666,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: transition
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "transition.{{ .Values.publishingDomainSuffix }}",
-              "transition.{{ .Values.testExternalDomainSuffix }}"
+              "transition.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: transition.{{ .Values.testExternalDomainSuffix }}
@@ -2755,8 +2732,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: travel-advice-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "travel-advice-publisher.{{ .Values.publishingDomainSuffix }}",
-              "travel-advice-publisher.{{ .Values.testExternalDomainSuffix }}"
+              "travel-advice-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: travel-advice-publisher.{{ .Values.testExternalDomainSuffix }}
@@ -2857,8 +2833,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "whitehall-admin.{{ .Values.publishingDomainSuffix }}",
-              "whitehall-admin.{{ .Values.testExternalDomainSuffix }}"
+              "whitehall-admin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: whitehall-admin.{{ .Values.testExternalDomainSuffix }}
