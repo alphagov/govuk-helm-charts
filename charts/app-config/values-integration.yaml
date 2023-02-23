@@ -267,6 +267,12 @@ govukApplications:
           secretKeyRef:
             name: bouncer-postgres
             key: DATABASE_URL
+    nginxConfigMap:
+      extraServerConf: |
+        # TODO: Find out which council is using this and ask them update.
+        location /eff/action/worldPayCallback {
+          proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
+        }
 
 - name: collections
   helmValues:
