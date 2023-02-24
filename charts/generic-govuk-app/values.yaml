@@ -27,6 +27,7 @@ dbMigrationCommand: ["rails", "db:migrate"]
 # worker-deployment.yaml).
 extraVolumes: []
 
+repoName: "example" # Dummy value, overridden in ArgoCD config.
 appImage:
   repository: ""  # Dummy value, overridden in ArgoCD config.
   pullPolicy: Always
