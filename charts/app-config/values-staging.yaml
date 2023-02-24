@@ -92,11 +92,6 @@ govukApplications:
             key: MONGODB_URI
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: AWS_REGION
         value: eu-west-1
       - name: AWS_S3_BUCKET_NAME
