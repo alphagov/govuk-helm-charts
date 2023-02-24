@@ -1,10 +1,11 @@
 {{- $fullName := include "generic-govuk-app.fullname" . }}
 {{- range .Values.cronTasks }}
+{{- $cronName := print $fullName "-" .name "-cron-task" }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: "{{ $fullName }}-{{ .name }}-cron-task"
+  name: "{{ $cronName }}"
   labels:
     {{- include "generic-govuk-app.labels" $ | nindent 4 }}
     app: "{{ $fullName }}-{{ .name }}-cron-task"
@@ -14,7 +15,7 @@ spec:
   schedule: "{{ .schedule }}"
   jobTemplate:
     metadata:
-      name: "{{ $fullName }}-{{ .name }}-cron-task"
+      name: "{{ $cronName }}"
       labels:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
         app.kubernetes.io/component: "{{ .name }}-cron-task"
@@ -22,7 +23,7 @@ spec:
       backoffLimit: 0
       template:
         metadata:
-          name: "{{ $fullName }}-{{ .name }}-cron-task"
+          name: "{{ $cronName }}"
           labels:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
             app.kubernetes.io/component: "{{ .name }}-cron-task"
@@ -75,4 +76,30 @@ spec:
                 {{- with $.Values.appExtraVolumeMounts }}
                   {{- . | toYaml | trim | nindent 16 }}
                 {{- end }}
+{{- if .monitoring.enabled }}
+{{- $match := print $cronName "-.*" }}
+{{- $runTimeMax := .monitoring.runTime.maximumSeconds | default 600 | toString }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ $cronName }}
+spec:
+  groups:
+    - name: {{ $cronName }}
+      interval: 1m
+      rules:
+        - alert: {{ $cronName }}-failed
+          expr: 'kube_job_failed{job_name=~"{{ $match }}",condition="true"}'
+          for: 1m
+          labels:
+            severity: {{ .monitoring.failureSeverity | default "warning" }}
+            description: "Run for cron job '{{ $.Release.Namespace }}/{{ $cronName }}' has failed"
+        - alert: {{ $cronName }}-long-run-time
+          expr: '(kube_job_status_completion_time{job_name=~"{{ $match }}"} - kube_job_status_start_time{job_name=~"{{ $match }}-.*"}) > {{ $runTimeMax }}'
+          for: 1m
+          labels:
+            severity: {{ .monitoring.runTime.severity | default "warning" }}
+            description: "Run for cron job '{{ $.Release.Namespace }}/{{ $cronName }}' has taken too long (over {{ $runTimeMax }} seconds)"
+{{- end }}
 {{- end }}
