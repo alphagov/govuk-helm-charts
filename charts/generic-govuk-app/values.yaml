@@ -121,3 +121,7 @@ securityContext:
 sentry:
   enabled: true
   createSecret: true
+
+rails:
+  enabled: true
+  createKeyBaseSecret: true
