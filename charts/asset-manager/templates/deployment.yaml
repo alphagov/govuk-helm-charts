@@ -75,6 +75,11 @@ spec:
               value: *uploads-path
             - name: PORT
               value: "{{ .Values.appPort }}"
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.repoName }}-rails-secret-key-base
+                  key: secret-key-base
             {{- if .Values.sentry.enabled }}
             - name: SENTRY_DSN
               valueFrom:
