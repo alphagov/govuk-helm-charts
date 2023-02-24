@@ -116,11 +116,6 @@ govukApplications:
         cpu: 1
         memory: 1Gi
     extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.production.govuk-internal.digital
       - name: EMAIL_ALERT_API_BEARER_TOKEN
@@ -134,11 +129,6 @@ govukApplications:
     extraEnv:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: email-alert-rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -175,11 +165,6 @@ govukApplications:
         value: e8b2d8a6-db5f-4346-9fbd-49b16b531e1c
       - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
         value: 54168fa9-3946-4860-a2f8-27ddbb14babe
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: SUPPORT_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -231,11 +216,6 @@ govukApplications:
         cpu: 2
         memory: 2000Mi
     extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.production.govuk-internal.digital
       - name: EMAIL_ALERT_API_BEARER_TOKEN
@@ -288,11 +268,6 @@ govukApplications:
           secretKeyRef:
             name: signon-token-frontend-publishing-api
             key: bearer_token
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: frontend-rails-secret-key-base
-            key: SECRET_KEY_BASE
 
 - name: government-frontend
   helmValues:
@@ -305,11 +280,6 @@ govukApplications:
         cpu: 1
         memory: 1500Mi
     extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.production.govuk-internal.digital
 
@@ -330,11 +300,6 @@ govukApplications:
           mongo-1.production.govuk-internal.digital,\
           mongo-2.production.govuk-internal.digital,\
           mongo-3.production.govuk-internal.digital/licence_finder_production"
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -368,11 +333,6 @@ govukApplications:
           secretKeyRef:
             name: release-mysql
             key: DATABASE_URL
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: GITHUB_USERNAME
         valueFrom:
           secretKeyRef:
@@ -386,6 +346,8 @@ govukApplications:
 
 - name: router
   helmValues:
+    rails:
+      enabled: false
     uploadAssets:
       enabled: false
     appResources:
@@ -484,13 +446,6 @@ govukApplications:
         value: "https://search-api.production.govuk-internal.digital"
 
 - name: service-manual-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
 
 - name: signon
   helmValues:
@@ -550,11 +505,6 @@ govukApplications:
           secretKeyRef:
             name: signon-devise-secret
             key: DEVISE_SECRET_KEY
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: SIGNON_APPS_URI_SUB_PATTERN
         value: publishing.service.gov.uk
       - name: SIGNON_APPS_URI_SUB_REPLACEMENT
@@ -566,13 +516,6 @@ govukApplications:
             key: token
 
 - name: info-frontend
-  helmValues:
-    extraEnv:
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
 
 - name: smartanswers
   repoName: smart-answers
@@ -592,11 +535,6 @@ govukApplications:
           secretKeyRef:
             name: signon-token-smart-answers-publishing-api
             key: bearer_token
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: ZENDESK_CLIENT_USERNAME
         valueFrom:
           secretKeyRef:
@@ -641,11 +579,6 @@ govukApplications:
             key: bearer_token
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
       - name: USE_TMPDIR_PAGE_CACHE
         value: "true"
     nginxConfigMap:
@@ -772,8 +705,3 @@ govukApplications:
           secretKeyRef:
             name: whitehall-mysql
             key: DATABASE_URL
-      - name: SECRET_KEY_BASE
-        valueFrom:
-          secretKeyRef:
-            name: rails-secret-key-base
-            key: SECRET_KEY_BASE
