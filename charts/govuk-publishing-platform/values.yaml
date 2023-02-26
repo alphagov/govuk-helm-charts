@@ -24,6 +24,8 @@ global: &globals
   uploadAssets: {enabled: false}
   sentry: {enabled: false}
   serveRailsAssetsFromFilesystem: true
+  rails:
+    createKeyBaseSecret: false
 
 frontend:
   <<: *globals
