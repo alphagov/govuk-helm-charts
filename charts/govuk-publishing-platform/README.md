@@ -34,7 +34,7 @@ Unprocessable Entity`.)
 ### Install or update the chart.
 
 ```sh
-helm dep update && helm upgrade -i foo .
+helm dep update && helm upgrade -i my-little-govuk .
 ```
 
 
@@ -65,20 +65,27 @@ Install the kubeseal utility.
 brew install kubeseal
 ```
 
-Install sealsecrets controller.
+Install the sealedsecrets controller.
 
 ```sh
-helm install sealed-secrets -n kube-system --set-string fullnameOverride=sealed-secrets-controller sealed-secrets/sealed-secrets
+helm install sealed-secrets -n kube-system \
+  --set-string fullnameOverride=sealed-secrets-controller \
+  sealed-secrets/sealed-secrets
 ```
 
 Create a sealedsecret manifest.
 
 ```sh
-kubectl create secret generic frontend-elections-api --dry-run=client --from-literal url="https://api.electoralcommission.org.uk/" --from-literal "key=$(pbpaste)" -ojson | kubeseal >frontend-elections-api.json
+mkdir -p sealedsecrets
+kubectl create secret generic frontend-elections-api \
+  --from-literal url="https://api.electoralcommission.org.uk/" \
+  --from-literal "key=$(pbpaste)" \
+  --dry-run client -ojson \
+  | kubeseal > sealedsecrets/frontend-elections-api.json
 ```
 
-Install the secret.
+Load the sealedsecrets into the cluster.
 
 ```sh
-kubectl create -f frontend-elections-api.json
+kubectl apply -f sealedsecrets
 ```
