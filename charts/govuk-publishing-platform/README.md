@@ -12,7 +12,7 @@ helm upgrade -i ingress-nginx ingress-nginx \
   --set controller.ingressClassResource.default=true \
   --set controller.service.ports.http=8080 \
   --set controller.service.ports.https=8443 \
-  --set controller.extraArgs=--default-ssl-certificate=ingress-nginx/dev.local
+  --set controller.extraArgs.default-ssl-certificate=ingress-nginx/dev.local
 ```
 
 The ingress load balancer will listen on localhost:8080 (plain HTTP) and localhost:8443 (TLS).
