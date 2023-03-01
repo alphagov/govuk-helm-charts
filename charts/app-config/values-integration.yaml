@@ -813,14 +813,8 @@ govukApplications:
       enabled: false
     workerEnabled: true
     workers:
-      - command: ['rake', 'message_queues:major_change_consumer']
-        name: major-change-consumer
-      - command: ['rake', 'message_queues:subscriber_list_details_update_major_consumer']
-        name: subscriber-list-details-update-major-consumer
-      - command: ['rake', 'message_queues:subscriber_list_details_update_minor_consumer']
-        name: subscriber-list-details-update-minor-consumer
-      - command: ['rake', 'message_queues:unpublishing_consumer']
-        name: unpublishing-consumer
+      - command: ['bin/email-alert-service']
+        name: email-alert-service
     extraEnv:
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
