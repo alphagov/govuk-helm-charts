@@ -54,6 +54,13 @@ spec:
             - configMapRef:
                 name: govuk-apps-env
           env:
+            {{- if $.Values.rails.enabled }}
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.repoName }}-rails-secret-key-base
+                  key: secret-key-base
+            {{- end }}
             {{- if $.Values.sentry.enabled }}
             - name: SENTRY_DSN
               valueFrom:
