@@ -2710,6 +2710,8 @@ govukApplications:
         - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
           path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
           pathType: ImplementationSpecific
+    rails:
+      createKeyBaseSecret: false
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
     extraEnv:
