@@ -274,7 +274,7 @@
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
-        "regex": ".*/(.*)",
+        "regex": "",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"

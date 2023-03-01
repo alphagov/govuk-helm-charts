@@ -69,7 +69,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.3.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -178,7 +178,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.3.0",
       "pointradius": 1,
       "points": true,
       "renderer": "flot",
@@ -285,7 +285,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "9.0.5",
+      "pluginVersion": "9.3.0",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -355,7 +355,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 36,
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -383,7 +383,7 @@
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "type": "query"
       },
       {
@@ -411,9 +411,9 @@
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
-        "regex": ".*/(.*)",
+        "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "type": "query"
       },
       {
@@ -444,7 +444,7 @@
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 4,
         "type": "query"
       },
       {
@@ -477,7 +477,7 @@
         "refresh": 2,
         "regex": "/^([45][0-9][0-9])$/",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 3,
         "type": "query"
       }
     ]
@@ -510,6 +510,6 @@
   "timezone": "browser",
   "title": "App: request rates, errors, durations",
   "uid": "000000109",
-  "version": 45,
+  "version": 1,
   "weekStart": ""
 }
