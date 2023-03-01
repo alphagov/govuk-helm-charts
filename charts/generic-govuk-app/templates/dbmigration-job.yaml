@@ -49,6 +49,13 @@ spec:
           env:
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
+            {{- if .Values.rails.enabled }}
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.repoName }}-rails-secret-key-base
+                  key: secret-key-base
+            {{- end }}
             {{- with .Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}

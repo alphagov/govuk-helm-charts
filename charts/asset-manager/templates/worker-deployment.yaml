@@ -81,6 +81,11 @@ spec:
               value: *uploads-path
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.repoName }}-rails-secret-key-base
+                  key: secret-key-base
             {{- with .Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
