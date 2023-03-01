@@ -103,3 +103,6 @@ monitoring:
 sentry:
   enabled: true
   createSecret: true
+
+rails:
+  createKeyBaseSecret: true
