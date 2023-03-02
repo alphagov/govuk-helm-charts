@@ -624,7 +624,7 @@ govukApplications:
             name: signon-app-content-store
             key: oauth_secret
       - name: DEFAULT_TTL
-        value: "1800"
+        value: "300"
       - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
         value: "mongodb://\
           mongo-1.integration.govuk-internal.digital,\
