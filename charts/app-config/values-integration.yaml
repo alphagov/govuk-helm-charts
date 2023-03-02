@@ -1054,6 +1054,8 @@ govukApplications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 
+- name: info-frontend
+
 - name: licencefinder
   repoName: licence-finder
   helmValues:
@@ -2053,8 +2055,6 @@ govukApplications:
           secretKeyRef:
             name: signon-auth-token
             key: token
-
-- name: info-frontend
 
 - name: smartanswers
   repoName: smart-answers
