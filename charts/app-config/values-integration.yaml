@@ -1065,7 +1065,7 @@ govukApplications:
       # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
       # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
       - name: ELASTICSEARCH_URI
-        value: "https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com"
+        value: &elasticsearch-uri https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
       - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
         value: "mongodb://\
           mongo-1.integration.govuk-internal.digital,\
@@ -1849,7 +1849,7 @@ govukApplications:
       - name: AWS_S3_SITEMAPS_BUCKET_NAME
         value: govuk-integration-sitemaps
       - name: ELASTICSEARCH_URI
-        value: https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
+        value: *elasticsearch-uri
       - name: ENABLE_LTR
         value: "true"
       - name: GDS_SSO_OAUTH_ID
