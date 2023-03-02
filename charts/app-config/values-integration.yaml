@@ -764,12 +764,7 @@ govukApplications:
         limit_req_zone $binary_remote_addr zone=email_alert_api_public:1M rate=50r/s;
         limit_req_status 429;
       extraServerConf: |
-        location ~ ^/status-updates(/|$) {
-          limit_req zone=email_alert_api_public burst=20 nodelay;
-          proxy_pass http://email-alert-api;
-        }
-
-        location ~ ^/spam-reports(/|$) {
+        location ~ ^/(status-updates|spam-reports)(/|$) {
           limit_req zone=email_alert_api_public burst=20 nodelay;
           proxy_pass http://email-alert-api;
         }
