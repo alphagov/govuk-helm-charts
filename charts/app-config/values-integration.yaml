@@ -400,6 +400,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: content-data.{{ .Values.testExternalDomainSuffix }}
+    nginxProxyReadTimeout: 60s
     workerEnabled: true
     extraEnv:
       - name: CONTENT_DATA_API_BEARER_TOKEN
@@ -459,6 +460,7 @@ govukApplications:
     uploadAssets:
       enabled: false
     dbMigrationEnabled: true
+    nginxProxyReadTimeout: 60s
     workerEnabled: true
     workers:
       - command: ["sidekiq", "-C", "config/sidekiq.yml"]
@@ -1034,6 +1036,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: imminence.{{ .Values.testExternalDomainSuffix }}
+    nginxProxyReadTimeout: 60s
     workerEnabled: true
     extraEnv:
       - name: DATABASE_URL
@@ -2236,6 +2239,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: specialist-publisher.{{ .Values.testExternalDomainSuffix }}
+    nginxProxyReadTimeout: 30s
     extraEnv:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
