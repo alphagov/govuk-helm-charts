@@ -153,8 +153,6 @@ govukApplications:
           secretKeyRef:
             name: signon-app-asset-manager
             key: oauth_secret
-      - name: GOVUK_ASSET_ROOT  # testing in isolation
-        value: https://assets-origin.eks.integration.govuk.digital
       - name: JWT_AUTH_SECRET
         valueFrom:
           secretKeyRef:
@@ -335,7 +333,7 @@ govukApplications:
             name: collections-publisher-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: &publishing-notify-template 759acac6-da53-4a19-b591-b7538c7c39de
       - name: PUBLISH_WITHOUT_2I_EMAIL
         value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
       - name: DATABASE_URL
@@ -452,7 +450,7 @@ govukApplications:
             name: content-data-admin-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 
@@ -582,7 +580,7 @@ govukApplications:
             name: content-publisher-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: JWT_AUTH_SECRET
         valueFrom:
           secretKeyRef:
@@ -626,7 +624,7 @@ govukApplications:
             name: signon-app-content-store
             key: oauth_secret
       - name: DEFAULT_TTL
-        value: "1800"
+        value: "300"
       - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
         value: "mongodb://\
           mongo-1.integration.govuk-internal.digital,\
@@ -754,7 +752,7 @@ govukApplications:
             name: email-alert-api-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 1fc69d3a-09a2-40f9-852b-03f6fcef5340
+        value: &frontend-notify-template 1fc69d3a-09a2-40f9-852b-03f6fcef5340
       - name: GOVUK_NOTIFY_RECIPIENTS
         value: email-alert-api-integration@digital.cabinet-office.gov.uk
       - name: REDIS_URL
@@ -766,12 +764,7 @@ govukApplications:
         limit_req_zone $binary_remote_addr zone=email_alert_api_public:1M rate=50r/s;
         limit_req_status 429;
       extraServerConf: |
-        location ~ ^/status-updates(/|$) {
-          limit_req zone=email_alert_api_public burst=20 nodelay;
-          proxy_pass http://email-alert-api;
-        }
-
-        location ~ ^/spam-reports(/|$) {
+        location ~ ^/(status-updates|spam-reports)(/|$) {
           limit_req zone=email_alert_api_public burst=20 nodelay;
           proxy_pass http://email-alert-api;
         }
@@ -901,7 +894,7 @@ govukApplications:
   helmValues:
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: &frontend-notify-template 1fc69d3a-09a2-40f9-852b-03f6fcef5340
+        value: *frontend-notify-template
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
       - name: ACCOUNT_API_BEARER_TOKEN
@@ -1061,6 +1054,8 @@ govukApplications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 
+- name: info-frontend
+
 - name: licencefinder
   repoName: licence-finder
   helmValues:
@@ -1072,7 +1067,7 @@ govukApplications:
       # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
       # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
       - name: ELASTICSEARCH_URI
-        value: "https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com"
+        value: &elasticsearch-uri https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
       - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
         value: "mongodb://\
           mongo-1.integration.govuk-internal.digital,\
@@ -1463,7 +1458,7 @@ govukApplications:
       - name: FACT_CHECK_REPLY_TO_ID
         value: 6b6ee566-54f2-48f6-98c4-21a373e6dea2
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
 
 - name: publishing-api
   helmValues:
@@ -1820,7 +1815,7 @@ govukApplications:
             name: search-admin-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -1856,7 +1851,7 @@ govukApplications:
       - name: AWS_S3_SITEMAPS_BUCKET_NAME
         value: govuk-integration-sitemaps
       - name: ELASTICSEARCH_URI
-        value: https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
+        value: *elasticsearch-uri
       - name: ENABLE_LTR
         value: "true"
       - name: GDS_SSO_OAUTH_ID
@@ -1976,7 +1971,7 @@ govukApplications:
             name: service-manual-publisher-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -2021,7 +2016,7 @@ govukApplications:
         serviceAccount: signon
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: INSTANCE_NAME
         value: integration
       - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
@@ -2060,8 +2055,6 @@ govukApplications:
           secretKeyRef:
             name: signon-auth-token
             key: token
-
-- name: info-frontend
 
 - name: smartanswers
   repoName: smart-answers
@@ -2211,7 +2204,7 @@ govukApplications:
             name: short-url-manager-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: INSTANCE_NAME
         value: integration
       - name: MONGODB_URI
@@ -2294,7 +2287,7 @@ govukApplications:
             name: support-api-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
     nginxConfigMap:
@@ -2424,7 +2417,7 @@ govukApplications:
             name: support-api-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: ZENDESK_CLIENT_USERNAME
@@ -2665,7 +2658,7 @@ govukApplications:
             name: signon-token-whitehall-search-api
             key: bearer_token
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 759acac6-da53-4a19-b591-b7538c7c39de
+        value: *publishing-notify-template
       - name: EMAIL_ADDRESS_OVERRIDE
         value: whitehall-emails-integration@digital.cabinet-office.gov.uk
       - name: REDIS_URL
