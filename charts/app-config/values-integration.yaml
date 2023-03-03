@@ -2578,6 +2578,8 @@ govukApplications:
     extraEnv:
       - name: ENV_MESSAGE_EXAMPLE
         value: message_by_example
+      - name: ENV_MESSAGE_MAISY
+        value: message_by_maisy
       - name: ENV_MESSAGE_OTHER
         value: message_by_other
 
