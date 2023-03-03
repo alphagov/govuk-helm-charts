@@ -1470,6 +1470,9 @@ govukApplications:
       enabled: false
     workerEnabled: true
     cronTasks:
+      - name: events-export
+        task: "events:export_to_s3"
+        schedule: "38 5 * * 0"
       - name: heartbeat
         task: "heartbeat_messages:send"
         schedule: "*/4 * * * *"
@@ -1508,10 +1511,6 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       - name: EVENT_LOG_AWS_BUCKETNAME
         value: govuk-publishing-api-event-log-integration
-      - name: EVENT_LOG_AWS_ACCESS_ID
-        value: unset  # TODO: allow publishing-api to write to the event log S3 bucket (using IAM permissions, not long-lived keys like this; this env var should be deleted)
-      - name: EVENT_LOG_AWS_USERNAME
-        value: govuk-publishing-api-event-log_user
       - name: GOVUK_CONTENT_SCHEMAS_PATH
         value: /app/content_schemas
       - name: DATABASE_URL
