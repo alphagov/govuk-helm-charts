@@ -101,24 +101,21 @@ spec:
           {{- with .Values.appProbes }}
             {{- . | toYaml | trim | nindent 10 }}
           {{- else }}
-          startupProbe: &app-probe  # TODO: check the Rails apps aren't picky about the Host header.
+          livenessProbe: &app-probe
             httpGet:
               path: /healthcheck/live
               port: http
-            failureThreshold: 10
-            periodSeconds: 3
-            timeoutSeconds: 15
-          livenessProbe:
-            <<: *app-probe
             failureThreshold: 3
             periodSeconds: 5
+            timeoutSeconds: 30
           readinessProbe:
-            <<: *app-probe
-            httpGet:
-              path: /healthcheck/live  # TODO: fix readiness check so that we can use it here.
-              port: http
+            <<: *app-probe  # Intentionally same path as liveness.
             failureThreshold: 2
-            periodSeconds: 5
+          startupProbe:
+            <<: *app-probe
+            failureThreshold: 15
+            periodSeconds: 2
+            timeoutSeconds: 2
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
@@ -135,7 +132,7 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.nginxPort }}
-          livenessProbe:
+          livenessProbe: &nginx-probe
             httpGet:
               path: /readyz
               port: http
@@ -144,12 +141,8 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 20
           readinessProbe:
-            httpGet:
-              path: /readyz
-              port: http
-            initialDelaySeconds: 2
+            <<: *nginx-probe  # Intentionally same path as liveness.
             failureThreshold: 2
-            periodSeconds: 5
             timeoutSeconds: 15
           {{- with .Values.nginxResources }}
           resources:
