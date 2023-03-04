@@ -419,12 +419,12 @@ govukApplications:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
-            name: signon-app-content-data-beta
+            name: signon-app-content-data
             key: oauth_id
       - name: GDS_SSO_OAUTH_SECRET
         valueFrom:
           secretKeyRef:
-            name: signon-app-content-data-beta
+            name: signon-app-content-data
             key: oauth_secret
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
@@ -498,7 +498,7 @@ govukApplications:
       - name: PUBLISHING_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
-            name: signon-token-content-performance-manager-publishing-api
+            name: signon-token-content-data-api-publishing-api
             key: bearer_token
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
