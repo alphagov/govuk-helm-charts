@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/component: app
 spec:
   replicas: {{ .Values.replicaCount }}
-  revisionHistoryLimit: 5
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
       app: {{ $fullName }}
