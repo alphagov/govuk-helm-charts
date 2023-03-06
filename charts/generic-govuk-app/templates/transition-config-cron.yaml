@@ -1,0 +1,97 @@
+{{- if .Values.transitionConfigEnabled -}}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $fullName }}-transition-config-cron
+  labels:
+    {{- include "generic-govuk-app.labels" $ | nindent 4 }}
+    app: {{ $fullName }}-transition-config-cron
+    app.kubernetes.io/name: {{ $fullName }}-transition-config-cron
+    app.kubernetes.io/component: transition-config-cron
+spec:
+  schedule: "00 09-19 * * 1-5"
+  jobTemplate:
+    metadata:
+      name: {{ $fullName }}-transition-config-cron
+      labels:
+        {{- include "generic-govuk-app.labels" $ | nindent 8 }}
+        app.kubernetes.io/component: "{{ .name }}-transition-config-cron"
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ $fullName }}-transition-config-cron
+          labels:
+            {{- include "generic-govuk-app.labels" $ | nindent 12 }}
+            app.kubernetes.io/component: transition-config-cron
+        spec:
+          automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
+          enableServiceLinks: false
+          securityContext:
+            fsGroup: &old-ec2-deploy-uid 2899
+            runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ $.Values.securityContext.runAsUser }}
+            runAsGroup: {{ $.Values.securityContext.runAsGroup }}
+          restartPolicy: Never
+          {{ if .serviceAccount }}serviceAccountName: {{ .serviceAccount }}{{- end }}
+          volumes:
+            - name: tmp
+              emptyDir: {}
+            {{- with $.Values.extraVolumes }}
+              {{- . | toYaml | trim | nindent 12 }}
+            {{- end }}
+          containers:
+            - name: clone-transition-config-repo
+              image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
+              command: ["/bin/bash"]
+              args: ["-c", "git clone https://github.com/alphagov/transition-config /transition-config/"]
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                runAsUser: *old-ec2-deploy-uid
+                runAsGroup: *old-ec2-deploy-uid
+              volumeMounts:
+                - name: transition-config-efs
+                  mountPath: /transition-config
+          containers:
+            - name: update-transtion-config
+              image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+              imagePullPolicy: {{ $.Values.appImage.pullPolicy | default "Always" }}
+              command: ['rake', 'import:all:orgs_sites_hosts']
+              envFrom:
+                - configMapRef:
+                    name: govuk-apps-env
+              env:
+                - name: PORT
+                  value: "{{ $.Values.appPort }}"
+                - name: SECRET_KEY_BASE
+                  value: "12345678"
+                {{- if $.Values.sentry.enabled }}
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $.Values.repoName }}-sentry
+                      key: dsn
+                - name: SENTRY_RELEASE
+                  value: "{{ $.Values.appImage.tag }}"
+                {{- end }}
+                {{- with $.Values.extraEnv }}
+                  {{- (tpl (toYaml .) $) | trim | nindent 16 }}
+                {{- end }}
+              {{- with $.Values.appResources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+                - name: transition-config-efs
+                  mountPath: /app/data/transition-config
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                runAsUser: *old-ec2-deploy-uid
+                runAsGroup: *old-ec2-deploy-uid
+{{- end }}
