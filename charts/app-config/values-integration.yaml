@@ -2443,6 +2443,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: transition.{{ .Values.testExternalDomainSuffix }}
+    transitionConfigEnabled: true
     cronTasks:
       - name: import-dns
         task: "import:dns_details"
@@ -2488,6 +2489,14 @@ govukApplications:
             key: DATABASE_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+    extraVolumes:
+      - name: transition-config-efs
+        nfs:
+          server: *assets-nfs
+          path: /transition
+    appExtraVolumeMounts:
+      - name: transition-config-efs
+        mountPath: /app/data/transition-config
 
 - name: travel-advice-publisher
   helmValues:

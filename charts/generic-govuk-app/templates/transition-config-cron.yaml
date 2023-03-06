@@ -27,7 +27,7 @@ spec:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
             app.kubernetes.io/component: transition-config-cron
         spec:
-          automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
+          automountServiceAccountToken: false
           enableServiceLinks: false
           securityContext:
             fsGroup: &old-ec2-deploy-uid 2899
@@ -35,7 +35,6 @@ spec:
             runAsUser: {{ $.Values.securityContext.runAsUser }}
             runAsGroup: {{ $.Values.securityContext.runAsGroup }}
           restartPolicy: Never
-          {{ if .serviceAccount }}serviceAccountName: {{ .serviceAccount }}{{- end }}
           volumes:
             - name: tmp
               emptyDir: {}
@@ -67,7 +66,7 @@ spec:
                 - name: PORT
                   value: "{{ $.Values.appPort }}"
                 - name: SECRET_KEY_BASE
-                  value: "12345678"
+                  value: unused_for_cron_but_still_required
                 {{- if $.Values.sentry.enabled }}
                 - name: SENTRY_DSN
                   valueFrom:
