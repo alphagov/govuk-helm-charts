@@ -13,6 +13,8 @@ testAssetsDomain: assets-eks.staging.publishing.service.gov.uk
 
 cspReportURI: https://csp-reporter.staging.publishing.service.gov.uk/report
 
+replicaCount: 2
+workerReplicaCount: 2
 appResources:
   limits:
     cpu: 1
@@ -41,6 +43,63 @@ alb-ingress-backend-waf-ruleset: &alb-ingress-backend-waf-ruleset
 # apps.
 
 govukApplications:
+- name: account-api
+  helmValues:
+    uploadAssets:
+      enabled: false
+    dbMigrationEnabled: true
+    workerEnabled: true
+    extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: account-api-postgres
+            key: DATABASE_URL
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-account-api-email-alert-api
+            key: bearer_token
+      - name: GOVUK_ACCOUNT_OAUTH_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: govuk-account-oauth
+            key: GOVUK_ACCOUNT_OAUTH_CLIENT_ID
+      - name: GOVUK_ACCOUNT_OAUTH_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: govuk-account-oauth
+            key: GOVUK_ACCOUNT_OAUTH_PRIVATE_KEY
+      - name: GOVUK_ACCOUNT_OAUTH_PROVIDER_URI
+        valueFrom:
+          secretKeyRef:
+            name: govuk-account-oauth
+            key: GOVUK_ACCOUNT_OAUTH_PROVIDER_URI
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: account-api-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: 6074fdc2-03b3-4bb6-83fe-31220779c13b
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-account-api-publishing-api
+            key: bearer_token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-account-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-account-api
+            key: oauth_secret
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
 - name: asset-manager
   chartPath: charts/asset-manager
   helmValues:
@@ -53,14 +112,31 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '20'
-        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
+        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+        alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
+          access_logs.s3.enabled=true,
+          access_logs.s3.bucket=govuk-staging-aws-logging,
+          access_logs.s3.prefix=elb/assets-origin-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "{{ .Values.assetsDomain }}",
+              "{{ .Values.testAssetsDomain }}",
+              "assets-origin.{{ .Values.publishingDomainSuffix }}",
+              "draft-assets.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
       hosts:
-        - name: assets-origin.eks.staging.govuk.digital
+        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
           paths:
             - path: /government/uploads/
+            - path: /government/assets/
             - path: /media/
+            - path: /auth/gds  # Viewing assets requires user auth.
+        - name: draft-assets.{{ .Values.testExternalDomainSuffix }}
+          paths:
+            - path: /government/uploads/
+            - path: /government/assets/
+            - path: /media/
+            - path: /auth/gds  # Viewing assets requires user auth.
     assetManagerNFS: &assets-nfs assets.blue.staging.govuk-internal.digital
     nginxConfigMap:
       create: false
@@ -78,8 +154,6 @@ govukApplications:
           secretKeyRef:
             name: signon-app-asset-manager
             key: oauth_secret
-      - name: GOVUK_ASSET_ROOT  # testing in isolation
-        value: https://assets.staging.publishing.service.gov.uk
       - name: JWT_AUTH_SECRET
         valueFrom:
           secretKeyRef:
@@ -103,8 +177,95 @@ govukApplications:
   helmValues:
     nextEnvironment: production
 
+- name: authenticating-proxy
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: draft-origin
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "draft-origin.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: draft-origin.{{ .Values.testExternalDomainSuffix }}
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-postgres
+            key: DATABASE_URL
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-preview
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-preview
+            key: oauth_secret
+      - name: GOVUK_UPSTREAM_URI
+        value: "http://draft-router"
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+
+- name: bouncer
+  helmValues:
+    rails:
+      enabled: false
+    uploadAssets:
+      enabled: false
+    ingress:
+      enabled: true
+      tls: {}
+      annotations:
+        <<: *alb-ingress-www-waf-ruleset
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+        alb.ingress.kubernetes.io/healthcheck-path: /readyz
+        alb.ingress.kubernetes.io/load-balancer-name: bouncer
+        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+      rules:
+        - http:  # Match all hostnames.
+            paths:
+              - path: "/"
+                pathType: Prefix
+                backend:
+                  service:
+                    name: bouncer
+                    port:
+                      number: 80
+    extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: bouncer-postgres
+            key: DATABASE_URL
+    nginxConfigMap:
+      extraServerConf: |
+        # TODO: Find out which council is using this and ask them to update.
+        location /eff/action/worldPayCallback {
+          proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
+        }
+
 - name: collections
   helmValues:
+    appResources:
+      limits:
+        cpu: 2
+        memory: 1500Mi
+      requests:
+        cpu: 1
+        memory: 1Gi
     extraEnv:
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
@@ -114,11 +275,517 @@ govukApplications:
             name: signon-token-collections-email-alert-api
             key: bearer_token
 
+- name: draft-collections
+  repoName: collections
+  helmValues:
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-collections-email-alert-api
+            key: bearer_token
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+
+- name: collections-publisher
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: collections-publisher
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "collections-publisher.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: collections-publisher.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-collections-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-collections-publisher
+            key: oauth_secret
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-collections-publisher-link-checker-api
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-collections-publisher-publishing-api
+            key: bearer_token
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: collections-publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: &publishing-notify-template 112842bb-d8a4-4511-90de-57dc5c8f27ec
+      - name: PUBLISH_WITHOUT_2I_EMAIL
+        value: mainstream-publisher-notifications-staging@digital.cabinet-office.gov.uk
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: collections-publisher-mysql
+            key: DATABASE_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: contacts-admin
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: contacts-admin
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "contacts-admin.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: contacts-admin.{{ .Values.testExternalDomainSuffix }}
+    cronTasks:
+      - name: org-import
+        task: "organisations:import"
+        schedule: "0 3 * * *"
+    extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: contacts-admin-mysql
+            key: DATABASE_URL
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-contacts
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-contacts
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-contacts-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: content-data-admin
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: content-data-admin
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "content-data.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: content-data.{{ .Values.testExternalDomainSuffix }}
+    nginxProxyReadTimeout: 60s
+    workerEnabled: true
+    extraEnv:
+      - name: CONTENT_DATA_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-data-admin-content-data-api
+            key: bearer_token
+      # These GA/GTM values are not secrets (not even the the gtm_auth one).
+      # https://github.com/alphagov/govuk-puppet/pull/8041
+      - name: GOOGLE_TAG_MANAGER_AUTH
+        value: xcAlGBhKTIeO6y_JhmEapQ
+      - name: GOOGLE_TAG_MANAGER_ID
+        value: GTM-NZG8SF2
+      - name: GOOGLE_TAG_MANAGER_PREVIEW
+        value: env-5
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-data-beta
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-data-beta
+            key: oauth_secret
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-aws
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-aws
+            key: secret_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_CSV_EXPORT_BUCKET_NAME
+        value: govuk-staging-content-data-csvs
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-postgres
+            key: DATABASE_URL
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: content-data-admin-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *publishing-notify-template
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: content-data-api
+  helmValues:
+    uploadAssets:
+      enabled: false
+    dbMigrationEnabled: true
+    workerEnabled: true
+    workers:
+      - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+        name: worker
+      - command: ['rake', 'publishing_api:consumer']
+        name: publishing-api-consumer
+      - command: ['rake', 'publishing_api:bulk_import_consumer']
+        name: bulk-import-publishing-api-consumer
+    nginxProxyReadTimeout: 60s
+    extraEnv:
+      - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-google-analytics
+            key: view-id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-google-analytics
+            key: client-email
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-google-analytics
+            key: private-key
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-data-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-data-api
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-performance-manager-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-postgres
+            key: DATABASE_URL
+      - name: SUPPORT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-data-api-support-api
+            key: bearer_token
+      - name: RABBITMQ_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-data-api-rabbitmq
+            key: RABBITMQ_URL
+      - name: RABBITMQ_QUEUE
+        value: content_data_api
+      - name: RABBITMQ_QUEUE_BULK
+        value: content_data_api_govuk_importer
+      - name: RABBITMQ_QUEUE_DEAD
+        value: content_data_api_dead_letter_queue
+
+- name: content-publisher
+  helmValues:
+    dbMigrationEnabled: true
+    nginxClientMaxBodySize: &max-upload-size 500M
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: content-publisher
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "content-publisher.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: content-publisher.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: AWS_REGION  # TODO: consider moving this to cm/govuk-apps-env?
+        value: eu-west-1
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-publisher-asset-manager
+            key: bearer_token
+      - name: AWS_S3_BUCKET
+        value: govuk-staging-content-publisher-activestorage
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-publisher-postgres
+            key: DATABASE_URL
+      - name: EMAIL_ADDRESS_OVERRIDE
+        value: content-publisher-notifications-staging@digital.cabinet-office.gov.uk
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-publisher
+            key: oauth_secret
+      # These GTM values are not secrets (not even the the gtm_auth one).
+      # https://github.com/alphagov/govuk-puppet/pull/8041
+      - name: GOOGLE_TAG_MANAGER_ID
+        value: &static-gtm-id GTM-NQXC4TG
+      - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only.
+        value: &static-gtm-auth QaRG0YPL6_pwZdxCbyMXPQ
+      - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only.
+        value: &static-gtm-preview env-5
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: content-publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *publishing-notify-template
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-publisher-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: WHITEHALL_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-publisher-whitehall
+            key: bearer_token
+
+- name: content-store
+  helmValues: &content-store
+    cronTasks:
+      - name: report-delays
+        task: "publishing_delay_report:report_delays"
+        schedule: "15 2 * * *"
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: ROUTER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-store-router-api
+            key: bearer_token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-store
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-store
+            key: oauth_secret
+      - name: DEFAULT_TTL
+        value: "300"
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          mongo-1.staging.govuk-internal.digital,\
+          mongo-2.staging.govuk-internal.digital,\
+          mongo-3.staging.govuk-internal.digital/content_store_production"
+      # TODO: remove this flag after launch (see https://github.com/alphagov/content-store/blob/4c6e16a9/app/models/route_set.rb#L70)
+      - name: NO_SET_ROUTER_BACKEND_ADDRESS_ON_PUBLISH
+        value: "1"
+
+- name: draft-content-store
+  repoName: content-store
+  helmValues:
+    <<: *content-store
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
+    extraEnv:
+      - name: ROUTER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-draft-content-store-draft-router-api
+            key: bearer_token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-draft-content-store
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-draft-content-store
+            key: oauth_secret
+      - name: DEFAULT_TTL
+        value: "1"
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          mongo-1.staging.govuk-internal.digital,\
+          mongo-2.staging.govuk-internal.digital,\
+          mongo-3.staging.govuk-internal.digital/draft_content_store_production"
+      - name: NO_SET_ROUTER_BACKEND_ADDRESS_ON_PUBLISH
+        value: "1"
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+
+- name: content-tagger
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: content-tagger
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "content-tagger.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: content-tagger.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-tagger
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-content-tagger
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-tagger-publishing-api
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-content-tagger-email-alert-api
+            key: bearer_token
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: content-tagger-postgres
+            key: DATABASE_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: email-alert-api
+  helmValues:
+    dbMigrationEnabled: true
+    uploadAssets:
+      enabled: false
+    workerEnabled: true
+    extraEnv:
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-api-account-api
+            key: bearer_token
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-api-postgres
+            key: DATABASE_URL
+      - name: EMAIL_ALERT_AUTH_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-auth
+            key: token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-email-alert-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-email-alert-api
+            key: oauth_secret
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-api-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: &frontend-notify-template 2844a647-6bf1-4b01-a25c-569d2cc00849
+      - name: GOVUK_NOTIFY_RECIPIENTS
+        value: email-alert-api-staging@digital.cabinet-office.gov.uk
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: WEB_CONCURRENCY
+        value: '10'
+    nginxConfigMap:
+      # TODO: consider using WAF for this instead of nginx.
+      extraHttpConf: |
+        limit_req_zone $binary_remote_addr zone=email_alert_api_public:1M rate=50r/s;
+        limit_req_status 429;
+      extraServerConf: |
+        location ~ ^/(status-updates|spam-reports)(/|$) {
+          limit_req zone=email_alert_api_public burst=20 nodelay;
+          proxy_pass http://email-alert-api;
+        }
+
 - name: email-alert-frontend
   helmValues:
     extraEnv:
       - name: SUBSCRIPTION_MANAGEMENT_ENABLED
-        value: "yes"  # non-prod only
+        value: "yes"
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: ACCOUNT_API_BEARER_TOKEN
@@ -141,6 +808,33 @@ govukApplications:
           secretKeyRef:
             name: email-alert-auth
             key: token
+
+- name: email-alert-service
+  helmValues:
+    appEnabled: false
+    rails:
+      enabled: false
+    uploadAssets:
+      enabled: false
+    workerEnabled: true
+    workers:
+      - command: ['bin/email-alert-service']
+        name: email-alert-service
+    extraEnv:
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-email-alert-service-email-alert-api
+            key: bearer_token
+      - name: GOVUK_PROMETHEUS_EXPORTER
+        value: force
+      - name: RABBITMQ_URL
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-service-rabbitmq
+            key: RABBITMQ_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
 - name: external-secrets
   chartPath: charts/external-secrets
@@ -195,26 +889,25 @@ govukApplications:
 
 - name: finder-frontend
   helmValues:
+    appResources:
+      limits:
+        cpu: 4
+        memory: 2500Mi
+      requests:
+        cpu: 2
+        memory: 2000Mi
     cronTasks:
       - name: registries-refresh
         task: "registries:cache_refresh"
         schedule: "15 * * * *"
-    appResources:
-      limits:
-        cpu: 4
-        memory: 1Gi
-      requests:
-        cpu: 2
-        memory: 512Mi
-    replicaCount: 3
     extraEnv:
-      - name: MEMCACHE_SERVERS
-        value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
             name: signon-token-finder-frontend-email-alert-api
             key: bearer_token
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
       - name: WEB_CONCURRENCY
         value: '4'
 
@@ -223,17 +916,57 @@ govukApplications:
     appResources:
       limits:
         cpu: 4
-        memory: 1Gi
+        memory: 1500Mi
       requests:
         cpu: 2
-        memory: 512Mi
+        memory: 1Gi
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 2844a647-6bf1-4b01-a25c-569d2cc00849
+        value: *frontend-notify-template
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+      - name: ACCOUNT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-account-api
+            key: bearer_token
+      - name: ELECTIONS_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: key
+      - name: ELECTIONS_API_URL
+        valueFrom:
+          secretKeyRef:
+            name: frontend-elections-api
+            key: url
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-email-alert-api
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-frontend-publishing-api
+            key: bearer_token
       - name: WEB_CONCURRENCY
         value: '4'
+
+- name: draft-frontend
+  repoName: frontend
+  helmValues:
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *frontend-notify-template
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -265,13 +998,101 @@ govukApplications:
     appResources:
       limits:
         cpu: 2
-        memory: 1Gi
+        memory: 2Gi
       requests:
         cpu: 1
-        memory: 512Mi
+        memory: 1500Mi
     extraEnv:
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+
+- name: draft-government-frontend
+  repoName: government-frontend
+  helmValues:
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+
+- name: hmrc-manuals-api
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: hmrc-manuals-api
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "hmrc-manuals-api.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: hmrc-manuals-api.{{ .Values.testExternalDomainSuffix }}
+    nginxProxyReadTimeout: 300s
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: ALLOW_UNKNOWN_HMRC_MANUAL_SLUGS
+        value: "1"
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-hmrc-manuals-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-hmrc-manuals-api
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-hmrc-manuals-api-publishing-api
+            key: bearer_token
+      - name: PUBLISH_TOPICS
+        value: "1"
+
+- name: imminence
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: imminence
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "imminence.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: imminence.{{ .Values.testExternalDomainSuffix }}
+    nginxProxyReadTimeout: 60s
+    workerEnabled: true
+    extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: imminence-postgres
+            key: DATABASE_URL
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-imminence
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-imminence
+            key: oauth_secret
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: info-frontend
 
 - name: licencefinder
   repoName: licence-finder
@@ -283,8 +1104,9 @@ govukApplications:
     extraEnv:
       # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
       # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
+      # TODO: Change this when copying from staging to production.
       - name: ELASTICSEARCH_URI
-        value: "https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com"
+        value: &elasticsearch-uri https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com
       - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
         value: "mongodb://\
           mongo-1.staging.govuk-internal.digital,\
@@ -296,6 +1118,443 @@ govukApplications:
             name: signon-token-licence-finder-publishing-api
             key: bearer_token
 
+- name: link-checker-api
+  helmValues:
+    dbMigrationEnabled: true
+    uploadAssets:
+      enabled: false
+    workerEnabled: true
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-link-checker-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-link-checker-api
+            key: oauth_secret
+      - name: GOOGLE_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: link-checker-api-google-api-key
+            key: GOOGLE_API_KEY
+      - name: GOVUK_BASIC_AUTH_CREDENTIALS
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: password
+      - name: GOVUK_USER
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: username
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: link-checker-api-postgres
+            key: DATABASE_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: local-links-manager
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: local-links-manager
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "local-links-manager.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: local-links-manager.{{ .Values.testExternalDomainSuffix }}
+    cronTasks:
+      - name: import-interact
+        task: "import:service_interactions:import_all"
+        schedule: "0 1 * * *"
+      - name: check-links
+        task: "check-links"
+        schedule: "0 2 * * *"
+      - name: export-links
+        task: "export:links:s3"
+        schedule: "0 3 * * *"
+      - name: import-ga
+        task: "import:google_analytics"
+        schedule: "0 5 * * *"
+      - name: export-ga-bad-links
+        task: "export:google_analytics:bad_links"
+        schedule: "0 6 * * *"
+    dbMigrationEnabled: true
+    extraEnv:
+      - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: govuk-view-id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: client-email
+      - name: GOOGLE_EXPORT_ACCOUNT_ID
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: export-account-id
+      - name: GOOGLE_EXPORT_CUSTOM_DATA_IMPORT_SOURCE_ID
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: export-custom-data-import-source-id
+      - name: GOOGLE_EXPORT_TRACKER_ID
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: export-tracker-id
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-google
+            key: private-key
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-local-links-manager
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-local-links-manager
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-local-links-manager-publishing-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-local-links-manager-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: RUN_LINK_GA_EXPORT
+        value: "false"
+      - name: AWS_S3_ASSET_BUCKET_NAME
+        value: "govuk-app-assets-staging"
+      - name: AWS_REGION
+        value: "eu-west-1"
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: local-links-manager-postgres
+            key: DATABASE_URL
+    nginxConfigMap:
+      extraServerConf: |
+        location /data {
+          proxy_set_header   Authorization "";
+          proxy_set_header   Connection "";
+          proxy_set_header   X-Real-IP $remote_addr;  # TODO: pass the actual end-client address
+          proxy_hide_header  x-amz-id-2;
+          proxy_hide_header  x-amz-meta-server-side-encryption;
+          proxy_hide_header  x-amz-request-id;
+          proxy_hide_header  x-amz-server-side-encryption;
+          proxy_hide_header  x-amz-version-id;
+          add_header         Cache-Control "public, max-age=3600";
+          proxy_intercept_errors on;
+          proxy_pass         https://govuk-app-assets-staging.s3.eu-west-1.amazonaws.com/data/local-links-manager;
+        }
+
+- name: locations-api
+  helmValues:
+    uploadAssets:
+      enabled: false
+    dbMigrationEnabled: true
+    workerEnabled: true
+    extraEnv:
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: locations-api-postgres
+            key: DATABASE_URL
+      - name: OS_PLACES_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: locations-api-os-places
+            key: api-key
+      - name: OS_PLACES_API_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: locations-api-os-places
+            key: api-secret
+      - name: OS_PLACES_API_POSTCODES_PER_SECOND
+        value: "1"
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: manuals-publisher
+  helmValues:
+    nginxClientMaxBodySize: *max-upload-size
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: manuals-publisher
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "manuals-publisher.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: manuals-publisher.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-manuals-publisher-asset-manager
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-manuals-publisher-email-alert-api
+            key: bearer_token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-manuals-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-manuals-publisher
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-manuals-publisher-publishing-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-manuals-publisher-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: manuals-publisher-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: manuals-publisher-docdb
+            key: MONGODB_URI
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: maslow
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: maslow
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "maslow.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: maslow.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-maslow
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-maslow
+            key: oauth_secret
+      - name: MEMCACHE_SERVERS
+        value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-maslow-publishing-api
+            key: bearer_token
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: maslow-docdb
+            key: MONGODB_URI
+
+- name: publisher
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    cronTasks:
+      - name: reports-generate
+        task: "reports:generate"
+        schedule: "0 * * * *"
+      - name: mail-fetcher
+        command: "script/mail_fetcher"
+        schedule: "*/5 * * * *"
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: publisher
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "publisher.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: publisher.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-publisher
+            key: oauth_secret
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publisher-asset-manager
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publisher-publishing-api
+            key: bearer_token
+      - name: FACT_CHECK_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: publisher-fact-check-email-account
+            key: FACT_CHECK_USERNAME
+      - name: FACT_CHECK_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: publisher-fact-check-email-account
+            key: FACT_CHECK_PASSWORD
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publisher-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: publisher-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: publisher-docdb
+            key: MONGODB_URI
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: EMAIL_GROUP_BUSINESS
+        value: mainstream-publisher-notifications-staging@digital.cabinet-office.gov.uk
+      - name: EMAIL_GROUP_CITIZEN
+        value: mainstream-publisher-notifications-staging@digital.cabinet-office.gov.uk
+      - name: EMAIL_GROUP_DEV
+        value: mainstream-publisher-notifications-staging@digital.cabinet-office.gov.uk
+      - name: EMAIL_GROUP_FORCE_PUBLISH_ALERTS
+        value: mainstream-publisher-notifications-staging@digital.cabinet-office.gov.uk
+      - name: FACT_CHECK_SUBJECT_PREFIX  # TODO: remove in production.
+        value: staging
+      - name: FACT_CHECK_REPLY_TO_ADDRESS
+        value: govuk-fact-check-staging@digital.cabinet-office.gov.uk
+      - name: FACT_CHECK_REPLY_TO_ID
+        value: 88f713ff-7de0-43a6-8221-8721bedd103c
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *publishing-notify-template
+
+- name: publishing-api
+  helmValues:
+    dbMigrationEnabled: true
+    uploadAssets:
+      enabled: false
+    workerEnabled: true
+    cronTasks:
+      - name: events-export
+        task: "events:export_to_s3"
+        schedule: "38 5 * * 0"
+      - name: heartbeat
+        task: "heartbeat_messages:send"
+        schedule: "*/4 * * * *"
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-publishing-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-publishing-api
+            key: oauth_secret
+      - name: CONTENT_STORE_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publishing-api-content-store
+            key: bearer_token
+      - name: DRAFT_CONTENT_STORE_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publishing-api-draft-content-store
+            key: bearer_token
+      - name: ROUTER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-publishing-api-router-api
+            key: bearer_token
+      - name: RABBITMQ_URL
+        valueFrom:
+          secretKeyRef:
+            name: publishing-api-rabbitmq
+            key: RABBITMQ_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: EVENT_LOG_AWS_BUCKETNAME
+        value: govuk-publishing-api-event-log-staging
+      - name: GOVUK_CONTENT_SCHEMAS_PATH
+        value: /app/content_schemas
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: publishing-api-postgres
+            key: DATABASE_URL
+
 - name: release
   helmValues:
     dbMigrationEnabled: true
@@ -305,8 +1564,12 @@ govukApplications:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: release
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "release.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
       hosts:
-        - name: release.eks.staging.govuk.digital
+        - name: release.{{ .Values.testExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -334,12 +1597,64 @@ govukApplications:
             name: release-github
             key: token
 
+- name: router-api
+  helmValues: &router-api
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - blue.staging.govuk-internal.digital
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-router-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-router-api
+            key: oauth_secret
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3/router"
+
+- name: draft-router-api
+  repoName: router-api
+  helmValues:
+    <<: *router-api
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-draft-router-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-draft-router-api
+            key: oauth_secret
+      - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+        value: "mongodb://\
+          router-backend-1,\
+          router-backend-2,\
+          router-backend-3/draft_router"
+
 - name: router
   helmValues:
     rails:
       enabled: false
     uploadAssets:
       enabled: false
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - blue.staging.govuk-internal.digital
     appResources:
       limits:
         cpu: 3
@@ -347,9 +1662,6 @@ govukApplications:
       requests:
         cpu: 2
         memory: 1Gi
-    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
-      searches:
-        - blue.staging.govuk-internal.digital
     ingress:
       enabled: true
       annotations:
@@ -357,11 +1669,18 @@ govukApplications:
         <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-name: www-origin
-        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/www-origin-eks
+        alb.ingress.kubernetes.io/load-balancer-attributes: >
+          access_logs.s3.enabled=true,
+          access_logs.s3.bucket=govuk-staging-aws-logging,
+          access_logs.s3.prefix=elb/www-origin-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["www.{{ .Values.externalDomainSuffix }}", "www.{{ .Values.testExternalDomainSuffix }}"]}}]
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "www.{{ .Values.externalDomainSuffix }}",
+              "www-origin.{{ .Values.publishingDomainSuffix }}",
+              "www.{{ .Values.testExternalDomainSuffix }}"
+          ]}}]
       hosts:
-        - name: www-origin.eks.staging.govuk.digital
+        - name: www-origin.{{ .Values.testExternalDomainSuffix }}
     nginxConfigMap:
       create: false
       name: live-router-nginx-conf
@@ -369,6 +1688,12 @@ govukApplications:
       - name: live-router-nginx-conf
         mountPath: /usr/share/nginx/html/robots.txt
         subPath: robots.txt
+      - name: router-nginx-htpasswd
+        mountPath: /etc/nginx/htpasswd
+    extraVolumes:
+      - name: router-nginx-htpasswd
+        secret:
+          secretName: router-nginx-htpasswd
     appProbes: &router-app-probes
       startupProbe: &router-probe
         httpGet:
@@ -403,7 +1728,7 @@ govukApplications:
       - name: BACKEND_URL_collections
         value: "http://collections"
       - name: BACKEND_URL_content-store
-        value: "https://content-store.staging.govuk-internal.digital"
+        value: "http://content-store"
       - name: BACKEND_URL_email-alert-frontend
         value: "http://email-alert-frontend"
       - name: BACKEND_URL_frontend
@@ -418,9 +1743,8 @@ govukApplications:
         value: "http://static"
       - name: BACKEND_URL_whitehall-frontend
         value: "http://whitehall-frontend"
-        # TODO: switch back to in-cluster account-api once it's fully working (similarly for draft).
       - name: BACKEND_URL_account-api
-        value: "https://account-api.staging.govuk-internal.digital"
+        value: "http://account-api"
       - name: BACKEND_URL_feedback
         value: "http://feedback"
       - name: BACKEND_URL_finder-frontend
@@ -431,11 +1755,284 @@ govukApplications:
         value: "http://licencefinder"
       - name: BACKEND_URL_licensify
         value: "https://licensify.staging.govuk-internal.digital"
-        # TODO: switch back to in-cluster search-api once it's fully working (similarly for draft).
       - name: BACKEND_URL_search-api
-        value: "https://search-api.staging.govuk-internal.digital"
+        value: "http://search-api"
+
+- name: draft-router
+  repoName: router
+  helmValues:
+    rails:
+      enabled: false
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
+    uploadAssets:
+      enabled: false
+    dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
+      searches:
+        - blue.staging.govuk-internal.digital
+    appProbes: *router-app-probes
+    nginxConfigMap:
+      create: false
+      name: draft-router-nginx-conf
+    extraEnv:
+      - name: ROUTER_PUBADDR
+        value: ":3000"
+      - name: ROUTER_APIADDR
+        value: ":9394"
+      - name: ROUTER_MONGO_URL  # Hostnames should match those shown in MongoDB rs.status().
+        value: *router_mongo_hosts
+      - name: ROUTER_MONGO_DB
+        value: draft_router
+      - name: BACKEND_URL_collections
+        value: "http://draft-collections"
+      - name: BACKEND_URL_content-store
+        value: "http://draft-content-store"
+      - name: BACKEND_URL_email-alert-frontend
+        value: "http://draft-email-alert-frontend"
+      - name: BACKEND_URL_frontend
+        value: "http://draft-frontend"
+      - name: BACKEND_URL_government-frontend
+        value: "http://draft-government-frontend"
+      - name: BACKEND_URL_service-manual-frontend
+        value: "http://draft-service-manual-frontend"
+      - name: BACKEND_URL_smartanswers
+        value: "http://draft-smartanswers"
+      - name: BACKEND_URL_static
+        value: "http://draft-static"
+      - name: BACKEND_URL_whitehall-frontend
+        value: "http://whitehall-frontend"  # There is no draft version whitehall frontend
+      - name: BACKEND_URL_account-api
+        value: "http://account-api"
+      - name: BACKEND_URL_feedback
+        value: "http://feedback"
+      - name: BACKEND_URL_finder-frontend
+        value: "http://finder-frontend"
+      - name: BACKEND_URL_info-frontend
+        value: "http://info-frontend"
+      - name: BACKEND_URL_licencefinder
+        value: "http://licencefinder"
+      - name: BACKEND_URL_licensify
+        value: "https://licensify.staging.govuk-internal.digital"
+      - name: BACKEND_URL_search-api
+        value: "http://search-api"
+
+- name: search-admin
+  helmValues:
+    dbMigrationEnabled: true
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: search-admin
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "search-admin.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: search-admin.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-search-admin
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-search-admin
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-search-admin-publishing-api
+            key: bearer_token
+      - name: RUMMAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-search-admin-search-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: search-admin-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *publishing-notify-template
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: search-admin-mysql
+            key: DATABASE_URL
+
+- name: search-api
+  helmValues:
+    rails:
+      enabled: false
+    nginxClientMaxBodySize: 20M
+    uploadAssets:
+      enabled: false
+    workerEnabled: true
+    cronTasks:
+      - name: generate-sitemap
+        task: "sitemap:generate_and_upload"
+        schedule: "50 2 * * *"
+    workers:
+      - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+        name: worker
+      - command: ['rake', 'message_queue:listen_to_publishing_queue']
+        name: publishing-queue-listener
+      - command: ['rake', 'message_queue:insert_data_into_govuk']
+        name: govuk-index-queue-listener
+      - command: ['rake', 'message_queue:bulk_insert_data_into_govuk']
+        name: bulk-reindex-queue-listener
+    extraEnv:
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_RELEVANCY_BUCKET_NAME
+        value: govuk-staging-search-relevancy
+      - name: AWS_S3_SITEMAPS_BUCKET_NAME
+        value: govuk-staging-sitemaps
+      - name: ELASTICSEARCH_URI
+        value: *elasticsearch-uri
+      - name: ENABLE_LTR
+        value: "true"
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-search-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-search-api
+            key: oauth_secret
+      - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: govuk-view-id
+      - name: GOOGLE_CLIENT_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: client-email
+      - name: GOOGLE_EXPORT_ACCOUNT_ID
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: export-account-id
+      - name: GOOGLE_EXPORT_CUSTOM_DATA_SOURCE_ID
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: export-custom-data-source-id
+      - name: GOOGLE_EXPORT_WEB_PROPERTY_ID
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: export-web-property-id
+      - name: GOOGLE_PRIVATE_KEY
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-analytics
+            key: private-key
+      - name: GOOGLE_BIGQUERY_CREDENTIALS
+        valueFrom:
+          secretKeyRef:
+            name: search-api-google-bigquery
+            key: credentials
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-search-api-publishing-api
+            key: bearer_token
+      - name: RABBITMQ_URL
+        valueFrom:
+          secretKeyRef:
+            name: search-api-rabbitmq
+            key: RABBITMQ_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: TENSORFLOW_SAGEMAKER_ENDPOINT
+        value: govuk-staging-search-ltr-endpoint
 
 - name: service-manual-frontend
+
+- name: draft-service-manual-frontend
+  repoName: service-manual-frontend
+  helmValues:
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+
+- name: service-manual-publisher
+  helmValues:
+    dbMigrationEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: service-manual-publisher
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "service-manual-publisher.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: service-manual-publisher.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-service-manual-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-service-manual-publisher
+            key: oauth_secret
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-service-manual-publisher-asset-manager
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-service-manual-publisher-publishing-api
+            key: bearer_token
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: service-manual-publisher-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *publishing-notify-template
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: service-manual-publisher-postgres
+            key: DATABASE_URL
+      - name: HTTP_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: username
+      - name: HTTP_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: password
 
 - name: signon
   helmValues:
@@ -448,9 +2045,12 @@ govukApplications:
         <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: signon
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "signon.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
       hosts:
-        - name: signon.eks.staging.govuk.digital
-    workerReplicaCount: 1
+        - name: signon.{{ .Values.testExternalDomainSuffix }}
     cronTasks:
       - name: "kubernetes-sync-app-secrets"
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
@@ -460,12 +2060,9 @@ govukApplications:
         task: "kubernetes:sync_token_secrets[signon-secrets-sync-conf]"
         schedule: "5 1 * * *"
         serviceAccount: signon
-      - name: "delete-event-logs"
-        task: "event_log:delete_logs_older_than_two_years"
-        schedule: "15 1 * * *"
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 112842bb-d8a4-4511-90de-57dc5c8f27ec
+        value: *publishing-notify-template
       - name: INSTANCE_NAME
         value: staging
       - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
@@ -505,8 +2102,6 @@ govukApplications:
             name: signon-auth-token
             key: token
 
-- name: info-frontend
-
 - name: smartanswers
   repoName: smart-answers
   helmValues:
@@ -543,9 +2138,6 @@ govukApplications:
   helmValues:
     uploadStaticErrorPagesEnabled: true
     ingress:
-      hosts:
-        - name: assets-origin.eks.staging.govuk.digital
-          path: /
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
@@ -553,9 +2145,14 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '30'
-        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
+        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+        alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
+      hosts:
+        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+          path: /
+        - name: draft-assets.{{ .Values.testExternalDomainSuffix }}
+          path: /
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
       # https://github.com/alphagov/govuk-puppet/pull/8041
@@ -588,28 +2185,414 @@ govukApplications:
           return 200 'google-site-verification: googlec908b3bc32386239.html';
         }
 
-- name: whitehall-frontend
-  repoName: whitehall
+- name: draft-static
+  repoName: static
+  helmValues:
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: DRAFT_ENVIRONMENT
+        value: "1"
+      - name: PLEK_HOSTNAME_PREFIX
+        value: draft-
+      - name: GA_UNIVERSAL_ID
+        value: *ga-universal-id
+      - name: GOOGLE_TAG_MANAGER_ID
+        value: *static-gtm-id
+      - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only.
+        value: *static-gtm-auth
+      - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only.
+        value: *static-gtm-preview
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-static-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: USE_TMPDIR_PAGE_CACHE
+        value: "true"
+
+- name: short-url-manager
   helmValues:
     ingress:
-      hosts:
-        - name: assets-origin.eks.staging.govuk.digital
-          path: /government/placeholder/
-        - name: assets-origin.eks.staging.govuk.digital
-          path: /assets/whitehall/
-        - name: assets-origin.eks.staging.govuk.digital
-          path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
-          pathType: ImplementationSpecific
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
-        <<: *alb-ingress-www-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
-        alb.ingress.kubernetes.io/group.name: assets-origin
-        alb.ingress.kubernetes.io/group.order: '10'
-        alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=govuk-staging-aws-logging,access_logs.s3.prefix=elb/assets-origin-eks
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: short-url-manager
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["{{ .Values.assetsDomain }}", "{{ .Values.testAssetsDomain }}"]}}]
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "short-url-manager.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: short-url-manager.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-short-url-manager
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-short-url-manager
+            key: oauth_secret
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: short-url-manager-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *publishing-notify-template
+      - name: INSTANCE_NAME
+        value: staging
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: short-url-manager-docdb
+            key: MONGODB_URI
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-short-url-manager-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: specialist-publisher
+  helmValues:
+    nginxClientMaxBodySize: *max-upload-size
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: specialist-publisher
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "specialist-publisher.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: specialist-publisher.{{ .Values.testExternalDomainSuffix }}
+    nginxProxyReadTimeout: 30s
+    extraEnv:
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-specialist-publisher-asset-manager
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-specialist-publisher-email-alert-api
+            key: bearer_token
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-specialist-publisher-publishing-api
+            key: bearer_token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-specialist-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-specialist-publisher
+            key: oauth_secret
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: specialist-publisher-aws
+            key: access_key
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: specialist-publisher-aws
+            key: secret_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-staging-specialist-publisher-csvs
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: specialist-publisher-docdb
+            key: MONGODB_URI
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-api-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *publishing-notify-template
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+    nginxConfigMap:
+      extraServerConf: |
+        client_max_body_size 500M;
+
+        # Extended timeout to allow the processing of large attachments
+        location ~* attachments {
+          proxy_read_timeout 30s;
+          proxy_pass http://specialist-publisher;
+        }
+
+- name: support
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: support
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "support.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: support.{{ .Values.testExternalDomainSuffix }}
+    uploadAssets:
+      path: /app/public/assets/support
+    workerEnabled: true
+    extraEnv:
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-staging-support-api-csvs
+      - name: EMERGENCY_CONTACT_DETAILS
+        valueFrom:
+          secretKeyRef:
+            name: support-emergency-contacts
+            key: emergency_contacts
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-support
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-support
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-support-publishing-api
+            key: bearer_token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: SUPPORT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-support-support-api
+            key: bearer_token
+      - name: ZENDESK_CLIENT_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: username
+      - name: ZENDESK_CLIENT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: password
+      - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: ticket_email
+
+- name: support-api
+  helmValues:
+    dbMigrationEnabled: true
+    uploadAssets:
+      enabled: false
+    workerEnabled: true
+    extraEnv:
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: support-aws
+            key: access_key
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-staging-support-api-csvs
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-aws
+            key: secret_key
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: support-api-postgres
+            key: DATABASE_URL
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-support-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-support-api
+            key: oauth_secret
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: support-api-notify
+            key: GOVUK_NOTIFY_API_KEY
+      - name: GOVUK_NOTIFY_TEMPLATE_ID
+        value: *publishing-notify-template
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: ZENDESK_CLIENT_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: username
+      - name: ZENDESK_CLIENT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: password
+      - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: support-zendesk
+            key: ticket_email
+
+- name: transition
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: transition
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "transition.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: transition.{{ .Values.testExternalDomainSuffix }}
+    cronTasks:
+      - name: import-dns
+        task: "import:dns_details"
+        schedule: "0 07-19 * * 1-5"
+      - name: clear-expired-sessions
+        task: "clear_expired_sessions"
+        schedule: "0 3 * * *"
+      - name: clear-old-mappings
+        task: "clear_old_mappings_batches"
+        schedule: "0 3 * * *"
+      - name: refresh-materialized
+        task: "import:hits:refresh_materialized"
+        schedule: "30 0,12 * * *"
+    dbMigrationEnabled: true
+    workerEnabled: true
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-transition
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-transition
+            key: oauth_secret
+      - name: AWS_REGION
+        value: eu-west-1
+      - name: BASIC_AUTH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: password
+      - name: BASIC_AUTH_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: basic-auth
+            key: username
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: transition-postgres
+            key: DATABASE_URL
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: travel-advice-publisher
+  helmValues:
+    workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: travel-advice-publisher
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "travel-advice-publisher.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: travel-advice-publisher.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
+      - name: ASSET_MANAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-travel-advice-publisher-asset-manager
+            key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-travel-advice-publisher-email-alert-api
+            key: bearer_token
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-travel-advice-publisher
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-travel-advice-publisher
+            key: oauth_secret
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-travel-advice-publisher-publishing-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-travel-advice-publisher-link-checker-api
+            key: bearer_token
+      - name: LINK_CHECKER_API_SECRET_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: travel-advice-publisher-link-checker-api-callback-token
+            key: LINK_CHECKER_API_SECRET_TOKEN
+      - name: MONGODB_URI
+        valueFrom:
+          secretKeyRef:
+            name: travel-advice-publisher-docdb
+            key: MONGODB_URI
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+
+- name: whitehall-admin
+  repoName: whitehall
+  helmValues:
     appResources:
       limits:
         memory: 4Gi
@@ -617,36 +2600,36 @@ govukApplications:
       requests:
         memory: 2Gi
         cpu: "1"
-    appProbes:
-      startupProbe:
-        failureThreshold: 10
-        httpGet:
-          path: /healthcheck/live
-          port: http
-          scheme: HTTP
-        periodSeconds: 3
-        successThreshold: 1
-        timeoutSeconds: 15
-      livenessProbe:
-        failureThreshold: 3
-        httpGet:
-          path: /healthcheck/live
-          port: http
-          scheme: HTTP
-        periodSeconds: 10
-        successThreshold: 1
-        timeoutSeconds: 30
-      readinessProbe:
-        failureThreshold: 3
-        httpGet:
-          path: /healthcheck/live
-          port: http
-          scheme: HTTP
-        periodSeconds: 10
-        successThreshold: 1
-        timeoutSeconds: 30
-    nginxProxyReadTimeout: 30
-    extraEnv: &whitehall-envs
+    securityContext:
+      # Use the same uid/gid for NFS permissions as the old stack, so that
+      # files uploaded by whitehall-admin on k8s can be processed by
+      # whitehall-admin on EC2 and vice versa. 2899 is the "deploy" user.
+      runAsUser: 2899
+      runAsGroup: 2899
+    cronTasks:
+      - name: index-consultations
+        task: "search:index:consultations"
+        schedule: "0 2-22 * * *"
+      - name: taxonomy-rebuild
+        task: "taxonomy:rebuild_cache"
+        schedule: "*/10 7-20 * * *"
+    dbMigrationEnabled: true
+    workerEnabled: true
+    nginxClientMaxBodySize: *max-upload-size
+    nginxDenyCrawlers: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "whitehall-admin.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: whitehall-admin.{{ .Values.testExternalDomainSuffix }}
+    extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -657,6 +2640,8 @@ govukApplications:
           secretKeyRef:
             name: signon-app-whitehall
             key: oauth_secret
+      - name: GOVUK_UPLOADS_ROOT
+        value: &whitehall-uploads-path /uploads
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -687,12 +2672,73 @@ govukApplications:
           secretKeyRef:
             name: signon-token-whitehall-publishing-api
             key: bearer_token
-      - name: AWS_S3_BUCKET_NAME
-        value: govuk-staging-whitehall-csvs
+      - name: RUMMAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-search-api
+            key: bearer_token
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: 112842bb-d8a4-4511-90de-57dc5c8f27ec
-      - name: EMAIL_ADDRESS_OVERRIDE
+        value: *publishing-notify-template
+      - name: EMAIL_ADDRESS_OVERRIDE  # TODO: remove in production.
         value: whitehall-emails-staging@digital.cabinet-office.gov.uk
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: whitehall-mysql
+            key: DATABASE_URL
+    extraVolumes:
+      - name: asset-uploads-efs
+        nfs:
+          server: *assets-nfs
+          path: /whitehall  # TODO: does this work on an new/empty EFS instance?
+    appExtraVolumeMounts:
+      - name: asset-uploads-efs
+        mountPath: *whitehall-uploads-path
+
+- name: whitehall-frontend
+  repoName: whitehall
+  helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: assets-origin
+        alb.ingress.kubernetes.io/group.name: assets-origin
+        alb.ingress.kubernetes.io/group.order: '10'
+        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+        alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
+      hosts:
+        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+          path: /government/placeholder/
+        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+          path: /assets/whitehall/
+        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+          path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
+          pathType: ImplementationSpecific
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
+    extraEnv:
+      - name: JWT_AUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: authenticating-proxy-jwt-auth-secret
+            key: JWT_AUTH_SECRET
+      - name: PUBLISHING_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-publishing-api
+            key: bearer_token
+      - name: RUMMAGER_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-whitehall-search-api
+            key: bearer_token
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: MEMCACHE_SERVERS
@@ -702,3 +2748,10 @@ govukApplications:
           secretKeyRef:
             name: whitehall-mysql
             key: DATABASE_URL
+    appResources:
+      limits:
+        memory: 4Gi
+        cpu: "2"
+      requests:
+        memory: 2Gi
+        cpu: "1"
