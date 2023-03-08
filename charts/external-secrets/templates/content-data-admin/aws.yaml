@@ -13,6 +13,7 @@ spec:
     name: aws-secretsmanager
     kind: ClusterSecretStore
   target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
     name: content-data-admin-aws
   dataFrom:
     - extract:
