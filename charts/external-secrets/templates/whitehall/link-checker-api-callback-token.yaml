@@ -15,6 +15,7 @@ spec:
     name: aws-secretsmanager
     kind: ClusterSecretStore
   target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
     name: whitehall-link-checker-api-callback-token
   dataFrom:
     - extract:
