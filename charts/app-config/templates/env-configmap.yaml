@@ -15,8 +15,8 @@ metadata:
 data:
   BOOTSNAP_READONLY: "1"
   GOVUK_APP_DOMAIN: ""
-  GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.testPublishingDomainSuffix }}
-  GOVUK_ASSET_ROOT: https://{{ .Values.testAssetsDomain }}
+  GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.k8sPublishingDomainSuffix }}
+  GOVUK_ASSET_ROOT: https://{{ .Values.k8sAssetsDomain }}
   GOVUK_CSP_REPORT_ONLY: {{ .Values.cspReportOnly | quote }}
   GOVUK_CSP_REPORT_URI: {{ .Values.cspReportURI | quote }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
@@ -31,7 +31,7 @@ data:
   GOVUK_PERSONALISATION_SECURITY_URI: "https://integration.account.gov.uk?link=security-privacy"
   {{- end }}
   GOVUK_SIDEKIQ_JSON_LOGGING: "1"
-  GOVUK_WEBSITE_ROOT: https://www.{{ .Values.testExternalDomainSuffix }}
+  GOVUK_WEBSITE_ROOT: https://www.{{ .Values.k8sExternalDomainSuffix }}
   PLEK_UNPREFIXABLE_HOSTS: account-api,feedback,imminence,info-frontend,licensify,local-links-manager,locations-api,search-api,signon
   PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS: "true"
   RAILS_LOG_TO_STDOUT: "true"
@@ -42,9 +42,9 @@ data:
   GOVUK_DATA_SYNC_PERIOD: "22:0-8:0"
   {{- end }}
 
-  # TODO: change testAssetsDomain to assetsDomain before launch.
-  PLEK_SERVICE_ASSETS_URI: https://{{ .Values.testAssetsDomain }}
-  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.testPublishingDomainSuffix }}
+  # TODO: change k8sAssetsDomain to assetsDomain before launch.
+  PLEK_SERVICE_ASSETS_URI: https://{{ .Values.k8sAssetsDomain }}
+  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.k8sPublishingDomainSuffix }}
 
   # Services which remain in EC2 for a while after "MVP launch".
   PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}

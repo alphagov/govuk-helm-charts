@@ -6,10 +6,10 @@ externalDomainSuffix: integration.publishing.service.gov.uk
 publishingDomainSuffix: integration.publishing.service.gov.uk
 assetsDomain: assets.integration.publishing.service.gov.uk
 
+k8sAssetsDomain: assets-eks.integration.publishing.service.gov.uk
+k8sExternalDomainSuffix: eks.integration.govuk.digital
 # TODO: Remove once fully migrated to EKS
-testExternalDomainSuffix: eks.integration.govuk.digital
-testPublishingDomainSuffix: eks.integration.govuk.digital
-testAssetsDomain: assets-eks.integration.publishing.service.gov.uk
+k8sPublishingDomainSuffix: eks.integration.govuk.digital
 
 cspReportURI: https://csp-reporter.integration.publishing.service.gov.uk/report
 
@@ -119,18 +119,18 @@ govukApplications:
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "{{ .Values.assetsDomain }}",
-              "{{ .Values.testAssetsDomain }}",
+              "{{ .Values.k8sAssetsDomain }}",
               "assets-origin.{{ .Values.publishingDomainSuffix }}",
               "draft-assets.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+        - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
           paths:
             - path: /government/uploads/
             - path: /government/assets/
             - path: /media/
             - path: /auth/gds  # Viewing assets requires user auth.
-        - name: draft-assets.{{ .Values.testExternalDomainSuffix }}
+        - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
           paths:
             - path: /government/uploads/
             - path: /government/assets/
@@ -189,7 +189,7 @@ govukApplications:
               "draft-origin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: draft-origin.{{ .Values.testExternalDomainSuffix }}
+        - name: draft-origin.{{ .Values.k8sExternalDomainSuffix }}
     uploadAssets:
       enabled: false
     extraEnv:
@@ -323,7 +323,7 @@ govukApplications:
               "collections-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: collections-publisher.{{ .Values.testExternalDomainSuffix }}
+        - name: collections-publisher.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -380,7 +380,7 @@ govukApplications:
               "contacts-admin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: contacts-admin.{{ .Values.testExternalDomainSuffix }}
+        - name: contacts-admin.{{ .Values.k8sExternalDomainSuffix }}
     cronTasks:
       - name: org-import
         task: "organisations:import"
@@ -422,7 +422,7 @@ govukApplications:
               "content-data.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: content-data.{{ .Values.testExternalDomainSuffix }}
+        - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
     nginxProxyReadTimeout: 60s
     workerEnabled: true
     extraEnv:
@@ -563,7 +563,7 @@ govukApplications:
               "content-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: content-publisher.{{ .Values.testExternalDomainSuffix }}
+        - name: content-publisher.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: AWS_REGION  # TODO: consider moving this to cm/govuk-apps-env?
         value: eu-west-1
@@ -709,7 +709,7 @@ govukApplications:
               "content-tagger.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: content-tagger.{{ .Values.testExternalDomainSuffix }}
+        - name: content-tagger.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1020,7 +1020,7 @@ govukApplications:
               "hmrc-manuals-api.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: hmrc-manuals-api.{{ .Values.testExternalDomainSuffix }}
+        - name: hmrc-manuals-api.{{ .Values.k8sExternalDomainSuffix }}
     nginxProxyReadTimeout: 300s
     uploadAssets:
       enabled: false
@@ -1058,7 +1058,7 @@ govukApplications:
               "imminence.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: imminence.{{ .Values.testExternalDomainSuffix }}
+        - name: imminence.{{ .Values.k8sExternalDomainSuffix }}
     nginxProxyReadTimeout: 60s
     workerEnabled: true
     extraEnv:
@@ -1158,7 +1158,7 @@ govukApplications:
               "local-links-manager.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: local-links-manager.{{ .Values.testExternalDomainSuffix }}
+        - name: local-links-manager.{{ .Values.k8sExternalDomainSuffix }}
     cronTasks:
       - name: import-interact
         task: "import:service_interactions:import_all"
@@ -1305,7 +1305,7 @@ govukApplications:
               "manuals-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: manuals-publisher.{{ .Values.testExternalDomainSuffix }}
+        - name: manuals-publisher.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
@@ -1363,7 +1363,7 @@ govukApplications:
               "maslow.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: maslow.{{ .Values.testExternalDomainSuffix }}
+        - name: maslow.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1410,7 +1410,7 @@ govukApplications:
               "publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: publisher.{{ .Values.testExternalDomainSuffix }}
+        - name: publisher.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1556,7 +1556,7 @@ govukApplications:
               "release.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: release.{{ .Values.testExternalDomainSuffix }}
+        - name: release.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1657,10 +1657,10 @@ govukApplications:
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.{{ .Values.externalDomainSuffix }}",
               "www-origin.{{ .Values.publishingDomainSuffix }}",
-              "www.{{ .Values.testExternalDomainSuffix }}"
+              "www.{{ .Values.k8sExternalDomainSuffix }}"
           ]}}]
       hosts:
-        - name: www-origin.{{ .Values.testExternalDomainSuffix }}
+        - name: www-origin.{{ .Values.k8sExternalDomainSuffix }}
     nginxConfigMap:
       create: false
       name: live-router-nginx-conf
@@ -1810,7 +1810,7 @@ govukApplications:
               "search-admin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: search-admin.{{ .Values.testExternalDomainSuffix }}
+        - name: search-admin.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1968,7 +1968,7 @@ govukApplications:
               "service-manual-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: service-manual-publisher.{{ .Values.testExternalDomainSuffix }}
+        - name: service-manual-publisher.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -2029,7 +2029,7 @@ govukApplications:
               "signon.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: signon.{{ .Values.testExternalDomainSuffix }}
+        - name: signon.{{ .Values.k8sExternalDomainSuffix }}
     cronTasks:
       - name: "kubernetes-sync-app-secrets"
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
@@ -2130,9 +2130,9 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
       hosts:
-        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+        - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
           path: /
-        - name: draft-assets.{{ .Values.testExternalDomainSuffix }}
+        - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
           path: /
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
@@ -2211,7 +2211,7 @@ govukApplications:
               "short-url-manager.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: short-url-manager.{{ .Values.testExternalDomainSuffix }}
+        - name: short-url-manager.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -2260,7 +2260,7 @@ govukApplications:
               "specialist-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: specialist-publisher.{{ .Values.testExternalDomainSuffix }}
+        - name: specialist-publisher.{{ .Values.k8sExternalDomainSuffix }}
     nginxProxyReadTimeout: 30s
     extraEnv:
       - name: ASSET_MANAGER_BEARER_TOKEN
@@ -2339,7 +2339,7 @@ govukApplications:
               "support.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: support.{{ .Values.testExternalDomainSuffix }}
+        - name: support.{{ .Values.k8sExternalDomainSuffix }}
     uploadAssets:
       path: /app/public/assets/support
     workerEnabled: true
@@ -2465,7 +2465,7 @@ govukApplications:
               "transition.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: transition.{{ .Values.testExternalDomainSuffix }}
+        - name: transition.{{ .Values.k8sExternalDomainSuffix }}
     cronTasks:
       - name: import-dns
         task: "import:dns_details"
@@ -2526,7 +2526,7 @@ govukApplications:
               "travel-advice-publisher.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: travel-advice-publisher.{{ .Values.testExternalDomainSuffix }}
+        - name: travel-advice-publisher.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: ASSET_MANAGER_BEARER_TOKEN
         valueFrom:
@@ -2626,7 +2626,7 @@ govukApplications:
               "whitehall-admin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: whitehall-admin.{{ .Values.testExternalDomainSuffix }}
+        - name: whitehall-admin.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -2709,11 +2709,11 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
       hosts:
-        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+        - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
           path: /government/placeholder/
-        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+        - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
           path: /assets/whitehall/
-        - name: assets-origin.{{ .Values.testExternalDomainSuffix }}
+        - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
           path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
           pathType: ImplementationSpecific
     rails:
