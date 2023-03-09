@@ -12,12 +12,16 @@ spec:
   - '*'
 
   # Deny all cluster-scoped resources from being created, except for Namespace
+  # and (for argocd-notifications-secret) external-secrets.io:ClusterExternalSecret.
+  # See argo-services/templates/notifications/secret.yaml.
   clusterResourceWhitelist:
   - group: ''
     kind: Namespace
+  - group: external-secrets.io
+    kind: ClusterExternalSecret
 
   destinations:
-  - namespace: "*"
+  - namespace: '*'
     server: https://kubernetes.default.svc
 
   orphanedResources:
