@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboards
+  labels:
+    # The Grafana operator looks for the grafana_dashboard label.
+    # https://www.github.com/prometheus-community/helm-charts/blob/47c064f/charts/kube-prometheus-stack/values.yaml#L719
+    grafana_dashboard: "1"
+    namespace: monitoring
+data:
+  {{- range $path, $_ := .Files.Glob "dashboards/**.json" }}
+    {{- $path | trimPrefix "dashboards/" | nindent 2 }}: |
+    {{- $.Files.Get $path | nindent 4 }}
+  {{ end }}
