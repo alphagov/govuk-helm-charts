@@ -48,6 +48,23 @@ govukApplications:
       enabled: false
     dbMigrationEnabled: true
     workerEnabled: true
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-www-waf-ruleset
+        alb.ingress.kubernetes.io/load-balancer-name: account-api
+        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+        alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
+          access_logs.s3.enabled=true,
+          access_logs.s3.bucket=govuk-integration-aws-logging,
+          access_logs.s3.prefix=elb/asset-manager-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "account-api.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: account-api.{{ .Values.k8sExternalDomainSuffix }}
     extraEnv:
       - name: DATABASE_URL
         valueFrom:
