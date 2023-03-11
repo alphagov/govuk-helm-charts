@@ -21,6 +21,9 @@ tests:
                 - exp_labels:
                       severity: page
                       job: router
+                  exp_annotations:
+                      summary: High 5xx error rate for router
+                      description: router has high 5xx error rate for more than 10 minutes.
 
     # Control test, should pass without any alerts triggered.
     - interval: 1m
