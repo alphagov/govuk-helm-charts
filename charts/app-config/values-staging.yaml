@@ -15,6 +15,8 @@ cspReportURI: https://csp-reporter.staging.publishing.service.gov.uk/report
 
 replicaCount: 2
 workerReplicaCount: 2
+podDisruptionBudget:
+  minAvailable: 1
 appResources:
   limits:
     cpu: 1

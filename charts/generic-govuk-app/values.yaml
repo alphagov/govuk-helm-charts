@@ -8,7 +8,10 @@ service:
 ingress:
   enabled: false
 
+# appEnabled determines whether the web app Deployment is created.
+appEnabled: true
 replicaCount: 2
+podDisruptionBudget: {}
 
 # workerEnabled should be true if the app uses Sidekiq, false otherwise.
 workerEnabled: false
@@ -16,8 +19,6 @@ workerReplicaCount: 2
 workers:
 - command: ["sidekiq", "-C", "config/sidekiq.yml"]
   name: worker
-# appEnabled determines if web app should run.
-appEnabled: true
 
 # dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
 dbMigrationEnabled: false
