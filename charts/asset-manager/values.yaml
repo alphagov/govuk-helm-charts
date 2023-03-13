@@ -20,6 +20,7 @@ ingress:
           pathType: Prefix
 
 replicaCount: 1
+podDisruptionBudget: {}
 
 workerReplicaCount: 1
 
