@@ -4,28 +4,28 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ $fullName }}-transition-config-cron
+  name: {{ $fullName }}-config-cron
   labels:
     {{- include "generic-govuk-app.labels" $ | nindent 4 }}
-    app: {{ $fullName }}-transition-config-cron
-    app.kubernetes.io/name: {{ $fullName }}-transition-config-cron
-    app.kubernetes.io/component: transition-config-cron
+    app: {{ $fullName }}-config-cron
+    app.kubernetes.io/name: {{ $fullName }}-config-cron
+    app.kubernetes.io/component: config-cron
 spec:
   schedule: "00 09-19 * * 1-5"
   jobTemplate:
     metadata:
-      name: {{ $fullName }}-transition-config-cron
+      name: {{ $fullName }}-config-cron
       labels:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
-        app.kubernetes.io/component: "{{ .name }}-transition-config-cron"
+        app.kubernetes.io/component: "{{ .name }}-config-cron"
     spec:
       backoffLimit: 0
       template:
         metadata:
-          name: {{ $fullName }}-transition-config-cron
+          name: {{ $fullName }}-config-cron
           labels:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
-            app.kubernetes.io/component: transition-config-cron
+            app.kubernetes.io/component: config-cron
         spec:
           automountServiceAccountToken: false
           enableServiceLinks: false
@@ -44,8 +44,12 @@ spec:
           initContainers:
             - name: clone-transition-config-repo
               image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
-              command: ["/bin/bash"]
-              args: ["-c", "git clone https://github.com/alphagov/transition-config /transition-config/"]
+              command: ["git"]
+              args:
+                - clone
+                - --depth 1
+                - https://github.com/alphagov/transition-config 
+                - /transition-config/
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
@@ -61,8 +65,6 @@ spec:
                 - configMapRef:
                     name: govuk-apps-env
               env:
-                - name: PORT
-                  value: "{{ $.Values.appPort }}"
                 - name: SECRET_KEY_BASE
                   value: unused_for_cron_but_still_required
                 {{- if $.Values.sentry.enabled }}
