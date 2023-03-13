@@ -1,5 +1,4 @@
-## Run Prometheus unit tests for alerts
+## Run Prometheus alert tests
 
-- Install Prometheus on your machine - `brew install prometheus`
-
-- Run `promtool test rules tests.yaml` in the folder containing tests.yaml.
+- Install `promtool` on your machine: `brew install prometheus`
+- Run `promtool test rules *_tests.yaml`.
