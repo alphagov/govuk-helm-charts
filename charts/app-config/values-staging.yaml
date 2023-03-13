@@ -236,6 +236,7 @@ govukApplications:
         alb.ingress.kubernetes.io/healthcheck-path: /readyz
         alb.ingress.kubernetes.io/load-balancer-name: bouncer
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+        external-dns.alpha.kubernetes.io/hostname: bouncer.{{ .Values.k8sExternalDomainSuffix }}
       rules:
         - http:  # Match all hostnames.
             paths:
