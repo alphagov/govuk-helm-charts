@@ -17,7 +17,7 @@ spec:
       name: {{ $fullName }}-config-cron
       labels:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
-        app.kubernetes.io/component: "{{ .name }}-config-cron"
+        app.kubernetes.io/component: config-cron
     spec:
       backoffLimit: 0
       template:
