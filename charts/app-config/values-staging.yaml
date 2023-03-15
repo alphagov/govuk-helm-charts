@@ -2278,6 +2278,10 @@ govukApplications:
           ]}}]
       hosts:
         - name: short-url-manager.{{ .Values.k8sExternalDomainSuffix }}
+    cronTasks:
+      - name: organisations-import
+        task: "organisations:import"
+        schedule: "0 4 * * *"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
