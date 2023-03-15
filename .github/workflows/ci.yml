@@ -40,7 +40,7 @@ jobs:
         run: "grep KUBERNETES_VERSION kubernetes_version >> $GITHUB_ENV"
 
       - name: kubeconform
-        uses: docker://ghcr.io/yannh/kubeconform:v0.5.0
+        uses: docker://ghcr.io/yannh/kubeconform:latest-alpine
         with:
           entrypoint: /kubeconform
           args: >
