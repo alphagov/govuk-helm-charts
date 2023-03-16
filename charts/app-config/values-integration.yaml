@@ -2422,6 +2422,19 @@ govukApplications:
     uploadAssets:
       enabled: false
     workerEnabled: true
+    cronTasks:
+      - name: anonymous-feedback-deduplication-nightly
+        task: "anonymous_feedback_deduplication:nightly"
+        schedule: "10 0 * * *"
+      - name: import-organisations
+        task: "api_sync:import_organisations"
+        schedule: "20 0 * * *"
+      - name: service-feedback-aggregation
+        task: "service_feedback_aggregation:daily"
+        schedule: "30 0 * * *"
+      - name: anonymous-feedback-deduplication-recent
+        task: "anonymous_feedback_deduplication:recent"
+        schedule: "*/5 3 * * *"
     extraEnv:
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
