@@ -44,18 +44,16 @@ spec:
           initContainers:
             - name: clone-transition-config-repo
               image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
-              command: ["git"]
-              args:
-                - clone
-                - --depth 1
-                - https://github.com/alphagov/transition-config 
-                - /transition-config/
+              command:
+                - sh
+                - -c 
+                - "[ -d .git ] && git pull || git clone --depth=1 https://github.com/alphagov/transition-config"
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
               volumeMounts:
                 - name: transition-config-efs
-                  mountPath: /transition-config
+                  mountPath: /home/user
           containers:
             - name: update-transtion-config
               image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
