@@ -48,20 +48,3 @@ data:
 
   # Services which remain in EC2 for a while after "MVP launch".
   PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-
-  {{- /* Special-case hackery for running frontends in k8s but APIs/backends in EC2. */}}
-  {{- /* TODO: get rid of this before launch. */}}
-  {{- if ne .Values.govukEnvironment "integration" }}
-  PLEK_SERVICE_ACCOUNT_API_URI: https://account-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_ASSET_MANAGER_URI: https://asset-manager.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_CONTENT_STORE_URI: https://content-store.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_EMAIL_ALERT_API_URI: https://email-alert-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_LINK_CHECKER_API_URI: https://link-checker-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_LOCATIONS_API_URI: https://locations-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_ROUTER_API_URI: https://router-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_IMMINENCE_URI: https://imminence.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_LOCAL_LINKS_MANAGER_URI: https://local-links-manager.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_SEARCH_API_URI: https://search-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_SUPPORT_URI: https://support.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  PLEK_SERVICE_SUPPORT_API_URI: https://support-api.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
-  {{- end }}
