@@ -2468,7 +2468,7 @@ govukApplications:
       enabled: false
     workerEnabled: true
     cronTasks:
-      - name: -feedback-deduplication-nightly
+      - name: feedback-deduplication-nightly
         task: "anonymous_feedback_deduplication:nightly"
         schedule: "10 0 * * *"
       - name: import-organisations
