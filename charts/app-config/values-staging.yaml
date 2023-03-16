@@ -2103,6 +2103,10 @@ govukApplications:
         task: "kubernetes:sync_token_secrets[signon-secrets-sync-conf]"
         schedule: "5 1 * * *"
         serviceAccount: signon
+      - name: "delete-logs-older-than-two-years"
+        task: "event_log:delete_logs_older_than_two_years"
+        schedule: "15 1 * * *"
+        serviceAccount: signon
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *publishing-notify-template
@@ -2274,6 +2278,10 @@ govukApplications:
           ]}}]
       hosts:
         - name: short-url-manager.{{ .Values.k8sExternalDomainSuffix }}
+    cronTasks:
+      - name: organisations-import
+        task: "organisations:import"
+        schedule: "0 4 * * *"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -2459,6 +2467,19 @@ govukApplications:
     uploadAssets:
       enabled: false
     workerEnabled: true
+    cronTasks:
+      - name: anonymous-feedback-deduplication-nightly
+        task: "anonymous_feedback_deduplication:nightly"
+        schedule: "10 0 * * *"
+      - name: import-organisations
+        task: "api_sync:import_organisations"
+        schedule: "20 0 * * *"
+      - name: service-feedback-aggregation
+        task: "service_feedback_aggregation:daily"
+        schedule: "30 0 * * *"
+      - name: anonymous-feedback-deduplication-recent
+        task: "anonymous_feedback_deduplication:recent"
+        schedule: "*/5 * * * *"
     extraEnv:
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
