@@ -15,59 +15,40 @@ spec:
       container:
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command:
-          - "bundle"
-          - "exec"
-          - "cucumber --profile=${ENVIRONMENT} --strict-undefined --tags='@replatforming' --tags='not @notreplatforming and not @not${ENVIRONMENT}{{"{{ inputs.parameters.extra-args }}"}}'"
+          - bundle
+          - exec
+          - >-
+            cucumber --profile={{ .Values.govukEnvironment }} --strict-undefined --tags='not
+            @notreplatforming' --tags='not @not{{ .Values.govukEnvironment }}' --tags="{{"{{ inputs.parameters.extra-args }}"}}"
         env:
-        - name: ENVIRONMENT
-          valueFrom:
-            configMapKeyRef:
-              name: govuk-apps-env
-              key: GOVUK_ENVIRONMENT
-        - name: GOVUK_APP_DOMAIN
-          valueFrom:
-            configMapKeyRef:
-              name: govuk-apps-env
-              key: GOVUK_APP_DOMAIN
-        - name: GOVUK_APP_DOMAIN_EXTERNAL
-          valueFrom:
-            configMapKeyRef:
-              name: govuk-apps-env
-              key: GOVUK_APP_DOMAIN_EXTERNAL
-        - name: GOVUK_ASSET_ROOT
-          valueFrom:
-            configMapKeyRef:
-              name: govuk-apps-env
-              key: GOVUK_ASSET_ROOT
-        - name: GOVUK_WEBSITE_ROOT
-          valueFrom:
-            configMapKeyRef:
-              name: govuk-apps-env
-              key: GOVUK_WEBSITE_ROOT
-        - name: PLEK_SERVICE_ASSETS_URI
-          valueFrom:
-            configMapKeyRef:
-              name: govuk-apps-env
-              key: PLEK_SERVICE_ASSETS_URI
-        - name: PLEK_SERVICE_ASSETS_ORIGIN_URI
-          valueFrom:
-            configMapKeyRef:
-              name: govuk-apps-env
-              key: PLEK_SERVICE_DRAFT_ASSETS_URI
-        - name: PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS
-          value: "1"
-        - name: SIGNON_EMAIL
-          valueFrom:
-            secretKeyRef:
-              name: smokey-signon-account
-              key: email
-        - name: SIGNON_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: smokey-signon-account
-              key: password
-        - name: BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-smokey-asset-manager
-              key: bearer_token
+          - name: BEARER_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: bearer_token
+                name: signon-token-smokey-asset-manager
+          - name: ENVIRONMENT
+            value: {{ .Values.govukEnvironment }}
+          - name: GOVUK_APP_DOMAIN
+            value: ""
+          - name: GOVUK_APP_DOMAIN_EXTERNAL
+            value: eks.{{ .Values.govukEnvironment }}.govuk.digital
+          - name: GOVUK_ASSET_ROOT
+            value: https://assets-eks.{{ .Values.govukEnvironment }}.publishing.service.gov.uk
+          - name: GOVUK_WEBSITE_ROOT
+            value: https://www.eks.{{ .Values.govukEnvironment }}.govuk.digital
+          - name: PLEK_SERVICE_ASSETS_URI
+            value: https://assets-eks.{{ .Values.govukEnvironment }}.publishing.service.gov.uk
+          - name: PLEK_SERVICE_ASSETS_ORIGIN_URI
+            value: https://assets-origin.eks.{{ .Values.govukEnvironment }}.govuk.digital
+          - name: PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS
+            value: "1"
+          - name: SIGNON_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: smokey-signon-account
+                key: email
+          - name: SIGNON_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: smokey-signon-account
+                key: password
