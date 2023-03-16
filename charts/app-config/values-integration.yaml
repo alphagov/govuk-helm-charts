@@ -2620,6 +2620,8 @@ govukApplications:
         value: message_by_maisy
       - name: ENV_MESSAGE_OTHER
         value: message_by_other
+      - name: ENV_MESSAGE_ALEX
+        value: message_by_alex
 
 - name: whitehall-admin
   repoName: whitehall
