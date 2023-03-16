@@ -27,7 +27,7 @@ spec:
             arguments:
               parameters:
                 - name: extra-args
-                  value: "{{" and @app-{{workflow.parameters.application}}"}}"
+                  value: "{{"@app-{{workflow.parameters.application}}"}}"
           {{ if .Values.nextEnvironment }}
           - name: promote-release
             depends: smoke-test.Succeeded
