@@ -2434,7 +2434,7 @@ govukApplications:
         schedule: "30 0 * * *"
       - name: anonymous-feedback-deduplication-recent
         task: "anonymous_feedback_deduplication:recent"
-        schedule: "*/5 3 * * *"
+        schedule: "*/5 * * * *"
     extraEnv:
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
