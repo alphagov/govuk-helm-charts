@@ -15,6 +15,16 @@
     "spec": {
       "description": "Specification of desired Service selection for target discovery by Prometheus.",
       "properties": {
+        "attachMetadata": {
+          "description": "Attaches node metadata to discovered targets. Requires Prometheus v2.37.0 and above.",
+          "properties": {
+            "node": {
+              "description": "When set to true, Prometheus must have permissions to get Nodes.",
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
         "endpoints": {
           "description": "A list of endpoints allowed as part of this ServiceMonitor.",
           "items": {
@@ -43,15 +53,14 @@
                       "key"
                     ],
                     "type": "object",
-                    "additionalProperties": false
+                    "x-kubernetes-map-type": "atomic"
                   },
                   "type": {
                     "description": "Set the authentication type. Defaults to Bearer, Basic will cause an error",
                     "type": "string"
                   }
                 },
-                "type": "object",
-                "additionalProperties": false
+                "type": "object"
               },
               "basicAuth": {
                 "description": "BasicAuth allow an endpoint to authenticate over basic authentication More info: https://prometheus.io/docs/operating/configuration/#endpoints",
@@ -76,7 +85,7 @@
                       "key"
                     ],
                     "type": "object",
-                    "additionalProperties": false
+                    "x-kubernetes-map-type": "atomic"
                   },
                   "username": {
                     "description": "The secret in the service monitor namespace that contains the username for authentication.",
@@ -98,11 +107,10 @@
                       "key"
                     ],
                     "type": "object",
-                    "additionalProperties": false
+                    "x-kubernetes-map-type": "atomic"
                   }
                 },
-                "type": "object",
-                "additionalProperties": false
+                "type": "object"
               },
               "bearerTokenFile": {
                 "description": "File to read bearer token for scraping targets.",
@@ -128,7 +136,15 @@
                   "key"
                 ],
                 "type": "object",
-                "additionalProperties": false
+                "x-kubernetes-map-type": "atomic"
+              },
+              "enableHttp2": {
+                "description": "Whether to enable HTTP2.",
+                "type": "boolean"
+              },
+              "filterRunning": {
+                "description": "Drop pods that are not running. (Failed, Succeeded). Enabled by default. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase",
+                "type": "boolean"
               },
               "followRedirects": {
                 "description": "FollowRedirects configures whether scrape requests follow HTTP 3xx redirects.",
@@ -143,7 +159,8 @@
                 "type": "boolean"
               },
               "interval": {
-                "description": "Interval at which metrics should be scraped",
+                "description": "Interval at which metrics should be scraped If not specified Prometheus' global scrape interval is used.",
+                "pattern": "^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$",
                 "type": "string"
               },
               "metricRelabelings": {
@@ -153,15 +170,30 @@
                   "properties": {
                     "action": {
                       "default": "replace",
-                      "description": "Action to perform based on regex matching. Default is 'replace'",
+                      "description": "Action to perform based on regex matching. Default is 'replace'. uppercase and lowercase actions require Prometheus >= 2.36.",
                       "enum": [
                         "replace",
+                        "Replace",
                         "keep",
+                        "Keep",
                         "drop",
+                        "Drop",
                         "hashmod",
+                        "HashMod",
                         "labelmap",
+                        "LabelMap",
                         "labeldrop",
-                        "labelkeep"
+                        "LabelDrop",
+                        "labelkeep",
+                        "LabelKeep",
+                        "lowercase",
+                        "Lowercase",
+                        "uppercase",
+                        "Uppercase",
+                        "keepequal",
+                        "KeepEqual",
+                        "dropequal",
+                        "DropEqual"
                       ],
                       "type": "string"
                     },
@@ -196,8 +228,7 @@
                       "type": "string"
                     }
                   },
-                  "type": "object",
-                  "additionalProperties": false
+                  "type": "object"
                 },
                 "type": "array"
               },
@@ -227,7 +258,7 @@
                           "key"
                         ],
                         "type": "object",
-                        "additionalProperties": false
+                        "x-kubernetes-map-type": "atomic"
                       },
                       "secret": {
                         "description": "Secret containing data to use for the targets.",
@@ -249,11 +280,10 @@
                           "key"
                         ],
                         "type": "object",
-                        "additionalProperties": false
+                        "x-kubernetes-map-type": "atomic"
                       }
                     },
-                    "type": "object",
-                    "additionalProperties": false
+                    "type": "object"
                   },
                   "clientSecret": {
                     "description": "The secret containing the OAuth2 client secret",
@@ -275,7 +305,7 @@
                       "key"
                     ],
                     "type": "object",
-                    "additionalProperties": false
+                    "x-kubernetes-map-type": "atomic"
                   },
                   "endpointParams": {
                     "additionalProperties": {
@@ -302,8 +332,7 @@
                   "clientSecret",
                   "tokenUrl"
                 ],
-                "type": "object",
-                "additionalProperties": false
+                "type": "object"
               },
               "params": {
                 "additionalProperties": {
@@ -316,7 +345,7 @@
                 "type": "object"
               },
               "path": {
-                "description": "HTTP path to scrape for metrics.",
+                "description": "HTTP path to scrape for metrics. If empty, Prometheus uses the default value (e.g. `/metrics`).",
                 "type": "string"
               },
               "port": {
@@ -334,15 +363,30 @@
                   "properties": {
                     "action": {
                       "default": "replace",
-                      "description": "Action to perform based on regex matching. Default is 'replace'",
+                      "description": "Action to perform based on regex matching. Default is 'replace'. uppercase and lowercase actions require Prometheus >= 2.36.",
                       "enum": [
                         "replace",
+                        "Replace",
                         "keep",
+                        "Keep",
                         "drop",
+                        "Drop",
                         "hashmod",
+                        "HashMod",
                         "labelmap",
+                        "LabelMap",
                         "labeldrop",
-                        "labelkeep"
+                        "LabelDrop",
+                        "labelkeep",
+                        "LabelKeep",
+                        "lowercase",
+                        "Lowercase",
+                        "uppercase",
+                        "Uppercase",
+                        "keepequal",
+                        "KeepEqual",
+                        "dropequal",
+                        "DropEqual"
                       ],
                       "type": "string"
                     },
@@ -377,8 +421,7 @@
                       "type": "string"
                     }
                   },
-                  "type": "object",
-                  "additionalProperties": false
+                  "type": "object"
                 },
                 "type": "array"
               },
@@ -387,7 +430,8 @@
                 "type": "string"
               },
               "scrapeTimeout": {
-                "description": "Timeout after which the scrape is ended",
+                "description": "Timeout after which the scrape is ended If not specified, the Prometheus global scrape timeout is used unless it is less than `Interval` in which the latter is used.",
+                "pattern": "^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$",
                 "type": "string"
               },
               "targetPort": {
@@ -406,7 +450,7 @@
                 "description": "TLS configuration to use when scraping the endpoint",
                 "properties": {
                   "ca": {
-                    "description": "Struct containing the CA cert to use for the targets.",
+                    "description": "Certificate authority used when verifying server certificates.",
                     "properties": {
                       "configMap": {
                         "description": "ConfigMap containing data to use for the targets.",
@@ -428,7 +472,7 @@
                           "key"
                         ],
                         "type": "object",
-                        "additionalProperties": false
+                        "x-kubernetes-map-type": "atomic"
                       },
                       "secret": {
                         "description": "Secret containing data to use for the targets.",
@@ -450,18 +494,17 @@
                           "key"
                         ],
                         "type": "object",
-                        "additionalProperties": false
+                        "x-kubernetes-map-type": "atomic"
                       }
                     },
-                    "type": "object",
-                    "additionalProperties": false
+                    "type": "object"
                   },
                   "caFile": {
                     "description": "Path to the CA cert in the Prometheus container to use for the targets.",
                     "type": "string"
                   },
                   "cert": {
-                    "description": "Struct containing the client cert file for the targets.",
+                    "description": "Client certificate to present when doing client-authentication.",
                     "properties": {
                       "configMap": {
                         "description": "ConfigMap containing data to use for the targets.",
@@ -483,7 +526,7 @@
                           "key"
                         ],
                         "type": "object",
-                        "additionalProperties": false
+                        "x-kubernetes-map-type": "atomic"
                       },
                       "secret": {
                         "description": "Secret containing data to use for the targets.",
@@ -505,11 +548,10 @@
                           "key"
                         ],
                         "type": "object",
-                        "additionalProperties": false
+                        "x-kubernetes-map-type": "atomic"
                       }
                     },
-                    "type": "object",
-                    "additionalProperties": false
+                    "type": "object"
                   },
                   "certFile": {
                     "description": "Path to the client cert file in the Prometheus container for the targets.",
@@ -543,24 +585,22 @@
                       "key"
                     ],
                     "type": "object",
-                    "additionalProperties": false
+                    "x-kubernetes-map-type": "atomic"
                   },
                   "serverName": {
                     "description": "Used to verify the hostname for the targets.",
                     "type": "string"
                   }
                 },
-                "type": "object",
-                "additionalProperties": false
+                "type": "object"
               }
             },
-            "type": "object",
-            "additionalProperties": false
+            "type": "object"
           },
           "type": "array"
         },
         "jobLabel": {
-          "description": "Chooses the label of the Kubernetes `Endpoints`. Its value will be used for the `job`-label's value of the created metrics. \n Default & fallback value: the name of the respective Kubernetes `Endpoint`.",
+          "description": "JobLabel selects the label from the associated Kubernetes service which will be used as the `job` label for all metrics. \n For example: If in `ServiceMonitor.spec.jobLabel: foo` and in `Service.metadata.labels.foo: bar`, then the `job=\"bar\"` label is added to all metrics. \n If the value of this field is empty or if the label doesn't exist for the given Service, the `job` label of the metrics defaults to the name of the Kubernetes Service.",
           "type": "string"
         },
         "labelLimit": {
@@ -593,8 +633,7 @@
               "type": "array"
             }
           },
-          "type": "object",
-          "additionalProperties": false
+          "type": "object"
         },
         "podTargetLabels": {
           "description": "PodTargetLabels transfers labels on the Kubernetes `Pod` onto the created metrics.",
@@ -636,8 +675,7 @@
                   "key",
                   "operator"
                 ],
-                "type": "object",
-                "additionalProperties": false
+                "type": "object"
               },
               "type": "array"
             },
@@ -650,7 +688,7 @@
             }
           },
           "type": "object",
-          "additionalProperties": false
+          "x-kubernetes-map-type": "atomic"
         },
         "targetLabels": {
           "description": "TargetLabels transfers labels from the Kubernetes `Service` onto the created metrics.",
@@ -669,8 +707,7 @@
         "endpoints",
         "selector"
       ],
-      "type": "object",
-      "additionalProperties": false
+      "type": "object"
     }
   },
   "required": [
