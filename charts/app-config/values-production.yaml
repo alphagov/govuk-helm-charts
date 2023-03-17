@@ -458,11 +458,11 @@ govukApplications:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
       # https://github.com/alphagov/govuk-puppet/pull/8041
       - name: GOOGLE_TAG_MANAGER_AUTH
-        value: xcAlGBhKTIeO6y_JhmEapQ
+        value: sxvBI4QvwgTRX5e76vdIHA
       - name: GOOGLE_TAG_MANAGER_ID
         value: GTM-NZG8SF2
       - name: GOOGLE_TAG_MANAGER_PREVIEW
-        value: env-5
+        value: env-2
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -2214,7 +2214,7 @@ govukApplications:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
       # https://github.com/alphagov/govuk-puppet/pull/8041
       - name: GA_UNIVERSAL_ID
-        value: &ga-universal-id UA-26179049-20
+        value: &ga-universal-id UA-26179049-1
       - name: GOOGLE_TAG_MANAGER_ID
         value: &static-gtm-id GTM-MG7HG5W
       - name: PUBLISHING_API_BEARER_TOKEN
