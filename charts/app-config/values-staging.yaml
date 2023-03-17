@@ -1448,7 +1448,7 @@ govukApplications:
 - name: publisher
   helmValues:
     dbMigrationEnabled: true
-    workerEnabled: false
+    workerEnabled: true
     cronTasks:
       - name: reports-generate
         task: "reports:generate"
