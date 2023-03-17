@@ -274,6 +274,7 @@ govukApplications:
 
 - name: collections
   helmValues:
+    replicaCount: 4
     appResources:
       limits:
         cpu: 2
@@ -645,7 +646,15 @@ govukApplications:
 
 - name: content-store
   helmValues: &content-store
+    # TODO(chris.banks): tune these once we have some real-world usage data.
     replicaCount: 6
+    appResources:
+      limits:
+        cpu: 4
+        memory: 2500Mi
+      requests:
+        cpu: 2
+        memory: 2000Mi
     cronTasks:
       - name: report-delays
         task: "publishing_delay_report:report_delays"
@@ -924,6 +933,7 @@ govukApplications:
 
 - name: finder-frontend
   helmValues:
+    replicaCount: 4
     appResources:
       limits:
         cpu: 4
@@ -948,6 +958,7 @@ govukApplications:
 
 - name: frontend
   helmValues:
+    replicaCount: 4
     appResources:
       limits:
         cpu: 4
@@ -1030,6 +1041,7 @@ govukApplications:
 
 - name: government-frontend
   helmValues:
+    replicaCount: 6
     appResources:
       limits:
         cpu: 2
@@ -2145,6 +2157,13 @@ govukApplications:
       # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
       path: /app/public/assets/smartanswers
       s3Directory: "smartanswers"
+    appResources:
+      limits:
+        memory: 2Gi
+        cpu: "4"
+      requests:
+        memory: 1Gi
+        cpu: "2"
     extraEnv:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
@@ -2743,6 +2762,13 @@ govukApplications:
 - name: whitehall-frontend
   repoName: whitehall
   helmValues:
+    appResources:
+      limits:
+        memory: 4Gi
+        cpu: "2"
+      requests:
+        memory: 2Gi
+        cpu: "1"
     ingress:
       enabled: true
       annotations:
@@ -2791,10 +2817,3 @@ govukApplications:
           secretKeyRef:
             name: whitehall-mysql
             key: DATABASE_URL
-    appResources:
-      limits:
-        memory: 4Gi
-        cpu: "2"
-      requests:
-        memory: 2Gi
-        cpu: "1"
