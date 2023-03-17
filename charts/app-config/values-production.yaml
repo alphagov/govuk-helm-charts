@@ -380,9 +380,9 @@ govukApplications:
             name: collections-publisher-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: &publishing-notify-template 112842bb-d8a4-4511-90de-57dc5c8f27ec
+        value: &publishing-notify-template e00e89f5-b622-4dcb-8f30-e6c70231a940
       - name: PUBLISH_WITHOUT_2I_EMAIL
-        value: mainstream-publisher-notifications-production@digital.cabinet-office.gov.uk
+        value: mainstream-force-publishing-alerts@digital.cabinet-office.gov.uk
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
@@ -807,7 +807,7 @@ govukApplications:
             name: email-alert-api-notify
             key: GOVUK_NOTIFY_API_KEY
       - name: GOVUK_NOTIFY_TEMPLATE_ID
-        value: &frontend-notify-template 2844a647-6bf1-4b01-a25c-569d2cc00849
+        value: &frontend-notify-template cb633abc-6ae6-4843-ae6f-82ca500b6de2
       - name: GOVUK_NOTIFY_RECIPIENTS
         value: email-alert-api-production@digital.cabinet-office.gov.uk
       - name: REDIS_URL
@@ -888,13 +888,13 @@ govukApplications:
   helmValues:
     extraEnv:
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
-        value: d33f7857-7514-4458-81b9-0995f48e2ac5
+        value: b5baae45-0a68-4b63-91a1-66b05640d27e
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
-        value: b67971ed-a249-4afa-b05e-9adad9da551a
+        value: ceefedd7-3214-4774-8b57-f27c89aac90d
       - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
-        value: d1f54751-80a8-420a-9077-d34c7d6cc734
+        value: e8b2d8a6-db5f-4346-9fbd-49b16b531e1c
       - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
-        value: 8a8d98c0-42c8-4f56-b61f-77c89417a171
+        value: 54168fa9-3946-4860-a2f8-27ddbb14babe
       - name: SUPPORT_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -1529,17 +1529,17 @@ govukApplications:
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       - name: EMAIL_GROUP_BUSINESS
-        value: mainstream-publisher-notifications-production@digital.cabinet-office.gov.uk
+        value: publisher-alerts-business@digital.cabinet-office.gov.uk
       - name: EMAIL_GROUP_CITIZEN
-        value: mainstream-publisher-notifications-production@digital.cabinet-office.gov.uk
+        value: publisher-alerts-citizen@digital.cabinet-office.gov.uk
       - name: EMAIL_GROUP_DEV
-        value: mainstream-publisher-notifications-production@digital.cabinet-office.gov.uk
+        value: govuk-dev@digital.cabinet-office.gov.uk
       - name: EMAIL_GROUP_FORCE_PUBLISH_ALERTS
-        value: mainstream-publisher-notifications-production@digital.cabinet-office.gov.uk
+        value: mainstream-force-publishing-alerts@digital.cabinet-office.gov.uk
       - name: FACT_CHECK_REPLY_TO_ADDRESS
-        value: govuk-fact-check-production@digital.cabinet-office.gov.uk
+        value: govuk-fact-check@digital.cabinet-office.gov.uk
       - name: FACT_CHECK_REPLY_TO_ID
-        value: 88f713ff-7de0-43a6-8221-8721bedd103c
+        value: e739d23a-b761-44af-9a99-a1eba0b75c7e
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *publishing-notify-template
 
