@@ -692,6 +692,8 @@ govukApplications:
   repoName: content-store
   helmValues:
     <<: *content-store
+    replicaCount: 3
+    cronTasks: []
     rails:
       createKeyBaseSecret: false
     sentry:
