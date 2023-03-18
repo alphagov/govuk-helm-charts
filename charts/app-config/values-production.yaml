@@ -24,6 +24,10 @@ default-alb-ingress-annotations: &default-alb-ingress-annotations
   alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
   alb.ingress.kubernetes.io/ssl-redirect: "443"
   alb.ingress.kubernetes.io/healthcheck-path: /readyz
+  alb.ingress.kubernetes.io/load-balancer-attributes: >
+    access_logs.s3.enabled=true,
+    access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
+    access_logs.s3.prefix=elb/{{ $fullName }}
 
 alb-ingress-www-waf-ruleset: &alb-ingress-www-waf-ruleset
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
@@ -52,10 +56,6 @@ govukApplications:
         <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: account-api
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
-        alb.ingress.kubernetes.io/load-balancer-attributes: >
-          access_logs.s3.enabled=true,
-          access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-          access_logs.s3.prefix=elb/account-api-eks
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "account-api.{{ .Values.publishingDomainSuffix }}"
@@ -129,7 +129,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
           access_logs.s3.enabled=true,
           access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-          access_logs.s3.prefix=elb/assets-origin-eks
+          access_logs.s3.prefix=elb/assets-origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "{{ .Values.assetsDomain }}",
@@ -1718,7 +1718,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-attributes: >
           access_logs.s3.enabled=true,
           access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-          access_logs.s3.prefix=elb/www-origin-eks
+          access_logs.s3.prefix=elb/www-origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.{{ .Values.externalDomainSuffix }}",
