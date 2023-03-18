@@ -58,11 +58,11 @@ govukApplications:
         <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: account-api
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
-        alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
+        alb.ingress.kubernetes.io/load-balancer-attributes: >
           access_logs.s3.enabled=true,
           access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-          access_logs.s3.prefix=elb/asset-manager-eks
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions >
+          access_logs.s3.prefix=elb/account-api-eks
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "account-api.{{ .Values.publishingDomainSuffix }}"
           ]}}]
