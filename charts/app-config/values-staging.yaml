@@ -1705,7 +1705,7 @@ govukApplications:
         - blue.staging.govuk-internal.digital
     appResources:
       limits:
-        cpu: 3
+        cpu: 4
         memory: 2Gi
       requests:
         cpu: 2
@@ -1762,6 +1762,8 @@ govukApplications:
         failureThreshold: 2
         periodSeconds: 5
     extraEnv:
+      - name: GOMAXPROCS
+        value: "4"  # Keep this similar to the CPU limit (in whole cores).
       - name: SENTRY_ENVIRONMENT
         value: "staging-eks"
       - name: ROUTER_PUBADDR
@@ -1823,6 +1825,8 @@ govukApplications:
       create: false
       name: draft-router-nginx-conf
     extraEnv:
+      - name: GOMAXPROCS
+        value: "4"  # Keep this similar to the CPU limit (in whole cores).
       - name: ROUTER_PUBADDR
         value: ":3000"
       - name: ROUTER_APIADDR
