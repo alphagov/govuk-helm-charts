@@ -455,14 +455,10 @@ govukApplications:
           secretKeyRef:
             name: signon-token-content-data-admin-content-data-api
             key: bearer_token
-      # These GA/GTM values are not secrets (not even the the gtm_auth one).
-      # https://github.com/alphagov/govuk-puppet/pull/8041
-      - name: GOOGLE_TAG_MANAGER_AUTH
-        value: sxvBI4QvwgTRX5e76vdIHA
+      # These GA/GTM values are not secrets
+      # https://www.github.com/alphagov/govuk-puppet/pull/8041
       - name: GOOGLE_TAG_MANAGER_ID
         value: GTM-NZG8SF2
-      - name: GOOGLE_TAG_MANAGER_PREVIEW
-        value: env-2
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
