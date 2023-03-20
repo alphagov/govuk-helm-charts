@@ -50,6 +50,11 @@ govukApplications:
     dbMigrationEnabled: true
     # TODO(chris.banks): during launch: global replace s/workerEnabled: false/workerEnabled: true/
     workerEnabled: false
+    workers:
+      - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+        name: worker
+      - command: ['rake', 'message_queue:consumer']
+        name: publishing-queue-listener
     ingress:
       enabled: true
       annotations:
