@@ -45,5 +45,9 @@ data:
   PLEK_SERVICE_ASSETS_URI: https://{{ .Values.assetsDomain }}
   PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
 
+  # Override to force publishing applications to use EKS version of Signon
+  # TODO: remove once publishing apps have migrated
+  PLEK_SERVICE_SIGNON_URI: https://signon.{{ .Values.k8sPublishingDomainSuffix }}
+
   # Services which remain in EC2 for a while after "MVP launch".
   PLEK_SERVICE_LICENSIFY_URI: https://licensify.{{ .Values.govukEnvironment }}.{{ .Values.ec2InternalDomainSuffix }}
