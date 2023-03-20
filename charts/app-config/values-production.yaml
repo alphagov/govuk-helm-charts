@@ -2134,10 +2134,6 @@ govukApplications:
             key: DEVISE_SECRET_KEY
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
-      - name: SIGNON_APPS_URI_SUB_PATTERN
-        value: publishing.service.gov.uk
-      - name: SIGNON_APPS_URI_SUB_REPLACEMENT
-        value: eks.production.govuk.digital
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
