@@ -2,7 +2,7 @@
 # individual apps below.
 
 govukEnvironment: production
-externalDomainSuffix: publishing.service.gov.uk
+externalDomainSuffix: gov.uk
 publishingDomainSuffix: publishing.service.gov.uk
 assetsDomain: assets.publishing.service.gov.uk
 
