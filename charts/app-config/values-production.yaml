@@ -24,6 +24,11 @@ default-alb-ingress-annotations: &default-alb-ingress-annotations
   alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
   alb.ingress.kubernetes.io/ssl-redirect: "443"
   alb.ingress.kubernetes.io/healthcheck-path: /readyz
+  alb.ingress.kubernetes.io/load-balancer-name: "{{ .Release.Name }}"
+  alb.ingress.kubernetes.io/load-balancer-attributes: >
+    access_logs.s3.enabled=true,
+    access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
+    access_logs.s3.prefix=elb/{{ .Release.Name }}
 
 alb-ingress-www-waf-ruleset: &alb-ingress-www-waf-ruleset
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
@@ -52,11 +57,7 @@ govukApplications:
         <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: account-api
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
-        alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
-          access_logs.s3.enabled=true,
-          access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-          access_logs.s3.prefix=elb/asset-manager-eks
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions >
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "account-api.{{ .Values.publishingDomainSuffix }}"
           ]}}]
@@ -129,13 +130,10 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
           access_logs.s3.enabled=true,
           access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-          access_logs.s3.prefix=elb/assets-origin-eks
+          access_logs.s3.prefix=elb/assets-origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "{{ .Values.assetsDomain }}",
-              "{{ .Values.k8sAssetsDomain }}",
-              "assets-origin.{{ .Values.publishingDomainSuffix }}",
-              "draft-assets.{{ .Values.publishingDomainSuffix }}"
+              "*assets*.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
@@ -143,13 +141,7 @@ govukApplications:
             - path: /government/uploads/
             - path: /government/assets/
             - path: /media/
-            - path: /auth/gds  # Viewing assets requires user auth.
-        - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
-          paths:
-            - path: /government/uploads/
-            - path: /government/assets/
-            - path: /media/
-            - path: /auth/gds  # Viewing assets requires user auth.
+            - path: /auth/gds  # Viewing draft assets requires user auth.
     assetManagerNFS: &assets-nfs assets.blue.production.govuk-internal.digital
     nginxConfigMap:
       create: false
@@ -246,7 +238,6 @@ govukApplications:
         alb.ingress.kubernetes.io/target-type: ip
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
         alb.ingress.kubernetes.io/healthcheck-path: /readyz
-        alb.ingress.kubernetes.io/load-balancer-name: bouncer
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         external-dns.alpha.kubernetes.io/hostname: bouncer.{{ .Values.k8sExternalDomainSuffix }}
       rules:
@@ -341,7 +332,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: collections-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "collections-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -398,7 +388,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: contacts-admin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "contacts-admin.{{ .Values.publishingDomainSuffix }}"
@@ -440,7 +429,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: content-data-admin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "content-data.{{ .Values.publishingDomainSuffix }}"
@@ -455,14 +443,10 @@ govukApplications:
           secretKeyRef:
             name: signon-token-content-data-admin-content-data-api
             key: bearer_token
-      # These GA/GTM values are not secrets (not even the the gtm_auth one).
-      # https://github.com/alphagov/govuk-puppet/pull/8041
-      - name: GOOGLE_TAG_MANAGER_AUTH
-        value: sxvBI4QvwgTRX5e76vdIHA
+      # These GA/GTM values are not secrets
+      # https://www.github.com/alphagov/govuk-puppet/pull/8041
       - name: GOOGLE_TAG_MANAGER_ID
         value: GTM-NZG8SF2
-      - name: GOOGLE_TAG_MANAGER_PREVIEW
-        value: env-2
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
@@ -581,7 +565,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: content-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "content-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -735,7 +718,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: content-tagger
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "content-tagger.{{ .Values.publishingDomainSuffix }}"
@@ -1075,7 +1057,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: hmrc-manuals-api
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "hmrc-manuals-api.{{ .Values.publishingDomainSuffix }}"
@@ -1113,7 +1094,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: imminence
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "imminence.{{ .Values.publishingDomainSuffix }}"
@@ -1213,7 +1193,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: local-links-manager
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "local-links-manager.{{ .Values.publishingDomainSuffix }}"
@@ -1360,7 +1339,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: manuals-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "manuals-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -1418,7 +1396,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: maslow
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "maslow.{{ .Values.publishingDomainSuffix }}"
@@ -1465,7 +1442,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "publisher.{{ .Values.publishingDomainSuffix }}"
@@ -1609,7 +1585,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: release
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "release.{{ .Values.publishingDomainSuffix }}"
@@ -1718,7 +1693,7 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-attributes: >
           access_logs.s3.enabled=true,
           access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-          access_logs.s3.prefix=elb/www-origin-eks
+          access_logs.s3.prefix=elb/www-origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "www.{{ .Values.externalDomainSuffix }}",
@@ -1875,7 +1850,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: search-admin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "search-admin.{{ .Values.publishingDomainSuffix }}"
@@ -2033,7 +2007,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: service-manual-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "service-manual-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -2093,7 +2066,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: signon
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
@@ -2212,8 +2184,6 @@ govukApplications:
       hosts:
         - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
           path: /
-        - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
-          path: /
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
       # https://github.com/alphagov/govuk-puppet/pull/8041
@@ -2277,7 +2247,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: short-url-manager
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "short-url-manager.{{ .Values.publishingDomainSuffix }}"
@@ -2330,7 +2299,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: specialist-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "specialist-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -2409,7 +2377,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: support
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "support.{{ .Values.publishingDomainSuffix }}"
@@ -2548,7 +2515,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: transition
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "transition.{{ .Values.publishingDomainSuffix }}"
@@ -2609,7 +2575,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: travel-advice-publisher
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "travel-advice-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -2692,7 +2657,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/load-balancer-name: whitehall-admin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "whitehall-admin.{{ .Values.publishingDomainSuffix }}"
