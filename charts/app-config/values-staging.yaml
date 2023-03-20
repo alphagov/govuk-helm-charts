@@ -56,11 +56,6 @@ govukApplications:
       enabled: false
     dbMigrationEnabled: true
     workerEnabled: true
-    workers:
-      - command: ["sidekiq", "-C", "config/sidekiq.yml"]
-        name: worker
-      - command: ['rake', 'message_queue:consumer']
-        name: publishing-queue-listener
     ingress:
       enabled: true
       annotations:
