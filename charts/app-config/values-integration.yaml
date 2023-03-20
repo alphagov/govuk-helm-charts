@@ -103,6 +103,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-account-api-publishing-api
             key: bearer_token
+      - name: SESSION_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: account-api-session-secret
+            key: session_secret
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
