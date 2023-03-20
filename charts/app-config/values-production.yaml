@@ -48,8 +48,7 @@ govukApplications:
     uploadAssets:
       enabled: false
     dbMigrationEnabled: true
-    # TODO(chris.banks): during launch: global replace s/workerEnabled: false/workerEnabled: true/
-    workerEnabled: false
+    workerEnabled: true
     workers:
       - command: ["sidekiq", "-C", "config/sidekiq.yml"]
         name: worker
@@ -127,7 +126,7 @@ govukApplications:
 - name: asset-manager
   chartPath: charts/asset-manager
   helmValues:
-    workerEnabled: false
+    workerEnabled: true
     ingress:
       enabled: true
       annotations:
@@ -318,6 +317,7 @@ govukApplications:
     rails:
       enabled: false
     appEnabled: false
+    # TODO(chris.banks): during launch: global replace s/workerEnabled: false/workerEnabled: true/
     workerEnabled: false
     workers:
       - command: ["rake", "message_queue:consumer", "QUEUE=high"]
@@ -768,7 +768,7 @@ govukApplications:
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
-    workerEnabled: false
+    workerEnabled: true
     extraEnv:
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
@@ -1111,7 +1111,7 @@ govukApplications:
       hosts:
         - name: imminence.{{ .Values.k8sExternalDomainSuffix }}
     nginxProxyReadTimeout: 60s
-    workerEnabled: false
+    workerEnabled: true
     extraEnv:
       - name: DATABASE_URL
         valueFrom:
@@ -1161,7 +1161,7 @@ govukApplications:
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
-    workerEnabled: false
+    workerEnabled: true
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1536,7 +1536,7 @@ govukApplications:
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
-    workerEnabled: false
+    workerEnabled: true
     cronTasks:
       - name: events-export
         task: "events:export_to_s3"
@@ -2070,7 +2070,7 @@ govukApplications:
 - name: signon
   helmValues:
     dbMigrationEnabled: true
-    workerEnabled: false
+    workerEnabled: true
     ingress:
       enabled: true
       annotations:
@@ -2394,7 +2394,7 @@ govukApplications:
         - name: support.{{ .Values.k8sExternalDomainSuffix }}
     uploadAssets:
       path: /app/public/assets/support
-    workerEnabled: false
+    workerEnabled: true
     extraEnv:
       - name: AWS_REGION
         value: eu-west-1
@@ -2448,7 +2448,7 @@ govukApplications:
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
-    workerEnabled: false
+    workerEnabled: true
     cronTasks:
       - name: feedback-deduplication-nightly
         task: "anonymous_feedback_deduplication:nightly"
