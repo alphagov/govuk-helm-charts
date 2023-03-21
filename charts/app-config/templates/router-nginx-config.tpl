@@ -156,11 +156,6 @@ http {
         rewrite ^(.*)$ $scheme://$host$uri_lowercase permanent;
       }
 
-      # If slug contains mIxEd CaSe, then return 404.
-      location ~ ^\/(?=.*[A-Z])(?=.*[a-z]).*$ {
-        return 404;
-      }
-
       # If slug has trailing URL, direct after trimming.
       location ~ ^\/(.+)\/$ {
         rewrite ^\/(.+)\/$ $scheme://$host/$1 permanent;
