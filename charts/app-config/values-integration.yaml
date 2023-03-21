@@ -2024,7 +2024,6 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "signon.{{ .Values.publishingDomainSuffix }}"
