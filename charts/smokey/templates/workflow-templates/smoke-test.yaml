@@ -30,7 +30,7 @@ spec:
             value: {{ .Values.govukEnvironment }}
           - name: GOVUK_APP_DOMAIN
             value: ""
-          {{- if eq .Values.govukEnvironment "integration" }}
+          {{- if ne .Values.govukEnvironment "production" }}
           - name: GOVUK_APP_DOMAIN_EXTERNAL
             value: {{ .Values.publishingDomainSuffix }}
           - name: GOVUK_ASSET_ROOT
