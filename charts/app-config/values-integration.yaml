@@ -2085,10 +2085,6 @@ govukApplications:
         value: "1"
       - name: MANDATE_2SV_FOR_ORGANISATION
         value: "1"
-      - name: SIGNON_APPS_URI_SUB_PATTERN
-        value: integration.publishing.service.gov.uk
-      - name: SIGNON_APPS_URI_SUB_REPLACEMENT
-        value: eks.integration.govuk.digital
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
