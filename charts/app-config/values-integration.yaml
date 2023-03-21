@@ -149,6 +149,12 @@ govukApplications:
             - path: /government/assets/
             - path: /media/
             - path: /auth/gds  # Viewing draft assets requires user auth.
+        - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
+          paths:
+            - path: /government/uploads/
+            - path: /government/assets/
+            - path: /media/
+            - path: /auth/gds  # Viewing draft assets requires user auth.
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
@@ -2135,6 +2141,8 @@ govukApplications:
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
       hosts:
         - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
+          path: /
+        - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
           path: /
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
