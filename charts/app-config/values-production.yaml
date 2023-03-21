@@ -203,11 +203,9 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: draft-origin
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "draft-assets.{{ .Values.publishingDomainSuffix }}",
               "draft-origin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
-        - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
         - name: draft-origin.{{ .Values.k8sExternalDomainSuffix }}
     uploadAssets:
       enabled: false
@@ -2195,8 +2193,6 @@ govukApplications:
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
       hosts:
         - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
-          path: /
-        - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
           path: /
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
