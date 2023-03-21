@@ -124,6 +124,10 @@ spec:
             # Asset Manager shares an NFS volume with its EC2 counterpart.
             runAsUser: *old-ec2-deploy-uid
             runAsGroup: *old-ec2-deploy-uid
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           ports:
@@ -157,3 +161,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
