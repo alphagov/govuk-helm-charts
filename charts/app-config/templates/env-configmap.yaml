@@ -47,7 +47,7 @@ data:
 
   # Override to force publishing applications to use EKS version of Signon
   # TODO: remove once publishing apps have migrated
-  {{- if ne .Values.govukEnvironment "integration" }}
+  {{- if eq .Values.govukEnvironment "production" }}
   PLEK_SERVICE_SIGNON_URI: https://signon.{{ .Values.k8sPublishingDomainSuffix }}
   {{- end }}
 
