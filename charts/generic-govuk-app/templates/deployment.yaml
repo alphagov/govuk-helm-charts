@@ -126,6 +126,10 @@ spec:
             {{- with .Values.appExtraVolumeMounts }}
               {{- . | toYaml | trim | nindent 12 }}
             {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
@@ -164,4 +168,8 @@ spec:
             {{- with .Values.nginxExtraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
 {{- end }}
