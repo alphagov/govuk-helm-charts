@@ -2100,6 +2100,11 @@ govukApplications:
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *publishing-notify-template
+      - name: GOVUK_NOTIFY_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: signon-notify
+            key: GOVUK_NOTIFY_API_KEY
       - name: INSTANCE_NAME
         value: production
       - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
