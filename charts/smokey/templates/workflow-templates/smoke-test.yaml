@@ -12,6 +12,8 @@ spec:
       inputs:
         parameters:
           - name: extra-args
+      retryStrategy:
+        limit: "2"
       container:
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command:
