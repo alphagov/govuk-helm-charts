@@ -1337,7 +1337,7 @@ govukApplications:
             name: locations-api-os-places
             key: api-secret
       - name: OS_PLACES_API_POSTCODES_PER_SECOND
-        value: "1"
+        value: "3"
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
 
