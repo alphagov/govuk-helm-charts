@@ -638,6 +638,7 @@ govukApplications:
 
 - name: content-store
   helmValues: &content-store
+    nginxClientMaxBodySize: 20M
     # TODO(chris.banks): tune these once we have some real-world usage data.
     replicaCount: 6
     appResources:

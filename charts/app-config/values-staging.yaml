@@ -651,6 +651,7 @@ govukApplications:
 
 - name: content-store
   helmValues: &content-store
+    nginxClientMaxBodySize: 20M
     replicaCount: 6
     cronTasks:
       - name: report-delays
