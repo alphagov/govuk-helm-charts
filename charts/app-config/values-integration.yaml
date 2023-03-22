@@ -2493,6 +2493,8 @@ govukApplications:
           ]}}]
       hosts:
         - name: transition.{{ .Values.k8sExternalDomainSuffix }}
+    dbMigrationEnabled: true
+    workerEnabled: true
     transitionConfigEnabled: true
     cronTasks:
       - name: import-dns
@@ -2507,8 +2509,14 @@ govukApplications:
       - name: refresh-materialized
         task: "import:hits:refresh_materialized"
         schedule: "30 0,12 * * *"
-    dbMigrationEnabled: true
-    workerEnabled: true
+    extraVolumes:
+      - name: transition-config-efs
+        nfs:
+          server: *assets-nfs
+          path: /transition
+    appExtraVolumeMounts:
+      - name: transition-config-efs
+        mountPath: /app/data/transition-config
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -2539,14 +2547,6 @@ govukApplications:
             key: DATABASE_URL
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-    extraVolumes:
-      - name: transition-config-efs
-        nfs:
-          server: *assets-nfs
-          path: /transition
-    appExtraVolumeMounts:
-      - name: transition-config-efs
-        mountPath: /app/data/transition-config
 
 - name: travel-advice-publisher
   helmValues:
