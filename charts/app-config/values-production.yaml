@@ -2795,5 +2795,5 @@ govukApplications:
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
-            name: whitehall-mysql
+            name: whitehall-frontend-mysql
             key: DATABASE_URL
