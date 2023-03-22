@@ -2711,7 +2711,7 @@ govukApplications:
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
-            name: whitehall-mysql
+            name: whitehall-admin-mysql
             key: DATABASE_URL
     extraVolumes:
       - name: asset-uploads-efs
@@ -2770,7 +2770,7 @@ govukApplications:
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
-            name: whitehall-mysql
+            name: whitehall-frontend-mysql
             key: DATABASE_URL
     appResources:
       limits:
