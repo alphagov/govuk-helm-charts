@@ -640,6 +640,7 @@ govukApplications:
 
 - name: content-store
   helmValues: &content-store
+    nginxClientMaxBodySize: 20M
     cronTasks:
       - name: report-delays
         task: "publishing_delay_report:report_delays"
