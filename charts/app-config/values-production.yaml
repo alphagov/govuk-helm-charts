@@ -804,7 +804,7 @@ govukApplications:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: &frontend-notify-template cb633abc-6ae6-4843-ae6f-82ca500b6de2
       - name: GOVUK_NOTIFY_RECIPIENTS
-        value: email-alert-api-production@digital.cabinet-office.gov.uk
+        value: '*'
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       - name: WEB_CONCURRENCY
