@@ -1,12 +1,12 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: whitehall-mysql
+  name: whitehall-admin-mysql
   labels:
     {{- include "external-secrets.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      Credentials for Whitehall to connect to MYSQL.
+      Credentials for Whitehall Admin to connect to MYSQL.
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
@@ -14,10 +14,10 @@ spec:
     kind: ClusterSecretStore
   target:
     deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
-    name: whitehall-mysql
+    name: whitehall-admin-mysql
     template:
       data:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/mysql-conn-string.tpl" | trim }}/whitehall_production'
   dataFrom:
     - extract:
-        key: govuk/whitehall/mysql-primary
+        key: govuk/whitehall-admin/mysql
