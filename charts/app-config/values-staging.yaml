@@ -2540,6 +2540,17 @@ govukApplications:
           ]}}]
       hosts:
         - name: transition.{{ .Values.k8sExternalDomainSuffix }}
+    dbMigrationEnabled: true
+    workerEnabled: false
+    transitionConfigEnabled: true
+    extraVolumes:
+      - name: transition-config-efs
+        nfs:
+          server: *assets-nfs
+          path: /transition
+    appExtraVolumeMounts:
+      - name: transition-config-efs
+        mountPath: /app/data/transition-config
     cronTasks:
       - name: import-dns
         task: "import:dns_details"
@@ -2553,8 +2564,6 @@ govukApplications:
       - name: refresh-materialized
         task: "import:hits:refresh_materialized"
         schedule: "30 0,12 * * *"
-    dbMigrationEnabled: true
-    workerEnabled: true
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -2568,16 +2577,6 @@ govukApplications:
             key: oauth_secret
       - name: AWS_REGION
         value: eu-west-1
-      - name: BASIC_AUTH_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: basic-auth
-            key: password
-      - name: BASIC_AUTH_USERNAME
-        valueFrom:
-          secretKeyRef:
-            name: basic-auth
-            key: username
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
