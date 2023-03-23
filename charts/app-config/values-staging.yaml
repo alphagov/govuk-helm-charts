@@ -780,28 +780,28 @@ govukApplications:
       enabled: true
       annotations:
         <<: *default-alb-ingress-annotations
-        <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "email-alert-api-public.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       rules:
         - host: email-alert-api.{{ .Values.k8sExternalDomainSuffix }}
-          paths:
-            - path: /status-updates
-              pathType: Prefix
-              backend:
-                service:
-                  name: email-alert-api
-                  port:
-                    number: '80'
-            - path: /spam-reports
-              pathType: Prefix
-              backend:
-                service:
-                  name: email-alert-api
-                  port:
-                    number: '80'
+          http:
+            paths:
+              - path: /status-updates
+                pathType: Prefix
+                backend:
+                  service:
+                    name: email-alert-api
+                    port:
+                      number: '80'
+              - path: /spam-reports
+                pathType: Prefix
+                backend:
+                  service:
+                    name: email-alert-api
+                    port:
+                      number: '80'
     extraEnv:
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
