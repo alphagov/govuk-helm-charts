@@ -28,7 +28,7 @@ spec:
               parameters:
                 - name: extra-args
                   value: "{{"@app-{{workflow.parameters.application}}"}}"
-          {{ if .Values.nextEnvironment }}
+    {{ if .Values.nextEnvironment }}
           - name: promote-release
             depends: smoke-test.Succeeded
             when: "{{"'{{workflow.parameters.application}}' !~ '^draft-'"}}"
@@ -43,7 +43,6 @@ spec:
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
                 - name: manualDeploy
                   value: "false"
-          {{- end }}
 
     - name: send-webhook
       inputs:
@@ -76,6 +75,7 @@ spec:
               secretKeyRef:
                 name: deploy-image-webhook-endpoint
                 key: url
+    {{- end }}
 
     - name: exit-handler
       steps:
