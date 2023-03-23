@@ -768,7 +768,7 @@ govukApplications:
               "email-alert-api-public.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       rules:
-        - host: email-alert-api.{{ .Values.k8sExternalDomainSuffix }}
+        - host: email-alert-api.eks.integration.govuk.digital
           http:
             paths:
               - path: /status-updates
