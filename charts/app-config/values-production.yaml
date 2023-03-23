@@ -2188,7 +2188,6 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '30'
-        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
       hosts:
@@ -2747,7 +2746,6 @@ govukApplications:
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
         alb.ingress.kubernetes.io/group.order: '10'
-        alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
       hosts:
