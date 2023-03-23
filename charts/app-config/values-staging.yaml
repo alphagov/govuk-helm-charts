@@ -794,14 +794,14 @@ govukApplications:
                   service:
                     name: email-alert-api
                     port:
-                      number: '80'
+                      number: 80
               - path: /spam-reports
                 pathType: Prefix
                 backend:
                   service:
                     name: email-alert-api
                     port:
-                      number: '80'
+                      number: 80
     extraEnv:
       - name: ACCOUNT_API_BEARER_TOKEN
         valueFrom:
