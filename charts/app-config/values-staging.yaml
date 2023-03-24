@@ -1569,7 +1569,7 @@ govukApplications:
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
-    workerEnabled: true
+    workerEnabled: false
     cronTasks:
       - name: events-export
         task: "events:export_to_s3"
