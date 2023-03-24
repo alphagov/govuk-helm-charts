@@ -2533,7 +2533,7 @@ govukApplications:
           path: /transition
     appExtraVolumeMounts:
       - name: transition-config-efs
-        mountPath: /app/data/transition-config
+        mountPath: /app/data
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
