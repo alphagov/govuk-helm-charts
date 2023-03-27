@@ -1140,6 +1140,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: imminence.{{ .Values.k8sExternalDomainSuffix }}
+    nginxClientMaxBodySize: &max-upload-size 500M
     nginxProxyReadTimeout: 60s
     workerEnabled: true
     extraEnv:
