@@ -1471,7 +1471,7 @@ govukApplications:
 - name: publisher
   helmValues:
     dbMigrationEnabled: true
-    workerEnabled: false
+    workerEnabled: true
     cronTasks:
       - name: reports-generate
         task: "reports:generate"
@@ -1570,7 +1570,7 @@ govukApplications:
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
-    workerEnabled: false
+    workerEnabled: true
     cronTasks:
       - name: events-export
         task: "events:export_to_s3"
