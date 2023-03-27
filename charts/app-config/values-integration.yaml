@@ -954,6 +954,8 @@ govukApplications:
           secretKeyRef:
             name: signon-token-finder-frontend-email-alert-api
             key: bearer_token
+      - name: DISABLE_LTR_ON_PATHS
+        value: /find-licences
 
 - name: frontend
   helmValues:
