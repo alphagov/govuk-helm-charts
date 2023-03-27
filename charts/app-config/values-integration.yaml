@@ -1914,7 +1914,7 @@ govukApplications:
       - name: ELASTICSEARCH_URI
         value: *elasticsearch-uri
       - name: ENABLE_LTR
-        value: "true"
+        value: "false"
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
