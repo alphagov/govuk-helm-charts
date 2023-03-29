@@ -434,7 +434,8 @@ govukApplications:
         <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "content-data.{{ .Values.publishingDomainSuffix }}"
+              "content-data.{{ .Values.publishingDomainSuffix }}",
+              "content-data-admin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
