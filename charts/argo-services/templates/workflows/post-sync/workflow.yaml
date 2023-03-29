@@ -43,6 +43,8 @@ spec:
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
                 - name: manualDeploy
                   value: "false"
+                - name: promoteDeployment
+                  value: "true"
 
     - name: send-webhook
       inputs:
@@ -51,6 +53,7 @@ spec:
         - name: repoName
         - name: imageTag
         - name: manualDeploy
+        - name: promoteDeployment
       script:
         image: curlimages/curl
         command:
@@ -62,7 +65,8 @@ spec:
               "environment": "{{"{{inputs.parameters.environment}}"}}",
               "repoName": "{{"{{inputs.parameters.repoName}}"}}",
               "imageTag": "{{"{{inputs.parameters.imageTag}}"}}",
-              "manualDeploy": "{{"{{inputs.parameters.manualDeploy}}"}}"
+              "manualDeploy": "{{"{{inputs.parameters.manualDeploy}}"}}",
+              "promoteDeployment": "{{"{{inputs.parameters.promoteDeployment}}"}}"
             }'
         env:
           - name: WEBHOOK_TOKEN
