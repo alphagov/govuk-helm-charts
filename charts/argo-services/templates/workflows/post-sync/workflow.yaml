@@ -69,11 +69,8 @@ spec:
             value: "{{"{{inputs.parameters.environment}}"}}"
           - name: REPO_NAME
             value: "{{"{{inputs.parameters.repoName}}"}}"
-        source: >
-          export DEPLOYMENT_CONFIG_URL="https://raw.githubusercontent.com/alphagov/govuk-helm-charts/main/charts/app-config/image-tags/${ENVIRONMENT}/${REPO_NAME}"
-
-          curl -Ls $DEPLOYMENT_CONFIG_URL | yq ".promote_deployment" -
-
+        source: |
+          {{- .Files.Get "scripts/check-for-promotion.sh" | nindent 14 }}
     - name: send-webhook
       inputs:
         parameters:
