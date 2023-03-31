@@ -29,9 +29,19 @@ spec:
                 - name: extra-args
                   value: "{{"@app-{{workflow.parameters.application}}"}}"
     {{ if .Values.nextEnvironment }}
-          - name: promote-release
+          - name: check-for-promotion
             depends: smoke-test.Succeeded
             when: "{{"'{{workflow.parameters.application}}' !~ '^draft-'"}}"
+            template: check-for-promotion
+            arguments:
+              parameters:
+                - name: environment
+                  value: "{{ .Values.govukEnvironment }}"
+                - name: repoName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
+          - name: promote-release
+            depends: check-for-promotion.Succeeded
+            when: "{{"'{{tasks.check-for-promotion.outputs.result}}' !~ '^true'"}}"
             template: send-webhook
             arguments:
               parameters:
@@ -43,6 +53,26 @@ spec:
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
                 - name: manualDeploy
                   value: "false"
+                - name: promoteDeployment
+                  value: "true"
+
+    - name: check-for-promotion
+      inputs:
+        parameters:
+        - name: environment
+        - name: repoName
+      script:
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
+        command: [/bin/bash]
+        env:
+          - name: ENVIRONMENT
+            value: "{{"{{inputs.parameters.environment}}"}}"
+          - name: REPO_NAME
+            value: "{{"{{inputs.parameters.repoName}}"}}"
+        source: >
+          export DEPLOYMENT_CONFIG_URL="https://raw.githubusercontent.com/alphagov/govuk-helm-charts/main/charts/app-config/image-tags/${ENVIRONMENT}/${REPO_NAME}"
+
+          curl -Ls $DEPLOYMENT_CONFIG_URL | yq ".promote_deployment" -
 
     - name: send-webhook
       inputs:
@@ -51,6 +81,7 @@ spec:
         - name: repoName
         - name: imageTag
         - name: manualDeploy
+        - name: promoteDeployment
       script:
         image: curlimages/curl
         command:
@@ -62,7 +93,8 @@ spec:
               "environment": "{{"{{inputs.parameters.environment}}"}}",
               "repoName": "{{"{{inputs.parameters.repoName}}"}}",
               "imageTag": "{{"{{inputs.parameters.imageTag}}"}}",
-              "manualDeploy": "{{"{{inputs.parameters.manualDeploy}}"}}"
+              "manualDeploy": "{{"{{inputs.parameters.manualDeploy}}"}}",
+              "promoteDeployment": "{{"{{inputs.parameters.promoteDeployment}}"}}"
             }'
         env:
           - name: WEBHOOK_TOKEN

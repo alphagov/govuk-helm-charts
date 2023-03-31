@@ -10,6 +10,7 @@ change_image_tag() {
   git checkout -b "${BRANCH}"
 
   yq -i '.image_tag = env(IMAGE_TAG)' "${FILE}"
+  yq -i '.promote_deployment = env(PROMOTE_DEPLOYMENT)' "${FILE}"
 
   git add "${FILE}"
   git commit -m "Update ${REPO_NAME} image tag to ${IMAGE_TAG} for ${ENVIRONMENT}"
