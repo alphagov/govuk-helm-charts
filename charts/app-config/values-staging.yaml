@@ -506,6 +506,18 @@ govukApplications:
 
 - name: content-data-api
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "content-data-api.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: content-data-api.{{ .Values.k8sExternalDomainSuffix }}
+    nginxProxyReadTimeout: 60s
     uploadAssets:
       enabled: false
     dbMigrationEnabled: true
@@ -517,7 +529,6 @@ govukApplications:
         name: publishing-api-consumer
       - command: ['rake', 'publishing_api:bulk_import_consumer']
         name: bulk-import-publishing-api-consumer
-    nginxProxyReadTimeout: 60s
     extraEnv:
       - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
         valueFrom:

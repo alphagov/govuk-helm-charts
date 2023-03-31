@@ -500,10 +500,21 @@ govukApplications:
 
 - name: content-data-api
   helmValues:
+    ingress:
+      enabled: true
+      annotations:
+        <<: *default-alb-ingress-annotations
+        <<: *alb-ingress-backend-waf-ruleset
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "content-data-api.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+      hosts:
+        - name: content-data-api.{{ .Values.k8sExternalDomainSuffix }}
+    nginxProxyReadTimeout: 60s
     uploadAssets:
       enabled: false
     dbMigrationEnabled: true
-    nginxProxyReadTimeout: 60s
     workerEnabled: true
     workers:
       - command: ["sidekiq", "-C", "config/sidekiq.yml"]
