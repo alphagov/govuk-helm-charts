@@ -41,7 +41,7 @@ spec:
                   value: "{{"{{workflow.parameters.repoName}}"}}"
           - name: promote-release
             depends: check-for-promotion.Succeeded
-            when: "{{"'{{tasks.check-for-promotion.outputs.result}}' !~ '^true'"}}"
+            when: "{{"'{{tasks.check-for-promotion.outputs.result}}' == 'true'"}}"
             template: send-webhook
             arguments:
               parameters:
