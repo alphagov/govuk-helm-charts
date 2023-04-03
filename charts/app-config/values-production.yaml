@@ -2758,6 +2758,8 @@ govukApplications:
           secretKeyRef:
             name: signon-token-whitehall-search-api
             key: bearer_token
+      - name: AWS_S3_BUCKET_NAME
+        value: govuk-production-whitehall-csvs
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *publishing-notify-template
       - name: REDIS_URL
