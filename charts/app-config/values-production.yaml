@@ -1099,6 +1099,7 @@ govukApplications:
 
 - name: hmrc-manuals-api
   helmValues:
+    nginxClientMaxBodySize: 2M
     ingress:
       enabled: true
       annotations:
@@ -1571,6 +1572,7 @@ govukApplications:
 
 - name: publishing-api
   helmValues:
+    nginxClientMaxBodySize: 2M
     dbMigrationEnabled: true
     uploadAssets:
       enabled: false
