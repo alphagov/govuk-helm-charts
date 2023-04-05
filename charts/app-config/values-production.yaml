@@ -1134,6 +1134,8 @@ govukApplications:
             key: bearer_token
       - name: PUBLISH_TOPICS
         value: "1"
+      - name: PUMA_TIMEOUT
+        value: "300"
 
 - name: imminence
   helmValues:
