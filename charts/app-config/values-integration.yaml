@@ -2678,6 +2678,8 @@ govukApplications:
         value: message_by_maisy
       - name: ENV_MESSAGE_OTHER
         value: message_by_other
+      - name: ENV_MESSAGE_KELV
+        value: message_by_kelv
 
 - name: whitehall-admin
   repoName: whitehall
