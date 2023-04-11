@@ -2125,12 +2125,9 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "signon.{{ .Values.publishingDomainSuffix }}"
-          ]}}]
+        external-dns.alpha.kubernetes.io/hostname: signon.{{ .Values.k8sExternalDomainSuffix }}
       hosts:
-        - name: signon.{{ .Values.k8sExternalDomainSuffix }}
+        - name: signon.{{ .Values.publishingDomainSuffix }}
     cronTasks:
       - name: "kubernetes-sync-app-secrets"
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
