@@ -2125,6 +2125,8 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
+        # TODO: remove certificate-arn annotation once ambiguous certs are removed from Cert Manager.
+        alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-1:696911096973:certificate/ea990af0-b7b7-4ce0-8145-56d639d54cde
         external-dns.alpha.kubernetes.io/hostname: signon.{{ .Values.k8sExternalDomainSuffix }}
       hosts:
         - name: signon.{{ .Values.publishingDomainSuffix }}
