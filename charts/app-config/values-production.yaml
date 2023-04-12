@@ -2118,12 +2118,11 @@ govukApplications:
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-          [{"field": "host-header", "hostHeaderConfig": { "values": [
-              "signon.{{ .Values.publishingDomainSuffix }}"
-          ]}}]
+        # TODO: remove certificate-arn annotation once ambiguous certs are removed from Cert Manager.
+        alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-1:172025368201:certificate/f139e436-181a-40de-aba2-23ec131fa1cf
+        external-dns.alpha.kubernetes.io/hostname: signon.{{ .Values.k8sExternalDomainSuffix }}
       hosts:
-        - name: signon.{{ .Values.k8sExternalDomainSuffix }}
+        - name: signon.{{ .Values.publishingDomainSuffix }}
     cronTasks:
       - name: "kubernetes-sync-app-secrets"
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
