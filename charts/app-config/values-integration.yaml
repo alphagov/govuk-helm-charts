@@ -450,7 +450,9 @@ govukApplications:
             }
           }
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-redirect: >
-          [{"field":"host-header","hostHeaderConfig":{"values":["content-data-admin.{{ .Values.publishingDomainSuffix }}"]}}]
+          [{"field":"host-header","hostHeaderConfig":{"values":[
+              "content-data-admin.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
       hosts:
         - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
     nginxProxyReadTimeout: 60s

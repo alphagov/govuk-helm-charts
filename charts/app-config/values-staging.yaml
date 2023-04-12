@@ -440,12 +440,29 @@ govukApplications:
   helmValues:
     ingress:
       enabled: true
+      redirect: true
       annotations:
         <<: *default-alb-ingress-annotations
         <<: *alb-ingress-backend-waf-ruleset
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
           [{"field": "host-header", "hostHeaderConfig": { "values": [
               "content-data.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
+        alb.ingress.kubernetes.io/actions.{{ .Release.Name }}-redirect: >
+          {
+            "Type":"redirect",
+            "RedirectConfig": {
+              "Host":"content-data.{{ .Values.publishingDomainSuffix }}",
+              "Path":"/#{path}",
+              "Port":"443",
+              "Protocol":"HTTPS",
+              "Query":"#{query}",
+              "StatusCode":"HTTP_301"
+            }
+          }
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-redirect: >
+          [{"field":"host-header","hostHeaderConfig":{"values":[
+              "content-data-admin.{{ .Values.publishingDomainSuffix }}"
           ]}}]
       hosts:
         - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
