@@ -35,5 +35,14 @@ spec:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
+          {{- if $.Values.ingress.redirect }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullName }}-redirect
+                port:
+                  name: use-annotation
+          {{- end }}
     {{- end }}
 {{- end }}
