@@ -6,7 +6,7 @@ CONFIG_URL="https://raw.githubusercontent.com/alphagov/govuk-helm-charts/main/ch
 CONFIG_CONTENT=$(curl -Ls "${CONFIG_URL}")
 
 # Extract the values of automatic_deploys_enabled and promote_deployment
-automatic_deploys_enabled=$(echo "${CONFIG_CONTENT}" | yq '.automatic_deploys_enabled // true' -)
+automatic_deploys_enabled=$(echo "${CONFIG_CONTENT}" | yq '.automatic_deploys_enabled' -)
 promote_deployment=$(echo "${CONFIG_CONTENT}" | yq '.promote_deployment' -)
 
 # Check if both values are true
