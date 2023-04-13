@@ -2258,6 +2258,8 @@ govukApplications:
     extraEnv:
       # These GA/GTM values are not secrets (not even the the gtm_auth one).
       # https://github.com/alphagov/govuk-puppet/pull/8041
+      - name: RAILS_SERVE_STATIC_FILES
+        value: "true"
       - name: GA_UNIVERSAL_ID
         value: &ga-universal-id UA-26179049-1
       - name: GOOGLE_TAG_MANAGER_ID
