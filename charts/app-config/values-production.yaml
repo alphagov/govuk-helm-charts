@@ -1811,7 +1811,7 @@ govukApplications:
       - name: GOMAXPROCS
         value: "4"  # Keep this similar to the CPU limit (in whole cores).
       - name: SENTRY_ENVIRONMENT
-        value: "production-eks"
+        value: "production"
       - name: ROUTER_PUBADDR
         value: ":3000"
       - name: ROUTER_APIADDR

@@ -1769,7 +1769,7 @@ govukApplications:
       - name: GOMAXPROCS
         value: "2"
       - name: SENTRY_ENVIRONMENT
-        value: "integration-eks"
+        value: "integration"
       - name: ROUTER_PUBADDR
         value: ":3000"
       - name: ROUTER_APIADDR
