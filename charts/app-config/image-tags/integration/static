@@ -1,3 +1,3 @@
-image_tag: release-8c4b7d2d38515ba9203473035fc733beedfdbf3e
+image_tag: release-d94f8e2974c907948b5e16e3d47d99e54b048845
 automatic_deploys_enabled: true
-promote_deployment: false
+promote_deployment: true
