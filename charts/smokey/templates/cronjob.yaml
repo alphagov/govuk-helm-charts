@@ -80,3 +80,10 @@ spec:
                 secretKeyRef:
                   key: password
                   name: smokey-signon-account
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.repoName }}-sentry
+                  key: dsn
+            - name: SENTRY_RELEASE
+              value: "{{ .Values.appImage.tag }}"
