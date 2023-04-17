@@ -1599,6 +1599,8 @@ govukApplications:
         value: 88f713ff-7de0-43a6-8221-8721bedd103c
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *publishing-notify-template
+      - name: REPORTS_S3_BUCKET_NAME
+        value: govuk-staging-publisher-csvs
 
 - name: publishing-api
   helmValues:
