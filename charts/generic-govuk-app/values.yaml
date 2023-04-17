@@ -88,7 +88,7 @@ nginxResources:
     cpu: 1
     memory: 1Gi
   requests:
-    cpu: 500m
+    cpu: 50m
     memory: 512Mi
 
 # dnsConfig is passed directly into the pod specs in the app and worker
