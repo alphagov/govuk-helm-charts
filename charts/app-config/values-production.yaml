@@ -2194,8 +2194,6 @@ govukApplications:
             key: DEVISE_SECRET_KEY
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
-      - name: MANDATE_2SV_FOR_ORGANISATION
-        value: "1"
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
