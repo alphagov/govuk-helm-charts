@@ -1601,6 +1601,8 @@ govukApplications:
         value: *publishing-notify-template
       - name: REPORTS_S3_BUCKET_NAME
         value: govuk-staging-publisher-csvs
+      - name: AWS_REGION
+        value: eu-west-1
 
 - name: publishing-api
   helmValues:
