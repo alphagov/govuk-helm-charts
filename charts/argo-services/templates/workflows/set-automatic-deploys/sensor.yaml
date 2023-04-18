@@ -5,6 +5,7 @@ metadata:
 spec:
   template:
     serviceAccountName: operate-workflow-sa
+  revisionHistoryLimit: 1
   dependencies:
   - name: set-automatic-deploys-enabled
     eventSourceName: webhook

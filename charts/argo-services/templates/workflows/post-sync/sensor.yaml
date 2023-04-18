@@ -5,6 +5,7 @@ metadata:
 spec:
   template:
     serviceAccountName: operate-workflow-sa
+  revisionHistoryLimit: 1
   dependencies:
   - name: sync-notification
     eventSourceName: webhook

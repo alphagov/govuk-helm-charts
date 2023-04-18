@@ -5,6 +5,7 @@ metadata:
 spec:
   template:
     serviceAccountName: operate-workflow-sa
+  revisionHistoryLimit: 1
   dependencies:
   - name: update-image-tag
     eventSourceName: webhook
