@@ -2695,8 +2695,6 @@ govukApplications:
         value: message_by_other
       - name: ENV_MESSAGE_ROSA
         value: hi
-      - name: ENV_MESSAGE_JAMES
-        value: hello
 
 - name: whitehall-admin
   repoName: whitehall
