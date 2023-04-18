@@ -317,6 +317,7 @@ govukApplications:
     rails:
       enabled: false
     appEnabled: false
+    podDisruptionBudget: {}
     workerEnabled: true
     workers:
       - command: ["rake", "message_queue:consumer", "QUEUE=high"]
@@ -908,6 +909,7 @@ govukApplications:
 - name: email-alert-service
   helmValues:
     appEnabled: false
+    podDisruptionBudget: {}
     rails:
       enabled: false
     uploadAssets:
