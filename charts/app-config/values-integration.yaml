@@ -2695,6 +2695,8 @@ govukApplications:
         value: message_by_other
       - name: ENV_MESSAGE_ROSA
         value: hi
+      - name: ENV_MESSAGE_ANDY
+        value: i_am_the_very_model_of_a_modern_major-general_ive_information_vegetable_animal_and_mineral_i_know_the_kings_of_england_and_i_quote_the_fights_historical_from_marathon_to_waterloo_in_order_categorical
 
 - name: whitehall-admin
   repoName: whitehall
