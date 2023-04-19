@@ -47,7 +47,10 @@ spec:
               command:
                 - sh
                 - -c
-                - "[ -d .git ] && git pull || git clone --depth=1 https://github.com/alphagov/transition-config"
+                - "[ -d transition-config ] && \
+                   cd transition-config && \
+                   [ -d .git ] && git pull || \
+                   git clone --depth=1 https://github.com/alphagov/transition-config transition-config"
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
