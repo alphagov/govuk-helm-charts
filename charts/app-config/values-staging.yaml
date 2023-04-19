@@ -2154,17 +2154,17 @@ govukApplications:
       hosts:
         - name: signon.{{ .Values.publishingDomainSuffix }}
     cronTasks:
-      - name: "kubernetes-sync-app-secrets"
+      - name: sync-app-secrets-to-k8s
         task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
-        schedule: "5 1 * * *"
+        schedule: "11 1 * * *"
         serviceAccount: signon
-      - name: "kubernetes-sync-token-secrets"
+      - name: sync-token-secrets-to-k8s
         task: "kubernetes:sync_token_secrets[signon-secrets-sync-conf]"
-        schedule: "5 1 * * *"
+        schedule: "12 1 * * *"
         serviceAccount: signon
-      - name: "delete-logs-older-than-two-years"
+      - name: delete-logs-older-than-two-years
         task: "event_log:delete_logs_older_than_two_years"
-        schedule: "15 1 * * *"
+        schedule: "18 1 * * *"
         serviceAccount: signon
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
