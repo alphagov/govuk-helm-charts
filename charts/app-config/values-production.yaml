@@ -2604,6 +2604,22 @@ govukApplications:
     dbMigrationEnabled: true
     workerEnabled: true
     transitionConfigEnabled: true
+    cronTasks:
+      - name: import-dns
+        task: "import:dns_details"
+        schedule: "4 07-19 * * 1-5"
+      - name: import-hits-from-cdn-logs
+        task: "import:all:hits[govuk-production-transition-fastly-logs]"
+        schedule: "39 3 * * *"
+      - name: clear-expired-sessions
+        task: "clear_expired_sessions"
+        schedule: "29 3 * * *"
+      - name: clear-old-mappings
+        task: "clear_old_mappings_batches"
+        schedule: "31 3 * * *"
+      - name: refresh-materialized-hits
+        task: "import:hits:refresh_materialized"
+        schedule: "28 0,12 * * *"
     extraVolumes:
       - name: transition-config-efs
         nfs:
@@ -2612,19 +2628,6 @@ govukApplications:
     appExtraVolumeMounts:
       - name: transition-config-efs
         mountPath: /app/data/transition-config
-    cronTasks:
-      - name: import-dns
-        task: "import:dns_details"
-        schedule: "0 07-19 * * 1-5"
-      - name: clear-expired-sessions
-        task: "clear_expired_sessions"
-        schedule: "0 3 * * *"
-      - name: clear-old-mappings
-        task: "clear_old_mappings_batches"
-        schedule: "0 3 * * *"
-      - name: refresh-materialized
-        task: "import:hits:refresh_materialized"
-        schedule: "30 0,12 * * *"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
