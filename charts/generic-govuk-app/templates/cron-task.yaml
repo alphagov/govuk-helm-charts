@@ -4,28 +4,32 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: "{{ $fullName }}-{{ .name }}-cron-task"
+  name: "{{ $fullName }}-{{ .name }}"
   labels:
     {{- include "generic-govuk-app.labels" $ | nindent 4 }}
-    app: "{{ $fullName }}-{{ .name }}-cron-task"
-    app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}-cron-task"
-    app.kubernetes.io/component: "{{ .name }}-cron-task"
+    app: "{{ $fullName }}-{{ .name }}"
+    app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
+    app.kubernetes.io/component: "{{ .name }}"
 spec:
   schedule: "{{ .schedule }}"
   jobTemplate:
     metadata:
-      name: "{{ $fullName }}-{{ .name }}-cron-task"
+      name: "{{ $fullName }}-{{ .name }}"
       labels:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
-        app.kubernetes.io/component: "{{ .name }}-cron-task"
+        app: "{{ $fullName }}-{{ .name }}"
+        app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
+        app.kubernetes.io/component: "{{ .name }}"
     spec:
       backoffLimit: 0
       template:
         metadata:
-          name: "{{ $fullName }}-{{ .name }}-cron-task"
+          name: "{{ $fullName }}-{{ .name }}"
           labels:
             {{- include "generic-govuk-app.labels" $ | nindent 12 }}
-            app.kubernetes.io/component: "{{ .name }}-cron-task"
+            app: "{{ $fullName }}-{{ .name }}"
+            app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
+            app.kubernetes.io/component: "{{ .name }}"
         spec:
           automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
           enableServiceLinks: false
