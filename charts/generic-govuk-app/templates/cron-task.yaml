@@ -51,7 +51,7 @@ spec:
               image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
               imagePullPolicy: {{ $.Values.appImage.pullPolicy | default "Always" }}
               {{- if .task }}
-              command: ["rails"]
+              command: ["rake"]
               args: ["{{ .task }}"]
               {{- else if .command }}
               command: ["/bin/bash"]
