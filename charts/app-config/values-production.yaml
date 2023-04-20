@@ -2743,6 +2743,9 @@ govukApplications:
       - name: index-consultations
         task: "search:index:consultations"
         schedule: "0 2-22 * * *"
+      - name: send-notifications
+        task: "publisher_notifications:send"
+        schedule: "33 1 * * *"
       - name: taxonomy-rebuild
         task: "taxonomy:rebuild_cache"
         schedule: "*/10 7-20 * * *"
