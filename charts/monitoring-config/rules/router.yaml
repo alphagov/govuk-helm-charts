@@ -27,6 +27,7 @@ groups:
         for: 10m
         labels:
           severity: page
+          playbook: 'https://docs.publishing.service.gov.uk/manual/alerts/{{ .Labels.alertname }}.html'
         annotations:
           summary: Router error ratio too high
-          description: More than 10% of HTTP responses from Router were 500-series errors for 10 minutes.
+          description: 'More than 10% of HTTP responses from Router were 500-series errors for 10 minutes. [link]: {{ .Labels.playbook }}'
