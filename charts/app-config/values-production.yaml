@@ -987,7 +987,7 @@ govukApplications:
 
 - name: finder-frontend
   helmValues:
-    replicaCount: 4
+    replicaCount: 9
     appResources:
       limits:
         cpu: 4
