@@ -6,10 +6,9 @@
 See [Helm's documentation](https://helm.sh/docs) to get started with Helm.
 
 See the [GOV.UK Kubernetes Cluster User Docs] for an introduction to the
-cluster or ask [#govuk-replatforming] in Slack.
+cluster or ask [#govuk-platform-engineering] in Slack.
 
 [GOV.UK Kubernetes Cluster User Docs]: https://govuk-k8s-user-docs.publishing.service.gov.uk/
-[#govuk-replatforming]: https://gds.slack.com/channels/govuk-replatforming
 
 
 ## Local development
@@ -79,8 +78,11 @@ against are in the [`schemas/`](schemas) directory.
 
 ## Team
 
-GOV.UK Replatforming team looks after this repo. If you're inside GDS, you can find us in [#govuk-replatforming](https://gds.slack.com/archives/C013F737737) or view our [kanban board](https://trello.com/b/u4FCzm53/).
+[GOV.UK Platform Engineering](https://github.com/orgs/alphagov/teams/gov-uk-platform-engineering) team looks after this repo. If you're inside GDS, you can find us in [#govuk-platform-engineering] or view our [kanban board](https://trello.com/b/u4FCzm53/).
 
 ## Licence
 
 [MIT License](LICENCE)
+
+
+[#govuk-platform-engineering]: https://gds.slack.com/channels/govuk-platform-engineering
