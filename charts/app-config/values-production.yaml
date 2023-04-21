@@ -987,7 +987,7 @@ govukApplications:
 
 - name: finder-frontend
   helmValues:
-    replicaCount: 4
+    replicaCount: 9
     appResources:
       limits:
         cpu: 4
@@ -1973,6 +1973,7 @@ govukApplications:
 
 - name: search-api
   helmValues:
+    replicaCount: 6
     rails:
       enabled: false
     nginxClientMaxBodySize: 20M
