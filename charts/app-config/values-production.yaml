@@ -1973,6 +1973,7 @@ govukApplications:
 
 - name: search-api
   helmValues:
+    replicaCount: 6
     rails:
       enabled: false
     nginxClientMaxBodySize: 20M
