@@ -1937,6 +1937,9 @@ govukApplications:
     workerEnabled: true
     workerReplicaCount: 3
     cronTasks:
+      - name: reindex-with-new-schemas
+        task: "search:migrate_schema"
+        schedule: "5 21 * * 1"
       - name: generate-sitemap
         task: "sitemap:generate_and_upload"
         schedule: "50 2 * * *"
@@ -1960,6 +1963,8 @@ govukApplications:
         value: *elasticsearch-uri
       - name: ENABLE_LTR
         value: "true"
+      - name: SEARCH_INDEX
+        value: all
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
           secretKeyRef:
