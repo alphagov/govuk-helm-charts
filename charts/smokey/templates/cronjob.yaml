@@ -80,6 +80,8 @@ spec:
                 secretKeyRef:
                   key: password
                   name: smokey-signon-account
+            - name: SENTRY_CURRENT_ENV
+              value: {{ .Values.govukEnvironment }}
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
