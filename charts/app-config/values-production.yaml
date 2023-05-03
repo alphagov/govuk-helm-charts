@@ -766,6 +766,10 @@ govukApplications:
           ]}}]
       hosts:
         - name: content-tagger.{{ .Values.k8sExternalDomainSuffix }}
+    cronTasks:
+      - name: taxonomy-health-checks
+        task: "taxonomy:health_checks"
+        schedule: "49 * * * *"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
