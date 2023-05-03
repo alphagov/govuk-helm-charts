@@ -2421,6 +2421,8 @@ govukApplications:
         value: *publishing-notify-template
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+      - name: PUBLISH_PRE_PRODUCTION_FINDERS
+        value: "yes"
 
 - name: support
   helmValues:
