@@ -1123,6 +1123,10 @@ govukApplications:
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
 
+- name: govuk-jobs
+  chartPath: charts/govuk-jobs
+  postSyncWorkflowEnabled: "false"
+
 - name: hmrc-manuals-api
   helmValues:
     nginxClientMaxBodySize: 2M
