@@ -31,10 +31,21 @@ spec:
       values: |
         {{- toYaml (omit $.Values "govukApplications") | nindent 8 }}
         repoName: {{ $reponame }}
+        {{- if .imageValues }}
+        images:
+        {{ range .imageValues }}
+          {{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.govukEnvironment . ) | fromYaml }}
+          {{- $imageTag := $imageTagConfig.image_tag }}
+          {{ camelcase . }}:
+            repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ . }}
+            tag: {{ $imageTag }}
+        {{- end }}
+        {{- else }}
         appImage:
           repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}
           tag: {{ $imageTag }}
           pullPolicy: {{ .appImagePullPolicy | default "IfNotPresent" }}
+        {{- end }}
         {{- with .helmValues }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

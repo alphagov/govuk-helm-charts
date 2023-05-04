@@ -1126,6 +1126,8 @@ govukApplications:
 - name: govuk-jobs
   chartPath: charts/govuk-jobs
   postSyncWorkflowEnabled: "false"
+  imageValues:
+    - "govuk-dependency-checker"
 
 - name: hmrc-manuals-api
   helmValues:
