@@ -1,0 +1,15 @@
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  runAsUser: 1001
+  runAsGroup: 1001
+resources:
+  limits:
+    cpu: 1
+    memory: 1500Mi
+  requests:
+    cpu: 0.1
+    memory: 800Mi
+image:
+  repository: "govuk-dependency-checker"
+  tag: "release"
