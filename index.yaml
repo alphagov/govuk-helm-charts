@@ -961,6 +961,15 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/govuk-apps-conf-0.1.0/govuk-apps-conf-0.1.0.tgz
     version: 0.1.0
+  govuk-jobs:
+  - apiVersion: v2
+    created: "2023-05-04T13:44:22.356928486Z"
+    description: Collection of jobs used in gov.uk
+    digest: b207b9ee0dd36f8d96a89060710b2338aa5b6947b6c77b90d7cfe813188e631c
+    name: govuk-jobs
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/govuk-jobs-1.0.0/govuk-jobs-1.0.0.tgz
+    version: 1.0.0
   govuk-rails-app:
   - apiVersion: v2
     created: "2022-02-03T16:05:04.075998736Z"
@@ -1459,4 +1468,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2023-03-15T11:22:14.502321546Z"
+generated: "2023-05-04T13:44:22.624525654Z"
