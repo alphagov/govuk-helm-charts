@@ -10,6 +10,7 @@ resources:
   requests:
     cpu: 0.1
     memory: 800Mi
-image:
-  repository: "govuk-dependency-checker"
-  tag: "release"
+images:
+  GovukDependencyChecker:
+    repository: "govuk-dependency-checker"
+    tag: "release"

@@ -32,7 +32,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: main
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: "{{ .Values.images.GovukDependencyChecker.repository }}:{{ .Values.images.GovukDependencyChecker.tag }}"
               imagePullPolicy: "Always"
               command: ["./dependabot_time_to_merge"]
               args: ["--days-range", "7", "--output-format", "prometheus"]
