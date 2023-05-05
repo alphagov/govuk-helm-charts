@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # Fetch the YAML configuration
-CONFIG_URL="https://raw.githubusercontent.com/alphagov/govuk-helm-charts/main/charts/app-config/image-tags/${ENVIRONMENT}/${REPO_NAME}"
-CONFIG_CONTENT=$(curl -Ls "${CONFIG_URL}")
+CONFIG_URL="/repos/alphagov/govuk-helm-charts/contents/charts/app-config/image-tags/${ENVIRONMENT}/${REPO_NAME}?ref=main"
+CONFIG_CONTENT=$(gh api --cache 0 "${CONFIG_URL}" -q '.content' | base64 --decode)
 
 # Extract the values of automatic_deploys_enabled and promote_deployment
 automatic_deploys_enabled=$(echo "${CONFIG_CONTENT}" | yq '.automatic_deploys_enabled' -)

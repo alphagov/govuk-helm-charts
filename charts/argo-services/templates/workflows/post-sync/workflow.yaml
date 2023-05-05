@@ -69,6 +69,11 @@ spec:
             value: "{{"{{inputs.parameters.environment}}"}}"
           - name: REPO_NAME
             value: "{{"{{inputs.parameters.repoName}}"}}"
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: govuk-ci-github-creds
+                key: token
         source: |
           {{- .Files.Get "scripts/check-for-promotion.sh" | nindent 14 }}
     - name: send-webhook
