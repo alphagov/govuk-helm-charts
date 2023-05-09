@@ -125,6 +125,7 @@ govukApplications:
 
 - name: asset-manager
   chartPath: charts/asset-manager
+  nginxClientMaxBodySize: 3M
   helmValues:
     workerEnabled: true
     ingress:
@@ -2667,6 +2668,7 @@ govukApplications:
 
 - name: travel-advice-publisher
   helmValues:
+    nginxClientMaxBodySize: 3M
     workerEnabled: true
     ingress:
       enabled: true
