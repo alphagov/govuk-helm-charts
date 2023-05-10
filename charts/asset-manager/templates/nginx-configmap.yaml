@@ -146,7 +146,7 @@ data:
           proxy_pass http://{{ $fullName }};
         }
 
-        client_max_body_size 500m;
+        client_max_body_size 500M;
 
         # Store values from Rails response headers for use in the
         # cloud-storage-proxy location block below.

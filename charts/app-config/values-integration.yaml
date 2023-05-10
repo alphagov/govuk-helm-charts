@@ -123,7 +123,6 @@ govukApplications:
 - name: asset-manager
   chartPath: charts/asset-manager
   helmValues:
-    nginxClientMaxBodySize: 3M
     workerEnabled: true
     ingress:
       enabled: true
@@ -1140,7 +1139,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: imminence.{{ .Values.k8sExternalDomainSuffix }}
-    nginxClientMaxBodySize: &max-upload-size 500M
+    nginxClientMaxBodySize: *max-upload-size
     nginxProxyReadTimeout: 60s
     dbMigrationEnabled: true
     workerEnabled: true
@@ -2651,7 +2650,7 @@ govukApplications:
 
 - name: travel-advice-publisher
   helmValues:
-    nginxClientMaxBodySize: 3M
+    nginxClientMaxBodySize: *max-upload-size
     workerEnabled: true
     ingress:
       enabled: true
