@@ -1142,6 +1142,7 @@ govukApplications:
         - name: imminence.{{ .Values.k8sExternalDomainSuffix }}
     nginxClientMaxBodySize: &max-upload-size 500M
     nginxProxyReadTimeout: 60s
+    dbMigrationEnabled: true
     workerEnabled: true
     extraEnv:
       - name: DATABASE_URL
