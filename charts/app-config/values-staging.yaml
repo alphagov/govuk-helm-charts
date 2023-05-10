@@ -125,7 +125,6 @@ govukApplications:
 
 - name: asset-manager
   chartPath: charts/asset-manager
-  nginxClientMaxBodySize: 3M
   helmValues:
     workerEnabled: true
     ingress:
