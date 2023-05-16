@@ -1950,6 +1950,34 @@ govukApplications:
       - name: generate-sitemap
         task: "sitemap:generate_and_upload"
         schedule: "50 2 * * *"
+      - name: load-page-traffic
+        command: "./bin/load_page_traffic.sh"
+        schedule: "32 4 * * *"
+        env:
+        - name: AWS_SEARCH_ANALYTICS_BUCKET
+          value: govuk-search-analytics-integration
+      - name: update-detailed-index-popularity
+        task: "search:update_popularity"
+        schedule: "42 4 * * *"
+        env:
+        - name: SEARCH_INDEX
+          value: detailed
+        - name: PROCESS_ALL_DATA
+          value: "true"
+      - name: update-government-index-popularity
+        task: "search:update_popularity"
+        schedule: "12 5 * * *"
+        env:
+        - name: SEARCH_INDEX
+          value: government
+        - name: PROCESS_ALL_DATA
+          value: "true"
+      - name: update-govuk-index-popularity
+        task: "search:update_popularity"
+        schedule: "42 5 * * *"
+        env:
+        - name: SEARCH_INDEX
+          value: govuk
     workers:
       - command: ["sidekiq", "-C", "config/sidekiq.yml"]
         name: worker
