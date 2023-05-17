@@ -2001,7 +2001,7 @@ govukApplications:
         schedule: "32 4 * * *"
         env:
         - name: AWS_SEARCH_ANALYTICS_BUCKET
-          value: govuk-search-analytics-integration
+          value: govuk-search-analytics-production
       - name: update-detailed-index-popularity
         task: "search:update_popularity"
         schedule: "42 4 * * *"
