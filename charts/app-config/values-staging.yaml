@@ -777,6 +777,9 @@ govukApplications:
       - name: taxonomy-health-checks
         task: "taxonomy:health_checks"
         schedule: "49 * * * *"
+      - name: taxonomy-metrics
+        task: "metrics:taxonomy:record_all"
+        schedule: "14 * * * *"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
