@@ -1644,6 +1644,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: release.{{ .Values.k8sExternalDomainSuffix }}
+    workerEnabled: true
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
@@ -1670,6 +1671,8 @@ govukApplications:
           secretKeyRef:
             name: release-github
             key: token
+      - name: REDIS_URL
+        value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 
 - name: router-api
   helmValues: &router-api
