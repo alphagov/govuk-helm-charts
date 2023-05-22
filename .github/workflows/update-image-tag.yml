@@ -41,8 +41,6 @@ jobs:
       config_file: "charts/app-config/image-tags/${{ env.environment }}/${{ env.repo }}"
       manual_deploy: ${{ github.event.client_payload.manual_deploy || inputs.manual_deploy }}
     steps:
-      - uses: chrisdickinson/setup-yq@latest
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
