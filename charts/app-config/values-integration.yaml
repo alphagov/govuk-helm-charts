@@ -1477,12 +1477,15 @@ govukApplications:
     dbMigrationEnabled: true
     workerEnabled: true
     cronTasks:
-      - name: reports-generate
-        task: "reports:generate"
-        schedule: "0 * * * *"
       - name: mail-fetcher
         command: "script/mail_fetcher"
         schedule: "*/5 * * * *"
+      - name: reports-generate
+        task: "reports:generate"
+        schedule: "0 * * * *"
+      - name: reschedule-pubs-after-db-restore  # non-prod only
+        task: "editions:requeue_scheduled_for_publishing"
+        schedule: "38 7 * * 1-5"
     ingress:
       enabled: true
       annotations:
