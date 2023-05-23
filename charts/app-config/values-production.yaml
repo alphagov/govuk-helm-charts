@@ -1687,7 +1687,7 @@ govukApplications:
         - name: release.{{ .Values.k8sExternalDomainSuffix }}
     workerEnabled: true
     replicaCount: 2
-    workerReplicaCount: 2
+    workerReplicaCount: 1
     podDisruptionBudget:
       minAvailable: 1
     appResources:
