@@ -17,4 +17,4 @@ spec:
     name: email-alert-monitoring-google
   dataFrom:
     - extract:
-        key: govuk/email-alert-montioring/google
+        key: govuk/email-alert-monitoring/google

@@ -917,6 +917,38 @@ govukApplications:
             name: email-alert-auth
             key: token
 
+- name: email-alert-monitoring
+  helmValues:
+    appEnabled: false
+    uploadAssets:
+      enabled: false
+    rails:
+      enabled: false
+    cronTasks:
+      - name: run_medical_alerts
+        task: "run_medical_alerts"
+        schedule: "21,51 * * * *"
+      - name: run_travel_alerts
+        task: "run_travel_alerts"
+        schedule: "*/15 * * * *"
+    workerEnabled: false
+    extraEnv:
+      - name: GOOGLE_OAUTH_CREDENTIALS
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-monitoring-google
+            key: oauth_credentials
+      - name: GOOGLE_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-monitoring-google
+            key: client_id
+      - name: GOOGLE_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: email-alert-monitoring-google
+            key: client_secret
+
 - name: email-alert-service
   helmValues:
     appEnabled: false
