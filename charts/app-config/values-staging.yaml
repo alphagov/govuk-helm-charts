@@ -1735,6 +1735,11 @@ govukApplications:
             key: token
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+      - name: SLACK_WEBHOOK_URL
+        valueFrom:
+          secretKeyRef:
+            name: slack-webhook-url
+            key: url
 
 - name: router-api
   helmValues: &router-api
