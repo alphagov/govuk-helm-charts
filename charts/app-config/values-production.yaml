@@ -368,6 +368,11 @@ govukApplications:
           secretKeyRef:
             name: signon-token-collections-publisher-publishing-api
             key: bearer_token
+      - name: EMAIL_ALERT_API_BEARER_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: signon-token-collections-publisher-email-alert-api
+            key: bearer_token
       - name: JWT_AUTH_SECRET
         valueFrom:
           secretKeyRef:
