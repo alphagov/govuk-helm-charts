@@ -712,9 +712,6 @@ govukApplications:
           mongo-1.production.govuk-internal.digital,\
           mongo-2.production.govuk-internal.digital,\
           mongo-3.production.govuk-internal.digital/content_store_production"
-      # TODO: remove this flag and feature after launch (see https://github.com/alphagov/content-store/blob/4c6e16a9/app/models/route_set.rb#L70)
-      - name: NO_SET_ROUTER_BACKEND_ADDRESS_ON_PUBLISH
-        value: "1"
       - name: WEB_CONCURRENCY
         value: '4'
 
@@ -751,8 +748,6 @@ govukApplications:
           mongo-1.production.govuk-internal.digital,\
           mongo-2.production.govuk-internal.digital,\
           mongo-3.production.govuk-internal.digital/draft_content_store_production"
-      - name: NO_SET_ROUTER_BACKEND_ADDRESS_ON_PUBLISH
-        value: "1"
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
 
