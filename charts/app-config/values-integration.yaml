@@ -1015,7 +1015,7 @@ govukApplications:
         valueFrom:
           secretKeyRef:
             name: signon-token-frontend-asset-manager
-            key: bearer-token
+            key: bearer_token
       - name: ELECTIONS_API_KEY
         valueFrom:
           secretKeyRef:
