@@ -847,6 +847,8 @@ govukApplications:
           secretKeyRef:
             name: signon-token-email-alert-api-account-api
             key: bearer_token
+      - name: BULK_MIGRATE_CONFIRMATION_EMAIL_ACCOUNT
+        value: email-alert-api-staging@digital.cabinet-office.gov.uk
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
