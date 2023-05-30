@@ -1,0 +1,19 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: email-alert-api-bulk-migrate-confirmation-email-account
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Email address to which confirmations of bulk migrations of email alert subscriptions are sent. Introduced to enable retiring of specialist topics and auto-migration of subscriptions.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: email-alert-api-bulk-migrate-confirmation-email-account
+  dataFrom:
+    - extract:
+        key: govuk/email-alert-api/bulk-migrate-confirmation-email-account
