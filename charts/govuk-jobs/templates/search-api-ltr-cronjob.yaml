@@ -1,0 +1,100 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "search-api-ltr"
+  labels:
+    app: "search-api-ltr"
+    app.kubernetes.io/component: "search-api-ltr"
+spec:
+  schedule: "26 4 * * *"
+  jobTemplate:
+    metadata:
+      name: "search-api-ltr"
+      labels:
+        app: "search-api-ltr"
+        app.kubernetes.io/component: "search-api-ltr"
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: "search-api-ltr"
+          labels:
+            app: "search-api-ltr"
+            app.kubernetes.io/component: "search-api-ltr"
+        spec:
+          enableServiceLinks: false
+          securityContext:
+            fsGroup: {{ .Values.securityContext.runAsGroup }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+          restartPolicy: Never
+          volumes:
+            - name: app-tmp
+              emptyDir: {}
+          initContainers:
+            - name: generate-datasets
+              image: "{{ .Values.images.SearchApi.repository }}:{{ .Values.images.SearchApi.tag }}"
+              imagePullPolicy: "Always"
+              command: ["rake"]
+              args: ["learn_to_rank:generate_data"]
+              env:
+                - name: AWS_DEFAULT_REGION
+                  value: eu-west-1
+                - name: AWS_S3_RELEVANCY_BUCKET_NAME
+                  value: "govuk-{{ .Values.govukEnvironment }}-search-relevancy"
+                - name: BIGQUERY_CREDENTIALS
+                  valueFrom:
+                    secretKeyRef:
+                      name: search-api-ltr-bigquery
+                      key: credentials
+                - name: ELASTICSEARCH_URI
+                  value: {{ .Values.learnToRank.elasticsearchUri }}
+                - name: EXPORT_TO_S3
+                  value: 'true'
+                - name: ENABLE_LTR
+                  value: 'true'
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: app-tmp
+                  mountPath: /tmp
+          containers:
+            - name: main
+              image: "{{ .Values.images.SearchApiLearnToRank.repository }}:{{ .Values.images.SearchApiLearnToRank.tag }}"
+              imagePullPolicy: "Always"
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ .Values.govukEnvironment }}
+                - name: AWS_S3_RELEVANCY_BUCKET_NAME
+                  value: "govuk-{{ .Values.govukEnvironment }}-search-relevancy"
+                - name: ROLE_ARN
+                  value: {{ .Values.learnToRank.iamRole }}
+                - name: AWS_DEFAULT_REGION
+                  value: eu-west-1
+                - name: IMAGE
+                  value: {{ .Values.learnToRank.sageMakerImage }}
+                - name: TRAIN_INSTANCE_TYPE
+                  value: {{ .Values.learnToRank.trainingInstance.type }}
+                - name: TRAIN_INSTANCE_COUNT
+                  value: "{{ .Values.learnToRank.trainingInstance.count }}"
+                - name: DEPLOY_INSTANCE_TYPE
+                  value: {{ .Values.learnToRank.deployInstance.type }}
+                - name: DEPLOY_INSTANCE_COUNT
+                  value: "{{ .Values.learnToRank.deployInstance.count }}"
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: app-tmp
+                  mountPath: /tmp

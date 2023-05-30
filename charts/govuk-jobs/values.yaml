@@ -14,3 +14,20 @@ images:
   GovukDependencyChecker:
     repository: "govuk-dependency-checker"
     tag: "release"
+  SearchApi:
+    repository: "search-api"
+    tag: "release"
+  SearchApiLearnToRank:
+    repository: "search-api-learn-to-rank"
+    tag: "release"
+
+learnToRank:
+  elasticsearchUri: ""
+  trainingInstance:
+    type: ""
+    count: '1'
+  deployInstance:
+    type: ""
+    count: '1'
+  iamRole: ""
+  sageMakerImage: ""

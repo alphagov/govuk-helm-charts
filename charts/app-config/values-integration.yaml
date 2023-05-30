@@ -1096,6 +1096,25 @@ govukApplications:
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
 
+- name: govuk-jobs
+  chartPath: charts/govuk-jobs
+  postSyncWorkflowEnabled: "false"
+  imageValues:
+    - "govuk-dependency-checker"
+    - "search-api"
+    - "search-api-learn-to-rank"
+  helmValues:
+    learnToRank:
+      elasticsearchUri: &elasticsearch-uri https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
+      trainingInstance:
+        type: ml.c5.xlarge
+        count: '1'
+      deployInstance:
+        type: ml.t2.medium
+        count: '2'
+      iamRole: arn:aws:iam::210287912431:role/govuk-integration-search-learntorank-role
+      sageMakerImage: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/search
+
 - name: hmrc-manuals-api
   helmValues:
     nginxClientMaxBodySize: 2M
@@ -1185,7 +1204,7 @@ govukApplications:
       # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
       # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
       - name: ELASTICSEARCH_URI
-        value: &elasticsearch-uri https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
+        value: *elasticsearch-uri
       - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
         value: "mongodb://\
           mongo-1.integration.govuk-internal.digital,\
