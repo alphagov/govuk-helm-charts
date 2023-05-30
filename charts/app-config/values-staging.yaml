@@ -1886,8 +1886,6 @@ govukApplications:
         value: "http://frontend"
       - name: BACKEND_URL_government-frontend
         value: "http://government-frontend"
-      - name: BACKEND_URL_service-manual-frontend
-        value: "http://service-manual-frontend"
       - name: BACKEND_URL_smartanswers
         value: "http://smartanswers"
       - name: BACKEND_URL_static
@@ -1946,8 +1944,6 @@ govukApplications:
         value: "http://draft-frontend"
       - name: BACKEND_URL_government-frontend
         value: "http://draft-government-frontend"
-      - name: BACKEND_URL_service-manual-frontend
-        value: "http://draft-service-manual-frontend"
       - name: BACKEND_URL_smartanswers
         value: "http://draft-smartanswers"
       - name: BACKEND_URL_static
@@ -2139,21 +2135,6 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       - name: TENSORFLOW_SAGEMAKER_ENDPOINT
         value: govuk-staging-search-ltr-endpoint
-
-- name: service-manual-frontend
-
-- name: draft-service-manual-frontend
-  repoName: service-manual-frontend
-  helmValues:
-    rails:
-      createKeyBaseSecret: false
-    sentry:
-      createSecret: false
-    uploadAssets:
-      enabled: false
-    extraEnv:
-      - name: PLEK_HOSTNAME_PREFIX
-        value: draft-
 
 - name: service-manual-publisher
   helmValues:
