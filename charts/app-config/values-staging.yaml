@@ -2303,6 +2303,8 @@ govukApplications:
 
 - name: smokey
   chartPath: charts/smokey
+  helmValues:
+    cronSchedule: "*/10 7-19 * * 1-5"
 
 - name: static
   helmValues:

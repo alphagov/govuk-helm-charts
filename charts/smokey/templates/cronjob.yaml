@@ -6,7 +6,7 @@ spec:
   concurrencyPolicy: Allow
   failedJobsHistoryLimit: 3
   successfulJobsHistoryLimit: 3
-  schedule: "*/10 * * * *"
+  schedule: {{ .Values.cronSchedule | quote }}
   jobTemplate:
     metadata:
       name: smokey
