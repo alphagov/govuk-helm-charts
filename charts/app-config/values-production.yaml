@@ -922,10 +922,10 @@ govukApplications:
     rails:
       enabled: false
     cronTasks:
-      - name: run_medical_alerts
+      - name: run-medical-alerts
         task: "run_medical_alerts"
         schedule: "21,51 * * * *"
-      - name: run_travel_alerts
+      - name: run-travel-alerts
         task: "run_travel_alerts"
         schedule: "*/15 * * * *"
     workerEnabled: false
