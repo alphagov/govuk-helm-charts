@@ -917,6 +917,8 @@ govukApplications:
 - name: email-alert-monitoring
   helmValues:
     appEnabled: false
+    sentry:
+      enabled: false
     uploadAssets:
       enabled: false
     rails:
