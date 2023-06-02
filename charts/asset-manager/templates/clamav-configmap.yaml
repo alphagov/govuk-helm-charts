@@ -25,6 +25,7 @@ data:
     # (as opposed to UNIX socket).
     MaxFileSize 500M
     MaxScanSize 1200M
+    MaxScanTime 240000
     MaxThreads 20
     SelfCheck 900
     StreamMaxLength 500M
