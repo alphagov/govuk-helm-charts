@@ -3,13 +3,9 @@
 
 govukEnvironment: staging
 externalDomainSuffix: staging.publishing.service.gov.uk
+k8sExternalDomainSuffix: eks.staging.govuk.digital
 publishingDomainSuffix: staging.publishing.service.gov.uk
 assetsDomain: assets.staging.publishing.service.gov.uk
-
-k8sAssetsDomain: assets-eks.staging.publishing.service.gov.uk
-k8sExternalDomainSuffix: eks.staging.govuk.digital
-# TODO: Remove once fully migrated to EKS
-k8sPublishingDomainSuffix: eks.staging.govuk.digital
 
 cspReportURI: https://csp-reporter.staging.publishing.service.gov.uk/report
 
