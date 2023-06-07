@@ -1118,8 +1118,8 @@ govukApplications:
       deployInstance:
         type: ml.t2.medium
         count: '2'
-      iamRole: arn:aws:iam::210287912431:role/govuk-integration-search-learntorank-role
-      sageMakerImage: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/search
+      sageMakerImage: 210287912431.dkr.ecr.eu-west-1.amazonaws.com/search
+      iamRole: arn:aws:iam::210287912431:role/search-api-learn-to-rank-govuk
 
 - name: hmrc-manuals-api
   helmValues:
