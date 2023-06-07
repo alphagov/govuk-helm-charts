@@ -24,6 +24,7 @@ spec:
             app.kubernetes.io/component: "search-api-ltr"
         spec:
           enableServiceLinks: false
+          serviceAccountName: search-api-learn-to-rank
           securityContext:
             fsGroup: {{ .Values.securityContext.runAsGroup }}
             runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
