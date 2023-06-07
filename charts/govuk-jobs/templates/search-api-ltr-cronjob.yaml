@@ -76,7 +76,7 @@ spec:
                 - name: AWS_S3_RELEVANCY_BUCKET_NAME
                   value: "govuk-{{ .Values.govukEnvironment }}-search-relevancy"
                 - name: ROLE_ARN
-                  value: {{ .Values.learnToRank.iamRole }}
+                  value: {{ .Values.learnToRank.sagemakerIamRole }}
                 - name: AWS_DEFAULT_REGION
                   value: eu-west-1
                 - name: IMAGE
