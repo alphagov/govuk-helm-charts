@@ -1119,7 +1119,8 @@ govukApplications:
         type: ml.t2.medium
         count: '2'
       sageMakerImage: 210287912431.dkr.ecr.eu-west-1.amazonaws.com/search
-      iamRole: arn:aws:iam::210287912431:role/search-api-learn-to-rank-govuk
+      sagemakerIamRole: arn:aws:iam::210287912431:role/learn-to-rank-sagemaker
+      serviceAccountIamRole: arn:aws:iam::210287912431:role/search-api-learn-to-rank-govuk
 
 - name: hmrc-manuals-api
   helmValues:

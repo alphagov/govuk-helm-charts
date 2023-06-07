@@ -29,5 +29,6 @@ learnToRank:
   deployInstance:
     type: ""
     count: '1'
-  iamRole: ""
   sageMakerImage: ""
+  sagemakerIamRole: ""
+  serviceAccountIamRole: ""
