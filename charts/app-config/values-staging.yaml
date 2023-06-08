@@ -1135,6 +1135,26 @@ govukApplications:
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
 
+- name: govuk-jobs
+  chartPath: charts/govuk-jobs
+  postSyncWorkflowEnabled: "false"
+  imageValues:
+    - "govuk-dependency-checker"
+    - "search-api"
+    - "search-api-learn-to-rank"
+  helmValues:
+    learnToRank:
+      elasticsearchUri: &elasticsearch-uri https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com
+      trainingInstance:
+        type: ml.c5.xlarge
+        count: '1'
+      deployInstance:
+        type: ml.c5.large
+        count: '4'
+      sageMakerImage: 696911096973.dkr.ecr.eu-west-1.amazonaws.com/search
+      sagemakerIamRole: arn:aws:iam::696911096973:role/learn-to-rank-sagemaker
+      serviceAccountIamRole: arn:aws:iam::696911096973:role/search-api-learn-to-rank-govuk
+
 - name: hmrc-manuals-api
   helmValues:
     nginxClientMaxBodySize: 2M
@@ -1225,7 +1245,7 @@ govukApplications:
       # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
       # TODO: Change this when copying from staging to production.
       - name: ELASTICSEARCH_URI
-        value: &elasticsearch-uri https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com
+        value: *elasticsearch-uri
       - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
         value: "mongodb://\
           mongo-1.staging.govuk-internal.digital,\
