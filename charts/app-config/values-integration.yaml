@@ -3,13 +3,9 @@
 
 govukEnvironment: integration
 externalDomainSuffix: integration.publishing.service.gov.uk
+k8sExternalDomainSuffix: eks.integration.govuk.digital
 publishingDomainSuffix: integration.publishing.service.gov.uk
 assetsDomain: assets.integration.publishing.service.gov.uk
-
-k8sAssetsDomain: assets-eks.integration.publishing.service.gov.uk
-k8sExternalDomainSuffix: eks.integration.govuk.digital
-# TODO: Remove once fully migrated to EKS
-k8sPublishingDomainSuffix: eks.integration.govuk.digital
 
 cspReportURI: https://csp-reporter.integration.publishing.service.gov.uk/report
 

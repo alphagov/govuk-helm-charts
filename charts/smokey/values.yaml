@@ -1,12 +1,10 @@
 govukEnvironment: test
 externalDomainSuffix: www.test.publishing.service.gov.uk
+k8sExternalDomainSuffix: eks.test.govuk.digital
 publishingDomainSuffix: test.publishing.service.gov.uk
 assetsDomain: assets.test.publishing.service.gov.uk
-cronSchedule: "*/10 * * * *"
 
-k8sExternalDomainSuffix: eks.test.govuk.digital
-k8sPublishingDomainSuffix: test.publishing.service.gov.uk
-k8sAssetsDomain: assets-eks.test.publishing.service.gov.uk
+cronSchedule: "*/10 * * * *"
 
 appImage:
   repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smokey
