@@ -48,7 +48,7 @@ spec:
                 - name: BIGQUERY_CREDENTIALS
                   valueFrom:
                     secretKeyRef:
-                      name: search-api-ltr-bigquery
+                      name: search-api-google-bigquery
                       key: credentials
                 - name: ELASTICSEARCH_URI
                   value: {{ .Values.learnToRank.elasticsearchUri }}
