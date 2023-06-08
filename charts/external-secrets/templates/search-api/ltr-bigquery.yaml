@@ -1,0 +1,20 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: search-api-ltr-bigquery
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Credentials used by search-api learn to rank process to access Google Bigquery
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: search-api-ltr-bigquery
+  dataFrom:
+    - extract:
+        key: govuk/search-api/ltr-bigquery
