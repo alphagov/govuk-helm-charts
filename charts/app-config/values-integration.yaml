@@ -707,6 +707,7 @@ govukApplications:
           mongo-1.integration.govuk-internal.digital,\
           mongo-2.integration.govuk-internal.digital,\
           mongo-3.integration.govuk-internal.digital/content_store_production"
+
 - name: draft-content-store
   repoName: content-store
   helmValues:
@@ -740,6 +741,42 @@ govukApplications:
           mongo-3.integration.govuk-internal.digital/draft_content_store_production"
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
+
+  - name: draft-content-store-postgresql-branch
+      repoName: content-store-postgresql-branch
+      helmValues:
+        <<: *content-store
+        rails:
+          createKeyBaseSecret: false
+        sentry:
+          createSecret: false  # Sentry DSNs are per repo.
+        extraEnv:
+          - name: ROUTER_API_BEARER_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: signon-token-draft-content-store-draft-router-api
+                key: bearer_token
+          - name: GDS_SSO_OAUTH_ID
+            valueFrom:
+              secretKeyRef:
+                name: signon-app-draft-content-store
+                key: oauth_id
+          - name: GDS_SSO_OAUTH_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: signon-app-draft-content-store
+                key: oauth_secret
+          - name: DEFAULT_TTL
+            value: "1"
+          - name: PLEK_HOSTNAME_PREFIX
+            value: draft-
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                name: draft-content-store-postgres
+                key: DATABASE_URL
+          - name: DISABLE_ROUTER_API
+            value: "true"
 
 - name: content-tagger
   helmValues:
