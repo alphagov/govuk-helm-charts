@@ -1,7 +1,7 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: draft-content-store-postgres
+  name: content-store-postgres
   labels:
     {{- include "external-secrets.labels" . | nindent 4 }}
   annotations:
@@ -14,7 +14,7 @@ spec:
     kind: ClusterSecretStore
   target:
     deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
-    name: draft-content-store-postgres
+    name: content-store-postgres
     template:
       data:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/postpsql-conn-string.tpl" | trim }}/draft-content-store_production'
