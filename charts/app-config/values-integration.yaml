@@ -748,6 +748,9 @@ govukApplications:
     <<: *content-store
     rails:
       createKeyBaseSecret: false
+      # use the same secret as the mongo draft-content-store, it will make the
+      # eventual switchover easier and reduce toil
+      secretKeyBaseName: content-store-rails-secret-key-base
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
     extraEnv:
