@@ -1,0 +1,23 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: content-store-postgres
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Credentials for draft-content-store's Postgres DB hosted in RDS.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: content-store-postgres
+    template:
+      data:
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/postpsql-conn-string.tpl" | trim }}/draft-content-store_production'
+  dataFrom:
+    - extract:
+        key: govuk/draft-content-store/postgres
