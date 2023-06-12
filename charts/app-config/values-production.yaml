@@ -1736,7 +1736,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: release.{{ .Values.k8sExternalDomainSuffix }}
-    workerEnabled: true
+    workerEnabled: false
     replicaCount: 2
     workerReplicaCount: 1
     podDisruptionBudget:
