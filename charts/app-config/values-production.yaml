@@ -1736,7 +1736,7 @@ govukApplications:
           ]}}]
       hosts:
         - name: release.{{ .Values.k8sExternalDomainSuffix }}
-    workerEnabled: false
+    workerEnabled: true
     replicaCount: 2
     workerReplicaCount: 1
     podDisruptionBudget:
@@ -1755,6 +1755,10 @@ govukApplications:
       requests:
         cpu: 100m
         memory: 400Mi
+    cronTasks:
+      - name: post-out-of-sync-deploys
+        task: "post_out_of_sync_deploys"
+        schedule: "0 9 * * 1-5"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
