@@ -783,7 +783,7 @@ govukApplications:
       - name: DATABASE_URL
         valueFrom:
           secretKeyRef:
-            name: content-store-postgres
+            name: draft-content-store-postgres
             key: DATABASE_URL
       - name: DISABLE_ROUTER_API
         value: "true"
