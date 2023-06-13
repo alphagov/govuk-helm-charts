@@ -1800,6 +1800,31 @@ govukApplications:
           router-backend-2,\
           router-backend-3/draft_router"
 
+- name: draft-router-api-postgres
+  repoName: router-api-postgres
+  helmValues:
+    <<: *router-api
+    rails:
+      createKeyBaseSecret: false
+    sentry:
+      createSecret: false  # Sentry DSNs are per repo.
+    extraEnv:
+      - name: GDS_SSO_OAUTH_ID
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-draft-router-api
+            key: oauth_id
+      - name: GDS_SSO_OAUTH_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: signon-app-draft-router-api
+            key: oauth_secret
+      - name: DATABASE_URL
+        valueFrom:
+          secretKeyRef:
+            name: router-api-postgres
+            key: DATABASE_URL
+
 - name: router
   helmValues:
     rails:
