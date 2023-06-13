@@ -754,11 +754,6 @@ govukApplications:
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
     extraEnv:
-      - name: SENTRY_DSN
-        valueFrom:
-          secretKeyRef:
-            name: content-store-sentry
-            key: dsn
       - name: SENTRY_ENVIRONMENT
         value: "postgresql-draft-integration"
       - name: ROUTER_API_BEARER_TOKEN
