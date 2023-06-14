@@ -1758,7 +1758,7 @@ govukApplications:
     cronTasks:
       - name: post-out-of-sync-deploys
         task: "post_out_of_sync_deploys"
-        schedule: "0 9 * * 1-5"
+        schedule: "30 7 * * 1-5"
     extraEnv:
       - name: GDS_SSO_OAUTH_ID
         valueFrom:
