@@ -86,7 +86,7 @@ spec:
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.repoName }}-sentry
+                  name: {{ .Values.sentry.dsnSecretName | default (printf "%s-sentry" .Values.repoName) }}
                   key: dsn
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"

@@ -753,6 +753,7 @@ govukApplications:
       secretKeyBaseName: content-store-rails-secret-key-base
     sentry:
       createSecret: false  # Sentry DSNs are per repo.
+      dsnSecretName: content-store-sentry
     extraEnv:
       - name: SENTRY_ENVIRONMENT
         value: "postgresql-draft-integration"
