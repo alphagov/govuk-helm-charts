@@ -1,0 +1,72 @@
+{{- $_ := .Values.govukEnvironment | required "govukEnvironment is required" }}
+{{- $fullName := include "search-index-env-sync.fullname" . }}
+{{- range get .Values.cronjobs .Values.govukEnvironment }}
+  {{- $jobName := printf "%s-%s" $fullName .name }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $jobName }}
+  labels:
+    {{- include "search-index-env-sync.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $jobName }}
+  annotations:
+    kubernetes.io/description: >
+      The {{ $fullName }}-* jobs copy Elasticsearch indices between environments
+      via Elasticsearch snapshots, so that the website search feature works in
+      staging and integration.
+
+      Elasticsearch handles the actual transfer of the index shards to/from the
+      snapshot repositories in S3. This job just makes HTTP requests to
+      Elasticsearch to initiate the snapshot and restore.
+
+      These jobs are not involved in making backups for disaster recovery
+      purposes; those are handled separately within AWS Managed Elasticsearch.
+spec:
+  schedule: {{ .schedule | quote }}
+  jobTemplate:
+    metadata:
+      name: {{ $jobName }}
+      labels:
+        {{- include "search-index-env-sync.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $jobName }}
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ $jobName }}
+          labels:
+            {{- include "search-index-env-sync.selectorLabels" $ | nindent 12 }}
+            app.kubernetes.io/component: {{ $jobName }}
+        spec:
+          enableServiceLinks: false
+          securityContext:
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+          restartPolicy: Never
+          volumes:
+            - name: scripts
+              configMap:
+                name: {{ $fullName }}
+                defaultMode: 0555  # world-executable
+          containers:
+            - name: main
+              image: {{ $.Values.imageRef | quote }}
+              command:
+                - /opt/bin/snapshot
+              args:
+                {{- toYaml .args | nindent 16 }}
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment | required "govukEnvironment is required" }}
+                - name: VERBOSE
+                  value: "1"
+                {{- with .extraEnv }}
+                  {{- toYaml . | nindent 16 }}
+                {{- end }}
+              resources:
+              securityContext:
+                {{- toYaml $.Values.securityContext | nindent 16 }}
+              volumeMounts:
+                - name: scripts
+                  mountPath: /opt/bin
+{{- end }}

@@ -102,7 +102,7 @@ fi
 : "${ES_URL:?required}"
 : "${SNAPSHOT_REPO:?required}"
 : "${SNAPSHOTS_TO_KEEP:=1}"
-: "${REQUEST_DEADLINE_SECONDS:=300}"  # Keep this > ES's 30s timeout to preserve error messages.
+: "${REQUEST_DEADLINE_SECONDS:=900}"  # Keep this > ES's 30s timeout to preserve error messages.
 readonly GOVUK_ENVIRONMENT ES_URL SNAPSHOTS_TO_KEEP REQUEST_DEADLINE_SECONDS
 
 curl="curl -Ssfm$REQUEST_DEADLINE_SECONDS"
