@@ -2278,8 +2278,6 @@ govukApplications:
             key: DEVISE_SECRET_KEY
       - name: REDIS_URL
         value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-      - name: SSO_PUSH_USER_EMAIL
-        value: signon+permissions@alphagov.co.uk
       - name: SIGNON_ADMIN_PASSWORD
         valueFrom:
           secretKeyRef:
