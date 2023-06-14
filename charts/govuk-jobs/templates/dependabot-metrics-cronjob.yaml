@@ -1,3 +1,4 @@
+{{- if eq .Values.govukEnvironment "production" }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -50,3 +51,4 @@ spec:
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
+{{- end }}
