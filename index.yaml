@@ -1274,6 +1274,16 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/router-0.3.0/router-0.3.0.tgz
     version: 0.3.0
+  search-index-env-sync:
+  - apiVersion: v2
+    created: "2023-06-15T14:50:32.196877622Z"
+    description: Cronjobs for copying Elasticsearch indices from prod to non-prod
+    digest: e24cf4bfff24506610e2220e4a9dcb7c8c8fa570b64bfaeaf0e9fb826a77a226
+    name: search-index-env-sync
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/search-index-env-sync-1.0.0/search-index-env-sync-1.0.0.tgz
+    version: 1.0.0
   signon:
   - apiVersion: v2
     created: "2022-02-04T09:33:44.852932584Z"
@@ -1468,4 +1478,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/static-0.3.0/static-0.3.0.tgz
     version: 0.3.0
-generated: "2023-05-04T13:44:22.624525654Z"
+generated: "2023-06-15T14:50:32.423500443Z"
