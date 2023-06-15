@@ -4,25 +4,28 @@ nameOverride: ""
 fullnameOverride: ""
 imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli"
 
+# govukEnvironment determines which set of cronjobs to use from `cronjobs`
+# below. When running under Argo CD, the ../app-config chart passes the
+# appropriate value for govukEnvironment by default.
 govukEnvironment: staging
 
 cronjobs:
   production:
-    - name: take-snapshot
+    - name: snapshot
       schedule: "21 1 * * *"
       args: [create_and_clean_up]
   staging:
-    - name: restore-from-prod
+    - name: copy-from-prod  # These names have to be fairly short :(
       schedule: "37 1 * * *"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
           value: govuk-production
-    - name: take-snapshot
+    - name: snapshot
       schedule: "37 2 * * *"
       args: [create_and_clean_up]
   integration:
-    - name: restore-from-staging
+    - name: copy-from-stag
       schedule: "53 2 * * *"
       args: [restore_latest]
       extraEnv:
