@@ -1,0 +1,66 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "content-store-mongo-to-postgres-cron"
+  labels:
+    app: "content-store-mongo-to-postgres-cron"
+    app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+spec:
+  schedule: "15 5 * * *"  
+  jobTemplate:
+    metadata:
+      name: "content-store-mongo-to-postgres-cron"
+      labels:
+        app: "content-store-mongo-to-postgres-cron"
+        app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: "content-store-mongo-to-postgres-cron"
+          labels:
+            app: "content-store-mongo-to-postgres-cron"
+            app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+        spec:
+          enableServiceLinks: false
+          securityContext:
+            fsGroup: {{ .Values.securityContext.runAsGroup }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+          restartPolicy: Never
+          volumes:
+            - name: mongo-export
+              emptyDir: {}
+          initContainers:
+            - name: export-mongo-data
+              image: "content-store:release"
+              imagePullPolicy: "Always"
+              command: ["rake"]
+              args: ["mongo:export:all[/mongo-export/]"]
+              env:
+                - name: MONGODB_URI
+                  value: "{{.Values.mongoExport.mongoDbUri }}"
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: mongo-export
+                  mountPath: /mongo-export
+          containers:
+            - name: import-mongo-data-to-postgresql
+              image: "content-store-postgresql-branch:release"
+              imagePullPolicy: "Always"
+              command: ["bundle exec rake"]
+              args:
+                - "import:all[/mongo-export/]"
+              env:
+                - name: DATABASE_URL
+                  value: "{{ .Values.postgresImport.image.databaseUrl }}"
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: mongo-export
+                  mountPath: /mongo-export
