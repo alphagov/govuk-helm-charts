@@ -1,5 +1,0 @@
-apiVersion: v2
-name: content-store-mongo-postgres-cron
-description: Cronjobs for copying (draft-)content-store data from Mongo to PostgreSQL
-type: application
-version: 1.0.0

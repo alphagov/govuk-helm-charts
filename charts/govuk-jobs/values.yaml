@@ -33,7 +33,7 @@ learnToRank:
   sagemakerIamRole: ""
   serviceAccountIamRole: ""
 
-content-store-mongo-postgres-cron:
+contentStoreMongoPostgresCron:
   mongoExport:
     mongoDbUri: ""
   postgresImport:
