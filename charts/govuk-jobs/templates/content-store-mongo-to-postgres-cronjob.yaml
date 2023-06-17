@@ -38,7 +38,8 @@ spec:
               image: "content-store:release"
               imagePullPolicy: "Always"
               command: ["rake"]
-              args: ["mongo:export:all[/mongo-export/]"]
+              args:
+                - "mongo:export:all[/mongo-export/]"
               env:
                 - name: MONGODB_URI
                   value: "{{ .Values.contentStoreMongoPostgresCron.mongoExport.mongoDbUri }}"
@@ -52,7 +53,7 @@ spec:
             - name: import-mongo-data-to-postgresql
               image: "content-store-postgresql-branch:release"
               imagePullPolicy: "Always"
-              command: ["bundle exec rake"]
+              command: ["rake"]
               args:
                 - "import:all[/mongo-export/]"
               env:
