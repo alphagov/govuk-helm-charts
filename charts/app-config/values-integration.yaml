@@ -788,9 +788,9 @@ govukApplications:
   chartPath: charts/content-store-mongo-postgres-cron
   helmValues:
     mongoExport:
-      mongoDbUri: "{{.Values.images.DraftContentStore.extraEnv.MONGODB_URI}}"
+      mongoDbUri: "{{ .Values.images.DraftContentStore.extraEnv.MONGODB_URI }}"
     postgresImport:
-      databaseUrl: "{{.Values.images.DraftContentStorePostgresqlBranch.extraEnv.DATABASE_URL}}"
+      databaseUrl: "{{ .Values.images.DraftContentStorePostgresqlBranch.extraEnv.DATABASE_URL }}"
 
 - name: content-tagger
   helmValues:
