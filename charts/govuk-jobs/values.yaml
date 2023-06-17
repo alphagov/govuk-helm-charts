@@ -32,3 +32,10 @@ learnToRank:
   sageMakerImage: ""
   sagemakerIamRole: ""
   serviceAccountIamRole: ""
+
+contentStoreMongoPostgresCron:
+  schedule: "15 5 * * *"
+  mongoExport:
+    mongoDbUri: ""
+  postgresImport:
+    databaseUrl: ""
