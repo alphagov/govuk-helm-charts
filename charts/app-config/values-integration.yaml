@@ -790,7 +790,7 @@ govukApplications:
     mongoExport:
       mongoDbUri: "{{ .Values.images.DraftContentStore.extraEnv.MONGODB_URI }}"
     postgresImport:
-      databaseUrl: "{{ .Values.images.DraftContentStorePostgresqlBranch.extraEnv.DATABASE_URL }}"
+      databaseUrlSecretName: "draft-content-store-postgres"
 
 - name: content-tagger
   helmValues:
@@ -1153,6 +1153,8 @@ govukApplications:
   chartPath: charts/govuk-jobs
   postSyncWorkflowEnabled: "false"
   imageValues:
+    - "content-store"
+    - "content-store-postgresql-branch"
     - "govuk-dependency-checker"
     - "search-api"
     - "search-api-learn-to-rank"

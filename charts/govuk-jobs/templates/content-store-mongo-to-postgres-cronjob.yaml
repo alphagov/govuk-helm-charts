@@ -62,7 +62,10 @@ spec:
                 - "import:all[/mongo-export/]"
               env:
                 - name: DATABASE_URL
-                  value: "{{ .Values.contentStoreMongoPostgresCron.postgresImport.databaseUrl }}"
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.contentStoreMongoPostgresCron.postgresImport.databaseUrlSecretName }}"
+                      key: DATABASE_URL
               {{- with .Values.resources }}
               resources:
                 {{- . | toYaml | trim | nindent 16 }}

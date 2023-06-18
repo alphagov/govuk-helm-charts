@@ -44,4 +44,4 @@ contentStoreMongoPostgresCron:
   mongoExport:
     mongoDbUri: ""
   postgresImport:
-    databaseUrl: ""
+    databaseUrlSecretName: "draft-content-store-postgres"
