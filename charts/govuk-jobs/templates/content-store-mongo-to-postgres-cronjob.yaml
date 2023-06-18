@@ -35,7 +35,7 @@ spec:
               emptyDir: {}
           initContainers:
             - name: export-mongo-data
-              image: "content-store:release"
+              image: "{{ .Values.images.DraftContentStore.repository }}:{{ .Values.images.DraftContentStore.tag }}"
               imagePullPolicy: "Always"
               command: ["rake"]
               args:
@@ -51,7 +51,7 @@ spec:
                   mountPath: /mongo-export
           containers:
             - name: import-mongo-data-to-postgresql
-              image: "content-store-postgresql-branch:release"
+              image: "{{ .Values.images.DraftContentStorePostgresqlBranch.repository }}:{{ .Values.images.DraftContentStorePostgresqlBranch.tag }}"
               imagePullPolicy: "Always"
               command: ["rake"]
               args:
