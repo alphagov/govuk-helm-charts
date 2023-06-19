@@ -1164,7 +1164,10 @@ govukApplications:
       serviceAccountIamRole: arn:aws:iam::210287912431:role/search-api-learn-to-rank-govuk
     contentStoreMongoPostgresCron:
       mongoExport:
-        mongoDbUri: "{{ .Values.images.DraftContentStore.extraEnv.MONGODB_URI }}"
+        mongoDbUri: "mongodb://\
+          mongo-1.integration.govuk-internal.digital,\
+          mongo-2.integration.govuk-internal.digital,\
+          mongo-3.integration.govuk-internal.digital/draft_content_store_production"
       postgresImport:
         databaseUrlSecretName: "draft-content-store-postgres"
 
