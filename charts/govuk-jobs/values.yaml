@@ -11,6 +11,12 @@ resources:
     cpu: 0.1
     memory: 800Mi
 images:
+  ContentStore:
+    repository: "content-store"
+    tag: "release"
+  ContentStorePostgresqlBranch:
+    repository: "content-store-postgresql-branch"
+    tag: "release"
   GovukDependencyChecker:
     repository: "govuk-dependency-checker"
     tag: "release"
@@ -33,9 +39,9 @@ learnToRank:
   sagemakerIamRole: ""
   serviceAccountIamRole: ""
 
-contentStoreMongoPostgresCron:
+draftContentStoreMongoPostgresCron:
   schedule: "15 5 * * *"
   mongoExport:
     mongoDbUri: ""
   postgresImport:
-    databaseUrl: ""
+    databaseUrlSecretName: "draft-content-store-postgres"

@@ -784,14 +784,6 @@ govukApplications:
       - name: DISABLE_ROUTER_API
         value: "true"
 
-- name: draft-content-store-mongo-postgres-cron
-  chartPath: charts/content-store-mongo-postgres-cron
-  helmValues:
-    mongoExport:
-      mongoDbUri: "{{ .Values.images.DraftContentStore.extraEnv.MONGODB_URI }}"
-    postgresImport:
-      databaseUrl: "{{ .Values.images.DraftContentStorePostgresqlBranch.extraEnv.DATABASE_URL }}"
-
 - name: content-tagger
   helmValues:
     dbMigrationEnabled: true
@@ -1153,6 +1145,8 @@ govukApplications:
   chartPath: charts/govuk-jobs
   postSyncWorkflowEnabled: "false"
   imageValues:
+    - "content-store"
+    - "content-store-postgresql-branch"
     - "govuk-dependency-checker"
     - "search-api"
     - "search-api-learn-to-rank"
@@ -1168,6 +1162,14 @@ govukApplications:
       sageMakerImage: 210287912431.dkr.ecr.eu-west-1.amazonaws.com/search
       sagemakerIamRole: arn:aws:iam::210287912431:role/learn-to-rank-sagemaker
       serviceAccountIamRole: arn:aws:iam::210287912431:role/search-api-learn-to-rank-govuk
+    draftContentStoreMongoPostgresCron:
+      mongoExport:
+        mongoDbUri: "mongodb://\
+          mongo-1.integration.govuk-internal.digital,\
+          mongo-2.integration.govuk-internal.digital,\
+          mongo-3.integration.govuk-internal.digital/draft_content_store_production"
+      postgresImport:
+        databaseUrlSecretName: "draft-content-store-postgres"
 
 - name: hmrc-manuals-api
   helmValues:
