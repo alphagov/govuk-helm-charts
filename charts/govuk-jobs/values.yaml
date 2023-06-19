@@ -11,10 +11,10 @@ resources:
     cpu: 0.1
     memory: 800Mi
 images:
-  DraftContentStore:
+  ContentStore:
     repository: "content-store"
     tag: "release"
-  DraftContentStorePostgresqlBranch:
+  ContentStorePostgresqlBranch:
     repository: "content-store-postgresql-branch"
     tag: "release"
   GovukDependencyChecker:

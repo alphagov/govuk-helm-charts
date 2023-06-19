@@ -55,7 +55,7 @@ spec:
                   mountPath: /mongo-export
           containers:
             - name: import-mongo-data-to-postgresql
-              image: "{{ .Values.images.DraftContentStorePostgresqlBranch.repository }}:{{ .Values.images.DraftContentStorePostgresqlBranch.tag }}"
+              image: "{{ .Values.images.ContentStorePostgresqlBranch.repository }}:{{ .Values.images.ContentStorePostgresqlBranch.tag }}"
               imagePullPolicy: "Always"
               command: ["rake"]
               args:
