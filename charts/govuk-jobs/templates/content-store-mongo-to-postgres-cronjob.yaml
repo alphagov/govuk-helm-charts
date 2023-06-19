@@ -35,7 +35,7 @@ spec:
               emptyDir: {}
           initContainers:
             - name: export-mongo-data
-              image: "{{ .Values.images.DraftContentStore.repository }}:{{ .Values.images.DraftContentStore.tag }}"
+              image: "{{ .Values.images.ContentStore.repository }}:{{ .Values.images.ContentStore.tag }}"
               imagePullPolicy: "Always"
               command: ["rake"]
               args:
