@@ -39,7 +39,7 @@ learnToRank:
   sagemakerIamRole: ""
   serviceAccountIamRole: ""
 
-contentStoreMongoPostgresCron:
+draftContentStoreMongoPostgresCron:
   schedule: "15 5 * * *"
   mongoExport:
     mongoDbUri: ""

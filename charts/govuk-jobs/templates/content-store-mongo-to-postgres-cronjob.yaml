@@ -2,26 +2,26 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: "content-store-mongo-to-postgres-cron"
+  name: "draft-content-store-mongo-to-postgres-cron"
   labels:
-    app: "content-store-mongo-to-postgres-cron"
-    app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+    app: "draft-content-store-mongo-to-postgres-cron"
+    app.kubernetes.io/component: "draft-content-store-mongo-to-postgres-cron"
 spec:
-  schedule: "{{ .Values.contentStoreMongoPostgresCron.schedule }}"  
+  schedule: "{{ .Values.draftContentStoreMongoPostgresCron.schedule }}"  
   jobTemplate:
     metadata:
-      name: "content-store-mongo-to-postgres-cron"
+      name: "draft-content-store-mongo-to-postgres-cron"
       labels:
-        app: "content-store-mongo-to-postgres-cron"
-        app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+        app: "draft-content-store-mongo-to-postgres-cron"
+        app.kubernetes.io/component: "draft-content-store-mongo-to-postgres-cron"
     spec:
       backoffLimit: 0
       template:
         metadata:
-          name: "content-store-mongo-to-postgres-cron"
+          name: "draft-content-store-mongo-to-postgres-cron"
           labels:
-            app: "content-store-mongo-to-postgres-cron"
-            app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+            app: "draft-content-store-mongo-to-postgres-cron"
+            app.kubernetes.io/component: "draft-content-store-mongo-to-postgres-cron"
         spec:
           enableServiceLinks: false
           securityContext:
@@ -42,7 +42,7 @@ spec:
                 - "mongo:export:all[/mongo-export/]"
               env:
                 - name: MONGODB_URI
-                  value: "{{ .Values.contentStoreMongoPostgresCron.mongoExport.mongoDbUri }}"
+                  value: "{{ .Values.draftContentStoreMongoPostgresCron.mongoExport.mongoDbUri }}"
               {{- with .Values.resources }}
               resources:
                 {{- . | toYaml | trim | nindent 16 }}
@@ -64,7 +64,7 @@ spec:
                 - name: DATABASE_URL
                   valueFrom:
                     secretKeyRef:
-                      name: "{{ .Values.contentStoreMongoPostgresCron.postgresImport.databaseUrlSecretName }}"
+                      name: "{{ .Values.draftContentStoreMongoPostgresCron.postgresImport.databaseUrlSecretName }}"
                       key: DATABASE_URL
               {{- with .Values.resources }}
               resources:
