@@ -1022,6 +1022,8 @@ govukApplications:
         - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
           path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
           pathType: ImplementationSpecific
+        - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
+          path: /assets/frontend/
     extraEnv:
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *frontend-notify-template
