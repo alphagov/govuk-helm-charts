@@ -1026,6 +1026,7 @@ govukApplications:
           path: /assets/frontend/
         - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
           path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
+          pathType: ImplementationSpecific
         - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
           path: /assets/frontend/
     extraEnv:
