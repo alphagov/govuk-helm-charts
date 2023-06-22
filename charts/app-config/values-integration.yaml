@@ -1101,7 +1101,7 @@ govukApplications:
         <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
-        alb.ingress.kubernetes.io/group.order: '15'
+        alb.ingress.kubernetes.io/group.order: '16'
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
         alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
@@ -1157,10 +1157,13 @@ govukApplications:
         <<: *alb-ingress-www-waf-ruleset
         alb.ingress.kubernetes.io/load-balancer-name: assets-origin
         alb.ingress.kubernetes.io/group.name: assets-origin
-        alb.ingress.kubernetes.io/group.order: '16'
+        alb.ingress.kubernetes.io/group.order: '15'
         alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
         alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
-        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
+        alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "draft-assets*.{{ .Values.publishingDomainSuffix }}"
+          ]}}]
       hosts:
         - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
           path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
