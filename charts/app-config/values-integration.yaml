@@ -784,6 +784,18 @@ govukApplications:
       - name: DISABLE_ROUTER_API
         value: "true"
 
+- name: draft-content-store-proxy
+  repoName: content-store-proxy
+  helmValues:
+    nginxClientMaxBodySize: 20M
+    uploadAssets:
+      enabled: false
+    extraEnv:
+      - name: PRIMARY_UPSTREAM
+        value: "http://draft-content-store/"
+      - name: SECONDARY_UPSTREAM
+        value: "http://draft-content-store-postgresql-branch/"
+
 - name: content-tagger
   helmValues:
     dbMigrationEnabled: true
