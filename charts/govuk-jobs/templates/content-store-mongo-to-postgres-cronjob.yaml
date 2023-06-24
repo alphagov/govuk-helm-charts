@@ -142,7 +142,6 @@ spec:
                   mountPath: /mongo-export
                 - name: app-tmp
                   mountPath: /tmp
-          containers:
             - name: import-mongo-data-to-postgresql
               image: "{{ .Values.images.ContentStorePostgresqlBranch.repository }}:{{ .Values.images.ContentStorePostgresqlBranch.tag }}"
               imagePullPolicy: "Always"
@@ -167,3 +166,103 @@ spec:
                   mountPath: /mongo-export
                 - name: app-tmp
                   mountPath: /tmp
+                - name: pg-dump
+                  mountPath: /pg-dump
+            - name: dump-postgresql
+              image: "{{ .Values.images.ContentStorePostgresqlBranch.repository }}:{{ .Values.images.ContentStorePostgresqlBranch.tag }}"
+              imagePullPolicy: "Always"
+              command: ["pg_dump"]
+              args:
+                - "-F c"
+                - "-f /pg-dump/content_store_production"
+                - "${DATABASE_URL}"
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.contentStoreMongoPostgresCron.postgresImport.databaseUrlSecretName }}"
+                      key: DATABASE_URL
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: app-tmp
+                  mountPath: /tmp
+                - name: pg-dump
+                  mountPath: /pg-dump
+            - name: compress-pg-dump
+              image: "{{ .Values.images.ContentStorePostgresqlBranch.repository }}:{{ .Values.images.ContentStorePostgresqlBranch.tag }}"
+              imagePullPolicy: "Always"
+              command: ["tar"]
+              args:
+                - "--create"
+                - "--gzip"
+                - "--force-local"
+                - "-f /pg-dump/content_store_production.gz"
+                - /pg-dump/content_store_production
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.draftContentStoreMongoPostgresCron.postgresImport.databaseUrlSecretName }}"
+                      key: DATABASE_URL
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: pg-dump
+                  mountPath: /pg-dump
+                - name: app-tmp
+                  mountPath: /tmp
+            - name: timestamp-pg-dump
+              image: "{{ .Values.images.ContentStorePostgresqlBranch.repository }}:{{ .Values.images.ContentStorePostgresqlBranch.tag }}"
+              imagePullPolicy: "Always"
+              command: ["mv"]
+              args:
+                - /pg-dump/content_store_production.gz
+                - "/pg-dump/$(date +%Y-%m-%dT%H:%M:%S)-content_store_production.gz"
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.draftContentStoreMongoPostgresCron.postgresImport.databaseUrlSecretName }}"
+                      key: DATABASE_URL
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: pg-dump
+                  mountPath: /pg-dump
+                - name: app-tmp
+                  mountPath: /tmp
+          containers:
+            - name: upload-to-s3
+              image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
+              command:
+                - aws
+                - s3
+                - sync
+                - /pg-dump
+                - s3://govuk-integration-database-backups/draft-content-store/
+              {{- with .Values.jobResources }}
+              resources:
+                {{- . | toYaml | trim | nindent 12 }}
+              {{- end }}
+              volumeMounts:
+                - name: pg-dump
+                  mountPath: /pg-dump
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
