@@ -278,6 +278,8 @@ govukApplications:
         cpu: 1
         memory: 1Gi
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.production.govuk-internal.digital
       - name: EMAIL_ALERT_API_BEARER_TOKEN
@@ -296,6 +298,8 @@ govukApplications:
     uploadAssets:
       enabled: false
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -885,6 +889,8 @@ govukApplications:
 - name: email-alert-frontend
   helmValues:
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: SUBSCRIPTION_MANAGEMENT_ENABLED
         value: "yes"
       - name: REDIS_URL
@@ -979,6 +985,8 @@ govukApplications:
 - name: feedback
   helmValues:
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
         value: b5baae45-0a68-4b63-91a1-66b05640d27e
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
@@ -1040,6 +1048,8 @@ govukApplications:
         task: "registries:cache_refresh"
         schedule: "15 * * * *"
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -1077,6 +1087,8 @@ govukApplications:
         cpu: 2
         memory: 1Gi
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *frontend-notify-template
       - name: MEMCACHE_SERVERS
@@ -1140,6 +1152,8 @@ govukApplications:
     uploadAssets:
       enabled: false
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *frontend-notify-template
       - name: PLEK_HOSTNAME_PREFIX
@@ -1181,6 +1195,8 @@ govukApplications:
         cpu: 1
         memory: 1500Mi
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: MEMCACHE_SERVERS
         value: frontend-memcached-govuk.eks.production.govuk-internal.digital
 
@@ -1194,6 +1210,8 @@ govukApplications:
     uploadAssets:
       enabled: false
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: PLEK_HOSTNAME_PREFIX
         value: draft-
 
@@ -1294,6 +1312,10 @@ govukApplications:
         value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
 
 - name: info-frontend
+  helmValues:
+    extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
 
 - name: licencefinder
   repoName: licence-finder
@@ -1303,6 +1325,8 @@ govukApplications:
       path: /app/public/assets/licencefinder
       s3Directory: "licencefinder"
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
       # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
       - name: ELASTICSEARCH_URI
@@ -2323,6 +2347,8 @@ govukApplications:
         schedule: "9 1 * * *"
         serviceAccount: signon
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: GOVUK_NOTIFY_TEMPLATE_ID
         value: *publishing-notify-template
       - name: GOVUK_NOTIFY_API_KEY
@@ -2380,6 +2406,8 @@ govukApplications:
         memory: 1Gi
         cpu: "2"
     extraEnv:
+      - name: GOVUK_CSP_REPORT_ONLY
+        value: "true"
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
