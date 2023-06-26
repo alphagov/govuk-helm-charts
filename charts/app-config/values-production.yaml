@@ -985,8 +985,6 @@ govukApplications:
 - name: feedback
   helmValues:
     extraEnv:
-      - name: GOVUK_CSP_REPORT_ONLY
-        value: "true"
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
         value: b5baae45-0a68-4b63-91a1-66b05640d27e
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
@@ -1048,8 +1046,6 @@ govukApplications:
         task: "registries:cache_refresh"
         schedule: "15 * * * *"
     extraEnv:
-      - name: GOVUK_CSP_REPORT_ONLY
-        value: "true"
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -2406,8 +2402,6 @@ govukApplications:
         memory: 1Gi
         cpu: "2"
     extraEnv:
-      - name: GOVUK_CSP_REPORT_ONLY
-        value: "true"
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:

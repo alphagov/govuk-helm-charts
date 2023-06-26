@@ -958,8 +958,6 @@ govukApplications:
 - name: feedback
   helmValues:
     extraEnv:
-      - name: GOVUK_CSP_REPORT_ONLY
-        value: "true"
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
         value: d33f7857-7514-4458-81b9-0995f48e2ac5
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
@@ -1020,8 +1018,6 @@ govukApplications:
         task: "registries:cache_refresh"
         schedule: "15 * * * *"
     extraEnv:
-      - name: GOVUK_CSP_REPORT_ONLY
-        value: "true"
       - name: EMAIL_ALERT_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
@@ -2359,8 +2355,6 @@ govukApplications:
       path: /app/public/assets/smartanswers
       s3Directory: "smartanswers"
     extraEnv:
-      - name: GOVUK_CSP_REPORT_ONLY
-        value: "true"
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:
           secretKeyRef:
