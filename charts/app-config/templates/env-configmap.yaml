@@ -17,7 +17,9 @@ data:
   GOVUK_APP_DOMAIN: ""
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.publishingDomainSuffix }}
   GOVUK_ASSET_ROOT: https://{{ .Values.assetsDomain }}
-  GOVUK_CSP_REPORT_ONLY: {{ .Values.cspReportOnly | quote }}
+  {{- if .Values.cspReportOnly }}
+  GOVUK_CSP_REPORT_ONLY: "true"
+  {{- end }}
   GOVUK_CSP_REPORT_URI: {{ .Values.cspReportURI | quote }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
   GOVUK_ENVIRONMENT_NAME: {{ .Values.govukEnvironment }}
