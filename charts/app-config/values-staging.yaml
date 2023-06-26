@@ -951,6 +951,7 @@ govukApplications:
 
 - name: feedback
   helmValues:
+    cspReportOnly: false
     extraEnv:
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
         value: d33f7857-7514-4458-81b9-0995f48e2ac5
@@ -1007,6 +1008,7 @@ govukApplications:
       requests:
         cpu: 2
         memory: 2000Mi
+    cspReportOnly: false
     cronTasks:
       - name: registries-refresh
         task: "registries:cache_refresh"
@@ -2298,6 +2300,7 @@ govukApplications:
       # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
       path: /app/public/assets/smartanswers
       s3Directory: "smartanswers"
+    cspReportOnly: false
     extraEnv:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:

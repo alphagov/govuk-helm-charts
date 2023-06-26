@@ -978,6 +978,7 @@ govukApplications:
 
 - name: feedback
   helmValues:
+    cspReportOnly: false
     extraEnv:
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
         value: b5baae45-0a68-4b63-91a1-66b05640d27e
@@ -1035,6 +1036,7 @@ govukApplications:
       requests:
         cpu: 2
         memory: 2000Mi
+    cspReportOnly: false
     cronTasks:
       - name: registries-refresh
         task: "registries:cache_refresh"
@@ -2347,6 +2349,7 @@ govukApplications:
       requests:
         memory: 1Gi
         cpu: "2"
+    cspReportOnly: false
     extraEnv:
       - name: LINK_CHECKER_API_BEARER_TOKEN
         valueFrom:

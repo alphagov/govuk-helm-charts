@@ -980,6 +980,7 @@ govukApplications:
 
 - name: feedback
   helmValues:
+    cspReportOnly: false
     extraEnv:
       - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
         value: 93109fea-34d9-4c38-ac7e-1ebc75e7416b
@@ -1029,6 +1030,7 @@ govukApplications:
 
 - name: finder-frontend
   helmValues:
+    cspReportOnly: false
     cronTasks:
       - name: registries-refresh
         task: "registries:cache_refresh"
@@ -2296,6 +2298,7 @@ govukApplications:
       # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
       path: /app/public/assets/smartanswers
       s3Directory: "smartanswers"
+    cspReportOnly: false
     extraEnv:
       - name: EXPOSE_GOVSPEAK
         value: "1"
