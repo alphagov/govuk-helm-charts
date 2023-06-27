@@ -139,20 +139,16 @@ govukApplications:
       hosts:
         - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
           paths:
-            - path: /assets/  # Integration only
             - path: /government/uploads/
             - path: /government/assets/
             - path: /media/
             - path: /auth/gds  # Viewing draft assets requires user auth.
-            - path: /whitehall_assets/  # Integration only
         - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
           paths:
-            - path: /assets/  # Integration only
             - path: /government/uploads/
             - path: /government/assets/
             - path: /media/
             - path: /auth/gds  # Viewing draft assets requires user auth.
-            - path: /whitehall_assets/  # Integration only
     assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
     nginxConfigMap:
       create: false
