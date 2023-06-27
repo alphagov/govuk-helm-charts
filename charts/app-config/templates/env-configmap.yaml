@@ -31,7 +31,7 @@ data:
   {{- end }}
   GOVUK_SIDEKIQ_JSON_LOGGING: "1"
   GOVUK_WEBSITE_ROOT: https://www.{{ .Values.externalDomainSuffix }}
-  PLEK_UNPREFIXABLE_HOSTS: account-api,feedback,imminence,info-frontend,licensify,local-links-manager,locations-api,search-api,signon
+  PLEK_UNPREFIXABLE_HOSTS: account-api,asset-manager,feedback,imminence,info-frontend,licensify,local-links-manager,locations-api,search-api,signon
   PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS: "true"
   RAILS_LOG_TO_STDOUT: "true"
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}
