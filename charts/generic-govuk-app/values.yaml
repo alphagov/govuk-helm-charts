@@ -4,6 +4,8 @@ service:
   type: NodePort
   annotations: {}
   port: 80
+  selector:
+    app:
 
 ingress:
   enabled: false
