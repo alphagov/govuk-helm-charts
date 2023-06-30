@@ -5,9 +5,6 @@ service:
   annotations: {}
   port: 80
 
-# which app hostname this service will respond to
-serviceSelector:
-
 ingress:
   enabled: false
 
