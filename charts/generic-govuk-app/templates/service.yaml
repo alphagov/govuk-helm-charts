@@ -20,5 +20,4 @@ spec:
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.nginxPort }}
   selector:
-    # app: {{ $fullName }}
     app: {{ .Values.service.selector.app | default $fullName }}
