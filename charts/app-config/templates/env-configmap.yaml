@@ -35,6 +35,7 @@ data:
   PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS: "true"
   RAILS_LOG_TO_STDOUT: "true"
   SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}
+  GOVUK_RAILS_JSON_LOGGING: "true"
 
   # Data sync period used by sentry to ignore application errors during that time. Only relevant to integration and staging.
   {{- if ne .Values.govukEnvironment "production" }}
