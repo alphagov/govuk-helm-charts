@@ -795,9 +795,7 @@ govukApplications:
         value: "http://draft-content-store-mongo-main/"
       - name: SECONDARY_UPSTREAM
         value: "http://draft-content-store-postgresql-branch/"
-    service:
-      selector:
-        app: draft-content-store
+    serviceSelector: draft-content-store
 
 - name: content-tagger
   helmValues:
