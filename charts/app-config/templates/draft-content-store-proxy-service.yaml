@@ -6,5 +6,5 @@ metadata:
   name: draft-content-store
 spec:
   type: ExternalName
-  externalName: draft-content-store-proxy
+  externalName: draft-content-store-proxy.apps.svc.cluster.local
 {{- end }}
