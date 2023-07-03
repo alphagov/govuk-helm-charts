@@ -1,0 +1,14 @@
+{{ if .Values.enableDraftContentStoreProxy }}
+# route all requests for draft-content-store via draft-content-store-proxy
+apiVersion: v1
+kind: Service
+metadata:
+  name: draft-content-store
+spec:
+  ports:
+    - name: app
+      port: 80
+      targetPort: 8080
+  selector:
+    app: draft-content-store-proxy
+{{- end }}

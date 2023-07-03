@@ -22,3 +22,5 @@ cspReportURI: ""
 
 monitoring:
   enabled: true
+
+enableDraftContentStoreProxy: false
