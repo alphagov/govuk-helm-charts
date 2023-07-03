@@ -710,7 +710,7 @@ govukApplications:
           mongo-2.integration.govuk-internal.digital,\
           mongo-3.integration.govuk-internal.digital/content_store_production"
 
-- name: draft-content-store
+- name: draft-content-store-mongo-main
   repoName: content-store
   helmValues:
     <<: *content-store
@@ -794,9 +794,10 @@ govukApplications:
       enabled: false
     extraEnv:
       - name: PRIMARY_UPSTREAM
-        value: "http://draft-content-store/"
+        value: "http://draft-content-store-mongo-main/"
       - name: SECONDARY_UPSTREAM
         value: "http://draft-content-store-postgresql-branch/"
+    serviceSelector: draft-content-store
 
 - name: content-tagger
   helmValues:
