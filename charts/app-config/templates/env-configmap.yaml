@@ -41,6 +41,13 @@ data:
   GOVUK_DATA_SYNC_PERIOD: "22:0-8:0"
   {{- end }}
 
+  # Endpoint used to export Open Telemetry data. Only set for integration as
+  # being used to demo Jaeger as part of GIFT week. Should be removed if not
+  # Jaeger not implemented.
+  {{- if eq .Values.govukEnvironment "integration" }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger-collector.monitoring.svc.cluster.local:4318"
+  {{- end }}
+
   PLEK_SERVICE_ASSETS_URI: https://{{ .Values.assetsDomain }}
   PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
 
