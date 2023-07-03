@@ -269,30 +269,6 @@ govukApplications:
           proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
         }
 
-- name: cache-clearing-service
-  helmValues:
-    uploadAssets:
-      enabled: false
-    dbMigrationEnabled: false
-    rails:
-      enabled: false
-    appEnabled: false
-    podDisruptionBudget: {}
-    workerEnabled: true
-    workers:
-      - command: ["rake", "message_queue:consumer", "QUEUE=high"]
-        name: high
-      - command: ["rake", "message_queue:consumer", "QUEUE=medium"]
-        name: medium
-      - command: ["rake", "message_queue:consumer", "QUEUE=low"]
-        name: low
-    extraEnv:
-      - name: RABBITMQ_URL
-        valueFrom:
-          secretKeyRef:
-            name: cache-clearing-service-rabbitmq
-            key: RABBITMQ_URL
-
 - name: collections
   helmValues:
     extraEnv:
