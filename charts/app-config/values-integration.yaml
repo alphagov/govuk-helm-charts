@@ -708,7 +708,7 @@ govukApplications:
           mongo-2.integration.govuk-internal.digital,\
           mongo-3.integration.govuk-internal.digital/content_store_production"
 
-- name: draft-content-store
+- name: draft-content-store-mongo-main
   repoName: content-store
   helmValues:
     <<: *content-store
@@ -784,7 +784,7 @@ govukApplications:
       - name: DISABLE_ROUTER_API
         value: "true"
 
-- name: draft-content-store-proxy
+- name: draft-content-store
   repoName: content-store-proxy
   helmValues:
     nginxClientMaxBodySize: 20M
@@ -792,7 +792,7 @@ govukApplications:
       enabled: false
     extraEnv:
       - name: PRIMARY_UPSTREAM
-        value: "http://draft-content-store/"
+        value: "http://draft-content-store-mongo-main/"
       - name: SECONDARY_UPSTREAM
         value: "http://draft-content-store-postgresql-branch/"
 
