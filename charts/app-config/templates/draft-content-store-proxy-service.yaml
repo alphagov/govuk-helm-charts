@@ -5,10 +5,6 @@ kind: Service
 metadata:
   name: draft-content-store
 spec:
-  ports:
-    - name: app
-      port: 80
-      targetPort: 8080
-  selector:
-    app: draft-content-store-proxy
+  type: ExternalName
+  externalName: draft-content-store-proxy
 {{- end }}
