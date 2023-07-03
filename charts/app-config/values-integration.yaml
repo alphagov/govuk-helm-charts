@@ -763,6 +763,8 @@ govukApplications:
 - name: draft-content-store
   repoName: content-store-proxy
   helmValues:
+    rails:
+      enabled: false
     nginxClientMaxBodySize: 20M
     uploadAssets:
       enabled: false
