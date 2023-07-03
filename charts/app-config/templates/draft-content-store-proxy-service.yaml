@@ -1,0 +1,10 @@
+{{ if .Values.enableDraftContentStoreProxy }}
+# route all requests for draft-content-store via draft-content-store-proxy
+apiVersion: v1
+kind: Service
+metadata:
+  name: draft-content-store
+spec:
+  type: ExternalName
+  externalName: draft-content-store-proxy.apps.svc.cluster.local
+{{- end }}

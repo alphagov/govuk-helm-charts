@@ -38,6 +38,8 @@ alb-ingress-backend-waf-ruleset: &alb-ingress-backend-waf-ruleset
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
     arn:aws:wafv2:eu-west-1:210287912431:regional/webacl/backend_public_web_acl/b5f616fd-699e-4b44-8ea2-7afd6626aa98
 
+# Route all requests for draft-content-store via draft-content-store-proxy
+enableDraftContentStoreProxy: true
 
 # Individual apps to be deployed by ArgoCD, and any values specific to those
 # apps.
@@ -708,7 +710,7 @@ govukApplications:
           mongo-2.integration.govuk-internal.digital,\
           mongo-3.integration.govuk-internal.digital/content_store_production"
 
-- name: draft-content-store
+- name: draft-content-store-mongo-main
   repoName: content-store
   helmValues:
     <<: *content-store
@@ -792,9 +794,10 @@ govukApplications:
       enabled: false
     extraEnv:
       - name: PRIMARY_UPSTREAM
-        value: "http://draft-content-store/"
+        value: "http://draft-content-store-mongo-main/"
       - name: SECONDARY_UPSTREAM
         value: "http://draft-content-store-postgresql-branch/"
+    serviceSelector: draft-content-store
 
 - name: content-tagger
   helmValues:
