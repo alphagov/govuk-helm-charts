@@ -45,7 +45,7 @@ data:
   # being used to demo Jaeger as part of GIFT week. Should be removed if not
   # Jaeger not implemented.
   {{- if eq .Values.govukEnvironment "integration" }}
-  OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger-collector.monitoring.svc.cluster.local:4318"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://grafana-tempo.monitoring.svc.cluster.local:4318"
   ENABLE_OPEN_TELEMETRY: "true"
   {{- end }}
 
