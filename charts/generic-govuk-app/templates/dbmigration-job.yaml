@@ -49,6 +49,8 @@ spec:
           env:
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
+            - name: ENABLE_OPEN_TELEMETRY
+              value: "false"
             {{- if .Values.rails.enabled }}
             - name: SECRET_KEY_BASE
               value: unused_for_dbmigrate_but_still_required
