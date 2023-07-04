@@ -36,23 +36,10 @@ http {
   }';
 
   # Set GOVUK-Request-Id if not set
-  # See http://nginx.org/en/docs/http/ngx_http_perl_module.html
-  perl_modules perl/lib;
-  perl_set $govuk_request_id '
-    sub {
-      my $r = shift;
-      my $current_header = $r->header_in("GOVUK-Request-Id");
-      if (defined $current_header && $current_header ne "") {
-        return $current_header;
-      } else {
-        my $pid = $r->variable("pid");
-        my $msec = $r->variable("msec");
-        my $remote_addr = $r->variable("remote_addr");
-        my $request_length = $r->variable("request_length");
-        return "$pid-$msec-$remote_addr-$request_length";
-      }
-    }
-  ';
+  map $http_govuk_request_id $govuk_request_id {
+    default $http_govuk_request_id;
+    ''      "$pid-$msec-$remote_addr-$request_length";
+  }
 
   # Map the passed in X-Forwarded-Host if present and default to the server host otherwise.
   map $http_x_forwarded_host $proxy_add_x_forwarded_host {
