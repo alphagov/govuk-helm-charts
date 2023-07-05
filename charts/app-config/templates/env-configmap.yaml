@@ -46,6 +46,7 @@ data:
   # Jaeger not implemented.
   {{- if eq .Values.govukEnvironment "integration" }}
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://grafana-tempo.monitoring.svc.cluster.local:4318"
+  OTEL_RUBY_INSTRUMENTATION_RACK_CONFIG_OPTS: "untraced_endpoints=/healthcheck/live"
   ENABLE_OPEN_TELEMETRY: "true"
   {{- end }}
 
