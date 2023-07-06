@@ -2184,6 +2184,8 @@ govukApplications:
         value: *elasticsearch-uri
       - name: ENABLE_LTR
         value: "true"
+      - name: LOG_LEVEL
+        value: warn
       - name: SEARCH_INDEX
         value: all
       - name: GDS_SSO_OAUTH_ID
