@@ -40,7 +40,7 @@ learnToRank:
   serviceAccountIamRole: ""
 
 draftContentStoreMongoPostgresCron:
-  schedule: "15 5 * * *"
+  schedule: "30 6 * * *"
   mongoExport:
     mongoDbUri: ""
   postgresImport:
