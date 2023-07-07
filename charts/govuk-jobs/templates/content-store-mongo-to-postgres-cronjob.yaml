@@ -82,3 +82,88 @@ spec:
                   mountPath: /mongo-export
                 - name: app-tmp
                   mountPath: /tmp
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "content-store-mongo-to-postgres-cron"
+  labels:
+    app: "content-store-mongo-to-postgres-cron"
+    app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+spec:
+  schedule: "{{ .Values.draftContentStoreMongoPostgresCron.schedule }}"  
+  jobTemplate:
+    metadata:
+      name: "content-store-mongo-to-postgres-cron"
+      labels:
+        app: "content-store-mongo-to-postgres-cron"
+        app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: "content-store-mongo-to-postgres-cron"
+          labels:
+            app: "content-store-mongo-to-postgres-cron"
+            app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
+        spec:
+          enableServiceLinks: false
+          securityContext:
+            fsGroup: {{ .Values.securityContext.runAsGroup }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+          restartPolicy: Never
+          volumes:
+            - name: mongo-export
+              emptyDir: {}
+            - name: app-tmp
+              emptyDir: {}
+          initContainers:
+            - name: export-mongo-data
+              image: "{{ .Values.images.ContentStore.repository }}:{{ .Values.images.ContentStore.tag }}"
+              imagePullPolicy: "Always"
+              command: ["rake"]
+              args:
+                - "mongo:export:all[/mongo-export/]"
+              env:
+                - name: MONGODB_URI
+                  value: "{{ .Values.contentStoreMongoPostgresCron.mongoExport.mongoDbUri }}"
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: mongo-export
+                  mountPath: /mongo-export
+                - name: app-tmp
+                  mountPath: /tmp
+          containers:
+            - name: import-mongo-data-to-postgresql
+              image: "{{ .Values.images.ContentStorePostgresqlBranch.repository }}:{{ .Values.images.ContentStorePostgresqlBranch.tag }}"
+              imagePullPolicy: "Always"
+              command: ["rake"]
+              args:
+                - "import:all[/mongo-export/]"
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: "{{ .Values.contentStoreMongoPostgresCron.postgresImport.databaseUrlSecretName }}"
+                      key: DATABASE_URL
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: mongo-export
+                  mountPath: /mongo-export
+                - name: app-tmp
+                  mountPath: /tmp

@@ -1314,7 +1314,14 @@ govukApplications:
           mongo-3.integration.govuk-internal.digital/draft_content_store_production"
       postgresImport:
         databaseUrlSecretName: "draft-content-store-postgres"
-
+    contentStoreMongoPostgresCron:
+      mongoExport:
+        mongoDbUri: "mongodb://\
+          mongo-1.integration.govuk-internal.digital,\
+          mongo-2.integration.govuk-internal.digital,\
+          mongo-3.integration.govuk-internal.digital/content_store_production"
+      postgresImport:
+        databaseUrlSecretName: "content-store-postgres"
 - name: hmrc-manuals-api
   helmValues:
     nginxClientMaxBodySize: 2M
