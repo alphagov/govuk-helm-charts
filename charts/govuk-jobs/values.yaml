@@ -45,3 +45,10 @@ draftContentStoreMongoPostgresCron:
     mongoDbUri: ""
   postgresImport:
     databaseUrlSecretName: "draft-content-store-postgres"
+
+contentStoreMongoPostgresCron:
+  schedule: "15 5 * * *"
+  mongoExport:
+    mongoDbUri: ""
+  postgresImport:
+    databaseUrlSecretName: "content-store-postgres"
