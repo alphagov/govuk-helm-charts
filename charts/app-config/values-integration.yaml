@@ -664,6 +664,7 @@ govukApplications:
             key: bearer_token
 
 - name: content-store-mongo-main
+  repoName: content-store
   helmValues: &content-store
     nginxClientMaxBodySize: 20M
     cronTasks:
