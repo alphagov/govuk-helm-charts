@@ -58,7 +58,7 @@ jobs:
 
           yq -i '.image_tag = env(image_tag)' "${config_file}"
 
-          UPDATED=$([-z git status --porcelain] && echo 'true' || echo 'false')
+          UPDATED=$(if [ -z "$(git status --porcelain)" ]; then echo true; else echo false; fi)
           echo "updated=${UPDATED}" >> "${GITHUB_OUTPUT}"
 
       - name: Push changes
