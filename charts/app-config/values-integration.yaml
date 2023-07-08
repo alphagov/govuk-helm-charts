@@ -52,8 +52,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-www-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-www-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "account-api.{{ .Values.publishingDomainSuffix }}"
@@ -123,8 +122,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-www-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-www-waf-ruleset]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: '20'
@@ -194,8 +192,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/load-balancer-name: draft-origin
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
@@ -309,8 +306,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "collections-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -370,8 +366,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "contacts-admin.{{ .Values.publishingDomainSuffix }}"
@@ -412,8 +407,7 @@ govukApplications:
         enabled: true
         redirect: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-data.{{ .Values.publishingDomainSuffix }}"
@@ -508,8 +502,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-data-api.{{ .Values.publishingDomainSuffix }}"
@@ -595,8 +588,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -852,8 +844,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-tagger.{{ .Values.publishingDomainSuffix }}"
@@ -1148,8 +1139,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-www-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-www-waf-ruleset]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: '16'
@@ -1206,8 +1196,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-www-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-www-waf-ruleset]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: '15'
@@ -1334,8 +1323,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "hmrc-manuals-api.{{ .Values.publishingDomainSuffix }}"
@@ -1373,8 +1361,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "imminence.{{ .Values.publishingDomainSuffix }}"
@@ -1480,8 +1467,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "local-links-manager.{{ .Values.publishingDomainSuffix }}"
@@ -1627,8 +1613,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "manuals-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -1684,8 +1669,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "maslow.{{ .Values.publishingDomainSuffix }}"
@@ -1733,8 +1717,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "publisher.{{ .Values.publishingDomainSuffix }}"
@@ -1883,8 +1866,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "release.{{ .Values.publishingDomainSuffix }}"
@@ -1987,8 +1969,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-www-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-www-waf-ruleset]
           alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
           alb.ingress.kubernetes.io/load-balancer-name: www-origin
           alb.ingress.kubernetes.io/load-balancer-attributes: >
@@ -2144,8 +2125,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "search-admin.{{ .Values.publishingDomainSuffix }}"
@@ -2327,8 +2307,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "service-manual-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -2386,8 +2365,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           # TODO: remove certificate-arn annotation once ambiguous certs are
           # removed from Cert Manager.
           alb.ingress.kubernetes.io/certificate-arn:
@@ -2511,8 +2489,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-www-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-www-waf-ruleset]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: '30'
@@ -2593,8 +2570,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "short-url-manager.{{ .Values.publishingDomainSuffix }}"
@@ -2646,8 +2622,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "specialist-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -2716,8 +2691,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "support.{{ .Values.publishingDomainSuffix }}"
@@ -2864,8 +2838,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "transition.{{ .Values.publishingDomainSuffix }}"
@@ -2937,8 +2910,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "travel-advice-publisher.{{ .Values.publishingDomainSuffix }}"
@@ -3000,8 +2972,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
         hosts:
           - name: govuk-replatform-test-app.eks.integration.govuk.digital
       extraEnv:
@@ -3040,8 +3011,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-backend-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-backend-waf-ruleset]
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "whitehall-admin.{{ .Values.publishingDomainSuffix }}"
@@ -3125,8 +3095,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: *default-alb-ingress-annotations
-          <<: *alb-ingress-www-waf-ruleset
+          <<: [*default-alb-ingress-annotations, *alb-ingress-www-waf-ruleset]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: '10'
