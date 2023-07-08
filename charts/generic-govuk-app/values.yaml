@@ -17,8 +17,8 @@ podDisruptionBudget: {}
 workerEnabled: false
 workerReplicaCount: 2
 workers:
-- command: ["sidekiq", "-C", "config/sidekiq.yml"]
-  name: worker
+  - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+    name: worker
 
 # dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
 dbMigrationEnabled: false
