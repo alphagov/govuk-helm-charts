@@ -15,7 +15,9 @@ groups:
 
       - record: global:router_5xx_responses_per_request:ratio_rate5m
         expr: |2
-            sum without (backend_id, response_code) (global:router_requests:rate5m{response_code=~"5.."})
+            sum without (backend_id, response_code) (
+              global:router_requests:rate5m{response_code=~"5.."}
+            )
           /
             sum without (backend_id, response_code) (global:router_requests:rate5m)
 
@@ -23,11 +25,13 @@ groups:
         expr: |2
             global:router_5xx_responses_per_request:ratio_rate5m{job="router"} > 0.1
           and
-            sum without (backend_id, response_code) (global:router_requests:rate5m{job="router"}) > 1
+            sum without (backend_id, response_code) (
+              global:router_requests:rate5m{job="router"}
+            ) > 1
         for: 10m
         labels:
           severity: page
-          playbook: 'https://docs.publishing.service.gov.uk/manual/alerts/{{ .Labels.alertname }}.html'
         annotations:
           summary: Router error ratio too high
-          description: 'More than 10% of HTTP responses from Router were 500-series errors for 10 minutes. [link]: {{ .Labels.playbook }}'
+          description: >-
+            More than 10% of HTTP responses from Router were 500-series errors for 10 minutes.
