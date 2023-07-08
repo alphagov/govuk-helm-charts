@@ -672,6 +672,8 @@ govukApplications:
         schedule: "15 2 * * *"
     rails:
       secretKeyBaseName: content-store-rails-secret-key-base
+    sentry:
+      dsnSecretName: content-store-sentry
     uploadAssets:
       enabled: false
     extraEnv:
