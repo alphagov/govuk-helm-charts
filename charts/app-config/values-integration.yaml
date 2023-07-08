@@ -663,7 +663,7 @@ govukApplications:
             name: signon-token-content-publisher-whitehall
             key: bearer_token
 
-- name: content-store
+- name: content-store-mongo-main
   helmValues: &content-store
     nginxClientMaxBodySize: 20M
     cronTasks:
@@ -736,7 +736,7 @@ govukApplications:
       - name: DISABLE_ROUTER_API
         value: "true"
 
-- name: content-store-proxy
+- name: content-store
   repoName: content-store-proxy
   helmValues:
     rails:
@@ -746,7 +746,7 @@ govukApplications:
       enabled: false
     extraEnv:
       - name: PRIMARY_UPSTREAM
-        value: "http://content-store/"
+        value: "http://content-store-mongo-main/"
       - name: SECONDARY_UPSTREAM
         value: "http://content-store-postgresql-branch/"
 
