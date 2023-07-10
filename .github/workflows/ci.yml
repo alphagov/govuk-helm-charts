@@ -34,7 +34,9 @@ jobs:
           done
 
       - name: Login to Github Packages
-        run: echo "${{ github.token }}" | docker login https://ghcr.io -u ${GITHUB_ACTOR} --password-stdin
+        run: |
+          echo "${{ github.token }}" |
+            docker login https://ghcr.io -u ${GITHUB_ACTOR} --password-stdin
 
       - name: Read Kubernetes version from /kubernetes_version
         run: "grep KUBERNETES_VERSION kubernetes_version >> $GITHUB_ENV"
@@ -54,6 +56,14 @@ jobs:
     name: Shellcheck
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Run ShellCheck
-      uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38  # 2.0.0
+      - uses: actions/checkout@v3
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38  # 2.0.0
+
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c  # v3.1.1
+        with:
+          format: github

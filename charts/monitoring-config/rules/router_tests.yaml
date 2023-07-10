@@ -7,14 +7,18 @@ tests:
   # Alert fires when threshold exceeded for too long.
   - interval: 1m
     input_series:
-      - series: 'router_backend_handler_response_duration_seconds_count{response_code="200", namespace="apps", job="router", backend_id="foo"}'
+      - series: 'router_backend_handler_response_duration_seconds_count{
+          response_code="200", namespace="apps", job="router", backend_id="foo"}'
         values: '0+89x15'
-      - series: 'router_backend_handler_response_duration_seconds_count{response_code="502", namespace="apps", job="router", backend_id="foo"}'
+      - series: 'router_backend_handler_response_duration_seconds_count{
+          response_code="502", namespace="apps", job="router", backend_id="foo"}'
         values: '0+5x15'
-      - series: 'router_backend_handler_response_duration_seconds_count{response_code="503", namespace="apps", job="router", backend_id="bar"}'
+      - series: 'router_backend_handler_response_duration_seconds_count{
+          response_code="503", namespace="apps", job="router", backend_id="bar"}'
         values: '0+6x15'
     promql_expr_test:
-      - expr: 'round(sum by (job) (global:router_requests:rate5m{job="router", response_code=~"5.."}), 1E-4)'
+      - expr: 'round(sum by (job) (global:router_requests:rate5m{
+          job="router", response_code=~"5.."}), 1E-4)'
         eval_time: 15m
         exp_samples:
           - labels: '{job="router"}'
@@ -24,7 +28,8 @@ tests:
         exp_samples:
           - labels: '{job="router"}'
             value: 1.6667
-      - expr: 'round(sum by (job) (global:router_5xx_responses_per_request:ratio_rate5m{job="router"}), 1E-4)'
+      - expr: 'round(sum by (job) (global:router_5xx_responses_per_request:ratio_rate5m{
+          job="router"}), 1E-4)'
         eval_time: 15m
         exp_samples:
           - labels: '{job="router"}'
@@ -38,14 +43,17 @@ tests:
               job: router
             exp_annotations:
               summary: Router error ratio too high
-              description: More than 10% of HTTP responses from Router were 500-series errors for 10 minutes.
+              description: >-
+                More than 10% of HTTP responses from Router were 500-series errors for 10 minutes.
 
   # Alert does not fire when threshold not exceeded for long enough.
   - interval: 1m
     input_series:
-      - series: 'router_backend_handler_response_duration_seconds_count{response_code="200", namespace="apps", job="router"}'
+      - series: 'router_backend_handler_response_duration_seconds_count{
+          response_code="200", namespace="apps", job="router"}'
         values: '0+60x15'
-      - series: 'router_backend_handler_response_duration_seconds_count{response_code="503", namespace="apps", job="router"}'
+      - series: 'router_backend_handler_response_duration_seconds_count{
+          response_code="503", namespace="apps", job="router"}'
         values: '0+12x8 0x7'
     alert_rule_test:
       - eval_time: 15m
@@ -55,9 +63,11 @@ tests:
   # Alert does not fire when min QPS threshold is not met.
   - interval: 1m
     input_series:
-      - series: 'router_backend_handler_response_duration_seconds_count{response_code="200", namespace="apps", job="router"}'
+      - series: 'router_backend_handler_response_duration_seconds_count{
+          response_code="200", namespace="apps", job="router"}'
         values: '0+30x15'
-      - series: 'router_backend_handler_response_duration_seconds_count{response_code="503", namespace="apps", job="router"}'
+      - series: 'router_backend_handler_response_duration_seconds_count{
+          response_code="503", namespace="apps", job="router"}'
         values: '0+20x15'
     alert_rule_test:
       - eval_time: 15m

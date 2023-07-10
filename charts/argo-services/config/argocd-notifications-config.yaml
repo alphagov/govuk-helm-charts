@@ -1,6 +1,6 @@
-# NOTE: this file is pulled into templates/argocd-notifications/cm.yaml
-# to avoid needing to nesting conflicting template tags (Helm uses Go, Argo
-# uses Jinja2 which both use the `{{}}` syntax).
+# This file is pulled into templates/argocd-notifications/cm.yaml to avoid
+# nesting template languages. Helm uses Go and Argo uses Jinja2. Both use the
+# `{{}}` syntax.
 service.webhook.argo_events: |
   headers:
   - name: "Content-Type"
@@ -26,6 +26,7 @@ template.send-argo-events-webhook: |
         }
       method: "POST"
       path: "/post-sync"
+# yamllint disable rule:line-length
 template.send-grafana: |
   message: |
     "Application {{.app.metadata.name}} is now running new version of deployments manifests. Revision: {{.app.status.sync.revision}}"
