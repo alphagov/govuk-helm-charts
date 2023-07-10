@@ -2,7 +2,6 @@ name: linting
 on: [push]
 jobs:
   chart-testing:
-    name: Chart testing
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -20,7 +19,7 @@ jobs:
           python-version: 3.x
 
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.3.1
+        uses: helm/chart-testing-action@v2
 
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yml
@@ -32,11 +31,6 @@ jobs:
           do
             helm template "${c}" "charts/${c}" --output-dir helm-dist
           done
-
-      - name: Login to Github Packages
-        run: |
-          echo "${{ github.token }}" |
-            docker login https://ghcr.io -u ${GITHUB_ACTOR} --password-stdin
 
       - name: Read Kubernetes version from /kubernetes_version
         run: "grep KUBERNETES_VERSION kubernetes_version >> $GITHUB_ENV"
@@ -53,12 +47,10 @@ jobs:
             helm-dist
 
   shellcheck:
-    name: Shellcheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38  # 2.0.0
+      - uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38  # 2.0.0
 
   yamllint:
     runs-on: ubuntu-latest

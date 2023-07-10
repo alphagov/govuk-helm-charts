@@ -1,6 +1,5 @@
 # GOV.UK Helm Charts
 
-
 ## Getting started
 
 See [Helm's documentation](https://helm.sh/docs) to get started with Helm.
@@ -10,13 +9,19 @@ cluster or ask [#govuk-platform-engineering] in Slack.
 
 [GOV.UK Kubernetes Cluster User Docs]: https://govuk-k8s-user-docs.publishing.service.gov.uk/
 
+## Versioned vs unversioned charts
+
+Most of the charts in this repository are designed to be deployed via [Argo
+CD](https://argo-cd.readthedocs.io/en/stable/) rather than by `helm install`.
+For these charts, we don't use `Chart.Version` or Helm's packaging system.
+
+A few charts are still installed via `helm install` ([via
+Terraform](https://github.com/search?q=repo%3Aalphagov%2Fgovuk-infrastructure+path%3Aterraform%2Fdeployments%2Fcluster-services+alphagov.github.io)).
+Those charts are [automatically packaged and
+pushed](https://github.com/alphagov/govuk-helm-charts/blob/main/.github/workflows/release.yml)
+to our Helm repository when a change to `Chart.Version` is merged.
 
 ## Local development
-
-Most of the charts in this repository are designed to be installed via [Argo
-CD] rather than by `helm`. We hope to improve portability over time.
-
-[Argo CD]: https://argo-cd.readthedocs.io/en/stable/
 
 ### Prerequisites
 
@@ -39,7 +44,6 @@ CD] rather than by `helm`. We hope to improve portability over time.
     git config core.hooksPath git-hooks
     ```
 
-
 ### Installing an application chart without Argo CD
 
 ```sh
@@ -55,7 +59,6 @@ helm install $USER-${APP?} ../generic-govuk-app --values <(
 
 You can inspect the final template output by running `helm template` instead of
 `helm install`.
-
 
 ### Chart repository
 
