@@ -931,6 +931,8 @@ govukApplications:
             secretKeyRef:
               name: email-alert-api-postgres
               key: DATABASE_URL
+        - name: DIGITAL_IDENTITY_ENVIRONMENT
+          value: integration
         - name: EMAIL_ALERT_AUTH_TOKEN
           valueFrom:
             secretKeyRef:
@@ -1168,6 +1170,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-asset-manager
               key: bearer_token
+        - name: DIGITAL_IDENTITY_ENVIRONMENT
+          value: integration
         - name: ELECTIONS_API_KEY
           valueFrom:
             secretKeyRef:
@@ -2499,6 +2503,8 @@ govukApplications:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /
       extraEnv:
+        - name: DIGITAL_IDENTITY_ENVIRONMENT
+          value: integration
         # These GA/GTM values are not secrets (not even the the gtm_auth one).
         # https://github.com/alphagov/govuk-puppet/pull/8041
         - name: RAILS_SERVE_STATIC_FILES
