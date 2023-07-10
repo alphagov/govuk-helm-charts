@@ -827,6 +827,9 @@ govukApplications:
     helmValues:
       rails:
         enabled: false
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: content-store-proxy-sentry
       nginxClientMaxBodySize: 20M
       uploadAssets:
         enabled: false
