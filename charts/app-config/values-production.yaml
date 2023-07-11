@@ -855,8 +855,6 @@ govukApplications:
   - name: email-alert-frontend
     helmValues:
       extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
         - name: SUBSCRIPTION_MANAGEMENT_ENABLED
           value: "yes"
         - name: REDIS_URL
@@ -1294,8 +1292,6 @@ govukApplications:
         path: /app/public/assets/licencefinder
         s3Directory: "licencefinder"
       extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
         # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
         # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
         - name: ELASTICSEARCH_URI
