@@ -42,16 +42,11 @@ data:
   GOVUK_DATA_SYNC_PERIOD: "22:0-8:0"
   {{- end }}
 
-  # Endpoint used to export Open Telemetry data. Only set for integration as
-  # being used to demo Jaeger as part of GIFT week. Should be removed if not
-  # Jaeger not implemented.
-  {{- if ne .Values.govukEnvironment "production" }}
   ENABLE_OPEN_TELEMETRY: "true"
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://tempo-distributor.monitoring.svc.cluster.local:4318"
   OTEL_TRACES_SAMPLER: "traceidratio"
-  OTEL_TRACES_SAMPLER_ARG: '0.3'
+  OTEL_TRACES_SAMPLER_ARG: '0.001'
   OTEL_RUBY_INSTRUMENTATION_RACK_CONFIG_OPTS: "untraced_endpoints=/healthcheck/live"
-  {{- end }}
 
   PLEK_SERVICE_ASSETS_URI: https://{{ .Values.assetsDomain }}
   PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
