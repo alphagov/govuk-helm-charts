@@ -1,4 +1,4 @@
-{{- if .Values.podDisruptionBudget }}
+{{- if and .Values.appEnabled .Values.podDisruptionBudget }}
 {{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
