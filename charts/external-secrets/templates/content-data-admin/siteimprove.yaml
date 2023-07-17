@@ -1,7 +1,7 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: content-data-admin-site-improve-api-client
+  name: content-data-admin-siteimprove-api-client
   labels:
     {{- include "external-secrets.labels" . | nindent 4 }}
   annotations:
@@ -14,7 +14,7 @@ spec:
     kind: ClusterSecretStore
   target:
     deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
-    name: content-data-admin-site-improve-api-client
+    name: content-data-admin-siteimprove-api-client
   dataFrom:
     - extract:
-        key: govuk/content-data-admin/site-improve-api-client
+        key: govuk/content-data-admin/siteimprove-api-client
