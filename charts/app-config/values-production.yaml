@@ -274,8 +274,6 @@ govukApplications:
           cpu: 1
           memory: 1Gi
       extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: EMAIL_ALERT_API_BEARER_TOKEN
@@ -294,8 +292,6 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -1060,8 +1056,6 @@ govukApplications:
           cpu: 2
           memory: 1Gi
       extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *frontend-notify-template
         - name: MEMCACHE_SERVERS
@@ -1127,8 +1121,6 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *frontend-notify-template
         - name: PLEK_HOSTNAME_PREFIX
@@ -1175,8 +1167,6 @@ govukApplications:
           cpu: 1
           memory: 1500Mi
       extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
 
@@ -1190,8 +1180,6 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
 
@@ -1291,10 +1279,6 @@ govukApplications:
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
 
   - name: info-frontend
-    helmValues:
-      extraEnv:
-        - name: GOVUK_CSP_REPORT_ONLY
-          value: "true"
 
   - name: licencefinder
     repoName: licence-finder
