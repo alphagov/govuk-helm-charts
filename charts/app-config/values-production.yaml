@@ -1702,6 +1702,13 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      workerResources:
+        limits:
+          cpu: 4000m
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 512Mi
       cronTasks:
         - name: events-export
           task: "events:export_to_s3"
