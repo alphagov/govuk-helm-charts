@@ -1157,7 +1157,6 @@ govukApplications:
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
     imageValues:
-      - "govuk-dependency-checker"
       - "search-api"
       - "search-api-learn-to-rank"
     helmValues:

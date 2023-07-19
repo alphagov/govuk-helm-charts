@@ -1275,7 +1275,6 @@ govukApplications:
     imageValues:
       - "content-store"
       - "content-store-postgresql-branch"
-      - "govuk-dependency-checker"
       - "search-api"
       - "search-api-learn-to-rank"
     helmValues:
