@@ -2861,6 +2861,13 @@ govukApplications:
         requests:
           memory: 2Gi
           cpu: "1"
+      workerResources:
+        limits:
+          memory: 1500Mi
+          cpu: 2000m
+        requests:
+          memory: 512Mi
+          cpu: 500m
       securityContext:
         # Use the same uid/gid for NFS permissions as the old stack, so that
         # files uploaded by whitehall-admin on k8s can be processed by
