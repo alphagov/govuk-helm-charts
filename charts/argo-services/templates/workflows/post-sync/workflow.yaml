@@ -125,14 +125,14 @@ spec:
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
                 - name: text
-                  value: "Post sync workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                  value: "Post-deploy (smoke test and promote-to-next-environment) workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
                 - name: blocks
                   value: |
                     [{
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Post sync workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                          "text": "Post-deploy (smoke test and promote-to-next-environment) workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
                       },
                       "accessory": {
                         "type": "button",
