@@ -1,0 +1,102 @@
+{{- $_ := .Values.govukEnvironment | required "govukEnvironment is required" }}
+{{- $fullName := include "db-backup.fullname" . }}
+
+{{- range $jobName, $job := get .Values.cronjobs .Values.govukEnvironment }}
+  {{- $jobFullName := printf "%s-%s" $fullName $jobName }}
+  {{- /* Job name should be same as DB hostname except for "draft" databases. */}}
+  {{- $dbHost := $job.host | default $jobName }}
+  {{- /* Last word of the database hostname is normally "postgres", "mysql" etc. */}}
+  {{- $dbms := $job.dbms | default (regexFind "[^-]+$" $dbHost) }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $jobFullName }}
+  labels:
+    {{- include "db-backup.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $jobName }}
+spec:
+  schedule: {{ $job.schedule | quote }}
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 28800  # 8 hours
+  suspend: {{ .suspend | default false }}
+  jobTemplate:
+    metadata:
+      name: {{ $jobFullName }}
+      labels:
+        {{- include "db-backup.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $jobName }}
+    spec:
+      activeDeadlineSeconds: 43200  # 12 hours
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ $jobFullName }}
+          labels:
+            {{- include "db-backup.selectorLabels" $ | nindent 12 }}
+            app.kubernetes.io/component: {{ $jobName }}
+        spec:
+          enableServiceLinks: false
+          restartPolicy: Never
+          dnsConfig:
+            searches:
+              - blue.{{ $.Values.govukEnvironment }}.govuk-internal.digital
+              - {{ $.Values.govukEnvironment }}.govuk-internal.digital
+          serviceAccountName: {{ include "db-backup.serviceAccountName" $ }}
+          securityContext:
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+          volumes:
+            - name: scripts
+              configMap:
+                name: {{ $fullName }}
+                defaultMode: 0555  # world-executable
+            - name: tmp  # aws-cli requires a writable dir.
+              emptyDir: {}
+          initContainers:
+  {{- range $job.operations }}
+            - name: {{ .op }}
+              image: {{ $.Values.imageRef | quote }}
+              command:
+                - /opt/bin/backup-{{ $dbms }}
+              args:
+                - {{ .op }}
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment }}
+                - name: PGUSER
+                  value: {{ $job.dbUser | default "aws_db_admin" }}
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $dbHost }}
+                - name: PGHOST
+                  value: {{ $dbHost }}
+                - name: PGDATABASE
+                  value: {{ .db | default $job.db }}
+                - name: BUCKET
+                  value: {{ .bucket }}
+                {{- with $.Values.extraEnv }}
+                  {{- toYaml . | nindent 16 }}
+                {{- end }}
+                {{- with .extraEnv }}
+                  {{- toYaml . | nindent 16 }}
+                {{- end }}
+              resources:
+                {{- $.Values.resources | toYaml | nindent 16 }}
+              securityContext:
+                {{- toYaml $.Values.securityContext | nindent 16 }}
+              volumeMounts:
+                - name: scripts
+                  mountPath: /opt/bin
+                  readOnly: true
+                - name: tmp
+                  mountPath: /tmp
+  {{- end }}
+          containers:
+            - name: noop
+              image: {{ $.Values.imageRef | quote }}
+              command: ["true"]
+              securityContext:
+                {{- toYaml $.Values.securityContext | nindent 16 }}
+{{- end }}
