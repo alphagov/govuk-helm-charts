@@ -1383,29 +1383,6 @@ govukApplications:
 
   - name: info-frontend
 
-  - name: licencefinder
-    repoName: licence-finder
-    helmValues:
-      uploadAssets:
-        # https://github.com/alphagov/licence-finder/blob/e60ad6b/config/application.rb#L35
-        path: /app/public/assets/licencefinder
-        s3Directory: "licencefinder"
-      extraEnv:
-        # TODO: Use a custom DNS name for ElasticSearch/OpenSearch. See
-        # https://aws.amazon.com/about-aws/whats-new/2020/11/amazon-elasticsearch-service-now-supports-defining-a-custom-name-for-your-domain-endpoint/
-        - name: ELASTICSEARCH_URI
-          value: *elasticsearch-uri
-        - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-          value: "mongodb://\
-            mongo-1.integration.govuk-internal.digital,\
-            mongo-2.integration.govuk-internal.digital,\
-            mongo-3.integration.govuk-internal.digital/licence_finder_production"
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-licence-finder-publishing-api
-              key: bearer_token
-
   - name: link-checker-api
     helmValues:
       dbMigrationEnabled: true
@@ -2038,8 +2015,6 @@ govukApplications:
           value: "http://finder-frontend"
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
-        - name: BACKEND_URL_licencefinder
-          value: "http://licencefinder"
         - name: BACKEND_URL_licensify
           value: "https://licensify.integration.govuk-internal.digital"
         - name: BACKEND_URL_search-api
@@ -2095,8 +2070,6 @@ govukApplications:
           value: "http://finder-frontend"
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
-        - name: BACKEND_URL_licencefinder
-          value: "http://licencefinder"
         - name: BACKEND_URL_licensify
           value: "https://licensify.integration.govuk-internal.digital"
         - name: BACKEND_URL_search-api

@@ -20,8 +20,3 @@ Disallow: /
 # https://support.microsoft.com/en-us/help/3019711/the-sharepoint-server-crawler-ignores-directives-in-robots-txt
 User-agent: MS Search 6.0 Robot
 Disallow: /
-
-# Google's crawler was sending requests for each variation of query param for
-# the sectors page of licence-finder # resulting in millions of requests a day.
-User-agent: Googlebot
-Disallow: /licence-finder/*
