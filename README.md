@@ -4,10 +4,10 @@
 
 See [Helm's documentation](https://helm.sh/docs) to get started with Helm.
 
-See the [GOV.UK Kubernetes Cluster User Docs] for an introduction to the
-cluster or ask [#govuk-platform-engineering] in Slack.
-
-[GOV.UK Kubernetes Cluster User Docs]: https://govuk-k8s-user-docs.publishing.service.gov.uk/
+See the [GOV.UK Kubernetes cluster
+docs](https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/)
+for an introduction to the cluster or ask [#govuk-platform-engineering] in
+Slack.
 
 ## Versioned vs unversioned charts
 
