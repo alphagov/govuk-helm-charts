@@ -49,7 +49,7 @@ extraVolumes: []
 
 appResources:
   limits:
-    cpu: 1
+    cpu: 1000m
     memory: 1Gi
   requests:
     cpu: 500m
@@ -57,27 +57,27 @@ appResources:
 
 workerResources:
   limits:
-    cpu: 1
+    cpu: 1000m
     memory: 2500Mi
   requests:
-    cpu: 500m
-    memory: 2Gi
+    cpu: 200m
+    memory: 700Mi
 
 freshclamResources:
   limits:
-    cpu: 500m
+    cpu: 1000m
     memory: 200Mi
   requests:
-    cpu: 500m
+    cpu: 200m
     memory: 200Mi
 
 clamdResources:
   limits:
-    cpu: 1
-    memory: 2Gi
+    cpu: 2000m
+    memory: 4Gi
   requests:
     cpu: 500m
-    memory: 1500Mi
+    memory: 2000Mi
 
 # assetManagerNFS is the address of the NFSv4 (or Amazon EFS) server where uploaded
 assetManagerNFS: "asset-manager-efs.dev.gov.uk"
