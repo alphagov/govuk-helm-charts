@@ -877,11 +877,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-email-alert-frontend-email-alert-api
               key: bearer_token
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-email-alert-frontend-publishing-api
-              key: bearer_token
         - name: EMAIL_ALERT_AUTH_TOKEN
           valueFrom:
             secretKeyRef:
