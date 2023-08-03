@@ -2920,6 +2920,8 @@ govukApplications:
           value: govuk-production-whitehall-csvs
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
+        - name: MEMCACHE_SERVERS
+          value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: DATABASE_URL

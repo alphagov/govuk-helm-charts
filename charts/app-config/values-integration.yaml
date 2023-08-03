@@ -3020,6 +3020,8 @@ govukApplications:
           value: *publishing-notify-template
         - name: EMAIL_ADDRESS_OVERRIDE
           value: whitehall-emails-integration@digital.cabinet-office.gov.uk
+        - name: MEMCACHE_SERVERS
+          value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: DATABASE_URL

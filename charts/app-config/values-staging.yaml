@@ -2875,6 +2875,8 @@ govukApplications:
           value: *publishing-notify-template
         - name: EMAIL_ADDRESS_OVERRIDE  # TODO: remove in production.
           value: whitehall-emails-staging@digital.cabinet-office.gov.uk
+        - name: MEMCACHE_SERVERS
+          value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: DATABASE_URL
