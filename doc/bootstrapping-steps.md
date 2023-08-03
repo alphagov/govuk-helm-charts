@@ -1,14 +1,11 @@
 # Bootstrapping steps
 
-Once you have applied the `cluster-services` Terraform project, you should
+Once you have applied the `cluster-services` Terraform module, you should
 run the following commands against the cluster.
 
-1. Manually store the Signon API token as a secret.
-
-  ```shell
-  kubectl -n apps create secret generic signon-auth-token --from-literal=token=$(openssl rand -base64 40)
-  ```
-
-2. Manually create all of secrets specified as ExternalSecrets in AWS
-  SecretsManager. E.g. see charts/app-config/templates/external-secrets/*.yaml
-  and charts/cluster-secrets/*.yaml
+1. In AWS Secrets Manager, create the secrets corresponding to the
+   ExternalSecrets in the cluster. SecretsManager. See
+   `charts/external-secrets/` and `charts/cluster-secrets/`. You can use a
+   script
+   ([example](https://github.com/alphagov/govuk-infrastructure/compare/main...sengi/bulk-secrets))
+   to dump, edit and load the secrets from an existing environment.
