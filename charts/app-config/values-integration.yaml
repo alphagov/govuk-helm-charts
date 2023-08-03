@@ -2390,11 +2390,6 @@ govukApplications:
               key: DEVISE_SECRET_KEY
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-        - name: SIGNON_ADMIN_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: signon-auth-token
-              key: token
 
   - name: smartanswers
     repoName: smart-answers
