@@ -10,7 +10,6 @@ spec:
       - name: environment
       - name: repoName
       - name: imageTag
-      - name: manualDeploy
       - name: promoteDeployment
   templates:
     - name: deploy-image
@@ -27,8 +26,6 @@ spec:
                   value: "{{"{{workflow.parameters.repoName}}"}}"
                 - name: imageTag
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
-                - name: manualDeploy
-                  value: "{{"{{workflow.parameters.manualDeploy}}"}}"
                 - name: promoteDeployment
                   value: "{{"{{workflow.parameters.promoteDeployment}}"}}"
         - - name: add-deployed-to-tag
