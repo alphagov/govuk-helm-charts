@@ -1,2 +1,2 @@
-image_tag: release-5c7d9d257b0e813e2bedb08379892a76d98cdd26
-promote_deployment: false
+image_tag: v1
+promote_deployment: true
