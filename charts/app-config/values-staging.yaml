@@ -34,6 +34,7 @@ _alb-ingress-defaults: &alb-ingress-defaults
     access_logs.s3.enabled=true,
     access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
     access_logs.s3.prefix=elb/{{ .Release.Name }}
+  alb.ingress.kubernetes.io/shield-advanced-protection: "true"
 
 _alb-ingress-waf-ruleset-www: &alb-ingress-waf-ruleset-www
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
@@ -257,6 +258,7 @@ govukApplications:
           alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
           alb.ingress.kubernetes.io/healthcheck-path: /readyz
           alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
+          alb.ingress.kubernetes.io/shield-advanced-protection: "true"
           external-dns.alpha.kubernetes.io/hostname: bouncer.{{ .Values.k8sExternalDomainSuffix }}
         rules:
           - http:  # Match all hostnames.
