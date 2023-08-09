@@ -2873,6 +2873,8 @@ govukApplications:
             secretKeyRef:
               name: signon-app-whitehall
               key: oauth_secret
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: GTM-P93SHJ4Z
         - name: GOVUK_UPLOADS_ROOT
           value: &whitehall-uploads-path /uploads
         - name: ASSET_MANAGER_BEARER_TOKEN
