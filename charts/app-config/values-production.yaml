@@ -1930,8 +1930,6 @@ govukApplications:
           value: "http://smartanswers"
         - name: BACKEND_URL_static
           value: "http://static"
-        - name: BACKEND_URL_whitehall-frontend
-          value: "http://whitehall-frontend"
         - name: BACKEND_URL_account-api
           value: "http://account-api"
         - name: BACKEND_URL_feedback
@@ -1986,8 +1984,6 @@ govukApplications:
           value: "http://draft-smartanswers"
         - name: BACKEND_URL_static
           value: "http://draft-static"
-        - name: BACKEND_URL_whitehall-frontend
-          value: "http://whitehall-frontend"  # There is no draft version whitehall frontend
         - name: BACKEND_URL_account-api
           value: "http://account-api"
         - name: BACKEND_URL_feedback
@@ -2937,43 +2933,3 @@ govukApplications:
       appExtraVolumeMounts:
         - name: asset-uploads-efs
           mountPath: *whitehall-uploads-path
-
-  - name: whitehall-frontend
-    repoName: whitehall
-    helmValues:
-      appResources:
-        limits:
-          memory: 4Gi
-          cpu: "2"
-        requests:
-          memory: 2Gi
-          cpu: "1"
-      rails:
-        createKeyBaseSecret: false
-      sentry:
-        createSecret: false  # Sentry DSNs are per repo.
-      extraEnv:
-        - name: JWT_AUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: authenticating-proxy-jwt-auth-secret
-              key: JWT_AUTH_SECRET
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-whitehall-publishing-api
-              key: bearer_token
-        - name: RUMMAGER_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-whitehall-search-api
-              key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.production.govuk-internal.digital
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: whitehall-frontend-mysql
-              key: DATABASE_URL
