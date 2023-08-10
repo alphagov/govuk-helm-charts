@@ -51,8 +51,6 @@ spec:
                   value: "{{"{{workflow.parameters.repoName}}"}}"
                 - name: imageTag
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
-                - name: manualDeploy
-                  value: "false"
                 - name: promoteDeployment
                   value: "true"
 
@@ -82,7 +80,6 @@ spec:
         - name: environment
         - name: repoName
         - name: imageTag
-        - name: manualDeploy
         - name: promoteDeployment
       script:
         image: curlimages/curl
@@ -95,7 +92,6 @@ spec:
               "environment": "{{"{{inputs.parameters.environment}}"}}",
               "repoName": "{{"{{inputs.parameters.repoName}}"}}",
               "imageTag": "{{"{{inputs.parameters.imageTag}}"}}",
-              "manualDeploy": "{{"{{inputs.parameters.manualDeploy}}"}}",
               "promoteDeployment": "{{"{{inputs.parameters.promoteDeployment}}"}}"
             }'
         env:

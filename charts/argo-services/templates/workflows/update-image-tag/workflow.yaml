@@ -9,7 +9,6 @@ spec:
       - name: environment
       - name: repoName
       - name: imageTag
-      - name: manualDeploy
       - name: promoteDeployment
   templates:
     - name: update-image-tag
@@ -18,8 +17,6 @@ spec:
           - name: environment
           - name: repoName
           - name: imageTag
-          - name: manualDeploy
-            default: "false"
           - name: promoteDeployment
             default: "false"
       script:
@@ -42,8 +39,6 @@ spec:
             value: "{{"{{inputs.parameters.environment}}"}}"
           - name: REPO_NAME
             value: "{{"{{inputs.parameters.repoName}}"}}"
-          - name: MANUAL_DEPLOY
-            value: "{{"{{inputs.parameters.manualDeploy}}"}}"
           - name: PROMOTE_DEPLOYMENT
             value: "{{"{{inputs.parameters.promoteDeployment}}"}}"
         source: |

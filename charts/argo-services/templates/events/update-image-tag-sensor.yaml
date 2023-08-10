@@ -35,10 +35,6 @@ spec:
           - dest: spec.arguments.parameters.3.value
             src:
               dependencyName: update-image-tag
-              dataKey: body.manualDeploy
-          - dest: spec.arguments.parameters.4.value
-            src:
-              dependencyName: update-image-tag
               dataKey: body.promoteDeployment
           - dest: metadata.generateName
             src:
@@ -63,7 +59,6 @@ spec:
                   - name: environment
                   - name: repoName
                   - name: imageTag
-                  - name: manualDeploy
                   - name: promoteDeployment
               workflowTemplateRef:
                 name: deploy-image
