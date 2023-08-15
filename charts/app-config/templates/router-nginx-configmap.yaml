@@ -28,4 +28,9 @@ data:
     {{- else }}
       User-agent: *
       Disallow: /
+      
+      User-agent: Govukbot
+      Disallow:
+      
+      Sitemap: https://www.{{ .Values.externalDomainSuffix }}/sitemap.xml
     {{- end }}
