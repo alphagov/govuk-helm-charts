@@ -120,6 +120,8 @@ spec:
               emptyDir: {}
             - name: app-tmp
               emptyDir: {}
+            - name: pg-dump
+              emptyDir: {}
           initContainers:
             - name: export-mongo-data
               image: "{{ .Values.images.ContentStore.repository }}:{{ .Values.images.ContentStore.tag }}"
