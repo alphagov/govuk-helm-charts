@@ -174,11 +174,10 @@ spec:
                   mountPath: /pg-dump
             - name: dump-postgresql
               image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
-              command: ["pg_dump"]
+              command: ["bash"]
               args:
-                - --format=custom
-                - --file=/pg-dump/$(date +%Y-%m-%dT%H:%M:%S)-content_store_production
-                - '${DATABASE_URL}'
+                - "-c"
+                - "pg_dump -F c -f /pg-dump/$(date +%Y-%m-%dT%H:%M:%S)-content_store_production ${DATABASE_URL}"
               env:
                 - name: DATABASE_URL
                   valueFrom:
