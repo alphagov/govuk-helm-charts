@@ -1,3 +1,3 @@
-image_tag: v8
+image_tag: release-dde43efb57c413a145c31bd7bae66240d4cd7e73
 automatic_deploys_enabled: true
-promote_deployment: true
+promote_deployment: false
