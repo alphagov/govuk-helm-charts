@@ -1,3 +1,3 @@
-image_tag: release-cba23039b10818e2830c3553d8473b69c1506fce
+image_tag: v71
 automatic_deploys_enabled: true
-promote_deployment: false
+promote_deployment: true
