@@ -690,6 +690,48 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
 
+  - name: content-store-postgresql-branch
+    repoName: content-store-postgresql-branch
+    helmValues:
+      <<: *content-store
+      rails:
+        createKeyBaseSecret: false
+        # use the same secret as the mongo content-store, it will make the
+        # eventual switchover easier and reduce toil
+        secretKeyBaseName: content-store-rails-secret-key-base
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: content-store-sentry
+      extraEnv:
+        - name: SENTRY_ENVIRONMENT
+          value: "postgresql-production"
+        - name: ROUTER_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-content-store-router-api
+              key: bearer_token
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-content-store
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-content-store
+              key: oauth_secret
+        - name: DEFAULT_TTL
+          value: "1"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: content-store-postgres
+              key: DATABASE_URL
+        - name: DISABLE_ROUTER_API
+          value: "true"
+        - name: WEB_CONCURRENCY
+          value: '4'
+
   - name: draft-content-store
     repoName: content-store
     helmValues:
@@ -725,6 +767,48 @@ govukApplications:
             mongo-3.production.govuk-internal.digital/draft_content_store_production"
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
+
+  - name: draft-content-store-postgresql-branch
+    repoName: content-store-postgresql-branch
+    helmValues:
+      <<: *content-store
+      rails:
+        createKeyBaseSecret: false
+        # use the same secret as the mongo draft-content-store, it will make the
+        # eventual switchover easier and reduce toil
+        secretKeyBaseName: content-store-rails-secret-key-base
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: content-store-sentry
+      extraEnv:
+        - name: SENTRY_ENVIRONMENT
+          value: "postgresql-draft-production"
+        - name: ROUTER_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-draft-content-store-draft-router-api
+              key: bearer_token
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-draft-content-store
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-draft-content-store
+              key: oauth_secret
+        - name: DEFAULT_TTL
+          value: "1"
+        - name: PLEK_HOSTNAME_PREFIX
+          value: draft-
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: draft-content-store-postgres
+              key: DATABASE_URL
+        - name: DISABLE_ROUTER_API
+          value: "true"
 
   - name: content-tagger
     helmValues:
@@ -1200,6 +1284,24 @@ govukApplications:
         sageMakerImage: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/search
         sagemakerIamRole: arn:aws:iam::172025368201:role/learn-to-rank-sagemaker
         serviceAccountIamRole: arn:aws:iam::172025368201:role/search-api-learn-to-rank-govuk
+      draftContentStoreMongoPostgresCron:
+        schedule: "30 6 * * *"
+        mongoExport:
+          mongoDbUri: "mongodb://\
+            mongo-1.production.govuk-internal.digital,\
+            mongo-2.production.govuk-internal.digital,\
+            mongo-3.production.govuk-internal.digital/draft_content_store_production"
+        postgresImport:
+          databaseUrlSecretName: "draft-content-store-postgres"
+      contentStoreMongoPostgresCron:
+        schedule: "15 5 * * *"
+        mongoExport:
+          mongoDbUri: "mongodb://\
+            mongo-1.production.govuk-internal.digital,\
+            mongo-2.production.govuk-internal.digital,\
+            mongo-3.production.govuk-internal.digital/content_store_production"
+        postgresImport:
+          databaseUrlSecretName: "content-store-postgres"
 
   - name: hmrc-manuals-api
     helmValues:
