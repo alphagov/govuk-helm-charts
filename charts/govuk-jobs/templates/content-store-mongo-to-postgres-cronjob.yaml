@@ -1,5 +1,4 @@
 
-{{- if eq .Values.govukEnvironment "integration" }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -173,4 +172,3 @@ spec:
                   mountPath: /tmp
                 - name: pg-dump
                   mountPath: /pg-dump
-{{- end }}
