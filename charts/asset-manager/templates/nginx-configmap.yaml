@@ -218,6 +218,8 @@ data:
           proxy_hide_header x-amz-version-id;
           proxy_hide_header x-amz-replication-status;
           proxy_hide_header x-amz-meta-md5-hexdigest;
+          proxy_hide_header x-amz-cf-id;
+          proxy_hide_header x-amz-cf-pop;
 
           # Strip any Authorization header from the client, as this will cause
           # S3 to return an error.  We do not use proxy_hide_header here, as
