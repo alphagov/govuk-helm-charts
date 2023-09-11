@@ -2274,6 +2274,13 @@ govukApplications:
         - name: TENSORFLOW_SAGEMAKER_ENDPOINT
           value: govuk-production-search-ltr-endpoint
 
+  - name: search-api-v2
+    helmValues:
+      dbMigrationEnabled: false
+      uploadAssets:
+        enabled: false
+      workerEnabled: false
+
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
     chartPath: charts/search-index-env-sync
