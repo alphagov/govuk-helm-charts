@@ -130,6 +130,7 @@ spec:
               command: ["rake"]
               args:
                 - "mongo:export:all[/mongo-export/]"
+                - " | gzip"
               env:
                 - name: MONGODB_URI
                   value: "{{ .Values.contentStoreMongoPostgresCron.mongoExport.mongoDbUri }}"
