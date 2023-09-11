@@ -2249,8 +2249,6 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: false
-      sentry:
-        enabled: false
 
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
