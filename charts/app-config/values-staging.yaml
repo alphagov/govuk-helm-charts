@@ -739,6 +739,23 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
 
+  - name: content-store-proxy
+    repoName: content-store-proxy
+    helmValues:
+      rails:
+        enabled: false
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: content-store-proxy-sentry
+      nginxClientMaxBodySize: 20M
+      uploadAssets:
+        enabled: false
+      extraEnv:
+        - name: PRIMARY_UPSTREAM
+          value: "http://content-store/"
+        - name: SECONDARY_UPSTREAM
+          value: "http://content-store-postgresql-branch/"
+
   - name: draft-content-store
     repoName: content-store
     helmValues:
@@ -816,6 +833,23 @@ govukApplications:
               key: DATABASE_URL
         - name: DISABLE_ROUTER_API
           value: "true"
+
+  - name: draft-content-store-proxy
+    repoName: content-store-proxy
+    helmValues:
+      rails:
+        enabled: false
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: content-store-proxy-sentry
+      nginxClientMaxBodySize: 20M
+      uploadAssets:
+        enabled: false
+      extraEnv:
+        - name: PRIMARY_UPSTREAM
+          value: "http://draft-content-store/"
+        - name: SECONDARY_UPSTREAM
+          value: "http://draft-content-store-postgresql-branch/"
 
   - name: content-tagger
     helmValues:
