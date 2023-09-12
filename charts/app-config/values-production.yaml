@@ -2963,6 +2963,7 @@ govukApplications:
       workerEnabled: true
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
+      nginxProxyReadTimeout: 60s
       ingress:
         enabled: true
         annotations:
