@@ -849,7 +849,7 @@ govukApplications:
         enabled: false
       extraEnv:
         - name: PRIMARY_UPSTREAM
-          value: "http://draft-content-store/"
+          value: "http://draft-content-store-mongo-main/"
         - name: SECONDARY_UPSTREAM
           value: "http://draft-content-store-postgresql-branch/"
 
