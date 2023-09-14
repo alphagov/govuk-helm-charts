@@ -2251,6 +2251,7 @@ govukApplications:
       dbMigrationEnabled: false
       uploadAssets:
         enabled: false
+      workerEnabled: true
       workers:
         - command: ['bin/rails', 'message_queue:consume_published_documents']
           name: published-documents-consumer
