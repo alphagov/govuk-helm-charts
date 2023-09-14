@@ -1,0 +1,24 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: search-api-v2-rabbitmq
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      RabbitMQ connection string for search-api-v2. Fields in SecretsManager are
+      username, password, host, port.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: search-api-v2-rabbitmq
+    template:
+      data:
+        RABBITMQ_URL: '{{ $.Files.Get "externalsecrets-templates/amqp-conn-string.tpl" | trim }}'
+  dataFrom:
+    - extract:
+        key: govuk/search-api-v2/rabbitmq

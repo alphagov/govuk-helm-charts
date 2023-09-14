@@ -2314,6 +2314,12 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: false
+      extraEnv:
+        - name: RABBITMQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-rabbitmq
+              key: RABBITMQ_URL
 
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
