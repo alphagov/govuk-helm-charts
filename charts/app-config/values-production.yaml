@@ -2315,9 +2315,11 @@ govukApplications:
         enabled: false
       workerEnabled: true
       workers:
-        - command: ['bin/rails', 'message_queue:consume_published_documents']
-          name: published-documents-consumer
+        - command: ['bin/rake', 'publish_event_pipeline:process_messages']
+          name: publish-event-pipeline-process-messages
       extraEnv:
+        - name: PUBLISH_EVENT_MESSAGE_QUEUE_NAME
+          value: search_api_v2_published_documents
         - name: RABBITMQ_URL
           valueFrom:
             secretKeyRef:
