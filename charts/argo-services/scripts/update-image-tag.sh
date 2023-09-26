@@ -20,6 +20,12 @@ if [[ "${current_image_tag}" = "${IMAGE_TAG}" ]]; then
   exit 0
 fi
 
+# Delete branch at origin if already exists
+if git ls-remote --heads origin "${BRANCH}" | grep -q "${BRANCH}"; then
+    echo "Deleting existing branch ${BRANCH} at origin"
+    git push origin --delete "${BRANCH}"
+fi
+
 git checkout -b "${BRANCH}"
 
 yq -i '.image_tag = env(IMAGE_TAG)' "${FILE}"
