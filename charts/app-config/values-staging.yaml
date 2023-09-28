@@ -750,6 +750,7 @@ govukApplications:
       rails:
         enabled: false
       nginxClientMaxBodySize: 20M
+      replicaCount: 6
       uploadAssets:
         enabled: false
       extraEnv:
@@ -757,6 +758,8 @@ govukApplications:
           value: "http://content-store-mongo-main/"
         - name: SECONDARY_UPSTREAM
           value: "http://content-store-postgresql-branch/"
+        - name: WEB_CONCURRENCY
+          value: '4'
 
   - name: draft-content-store-mongo-main
     repoName: content-store
@@ -845,6 +848,7 @@ govukApplications:
         createSecret: false  # Sentry DSNs are per repo.
         dsnSecretName: content-store-proxy-sentry
       nginxClientMaxBodySize: 20M
+      replicaCount: 3
       uploadAssets:
         enabled: false
       extraEnv:
