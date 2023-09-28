@@ -740,6 +740,14 @@ govukApplications:
       sentry:
         dsnSecretName: content-store-proxy-sentry
       nginxClientMaxBodySize: 20M
+      replicaCount: 6
+      appResources:
+        limits:
+          cpu: 4
+          memory: 2500Mi
+        requests:
+          cpu: 2
+          memory: 2000Mi
       uploadAssets:
         enabled: false
       extraEnv:
@@ -747,6 +755,8 @@ govukApplications:
           value: "http://content-store/"
         - name: SECONDARY_UPSTREAM
           value: "http://content-store-postgresql-branch/"
+        - name: WEB_CONCURRENCY
+          value: '4'
 
   - name: draft-content-store
     repoName: content-store
@@ -835,6 +845,7 @@ govukApplications:
         createSecret: false  # Sentry DSNs are per repo.
         dsnSecretName: content-store-proxy-sentry
       nginxClientMaxBodySize: 20M
+      replicaCount: 3
       uploadAssets:
         enabled: false
       extraEnv:
@@ -842,7 +853,8 @@ govukApplications:
           value: "http://draft-content-store/"
         - name: SECONDARY_UPSTREAM
           value: "http://draft-content-store-postgresql-branch/"
-
+        - name: WEB_CONCURRENCY
+          value: '4'
 
   - name: content-tagger
     helmValues:
