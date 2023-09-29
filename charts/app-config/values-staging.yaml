@@ -759,7 +759,7 @@ govukApplications:
         - name: SECONDARY_UPSTREAM
           value: "http://content-store-postgresql-branch/"
         - name: WEB_CONCURRENCY
-          value: '4'
+          value: '8'
 
   - name: draft-content-store-mongo-main
     repoName: content-store
