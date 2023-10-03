@@ -690,6 +690,19 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
 
+  - name: content-store-mongo-main
+    repoName: content-store
+    helmValues:
+      <<: *content-store
+      rails:
+        createKeyBaseSecret: false
+        # use the same secret as the mongo content-store, it will make the
+        # eventual switchover easier and reduce toil
+        secretKeyBaseName: content-store-rails-secret-key-base
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: content-store-sentry
+
   - name: content-store-postgresql-branch
     repoName: content-store-postgresql-branch
     helmValues:
@@ -752,13 +765,49 @@ govukApplications:
         enabled: false
       extraEnv:
         - name: PRIMARY_UPSTREAM
-          value: "http://content-store/"
+          value: "http://content-store-mongo-main/"
         - name: SECONDARY_UPSTREAM
           value: "http://content-store-postgresql-branch/"
         - name: WEB_CONCURRENCY
           value: '8'
 
   - name: draft-content-store
+    repoName: content-store
+    helmValues:
+      <<: *content-store
+      replicaCount: 3
+      cronTasks: []
+      rails:
+        createKeyBaseSecret: false
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+      extraEnv:
+        - name: ROUTER_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-draft-content-store-draft-router-api
+              key: bearer_token
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-draft-content-store
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-draft-content-store
+              key: oauth_secret
+        - name: DEFAULT_TTL
+          value: "1"
+        - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
+          value: "mongodb://\
+            mongo-1.production.govuk-internal.digital,\
+            mongo-2.production.govuk-internal.digital,\
+            mongo-3.production.govuk-internal.digital/draft_content_store_production"
+        - name: PLEK_HOSTNAME_PREFIX
+          value: draft-
+
+  - name: draft-content-store-mongo-main
     repoName: content-store
     helmValues:
       <<: *content-store
@@ -850,7 +899,7 @@ govukApplications:
         enabled: false
       extraEnv:
         - name: PRIMARY_UPSTREAM
-          value: "http://draft-content-store/"
+          value: "http://draft-content-store-mongo-main/"
         - name: SECONDARY_UPSTREAM
           value: "http://draft-content-store-postgresql-branch/"
         - name: WEB_CONCURRENCY
