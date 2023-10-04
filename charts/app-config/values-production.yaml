@@ -646,8 +646,7 @@ govukApplications:
               name: signon-token-content-publisher-whitehall
               key: bearer_token
 
-  - name: content-store-mongo-main
-    repoName: content-store
+  - name: content-store
     helmValues: &content-store
       nginxClientMaxBodySize: 20M
       # TODO(chris.banks): tune these once we have some real-world usage data.
@@ -691,6 +690,19 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
 
+  - name: content-store-mongo-main
+    repoName: content-store
+    helmValues:
+      <<: *content-store
+      rails:
+        createKeyBaseSecret: false
+        # use the same secret as the mongo content-store, it will make the
+        # eventual switchover easier and reduce toil
+        secretKeyBaseName: content-store-rails-secret-key-base
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: content-store-sentry
+
   - name: content-store-postgresql-branch
     repoName: content-store-postgresql-branch
     helmValues:
@@ -733,7 +745,7 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
 
-  - name: content-store
+  - name: content-store-proxy
     repoName: content-store-proxy
     helmValues:
       rails:
