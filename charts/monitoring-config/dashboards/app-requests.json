@@ -117,7 +117,8 @@
       "options": {
         "legend": {
           "calcs": [
-            "mean"
+            "mean",
+            "max"
           ],
           "displayMode": "table",
           "placement": "right",
@@ -276,7 +277,8 @@
       "options": {
         "legend": {
           "calcs": [
-            "sum"
+            "mean",
+            "max"
           ],
           "displayMode": "table",
           "placement": "right",
@@ -405,7 +407,8 @@
       "options": {
         "legend": {
           "calcs": [
-            "mean"
+            "mean",
+            "max"
           ],
           "displayMode": "table",
           "placement": "right",
