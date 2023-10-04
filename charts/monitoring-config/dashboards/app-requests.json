@@ -603,51 +603,20 @@
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "definition": "label_values(http_request_duration_seconds{namespace=\"${namespace}\"}, job)",
+        "definition": "label_values(http_requests_total{namespace=\"${namespace}\"},job)",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "app",
         "options": [],
         "query": {
-          "query": "label_values(http_request_duration_seconds{namespace=\"${namespace}\"}, job)",
+          "query": "label_values(http_requests_total{namespace=\"${namespace}\"},job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
-        "definition": "label_values(http_request_duration_seconds{namespace=\"${namespace}\"}, quantile)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "quantile",
-        "multi": true,
-        "name": "quantile",
-        "options": [],
-        "query": {
-          "query": "label_values(http_request_duration_seconds{namespace=\"${namespace}\"}, quantile)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 4,
         "type": "query"
       },
       {
