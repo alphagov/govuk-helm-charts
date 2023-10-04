@@ -456,85 +456,62 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Controller Action times sorted by application and sortable by maximum time taken",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Request Time (s)",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "smooth",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
-            },
-            "showPoints": "always",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
             }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
+          }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 13,
+        "h": 9,
         "w": 24,
         "x": 0,
         "y": 20
       },
-      "id": 5,
+      "id": 4,
       "options": {
+        "calculate": false,
+        "cellGap": 1,
+        "color": {
+          "exponent": 0.5,
+          "fill": "dark-orange",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "Viridis",
+          "steps": 64
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-9
+        },
         "legend": {
-          "calcs": [
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "width": 300
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "auto"
         },
         "tooltip": {
-          "mode": "single",
-          "sort": "none"
+          "show": true,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "left",
+          "reverse": false
         }
       },
+      "pluginVersion": "9.5.5",
       "targets": [
         {
           "datasource": {
@@ -542,19 +519,15 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "exemplar": true,
-          "expr": "label_replace(avg without (pod, instance) (http_request_duration_seconds{namespace=\"${namespace}\", job=~\"${app}\", quantile=~\"${quantile}\"}), \"a\", \"$1\", \"job\", \"(.*)\")",
-          "interval": "",
-          "legendFormat": "{{job}} {{controller}} {{action}} {{quantile}}",
+          "expr": "sum by (le) (increase(http_request_duration_seconds_bucket{namespace=\"${namespace}\", job=~\"${app}\"}[$__rate_interval]))",
+          "format": "heatmap",
+          "legendFormat": "__auto",
           "range": true,
-          "refId": "A",
-          "sort": "current",
-          "sortDesc": false
+          "refId": "A"
         }
       ],
-      "title": "Request duration per App/Controller/Action",
-      "transformations": [],
-      "type": "timeseries"
+      "title": "Distribution of Request Durations",
+      "type": "heatmap"
     }
   ],
   "refresh": "1m",
