@@ -58,10 +58,10 @@ spec:
                 - name: transition-config-efs
                   mountPath: /home/user
           containers:
-            - name: update-transtion-config
+            - name: update-transition-config
               image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
               imagePullPolicy: {{ $.Values.appImage.pullPolicy | default "Always" }}
-              command: ['rake', 'import:all:orgs_sites_hosts']
+              command: ['rake', 'import:all:organisations']
               envFrom:
                 - configMapRef:
                     name: govuk-apps-env
