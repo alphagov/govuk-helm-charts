@@ -1,15 +1,14 @@
-groups:
-  - name: SignonAlerts
-    rules:
-      - record: global:signon_api_user_token_expires_in_seconds
-        expr: |
-          min(signon_api_user_token_expiry_timestamp_seconds) by (api_user, application) - time()
+- name: SignonAlerts
+  rules:
+    - record: global:signon_api_user_token_expires_in_seconds
+      expr: |
+        min(signon_api_user_token_expiry_timestamp_seconds) by (api_user, application) - time()
 
-      - alert: SignonApiUserTokenExpirySoon
-        expr: |
-          global:signon_api_user_token_expires_in_seconds < 1209600
-        for: 10m
-        annotations:
-          summary: Signon API User token is due to expire soon
-          description: >-
-            A token is about to expire within the next two weeks and needs rotating.
+    - alert: SignonApiUserTokenExpirySoon
+      expr: |
+        global:signon_api_user_token_expires_in_seconds < 1209600
+      for: 10m
+      annotations:
+        summary: Signon API User token is due to expire soon
+        description: >-
+          A token is about to expire within the next two weeks and needs rotating.
