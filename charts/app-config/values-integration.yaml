@@ -834,6 +834,8 @@ govukApplications:
           value: "http://draft-content-store-mongo-main/"
         - name: SECONDARY_UPSTREAM
           value: "http://draft-content-store-postgresql-branch/"
+        - name: COMPARISON_SAMPLE_PCT
+          value: 50
 
   - name: content-tagger
     helmValues:

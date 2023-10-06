@@ -770,6 +770,8 @@ govukApplications:
           value: "http://content-store-postgresql-branch/"
         - name: WEB_CONCURRENCY
           value: '8'
+        - name: COMPARISON_SAMPLE_PCT
+          value: 10
 
   - name: draft-content-store-mongo-main
     repoName: content-store
