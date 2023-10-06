@@ -2256,10 +2256,10 @@ govukApplications:
         enabled: false
       workerEnabled: true
       workers:
-        - command: ['bin/rake', 'publishing_event_pipeline:process_messages']
-          name: publishing-event-pipeline-process-messages
+        - command: ['bin/rake', 'document_sync_worker:run']
+          name: document-sync-worker
       extraEnv:
-        - name: PUBLISHING_EVENT_MESSAGE_QUEUE_NAME
+        - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
           value: search_api_v2_published_documents
         - name: RABBITMQ_URL
           valueFrom:
