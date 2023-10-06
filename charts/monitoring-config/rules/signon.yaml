@@ -7,7 +7,7 @@
     - alert: SignonApiUserTokenExpirySoon
       expr: |
         global:signon_api_user_token_expires_in_seconds < 1209600
-      for: 10m
+      for: 1h
       annotations:
         summary: Signon API User token is due to expire soon
         description: >-
