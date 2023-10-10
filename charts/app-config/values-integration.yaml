@@ -2816,8 +2816,10 @@ govukApplications:
           - name: transition.{{ .Values.k8sExternalDomainSuffix }}
       dbMigrationEnabled: true
       workerEnabled: true
-      transitionConfigEnabled: true
       cronTasks:
+        - name: import-all-organisations
+          task: "import:all:organisations"
+          schedule: "00 09-19 * * 1-5"
         - name: import-dns
           task: "import:dns_details"
           schedule: "3 07-19 * * 1-5"
@@ -2833,14 +2835,6 @@ govukApplications:
         - name: refresh-materialized-hits
           task: "import:hits:refresh_materialized"
           schedule: "38 0,12 * * *"
-      extraVolumes:
-        - name: transition-config-efs
-          nfs:
-            server: *assets-nfs
-            path: /transition
-      appExtraVolumeMounts:
-        - name: transition-config-efs
-          mountPath: /app/data
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
