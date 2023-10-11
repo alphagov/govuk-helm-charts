@@ -747,6 +747,13 @@ govukApplications:
   - name: content-store
     repoName: content-store-proxy
     helmValues:
+      appResources:
+        limits:
+          cpu: 6
+          memory: 2500Mi
+        requests:
+          cpu: 1
+          memory: 1Gi
       rails:
         enabled: false
       nginxClientMaxBodySize: 20M
