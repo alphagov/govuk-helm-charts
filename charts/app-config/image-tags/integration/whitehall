@@ -1,3 +1,3 @@
-image_tag: release-6179566d9c4da0415fa27dfec953413570ccaf00
+image_tag: v250
 automatic_deploys_enabled: true
-promote_deployment: false
+promote_deployment: true
