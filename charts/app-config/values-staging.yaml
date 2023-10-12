@@ -768,7 +768,7 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '8'
         - name: COMPARISON_SAMPLE_PCT
-          value: '50'
+          value: '100'
 
   - name: draft-content-store-mongo-main
     repoName: content-store
