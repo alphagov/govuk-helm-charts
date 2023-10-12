@@ -12,3 +12,4 @@
         summary: Signon API User token is due to expire soon
         description: >-
           A token is about to expire within the next two weeks and needs rotating.
+        runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/signon-api-user-token-expires-soon.html
