@@ -756,7 +756,7 @@ govukApplications:
       replicaCount: 6
       appResources:
         limits:
-          cpu: 4
+          cpu: 6
           memory: 2500Mi
         requests:
           cpu: 2
