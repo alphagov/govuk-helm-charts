@@ -1152,6 +1152,8 @@ govukApplications:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /government/placeholder/
       extraEnv:
+        - name: NEW_DESIGN
+          value: impact
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *frontend-notify-template
         - name: MEMCACHE_SERVERS
