@@ -1,0 +1,13 @@
+{{- if ne .Values.govukEnvironment "production" }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: govuk-mirror-sync
+spec:
+  storageClassName: ebs-gp3
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+{{- end }}

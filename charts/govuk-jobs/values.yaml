@@ -27,6 +27,9 @@ images:
     repository: "search-api-learn-to-rank"
     tag: "release"
 
+govukMirrorSync:
+  schedule: "0 0 * * *"
+
 learnToRank:
   elasticsearchUri: ""
   trainingInstance:

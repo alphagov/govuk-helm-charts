@@ -1300,6 +1300,8 @@ govukApplications:
       - "search-api"
       - "search-api-learn-to-rank"
     helmValues:
+      govukMirrorSync:
+        iamRoleArn: arn:aws:iam::696911096973:role/govuk-mirror-sync
       learnToRank:
         elasticsearchUri: &elasticsearch-uri
           https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com

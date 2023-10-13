@@ -1,0 +1,8 @@
+{{- if ne .Values.govukEnvironment "production" }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: govuk-mirror-sync
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .Values.govukMirrorSync.iamRoleArn }}
+{{- end }}
