@@ -695,6 +695,7 @@ govukApplications:
     repoName: content-store-postgresql-branch
     helmValues:
       <<: *content-store
+      dbMigrationEnabled: true
       rails:
         createKeyBaseSecret: false
         # use the same secret as the mongo content-store, it will make the
@@ -799,6 +800,7 @@ govukApplications:
     repoName: content-store-postgresql-branch
     helmValues:
       <<: *content-store
+      dbMigrationEnabled: true
       rails:
         createKeyBaseSecret: false
         # use the same secret as the mongo draft-content-store, it will make the
