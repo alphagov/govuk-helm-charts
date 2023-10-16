@@ -738,8 +738,6 @@ govukApplications:
     helmValues:
       rails:
         enabled: false
-      sentry:
-        dsnSecretName: content-store-proxy-sentry
       nginxClientMaxBodySize: 20M
       replicaCount: 6
       appResources:
