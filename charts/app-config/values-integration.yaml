@@ -2261,6 +2261,16 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-rabbitmq
               key: RABBITMQ_URL
+        - name: GOOGLE_KEY_READ
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-key-read
+              key: GOOGLE_KEY_READ
+        - name: GOOGLE_KEY_WRITE
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-key-write
+              key: GOOGLE_KEY_WRITE
 
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
