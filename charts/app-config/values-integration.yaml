@@ -744,6 +744,10 @@ govukApplications:
         - name: COMPARISON_SAMPLE_PCT
           value: '50'
 
+  - name: db-backup
+    chartPath: charts/db-backup
+    postSyncWorkflowEnabled: "false"
+
   - name: draft-content-store-mongo-main
     repoName: content-store
     helmValues:
