@@ -45,11 +45,11 @@ spec:
               workingDir: /data
               resources:
                 limits:
-                  cpu: 2
-                  memory: 8000Mi
+                  cpu: 4
+                  memory: 10000Mi
                 requests:
-                  cpu: 1
-                  memory: 2000Mi
+                  cpu: 2
+                  memory: 5000Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
@@ -84,7 +84,7 @@ spec:
                   memory: 8000Mi
                 requests:
                   cpu: 1
-                  memory: 2000Mi
+                  memory: 5000Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
