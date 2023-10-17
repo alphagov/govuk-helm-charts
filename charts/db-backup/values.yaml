@@ -22,26 +22,26 @@ govukEnvironment: staging
 cronjobs:
   production:
     content-store-postgres:
-      schedule: "16 1 * * *"
+      schedule: "16 2 * * *"
       db: content_store_production
       operations:
         - op: backup
     draft-content-store-postgres:
-      schedule: "16 1 * * *"
+      schedule: "36 2 * * *"
       db: draft_content_store_production
       operations:
         - op: backup
   staging:
     content-store-postgres:
       db: content_store_production
-      schedule: "16 2 * * *"
+      schedule: "16 3 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
     draft-content-store-postgres:
       db: draft_content_store_production
-      schedule: "16 2 * * *"
+      schedule: "36 3 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -49,7 +49,7 @@ cronjobs:
   integration:
     content-store-postgres:
       db: content_store_production
-      schedule: "16 3 * * *"
+      schedule: "16 4 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -57,7 +57,7 @@ cronjobs:
     # of publishing-api that require it are rectified.
     draft-content-store-postgres:
       db: draft_content_store_production
-      schedule: "16 3 * * *"
+      schedule: "36 4 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
