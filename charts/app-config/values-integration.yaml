@@ -2262,9 +2262,9 @@ govukApplications:
             secretName: search-api-v2-google-key-write
       appExtraVolumeMounts:
         - name: search-api-v2-google-key-read
-          mountPath: /etc/keys/google-key-read.json
+          mountPath: /etc/keys/google-key-read
         - name: search-api-v2-google-key-write
-          mountPath: /etc/keys/google-key-write.json
+          mountPath: /etc/keys/google-key-write
       extraEnv:
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
           value: search_api_v2_published_documents
