@@ -2253,6 +2253,18 @@ govukApplications:
       workers:
         - command: ['bin/rake', 'document_sync_worker:run']
           name: document-sync-worker
+      extraVolumes:
+        - name: search-api-v2-google-key-read
+          secret:
+            secretName: search-api-v2-google-key-read
+        - name: search-api-v2-google-key-write
+          secret:
+            secretName: search-api-v2-google-key-write
+      appExtraVolumeMounts:
+        - name: search-api-v2-google-key-read
+          mountPath: /etc/keys/google-key-read.json
+        - name: search-api-v2-google-key-write
+          mountPath: /etc/keys/google-key-write.json
       extraEnv:
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
           value: search_api_v2_published_documents
@@ -2261,16 +2273,10 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-rabbitmq
               key: RABBITMQ_URL
-        - name: GOOGLE_KEY_READ
-          valueFrom:
-            secretKeyRef:
-              name: search-api-v2-google-key-read
-              key: GOOGLE_KEY_READ
-        - name: GOOGLE_KEY_WRITE
-          valueFrom:
-            secretKeyRef:
-              name: search-api-v2-google-key-write
-              key: GOOGLE_KEY_WRITE
+        - name: GOOGLE_KEYFILE_READ
+          value: /etc/keys/google-key-read.json
+        - name: GOOGLE_KEYFILE_WRITE
+          value: /etc/keys/google-key-write.json
 
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
