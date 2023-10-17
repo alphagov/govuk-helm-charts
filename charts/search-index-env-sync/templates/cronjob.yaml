@@ -64,9 +64,11 @@ spec:
                   {{- toYaml . | nindent 16 }}
                 {{- end }}
               resources:
+                {{- $.Values.resources | toYaml | nindent 16 }}
               securityContext:
                 {{- toYaml $.Values.securityContext | nindent 16 }}
               volumeMounts:
                 - name: scripts
                   mountPath: /opt/bin
+                  readOnly: true
 {{- end }}

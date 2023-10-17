@@ -1,0 +1,100 @@
+# Default values for db-backup.
+
+nameOverride: ""
+fullnameOverride: ""
+# https://github.com/alphagov/govuk-infrastructure/tree/main/images/toolbox
+imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/toolbox"
+
+# govukEnvironment determines which set of cronjobs to use from `cronjobs`
+# below. When running under Argo CD, the ../app-config chart passes the
+# appropriate value for govukEnvironment in by default.
+govukEnvironment: staging
+
+# cronjobs defines a set of k8s CronJobs that should exist in each environment
+# (production, staging, integration). Each CronJob consists of one or more
+# operations which run as a sequence of InitContainers.
+#
+# Each environment has a map of job names to job configs. If the job name (i.e.
+# the map key) is of the form <app-name>-<dbms>, for example
+# link-checker-api-postgres, then the DBMS hostname and DBMS type (postgres,
+# mysql etc.) can be inferred. These can be specified explicitly via the `host`
+# and `dbms` keys in the job config.
+cronjobs:
+  production:
+    content-store-postgres:
+      schedule: "16 2 * * *"
+      db: content_store_production
+      operations:
+        - op: backup
+    draft-content-store-postgres:
+      schedule: "36 2 * * *"
+      db: draft_content_store_production
+      operations:
+        - op: backup
+  staging:
+    content-store-postgres:
+      db: content_store_production
+      schedule: "16 3 * * *"
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+    draft-content-store-postgres:
+      db: draft_content_store_production
+      schedule: "36 3 * * *"
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+  integration:
+    content-store-postgres:
+      db: content_store_production
+      schedule: "16 4 * * *"
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+    # TODO: stop copying draft content into integration once the design quirks
+    # of publishing-api that require it are rectified.
+    draft-content-store-postgres:
+      db: draft_content_store_production
+      schedule: "36 4 * * *"
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+extraEnv:
+  - name: VERBOSE
+    value: "1"
+
+podSecurityContext:
+  fsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1001
+
+serviceAccount:
+  create: true
+  name: db-backup
+  annotations:
+    # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/db_backup_s3.tf
+    eks.amazonaws.com/role-arn: arn:aws:iam::696911096973:role/db-backup-govuk
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 512Mi
+  requests:
+    cpu: 500m
+    memory: 128Mi
+
+externalSecrets:
+  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
+  deletionPolicy: Delete
