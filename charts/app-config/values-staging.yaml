@@ -773,6 +773,11 @@ govukApplications:
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
+    helmValues:
+      # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/db_backup_s3.tf
+      serviceAccount:
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::696911096973:role/db-backup-govuk
 
   - name: draft-content-store-mongo-main
     repoName: content-store
