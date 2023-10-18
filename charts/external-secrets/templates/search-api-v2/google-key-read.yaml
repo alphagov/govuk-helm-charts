@@ -18,3 +18,4 @@ spec:
   dataFrom:
     - extract:
         key: govuk/search-api-v2/google-key-read
+        decodingStrategy: Base64
