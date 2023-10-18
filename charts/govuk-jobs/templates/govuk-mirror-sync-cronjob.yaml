@@ -62,7 +62,7 @@ spec:
                 - name: SITE
                   value: https://www.{{ .Values.externalDomainSuffix }}/sitemap.xml
                 - name: ALLOWED_DOMAINS
-                  value: www.{{ .Values.externalDomainSuffix }}
+                  value: www.{{ .Values.externalDomainSuffix }},{{ .Values.assetsDomain }}
                 - name: DISALLOWED_URL_RULES
                   value: '/apply-for-a-licence(/|$),/business-finance-support(/|$),/drug-device-alerts\.atom,/drug-safety-update\.atom,/foreign-travel-advice\.atom,/government/announcements\.atom,/government/publications\.atom,/government/statistics\.atom,/licence-finder/,/search(/|$)'
                 - name: CONCURRENCY
@@ -106,5 +106,6 @@ spec:
                 - /bin/sh
                 - -c
                 - >-
-                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/"
+                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/" && \
+                  /s5cmd sync --size-only "/data/${ASSETS_DOMAIN}" "s3://${BUCKET_NAME}/"
 {{- end }}
