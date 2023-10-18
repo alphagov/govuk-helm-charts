@@ -105,5 +105,5 @@ spec:
                 - /bin/sh
                 - -c
                 - >-
-                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/" && \
+                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/" && 
                   /s5cmd sync --size-only "/data/${ASSETS_DOMAIN}" "s3://${BUCKET_NAME}/"
