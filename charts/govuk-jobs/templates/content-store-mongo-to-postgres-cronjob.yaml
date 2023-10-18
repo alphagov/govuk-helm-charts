@@ -1,4 +1,4 @@
-
+{{- if .Values.draftContentStoreMongoPostgresCron.schedule }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -83,7 +83,8 @@ spec:
                   mountPath: /mongo-export
                 - name: app-tmp
                   mountPath: /tmp
-
+{{- end }}
+{{- if .Values.contentStoreMongoPostgresCron.schedule }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -93,7 +94,7 @@ metadata:
     app: "content-store-mongo-to-postgres-cron"
     app.kubernetes.io/component: "content-store-mongo-to-postgres-cron"
 spec:
-  schedule: "{{ .Values.draftContentStoreMongoPostgresCron.schedule }}"  
+  schedule: "{{ .Values.contentStoreMongoPostgresCron.schedule }}"  
   jobTemplate:
     metadata:
       name: "content-store-mongo-to-postgres-cron"
@@ -172,3 +173,4 @@ spec:
                   mountPath: /tmp
                 - name: pg-dump
                   mountPath: /pg-dump
+{{- end }}
