@@ -84,8 +84,7 @@ serviceAccount:
   create: true
   name: db-backup
   annotations:
-    # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/db_backup_s3.tf
-    eks.amazonaws.com/role-arn: arn:aws:iam::696911096973:role/db-backup-govuk
+    eks.amazonaws.com/role-arn: ""
 
 resources:
   limits:
