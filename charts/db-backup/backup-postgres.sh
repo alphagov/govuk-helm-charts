@@ -42,8 +42,8 @@ restore () {
   fi
   local s3_url="$BUCKET/$PGHOST/$FILENAME"
   s3_url="$s3_url" dump_is_readable
-  aws s3 cp "$s3_url" - | progress \
-    | pg_restore -Ccd postgres --if-exists --no-comments
+  dropdb -ef --if-exists "$PGDATABASE"
+  aws s3 cp "$s3_url" - | progress | pg_restore -Cd postgres --no-comments
 }
 
 subcommand=${1:-}
