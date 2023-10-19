@@ -56,6 +56,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -186,6 +187,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 4,
@@ -346,6 +348,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -512,7 +515,7 @@
           "reverse": false
         }
       },
-      "pluginVersion": "9.5.5",
+      "pluginVersion": "10.1.5",
       "targets": [
         {
           "datasource": {
