@@ -500,7 +500,8 @@
           "show": true
         },
         "rowsFrame": {
-          "layout": "auto"
+          "layout": "auto",
+          "value": "Number of requests"
         },
         "tooltip": {
           "show": true,
