@@ -757,7 +757,7 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '8'
         - name: COMPARISON_SAMPLE_PCT
-          value: '10'
+          value: '25'
 
   - name: db-backup
     chartPath: charts/db-backup
@@ -866,7 +866,7 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
         - name: COMPARISON_SAMPLE_PCT
-          value: '10'
+          value: '50'
 
   - name: content-tagger
     helmValues:
