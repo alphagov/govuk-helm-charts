@@ -45,10 +45,10 @@ spec:
               resources:
                 limits:
                   cpu: 4
-                  memory: 10000Mi
+                  memory: 15000Mi
                 requests:
                   cpu: 2
-                  memory: 5000Mi
+                  memory: 10000Mi
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
@@ -65,7 +65,7 @@ spec:
                 - name: DISALLOWED_URL_RULES
                   value: '/apply-for-a-licence(/|$),/business-finance-support(/|$),/drug-device-alerts\.atom,/drug-safety-update\.atom,/foreign-travel-advice\.atom,/government/announcements\.atom,/government/publications\.atom,/government/statistics\.atom,/licence-finder/,/search(/|$)'
                 - name: CONCURRENCY
-                  value: "100"
+                  value: "10"
                 - name: RATE_LIMIT_TOKEN
                   valueFrom:
                     secretKeyRef:
@@ -79,10 +79,10 @@ spec:
               imagePullPolicy: "Always"
               resources:
                 limits:
-                  cpu: 2
+                  cpu: 4
                   memory: 8000Mi
                 requests:
-                  cpu: 1
+                  cpu: 2
                   memory: 5000Mi
               securityContext:
                 allowPrivilegeEscalation: false
