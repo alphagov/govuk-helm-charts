@@ -104,6 +104,8 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - >-
-                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/" && 
+                - |-
+                  set -eu
+                  mkdir -p /data/error && wget -q -O /data/error/503.html https://${ASSETS_DOMAIN}/templates/503.html.erb
+                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/"
                   /s5cmd sync --size-only "/data/${ASSETS_DOMAIN}" "s3://${BUCKET_NAME}/"
