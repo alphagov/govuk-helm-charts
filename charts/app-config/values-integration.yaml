@@ -742,7 +742,7 @@ govukApplications:
         - name: SECONDARY_UPSTREAM
           value: "http://content-store-postgresql-branch/"
         - name: COMPARISON_SAMPLE_PCT
-          value: '50'
+          value: '100'
 
   - name: db-backup
     chartPath: charts/db-backup
@@ -846,7 +846,7 @@ govukApplications:
         - name: SECONDARY_UPSTREAM
           value: "http://draft-content-store-postgresql-branch/"
         - name: COMPARISON_SAMPLE_PCT
-          value: '50'
+          value: '100'
 
   - name: content-tagger
     helmValues:
