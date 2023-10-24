@@ -743,6 +743,8 @@ govukApplications:
           value: "http://content-store-postgresql-branch/"
         - name: COMPARISON_SAMPLE_PCT
           value: '100'
+        - name: SECONDARY_TIMEOUT_SECONDS
+          value: '2'
 
   - name: db-backup
     chartPath: charts/db-backup
@@ -847,6 +849,8 @@ govukApplications:
           value: "http://draft-content-store-postgresql-branch/"
         - name: COMPARISON_SAMPLE_PCT
           value: '100'
+        - name: SECONDARY_TIMEOUT_SECONDS
+          value: '2'
 
   - name: content-tagger
     helmValues:
