@@ -104,6 +104,15 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - >-
-                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/" && 
+                - |-
+                  set -eu
+                  # Retrieve error template
+                  mkdir -p /data/error && wget -q -O /data/error/503.html https://${ASSETS_DOMAIN}/templates/503.html.erb
+
+                  # Sync mirrors
+                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/"
                   /s5cmd sync --size-only "/data/${ASSETS_DOMAIN}" "s3://${BUCKET_NAME}/"
+
+                  # Upload file for checking mirror freshness
+                  touch "/data/${WWW_DOMAIN}/last-updated.txt"
+                  /s5cmd cp "/data/${WWW_DOMAIN}/last-updated.txt" "s3://${BUCKET_NAME}/${WWW_DOMAIN}/last-updated.txt"
