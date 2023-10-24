@@ -758,6 +758,8 @@ govukApplications:
           value: '8'
         - name: COMPARISON_SAMPLE_PCT
           value: '25'
+        - name: SECONDARY_TIMEOUT_SECONDS
+          value: '2'
 
   - name: db-backup
     chartPath: charts/db-backup
@@ -867,6 +869,8 @@ govukApplications:
           value: '4'
         - name: COMPARISON_SAMPLE_PCT
           value: '50'
+        - name: SECONDARY_TIMEOUT_SECONDS
+          value: '2'
 
   - name: content-tagger
     helmValues:
