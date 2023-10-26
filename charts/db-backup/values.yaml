@@ -215,7 +215,7 @@ cronjobs:
 
     ckan-postgres:
       suspend: true
-      schedule: "43 1 * * 7"
+      schedule: "43 1 * * 0"
       db: ckan_production
       operations:
         - op: restore
@@ -416,7 +416,7 @@ cronjobs:
 
     ckan-postgres:
       suspend: true
-      schedule: "43 3 * * 7"
+      schedule: "43 3 * * 0"
       db: ckan_production
       operations:
         - op: restore
