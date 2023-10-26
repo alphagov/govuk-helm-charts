@@ -1,14 +1,48 @@
-# Default values for db-backup.
+# Configuration for db-backup jobs.
 
 nameOverride: ""
 fullnameOverride: ""
 # https://github.com/alphagov/govuk-infrastructure/tree/main/images/toolbox
 imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/toolbox"
 
-# govukEnvironment determines which set of cronjobs to use from `cronjobs`
-# below. When running under Argo CD, the ../app-config chart passes the
-# appropriate value for govukEnvironment in by default.
-govukEnvironment: staging
+externalSecrets:
+  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
+  deletionPolicy: Delete
+
+extraEnv:
+  - name: VERBOSE
+    value: "1"
+
+podSecurityContext:
+  fsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 512Mi
+  requests:
+    cpu: 500m
+    memory: 128Mi
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1001
+
+serviceAccount:
+  create: true
+  name: db-backup
+  annotations:
+    eks.amazonaws.com/role-arn: ""  # Overridden in ../app-config (Argo CD).
+
+# govukEnvironment determines which set of jobs to use from `cronjobs` below.
+govukEnvironment: staging  # Overridden in ../app-config (Argo CD).
 
 # cronjobs defines a set of k8s CronJobs that should exist in each environment
 # (production, staging, integration). Each CronJob consists of one or more
@@ -21,6 +55,58 @@ govukEnvironment: staging
 # and `dbms` keys in the job config.
 cronjobs:
   production:
+    account-api-postgres:
+      schedule: "37 23 * * *"
+      db: account-api_production
+      # TODO: add an automatic test restore to somewhere in production (because
+      # unlike the other DBs, we don't copy prod account-api data to staging).
+      operations:
+        - op: backup
+
+    authenticating-proxy-postgres:
+      schedule: "23 23 * * *"
+      db: authenticating_proxy_production
+      operations:
+        - op: backup
+
+    ckan-postgres:
+      schedule: "43 4 * * *"
+      db: ckan_production
+      operations:
+        - op: backup
+
+    # # TODO: implement MySQL support.
+    # collections-publisher-mysql:
+    #   schedule: "21 23 * * *"
+    #   db: collections_publisher_production
+    #   operations:
+    #     - op: backup
+
+    # contacts-admin-mysql:
+    #   schedule: "49 23 * * *"
+    #   db: contacts_production
+    #   operations:
+    #     - op: backup
+
+    content-data-admin-postgres:
+      schedule: "4 23 * * *"
+      db: content_data_admin_production
+      operations:
+        - op: backup
+
+    content-data-api-postgresql-primary:
+      schedule: "35 23 * * *"
+      db: content_performance_manager_production
+      dbms: postgresql
+      operations:
+        - op: backup
+
+    content-publisher-postgres:
+      schedule: "9 23 * * *"
+      db: content_publisher_production
+      operations:
+        - op: backup
+
     content-store-postgres:
       schedule: "16 2 * * *"
       db: content_store_production
@@ -31,7 +117,155 @@ cronjobs:
       db: draft_content_store_production
       operations:
         - op: backup
+
+    content-tagger-postgres:
+      schedule: "31 23 * * *"
+      db: content_tagger_production
+      operations:
+        - op: backup
+
+    email-alert-api-postgres:
+      schedule: "54 23 * * *"
+      db: email-alert-api_production
+      operations:
+        - op: backup
+
+    imminence-postgres:
+      schedule: "18 23 * * *"
+      db: imminence_production
+      operations:
+        - op: backup
+
+    link-checker-api-postgres:
+      schedule: "43 23 * * *"
+      db: link_checker_api_production
+      operations:
+        - op: backup
+
+    local-links-manager-postgres:
+      schedule: "8 23 * * *"
+      db: local-links-manager_production
+      operations:
+        - op: backup
+
+    locations-api-postgres:
+      schedule: "32 23 * * *"
+      db: locations_api_production
+      operations:
+        - op: backup
+
+    publishing-api-postgres:
+      schedule: "37 23 * * *"
+      db: publishing_api_production
+      operations:
+        - op: backup
+
+    # release-mysql:
+    #   schedule: "11 23 * * *"
+    #   db: release_production
+    #   operations:
+    #     - op: backup
+
+    # search-admin-mysql:
+    #   schedule: "56 23 * * *"
+    #   db: search_admin_production
+    #   operations:
+    #     - op: backup
+
+    service-manual-publisher-postgres:
+      schedule: "49 23 * * *"
+      db: service-manual-publisher_production
+      operations:
+        - op: backup
+
+    # signon-mysql:
+    #   schedule: "3 23 * * *"
+    #   db: signon_production
+    #   operations:
+    #     - op: backup
+
+    support-api-postgres:
+      schedule: "38 23 * * *"
+      db: support_contacts_production
+      operations:
+        - op: backup
+
+    transition-postgresql-primary:
+      schedule: "24 3 * * *"
+      db: transition_production
+      dbms: postgresql
+      operations:
+        - op: backup
+
+    # whitehall-mysql:
+    #   schedule: "28 0 * * *"
+    #   db: whitehall_production
+    #   operations:
+    #     - op: backup
+
+
   staging:
+    authenticating-proxy-postgres:
+      schedule: "23 1 * * *"
+      db: authenticating_proxy_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    ckan-postgres:
+      suspend: true
+      schedule: "43 1 * * 7"
+      db: ckan_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    # collections-publisher-mysql:
+    #   schedule: "21 1 * * *"
+    #   db: collections_publisher_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-production-database-backups
+    #     - op: backup
+
+    # contacts-admin-mysql:
+    #   schedule: "49 1 * * *"
+    #   db: contacts_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-production-database-backups
+    #     - op: backup
+
+    content-data-admin-postgres:
+      schedule: "4 1 * * *"
+      db: content_data_admin_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    content-data-api-postgresql-primary:
+      schedule: "35 1 * * *"
+      db: content_performance_manager_production
+      dbms: postgresql
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    # # TODO: implement "op: transform"
+    # content-publisher-postgres:
+    #   schedule: "9 1 * * *"
+    #   db: content_publisher_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-production-database-backups
+    #     - op: transform
+    #       script: content_publisher.sql
+    #     - op: backup
+
     content-store-postgres:
       db: content_store_production
       schedule: "16 3 * * *"
@@ -46,7 +280,185 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
+
+    content-tagger-postgres:
+      schedule: "31 1 * * *"
+      db: content_tagger_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    # email-alert-api-postgres:
+    #   schedule: "54 1 * * *"
+    #   db: email-alert-api_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-production-database-backups
+    #     - op: transform
+    #       script: anonymise_email_addresses.sql
+    #     - op: backup
+
+    imminence-postgres:
+      schedule: "18 1 * * *"
+      db: imminence_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    link-checker-api-postgres:
+      schedule: "43 1 * * *"
+      db: link_checker_api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    local-links-manager-postgres:
+      schedule: "8 1 * * *"
+      db: local-links-manager_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    locations-api-postgres:
+      schedule: "32 1 * * *"
+      db: locations_api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    # publishing-api-postgres:
+    #   schedule: "37 1 * * *"
+    #   db: publishing_api_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-production-database-backups
+    #     - op: transform
+    #       script: sanitise_publishing_api_production.sql
+    #     - op: backup
+
+    # release-mysql:
+    #   schedule: "11 1 * * 1"  # Daily would be overkill.
+    #   db: release_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-production-database-backups
+    #     - op: backup
+
+    # search-admin-mysql:
+    #   schedule: "56 1 * * *"
+    #   db: search_admin_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-production-database-backups
+    #     - op: backup
+
+    service-manual-publisher-postgres:
+      schedule: "49 1 * * *"
+      db: service-manual-publisher_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    # signon-mysql:
+    #   schedule: "3 1 * * *"
+    #   db: signon_production
+    #   operations:
+    #    - op: restore
+    #      bucket: s3://govuk-production-database-backups
+    #     - op: backup
+
+    support-api-postgres:
+      schedule: "38 1 * * *"
+      db: support_contacts_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    transition-postgresql-primary:
+      schedule: "24 1 * * *"
+      db: transition_production
+      dbms: postgresql
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    # whitehall-mysql:
+    #   schedule: "28 1 * * *"
+    #   db: whitehall_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-production-database-backups
+    #     - op: backup
+
+
   integration:
+    account-api-postgres:
+      schedule: "37 3 * * *"
+      db: account-api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    authenticating-proxy-postgres:
+      schedule: "23 3 * * *"
+      db: authenticating_proxy_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    ckan-postgres:
+      suspend: true
+      schedule: "43 3 * * 7"
+      db: ckan_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    # collections-publisher-mysql:
+    #   schedule: "21 3 * * *"
+    #   db: collections_publisher_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-staging-database-backups
+
+    # contacts-admin-mysql:
+    #   schedule: "49 3 * * *"
+    #   db: contacts_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-staging-database-backups
+
+    content-data-admin-postgres:
+      schedule: "4 3 * * *"
+      db: content_data_admin_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    content-data-api-postgresql-primary:
+      schedule: "35 3 * * *"
+      db: content_performance_manager_production
+      dbms: postgresql
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+#   content-publisher-postgres:
+    # schedule: "9 3 * * *"
+    # db: content_publisher_production
+    # operations:
+    #   - op: restore
+    #     bucket: s3://govuk-staging-database-backups
+    #   - op: backup
+
     content-store-postgres:
       db: content_store_production
       schedule: "16 4 * * *"
@@ -63,38 +475,106 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
-extraEnv:
-  - name: VERBOSE
-    value: "1"
 
-podSecurityContext:
-  fsGroup: 1001
-  runAsNonRoot: true
-  runAsUser: 1001
-  runAsGroup: 1001
+    content-tagger-postgres:
+      schedule: "31 3 * * *"
+      db: content_tagger_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
 
-securityContext:
-  allowPrivilegeEscalation: false
-  capabilities:
-    drop: [ALL]
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1001
+#   email-alert-api-postgres:
+    # schedule: "54 3 * * *"
+    # db: email-alert-api_production
+    # operations:
+    #   - op: restore
+    #     bucket: s3://govuk-staging-database-backups
+    #   - op: backup
 
-serviceAccount:
-  create: true
-  name: db-backup
-  annotations:
-    eks.amazonaws.com/role-arn: ""
+    imminence-postgres:
+      schedule: "18 3 * * *"
+      db: imminence_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
 
-resources:
-  limits:
-    cpu: 2000m
-    memory: 512Mi
-  requests:
-    cpu: 500m
-    memory: 128Mi
+    link-checker-api-postgres:
+      schedule: "43 3 * * *"
+      db: link_checker_api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
 
-externalSecrets:
-  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
-  deletionPolicy: Delete
+    local-links-manager-postgres:
+      schedule: "8 3 * * *"
+      db: local-links-manager_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    locations-api-postgres:
+      schedule: "32 3 * * *"
+      db: locations_api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+#   publishing-api-postgres:
+    # schedule: "37 3 * * *"
+    # db: publishing_api_production
+    # operations:
+    #   - op: restore
+    #     bucket: s3://govuk-staging-database-backups
+    #   - op: backup
+
+    # release-mysql:
+    #   schedule: "11 3 * * 1"
+    #   db: release_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-staging-database-backups
+
+    # search-admin-mysql:
+    #   schedule: "56 3 * * *"
+    #   db: search_admin_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-staging-database-backups
+
+    service-manual-publisher-postgres:
+      schedule: "49 3 * * *"
+      db: service-manual-publisher_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    # signon-mysql:
+    #   suspend: true
+    #   schedule: "3 3 * * *"
+    #   db: signon_production
+    #   operations:
+    #    - op: restore
+    #      # Integration Signon accounts are not synced from production/staging.
+    #      bucket: s3://govuk-integration-database-backups
+
+    support-api-postgres:
+      schedule: "38 3 * * *"
+      db: support_contacts_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    transition-postgresql-primary:
+      schedule: "24 3 * * *"
+      db: transition_production
+      dbms: postgresql
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    # whitehall-mysql:
+    #   schedule: "28 3 * * *"
+    #   db: whitehall_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-staging-database-backups
