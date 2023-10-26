@@ -1,12 +1,13 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: search-api-v2-google-key-write
+  name: search-api-v2-google-cloud-discovery-engine-configuration
   labels:
     {{- include "external-secrets.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      Credentials used by search-api-v2 to access Google Cloud Discovery Engine (write-only)
+      Configuration for Google Cloud Discovery Engine for search-api-v2 (DISCOVERY_ENGINE_DATASTORE
+      and DISCOVERY_ENGINE_ENGINE)
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
@@ -14,7 +15,7 @@ spec:
     kind: ClusterSecretStore
   target:
     deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
-    name: search-api-v2-google-key-write
+    name: search-api-v2-google-cloud-discovery-engine-configuration
   dataFrom:
     - extract:
-        key: govuk/search-api-v2/google-key-write
+        key: govuk/search-api-v2/google-cloud-discovery-engine-configuration
