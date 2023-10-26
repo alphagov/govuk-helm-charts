@@ -53,6 +53,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
     # TODO: stop copying draft content into integration once the design quirks
     # of publishing-api that require it are rectified.
     draft-content-store-postgres:
@@ -61,7 +62,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
-
+        - op: backup
 extraEnv:
   - name: VERBOSE
     value: "1"
