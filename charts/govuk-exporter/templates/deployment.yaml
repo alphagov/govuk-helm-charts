@@ -37,7 +37,7 @@ spec:
           livenessProbe: &probe
             httpGet:
               path: /metrics
-              port: http
+              port: metrics
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 30

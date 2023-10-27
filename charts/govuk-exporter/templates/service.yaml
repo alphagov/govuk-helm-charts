@@ -8,8 +8,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: metrics
       protocol: TCP
-      name: http
   selector:
     app: {{ .Values.name }} 
