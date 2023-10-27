@@ -1,0 +1,25 @@
+# Default values for govuk-exporter.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: govuk-exporter
+
+replicaCount: 1
+
+securityContext:
+  fsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+
+service:
+  type: ClusterIP
+  port: 8000
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
