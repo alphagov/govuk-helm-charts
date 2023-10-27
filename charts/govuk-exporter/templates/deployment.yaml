@@ -34,6 +34,10 @@ spec:
           ports:
             - name: metrics
               containerPort: 8000
+          env:
+            {{- with .Values.extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
           livenessProbe: &probe
             httpGet:
               path: /metrics

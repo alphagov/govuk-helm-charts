@@ -1287,11 +1287,6 @@ govukApplications:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
 
-  - name: govuk-exporter
-    chartPath: charts/govuk-exporter
-    helmValues:
-      replicaCount: 1
-
   - name: govuk-jobs
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
