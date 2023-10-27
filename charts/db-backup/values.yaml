@@ -97,7 +97,7 @@ cronjobs:
     content-data-api-postgresql-primary:
       schedule: "35 23 * * *"
       db: content_performance_manager_production
-      dbms: postgresql
+      dbms: postgres
       operations:
         - op: backup
 
@@ -193,7 +193,7 @@ cronjobs:
     transition-postgresql-primary:
       schedule: "24 3 * * *"
       db: transition_production
-      dbms: postgresql
+      dbms: postgres
       operations:
         - op: backup
 
@@ -249,7 +249,7 @@ cronjobs:
     content-data-api-postgresql-primary:
       schedule: "35 1 * * *"
       db: content_performance_manager_production
-      dbms: postgresql
+      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -384,7 +384,7 @@ cronjobs:
     transition-postgresql-primary:
       schedule: "24 1 * * *"
       db: transition_production
-      dbms: postgresql
+      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -446,7 +446,7 @@ cronjobs:
     content-data-api-postgresql-primary:
       schedule: "35 3 * * *"
       db: content_performance_manager_production
-      dbms: postgresql
+      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -567,7 +567,7 @@ cronjobs:
     transition-postgresql-primary:
       schedule: "24 3 * * *"
       db: transition_production
-      dbms: postgresql
+      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
