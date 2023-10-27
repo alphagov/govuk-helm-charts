@@ -33,7 +33,7 @@ spec:
             readOnlyRootFilesystem: true
           ports:
             - name: metrics
-              containerPort: 8000
+              containerPort: 9090
           env:
             {{- with .Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
