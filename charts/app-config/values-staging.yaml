@@ -1308,6 +1308,11 @@ govukApplications:
     chartPath: charts/govuk-exporter
     helmValues:
       replicaCount: 1
+      extraEnv:
+        - name: MIRROR_FRESHNESS_URL
+          value: https://www.{{ .Values.externalDomainSuffix }}/last-updated.txt
+        - name: BACKENDS
+          value: "mirrorS3,mirrorGCS"
 
   - name: govuk-jobs
     chartPath: charts/govuk-jobs

@@ -23,3 +23,11 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+
+extraEnv:
+  - name: MIRROR_FRESHNESS_URL
+    value: ""
+  - name: BACKENDS
+    value: ""
+  - name: REFRESH_INTERVAL
+    value: 4h
