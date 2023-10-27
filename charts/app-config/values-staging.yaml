@@ -2305,6 +2305,13 @@ govukApplications:
       workers:
         - command: ['bin/rake', 'document_sync_worker:run']
           name: document-sync-worker
+      extraVolumes:
+        - name: search-api-v2-google-cloud-credentials
+          secret:
+            secretName: search-api-v2-google-cloud-credentials
+      appExtraVolumeMounts:
+        - name: search-api-v2-google-cloud-credentials
+          mountPath: /etc/credentials/google-cloud
       extraEnv:
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
           value: search_api_v2_published_documents
@@ -2313,6 +2320,18 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-rabbitmq
               key: RABBITMQ_URL
+        - name: GOOGLE_CLOUD_CREDENTIALS
+          value: /etc/credentials/google-cloud/credentials.json
+        - name: DISCOVERY_ENGINE_DATASTORE
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_DATASTORE
+        - name: DISCOVERY_ENGINE_ENGINE
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_ENGINE
 
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
