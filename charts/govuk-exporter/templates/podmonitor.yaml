@@ -1,18 +1,14 @@
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PodMonitor
 metadata:
   name: {{ .Values.name }}
   labels:
     app: {{ .Values.name }}
     app.kubernetes.io/name: {{ .Values.name }}
 spec:
-  jobLabel: {{ .Values.name }}
+  jobLabel: app.kubernetes.io/name
   selector:
     matchLabels:
       app: {{ .Values.name }}
-  namespaceSelector:
-    matchNames:
-    - apps
-  endpoints:
+  podMetricsEndpoints:
   - port: metrics
-    interval: 10m
