@@ -403,9 +403,9 @@ cronjobs:
     account-api-postgres:
       schedule: "37 3 * * *"
       db: account-api_production
+      # We don't copy account-api data between environments at present.
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     authenticating-proxy-postgres:
       schedule: "23 3 * * *"
