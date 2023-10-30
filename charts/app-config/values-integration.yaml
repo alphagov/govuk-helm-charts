@@ -3069,6 +3069,10 @@ govukApplications:
             secretKeyRef:
               name: whitehall-admin-mysql
               key: DATABASE_URL
+        - name: OTEL_TRACES_SAMPLER
+          value: traceidratio
+        - name: OTEL_TRACES_SAMPLER_ARG
+          value: "1"
       extraVolumes:
         - name: asset-uploads-efs
           nfs:
