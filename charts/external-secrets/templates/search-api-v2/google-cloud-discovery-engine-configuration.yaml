@@ -7,7 +7,7 @@ metadata:
   annotations:
     kubernetes.io/description: >
       Configuration for Google Cloud Discovery Engine for search-api-v2 (DISCOVERY_ENGINE_DATASTORE
-      and DISCOVERY_ENGINE_ENGINE)
+      and DISCOVERY_ENGINE_SERVING_CONFIG)
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
