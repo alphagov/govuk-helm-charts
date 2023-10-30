@@ -9,6 +9,10 @@ metadata:
     app: {{ $fullName }}
     app.kubernetes.io/name: {{ $fullName }}
     app.kubernetes.io/component: app
+  {{- if eq .Values.govukEnvironment "integration" }}
+  annotations:
+    reloader.stakater.com/auto: "true"
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 2
