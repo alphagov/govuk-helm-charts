@@ -1,0 +1,21 @@
+{{ if eq .Values.govukEnvironment "integration" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: reloader
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: reloader
+  source:
+    repoURL: https://stakater.github.io/stakater-charts
+    path: reloader
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.argoNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+{{ end }}
