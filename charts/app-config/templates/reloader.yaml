@@ -5,7 +5,7 @@ metadata:
   name: reloader
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
 spec:
-  project: govuk
+  project: default
   source:
     repoURL: https://stakater.github.io/stakater-charts
     chart: reloader
