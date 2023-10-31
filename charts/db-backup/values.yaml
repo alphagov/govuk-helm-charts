@@ -563,6 +563,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     transition-postgresql-primary:
       schedule: "24 3 * * *"
