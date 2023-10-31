@@ -1,3 +1,3 @@
-image_tag: v311
+image_tag: release-479e6c4ff01f61d5e8270188eef63b60934f07fd
 automatic_deploys_enabled: true
-promote_deployment: true
+promote_deployment: false
