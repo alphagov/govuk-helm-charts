@@ -16,11 +16,8 @@ jobs:
         with:
           python-version: 3.x
 
-      # TODO: Go back to v2 version once they release a fix
-      # for the cosign issue
-      # https://github.com/helm/chart-testing-action/issues/132
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@cb49023b9227b1097e5eddd8824f48bdea11b1aa
+        uses: helm/chart-testing-action@v2
         with:
           version: v3.8.0
 
