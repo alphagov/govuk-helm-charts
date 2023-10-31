@@ -8,6 +8,8 @@ metadata:
     app: {{ $fullName }}
     app.kubernetes.io/name: {{ $fullName }}
     app.kubernetes.io/component: app
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 2
