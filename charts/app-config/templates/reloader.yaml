@@ -10,6 +10,10 @@ spec:
     repoURL: https://stakater.github.io/stakater-charts
     chart: reloader
     targetRevision: "1.0.46"
+    helm:
+      values:
+        reloader:
+          reloadStrategy: annotations
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.argoNamespace }}
