@@ -20,4 +20,5 @@ spec:
     automated: null
     syncOptions:
       - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
 {{ end }}
