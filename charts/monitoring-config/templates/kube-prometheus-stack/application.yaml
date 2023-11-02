@@ -1,0 +1,23 @@
+{{ if eq .Values.govukEnvironment "integration" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: "51.9.2"
+    helm:
+      values: |
+        {{ .Files.Get (printf "kube-prometheus-stack-values-%s.yaml" .Values.govukEnvironment) | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.monitoringNamespace }}
+  syncPolicy:
+    automated: null
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+{{ end }}
