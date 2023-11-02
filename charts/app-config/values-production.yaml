@@ -757,7 +757,7 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '8'
         - name: COMPARISON_SAMPLE_PCT
-          value: '100'
+          value: '0'
         - name: SECONDARY_TIMEOUT_SECONDS
           value: '2'
 
@@ -868,7 +868,7 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
         - name: COMPARISON_SAMPLE_PCT
-          value: '100'
+          value: '0'
         - name: SECONDARY_TIMEOUT_SECONDS
           value: '2'
 
