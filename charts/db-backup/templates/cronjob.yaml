@@ -20,6 +20,8 @@ spec:
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 28800  # 8 hours
   suspend: {{ .suspend | default false }}
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 2
   jobTemplate:
     metadata:
       name: {{ $jobFullName }}
