@@ -1,0 +1,31 @@
+- name: PagerDutyDrillAlerts
+  rules:
+    - record: global:time:is_daylight_saving_time
+      expr: |
+        (vector(1) and (month() > 3 and month() < 10))
+        or
+        (vector(1) and (month() == 3 and (day_of_month() - day_of_week()) >= 25) and
+        absent((day_of_month() >= 25) and (day_of_week() == 0)))
+        or
+        (vector(1) and (month() == 10 and (day_of_month() - day_of_week()) < 25) and
+        absent((day_of_month() >= 25) and (day_of_week() == 0)))
+        or
+        (vector(1) and ((month() == 10 and hour() < 1) or (month() == 3 and hour() > 0))
+        and ((day_of_month() >= 25) and (day_of_week() == 0)))
+        or
+        vector(0)
+
+    - record: global:time:london_hour
+      expr: |
+        hour() + 1 * global:time:is_daylight_saving_time
+
+    - alert: PagerDutyDrillAlert
+      expr: |
+        global:time:london_hour == 10 and day_of_week(vector(time())) == 3 and
+        minute(vector(time())) < 3
+      for: 1m
+      labels:
+        severity: page
+      annotations:
+        description: >-
+          Pagerduty drill fires at 10am on Wednesdays

@@ -1,0 +1,54 @@
+rule_files:
+  - pagerduty_drill.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    promql_expr_test:
+      - expr: 'day_of_week(vector(time()))'
+        eval_time: 9241m
+        exp_samples:
+          - value: 3
+
+      - expr: 'hour(vector(time()))'
+        eval_time: 9241m
+        exp_samples:
+          - value: 10
+
+      - expr: 'minute(vector(time()))'
+        eval_time: 9241m
+        exp_samples:
+          - value: 1
+
+  # eval_time starts at epoch unix time 1/1/1970 00:00
+  # alert expected on 3rd day (Wednesday) at 10am
+    alert_rule_test:
+      - eval_time: 9241m
+        alertname: PagerDutyDrillAlert
+        exp_alerts:
+          - exp_labels:
+              severity: page
+            exp_annotations:
+              description: Pagerduty drill fires at 10am on Wednesdays
+
+  # no alert expected before 10am
+  - interval: 1m
+    alert_rule_test:
+      - eval_time: 7701m
+        alertname: PagerDutyDrillAlert
+        exp_alerts: []
+
+  # no alert expected after 10am hour
+  - interval: 1m
+    alert_rule_test:
+      - eval_time: 7901m
+        alertname: PagerDutyDrillAlert
+        exp_alerts: []
+
+  # no alert expected on different day
+  - interval: 1m
+    alert_rule_test:
+      - eval_time: 6901m
+        alertname: PagerDutyDrillAlert
+        exp_alerts: []
