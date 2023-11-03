@@ -46,7 +46,7 @@ spec:
     slackConfigs:
     - channel: '#govuk-2ndline-tech'
       sendResolved: true
-      iconUrl: https://avatars3.githubusercontent.com/u/3380462
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
       title: |-
         {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
       text: >-
@@ -68,7 +68,7 @@ spec:
     slackConfigs:
     - channel: '#govuk-platform-engineering'
       sendResolved: true
-      iconUrl: https://avatars3.githubusercontent.com/u/3380462
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
       title: |-
         {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
       text: >-
@@ -78,7 +78,7 @@ spec:
 
         *Mirror*: {{ "{{ $labels.backend }}" }}
       apiURL: *slack_api_url
-  timeIntervals:
+  muteTimeIntervals:
   - name: inhours
     timeIntervals:
     - weekdays: ['monday:friday']
