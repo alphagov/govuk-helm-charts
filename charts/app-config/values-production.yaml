@@ -3032,8 +3032,8 @@ govukApplications:
     helmValues:
       appResources:
         limits:
-          memory: 4Gi
-          cpu: "2"
+          memory: 8Gi
+          cpu: "4"
         requests:
           memory: 2Gi
           cpu: "1"
