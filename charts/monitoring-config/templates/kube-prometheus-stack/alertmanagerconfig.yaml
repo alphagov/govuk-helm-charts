@@ -1,0 +1,91 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: alertmanagerconfig-general
+spec:
+  route:
+    receiver: 'null'
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 4h
+    groupBy: [alertname, namespace]
+    routes:
+    - match:
+        severity: page
+      receiver: 'pagerduty'
+    - match:
+        alertname: Watchdog
+      receiver: 'pagerduty'
+      activeTimeIntervals:
+      - pagerduty_drill
+    - match:
+        alertname: SignonApiUserTokenExpirySoon
+      receiver: 'slack-signon-token-expiry'
+      repeatInterval: 1d
+      groupWait: 12h
+      groupInterval: 12h
+      activeTimeIntervals:
+      - inhours
+    - match:
+        alertname: MirrorFreshnessAlert
+      receiver: 'slack-mirror-freshness'
+      repeatInterval: 1d
+      groupWait: 12h
+      groupInterval: 12h
+      activeTimeIntervals:
+      - inhours
+  receivers:
+  - name: 'null'
+  - name: 'pagerduty'
+    pagerdutyConfigs:
+    - routingKey:
+        name: alertmanager-receivers
+        key: pagerduty_routing_key
+      clientURL: "https://alertmanager.{{ .Values.k8sExternalDomainSuffix }}/#/alerts?receiver={{ "{{ .Receiver | urlquery }}" }}"
+  - name: 'slack-signon-token-expiry'
+    slackConfigs:
+    - channel: '#govuk-2ndline-tech'
+      sendResolved: true
+      iconUrl: https://avatars3.githubusercontent.com/u/3380462
+      title: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+      text: >-
+        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+
+        *Environment:* {{ .Values.govukEnvironment }}
+
+        *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
+
+        *Expiring tokens:*
+
+        {{ "{{ range .Alerts -}}" }}
+          • api_user: {{ "`{{ .Labels.api_user }}`, application: `{{ .Labels.application }}`" }}
+        {{ "{{ end }}" }}
+      apiURL: &slack_api_url
+        name: alertmanager-receivers
+        key: slack_api_url
+  - name: 'slack-mirror-freshness'
+    slackConfigs:
+    - channel: '#govuk-platform-engineering'
+      sendResolved: true
+      iconUrl: https://avatars3.githubusercontent.com/u/3380462
+      title: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+      text: >-
+        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+
+        *Environment:* {{ .Values.govukEnvironment }}
+
+        *Mirror*: {{ "{{ $labels.backend }}" }}
+      apiURL: *slack_api_url
+  timeIntervals:
+  - name: inhours
+    timeIntervals:
+    - weekdays: ['monday:friday']
+  - name: pagerduty_drill
+    timeIntervals:
+    - weekdays: ['wednesday']
+      times: 
+      - startTime: 10:00
+        endTime: 10:03
+      location: 'Europe/London'

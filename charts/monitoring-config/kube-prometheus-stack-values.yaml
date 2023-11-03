@@ -13,6 +13,8 @@
             "requests":
               "storage": "10Gi"
           "storageClassName": "ebs-gp3"
+    alertManagerConfiguration:
+      name: alertmanagerconfig-general
 "defaultRules":
   "disabled":
     "KubePodNotReady": true
