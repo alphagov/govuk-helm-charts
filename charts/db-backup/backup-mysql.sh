@@ -14,7 +14,7 @@ EOF
 }
 
 progress () {
-  pv -fi 10 -F '%t %r %b'
+  stdbuf -eL -- pv -fi 10 -F '%t %r %b'
 }
 
 backup () {
