@@ -7,3 +7,5 @@ metadata:
 data:
   backup-postgres: |
     {{- $.Files.Get "backup-postgres.sh" | trim | nindent 4 }}
+  backup-mysql: |
+    {{- $.Files.Get "backup-mysql.sh" | trim | nindent 4 }}

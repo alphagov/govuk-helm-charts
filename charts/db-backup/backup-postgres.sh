@@ -50,13 +50,19 @@ subcommand=${1:-}
 [[ $(type -t "$subcommand") == function ]] || usage
 
 : "${GOVUK_ENVIRONMENT:?required}"
-: "${PGUSER:=aws_db_admin}"
-: "${PGPASSWORD:?required}"
-: "${PGHOST:?required}"
-: "${PGDATABASE:?required}"
+: "${DB_USER:=aws_db_admin}"
+: "${DB_PASSWORD:?required}"
+: "${DB_HOST:?required}"
+: "${DB_DATABASE:?required}"
 : "${BUCKET:=s3://govuk-$GOVUK_ENVIRONMENT-database-backups}"
 [[ "${VERBOSE:-0}" -ge 1 ]] && set -x
 
-readonly GOVUK_ENVIRONMENT PGUSER PGPASSWORD PGHOST PGDATABASE BUCKET
+readonly GOVUK_ENVIRONMENT DB_USER DB_PASSWORD DB_HOST DB_DATABASE BUCKET
+export PGUSER=$DB_USER
+export PGPASSWORD=$DB_PASSWORD
+export PGHOST=$DB_HOST
+export PGDATABASE=$DB_DATABASE
+readonly PGUSER PGPASSWORD PGHOST PGDATABASE
 
 $subcommand "$@"
+echo "done"
