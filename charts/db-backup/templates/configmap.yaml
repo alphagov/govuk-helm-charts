@@ -5,9 +5,4 @@ metadata:
   labels:
     {{- include "db-backup.labels" . | nindent 4 }}
 data:
-  backup-postgres: |
-    {{- $.Files.Get "backup-postgres.sh" | trim | nindent 4 }}
-  backup-mysql: |
-    {{- $.Files.Get "backup-mysql.sh" | trim | nindent 4 }}
-  lib.sh: |
-    {{- $.Files.Get "lib.sh" | trim | nindent 4 }}
+  {{- (.Files.Glob "scripts/*").AsConfig | nindent 2 }}
