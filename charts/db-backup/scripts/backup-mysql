@@ -11,6 +11,11 @@ backup () {
     | progress | gzip -1 | aws s3 cp - "$BUCKET/$s3_path"
 }
 
+transform () {
+  shift
+  (cd "$source_dir" && mysql "$DB_DATABASE" < "$1")
+}
+
 dump_is_readable () {
   set +o pipefail  # We expect SIGPIPE here, but only here.
   (aws s3 cp "$s3_url" - 2>/dev/null) | gzip -d | head -n5 \

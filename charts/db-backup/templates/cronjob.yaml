@@ -62,6 +62,9 @@ spec:
                 - /opt/bin/backup-{{ $dbms }}
               args:
                 - {{ .op }}
+                {{- with .script }}
+                - {{ . }}
+                {{- end }}
               env:
                 - name: GOVUK_ENVIRONMENT
                   value: {{ $.Values.govukEnvironment }}
