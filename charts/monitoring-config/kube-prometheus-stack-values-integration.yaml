@@ -23,7 +23,8 @@
   "replicas": 1
   "serviceAccount":
     "annotations":
-      "eks.amazonaws.com/role-arn": "arn:aws:iam::210287912431:role/kube-prometheus-stack-grafana-govuk"
+      "eks.amazonaws.com/role-arn":
+        "arn:aws:iam::210287912431:role/kube-prometheus-stack-grafana-govuk"
 "prometheus":
   "prometheusSpec":
     "externalUrl": "https://prometheus.eks.integration.govuk.digital"
