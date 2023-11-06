@@ -62,18 +62,18 @@ spec:
                 - configMapRef:
                     name: govuk-apps-env
               env:
-                {{- if .Values.rails.enabled }}
+                {{- if $.Values.rails.enabled }}
                 - name: SECRET_KEY_BASE
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.rails.secretKeyBaseName | default (printf "%s-rails-secret-key-base" .Values.repoName) }}
+                      name: {{ $.Values.rails.secretKeyBaseName | default (printf "%s-rails-secret-key-base" $.Values.repoName) }}
                       key: secret-key-base
                 {{- end }}
-                {{- if .Values.sentry.enabled }}
+                {{- if $.Values.sentry.enabled }}
                 - name: SENTRY_DSN
                   valueFrom:
                     secretKeyRef:
-                      name: {{ .Values.sentry.dsnSecretName | default (printf "%s-sentry" .Values.repoName) }}
+                      name: {{ $.Values.sentry.dsnSecretName | default (printf "%s-sentry" $.Values.repoName) }}
                       key: dsn
                 - name: SENTRY_RELEASE
                   value: "{{ $.Values.appImage.tag }}"
