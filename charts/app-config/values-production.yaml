@@ -401,6 +401,8 @@ govukApplications:
               key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: &publishing-bootstrap-gtm-id GTM-W573BJPG
 
   - name: content-data-admin
     helmValues:
@@ -620,7 +622,7 @@ govukApplications:
         # These GTM values are not secrets (not even the the gtm_auth one).
         # https://github.com/alphagov/govuk-puppet/pull/8041
         - name: GOOGLE_TAG_MANAGER_ID
-          value: &static-gtm-id GTM-NQXC4TG
+          value: &publishing-design-system-gtm-id GTM-P93SHJ4Z
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
@@ -1702,6 +1704,8 @@ govukApplications:
               key: MONGODB_URI
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-design-system-gtm-id
 
   - name: maslow
     helmValues:
@@ -1738,6 +1742,8 @@ govukApplications:
             secretKeyRef:
               name: maslow-docdb
               key: MONGODB_URI
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: publisher
     helmValues:
@@ -2452,6 +2458,8 @@ govukApplications:
             secretKeyRef:
               name: basic-auth
               key: password
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: signon
     helmValues:
@@ -2697,6 +2705,8 @@ govukApplications:
               key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: specialist-publisher
     helmValues:
@@ -2767,6 +2777,8 @@ govukApplications:
           value: *publishing-notify-template
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: support
     helmValues:
@@ -3026,6 +3038,8 @@ govukApplications:
               key: MONGODB_URI
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-design-system-gtm-id
 
   - name: whitehall-admin
     repoName: whitehall
@@ -3089,8 +3103,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-whitehall
               key: oauth_secret
-        - name: GOOGLE_TAG_MANAGER_ID
-          value: GTM-P93SHJ4Z
         - name: GOVUK_UPLOADS_ROOT
           value: &whitehall-uploads-path /uploads
         - name: ASSET_MANAGER_BEARER_TOKEN
@@ -3143,6 +3155,8 @@ govukApplications:
             secretKeyRef:
               name: whitehall-admin-mysql
               key: DATABASE_URL
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-design-system-gtm-id
       extraVolumes:
         - name: asset-uploads-efs
           nfs:
