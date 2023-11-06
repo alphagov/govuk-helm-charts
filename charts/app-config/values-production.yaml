@@ -1861,9 +1861,6 @@ govukApplications:
         - name: events-export
           task: "events:export_to_s3"
           schedule: "38 5 * * 0"
-        - name: heartbeat
-          task: "heartbeat_messages:send"
-          schedule: "*/4 * * * *"
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
