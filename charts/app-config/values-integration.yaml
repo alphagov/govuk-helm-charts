@@ -1782,6 +1782,10 @@ govukApplications:
         - name: heartbeat
           task: "heartbeat_messages:send"
           schedule: "*/4 * * * *"
+        - name: search-api-v2-bulk-import
+          task: "queue:requeue_all_the_things[bulk.search_api_v2_sync]"
+          schedule: "0 0 1 11 *"  # arbitrary value (only used as a template but field is required)
+          suspend: true
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
