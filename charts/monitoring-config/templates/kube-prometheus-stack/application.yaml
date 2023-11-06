@@ -1,6 +1,6 @@
 {{ $baseValues := fromYaml (.Files.Get "kube-prometheus-stack-values.yaml") }}
 {{ $envValues := fromYaml (.Files.Get (printf "kube-prometheus-stack-values-%s.yaml" .Values.govukEnvironment)) }}
-{{ $mergedValues := toYaml (merge $baseValues $envValues) }}
+{{ $mergedValues := toYaml (merge $envValues $baseValues) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
