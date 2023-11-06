@@ -24,6 +24,18 @@ workers:
 dbMigrationEnabled: false
 dbMigrationCommand: ["rails", "db:migrate"]
 
+# cronTasks is a list of {name, command, schedule} and/or {name, task,
+# schedule}, which represent CronJobs to run either an arbitrary command or a
+# Rake task. An optional `suspend` field is passed through to the CronJob spec
+# if present.
+cronTasks: []
+#  - name: mail-fetcher
+#    command: "script/mail_fetcher"
+#    schedule: "*/15 * * * *"
+#  - name: reports-generate
+#    task: "reports:generate"  # Rake task.
+#    schedule: "3 * * * *"
+
 # extraVolumes defines Volumes on the app Pods (in both deployment.yaml and
 # worker-deployment.yaml).
 extraVolumes: []

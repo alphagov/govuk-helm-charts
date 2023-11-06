@@ -12,6 +12,7 @@ metadata:
     app.kubernetes.io/component: "{{ .name }}"
 spec:
   schedule: "{{ .schedule }}"
+  suspend: {{ .suspend | default false }}
   jobTemplate:
     metadata:
       name: "{{ $fullName }}-{{ .name }}"
