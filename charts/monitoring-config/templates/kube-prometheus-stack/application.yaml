@@ -1,4 +1,4 @@
-{{ if eq .Values.govukEnvironment "integration" }}
+{{ if has .Values.govukEnvironment (list "integration" "staging") }}
 {{ $baseValues := fromYaml (.Files.Get "kube-prometheus-stack-values.yaml") }}
 {{ $envValues := fromYaml (.Files.Get (printf "kube-prometheus-stack-values-%s.yaml" .Values.govukEnvironment)) }}
 {{ $mergedValues := toYaml (merge $baseValues $envValues) }}
