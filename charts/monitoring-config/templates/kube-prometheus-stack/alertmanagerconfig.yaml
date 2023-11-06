@@ -1,4 +1,3 @@
-{{ if has .Values.govukEnvironment (list "integration" "staging") }}
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
@@ -89,4 +88,3 @@ spec:
       times: 
       - startTime: 10:00
         endTime: 10:03
-{{ end }}
