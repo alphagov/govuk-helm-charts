@@ -65,16 +65,16 @@ spec:
               env:
                 - name: GOVUK_ENVIRONMENT
                   value: {{ $.Values.govukEnvironment }}
-                - name: PGUSER
+                - name: DB_USER
                   value: {{ $job.dbUser | default "aws_db_admin" }}
-                - name: PGPASSWORD
+                - name: DB_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ $fullName }}-passwd
                       key: {{ $dbHost }}
-                - name: PGHOST
+                - name: DB_HOST
                   value: {{ $dbHost }}
-                - name: PGDATABASE
+                - name: DB_DATABASE
                   value: {{ .db | default $job.db }}
                 - name: BUCKET
                   value: {{ .bucket }}

@@ -75,18 +75,17 @@ cronjobs:
       operations:
         - op: backup
 
-    # # TODO: implement MySQL support.
-    # collections-publisher-mysql:
-    #   schedule: "21 23 * * *"
-    #   db: collections_publisher_production
-    #   operations:
-    #     - op: backup
+    collections-publisher-mysql:
+      schedule: "21 23 * * *"
+      db: collections_publisher_production
+      operations:
+        - op: backup
 
-    # contacts-admin-mysql:
-    #   schedule: "49 23 * * *"
-    #   db: contacts_production
-    #   operations:
-    #     - op: backup
+    contacts-admin-mysql:
+      schedule: "49 23 * * *"
+      db: contacts_production
+      operations:
+        - op: backup
 
     content-data-admin-postgres:
       schedule: "4 23 * * *"
@@ -160,17 +159,17 @@ cronjobs:
       operations:
         - op: backup
 
-    # release-mysql:
-    #   schedule: "11 23 * * *"
-    #   db: release_production
-    #   operations:
-    #     - op: backup
+    release-mysql:
+      schedule: "11 23 * * *"
+      db: release_production
+      operations:
+        - op: backup
 
-    # search-admin-mysql:
-    #   schedule: "56 23 * * *"
-    #   db: search_admin_production
-    #   operations:
-    #     - op: backup
+    search-admin-mysql:
+      schedule: "56 23 * * *"
+      db: search_admin_production
+      operations:
+        - op: backup
 
     service-manual-publisher-postgres:
       schedule: "49 23 * * *"
@@ -178,11 +177,11 @@ cronjobs:
       operations:
         - op: backup
 
-    # signon-mysql:
-    #   schedule: "3 23 * * *"
-    #   db: signon_production
-    #   operations:
-    #     - op: backup
+    signon-mysql:
+      schedule: "3 23 * * *"
+      db: signon_production
+      operations:
+        - op: backup
 
     support-api-postgres:
       schedule: "38 23 * * *"
@@ -222,21 +221,21 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    # collections-publisher-mysql:
-    #   schedule: "21 1 * * *"
-    #   db: collections_publisher_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-production-database-backups
-    #     - op: backup
+    collections-publisher-mysql:
+      schedule: "21 1 * * *"
+      db: collections_publisher_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
 
-    # contacts-admin-mysql:
-    #   schedule: "49 1 * * *"
-    #   db: contacts_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-production-database-backups
-    #     - op: backup
+    contacts-admin-mysql:
+      schedule: "49 1 * * *"
+      db: contacts_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
 
     content-data-admin-postgres:
       schedule: "4 1 * * *"
@@ -341,21 +340,21 @@ cronjobs:
     #       script: sanitise_publishing_api_production.sql
     #     - op: backup
 
-    # release-mysql:
-    #   schedule: "11 1 * * 1"  # Daily would be overkill.
-    #   db: release_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-production-database-backups
-    #     - op: backup
+    release-mysql:
+      schedule: "11 1 * * 1"  # Daily would be overkill.
+      db: release_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
 
-    # search-admin-mysql:
-    #   schedule: "56 1 * * *"
-    #   db: search_admin_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-production-database-backups
-    #     - op: backup
+    search-admin-mysql:
+      schedule: "56 1 * * *"
+      db: search_admin_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
 
     service-manual-publisher-postgres:
       schedule: "49 1 * * *"
@@ -365,13 +364,12 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    # signon-mysql:
-    #   schedule: "3 1 * * *"
-    #   db: signon_production
-    #   operations:
-    #    - op: restore
-    #      bucket: s3://govuk-production-database-backups
-    #     - op: backup
+    signon-mysql:
+      schedule: "3 1 * * *"
+      db: signon_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
 
     support-api-postgres:
       schedule: "38 1 * * *"
@@ -422,19 +420,19 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-    # collections-publisher-mysql:
-    #   schedule: "21 3 * * *"
-    #   db: collections_publisher_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-staging-database-backups
+    collections-publisher-mysql:
+      schedule: "21 3 * * *"
+      db: collections_publisher_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
 
-    # contacts-admin-mysql:
-    #   schedule: "49 3 * * *"
-    #   db: contacts_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-staging-database-backups
+    contacts-admin-mysql:
+      schedule: "49 3 * * *"
+      db: contacts_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
 
     content-data-admin-postgres:
       schedule: "4 3 * * *"
@@ -452,13 +450,13 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-#   content-publisher-postgres:
-    # schedule: "9 3 * * *"
-    # db: content_publisher_production
-    # operations:
-    #   - op: restore
-    #     bucket: s3://govuk-staging-database-backups
-    #   - op: backup
+    # content-publisher-postgres:
+    #   schedule: "9 3 * * *"
+    #   db: content_publisher_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-staging-database-backups
+    #     - op: backup
 
     content-store-postgres:
       db: content_store_production
@@ -484,13 +482,13 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-#   email-alert-api-postgres:
-    # schedule: "54 3 * * *"
-    # db: email-alert-api_production
-    # operations:
-    #   - op: restore
-    #     bucket: s3://govuk-staging-database-backups
-    #   - op: backup
+    # email-alert-api-postgres:
+    #   schedule: "54 3 * * *"
+    #   db: email-alert-api_production
+    #   operations:
+    #     - op: restore
+    #       bucket: s3://govuk-staging-database-backups
+    #     - op: backup
 
     imminence-postgres:
       schedule: "18 3 * * *"
@@ -520,27 +518,27 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-#   publishing-api-postgres:
-    # schedule: "37 3 * * *"
-    # db: publishing_api_production
-    # operations:
-    #   - op: restore
-    #     bucket: s3://govuk-staging-database-backups
-    #   - op: backup
-
-    # release-mysql:
-    #   schedule: "11 3 * * 1"
-    #   db: release_production
+    # publishing-api-postgres:
+    #   schedule: "37 3 * * *"
+    #   db: publishing_api_production
     #   operations:
     #     - op: restore
     #       bucket: s3://govuk-staging-database-backups
+    #     - op: backup
 
-    # search-admin-mysql:
-    #   schedule: "56 3 * * *"
-    #   db: search_admin_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-staging-database-backups
+    release-mysql:
+      schedule: "11 3 * * 1"
+      db: release_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    search-admin-mysql:
+      schedule: "56 3 * * *"
+      db: search_admin_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
 
     service-manual-publisher-postgres:
       schedule: "49 3 * * *"
@@ -549,14 +547,21 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-    # signon-mysql:
-    #   suspend: true
-    #   schedule: "3 3 * * *"
-    #   db: signon_production
-    #   operations:
-    #    - op: restore
-    #      # Integration Signon accounts are not synced from production/staging.
-    #      bucket: s3://govuk-integration-database-backups
+    # Integration Signon accounts are not synced from production/staging.
+    signon-mysql-backup:
+      schedule: "3 3 * * *"
+      db: signon_production
+      operations:
+        - op: backup
+          bucket: s3://govuk-integration-database-backups
+
+    signon-mysql-restore:
+      suspend: true
+      schedule: "0 0 * * 0"
+      db: signon_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-integration-database-backups
 
     support-api-postgres:
       schedule: "38 3 * * *"
