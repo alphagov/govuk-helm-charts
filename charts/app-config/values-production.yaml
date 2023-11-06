@@ -401,6 +401,8 @@ govukApplications:
               key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: &publishing-bootstrap-gtm-id GTM-W573BJPG
 
   - name: content-data-admin
     helmValues:
@@ -1738,6 +1740,8 @@ govukApplications:
             secretKeyRef:
               name: maslow-docdb
               key: MONGODB_URI
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: publisher
     helmValues:
@@ -2452,6 +2456,8 @@ govukApplications:
             secretKeyRef:
               name: basic-auth
               key: password
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: signon
     helmValues:
@@ -2697,6 +2703,8 @@ govukApplications:
               key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: specialist-publisher
     helmValues:
@@ -2767,6 +2775,8 @@ govukApplications:
           value: *publishing-notify-template
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: support
     helmValues:

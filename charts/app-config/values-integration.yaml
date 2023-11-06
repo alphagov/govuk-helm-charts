@@ -395,6 +395,12 @@ govukApplications:
               key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: &publishing-bootstrap-gtm-id GTM-W573BJPG
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: &publishing-bootstrap-gtm-auth 2jaYNm4QqCxqsb10EcYo5w
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: &publishing-bootstrap-gtm-preview env-18
 
   - name: content-data-admin
     helmValues:
@@ -1664,6 +1670,12 @@ govukApplications:
             secretKeyRef:
               name: maslow-docdb
               key: MONGODB_URI
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: *publishing-bootstrap-gtm-auth
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: *publishing-bootstrap-gtm-preview
 
   - name: publisher
     helmValues:
@@ -2351,6 +2363,12 @@ govukApplications:
             secretKeyRef:
               name: basic-auth
               key: password
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: *publishing-bootstrap-gtm-auth
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: *publishing-bootstrap-gtm-preview
 
   - name: signon
     helmValues:
@@ -2601,6 +2619,12 @@ govukApplications:
               key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: *publishing-bootstrap-gtm-auth
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: *publishing-bootstrap-gtm-preview
 
   - name: specialist-publisher
     helmValues:
@@ -2673,6 +2697,12 @@ govukApplications:
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: PUBLISH_PRE_PRODUCTION_FINDERS
           value: "yes"
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: *publishing-bootstrap-gtm-auth
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: *publishing-bootstrap-gtm-preview
 
   - name: support
     helmValues:
