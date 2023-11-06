@@ -548,7 +548,7 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
 
     # Integration Signon accounts are not synced from production/staging.
-    signon-mysql-backup:
+    signon-mysql:
       schedule: "3 3 * * *"
       db: signon_production
       operations:
@@ -558,6 +558,7 @@ cronjobs:
     signon-mysql-restore:
       suspend: true
       schedule: "0 0 * * 0"
+      host: signon-mysql
       db: signon_production
       operations:
         - op: restore
