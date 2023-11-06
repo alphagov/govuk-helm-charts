@@ -626,11 +626,11 @@ govukApplications:
         # These GTM values are not secrets (not even the the gtm_auth one).
         # https://github.com/alphagov/govuk-puppet/pull/8041
         - name: GOOGLE_TAG_MANAGER_ID
-          value: &static-gtm-id GTM-NQXC4TG
-        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only.
-          value: &static-gtm-auth xTPyDeRcMiXFWvscgkLowg
-        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only.
-          value: &static-gtm-preview env-6
+          value: &publishing-design-system-gtm-id GTM-P93SHJ4Z
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: &publishing-design-system-gtm-auth 8jHx-VNEguw67iX9TBC6_g
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: &publishing-design-system-gtm-preview env-50
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
@@ -1634,6 +1634,12 @@ govukApplications:
               key: MONGODB_URI
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-design-system-gtm-id
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: *publishing-design-system-gtm-auth
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: *publishing-design-system-gtm-preview
 
   - name: maslow
     helmValues:
@@ -2972,6 +2978,12 @@ govukApplications:
               key: MONGODB_URI
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-design-system-gtm-id
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: *publishing-design-system-gtm-auth
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: *publishing-design-system-gtm-preview
 
   - name: govuk-replatform-test-app
     helmValues:
@@ -3099,6 +3111,12 @@ govukApplications:
             secretKeyRef:
               name: whitehall-admin-mysql
               key: DATABASE_URL
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-design-system-gtm-id
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: *publishing-design-system-gtm-auth
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: *publishing-design-system-gtm-preview
       extraVolumes:
         - name: asset-uploads-efs
           nfs:
