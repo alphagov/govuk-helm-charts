@@ -444,6 +444,7 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
 
     content-data-api-postgresql-primary:
+      suspend: true
       schedule: "35 6 * * 6"
       db: content_performance_manager_production
       dbms: postgres
