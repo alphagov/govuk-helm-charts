@@ -42,6 +42,8 @@ spec:
         name: alertmanager-receivers
         key: pagerduty_routing_key
       clientURL: "https://alertmanager.{{ .Values.k8sExternalDomainSuffix }}/#/alerts?receiver={{ "{{ .Receiver | urlquery }}" }}"
+      description: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
   - name: 'slack-signon-token-expiry'
     slackConfigs:
     - channel: '#govuk-2ndline-tech'

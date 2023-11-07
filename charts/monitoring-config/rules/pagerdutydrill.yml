@@ -1,0 +1,12 @@
+# TODO: Work out how to support BST here
+- name: PagerDutyDrill
+  rules:
+    - alert: PagerDutyDrill
+      expr: |
+        (day_of_week() == 3) and (hour() == 10) and (minute() >= 0) and (minute() <= 10)
+      labels:
+        severity: page
+      annotations:
+        summary: PagerDuty test drill
+        description: >-
+          Developers: escalate this alert. SMT: resolve this alert.
