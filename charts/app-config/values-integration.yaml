@@ -18,6 +18,10 @@ appResources:
     cpu: 0.1
     memory: 800Mi
 
+monitoring:
+  authorisation:
+    readWriteTeam: alphagov:gov-uk
+
 alb-ingress-defaults: &alb-ingress-defaults
   alb.ingress.kubernetes.io/scheme: internet-facing
   alb.ingress.kubernetes.io/target-type: ip

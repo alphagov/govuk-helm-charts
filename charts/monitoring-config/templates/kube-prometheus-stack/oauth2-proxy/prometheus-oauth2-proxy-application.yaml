@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-oauth2-proxy
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: default
+  source:
+    repoURL: https://oauth2-proxy.github.io/manifests
+    chart: oauth2-proxy
+    targetRevision: "6.18.0"
+    helm:
+      values: |
+{{ include "monitoring-config.oauth2-proxy.config" (merge (dict "app" "prometheus" "port" 9090) . ) | indent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.monitoringNamespace }}
+  syncPolicy:
+    automated: null
+    syncOptions:
+      - ApplyOutOfSyncOnly=true

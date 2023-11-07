@@ -22,3 +22,6 @@ cspReportURI: ""
 
 monitoring:
   enabled: true
+  authorisation:
+    readOnlyGithubTeam: alphagov:gov-uk
+    readWriteGithubTeam: alphagov:gov-uk-production-deploy
