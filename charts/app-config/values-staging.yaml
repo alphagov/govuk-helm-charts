@@ -2473,6 +2473,10 @@ govukApplications:
               key: DEVISE_SECRET_KEY
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+        - name: SIGNON_APPS_URI_SUB_PATTERN
+          value: publishing.service.gov.uk
+        - name: SIGNON_APPS_URI_SUB_REPLACEMENT
+          value: staging.publishing.service.gov.uk
 
   - name: smartanswers
     repoName: smart-answers
