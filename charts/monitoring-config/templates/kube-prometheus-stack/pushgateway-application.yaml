@@ -22,4 +22,8 @@ spec:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.monitoringNamespace }}
   syncPolicy:
-    automated: null
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
