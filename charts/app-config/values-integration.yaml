@@ -1047,8 +1047,6 @@ govukApplications:
             secretKeyRef:
               name: email-alert-monitoring-google
               key: client_secret
-        - name: PROMETHEUS_PUSHGATEWAY_URL
-          value: http://prometheus-pushgateway.monitoring.svc.cluster.local:9091
 
   - name: email-alert-service
     helmValues:
