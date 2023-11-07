@@ -13,7 +13,7 @@ readonly PGUSER PGPASSWORD PGHOST PGDATABASE
 backup () {
   local s3_path
   s3_path="$PGHOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$PGDATABASE.gz"
-  pg_dump -Fc | progress | aws s3 cp - "$BUCKET/$s3_path"
+  pg_dump -FcZ1 | progress | aws s3 cp - "$BUCKET/$s3_path"
 }
 
 dump_is_readable () {

@@ -8,12 +8,12 @@ backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
   mysqldump --single-transaction "$DB_DATABASE" \
-    | progress | gzip -c | aws s3 cp - "$BUCKET/$s3_path"
+    | progress | gzip -1 | aws s3 cp - "$BUCKET/$s3_path"
 }
 
 dump_is_readable () {
   set +o pipefail  # We expect SIGPIPE here, but only here.
-  (aws s3 cp "$s3_url" - 2>/dev/null) | gzip -cd | head -n5 \
+  (aws s3 cp "$s3_url" - 2>/dev/null) | gzip -d | head -n5 \
     | tee /dev/fd/2 | grep 'MySQL dump' >/dev/null 2>&1
   local ret=$?
   set -o pipefail
@@ -29,7 +29,7 @@ restore () {
   s3_url="$s3_url" dump_is_readable
   mysqladmin drop -f "$DB_DATABASE" || true
   mysqladmin create "$DB_DATABASE"
-  aws s3 cp "$s3_url" - | gzip -cd | progress | mysql "$DB_DATABASE"
+  aws s3 cp "$s3_url" - | gzip -d | progress | mysql "$DB_DATABASE"
 }
 
 write_config () {
