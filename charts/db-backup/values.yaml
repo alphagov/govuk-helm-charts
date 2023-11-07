@@ -196,11 +196,11 @@ cronjobs:
       operations:
         - op: backup
 
-    # whitehall-mysql:
-    #   schedule: "28 0 * * *"
-    #   db: whitehall_production
-    #   operations:
-    #     - op: backup
+    whitehall-mysql:
+      schedule: "28 0 * * *"
+      db: whitehall_production
+      operations:
+        - op: backup
 
 
   staging:
@@ -254,16 +254,16 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    # # TODO: implement "op: transform"
-    # content-publisher-postgres:
-    #   schedule: "9 1 * * *"
-    #   db: content_publisher_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-production-database-backups
-    #     - op: transform
-    #       script: content_publisher.sql
-    #     - op: backup
+    content-publisher-postgres:
+      suspend: true
+      schedule: "9 1 * * *"
+      db: content_publisher_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: transform
+          script: content-publisher.sql
+        - op: backup
 
     content-store-postgres:
       db: content_store_production
@@ -288,15 +288,15 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    # email-alert-api-postgres:
-    #   schedule: "54 1 * * *"
-    #   db: email-alert-api_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-production-database-backups
-    #     - op: transform
-    #       script: anonymise_email_addresses.sql
-    #     - op: backup
+    email-alert-api-postgres:
+      schedule: "54 1 * * *"
+      db: email-alert-api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: transform
+          script: email-alert-api.sql
+        - op: backup
 
     imminence-postgres:
       schedule: "18 1 * * *"
@@ -330,15 +330,15 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    # publishing-api-postgres:
-    #   schedule: "37 1 * * *"
-    #   db: publishing_api_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-production-database-backups
-    #     - op: transform
-    #       script: sanitise_publishing_api_production.sql
-    #     - op: backup
+    publishing-api-postgres:
+      schedule: "37 1 * * *"
+      db: publishing_api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: transform
+          script: publishing-api.sql
+        - op: backup
 
     release-mysql:
       schedule: "11 1 * * 1"  # Daily would be overkill.
@@ -388,13 +388,15 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    # whitehall-mysql:
-    #   schedule: "28 1 * * *"
-    #   db: whitehall_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-production-database-backups
-    #     - op: backup
+    whitehall-mysql:
+      schedule: "28 1 * * *"
+      db: whitehall_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: transform
+          script: whitehall.sql
+        - op: backup
 
 
   integration:
@@ -450,13 +452,13 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-    # content-publisher-postgres:
-    #   schedule: "9 3 * * *"
-    #   db: content_publisher_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-staging-database-backups
-    #     - op: backup
+    content-publisher-postgres:
+      schedule: "9 3 * * *"
+      db: content_publisher_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     content-store-postgres:
       db: content_store_production
@@ -482,13 +484,13 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-    # email-alert-api-postgres:
-    #   schedule: "54 3 * * *"
-    #   db: email-alert-api_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-staging-database-backups
-    #     - op: backup
+    email-alert-api-postgres:
+      schedule: "54 3 * * *"
+      db: email-alert-api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     imminence-postgres:
       schedule: "18 3 * * *"
@@ -518,13 +520,13 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-    # publishing-api-postgres:
-    #   schedule: "37 3 * * *"
-    #   db: publishing_api_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-staging-database-backups
-    #     - op: backup
+    publishing-api-postgres:
+      schedule: "37 3 * * *"
+      db: publishing_api_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     release-mysql:
       schedule: "11 3 * * 1"
@@ -580,9 +582,9 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-    # whitehall-mysql:
-    #   schedule: "28 3 * * *"
-    #   db: whitehall_production
-    #   operations:
-    #     - op: restore
-    #       bucket: s3://govuk-staging-database-backups
+    whitehall-mysql:
+      schedule: "28 3 * * *"
+      db: whitehall_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups

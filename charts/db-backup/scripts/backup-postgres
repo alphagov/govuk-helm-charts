@@ -16,6 +16,11 @@ backup () {
   pg_dump -FcZ1 | progress | aws s3 cp - "$BUCKET/$s3_path"
 }
 
+transform () {
+  shift
+  (cd "$source_dir" && psql < "$1")
+}
+
 dump_is_readable () {
   (aws s3 cp "$s3_url" - 2>/dev/null || true) | head | file - | tee /dev/fd/2 \
     | grep -iq 'PostgreSQL custom database dump'
