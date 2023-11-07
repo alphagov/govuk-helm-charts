@@ -1,4 +1,4 @@
 apiVersion: v2
 name: cluster-secrets
 description: A Helm chart for defining ExternalSecrets for cluster-wide services.
-version: 0.9.4
+version: 0.9.5
