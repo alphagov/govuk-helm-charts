@@ -2280,7 +2280,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
-      workerReplicaCount: 5
+      workerReplicaCount: 10
       workers:
         - command: ['bin/rake', 'document_sync_worker:run']
           name: document-sync-worker
