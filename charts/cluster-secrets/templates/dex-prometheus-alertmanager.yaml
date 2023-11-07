@@ -3,7 +3,7 @@
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: govuk-dex-alert-manager
+  name: govuk-dex-alertmanager
   namespace: "{{ . }}"
   annotations:
     kubernetes.io/description: >
@@ -67,7 +67,7 @@ rules:
   - ""
   resourceNames:
   - govuk-dex-prometheus
-  - govuk-dex-alert-manager
+  - govuk-dex-alertmanager
   resources:
   - secrets
   verbs:
