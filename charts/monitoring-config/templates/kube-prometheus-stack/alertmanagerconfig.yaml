@@ -10,30 +10,28 @@ spec:
     repeatInterval: 4h
     groupBy: [alertname, namespace]
     routes:
-    - match:
-        severity: page
+    - matchers:
+        - name: severity
+          value: page
       receiver: 'pagerduty'
-    - match:
-        alertname: Watchdog
-      receiver: 'pagerduty'
-      activeTimeIntervals:
-      - pagerduty_drill
-    - match:
-        alertname: SignonApiUserTokenExpirySoon
+    - matchers:
+        - name: alertname
+          value: SignonApiUserTokenExpirySoon
       receiver: 'slack-signon-token-expiry'
       repeatInterval: 1d
       groupWait: 12h
       groupInterval: 12h
       activeTimeIntervals:
-      - inhours
-    - match:
-        alertname: MirrorFreshnessAlert
+        - inhours
+    - matchers:
+        - name: alertname
+          value: MirrorFreshnessAlert
       receiver: 'slack-mirror-freshness'
       repeatInterval: 1d
       groupWait: 12h
       groupInterval: 12h
       activeTimeIntervals:
-      - inhours
+        - inhours
   receivers:
   - name: 'null'
   - name: 'pagerduty'
