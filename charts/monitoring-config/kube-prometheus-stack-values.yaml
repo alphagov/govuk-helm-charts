@@ -13,7 +13,7 @@
             "requests":
               "storage": "10Gi"
           "storageClassName": "ebs-gp3"
-    alertManagerConfiguration:
+    alertmanagerConfiguration:
       name: alertmanagerconfig-general
 "defaultRules":
   "disabled":
