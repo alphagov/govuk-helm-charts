@@ -255,7 +255,6 @@ cronjobs:
         - op: backup
 
     content-publisher-postgres:
-      suspend: true
       schedule: "9 1 * * *"
       db: content_publisher_production
       operations:
