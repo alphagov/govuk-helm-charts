@@ -13,7 +13,11 @@ spec:
         parameters:
           - name: extra-args
       retryStrategy:
-        limit: "2"
+        limit: 2
+        backoff:
+          duration: "2m"
+          factor: 2
+          maxDuration: "16m"
       container:
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command:

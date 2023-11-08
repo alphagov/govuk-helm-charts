@@ -6,8 +6,12 @@ spec:
   entrypoint: handle-sync-event
   onExit: exit-handler
   retryStrategy:
-    limit: "3"
     expression: "asInt(lastRetry.exitCode) > 1"
+    limit: 3
+    backoff:
+      duration: "2m"
+      factor: 2
+      maxDuration: "16m"
   arguments:
     parameters:
       - name: application
