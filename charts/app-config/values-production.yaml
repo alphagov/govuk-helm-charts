@@ -1367,7 +1367,7 @@ govukApplications:
         sagemakerIamRole: arn:aws:iam::172025368201:role/learn-to-rank-sagemaker
         serviceAccountIamRole: arn:aws:iam::172025368201:role/search-api-learn-to-rank-govuk
       draftContentStoreMongoPostgresCron:
-        schedule: "16 0 * * *"
+        schedule: "26 22 * * *"
         mongoExport:
           mongoDbUri: "mongodb://\
             mongo-1.production.govuk-internal.digital,\
@@ -1376,7 +1376,7 @@ govukApplications:
         postgresImport:
           databaseUrlSecretName: "draft-content-store-postgres"
       contentStoreMongoPostgresCron:
-        schedule: "16 0 * * *"
+        schedule: "26 22 * * *"
         mongoExport:
           mongoDbUri: "mongodb://\
             mongo-1.production.govuk-internal.digital,\
