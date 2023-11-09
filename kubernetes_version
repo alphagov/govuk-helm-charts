@@ -2,4 +2,4 @@
 # output in .github/workflows/ci.yml.
 #
 # Available schema versions: https://github.com/yannh/kubernetes-json-schema
-KUBERNETES_VERSION=1.26.9
+KUBERNETES_VERSION=1.27.7
