@@ -6,8 +6,7 @@ metadata:
     {{- include "external-secrets.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      Configuration for Google Cloud Discovery Engine for search-api-v2 (DISCOVERY_ENGINE_DATASTORE
-      and DISCOVERY_ENGINE_SERVING_CONFIG)
+      Configuration for Google Cloud Discovery Engine for search-api-v2
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
