@@ -2381,11 +2381,11 @@ govukApplications:
               key: RABBITMQ_URL
         - name: GOOGLE_CLOUD_CREDENTIALS
           value: /etc/credentials/google-cloud/credentials.json
-        - name: DISCOVERY_ENGINE_DATASTORE
+        - name: DISCOVERY_ENGINE_DATASTORE_BRANCH
           valueFrom:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
-              key: DISCOVERY_ENGINE_DATASTORE
+              key: DISCOVERY_ENGINE_DATASTORE_BRANCH
         - name: DISCOVERY_ENGINE_SERVING_CONFIG
           valueFrom:
             secretKeyRef:
