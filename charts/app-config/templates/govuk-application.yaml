@@ -7,11 +7,8 @@ kind: Application
 metadata:
   name: {{ .name }}
   namespace: {{ $.Values.argoNamespace | default $.Release.Namespace }}
-  {{- if has $.Values.govukEnvironment (list "test" "integration") }}
-  {{- /* Clean up k8s resources on chart deletion in non-prod only. */}}
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
-  {{- end }}
+    - resources-finalizer.argocd.argoproj.io
   annotations:
     slackChannel: "{{ .slackChannel }}"
     repoName: "{{ $reponame }}"
