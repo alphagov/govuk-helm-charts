@@ -7,7 +7,7 @@ spec:
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
-      suspend: true
+      suspend: false
       template:
         spec:
           containers:
