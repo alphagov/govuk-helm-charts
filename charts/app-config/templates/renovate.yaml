@@ -1,0 +1,23 @@
+{{ if eq .Values.govukEnvironment "production" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: renovate
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: apps
+  source:
+    repoURL: git@github.com/alphagov/govuk-helm-charts
+    path: charts/renovate
+    helm:
+      values: ""
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.argoNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - ApplyOutOfSyncOnly=true
+{{ end }}

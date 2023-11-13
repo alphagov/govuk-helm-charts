@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-config
+data:
+  config.json: |-
+    {
+      "repositories": ["alphagov/govuk-helm-charts"]
+    }
