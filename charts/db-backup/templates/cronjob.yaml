@@ -54,8 +54,12 @@ spec:
                 defaultMode: 0555  # world-executable
             - name: tmp  # aws-cli requires a writable dir.
               emptyDir: {}
+  {{- range $i, $_ := $job.operations }}
+    {{- if and (eq $i 0) (gt (len $job.operations) 1) }}
           initContainers:
-  {{- range $job.operations }}
+    {{- else if eq $i (sub (len $job.operations) 1) }}
+          containers:
+    {{- end }}
             - name: {{ .op }}
               image: {{ $.Values.imageRef | quote }}
               command:
@@ -98,10 +102,4 @@ spec:
                 - name: tmp
                   mountPath: /tmp
   {{- end }}
-          containers:
-            - name: noop
-              image: {{ $.Values.imageRef | quote }}
-              command: ["true"]
-              securityContext:
-                {{- toYaml $.Values.securityContext | nindent 16 }}
 {{- end }}
