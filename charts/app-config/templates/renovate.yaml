@@ -5,7 +5,7 @@ metadata:
   name: renovate
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
 spec:
-  project: apps
+  project: govuk
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
     path: charts/renovate
