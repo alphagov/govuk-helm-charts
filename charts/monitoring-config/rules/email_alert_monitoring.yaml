@@ -2,16 +2,14 @@ groups:
   - name: EmailAlertMonitoringAlerts
     rules:
       - alert: TravelAlert
-        expr: time() - travel_alerts_last_successful_run_timestamp_seconds{job="email-alert-monitoring"} > 1h
-        for: 60m
+        expr: time() - travel_alerts_last_successful_run_timestamp_seconds{job="email-alert-monitoring"} > 3600
         labels:
           severity: page
         annotations:
           summary: No travel alert probe email seen in the last 1h.
 
       - alert: MedicalAlert
-        expr: time() - medical_alerts_last_successful_run_timestamp_seconds{job="email-alert-monitoring"} > 1h
-        for: 60m
+        expr: time() - medical_alerts_last_successful_run_timestamp_seconds{job="email-alert-monitoring"} > 3600
         labels:
           severity: page
         annotations:
