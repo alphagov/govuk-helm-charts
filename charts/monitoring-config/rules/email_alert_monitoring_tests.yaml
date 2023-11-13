@@ -1,0 +1,43 @@
+rule_files:
+  - email_alert_monitoring.yaml
+ 
+evaluation_interval: 1m
+
+tests:
+  - name: travel_test
+    interval: 1m
+    input_series:
+      - series: 'travel_alerts_last_successful_run_timestamp_seconds{job="email-alert-monitoring"}'
+        values: '0x60'
+
+    alert_rule_test:
+      - eval_time: 59m
+        alertname: TravelAlert
+        exp_alerts: []
+
+      - eval_time: 61m
+        alertname: TravelAlert
+        exp_alerts:
+          - exp_labels:
+              severity: page
+            exp_annotations:
+              summary: No travel alert probe email seen in the last 1h.
+
+  - name: medical_test
+    interval: 1m
+    input_series:
+      - series: 'medical_alerts_last_successful_run_timestamp_seconds{job="email-alert-monitoring"}'
+        values: '0x60'
+ 
+    alert_rule_test:
+      - eval_time: 59m
+        alertname: MedicalAlert
+        exp_alerts: []
+ 
+      - eval_time: 61m
+        alertname: MedicalAlert
+        exp_alerts:
+          - exp_labels:
+              severity: page
+            exp_annotations:
+              summary: No medical alert probe email seen in the last 1h.    
