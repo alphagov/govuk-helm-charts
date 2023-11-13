@@ -27,8 +27,8 @@ spec:
                       key: token
                 - name: RENOVATE_CONFIG_FILE
                   value: /opt/renovate/config.json
-                - name: LOG_LEVEL
-                  value: DEBUG
+                - name: RENOVATE_PR_BODY_TEMPLATE
+                  value: '{{ "{{{header}}}{{{table}}}{{{warnings}}}{{{notes}}}{{{changelogs}}}{{{controls}}}{{{footer}}}" }}'
               securityContext:
                 readOnlyRootFilesystem: true
                 runAsUser: 1000
