@@ -9,8 +9,6 @@ spec:
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
     path: charts/renovate
-    helm:
-      values: ""
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.argoNamespace }}
