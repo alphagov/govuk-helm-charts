@@ -20,11 +20,12 @@ data:
     Foreground yes
     LogTime yes
     LogVerbose yes
+    MaxFiles 20000
     # Whitehall and Specialist Publisher allow up to 500 MB uploads. Keep in
     # sync with StreamMaxLen, because clamdscan streams when connecting via TCP
     # (as opposed to UNIX socket).
     MaxFileSize 500M
-    MaxScanSize 1200M
+    MaxScanSize 2000M
     MaxScanTime 0
     MaxThreads 20
     SelfCheck 900
