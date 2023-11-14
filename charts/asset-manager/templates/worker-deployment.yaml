@@ -79,8 +79,15 @@ spec:
           env:
             - name: GOVUK_UPLOADS_ROOT
               value: *uploads-path
+            {{- if .Values.sentry.enabled }}
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.repoName }}-sentry
+                  key: dsn
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
+            {{- end }}
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
