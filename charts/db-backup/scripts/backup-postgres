@@ -7,13 +7,13 @@ source_dir=$(dirname "${BASH_SOURCE[0]}")
 export PGUSER=$DB_USER
 export PGPASSWORD=$DB_PASSWORD
 export PGHOST=$DB_HOST
-export PGDATABASE=$DB_DATABASE
-readonly PGUSER PGPASSWORD PGHOST PGDATABASE
+export PGDATABASE=postgres
 
 backup () {
   local s3_path
-  s3_path="$PGHOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$PGDATABASE.gz"
-  pg_dump -Fc -Z1 | progress | aws s3 cp - "$BUCKET/$s3_path"
+  s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
+  PGDATABASE=$DB_DATABASE \
+    pg_dump -Fc -Z1 | progress | aws s3 cp - "$BUCKET/$s3_path"
 }
 
 transform () {
@@ -31,10 +31,17 @@ restore () {
   if [[ "$GOVUK_ENVIRONMENT" = *"prod"* ]]; then
     : "${REALLY_RESTORE_ONTO_PRODUCTION?}"
   fi
-  local s3_url="$BUCKET/$PGHOST/$FILENAME"
+  local s3_url="$BUCKET/$DB_HOST/$FILENAME"
   s3_url="$s3_url" dump_is_readable
-  dropdb -ef --if-exists "$PGDATABASE"
-  aws s3 cp "$s3_url" - | progress | pg_restore -Cd postgres --no-comments
+
+  dropdb -ef --if-exists "$DB_DATABASE-restore"
+  createdb -eT template0 "$DB_DATABASE-restore"
+  aws s3 cp "$s3_url" - | progress | pg_restore -d "$DB_DATABASE-restore" --no-comments
+  psql -c "ALTER DATABASE \"$DB_DATABASE-restore\" OWNER TO \"$DB_OWNER\";" || true
+
+  psql -c "ALTER DATABASE \"$DB_DATABASE\" RENAME TO \"$DB_DATABASE-old\";" || true
+  psql -c "ALTER DATABASE \"$DB_DATABASE-restore\" RENAME TO \"$DB_DATABASE\";"
+  dropdb -ef --if-exists "$DB_DATABASE-old"
 }
 
 subcommand=${1:-}
