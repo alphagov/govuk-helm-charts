@@ -107,12 +107,12 @@ cronjobs:
         - op: backup
 
     content-store-postgres:
-      schedule: "16 0 * * *"  # Keep this before publishing-api.
+      schedule: "06 21 * * *"  # Keep this before publishing-api.
       db: content_store_production
       operations:
         - op: backup
     draft-content-store-postgres:
-      schedule: "36 0 * * *"  # Keep this before publishing-api.
+      schedule: "16 21 * * *"  # Keep this before publishing-api.
       db: draft_content_store_production
       operations:
         - op: backup
@@ -154,7 +154,7 @@ cronjobs:
         - op: backup
 
     publishing-api-postgres:
-      schedule: "37 1 * * *"
+      schedule: "36 21 * * *"
       db: publishing_api_production
       operations:
         - op: backup
@@ -266,14 +266,14 @@ cronjobs:
 
     content-store-postgres:
       db: content_store_production
-      schedule: "16 2 * * *"  # Keep this before publishing-api.
+      schedule: "06 22 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
     draft-content-store-postgres:
       db: draft_content_store_production
-      schedule: "36 2 * * *"  # Keep this before publishing-api.
+      schedule: "16 22 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -330,7 +330,7 @@ cronjobs:
         - op: backup
 
     publishing-api-postgres:
-      schedule: "37 3 * * *"
+      schedule: "36 1 * * *"
       db: publishing_api_production
       operations:
         - op: restore
@@ -461,7 +461,7 @@ cronjobs:
 
     content-store-postgres:
       db: content_store_production
-      schedule: "16 5 * * *"  # Keep this before publishing-api.
+      schedule: "06 23 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -470,7 +470,7 @@ cronjobs:
     # of publishing-api that require it are rectified.
     draft-content-store-postgres:
       db: draft_content_store_production
-      schedule: "36 5 * * *"  # Keep this before publishing-api.
+      schedule: "16 23 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -520,7 +520,7 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
 
     publishing-api-postgres:
-      schedule: "37 6 * * *"
+      schedule: "36 5 * * *"
       db: publishing_api_production
       operations:
         - op: restore

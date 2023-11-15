@@ -1,3 +1,5 @@
+DELETE FROM events WHERE created_at < NOW() - INTERVAL '1 month';
+
 UPDATE events SET payload = NULL
 WHERE
   action = 'PutContent'
