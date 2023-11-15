@@ -12,7 +12,7 @@ EOF
 }
 
 progress () {
-  stdbuf -eL -- pv -fi 10 -F '%t %r %b'
+  stdbuf -e0 -- pv -fi 10 -F '%t %r %b'
 }
 
 # List available backups in ascending date order.
@@ -27,5 +27,6 @@ list () {
 : "${DB_PASSWORD:?required}"
 : "${DB_HOST:?required}"
 : "${DB_DATABASE:?required}"
+: "${DB_OWNER:=${DB_DATABASE%_production}}"
 : "${BUCKET:=s3://govuk-$GOVUK_ENVIRONMENT-database-backups}"
 readonly GOVUK_ENVIRONMENT DB_USER DB_PASSWORD DB_HOST DB_DATABASE BUCKET
