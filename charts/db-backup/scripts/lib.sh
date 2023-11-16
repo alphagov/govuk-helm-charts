@@ -27,6 +27,6 @@ list () {
 : "${DB_PASSWORD:?required}"
 : "${DB_HOST:?required}"
 : "${DB_DATABASE:?required}"
-: "${DB_OWNER:=${DB_DATABASE%_production}}"
+: "${DB_OWNER:=$(echo "${DB_DATABASE%_production}" | tr - _)}"
 : "${BUCKET:=s3://govuk-$GOVUK_ENVIRONMENT-database-backups}"
 readonly GOVUK_ENVIRONMENT DB_USER DB_PASSWORD DB_HOST DB_DATABASE BUCKET
