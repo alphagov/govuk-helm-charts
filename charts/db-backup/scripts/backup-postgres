@@ -26,6 +26,13 @@ dump_is_readable () {
     | grep -iq 'PostgreSQL custom database dump'
 }
 
+create_temp_db () {
+  psql <<EOF
+DROP DATABASE IF EXISTS "$1" WITH (FORCE);
+CREATE DATABASE "$1" TEMPLATE template0;
+EOF
+}
+
 db_exists () {
   psql -Alqt |grep -Eo '^\w+\|' |grep -Fq "$1|"
 }
@@ -34,16 +41,20 @@ rename_db () {
   psql -1 <<EOF
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity
 WHERE pid <> pg_backend_pid() AND datname='$1';
+ALTER DATABASE "$1" OWNER TO session_user;
 ALTER DATABASE "$1" RENAME TO "$2";
 EOF
 }
 
 swap_dbs () {
-  psql -1 <<EOF
+  psql <<EOF
+DROP DATABASE IF EXISTS "$3" WITH (FORCE);
+BEGIN;
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity
 WHERE pid <> pg_backend_pid() AND datname IN ('$1', '$2');
 ALTER DATABASE "$2" RENAME TO "$3";
 ALTER DATABASE "$1" RENAME TO "$2";
+COMMIT;
 EOF
 }
 
@@ -55,12 +66,10 @@ restore () {
   local s3_url="$BUCKET/$DB_HOST/$FILENAME"
   s3_url="$s3_url" dump_is_readable
 
-  dropdb -ef --if-exists "$DB_DATABASE-restore"
-  createdb -eT template0 "$DB_DATABASE-restore"
+  create_temp_db "$DB_DATABASE-restore"
   aws s3 cp "$s3_url" - | progress | pg_restore -d "$DB_DATABASE-restore" --no-comments
 
   if db_exists "$DB_DATABASE"; then
-    dropdb -ef --if-exists "$DB_DATABASE-old"
     swap_dbs "$DB_DATABASE-restore" "$DB_DATABASE" "$DB_DATABASE-old"
   else
     rename_db "$DB_DATABASE-restore" "$DB_DATABASE"
