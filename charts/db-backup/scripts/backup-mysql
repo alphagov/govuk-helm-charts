@@ -43,6 +43,8 @@ write_config () {
 user=$DB_USER
 password=$DB_PASSWORD
 host=$DB_HOST
+[mysql]
+init-command="SET SESSION unique_checks=0, foreign_key_checks=0;"
 [mysqldump]
 set-gtid-purged=OFF  # https://bugs.mysql.com/bug.php?id=109685#c530123
 EOF
