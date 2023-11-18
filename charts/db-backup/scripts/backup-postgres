@@ -57,7 +57,8 @@ restore () {
 
   dropdb -ef --if-exists "$DB_DATABASE-restore"
   createdb -eT template0 "$DB_DATABASE-restore"
-  aws s3 cp "$s3_url" - | progress | pg_restore -d "$DB_DATABASE-restore" --no-comments
+  aws s3 cp "$s3_url" - | progress | pg_restore --no-comments -f - \
+    | psql -d "$DB_DATABASE-restore" -c "SET session_replication_role = 'replica';" -f -
 
   if db_exists "$DB_DATABASE"; then
     dropdb -ef --if-exists "$DB_DATABASE-old"
