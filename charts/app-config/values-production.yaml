@@ -2397,6 +2397,33 @@ govukApplications:
     chartPath: charts/search-index-env-sync
     postSyncWorkflowEnabled: "false"
 
+  - name: search-v2-evaluator
+    helmValues:
+      dbMigrationEnabled: false
+      sentry:
+        enabled: false
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-backend]
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "try-new-search-engine.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: try-new-search-engine.{{ .Values.k8sExternalDomainSuffix }}
+      extraEnv:
+        - name: BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: basic-auth
+              key: password
+        - name: BASIC_AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: basic-auth
+              key: username
+
   - name: service-manual-publisher
     helmValues:
       dbMigrationEnabled: true
