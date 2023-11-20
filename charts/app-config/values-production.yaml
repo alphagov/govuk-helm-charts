@@ -1840,6 +1840,8 @@ govukApplications:
           value: govuk-production-publisher-csvs
         - name: AWS_REGION
           value: eu-west-1
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: publishing-api
     helmValues:
