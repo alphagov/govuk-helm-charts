@@ -2313,8 +2313,6 @@ govukApplications:
   - name: search-v2-evaluator
     helmValues:
       dbMigrationEnabled: false
-      uploadAssets:
-        enabled: false
       sentry:
         enabled: false
       ingress:
