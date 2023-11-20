@@ -2315,6 +2315,8 @@ govukApplications:
       dbMigrationEnabled: false
       uploadAssets:
         enabled: false
+      sentry:
+        enabled: false
       ingress:
         enabled: true
         annotations:
