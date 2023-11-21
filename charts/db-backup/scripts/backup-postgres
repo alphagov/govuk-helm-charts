@@ -31,21 +31,25 @@ db_exists () {
 }
 
 rename_db () {
-  psql -1 <<EOF
+  psql <<EOF
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity
 WHERE pid <> pg_backend_pid() AND datname='$1';
-ALTER DATABASE "$1" OWNER TO session_user;
-ALTER DATABASE "$1" RENAME TO "$2";
+BEGIN;
+  ALTER DATABASE "$1" OWNER TO session_user;
+  ALTER DATABASE "$1" RENAME TO "$2";
+COMMIT;
 EOF
 }
 
 swap_dbs () {
-  psql -1 <<EOF
+  psql <<EOF
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity
 WHERE pid <> pg_backend_pid() AND datname IN ('$1', '$2');
-ALTER DATABASE "$2" OWNER TO session_user;
-ALTER DATABASE "$2" RENAME TO "$3";
-ALTER DATABASE "$1" RENAME TO "$2";
+BEGIN;
+  ALTER DATABASE "$2" OWNER TO session_user;
+  ALTER DATABASE "$2" RENAME TO "$3";
+  ALTER DATABASE "$1" RENAME TO "$2";
+COMMIT;
 EOF
 }
 
