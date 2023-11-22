@@ -37,6 +37,8 @@ spec:
           labels:
             {{- include "db-backup.selectorLabels" $ | nindent 12 }}
             app.kubernetes.io/component: {{ $jobName }}
+          annotations:
+            cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
         spec:
           enableServiceLinks: false
           restartPolicy: Never
