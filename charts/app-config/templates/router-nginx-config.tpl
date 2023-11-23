@@ -86,7 +86,6 @@ http {
     '"request_query_string":"$query_string",'
     '"request_method":"$request_method",'
     '"request_time":$request_time,'
-    '"request_uri":"$request_uri",'
     '"sent_http_content_type":"$sent_http_content_type",'
     '"sent_http_location":"$sent_http_location",'
     '"server_name":"$server_name",'
