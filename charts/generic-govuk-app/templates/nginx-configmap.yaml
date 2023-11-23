@@ -77,7 +77,6 @@ data:
         '"@timestamp":"$time_iso8601",'
         '"body_bytes_sent":$body_bytes_sent,'
         '"bytes_sent":$bytes_sent,'
-        '"govuk_dependency_resolution_source_content_id":"$http_govuk_dependency_resolution_source_content_id",'
         '"govuk_request_id":"$http_govuk_request_id",'
         '"http_host":"$http_host",'
         '"http_referer":"$http_referer",'
