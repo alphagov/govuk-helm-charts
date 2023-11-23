@@ -1,7 +1,7 @@
 {{- define "app-config.dex-values" -}}
 replicaCount: {{ .Values.replicaCount | default 1 }}
 config:
-  issuer: "https://dex.{{ .Values.externalDomainSuffix }}"
+  issuer: "https://dex.{{ .Values.k8sExternalDomainSuffix }}"
   oauth2:
     skipApprovalScreen: true
   storage:
@@ -15,7 +15,7 @@ config:
       config:
         clientID: "$GITHUB_CLIENT_ID"
         clientSecret: "$GITHUB_CLIENT_SECRET"
-        redirectURI: "https://dex.{{ .Values.externalDomainSuffix}}/callback"
+        redirectURI: "https://dex.{{ .Values.k8sExternalDomainSuffix }}/callback"
         orgs:
           - name: alpgagov
             teams:
@@ -28,27 +28,27 @@ config:
       idEnv: ARGO_WORKFLOWS_CLIENT_ID
       secretEnv: ARGO_WORKFLOWS_CLIENT_SECRET
       redirectURIs:
-        - https://argo-workflows.{{ .Values.externalDomainSuffix }}/oauth2/callback
+        - https://argo-workflows.{{ .Values.k8sExternalDomainSuffix }}/oauth2/callback
     - name: argocd
       idEnv: ARGOCD_CLIENT_ID
       secretEnv: ARGOCD_CLIENT_SECRET
       redirectURIs:
-        - https://argo.{{ .Values.externalDomainSuffix }}/auth/callback
+        - https://argo.{{ .Values.k8sExternalDomainSuffix }}/auth/callback
     - name: grafana
       idEnv: GRAFANA_CLIENT_ID
       secretEnv: GRAFANA_CLIENT_SECRET
       redirectURIs:
-        - https://grafana.{{ .Values.externalDomainSuffix }}/login/generic_outh
+        - https://grafana.{{ .Values.k8sExternalDomainSuffix }}/login/generic_outh
     - name: prometheus
       idEnv: PROMETHEUS_CLIENT_ID
       secretEnv: PROMETHEUS_CLIENT_SECRET
       redirectURIs:
-        - https://prometheus.{{ .Values.externalDomainSuffix }}/oauth2/callback
+        - https://prometheus.{{ .Values.k8sExternalDomainSuffix }}/oauth2/callback
     - name: alert-manager
       idEnv: ALERT_MANAGER_CLIENT_ID
       secretEnv: ALERT_MANAGER_CLIENT_SECRET
       redirectURIs:
-        - https://alertmanager.{{ .Values.externalDomainSuffix }}/oauth2/callback
+        - https://alertmanager.{{ .Values.k8sExternalDomainSuffix }}/oauth2/callback
 envVars:
   - name: GITHUB_CLIENT_ID
     valueFrom:
@@ -123,11 +123,11 @@ ingress:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/load-balancer-name: dex
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: "443"
   className: aws-alb
   hosts:
-    - host: dex.{{ .Values.externalDomainSuffix }}
+    - host: dex.{{ .Values.k8sExternalDomainSuffix }}
       paths:
         - path: "/*"
           pathType: ImplementationSpecific
