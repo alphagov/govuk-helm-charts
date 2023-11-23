@@ -17,7 +17,7 @@ config:
         clientSecret: "$GITHUB_CLIENT_SECRET"
         redirectURI: "https://dex.{{ .Values.k8sExternalDomainSuffix }}/callback"
         orgs:
-          - name: alpgagov
+          - name: alphagov
             teams:
               - gov-uk
               - gov-uk-production-deploy
