@@ -1,4 +1,4 @@
-{{ if has .Values.govukEnvironment (list "integration") }}
+{{ if has .Values.govukEnvironment (list "integration" "staging") }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
