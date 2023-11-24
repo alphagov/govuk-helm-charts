@@ -39,7 +39,7 @@ config:
       idEnv: GRAFANA_CLIENT_ID
       secretEnv: GRAFANA_CLIENT_SECRET
       redirectURIs:
-        - https://grafana.{{ .Values.k8sExternalDomainSuffix }}/login/generic_outh
+        - https://grafana.{{ .Values.k8sExternalDomainSuffix }}/login/generic_oauth
     - name: prometheus
       idEnv: PROMETHEUS_CLIENT_ID
       secretEnv: PROMETHEUS_CLIENT_SECRET
