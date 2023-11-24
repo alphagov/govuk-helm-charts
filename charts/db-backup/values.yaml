@@ -165,6 +165,14 @@ cronjobs:
       operations:
         - op: backup
 
+    router-mongo:
+      schedule: "27 23 * * *"
+      db: all
+      replicaSet: router-backend-1,router-backend-2,router-backend-3
+      noAuth: true
+      operations:
+        - op: backup
+
     search-admin-mysql:
       schedule: "56 23 * * *"
       db: search_admin_production
@@ -342,6 +350,16 @@ cronjobs:
     release-mysql:
       schedule: "11 1 * * 1"  # Daily would be overkill.
       db: release_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    router-mongo:
+      schedule: "27 0 * * *"
+      db: all
+      replicaSet: router-backend-1,router-backend-2,router-backend-3
+      noAuth: true
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -533,6 +551,16 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+
+    router-mongo:
+      schedule: "27 2 * * *"
+      db: all
+      replicaSet: router-backend-1,router-backend-2,router-backend-3
+      noAuth: true
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     search-admin-mysql:
       schedule: "56 3 * * *"
