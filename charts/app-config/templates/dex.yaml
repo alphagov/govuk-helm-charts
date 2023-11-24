@@ -1,4 +1,3 @@
-{{ if has .Values.govukEnvironment (list "integration" "staging") }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -20,4 +19,3 @@ spec:
     automated: null
     syncOptions:
       - ApplyOutOfSyncOnly=true
-{{ end }}
