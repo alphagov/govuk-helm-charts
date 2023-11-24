@@ -22,5 +22,12 @@
   },
   "ignorePaths": [
     "charts/app-config/image-tags/**"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["renovate/renovate"],
+      "automerge": true,
+      "automergeType": "branch"
+    }
   ]
 }
