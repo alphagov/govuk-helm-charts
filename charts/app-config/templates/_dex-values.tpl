@@ -17,10 +17,11 @@ config:
         clientSecret: "$GITHUB_CLIENT_SECRET"
         redirectURI: "https://dex.{{ .Values.k8sExternalDomainSuffix }}/callback"
         orgs:
-          - name: alphagov
-            teams:
-              - gov-uk
-              - gov-uk-production-deploy
+          - name: {{ .Values.monitoring.authorisation.githubOrganisation }}
+            teams: {{ list
+              .Values.monitoring.authorisation.readOnlyGithubTeam
+              .Values.monitoring.authorisation.readWriteGithubTeam
+            | uniq | toYaml | nindent 14 }}
         teamNameField: both
         useLoginAsID: true
   staticClients:

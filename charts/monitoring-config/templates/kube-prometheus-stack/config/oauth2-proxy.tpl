@@ -1,4 +1,5 @@
 {{- define "monitoring-config.oauth2-proxy.config" -}}
+{{- $rwTeam := print .Values.monitoring.authorisation.githubOrganisation ":" .Values.monitoring.authorisation.readWriteGithubTeam -}}
 proxyVarsAsSecrets: false
 ingress:
   enabled: true
@@ -15,7 +16,7 @@ extraArgs:
   skip-provider-button: "true"
 extraEnv:
   - name: OAUTH2_PROXY_ALLOWED_GROUP
-    value: {{ .Values.monitoring.authorisation.readWriteGithubTeam }}
+    value: {{ $rwTeam }}
   - name: OAUTH2_PROXY_OIDC_ISSUER_URL
     value: "https://dex.{{ .Values.k8sExternalDomainSuffix }}"
   - name: OAUTH2_PROXY_PROVIDER
