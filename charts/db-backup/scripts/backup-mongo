@@ -13,11 +13,6 @@ backup () {
     | progress | gzip -1 | aws s3 cp - "$BUCKET/$s3_path"
 }
 
-transform () {
-  shift
-  (cd "$source_dir" && mongo -h "$DB_MONGO_REPLICASET" "$DB_DATABASE" < "$1")
-}
-
 dump_is_readable () {
   set +o pipefail  # We expect SIGPIPE here, but only here.
   (aws s3 cp "$s3_url" - 2>/dev/null) | gzip -d | head -c 100 \
@@ -37,11 +32,6 @@ restore () {
 
   aws s3 cp "$s3_url" - | gzip -d | progress | \
     mongorestore -h "$DB_MONGO_REPLICASET" --archive --drop
-}
-
-write_config () {
-  cat > "$HOME/.my.cnf" <<EOF
-EOF
 }
 
 subcommand=${1:-}
