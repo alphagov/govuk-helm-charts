@@ -37,7 +37,6 @@ restore () {
 subcommand=${1:-}
 [[ $(type -t "$subcommand") == function ]] || usage
 
-write_config
 [[ "${VERBOSE:-0}" -ge 1 ]] && set -x
 $subcommand "$@"
 echo "done"
