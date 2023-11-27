@@ -1,0 +1,20 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: search-v2-evaluator-google-cloud-bigquery-configuration
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Configuration for Google Cloud BigQuery for search-v2-evaluator
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: search-v2-evaluator-google-cloud-bigquery-configuration
+  dataFrom:
+    - extract:
+        key: govuk/search-v2-evaluator/google-cloud-bigquery-configuration
