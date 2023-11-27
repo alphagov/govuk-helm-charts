@@ -24,7 +24,7 @@ list () {
 
 : "${GOVUK_ENVIRONMENT:?required}"
 : "${DB_USER:=aws_db_admin}"
-: "${DB_PASSWORD:?required}"
+: "${DB_PASSWORD:=}"
 : "${DB_HOST:?required}"
 : "${DB_DATABASE:?required}"
 : "${DB_OWNER:=$(echo "${DB_DATABASE%_production}" | tr - _)}"

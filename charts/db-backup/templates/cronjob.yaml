@@ -74,6 +74,7 @@ spec:
               env:
                 - name: GOVUK_ENVIRONMENT
                   value: {{ $.Values.govukEnvironment }}
+                {{- if not $job.noAuth }}
                 - name: DB_USER
                   value: {{ $job.dbUser | default "aws_db_admin" }}
                 - name: DB_PASSWORD
@@ -81,8 +82,11 @@ spec:
                     secretKeyRef:
                       name: {{ $fullName }}-passwd
                       key: {{ $dbHost }}
+                {{- end }}
                 - name: DB_HOST
                   value: {{ $dbHost }}
+                - name: DB_MONGO_REPLICASET
+                  value: {{ $job.replicaSet | default "" }}
                 - name: DB_DATABASE
                   value: {{ .db | default $job.db }}
                 - name: BUCKET
