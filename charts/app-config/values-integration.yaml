@@ -2343,6 +2343,26 @@ govukApplications:
             secretKeyRef:
               name: basic-auth
               key: username
+        - name: GOOGLE_CLOUD_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: search-v2-evaluator-google-cloud-bigquery-configuration
+              key: GOOGLE_CLOUD_CREDENTIALS
+        - name: BIGQUERY_PROJECT
+          valueFrom:
+            secretKeyRef:
+              name: search-v2-evaluator-google-cloud-bigquery-configuration
+              key: BIGQUERY_PROJECT
+        - name: BIGQUERY_DATASET
+          valueFrom:
+            secretKeyRef:
+              name: search-v2-evaluator-google-cloud-bigquery-configuration
+              key: BIGQUERY_DATASET
+        - name: BIGQUERY_TABLE
+          valueFrom:
+            secretKeyRef:
+              name: search-v2-evaluator-google-cloud-bigquery-configuration
+              key: BIGQUERY_TABLE
 
   - name: service-manual-publisher
     helmValues:
