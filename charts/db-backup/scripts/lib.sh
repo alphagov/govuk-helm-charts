@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 export LC_ALL=C.UTF-8  # Prevent i18n from affecting command outputs (e.g. `type`).
-export HOME=${TMPDIR:-/tmp}  # For aws-cli and the mysql* tools.
+export HOME=${TMPDIR:-/tmp}  # For the mysql* tools.
 
 usage () {
   self=$(basename "$0")
@@ -19,7 +19,7 @@ progress () {
 list () {
   local db_name_re
   db_name_re=$(echo "$DB_DATABASE" | tr _- .)
-  aws s3 ls "$BUCKET/$DB_HOST/" | grep -Eo "[-0-9:TZ_]+-$db_name_re\.gz"
+  s5cmd ls "$BUCKET/$DB_HOST/" | grep -Eo "[-0-9:TZ_]+-$db_name_re\.gz"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"

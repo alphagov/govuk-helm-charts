@@ -13,7 +13,7 @@ backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
   PGDATABASE=$DB_DATABASE \
-    pg_dump -Fc -Z1 | progress | aws s3 cp - "$BUCKET/$s3_path"
+    pg_dump -Fc -Z1 | progress | s5cmd pipe "$BUCKET/$s3_path"
 }
 
 transform () {
@@ -22,12 +22,16 @@ transform () {
 }
 
 dump_is_readable () {
-  (aws s3 cp "$1" - 2>/dev/null || true) | head | file - | tee /dev/fd/2 \
+  set +o pipefail  # We expect SIGPIPE here, but only here.
+  s5cmd cat "$1" | head | file - | tee /dev/fd/2 \
     | grep -iq 'PostgreSQL custom database dump'
+  local ret=$?
+  set -o pipefail
+  return $ret
 }
 
 db_exists () {
-  psql -Alqt |grep -Eo '^\w+\|' |grep -Fq "$1|"
+  psql -Alqt | grep -Eo '^\w+\|' | grep -Fq "$1|"
 }
 
 rename_db () {
@@ -63,7 +67,7 @@ restore () {
 
   dropdb -ef --if-exists "$DB_DATABASE-restore"
   createdb -eT template0 "$DB_DATABASE-restore"
-  aws s3 cp "$s3_url" - | progress | pg_restore --no-comments -f - \
+  s5cmd cat "$s3_url" | progress | pg_restore --no-comments -f - \
     | psql -d "$DB_DATABASE-restore" -c "SET session_replication_role = 'replica';" -f -
 
   if db_exists "$DB_DATABASE"; then

@@ -10,13 +10,12 @@ backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
   mongodump "$db_url" --archive \
-    | progress | gzip -1 | aws s3 cp - "$BUCKET/$s3_path"
+    | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path"
 }
 
 dump_is_readable () {
   set +o pipefail  # We expect SIGPIPE here, but only here.
-  (aws s3 cp "$1" - 2>/dev/null) | gzip -d | head -c 100 \
-    | grep -q concurrent_collections
+  s5cmd cat "$1" | gzip -d | head -c 100 | grep -q concurrent_collections
   local ret=$?
   set -o pipefail
   return $ret
@@ -30,8 +29,7 @@ restore () {
   local s3_url="$BUCKET/$DB_HOST/$FILENAME"
   dump_is_readable "$s3_url"
 
-  aws s3 cp "$s3_url" - | gzip -d | progress | \
-    mongorestore "$db_url" --archive --drop
+  s5cmd cat "$s3_url" | gzip -d | mongorestore "$db_url" --archive --drop
 }
 
 transform () {
