@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -eu
 
 source_dir=$(dirname "${BASH_SOURCE[0]}")
 . "$source_dir/lib.sh"
@@ -7,8 +7,10 @@ source_dir=$(dirname "${BASH_SOURCE[0]}")
 backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
+  set -o pipefail
   mysqldump --single-transaction "$DB_DATABASE" \
     | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path"
+  set +o pipefail
 }
 
 transform () {
@@ -17,12 +19,8 @@ transform () {
 }
 
 dump_is_readable () {
-  set +o pipefail  # We expect SIGPIPE here, but only here.
   s5cmd cat "$1" | gzip -d | head -n5 \
     | tee /dev/fd/2 | grep 'MySQL dump' >/dev/null 2>&1
-  local ret=$?
-  set -o pipefail
-  return $ret
 }
 
 restore () {
