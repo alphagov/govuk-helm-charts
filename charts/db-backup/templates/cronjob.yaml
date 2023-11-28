@@ -7,6 +7,7 @@
   {{- $dbHost := $job.host | default $jobName }}
   {{- /* Last word of the database hostname is normally "postgres", "mysql" etc. */}}
   {{- $dbms := $job.dbms | default (regexFind "[^-]+$" $dbHost) }}
+  {{- $dbms := eq $dbms "documentdb" | ternary "mongo" $dbms }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -62,7 +63,7 @@ spec:
     {{- else if eq $i (sub (len $job.operations) 1) }}
           containers:
     {{- end }}
-            - name: {{ .op }}
+            - name: {{ $i }}-{{ .op }}
               image: {{ $.Values.imageRef | quote }}
               command:
                 - /opt/bin/backup-{{ $dbms }}
@@ -74,7 +75,19 @@ spec:
               env:
                 - name: GOVUK_ENVIRONMENT
                   value: {{ $.Values.govukEnvironment }}
-                {{- if not $job.noAuth }}
+                - name: DB_HOST
+                  value: {{ $dbHost }}
+                - name: DB_DATABASE
+                  value: {{ .db | default $job.db }}
+                - name: BUCKET
+                  value: {{ .bucket }}
+                {{- if eq $dbms "mongo" }}
+                - name: DB_MONGO_CONNECTION_STRING
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $dbHost }}
+                {{- else }}
                 - name: DB_USER
                   value: {{ $job.dbUser | default "aws_db_admin" }}
                 - name: DB_PASSWORD
@@ -83,14 +96,6 @@ spec:
                       name: {{ $fullName }}-passwd
                       key: {{ $dbHost }}
                 {{- end }}
-                - name: DB_HOST
-                  value: {{ $dbHost }}
-                - name: DB_MONGO_REPLICASET
-                  value: {{ $job.replicaSet | default "" }}
-                - name: DB_DATABASE
-                  value: {{ .db | default $job.db }}
-                - name: BUCKET
-                  value: {{ .bucket }}
                 {{- with $.Values.extraEnv }}
                   {{- toYaml . | nindent 16 }}
                 {{- end }}

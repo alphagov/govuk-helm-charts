@@ -22,10 +22,10 @@ podSecurityContext:
 resources:
   limits:
     cpu: 2000m
-    memory: 512Mi
+    memory: 1Gi
   requests:
     cpu: 500m
-    memory: 128Mi
+    memory: 512Mi
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -166,12 +166,12 @@ cronjobs:
         - op: backup
 
     router-mongo:
-      schedule: "27 23 * * *"
-      db: all
-      replicaSet: router-backend-1,router-backend-2,router-backend-3
-      noAuth: true
+      schedule: "23 23 * * *"
       operations:
         - op: backup
+          db: draft_router
+        - op: backup
+          db: router
 
     search-admin-mysql:
       schedule: "56 23 * * *"
@@ -184,6 +184,20 @@ cronjobs:
       db: service-manual-publisher_production
       operations:
         - op: backup
+
+    shared-documentdb:
+      schedule: "13 0 * * *"
+      operations:
+        - op: backup
+          db: govuk_assets_production
+        - op: backup
+          db: maslow_production
+        - op: backup
+          db: publisher_production
+        - op: backup
+          db: short_url_manager_production
+        - op: backup
+          db: travel_advice_publisher_production
 
     signon-mysql:
       schedule: "3 23 * * *"
@@ -356,14 +370,18 @@ cronjobs:
         - op: backup
 
     router-mongo:
-      schedule: "27 0 * * *"
-      db: all
-      replicaSet: router-backend-1,router-backend-2,router-backend-3
-      noAuth: true
+      schedule: "23 0 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
+          db: draft_router
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+          db: router
         - op: backup
+          db: draft_router
+        - op: backup
+          db: router
 
     search-admin-mysql:
       schedule: "56 1 * * *"
@@ -380,6 +398,38 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
+
+    shared-documentdb:
+      schedule: "13 1 * * *"
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+          db: govuk_assets_production
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+          db: maslow_production
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+          db: publisher_production
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+          db: short_url_manager_production
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+          db: travel_advice_publisher_production
+        - op: transform
+          db: govuk_assets_production
+          script: asset-manager.js
+        - op: backup
+          db: govuk_assets_production
+        - op: backup
+          db: maslow_production
+        - op: backup
+          db: publisher_production
+        - op: backup
+          db: short_url_manager_production
+        - op: backup
+          db: travel_advice_publisher_production
 
     signon-mysql:
       schedule: "3 1 * * *"
@@ -553,14 +603,16 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
 
     router-mongo:
-      schedule: "27 2 * * *"
-      db: all
-      replicaSet: router-backend-1,router-backend-2,router-backend-3
-      noAuth: true
+      schedule: "23 2 * * *"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+          db: draft_router
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+          db: router
         - op: backup
+          db: router
 
     search-admin-mysql:
       schedule: "56 3 * * *"
@@ -575,6 +627,35 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+
+    shared-documentdb:
+      schedule: "13 3 * * *"
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+          db: govuk_assets_production
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+          db: maslow_production
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+          db: publisher_production
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+          db: short_url_manager_production
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+          db: travel_advice_publisher_production
+        - op: backup
+          db: govuk_assets_production
+        - op: backup
+          db: maslow_production
+        - op: backup
+          db: publisher_production
+        - op: backup
+          db: short_url_manager_production
+        - op: backup
+          db: travel_advice_publisher_production
 
     # Integration Signon accounts are not synced from production/staging.
     signon-mysql:

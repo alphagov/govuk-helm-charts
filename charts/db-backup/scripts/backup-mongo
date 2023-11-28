@@ -1,25 +1,22 @@
 #!/bin/bash
-set -euo pipefail
+set -eu
 
 source_dir=$(dirname "${BASH_SOURCE[0]}")
 . "$source_dir/lib.sh"
 
-: "${DB_MONGO_REPLICASET:=$DB_HOST}"
+db_url="${DB_MONGO_CONNECTION_STRING%/}/$DB_DATABASE"
 
 backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
-  mongodump -h "$DB_MONGO_REPLICASET" --archive \
-    | progress | gzip -1 | aws s3 cp - "$BUCKET/$s3_path"
+  set -o pipefail
+  mongodump "$db_url" --archive \
+    | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path"
+  set +o pipefail
 }
 
 dump_is_readable () {
-  set +o pipefail  # We expect SIGPIPE here, but only here.
-  (aws s3 cp "$s3_url" - 2>/dev/null) | gzip -d | head -c 100 \
-    | grep -q concurrent_collections
-  local ret=$?
-  set -o pipefail
-  return $ret
+  s5cmd cat "$1" | gzip -d | head -c 100 | grep -q concurrent_collections
 }
 
 restore () {
@@ -28,15 +25,18 @@ restore () {
     : "${REALLY_RESTORE_ONTO_PRODUCTION?}"
   fi
   local s3_url="$BUCKET/$DB_HOST/$FILENAME"
-  s3_url="$s3_url" dump_is_readable
+  dump_is_readable "$s3_url"
 
-  aws s3 cp "$s3_url" - | gzip -d | progress | \
-    mongorestore -h "$DB_MONGO_REPLICASET" --archive --drop
+  s5cmd cat "$s3_url" | gzip -d | mongorestore "$db_url" --archive --drop
+}
+
+transform () {
+  shift
+  (cd "$source_dir" && mongosh "$db_url" < "$1")
 }
 
 subcommand=${1:-}
 [[ $(type -t "$subcommand") == function ]] || usage
 
-[[ "${VERBOSE:-0}" -ge 1 ]] && set -x
 $subcommand "$@"
 echo "done"
