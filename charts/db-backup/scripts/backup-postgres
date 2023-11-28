@@ -22,7 +22,7 @@ transform () {
 }
 
 dump_is_readable () {
-  (aws s3 cp "$s3_url" - 2>/dev/null || true) | head | file - | tee /dev/fd/2 \
+  (aws s3 cp "$1" - 2>/dev/null || true) | head | file - | tee /dev/fd/2 \
     | grep -iq 'PostgreSQL custom database dump'
 }
 
@@ -59,7 +59,7 @@ restore () {
     : "${REALLY_RESTORE_ONTO_PRODUCTION?}"
   fi
   local s3_url="$BUCKET/$DB_HOST/$FILENAME"
-  s3_url="$s3_url" dump_is_readable
+  dump_is_readable "$s3_url"
 
   dropdb -ef --if-exists "$DB_DATABASE-restore"
   createdb -eT template0 "$DB_DATABASE-restore"
