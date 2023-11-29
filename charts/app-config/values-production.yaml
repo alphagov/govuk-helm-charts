@@ -1374,15 +1374,6 @@ govukApplications:
         sageMakerImage: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/search
         sagemakerIamRole: arn:aws:iam::172025368201:role/learn-to-rank-sagemaker
         serviceAccountIamRole: arn:aws:iam::172025368201:role/search-api-learn-to-rank-govuk
-      draftContentStoreMongoPostgresCron:
-        schedule: "26 22 * * *"
-        mongoExport:
-          mongoDbUri: "mongodb://\
-            mongo-1.production.govuk-internal.digital,\
-            mongo-2.production.govuk-internal.digital,\
-            mongo-3.production.govuk-internal.digital/draft_content_store_production"
-        postgresImport:
-          databaseUrlSecretName: "draft-content-store-postgres"
       contentStoreMongoPostgresCron:
         schedule: "26 22 * * *"
         mongoExport:
