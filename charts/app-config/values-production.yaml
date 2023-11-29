@@ -7,6 +7,8 @@ k8sExternalDomainSuffix: eks.production.govuk.digital
 publishingDomainSuffix: publishing.service.gov.uk
 assetsDomain: assets.publishing.service.gov.uk
 
+awsAccountId: "172025368201"
+
 cspReportURI: https://csp-reporter.publishing.service.gov.uk/report
 
 replicaCount: 3
