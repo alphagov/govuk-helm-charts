@@ -99,11 +99,14 @@ spec:
                 {{- with $.Values.extraEnv }}
                   {{- toYaml . | nindent 16 }}
                 {{- end }}
+                {{- with $job.extraEnv }}
+                  {{- toYaml . | nindent 16 }}
+                {{- end }}
                 {{- with .extraEnv }}
                   {{- toYaml . | nindent 16 }}
                 {{- end }}
               resources:
-                {{- $.Values.resources | toYaml | nindent 16 }}
+                {{- merge ($job.resources | default dict) $.Values.resources | toYaml | nindent 16 }}
               securityContext:
                 {{- toYaml $.Values.securityContext | nindent 16 }}
               volumeMounts:

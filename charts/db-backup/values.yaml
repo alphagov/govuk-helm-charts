@@ -10,6 +10,8 @@ externalSecrets:
   deletionPolicy: Delete
 
 extraEnv:
+  - name: GOGC
+    value: "30"
   - name: VERBOSE
     value: "1"
 
@@ -22,10 +24,17 @@ podSecurityContext:
 resources:
   limits:
     cpu: 2000m
-    memory: 1Gi
+    memory: 576Mi
   requests:
-    cpu: 500m
-    memory: 512Mi
+    cpu: 400m
+    memory: 288Mi
+
+_mongoResources: &mongo-resources
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      memory: 576Mi
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -166,6 +175,7 @@ cronjobs:
         - op: backup
 
     router-mongo:
+      <<: *mongo-resources
       schedule: "23 23 * * *"
       operations:
         - op: backup
@@ -186,6 +196,7 @@ cronjobs:
         - op: backup
 
     shared-documentdb:
+      <<: *mongo-resources
       schedule: "13 0 * * *"
       operations:
         - op: backup
@@ -370,6 +381,7 @@ cronjobs:
         - op: backup
 
     router-mongo:
+      <<: *mongo-resources
       schedule: "23 0 * * *"
       operations:
         - op: restore
@@ -400,6 +412,7 @@ cronjobs:
         - op: backup
 
     shared-documentdb:
+      <<: *mongo-resources
       schedule: "13 1 * * *"
       operations:
         - op: restore
@@ -603,6 +616,7 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
 
     router-mongo:
+      <<: *mongo-resources
       schedule: "23 2 * * *"
       operations:
         - op: restore
@@ -629,6 +643,7 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
 
     shared-documentdb:
+      <<: *mongo-resources
       schedule: "13 3 * * *"
       operations:
         - op: restore
