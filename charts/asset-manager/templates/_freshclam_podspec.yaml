@@ -28,7 +28,7 @@ spec:
         - name: clam-virus-db
           mountPath: /var/lib/clamav
         - name: etc-clamav
-          mountPath: /usr/local/etc
+          mountPath: {{ .Values.clamMountConfigPath }}
       securityContext:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
