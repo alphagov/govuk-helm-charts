@@ -27,7 +27,7 @@ restore () {
   local s3_url="$BUCKET/$DB_HOST/$FILENAME"
   dump_is_readable "$s3_url"
 
-  s5cmd cat "$s3_url" | gzip -d | mongorestore "$db_url" --archive --drop
+  s5cmd cat "$s3_url" | gzip -d | mongorestore "$db_url" --archive --drop -j 1
 }
 
 transform () {
