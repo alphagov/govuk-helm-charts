@@ -189,8 +189,6 @@ cronjobs:
       schedule: "13 0 * * *"
       operations:
         - op: backup
-          db: govuk_assets_production
-        - op: backup
           db: maslow_production
         - op: backup
           db: publisher_production
@@ -198,6 +196,8 @@ cronjobs:
           db: short_url_manager_production
         - op: backup
           db: travel_advice_publisher_production
+        - op: backup
+          db: govuk_assets_production
 
     signon-mysql:
       schedule: "3 23 * * *"
@@ -404,9 +404,6 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
-          db: govuk_assets_production
-        - op: restore
-          bucket: s3://govuk-production-database-backups
           db: maslow_production
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -417,19 +414,22 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-production-database-backups
           db: travel_advice_publisher_production
+        - op: backup
+          db: maslow_production
+        - op: backup
+          db: publisher_production
+        - op: backup
+          db: short_url_manager_production
+        - op: backup
+          db: travel_advice_publisher_production
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+          db: govuk_assets_production
         - op: transform
           db: govuk_assets_production
           script: asset-manager.js
         - op: backup
           db: govuk_assets_production
-        - op: backup
-          db: maslow_production
-        - op: backup
-          db: publisher_production
-        - op: backup
-          db: short_url_manager_production
-        - op: backup
-          db: travel_advice_publisher_production
 
     signon-mysql:
       schedule: "3 1 * * *"
@@ -633,9 +633,6 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
-          db: govuk_assets_production
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
           db: maslow_production
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -647,8 +644,6 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
           db: travel_advice_publisher_production
         - op: backup
-          db: govuk_assets_production
-        - op: backup
           db: maslow_production
         - op: backup
           db: publisher_production
@@ -656,6 +651,11 @@ cronjobs:
           db: short_url_manager_production
         - op: backup
           db: travel_advice_publisher_production
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+          db: govuk_assets_production
+        - op: backup
+          db: govuk_assets_production
 
     # Integration Signon accounts are not synced from production/staging.
     signon-mysql:
