@@ -353,7 +353,7 @@
             "statistic": "Sum"
           }
         ],
-        "title": "govuk-production-mirror requests by HTTP method",
+        "title": "govuk-production-mirror requests by HTTP method per second",
         "type": "timeseries"
       },
       {
@@ -485,7 +485,7 @@
             "statistic": "Sum"
           }
         ],
-        "title": "govuk-production-mirror error",
+        "title": "govuk-production-mirror error per second",
         "type": "timeseries"
       }
     ],
