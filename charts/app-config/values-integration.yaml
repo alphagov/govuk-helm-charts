@@ -153,12 +153,13 @@ govukApplications:
               - path: /media/
               - path: /auth/gds  # Viewing draft assets requires user auth.
       assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
+      clamMountConfigPath: /usr/local/etc
       nginxConfigMap:
         create: false
         name: asset-manager-nginx-conf
       extraEnv:
         - name: ASSET_MANAGER_CLAMSCAN_PATH
-          value: /usr/bin/clamdscan
+          value: /usr/local/bin/clamdscan
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:

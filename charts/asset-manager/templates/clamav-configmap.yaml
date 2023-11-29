@@ -37,5 +37,7 @@ data:
     Foreground yes
     LogTime yes
     LogVerbose yes
+    DatabaseDirectory /var/lib/clamav
+    DatabaseOwner app
     # Avoid peaky RAM usage. clamd will complain anyway if something's wrong with the database.
     TestDatabases no

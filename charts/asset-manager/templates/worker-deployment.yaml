@@ -69,7 +69,7 @@ spec:
             - name: asset-manager-efs
               mountPath: &uploads-path /mnt/asset-manager
             - name: etc-clamav
-              mountPath: /etc/clamav
+              mountPath: {{ .Values.clamMountConfigPath }}
             {{- with .Values.appExtraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
@@ -123,7 +123,7 @@ spec:
             - name: clamd-tmp
               mountPath: /tmp
             - name: etc-clamav
-              mountPath: /etc/clamav
+              mountPath: {{ .Values.clamMountConfigPath }}
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
