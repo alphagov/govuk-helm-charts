@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://charts.bitnami.com/bitnami
     chart: external-dns
-    targetRevision: "6.6.0"
+    targetRevision: "6.28.5"
     helm:
       values: |
         aws:
