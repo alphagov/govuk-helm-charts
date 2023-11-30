@@ -80,7 +80,7 @@ clamdResources:
     memory: 2000Mi
 
 # clamMountConfigPath is the path to which the clamav.conf and freshclam.conf are mounted
-clamMountConfigPath: "/etc/clamav"
+clamMountConfigPath: "/usr/local/etc"
 
 # assetManagerNFS is the address of the NFSv4 (or Amazon EFS) server where uploaded
 assetManagerNFS: "asset-manager-efs.dev.gov.uk"

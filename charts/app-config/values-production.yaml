@@ -151,7 +151,7 @@ govukApplications:
         name: asset-manager-nginx-conf
       extraEnv:
         - name: ASSET_MANAGER_CLAMSCAN_PATH
-          value: /usr/bin/clamdscan
+          value: /usr/local/bin/clamdscan
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
