@@ -1,0 +1,62 @@
+{{- if .Values.govukSliCollector.enabled }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "govuk-sli-collector"
+  labels:
+    app: "govuk-sli-collector"
+    app.kubernetes.io/component: "govuk-sli-collector"
+spec:
+  schedule: "*/{{ .Values.govukSliCollector.intervalMinutes }} * * * *"
+  jobTemplate:
+    metadata:
+      name: "govuk-sli-collector"
+      labels:
+        app: "govuk-sli-collector"
+        app.kubernetes.io/component: "govuk-sli-collector"
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: "govuk-sli-collector"
+          labels:
+            app: "govuk-sli-collector"
+            app.kubernetes.io/component: "govuk-sli-collector"
+        spec:
+          enableServiceLinks: false
+          securityContext:
+            fsGroup: {{ .Values.securityContext.runAsGroup }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+          restartPolicy: Never
+          containers:
+            - name: main
+              image: "{{ .Values.images.GovukSliCollector.repository }}:{{ .Values.images.GovukSliCollector.tag }}"
+              imagePullPolicy: "Always"
+              env:
+                - name: INTERVAL_MINUTES
+                  value: "{{ .Values.govukSliCollector.intervalMinutes }}"
+                - name: OFFSET_MINUTES
+                  value: "{{ .Values.govukSliCollector.offsetMinutes }}"
+                - name: LOGIT_OPENSEARCH_BASIC_AUTH
+                  valueFrom:
+                    secretKeyRef:
+                      name: govuk-sli-collector-logit-opensearch-api
+                      key: basic-auth
+                - name: LOGIT_OPENSEARCH_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: govuk-sli-collector-logit-opensearch-api
+                      key: host
+                - name: PROMETHEUS_PUSHGATEWAY_URL
+                  value: http://prometheus-pushgateway.monitoring.svc.cluster.local:9091
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+{{- end }}
