@@ -16,6 +16,7 @@ data:
     AlertExceedsMax yes
     # Avoid RAM spikes on reload. Scanning tasks are async anyway.
     ConcurrentDatabaseReload no
+    DatabaseDirectory /var/lib/clamav
     ExtendedDetectionInfo yes
     Foreground yes
     LogTime yes
