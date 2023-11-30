@@ -32,7 +32,7 @@ restore () {
 
 transform () {
   shift
-  (cd "$source_dir" && mongosh "$db_url" < "$1")
+  (cd "$source_dir" && mongosh --quiet "$db_url" < "$1")
 }
 
 subcommand=${1:-}
