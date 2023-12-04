@@ -1356,16 +1356,7 @@ govukApplications:
         sageMakerImage: 696911096973.dkr.ecr.eu-west-1.amazonaws.com/search
         sagemakerIamRole: arn:aws:iam::696911096973:role/learn-to-rank-sagemaker
         serviceAccountIamRole: arn:aws:iam::696911096973:role/search-api-learn-to-rank-govuk
-      draftContentStoreMongoPostgresCron:
-        schedule: "26 22 * * *"
-        suspended: true
-        mongoExport:
-          mongoDbUri: "mongodb://\
-            mongo-1.staging.govuk-internal.digital,\
-            mongo-2.staging.govuk-internal.digital,\
-            mongo-3.staging.govuk-internal.digital/draft_content_store_production"
-        postgresImport:
-          databaseUrlSecretName: "draft-content-store-postgres"
+
   - name: hmrc-manuals-api
     helmValues:
       nginxClientMaxBodySize: 2M
