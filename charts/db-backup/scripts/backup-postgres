@@ -29,7 +29,7 @@ dump_is_readable () {
 }
 
 db_exists () {
-  psql -Alqt | grep -Eo '^\w+\|' | grep -Fq "$1|"
+  psql -Alqt | grep -Eo '^[^|]+\|' | grep -Fq "$1|"
 }
 
 rename_db () {
