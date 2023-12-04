@@ -761,9 +761,9 @@ govukApplications:
         enabled: false
       extraEnv:
         - name: PRIMARY_UPSTREAM
-          value: "http://content-store-postgresql-branch/"
-        - name: SECONDARY_UPSTREAM
           value: "http://content-store-mongo-main/"
+        - name: SECONDARY_UPSTREAM
+          value: "http://content-store-postgresql-branch/"
         - name: WEB_CONCURRENCY
           value: '8'
         - name: COMPARISON_SAMPLE_PCT
@@ -872,9 +872,9 @@ govukApplications:
         enabled: false
       extraEnv:
         - name: PRIMARY_UPSTREAM
-          value: "http://draft-content-store-mongo-main/"
-        - name: SECONDARY_UPSTREAM
           value: "http://draft-content-store-postgresql-branch/"
+        - name: SECONDARY_UPSTREAM
+          value: "http://draft-content-store-mongo-main/"
         - name: WEB_CONCURRENCY
           value: '4'
         - name: COMPARISON_SAMPLE_PCT
