@@ -52,6 +52,15 @@ spec:
                       key: host
                 - name: PROMETHEUS_PUSHGATEWAY_URL
                   value: http://prometheus-pushgateway.monitoring.svc.cluster.local:9091
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: govuk-sli-collector-sentry
+                      key: dsn
+                - name: SENTRY_RELEASE
+                  value: "{{ .Values.images.GovukSliCollector.tag }}"
+                - name: SENTRY_CURRENT_ENV
+                  value: "{{ .Values.govukEnvironment }}"
               {{- with .Values.resources }}
               resources:
                 {{- . | toYaml | trim | nindent 16 }}
