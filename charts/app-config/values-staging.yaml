@@ -1826,8 +1826,7 @@ govukApplications:
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
-      workerEnabled: true
-      workerReplicaCount: 0
+      workerEnabled: false
       workerResources:
         limits:
           cpu: 4000m
