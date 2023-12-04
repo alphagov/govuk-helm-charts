@@ -1358,6 +1358,7 @@ govukApplications:
         serviceAccountIamRole: arn:aws:iam::696911096973:role/search-api-learn-to-rank-govuk
       draftContentStoreMongoPostgresCron:
         schedule: "26 22 * * *"
+        suspended: true
         mongoExport:
           mongoDbUri: "mongodb://\
             mongo-1.production.govuk-internal.digital,\
