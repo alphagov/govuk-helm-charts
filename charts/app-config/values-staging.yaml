@@ -1361,9 +1361,9 @@ govukApplications:
         suspended: true
         mongoExport:
           mongoDbUri: "mongodb://\
-            mongo-1.production.govuk-internal.digital,\
-            mongo-2.production.govuk-internal.digital,\
-            mongo-3.production.govuk-internal.digital/draft_content_store_production"
+            mongo-1.staging.govuk-internal.digital,\
+            mongo-2.staging.govuk-internal.digital,\
+            mongo-3.staging.govuk-internal.digital/draft_content_store_production"
         postgresImport:
           databaseUrlSecretName: "draft-content-store-postgres"
   - name: hmrc-manuals-api
