@@ -2385,8 +2385,6 @@ govukApplications:
   - name: search-v2-evaluator
     helmValues:
       dbMigrationEnabled: false
-      sentry:
-        enabled: false
       ingress:
         enabled: true
         annotations:
