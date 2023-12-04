@@ -1,0 +1,21 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: govuk-sli-collector-logit-opensearch-api
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Basic auth credentials for Logit's OpenSearch API, used for querying log
+      data. basic-auth is the base64 combined username:password string and host
+      is the API URL (with no endpoint path).
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-sli-collector-logit-opensearch-api
+  dataFrom:
+    - extract:
+        key: govuk/govuk-sli-collector/logit-opensearch-api
