@@ -234,6 +234,11 @@ cronjobs:
       db: whitehall_production
       operations:
         - op: backup
+      resources: &whitehall-resources
+        limits:
+          memory: 768Mi
+        requests:
+          memory: 384Mi
 
 
   staging:
@@ -471,6 +476,7 @@ cronjobs:
     whitehall-mysql:
       schedule: "28 1 * * *"
       db: whitehall_production
+      resources: *whitehall-resources
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -708,6 +714,7 @@ cronjobs:
     whitehall-mysql:
       schedule: "28 3 * * *"
       db: whitehall_production
+      resources: *whitehall-resources
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
