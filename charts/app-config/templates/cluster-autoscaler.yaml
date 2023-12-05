@@ -30,6 +30,8 @@ spec:
     server: https://kubernetes.default.svc
     namespace: kube-system
   syncPolicy:
-    automated: null
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - ApplyOutOfSyncOnly=true
