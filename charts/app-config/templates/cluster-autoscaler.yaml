@@ -1,0 +1,37 @@
+{{ if has .Values.govukEnvironment (list "integration") }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cluster-autoscaler
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes.github.io/autoscaler
+    chart: cluster-autoscaler
+    targetRevision: "9.25.0"
+    helm:
+      values: |
+        awsRegion: eu-west-1
+        rbac:
+          create: true
+          serviceAccount:
+            name: cluster-autoscaler
+            annotations:
+              eks.amazonaws.com/role-arn: arn:aws:iam::{{ .Values.awsAccountId }}:role/cluster-autoscaler-govuk
+        autoDiscovery:
+          clusterName: govuk
+          enabled: true
+        extraArgs:
+          balance-similar-node-groups: true
+          scale-down-utilization-threshold: "0.55"
+          skip-nodes-with-local-storage: false
+        replicaCount: {{ .Values.replicaCount }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated: null
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+{{ end }}

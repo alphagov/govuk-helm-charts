@@ -1,0 +1,42 @@
+{{ if has .Values.govukEnvironment (list "integration") }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-ebs-csi-driver
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+    chart: aws-ebs-csi-driver
+    targetRevision: "2.17.2"
+    helm:
+      values: |
+        enableVolumeResizing: true
+        controller:
+          serviceAccount:
+            create: true
+            name: ebs-csi-controller-sa
+            annotations:
+              eks.amazonaws.com/role-arn: arn:aws:iam::{{ .Values.awsAccountId }}:role/ebs-csi-controller-sa-govuk
+        storageClasses:
+          - apiVersion: storage.k8s.io/v1
+            kind: StorageClass
+            metadata:
+              name: ebs-gp3
+              annotations:
+                storageclass.kubernetes.io/is-default-class: "true"
+            provisioner: ebs.csi.aws.com
+            parameters:
+              type: gp3
+            reclaimPolicy: Retain
+            volumeBindingMode: WaitForFirstConsumer
+            allowVolumeExpansion: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated: null
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+{{ end }}
