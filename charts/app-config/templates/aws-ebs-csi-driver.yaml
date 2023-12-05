@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
     chart: aws-ebs-csi-driver
-    targetRevision: "2.17.2"
+    targetRevision: "2.25.0"
     helm:
       values: |
         enableVolumeResizing: true
