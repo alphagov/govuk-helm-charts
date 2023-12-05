@@ -20,7 +20,7 @@ backup () {
 
 transform () {
   shift
-  (cd "$source_dir" && psql < "$1")
+  (cd "$source_dir" && psql "$DB_DATABASE" < "$1")
 }
 
 dump_is_readable () {
