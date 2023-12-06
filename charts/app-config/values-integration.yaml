@@ -1321,11 +1321,14 @@ govukApplications:
     imageValues:
       - "content-store"
       - "content-store-postgresql-branch"
+      - "govuk-sli-collector"
       - "search-api"
       - "search-api-learn-to-rank"
     helmValues:
       govukMirrorSync:
         iamRoleArn: arn:aws:iam::210287912431:role/govuk-mirror-sync
+      govukSliCollector:
+        enabled: true
       learnToRank:
         elasticsearchUri: &elasticsearch-uri
           https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com

@@ -20,6 +20,9 @@ images:
   GovukDependencyChecker:
     repository: "govuk-dependency-checker"
     tag: "release"
+  GovukSliCollector:
+    repository: "govuk-sli-collector"
+    tag: "release"
   SearchApi:
     repository: "search-api"
     tag: "release"
@@ -29,6 +32,11 @@ images:
 
 govukMirrorSync:
   schedule: "0 0 * * *"
+
+govukSliCollector:
+  enabled: false
+  intervalMinutes: "5"
+  offsetMinutes: "10"
 
 learnToRank:
   elasticsearchUri: ""
