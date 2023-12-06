@@ -32,9 +32,9 @@ resources:
 _mongoResources: &mongo-resources
   resources:
     limits:
-      memory: 1Gi
+      memory: 1280Mi
     requests:
-      memory: 576Mi
+      memory: 768Mi
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -236,9 +236,9 @@ cronjobs:
         - op: backup
       resources: &whitehall-resources
         limits:
-          memory: 768Mi
+          memory: 1Gi
         requests:
-          memory: 384Mi
+          memory: 512Mi
 
 
   staging:
