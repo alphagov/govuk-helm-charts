@@ -31,6 +31,9 @@ spec:
             runAsUser: {{ .Values.securityContext.runAsUser }}
             runAsGroup: {{ .Values.securityContext.runAsGroup }}
           restartPolicy: Never
+          volumes:
+            - name: app-tmp
+              emptyDir: {}
           containers:
             - name: main
               image: "{{ .Values.images.GovukSliCollector.repository }}:{{ .Values.images.GovukSliCollector.tag }}"
@@ -68,4 +71,7 @@ spec:
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: app-tmp
+                  mountPath: /tmp
 {{- end }}
