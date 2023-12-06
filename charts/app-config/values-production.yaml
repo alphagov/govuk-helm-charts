@@ -16,7 +16,7 @@ workerReplicaCount: 3
 podDisruptionBudget:
   maxUnavailable: 2
 
-alb-ingress-defaults: &alb-ingress-defaults
+_alb-ingress-defaults: &alb-ingress-defaults
   alb.ingress.kubernetes.io/scheme: internet-facing
   alb.ingress.kubernetes.io/target-type: ip
   alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
@@ -28,11 +28,11 @@ alb-ingress-defaults: &alb-ingress-defaults
     access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
     access_logs.s3.prefix=elb/{{ .Release.Name }}
 
-alb-ingress-waf-ruleset-www: &alb-ingress-waf-ruleset-www
+_alb-ingress-waf-ruleset-www: &alb-ingress-waf-ruleset-www
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
     arn:aws:wafv2:eu-west-1:172025368201:regional/webacl/cache_public_web_acl/d9033e40-69e8-4bbc-a61a-cd3c50254d04
 
-alb-ingress-waf-ruleset-backend: &alb-ingress-waf-ruleset-backend
+_alb-ingress-waf-ruleset-backend: &alb-ingress-waf-ruleset-backend
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
     arn:aws:wafv2:eu-west-1:172025368201:regional/webacl/backend_public_web_acl/b1b08896-5b4d-4a99-9669-b1118c0f945e
 
@@ -123,7 +123,7 @@ govukApplications:
           <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
-          alb.ingress.kubernetes.io/group.order: '20'
+          alb.ingress.kubernetes.io/group.order: "20"
           alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
             access_logs.s3.enabled=true,
             access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
@@ -1191,7 +1191,7 @@ govukApplications:
           <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
-          alb.ingress.kubernetes.io/group.order: '16'
+          alb.ingress.kubernetes.io/group.order: "16"
           alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
         hosts:
@@ -1260,7 +1260,7 @@ govukApplications:
           <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
-          alb.ingress.kubernetes.io/group.order: '15'
+          alb.ingress.kubernetes.io/group.order: "15"
           alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
@@ -2639,7 +2639,7 @@ govukApplications:
           <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
-          alb.ingress.kubernetes.io/group.order: '30'
+          alb.ingress.kubernetes.io/group.order: "30"
           alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
         hosts:
