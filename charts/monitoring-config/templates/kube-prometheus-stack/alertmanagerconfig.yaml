@@ -32,6 +32,15 @@ spec:
       groupInterval: 12h
       activeTimeIntervals:
         - inhours
+    - matchers:
+      - name: destination
+        value: slack-platform-engineering
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 1d
+      groupWait: 12h
+      groupInterval: 12h
+      activeTimeIntervals:
+        - inhours
   receivers:
   - name: 'null'
   - name: 'pagerduty'
@@ -77,6 +86,14 @@ spec:
         *Environment:* {{ .Values.govukEnvironment }}
 
         *Mirror*: {{ "{{ $labels.backend }}" }}
+      apiURL: *slack_api_url
+  - name: 'generic-slack-platform-engineering'
+    slackConfigs:
+    - channel: '#govuk-platform-engineering'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      text: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
       apiURL: *slack_api_url
   muteTimeIntervals:
   - name: inhours
