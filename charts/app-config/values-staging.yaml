@@ -1770,7 +1770,7 @@ govukApplications:
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
-      workerEnabled: false
+      workerEnabled: true
       workerResources:
         limits:
           cpu: 4000m
