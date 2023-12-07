@@ -20,7 +20,7 @@ ALTER TABLE emails OWNER TO "email-alert-api";
 
 INSERT INTO emails
 SELECT * FROM old_emails  -- noqa: AM04
-WHERE created_at < current_timestamp - interval '1 day';
+WHERE created_at > current_timestamp - interval '1 day';
 
 DROP TABLE old_emails CASCADE;
 
