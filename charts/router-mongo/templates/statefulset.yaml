@@ -1,0 +1,67 @@
+{{- $fullName := include "router-mongo.fullname" . }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "router-mongo.labels" $ | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      {{ $fullName }} runs the old version of MongoDB that hosts the GOV.UK
+      Router database.
+spec:
+  serviceName: {{ $fullName }}
+  replicas: 1  # TODO: run two in-cluster replicas once the old EC2 ones are gone.
+  selector:
+    matchLabels:
+      {{- include "router-mongo.selectorLabels" $ | nindent 6 }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: ebs-gp3
+        resources:
+          requests:
+            storage: 20Gi
+  template:
+    metadata:
+      name: {{ $fullName }}
+      labels:
+        {{- include "router-mongo.selectorLabels" $ | nindent 8 }}
+    spec:
+      enableServiceLinks: false
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 12 }}
+      dnsConfig:
+        searches:
+          - blue.{{ $.Values.govukEnvironment }}.govuk-internal.digital
+      volumes:
+        - name: config
+          configMap:
+            name: {{ $fullName }}
+            defaultMode: 0444
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: mongo
+          image: {{ .Values.imageRef | quote }}
+          args:
+            {{- toYaml .Values.args | nindent 16 }}
+          env:
+            {{- with .Values.extraEnv }}
+              {{- toYaml . | nindent 16 }}
+            {{- end }}
+          resources:
+            {{- .Values.resources | toYaml | nindent 16 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 16 }}
+          volumeMounts:
+            - name: config
+              mountPath: /etc/mongo
+              readOnly: true
+            - name: data
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp

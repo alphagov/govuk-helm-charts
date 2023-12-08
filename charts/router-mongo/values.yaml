@@ -1,0 +1,34 @@
+# Default values for router-mongo.
+
+nameOverride: ""
+fullnameOverride: ""
+imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/mongodb"
+govukEnvironment: staging
+
+args:
+  - --config
+  - /etc/mongo/mongodb.conf
+  - --replSet
+  - production/router-mongo-0,router-backend-1,router-backend-2,router-backend-3
+
+podSecurityContext:
+  fsGroup: &uid 999
+  runAsNonRoot: true
+  runAsUser: *uid
+  runAsGroup: *uid
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: *uid
+
+resources:
+  limits:
+    cpu: 3000m
+    memory: 4096Mi
+  requests:
+    cpu: 1000m
+    memory: 4096Mi
