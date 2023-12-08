@@ -1825,6 +1825,8 @@ govukApplications:
             secretKeyRef:
               name: publishing-api-postgres
               key: DATABASE_URL
+        - name: ENQUEUE_PUBLISH_INTENTS
+          value: true
 
   - name: release
     helmValues:
