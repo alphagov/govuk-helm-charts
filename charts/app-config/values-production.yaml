@@ -835,8 +835,6 @@ govukApplications:
             secretKeyRef:
               name: draft-content-store-postgres
               key: DATABASE_URL
-        - name: DISABLE_ROUTER_API
-          value: "true"
 
   - name: content-tagger
     helmValues:
