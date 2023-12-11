@@ -29,5 +29,16 @@
       "automerge": true,
       "automergeType": "branch"
     }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [".*\\/helm-versions\\/.*\\.yaml"],
+      "datasourceTemplate": "helm",
+      "matchStrings": [
+        "(?<registryUrl>.{1,}) (?<depName>.{1,}): \"(?<currentValue>[0-9\\.]{1,})\""
+      ],
+      "additionalBranchPrefix": "{{packageFile}}-"
+    }
   ]
 }
