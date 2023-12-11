@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
-    chart: external-dns
-    targetRevision: "6.28.5"
+    {{- include "app-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://charts.bitnami.com/bitnami" "chart" "external-dns") )
+        | nindent 4 }}
     helm:
       values: |
         aws:

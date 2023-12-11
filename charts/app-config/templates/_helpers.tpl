@@ -49,3 +49,15 @@ Selector labels
 app.kubernetes.io/name: {{ include "app-config.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+
+{{/*
+Get helm release
+*/}}
+{{- define "app-config.helm-release" -}}
+{{- $versions := $.Files.Get (printf "helm-versions/%s.yaml" $.Values.govukEnvironment) | fromYaml -}}
+{{- $version := get $versions (printf "%s %s" .repoURL .chart) -}}
+repoURL: {{ .repoURL }}
+chart: {{ .chart }}
+targetRevision: "{{ $version }}"
+{{- end -}}
