@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.dexidp.io
-    chart: dex
-    targetRevision: "0.15.3"
+    {{- include "app-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://charts.dexidp.io" "chart" "dex") )
+        | nindent 4 }}
     helm:
       values: |
         {{- include "app-config.dex-values" . | nindent 8 }}

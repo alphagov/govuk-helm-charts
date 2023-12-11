@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://stakater.github.io/stakater-charts
-    chart: reloader
-    targetRevision: "1.0.52"
+    {{- include "app-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://stakater.github.io/stakater-charts" "chart" "reloader") )
+        | nindent 4 }}
     helm:
       values: |
         reloader:

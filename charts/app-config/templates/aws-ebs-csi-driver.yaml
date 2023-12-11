@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
-    chart: aws-ebs-csi-driver
-    targetRevision: "2.25.0"
+    {{- include "app-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://kubernetes-sigs.github.io/aws-ebs-csi-driver" "chart" "aws-ebs-csi-driver") )
+        | nindent 4 }}
     helm:
       values: |
         enableVolumeResizing: true
