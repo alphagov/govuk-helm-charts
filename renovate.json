@@ -36,7 +36,7 @@
       "fileMatch": [".*\\/helm-versions\\/.*\\.yaml"],
       "datasourceTemplate": "helm",
       "matchStrings": [
-        "(?<registryUrl>.{1,}) (?<depName>.{1,}): \"(?<currentValue>[0-9\\.]{1,})\""
+        "(?<registryUrl>.+) (?<depName>.+): \"(?<currentValue>[0-9\\.]+)\""
       ],
       "additionalBranchPrefix": "{{packageFile}}-"
     }
