@@ -31,8 +31,8 @@
     },
     {
       "matchFileNames": ["**/helm-versions/*"],
-      "additionalBranchPrefix": "{{packageFile}}-",
-      "commitMessageSuffix": " ({{packageFile}})"
+      "additionalBranchPrefix": "{{replace '^.+\\/' '' packageFile}}-",
+      "commitMessageSuffix": " ({{replace '^.+\\/' '' packageFile}})"
     }
   ],
   "customManagers": [
