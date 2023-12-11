@@ -1812,7 +1812,7 @@ govukApplications:
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
-      workerEnabled: false
+      workerEnabled: true
       workerResources:
         limits:
           cpu: 4000m
@@ -1870,8 +1870,6 @@ govukApplications:
             secretKeyRef:
               name: publishing-api-postgres
               key: DATABASE_URL
-        - name: ENQUEUE_PUBLISH_INTENTS
-          value: "true"
 
   - name: release
     helmValues:
