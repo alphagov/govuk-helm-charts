@@ -1,4 +1,4 @@
 apiVersion: v2
 name: govuk-jobs
-description: Collection of jobs used in gov.uk
+description: DEPRECATED; please do not add to this kitchen-sink chart.
 version: 1.0.0
