@@ -24,10 +24,10 @@ podSecurityContext:
 resources:
   limits:
     cpu: 2000m
-    memory: 576Mi
+    memory: 640Mi
   requests:
     cpu: 400m
-    memory: 288Mi
+    memory: 384Mi
 
 _mongoResources: &mongo-resources
   resources:
