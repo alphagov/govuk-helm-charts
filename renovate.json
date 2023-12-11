@@ -28,6 +28,10 @@
       "matchPackageNames": ["renovate/renovate"],
       "automerge": true,
       "automergeType": "branch"
+    },
+    {
+      "matchFileNames": ["**/helm-versions/*.yaml"],
+      "additionalBranchPrefix": "{{packageFile}}-"
     }
   ],
   "customManagers": [
@@ -37,8 +41,7 @@
       "datasourceTemplate": "helm",
       "matchStrings": [
         "(?<registryUrl>.+) (?<depName>.+): \"(?<currentValue>[0-9\\.]+)\""
-      ],
-      "additionalBranchPrefix": "{{packageFile}}-"
+      ]
     }
   ]
 }
