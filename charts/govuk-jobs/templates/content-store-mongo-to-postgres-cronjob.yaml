@@ -44,6 +44,11 @@ spec:
               args:
                 - "mongo:export:all[/mongo-export/]"
               env:
+                - name: SECRET_KEY_BASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret-key-base
+                      name: content-store-rails-secret-key-base
                 - name: MONGODB_URI
                   value: "{{ .Values.draftContentStoreMongoPostgresCron.mongoExport.mongoDbUri }}"
               {{- with .Values.resources }}
@@ -66,6 +71,11 @@ spec:
               args:
                 - "import:all[/mongo-export/]"
               env:
+                - name: SECRET_KEY_BASE
+                  valueFrom:
+                    secretKeyRef:
+                      key: secret-key-base
+                      name: content-store-rails-secret-key-base
                 - name: DATABASE_URL
                   valueFrom:
                     secretKeyRef:
