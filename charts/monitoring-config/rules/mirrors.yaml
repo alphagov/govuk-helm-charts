@@ -6,7 +6,7 @@
 
     - alert: MirrorFreshnessAlert
       expr: |
-        govuk_mirror_freshness_seconds < 172800
+        global:govuk_mirror_freshness_seconds > 172800
       annotations:
         summary: Mirror freshness has exceeded two days
         description: >-
