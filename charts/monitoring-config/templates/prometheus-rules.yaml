@@ -6,10 +6,9 @@ metadata:
   labels:
     app: monitoring-config
 spec:
-  groups:
 {{- range $path, $_ := .Files.Glob "rules/**.yaml" }}
 {{- if not (hasSuffix "_tests.yaml" $path) }}
   # {{ $path }}
-  {{- $.Files.Get $path | nindent 4 }}
+  {{- $.Files.Get $path | nindent 2 }}
 {{ end }}
 {{ end }}

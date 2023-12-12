@@ -1,13 +1,14 @@
-- name: MirrorAlerts
-  rules:
-    - record: global:govuk_mirror_freshness_seconds
-      expr: |
-        time() - min(govuk_mirror_last_updated_time) by (backend)
+groups:
+  - name: MirrorAlerts
+    rules:
+      - record: global:govuk_mirror_freshness_seconds
+        expr: |
+          time() - min(govuk_mirror_last_updated_time) by (backend)
 
-    - alert: MirrorFreshnessAlert
-      expr: |
-        govuk_mirror_freshness_seconds < 172800
-      annotations:
-        summary: Mirror freshness has exceeded two days
-        description: >-
-          The mirror hasn't been updated in more than two days
+      - alert: MirrorFreshnessAlert
+        expr: |
+          govuk_mirror_freshness_seconds < 172800
+        annotations:
+          summary: Mirror freshness has exceeded two days
+          description: >-
+            The mirror hasn't been updated in more than two days
