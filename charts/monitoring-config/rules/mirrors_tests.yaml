@@ -12,7 +12,7 @@ tests:
     promql_expr_test:
       - expr: |
           time() - min(govuk_mirror_last_updated_time) by (backend)
-        eval_time: 1622500200
+        eval_time: 1622500200s
         exp_samples:
           - labels: 'global:govuk_mirror_freshness_seconds{backend="backend1"}'
             value: 21600
@@ -23,10 +23,11 @@ tests:
         values: '1622478600'
 
     alert_rule_test:
-      - eval_time: 1622694600  # 48 hours and 30 minutes later
+      - eval_time: 1622694600s  # 48 hours and 30 minutes later
         alertname: MirrorFreshnessAlert
-        exp_labels:
-          backend: backend1
-        exp_annotations:
-          summary: Mirror freshness has exceeded two days
-          description: The mirror hasn't been updated in more than two days
+        exp_alerts:
+          - exp_labels:
+              backend: backend1
+            exp_annotations:
+              summary: Mirror freshness has exceeded two days
+              description: The mirror hasn't been updated in more than two days
