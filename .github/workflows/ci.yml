@@ -69,8 +69,9 @@ jobs:
   promtest:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout'
-        uses: 'actions/checkout@v2'
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
       - name: 'Run promtool tests'
         uses: 'MatsuriJapon/promtool-action@v1'
         with:
