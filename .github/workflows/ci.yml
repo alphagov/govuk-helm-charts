@@ -68,8 +68,6 @@ jobs:
 
   promcheck:
     runs-on: ubuntu-latest
-    env:
-      GLOBIGNORE: '*_tests.*'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -78,6 +76,8 @@ jobs:
         uses: 'MatsuriJapon/promtool-action@v1'
         with:
           args: 'check rules charts/monitoring-config/rules/*.yaml'
+        env:
+          GLOBIGNORE: '*_tests.*''
 
   promtest:
     runs-on: ubuntu-latest
