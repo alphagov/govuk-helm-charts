@@ -563,6 +563,21 @@ govukApplications:
             secretKeyRef:
               name: content-data-api-google-analytics
               key: private-key
+        - name: BIGQUERY_PROJECT
+          valueFrom:
+            secretKeyRef:
+              name: content-data-api-ga4
+              key: project_id
+        - name: BIGQUERY_CLIENT_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: content-data-api-ga4
+              key: client_email
+        - name: BIGQUERY_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: content-data-api-ga4
+              key: private_key
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
