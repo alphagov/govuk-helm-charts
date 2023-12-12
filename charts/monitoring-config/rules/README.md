@@ -4,6 +4,5 @@
 - Run the following command
 
     ```sh
-    (GLOBIGNORE='*_tests.*' && promtool check rules *.yaml) &&
-      promtool test rules *_tests.yaml
+    /bin/bash -c "(GLOBIGNORE='*_tests.*' && promtool check rules *.yaml) && promtool test rules *_tests.yaml"
     ```
