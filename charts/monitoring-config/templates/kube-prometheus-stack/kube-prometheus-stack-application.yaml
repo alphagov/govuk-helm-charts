@@ -9,9 +9,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://prometheus-community.github.io/helm-charts
-    chart: kube-prometheus-stack
-    targetRevision: "51.9.2"
+    {{- include "monitoring-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://prometheus-community.github.io/helm-charts" "chart" "kube-prometheus-stack") )
+        | nindent 4 }}
     helm:
       values: |
         {{ $mergedValues | nindent 8 }}
