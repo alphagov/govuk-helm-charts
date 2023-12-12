@@ -5,8 +5,7 @@ evaluation_interval: 1m
 
 tests:
   # Alert does not fire if current and delivered are identical
-  - name: travel_advice_alert_test_identical
-    interval: 1m
+  - interval: 1m
     input_series:
       - series: 'email_alert_api_current_travel_advice_alerts'
         values: '2'
@@ -18,8 +17,7 @@ tests:
         exp_alerts: []
 
   # Alert does not fire if current and delivered are zero
-  - name: travel_advice_alert_test_zeros
-    interval: 1m
+  - interval: 1m
     input_series:
       - series: 'email_alert_api_current_travel_advice_alerts'
         values: '0'
@@ -31,8 +29,7 @@ tests:
         exp_alerts: []
 
   # Alert fires if current and delivered are different
-  - name: travel_advice_alert_test
-    interval: 1m
+  - interval: 1m
     input_series:
       - series: 'email_alert_api_current_travel_advice_alerts'
         values: '1'
@@ -51,8 +48,7 @@ tests:
 
 
   # Alert does not fire if current and delivered are identical
-  - name: medical_safety_alert_test_identical
-    interval: 1m
+  - interval: 1m
     input_series:
       - series: 'email_alert_api_current_medical_safety_alerts'
         values: '2'
@@ -64,8 +60,7 @@ tests:
         exp_alerts: []
 
   # Alert does not fire if current and delivered are zero
-  - name: medical_safety_alert_test_zeros
-    interval: 1m
+  - interval: 1m
     input_series:
       - series: 'email_alert_api_current_medical_safety_alerts'
         values: '0'
@@ -77,8 +72,7 @@ tests:
         exp_alerts: []
 
   # Alert fires if current and delivered are different
-  - name: medical_safety_alert_test
-    interval: 1m
+  - interval: 1m
     input_series:
       - series: 'email_alert_api_current_medical_safety_alerts'
         values: '1'
