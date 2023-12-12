@@ -687,10 +687,6 @@ govukApplications:
         - name: report-delays
           task: "publishing_delay_report:report_delays"
           schedule: "15 2 * * *"
-      rails:
-        secretKeyBaseName: content-store-rails-secret-key-base
-      sentry:
-        dsnSecretName: content-store-sentry
       uploadAssets:
         enabled: false
       extraEnv:
@@ -718,8 +714,6 @@ govukApplications:
             secretKeyRef:
               name: content-store-postgres
               key: DATABASE_URL
-        - name: DISABLE_ROUTER_API
-          value: "true"
         - name: WEB_CONCURRENCY
           value: '4'
 
