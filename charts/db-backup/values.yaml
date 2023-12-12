@@ -167,6 +167,11 @@ cronjobs:
       db: publishing_api_production
       operations:
         - op: backup
+      resources: &pubapi-resources
+        limits:
+          memory: 1024Mi
+        requests:
+          memory: 768Mi
 
     release-mysql:
       schedule: "11 23 * * *"
@@ -236,9 +241,9 @@ cronjobs:
         - op: backup
       resources: &whitehall-resources
         limits:
-          memory: 1Gi
+          memory: 1024Mi
         requests:
-          memory: 512Mi
+          memory: 768Mi
 
 
   staging:
@@ -370,6 +375,7 @@ cronjobs:
     publishing-api-postgres:
       schedule: "36 1 * * *"
       db: publishing_api_production
+      resources: *pubapi-resources
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -609,6 +615,7 @@ cronjobs:
     publishing-api-postgres:
       schedule: "36 5 * * *"
       db: publishing_api_production
+      resources: *pubapi-resources
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
