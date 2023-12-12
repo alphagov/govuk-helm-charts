@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://prometheus-community.github.io/helm-charts
-    chart: prometheus-pushgateway
-    targetRevision: "2.4.2"
+    {{- include "monitoring-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://prometheus-community.github.io/helm-charts" "chart" "prometheus-pushgateway") )
+        | nindent 4 }}
     helm:
       values: |
         resources:

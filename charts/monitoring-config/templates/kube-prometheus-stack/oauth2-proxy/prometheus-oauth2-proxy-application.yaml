@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://oauth2-proxy.github.io/manifests
-    chart: oauth2-proxy
-    targetRevision: "6.18.0"
+    {{- include "monitoring-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://oauth2-proxy.github.io/manifests" "chart" "oauth2-proxy") )
+        | nindent 4 }}
     helm:
       values: |
 {{ include "monitoring-config.oauth2-proxy.config" (merge (dict "app" "prometheus" "port" 9090) . ) | indent 8 }}
