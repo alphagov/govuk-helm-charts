@@ -66,6 +66,19 @@ jobs:
         with:
           format: github
 
+  promcheck:
+    runs-on: ubuntu-latest
+    env:
+      GLOBIGNORE: '*_tests.*'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - name: 'Run promtool checks'
+        uses: 'MatsuriJapon/promtool-action@v1'
+        with:
+          args: 'check rules charts/monitoring-config/rules/*.yaml'
+
   promtest:
     runs-on: ubuntu-latest
     steps:
