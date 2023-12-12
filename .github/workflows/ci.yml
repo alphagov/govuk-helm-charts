@@ -74,4 +74,4 @@ jobs:
       - name: 'Run promtool tests'
         uses: 'MatsuriJapon/promtool-action@v1'
         with:
-          args: 'test rules ($find charts/monitoring-config/rules -name *_tests.yaml'
+          args: 'test rules ($find charts/monitoring-config/rules -name *_tests.yaml)'
