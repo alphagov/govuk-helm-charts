@@ -65,3 +65,26 @@ jobs:
       - uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c  # v3.1.1
         with:
           format: github
+
+  promcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - name: 'Run promtool checks'
+        uses: 'KludgeKML/promtool-action@v1'
+        with:
+          # yamllint disable-line rule:line-length
+          args: 'check rules $(find charts/monitoring-config/rules -name *.yaml -not -name *_tests.yaml)'
+
+  promtest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - name: 'Run promtool tests'
+        uses: 'KludgeKML/promtool-action@v1'
+        with:
+          args: 'test rules charts/monitoring-config/rules/*_tests.yaml'
