@@ -1,18 +1,19 @@
-- name: PrometheusDiskSpace
-  rules:
-    - alert: PrometheusDiskSpace
-      expr: |
-          (
-            kubelet_volume_stats_available_bytes{persistentvolumeclaim=~"prometheus-kube-prometheus-stack-prometheus-db-prometheus-kube-prometheus-stack-prometheus-.*"}
-            /
-            (10 * 1000 * 1000 * 1000)
-          )
-          <
-          5 # GB
-      labels:
-        severity: warning
-        destination: slack-platform-engineering
-      annotations:
-        summary: Prometheus disk space low
-        description: >-
-          Less than 5GB of disk space remaining on Prometheus volumes
+groups:
+  - name: PrometheusDiskSpace
+    rules:
+      - alert: PrometheusDiskSpace
+        expr: |
+            (
+              kubelet_volume_stats_available_bytes{persistentvolumeclaim=~"prometheus-kube-prometheus-stack-prometheus-db-prometheus-kube-prometheus-stack-prometheus-.*"}
+              /
+              (10 * 1000 * 1000 * 1000)
+            )
+            <
+            5 # GB
+        labels:
+          severity: warning
+          destination: slack-platform-engineering
+        annotations:
+          summary: Prometheus disk space low
+          description: >-
+            Less than 5GB of disk space remaining on Prometheus volumes
