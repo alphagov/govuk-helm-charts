@@ -10,6 +10,7 @@ spec:
 {{- range $path, $_ := .Files.Glob "rules/**.yaml" }}
 {{- if not (hasSuffix "_tests.yaml" $path) }}
   # {{ $path }}
-  {{- $.Files.Get $path | nindent 4 }}
+  # {{- $.Files.Get $path | replace "groups:" "" | nindent 2  }}
+  {{- $.Files.Get $path | regexReplaceAll "^Agroups:" "" | nindent 2  }}
 {{ end }}
 {{ end }}
