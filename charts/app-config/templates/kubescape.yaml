@@ -1,3 +1,4 @@
+{{ if eq .Values.govukEnvironment "integration" }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -12,18 +13,16 @@ spec:
     repoURL: 'https://github.com/kubescape/helm-charts'
     targetRevision: HEAD
     helm:
+    helm:
       valueFiles:
         - values.yaml
       parameters:
         - name: account
-          valueFrom:
-            secretKeyRef:
-              name: kubescape-account-id
-              key: accountGuid
+          value: '123456' # Dummy value
         - name: clusterName
-          value: 'govuk-integration-new' # add cluster name
+          value: 'govuk-integration-new'
         - name: server
-          value: 'https://kubernetes.default.svc' # add Kubescape-compatible backend service URL
+          value: 'https://kubernetes.default.svc'
   project: default
   syncPolicy:
     syncOptions:
@@ -38,3 +37,4 @@ spec:
       jsonPointers:
         - /data
         - /metadata
+{{ end }}
