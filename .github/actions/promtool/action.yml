@@ -1,0 +1,14 @@
+name: Promtool
+
+inputs:
+  args:
+    description: Arguments to pass to promtool (as a single string)
+    required: true
+
+runs:
+  using: docker
+  image: docker://prom/prometheus
+  entrypoint: /bin/sh
+  args:
+    - -c
+    - promtool ${{ inputs.args }}
