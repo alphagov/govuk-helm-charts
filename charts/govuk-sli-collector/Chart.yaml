@@ -1,0 +1,5 @@
+apiVersion: v2
+name: govuk-sli-collector
+description: Cronjob for GOV.UK SLI Collector (https://github.com/alphagov/govuk-sli-collector/)
+type: application
+version: 1.0.0
