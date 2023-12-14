@@ -1237,10 +1237,6 @@ govukApplications:
         sagemakerIamRole: arn:aws:iam::210287912431:role/learn-to-rank-sagemaker
         serviceAccountIamRole: arn:aws:iam::210287912431:role/search-api-learn-to-rank-govuk
 
-  - name: govuk-sli-collector
-    chartPath: charts/govuk-sli-collector
-    postSyncWorkflowEnabled: "false"
-
   - name: hmrc-manuals-api
     helmValues:
       nginxClientMaxBodySize: 2M
