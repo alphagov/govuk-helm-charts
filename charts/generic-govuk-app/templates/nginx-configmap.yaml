@@ -15,13 +15,13 @@ data:
     error_log  /dev/stderr warn;
     pid        /tmp/nginx.pid;
 
-    events {
-      worker_connections  1024;
-    }
-
     {{- if ne .Values.govukEnvironment "staging" }}
     load_module /usr/lib/nginx/modules/ngx_http_perl_module.so;
     {{- end }}
+
+    events {
+      worker_connections  1024;
+    }
 
     http {
       include       /etc/nginx/mime.types;
