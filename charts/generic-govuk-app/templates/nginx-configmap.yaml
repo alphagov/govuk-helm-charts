@@ -15,11 +15,13 @@ data:
     error_log  /dev/stderr warn;
     pid        /tmp/nginx.pid;
 
-    load_module /usr/lib/nginx/modules/ngx_http_perl_module.so;
-
     events {
       worker_connections  1024;
     }
+
+    {{- if ne .Values.govukEnvironment "staging" }}
+    load_module /usr/lib/nginx/modules/ngx_http_perl_module.so;
+    {{- end }}
 
     http {
       include       /etc/nginx/mime.types;
@@ -41,7 +43,14 @@ data:
       sendfile        on;
       keepalive_timeout  65;
 
+
+      {{- if eq .Values.govukEnvironment "staging" }}
       # Set GOVUK-Request-Id if not set
+      map $http_govuk_request_id $govuk_request_id {
+        default $http_govuk_request_id;
+        ''      "$pid-$msec-$remote_addr-$request_length";
+      }
+      {{- else }}
       # See http://nginx.org/en/docs/http/ngx_http_perl_module.html
       perl_modules perl/lib;
       perl_set $govuk_request_id '
@@ -59,6 +68,8 @@ data:
           }
         }
       ';
+      {{- end }}
+      
 
       # Default values for response headers. These values are used when the
       # header is not already set on the incoming response.
@@ -77,7 +88,7 @@ data:
         '"@timestamp":"$time_iso8601",'
         '"body_bytes_sent":$body_bytes_sent,'
         '"bytes_sent":$bytes_sent,'
-        '"govuk_request_id":"$http_govuk_request_id",'
+        '"govuk_request_id":"$govuk_request_id",'
         '"http_host":"$http_host",'
         '"http_referer":"$http_referer",'
         '"http_user_agent":"$http_user_agent",'
