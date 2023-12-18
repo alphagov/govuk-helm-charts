@@ -60,3 +60,9 @@ spec:
               secretKeyRef:
                 name: smokey-signon-account
                 key: password
+          - name: SE_CACHE_PATH
+            value: "/tmp/.cache/selenium"
+          - name: XDG_CONFIG_HOME
+            value: "/tmp/.chrome"
+          - name: XDG_CACHE_HOME
+            value: "/tmp/.chrome"
