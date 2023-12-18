@@ -29,6 +29,14 @@ resources:
     cpu: 400m
     memory: 384Mi
 
+# TODO: figure out why memory usage is so spiky in these cases.
+_s5cmdRamWorkaround: &s5cmd-ram-workaround
+  resources:
+    limits:
+      memory: 2048Mi
+    requests:
+      memory: 1536Mi
+
 _mongoResources: &mongo-resources
   resources:
     limits:
@@ -116,11 +124,13 @@ cronjobs:
         - op: backup
 
     content-store-postgres:
+      <<: *s5cmd-ram-workaround
       schedule: "06 21 * * *"  # Keep this before publishing-api.
       db: content_store_production
       operations:
         - op: backup
     draft-content-store-postgres:
+      <<: *s5cmd-ram-workaround
       schedule: "16 21 * * *"  # Keep this before publishing-api.
       db: draft_content_store_production
       operations:
@@ -163,15 +173,11 @@ cronjobs:
         - op: backup
 
     publishing-api-postgres:
+      <<: *s5cmd-ram-workaround
       schedule: "36 21 * * *"
       db: publishing_api_production
       operations:
         - op: backup
-      resources: &pubapi-resources
-        limits:
-          memory: 1024Mi
-        requests:
-          memory: 768Mi
 
     release-mysql:
       schedule: "11 23 * * *"
@@ -308,6 +314,7 @@ cronjobs:
         - op: backup
 
     content-store-postgres:
+      <<: *s5cmd-ram-workaround
       db: content_store_production
       schedule: "06 22 * * *"
       operations:
@@ -315,6 +322,7 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
     draft-content-store-postgres:
+      <<: *s5cmd-ram-workaround
       db: draft_content_store_production
       schedule: "16 22 * * *"
       operations:
@@ -373,9 +381,9 @@ cronjobs:
         - op: backup
 
     publishing-api-postgres:
+      <<: *s5cmd-ram-workaround
       schedule: "36 1 * * *"
       db: publishing_api_production
-      resources: *pubapi-resources
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -553,6 +561,7 @@ cronjobs:
         - op: backup
 
     content-store-postgres:
+      <<: *s5cmd-ram-workaround
       db: content_store_production
       schedule: "06 23 * * *"
       operations:
@@ -562,6 +571,7 @@ cronjobs:
     # TODO: stop copying draft content into integration once the design quirks
     # of publishing-api that require it are rectified.
     draft-content-store-postgres:
+      <<: *s5cmd-ram-workaround
       db: draft_content_store_production
       schedule: "16 23 * * *"
       operations:
@@ -613,9 +623,9 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
 
     publishing-api-postgres:
+      <<: *s5cmd-ram-workaround
       schedule: "36 5 * * *"
       db: publishing_api_production
-      resources: *pubapi-resources
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
