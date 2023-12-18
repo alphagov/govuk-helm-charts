@@ -22,11 +22,17 @@ list () {
   s5cmd ls "$BUCKET/$DB_HOST/" | grep -Eo "[-0-9:TZ_]+-$db_name_re\.gz"
 }
 
+# foo-bar -> foo_bar
+# draft-foo-bar_production -> foo_bar
+default_db_owner () {
+  echo "${1%_production}" | sed -E 's/^(draft[_-])?(.*)/\2/' | tr - _
+}
+
 : "${GOVUK_ENVIRONMENT:?required}"
 : "${DB_USER:=aws_db_admin}"
 : "${DB_PASSWORD:=}"
 : "${DB_HOST:?required}"
 : "${DB_DATABASE:?required}"
-: "${DB_OWNER:=$(echo "${DB_DATABASE%_production}" | tr - _)}"
+: "${DB_OWNER:=$(default_db_owner "$DB_DATABASE")}"
 : "${BUCKET:=s3://govuk-$GOVUK_ENVIRONMENT-database-backups}"
 readonly GOVUK_ENVIRONMENT DB_USER DB_PASSWORD DB_HOST DB_DATABASE BUCKET
