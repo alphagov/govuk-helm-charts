@@ -690,7 +690,6 @@ govukApplications:
               key: bearer_token
 
   - name: content-store
-    repoName: content-store-postgresql-branch
     helmValues: &content-store
       nginxClientMaxBodySize: 20M
       # TODO(chris.banks): tune these once we have some real-world usage data.
