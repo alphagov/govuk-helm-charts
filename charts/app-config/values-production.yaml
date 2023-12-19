@@ -746,13 +746,12 @@ govukApplications:
           eks.amazonaws.com/role-arn: arn:aws:iam::172025368201:role/db-backup-govuk
 
   - name: draft-content-store
-    repoName: content-store-postgresql-branch
+    repoName: content-store
     helmValues:
       <<: *content-store
       rails:
         createKeyBaseSecret: false
-        # use the same secret as the mongo draft-content-store, it will make the
-        # eventual switchover easier and reduce toil
+        # use the same secret as the live content-store, it will reduce toil
         secretKeyBaseName: content-store-rails-secret-key-base
       sentry:
         createSecret: false  # Sentry DSNs are per repo.
