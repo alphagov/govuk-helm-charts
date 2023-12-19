@@ -241,15 +241,11 @@ cronjobs:
         - op: backup
 
     whitehall-mysql:
+      <<: *s5cmd-ram-workaround
       schedule: "28 0 * * *"
       db: whitehall_production
       operations:
         - op: backup
-      resources: &whitehall-resources
-        limits:
-          memory: 1024Mi
-        requests:
-          memory: 768Mi
 
 
   staging:
@@ -488,9 +484,9 @@ cronjobs:
         - op: backup
 
     whitehall-mysql:
+      <<: *s5cmd-ram-workaround
       schedule: "28 1 * * *"
       db: whitehall_production
-      resources: *whitehall-resources
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -729,9 +725,9 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
 
     whitehall-mysql:
+      <<: *s5cmd-ram-workaround
       schedule: "28 3 * * *"
       db: whitehall_production
-      resources: *whitehall-resources
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
