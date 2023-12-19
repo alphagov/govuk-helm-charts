@@ -739,7 +739,7 @@ govukApplications:
           eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/db-backup-govuk
 
   - name: draft-content-store
-    repoName: content-store-postgresql-branch
+    repoName: content-store
     helmValues:
       <<: *content-store
       rails:
