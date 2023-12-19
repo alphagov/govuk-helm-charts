@@ -1,4 +1,6 @@
 {{- $_ := .Values.govukEnvironment | required "govukEnvironment is required" }}
+{{- $imageTagConfig := $.Files.Get (printf "charts/app-config/image-tags/%s/govuk-sli-collector" .Values.govukEnvironment) | fromYaml }}
+{{- $imageTag := $imageTagConfig.image_tag }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -30,7 +32,7 @@ spec:
               emptyDir: {}
           containers:
             - name: main
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: "{{ .Values.imageRepository }}:{{ $imageTag }}"
               imagePullPolicy: "Always"
               env:
                 - name: INTERVAL_MINUTES
@@ -55,7 +57,7 @@ spec:
                       name: govuk-sli-collector-sentry
                       key: dsn
                 - name: SENTRY_RELEASE
-                  value: "{{ .Values.image.tag }}"
+                  value: "{{ $imageTag }}"
                 - name: SENTRY_CURRENT_ENV
                   value: "{{ .Values.govukEnvironment }}"
               resources:
