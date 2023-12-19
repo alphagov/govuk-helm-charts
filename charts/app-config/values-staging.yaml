@@ -694,7 +694,6 @@ govukApplications:
               key: bearer_token
 
   - name: content-store
-    repoName: content-store-postgresql-branch
     helmValues: &content-store
       nginxClientMaxBodySize: 20M
       replicaCount: 6
@@ -742,13 +741,12 @@ govukApplications:
           eks.amazonaws.com/role-arn: arn:aws:iam::696911096973:role/db-backup-govuk
 
   - name: draft-content-store
-    repoName: content-store-postgresql-branch
+    repoName: content-store
     helmValues:
       <<: *content-store
       rails:
         createKeyBaseSecret: false
-        # use the same secret as the mongo draft-content-store, it will make the
-        # eventual switchover easier and reduce toil
+        # use the same secret as the main content-store, it will reduce toil
         secretKeyBaseName: content-store-rails-secret-key-base
       sentry:
         createSecret: false  # Sentry DSNs are per repo.
