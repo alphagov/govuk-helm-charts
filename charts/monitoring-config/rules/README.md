@@ -3,7 +3,7 @@
 - Install `promtool` on your machine: `brew install prometheus`
 - Run the following command
 
-    ```sh
+    ```bash
     (GLOBIGNORE='*_tests.*' && promtool check rules *.yaml) &&
       promtool test rules *_tests.yaml
     ```
