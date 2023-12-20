@@ -1275,6 +1275,9 @@ govukApplications:
   - name: govuk-sli-collector
     chartPath: charts/govuk-sli-collector
     postSyncWorkflowEnabled: "false"
+    helmValues:
+      image:
+        tag: "deployed-to-production"
 
   - name: hmrc-manuals-api
     helmValues:
