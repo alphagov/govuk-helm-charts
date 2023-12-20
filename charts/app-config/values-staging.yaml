@@ -517,6 +517,8 @@ govukApplications:
           value: *publishing-notify-template
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+        - name: FIND_CONTENT_QUERY_PAGE_SIZE
+          value: 1000
 
   - name: content-data-api
     helmValues:
