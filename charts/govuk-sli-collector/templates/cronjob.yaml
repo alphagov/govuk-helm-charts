@@ -30,7 +30,7 @@ spec:
               emptyDir: {}
           containers:
             - name: main
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: "{{ .Values.images.GovukSliCollector.repository }}:{{ .Values.images.GovukSliCollector.tag }}"
               imagePullPolicy: "Always"
               env:
                 - name: INTERVAL_MINUTES
@@ -55,7 +55,7 @@ spec:
                       name: govuk-sli-collector-sentry
                       key: dsn
                 - name: SENTRY_RELEASE
-                  value: "{{ .Values.image.tag }}"
+                  value: "{{ .Values.images.GovukSliCollector.tag }}"
                 - name: SENTRY_CURRENT_ENV
                   value: "{{ .Values.govukEnvironment }}"
               resources:
