@@ -1,3 +1,3 @@
-image_tag: release-108623e34bfcfca22ed5b0d2b46a9ada2d102aba
+image_tag: v523
 automatic_deploys_enabled: true
-promote_deployment: false
+promote_deployment: true
