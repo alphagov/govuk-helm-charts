@@ -7,22 +7,21 @@ spec:
   destination:
     name: kubescape
     namespace: kubescape
-    server: 'https://kubernetes.default.svc' # change to your server
+    server: https://kubernetes.default.svc
   source:
-    path: charts/kubescape-operator
-    repoURL: 'https://github.com/kubescape/helm-charts'
-    targetRevision: HEAD
-    helm:
+    {{- include "app-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://github.com/kubescape/helm-charts" "path" "charts/kubescape-operator" "targetRevision" "HEAD") )
+        | nindent 4 }}
     helm:
       valueFiles:
         - values.yaml
       parameters:
         - name: account
-          value: '123456' # Dummy value
+          value: "123456" # Dummy value
         - name: clusterName
-          value: 'govuk-integration-new'
+          value: "govuk-integration-new"
         - name: server
-          value: 'https://kubernetes.default.svc'
+          value: "https://kubernetes.default.svc"
   project: default
   syncPolicy:
     syncOptions:
