@@ -1,0 +1,40 @@
+{{ if eq .Values.govukEnvironment "integration" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubescape
+spec:
+  destination:
+    name: kubescape
+    namespace: kubescape
+    server: 'https://kubernetes.default.svc' # change to your server
+  source:
+    path: charts/kubescape-operator
+    repoURL: 'https://github.com/kubescape/helm-charts'
+    targetRevision: HEAD
+    helm:
+    helm:
+      valueFiles:
+        - values.yaml
+      parameters:
+        - name: account
+          value: '123456' # Dummy value
+        - name: clusterName
+          value: 'govuk-integration-new'
+        - name: server
+          value: 'https://kubernetes.default.svc'
+  project: default
+  syncPolicy:
+    syncOptions:
+      - PruneLast=true
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
+  ignoreDifferences:
+    - group: core
+      kind: ConfigMap
+      name: ks-cloud-config
+      namespace: kubescape
+      jsonPointers:
+        - /data
+        - /metadata
+{{ end }}
