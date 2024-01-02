@@ -36,6 +36,12 @@
       "automergeType": "branch"
     },
     {
+      "matchPackageNames": ["external-secrets"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
       "matchFileNames": ["**/helm-versions/*"],
       "additionalBranchPrefix": "{{replace '^.+\\/' '' packageFile}}-",
       "commitMessageSuffix": " ({{replace '^.+\\/' '' packageFile}})"
