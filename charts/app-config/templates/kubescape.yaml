@@ -3,10 +3,11 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: kubescape
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
 spec:
   destination:
     name: kubescape
-    namespace: kubescape
+    namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
     server: 'https://kubernetes.default.svc' # change to your server
   source:
     path: charts/kubescape-operator
