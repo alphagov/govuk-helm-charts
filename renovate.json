@@ -30,6 +30,12 @@
       "automergeType": "branch"
     },
     {
+      "matchPackageNames": ["reloader"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
       "matchFileNames": ["**/helm-versions/*"],
       "additionalBranchPrefix": "{{replace '^.+\\/' '' packageFile}}-",
       "commitMessageSuffix": " ({{replace '^.+\\/' '' packageFile}})"
