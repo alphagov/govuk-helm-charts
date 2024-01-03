@@ -1,0 +1,264 @@
+# Licensify Components
+nameOverride: "licensify"
+
+licensify:
+  # Admin Config
+  admin:
+    image:
+      repository: ghcr.io/alphagov/licensify/admin
+      tag: release_209-eafeb428
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations: {}
+      class: "nginx"
+      hosts:
+        - host: admin
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+    service:
+      type: LoadBalancer
+      nodePort: 30950
+      port: 9950
+      targetPort: 9950
+
+  # Backend Config
+  backend:
+    image:
+      repository: ghcr.io/alphagov/licensify/backend
+      tag: release_209-eafeb428
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations: {}
+      class: "nginx"
+      hosts:
+        - host: backend
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+    service:
+      type: LoadBalancer
+      nodePort: 30920
+      port: 9920
+      targetPort: 9920
+
+# Dummyservices Config (Dev Only)
+  dummyservices:
+    image:
+      repository: ghcr.io/alphagov/licensify/dummyservices
+      tag: release_209-eafeb428
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations: {}
+      class: "nginx"
+      hosts:
+        - host: dummyservices
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+    service:
+      type: LoadBalancer
+      nodePort: 30910
+      port: 9910
+      targetPort: 9910
+
+  # Feed Config
+  feed:
+    image:
+      repository: ghcr.io/alphagov/licensify/feed
+      tag: release_209-eafeb428
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations: {}
+      class: "nginx"
+      hosts:
+        - host: feed
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+    service:
+      type: LoadBalancer
+      nodePort: 30940
+      port: 9940
+      targetPort: 9940
+
+  # Frontend Config
+  frontend:
+    image:
+      repository: ghcr.io/alphagov/licensify/frontend
+      tag: release_209-eafeb428
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations: {}
+      class: "nginx"
+      hosts:
+        - host: frontend
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+    service:
+      type: LoadBalancer
+      nodePort: 30903
+      port: 9903
+      targetPort: 9903
+
+  # Shared Environment Variables
+  env:
+    - name: SBT_MODE
+      value: docker
+    - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
+      value: key
+    - name: APPLICATION_FORM_AWS_SECRET_KEY
+      value: seekrit
+    - name: APPLICATION_FORM_AWS_REGION
+      value: eu-west-1
+    - name: APPLICATION_FORM_BUCKET_NAME
+      value: liz
+    - name: GDS_CONFIG_FILE
+      value: /etc/licensing/gds-licensing-config.properties
+
+
+  # imagePullSecrets:
+  #   - name: ghcr-alphagov
+
+  # Config for GDS Licensing Config .properties File
+  # (See templates/configmap-gds-licensing-config-template.yaml)
+  config:
+    # Service Hostname Overrides
+    clamAntivirusHost: clamav
+
+    # MongoDB Config
+    mongo:
+      dbHosts: mongo:27017
+      dbReferenceName: licensify-test
+      dbAuditName: licensify-test
+      dbAuthEnabled: "true"
+      dbAuthUsername: licensify-test
+      dbAuthPassword: licensify-test
+      dbSlaveOk: "false"
+
+    # ELMS/Licensify Service Endpoints
+    elmsFrontendHost: http://frontend:9903/
+    elmsAdminHost: http://backend:9920/
+    elmsPdfApiHost: http://dummyservices:9910/GDSELMS/
+
+    # Other Service Endpoints
+    calendarApiUrl: https://www.gov.uk/bank-holidays.json
+    performancePlatformServiceUrl: http://dummyservices:9910/fake-performance-data/send
+    placesApiUrl: http://places-api:9700/places
+
+    # Client Credentials
+    clientId: 1
+    clientSecret: 2
+
+    # Callback URLs
+    accessTokenUrl: http://dummyservices:9910/fake-oauth/token
+    authorizationUrl: http://dummyservices:9910/fake-oauth
+    oauthCallbackUrlOverride: http://backend:9920/licence-management/admin/oauth
+    signonUrl: http://dummyservices:9910/fake-oauth
+    userDetailsUrl: http://dummyservices:9910/fake-oauth/user.json
+
+    # Notify Configuration
+    noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
+    ## notifyKeyApi: unset
+    notifyKeyService: ab58b387-ffef-42f0-a67f-9784aecc1e92
+    notifyTemplateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
+
+    # Dev Environment Overrides
+    ldgWebserviceUrl: http://dummyservices:9910/fake-ldg
+    paymentCapitaFormUrl: http://dummyservices:9910/fake-capita
+    paymentCivicaFormUrl: http://dummyservices:9910/fake-civica
+    paymentCivicaQueryAuthSrvUrl: http://dummyservices:9910/fake-civica/queryAuthService
+    paymentNorthgateFormUrlFake: "true"
+    paymentWorldpayFormUrl: http://dummyservices:9910/fake-worldpay
+    paymentsTestMode: true
+    s3Url: http://s3mock:9911/
+
+    # Other Settings
+    appTimezoneId: Europe/London
+    feedActor: "true"
+    isMasterNode: true
+    isTest: true
+    licenceApplicationPurgeExpiredAfter: 2
+    performanceDataSenderCronExpression: 0 0 1 * * ?
+    pdfCacheSeconds: 0
+    scheduledVirusScanCronExpression: 0 0 2 * * ?
+    uncollectedExpiryEnabled: "true"
+
+
+# Service Components
+####################
+
+# ClamAV Config
+clamav:
+  count: 1
+
+# Mongo is only needed for Development - We use AWS DocumentDB in Production,
+# This can be disaabled in non-Dev.
+mongo:
+  enabled: true
+  count: 1
+
+# ExternalSecret won't work in Dev, but must be present everywhere else.
+externalSecret:
+  enabled: false

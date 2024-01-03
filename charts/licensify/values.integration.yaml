@@ -1,0 +1,269 @@
+# Licensify Components
+nameOverride: "licensify"
+
+licensify:
+  # Admin Config
+  admin:
+    fullnameOverride: "licensify-admin"
+
+    image:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/licensify/admin
+      tag: release_210-bdbf4b90
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/healthcheck-path: /
+        alb.ingress.kubernetes.io/load-balancer-name: licensify-admin
+        alb.ingress.kubernetes.io/load-balancer-attributes: >
+          access_logs.s3.enabled=true,
+          access_logs.s3.bucket=govuk-integration-aws-logging,
+          access_logs.s3.prefix=elb/licensify-admin
+      class: "aws-alb"
+      hosts:
+        - host: licensify-admin.eks.integration.govuk.digital
+          paths:
+            - path: /
+              pathType: Prefix
+
+      tls:
+        # - hosts: 
+        #   - licensify-admin.eks.integration.govuk.digital
+
+    service:
+      type: NodePort
+      nodePort: 30950
+      port: 80
+      targetPort: 9950
+
+  # Backend Config
+  backend:
+    fullnameOverride: "licensify-backend"
+
+    image:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/licensify/backend
+      tag: release_210-bdbf4b90
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: false
+
+    service:
+      type: NodePort
+      nodePort: 30920
+      port: 9920
+      targetPort: 9920
+
+# Dummyservices Config (Dev Only)
+  dummyservices:
+    fullnameOverride: "licensify-dummyservices"
+
+    image:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/licensify/dummyservices
+      tag: release_210-bdbf4b90
+      pullPolicy: IfNotPresent
+
+    count: 0
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: false
+
+    service:
+      type: NodePort
+      nodePort: 30910
+      port: 9910
+      targetPort: 9910
+
+  # Feed Config
+  feed:
+    fullnameOverride: "licensify-feed"
+
+    image:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/licensify/feed
+      tag: release_210-bdbf4b90
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/healthcheck-path: /licence-management/feed/process-applications
+        alb.ingress.kubernetes.io/load-balancer-name: licensify-feed
+        alb.ingress.kubernetes.io/load-balancer-attributes: >
+          access_logs.s3.enabled=true,
+          access_logs.s3.bucket=govuk-integration-aws-logging,
+          access_logs.s3.prefix=elb/licensify-feed
+      class: "aws-alb"
+      hosts:
+        - host: licensify-feed.eks.integration.govuk.digital
+          paths:
+            - path: /
+              pathType: Prefix
+      tls: []
+      #  - hosts:
+      #      - licensify-feed.eks.integration.govuk.digital
+
+    service:
+      type: NodePort
+      nodePort: 30940
+      port: 80
+      targetPort: 9940
+
+  # Frontend Config
+  frontend:
+    fullnameOverride: "licensify-frontend"
+
+    image:
+      repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/licensify/frontend
+      tag: release_210-bdbf4b90
+      pullPolicy: IfNotPresent
+
+    count: 1
+    autoscaling:
+      enabled: false
+
+    ingress:
+      enabled: true
+      annotations:
+        alb.ingress.kubernetes.io/scheme: internet-facing
+        alb.ingress.kubernetes.io/target-type: ip
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+        alb.ingress.kubernetes.io/ssl-redirect: "443"
+        alb.ingress.kubernetes.io/healthcheck-path: /apply-for-a-licence
+        alb.ingress.kubernetes.io/load-balancer-name: licensify-frontend
+        alb.ingress.kubernetes.io/load-balancer-attributes: >
+          access_logs.s3.enabled=true,
+          access_logs.s3.bucket=govuk-integration-aws-logging,
+          access_logs.s3.prefix=elb/licensify-frontend
+      class: "aws-alb"
+      hosts:
+        - host: licensify.eks.integration.govuk.digital
+          paths:
+            - path: /
+              pathType: Prefix
+
+      tls: []
+      #  - hosts:
+      #     - licensify.eks.integration.govuk.digital
+
+    service:
+      type: NodePort
+      nodePort: 30903
+      port: 80
+      targetPort: 9903
+
+  # Shared Environment Variables
+  env:
+    - name: SBT_MODE
+      value: docker
+    - name: APPLICATION_FORM_AWS_REGION
+      value: eu-west-1
+    - name: APPLICATION_FORM_BUCKET_NAME
+      value: govuk-licensing-application-forms-integration
+    - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
+      value: key
+    - name: APPLICATION_FORM_AWS_SECRET_KEY
+      value: seekrit
+    - name: GDS_CONFIG_FILE
+      value: /etc/licensing/gds-licensing-config.properties
+
+
+  # imagePullSecrets:
+  #   - name: ghcr-alphagov
+
+  # Config for GDS Licensing Config .properties File
+  # (See templates/configmap-gds-licensing-config-template.yaml)
+  config:
+    # MongoDB Config
+    mongo:
+      dbHosts: licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+      dbReferenceName: licensify-refdata
+      dbAuditName: licensify-audit
+      dbAuthEnabled: true
+      dbAuthUsername: master
+      dbAuthPassword: ExternalSecret
+      dbSlaveOk: false
+
+    # ELMS/Licensify Service Endpoints
+    elmsAdminHost: https://licensify-admin.eks.integration.govuk.digital/
+    elmsFrontendHost: https://licensify.eks.integration.govuk.digital/
+    elmsPdfApiHost: https://gdspreprodaws.aptosolutions.co.uk/GDSELMS-5/
+
+    # Other Service Endpoints
+    clamAntivirusHost: clamav
+    # govukUrl: https://www-origin.integration.publishing.service.gov.uk
+    govukUrl: https://licensify.eks.integration.govuk.digital/
+    licenceFinderUrl: https://www-origin.integration.publishing.service.gov.uk/licence-finder
+    performancePlatformServiceUrl: https://www.integration.performance.service.gov.uk/data/licensing/application
+    placesApiUrl: http://places-api:9700/places
+
+    # Client Credentials (Will be handled by ESO)
+    clientId: ExternalSecret
+    clientSecret: ExternalSecret
+    performancePlatformBearerToken: ExternalSecret
+
+    # Callback URLs
+    accessTokenUrl: https://signon.integration.publishing.service.gov.uk/oauth/access_token
+    authorizationUrl: https://signon.integration.publishing.service.gov.uk/oauth/authorize
+    oauthCallbackUrlOverride: https://licensify-admin.eks.integration.govuk.digital/licence-management/admin/oauth
+    signonUrl: https://signon.integration.publishing.service.gov.uk
+    # uploadUrlBase: https://uploadlicence.integration.publishing.service.gov.uk/
+    uploadUrlBase: https://licensify.eks.integration.govuk.digital/
+    userDetailsUrl: https://signon.integration.publishing.service.gov.uk/user.json
+    worldpayRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayComplete
+    worldpayCancelledRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayCancelled
+
+    # GA Config
+    googleAnalytics:
+      accountAdmin: UA-34519962-2
+      domainAdmin: integration.publishing.service.gov.uk
+      accountFrontend: UA-34519962-1
+      domainFrontend: integration.publishing.service.gov.uk
+
+    # Notify Configuration
+    noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
+    notifyKeyApi: ExternalSecret
+
+    # Other Settings    
+    appTimezoneId: Europe/London
+    elmsMaxAppProcessAttemptCount: 6
+    feedActor: true
+    isMasterNode: true
+    paymentsTestMode: true
+    performanceDataSenderCronExpression: 0 0 1 * * ?
+    scheduledVirusScanCronExpression: 0 0 16 * * ?
+
+# Service Components
+clamav:
+  count: 1
+
+# Mongo is only needed for Development - We use AWS DocumentDB in Production,
+# This can be shut down in non-Dev.
+mongo:
+  enabled: false
+  count: 0
+
+externalSecret:
+  enabled: true
