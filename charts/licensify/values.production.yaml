@@ -12,8 +12,6 @@ licensify:
       pullPolicy: IfNotPresent
 
     count: 1
-    autoscaling:
-      enabled: false
 
     ingress:
       enabled: true
@@ -55,8 +53,6 @@ licensify:
       pullPolicy: IfNotPresent
 
     count: 1
-    autoscaling:
-      enabled: false
 
     ingress:
       enabled: false
@@ -88,8 +84,6 @@ licensify:
       pullPolicy: IfNotPresent
 
     count: 1
-    autoscaling:
-      enabled: false
 
     ingress:
       enabled: false
@@ -122,8 +116,6 @@ licensify:
       pullPolicy: IfNotPresent
 
     count: 1
-    autoscaling:
-      enabled: false
 
     ingress:
       enabled: true
@@ -164,8 +156,6 @@ licensify:
       pullPolicy: IfNotPresent
 
     count: 1
-    autoscaling:
-      enabled: false
 
     ingress:
       enabled: true

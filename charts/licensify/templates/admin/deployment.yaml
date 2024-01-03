@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "licensify.admin.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.licensify.admin.autoscaling.enabled }}
   replicas: {{ .Values.licensify.admin.count }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "licensify.admin.selectorLabels" . | nindent 6 }}
