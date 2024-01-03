@@ -1373,6 +1373,25 @@ govukApplications:
         config:
           mongo:
             dbHosts: licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+          elmsAdminHost: https://licensify-admin.eks.integration.govuk.digital/
+          elmsFrontendHost: https://licensify.eks.integration.govuk.digital/
+          govukUrl: https://licensify.eks.integration.govuk.digital/
+          licenceFinderUrl: https://www-origin.integration.publishing.service.gov.uk/licence-finder
+          performancePlatformServiceUrl: https://www.integration.performance.service.gov.uk/data/licensing/application
+          accessTokenUrl: https://signon.integration.publishing.service.gov.uk/oauth/access_token
+          authorizationUrl: https://signon.integration.publishing.service.gov.uk/oauth/authorize
+          oauthCallbackUrlOverride: https://licensify-admin.eks.integration.govuk.digital/licence-management/admin/oauth
+          signonUrl: https://signon.integration.publishing.service.gov.uk
+          uploadUrlBase: https://licensify.eks.integration.govuk.digital/
+          userDetailsUrl: https://signon.integration.publishing.service.gov.uk/user.json
+          worldpayRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayComplete
+          worldpayCancelledRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayCancelled
+          googleAnalytics:
+            accountAdmin: UA-34519962-2
+            domainAdmin: integration.publishing.service.gov.uk
+            accountFrontend: UA-34519962-1
+            domainFrontend: integration.publishing.service.gov.uk
+          noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
 
   - name: link-checker-api
     helmValues:

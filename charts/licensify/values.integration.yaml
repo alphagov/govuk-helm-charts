@@ -202,24 +202,16 @@ licensify:
     elmsPdfApiHost: https://gdspreprodaws.aptosolutions.co.uk/GDSELMS-5/
 
     # Other Service Endpoints
-    clamAntivirusHost: clamav
     # govukUrl: https://www-origin.integration.publishing.service.gov.uk
     govukUrl: https://licensify.eks.integration.govuk.digital/
     licenceFinderUrl: https://www-origin.integration.publishing.service.gov.uk/licence-finder
     performancePlatformServiceUrl: https://www.integration.performance.service.gov.uk/data/licensing/application
-    placesApiUrl: http://places-api:9700/places
-
-    # Client Credentials (Will be handled by ESO)
-    clientId: ExternalSecret
-    clientSecret: ExternalSecret
-    performancePlatformBearerToken: ExternalSecret
 
     # Callback URLs
     accessTokenUrl: https://signon.integration.publishing.service.gov.uk/oauth/access_token
     authorizationUrl: https://signon.integration.publishing.service.gov.uk/oauth/authorize
     oauthCallbackUrlOverride: https://licensify-admin.eks.integration.govuk.digital/licence-management/admin/oauth
     signonUrl: https://signon.integration.publishing.service.gov.uk
-    # uploadUrlBase: https://uploadlicence.integration.publishing.service.gov.uk/
     uploadUrlBase: https://licensify.eks.integration.govuk.digital/
     userDetailsUrl: https://signon.integration.publishing.service.gov.uk/user.json
     worldpayRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayComplete
@@ -234,7 +226,6 @@ licensify:
 
     # Notify Configuration
     noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
-    notifyKeyApi: ExternalSecret
 
     # Other Settings    
     appTimezoneId: Europe/London
@@ -244,16 +235,3 @@ licensify:
     paymentsTestMode: true
     performanceDataSenderCronExpression: 0 0 1 * * ?
     scheduledVirusScanCronExpression: 0 0 16 * * ?
-
-# Service Components
-clamav:
-  count: 1
-
-# Mongo is only needed for Development - We use AWS DocumentDB in Production,
-# This can be shut down in non-Dev.
-mongo:
-  enabled: false
-  count: 0
-
-externalSecret:
-  enabled: true
