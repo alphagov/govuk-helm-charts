@@ -13,7 +13,8 @@ metadata:
     kubernetes.io/description: >
       Temporary service to let Mongo nodes outside the k8s cluster connect to
       the one inside the cluster. Obsolete once the out-of-cluster nodes have
-      been removed from the replicaset.
+      been removed from the replicaset. Needs to be deleted before scaling out
+      the statefulset beyond its initial replica.
 spec:
   type: LoadBalancer
   loadBalancerSourceRanges:
