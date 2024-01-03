@@ -172,33 +172,32 @@ licensify:
   # Config for GDS Licensing Config .properties File
   # Specify a values.[environment].yaml file when running Helm.
   # (See templates/configmap-gds-licensing-config-template.yaml)
-  # config:
-    # Service Hostname Overrides
-    # clamAntivirusHost: clamav
-
+  config:
     # MongoDB Config
-    # mongo:
+    mongo:
     #   dbHosts: mongo:27017
-    #   dbReferenceName: licensify-test
-    #   dbAuditName: licensify-test
-    #   dbAuthEnabled: "true"
-    #   dbAuthUsername: licensify-test
-    #   dbAuthPassword: licensify-test
-    #   dbSlaveOk: "false"
+      dbReferenceName: licensify-refdata
+      dbAuditName: licensify-audit
+      dbAuthEnabled: true
+      dbAuthUsername: master
+      dbAuthPassword: ExternalSecret
+      dbSlaveOk: false
 
     # ELMS/Licensify Service Endpoints
     # elmsFrontendHost: http://frontend:9903/
     # elmsAdminHost: http://backend:9920/
-    # elmsPdfApiHost: http://dummyservices:9910/GDSELMS/
+    elmsPdfApiHost: https://gdspreprodaws.aptosolutions.co.uk/GDSELMS-5/
 
     # Other Service Endpoints
+    clamAntivirusHost: clamav
     # calendarApiUrl: https://www.gov.uk/bank-holidays.json
     # performancePlatformServiceUrl: http://dummyservices:9910/fake-performance-data/send
-    # placesApiUrl: http://places-api:9700/places
+    placesApiUrl: http://places-api:9700/places
 
     # Client Credentials
-    # clientId: 1
-    # clientSecret: 2
+    clientId: ExternalSecret
+    clientSecret: ExternalSecret
+    performancePlatformBearerToken: ExternalSecret
 
     # Callback URLs
     # accessTokenUrl: http://dummyservices:9910/fake-oauth/token
@@ -209,7 +208,7 @@ licensify:
 
     # Notify Configuration
     # noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
-    # notifyKeyApi: unset
+    notifyKeyApi: ExternalSecret
     # notifyKeyService: ab58b387-ffef-42f0-a67f-9784aecc1e92
     # notifyTemplateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
 
@@ -224,9 +223,13 @@ licensify:
     # s3Url: http://s3mock:9911/
 
     # Other Settings
-    # appTimezoneId: Europe/London
-    # feedActor: "true"
-    # isMasterNode: true
+    appTimezoneId: Europe/London
+    elmsMaxAppProcessAttemptCount: 6
+    feedActor: true
+    isMasterNode: true
+    paymentsTestMode: true
+    performanceDataSenderCronExpression: 0 0 1 * * ?
+    scheduledVirusScanCronExpression: 0 0 16 * * ?
     # isTest: true
     # licenceApplicationPurgeExpiredAfter: 2
     # performanceDataSenderCronExpression: 0 0 1 * * ?
