@@ -25,6 +25,8 @@ securityContext:
   runAsNonRoot: true
   runAsUser: *uid
 
+replicas: 1
+
 resources:
   limits:
     cpu: 3000m
