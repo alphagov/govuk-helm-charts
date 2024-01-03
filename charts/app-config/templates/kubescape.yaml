@@ -14,7 +14,6 @@ spec:
     repoURL: 'https://github.com/kubescape/helm-charts'
     targetRevision: HEAD
     helm:
-    helm:
       valueFiles:
         - values.yaml
       parameters:
