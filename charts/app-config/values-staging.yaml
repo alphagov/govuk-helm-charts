@@ -1856,7 +1856,7 @@ govukApplications:
               key: oauth_secret
         - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
           value: "mongodb://\
-            router-backend-1,\
+            router-mongo-0,\
             router-backend-2,\
             router-backend-3/router"
 
@@ -1881,7 +1881,7 @@ govukApplications:
               key: oauth_secret
         - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
           value: "mongodb://\
-            router-backend-1,\
+            router-mongo-0,\
             router-backend-2,\
             router-backend-3/draft_router"
 
@@ -1962,7 +1962,7 @@ govukApplications:
           value: ":9394"
         - name: ROUTER_MONGO_URL
           value: &router_mongo_hosts "\
-            router-backend-1,\
+            router-mongo-0,\
             router-backend-2,\
             router-backend-3"
         - name: BACKEND_URL_collections
