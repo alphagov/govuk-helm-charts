@@ -1,47 +1,47 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "licensify.frontend.fullname" . }}
+  name: {{ include "fullname" . }}
   labels:
-    {{- include "licensify.labels" . | nindent 4 }}
+    {{- include "labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.licensify.frontend.count }}
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 2
   selector:
     matchLabels:
-      {{- include "licensify.frontend.selectorLabels" . | nindent 6 }}
+      {{- include "selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         {{- if .Values.podAnnotations -}}
         {{- toYaml .Values.podAnnotations | indent 8 }}
         {{- end }}
-        checksum/config: {{ tpl (toYaml .Values) . | sha256sum }}
       labels:
-        {{- include "licensify.frontend.selectorLabels" . | nindent 8 }}
+        {{- include "selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        fsGroup: {{ .Values.securityContext.runAsGroup }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: main
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.licensify.frontend.image.repository }}:{{ .Values.licensify.frontend.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.licensify.frontend.image.pullPolicy }}
+          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           env:
-          {{- with .Values.licensify.env }}
-            {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+          {{- range $k, $v := .Values.env }}
+            - name: {{ $v.name }}
+              value: {{ $v.value }}
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.licensify.frontend.service.targetPort }}
+              containerPort: {{ .Values.service.targetPort }}
               protocol: TCP
           livenessProbe:
             tcpSocket:
-              port: {{ .Values.licensify.frontend.service.targetPort }}
+              port: {{ .Values.service.targetPort }}
             initialDelaySeconds: 10
             periodSeconds: 10
             failureThreshold: 2
@@ -49,8 +49,8 @@ spec:
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              port: {{ .Values.licensify.frontend.service.targetPort }}
-              path: /apply-for-a-licence
+              port: {{ .Values.service.targetPort }}
+              path: {{ .Values.service.readinessPath | default "/" }}
             initialDelaySeconds: 10
             failureThreshold: 3
             periodSeconds: 10
@@ -74,15 +74,3 @@ spec:
           - key: "gds-licensing-config.properties"
             path: "gds-licensing-config.properties"
         {{- end }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
