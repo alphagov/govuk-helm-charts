@@ -1,241 +1,115 @@
 # Licensify Components
-nameOverride: "licensify"
+replicaCount: 1
 
-licensify:
-  # Admin Config
-  admin:
-    fullnameOverride: "licensify-admin"
+ingress:
+  enabled: true
+  annotations: {}
+  class: "aws-alb"
+  hosts:
+    - host: admin
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
 
-    image:
-      repository: ghcr.io/alphagov/licensify/admin
-      tag: release_209-eafeb428
-      pullPolicy: IfNotPresent
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
 
-    count: 1
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  runAsUser: 1001
+  runAsGroup: 1001
 
-    ingress:
-      enabled: true
-      annotations: {}
-      class: "aws-alb"
-      hosts:
-        - host: admin
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
+service:
+  type: NodePort
+  port: 80
+  targetPort: 9950
+  readinessPath: "/"
 
-      tls: []
-      #  - secretName: chart-example-tls
-      #    hosts:
-      #      - chart-example.local
+# Shared EnvVars
+env:
+  - name: SBT_MODE
+    value: docker
+  - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
+    value: key
+  - name: APPLICATION_FORM_AWS_SECRET_KEY
+    value: seekrit
+  - name: APPLICATION_FORM_AWS_REGION
+    value: eu-west-1
+  - name: APPLICATION_FORM_BUCKET_NAME
+    value: liz
+  - name: GDS_CONFIG_FILE
+    value: /etc/licensing/gds-licensing-config.properties
 
-    service:
-      type: NodePort
-      nodePort: 30950
-      port: 80
-      targetPort: 9950
+# Config for GDS Licensing Config .properties File
+# Specify a values.[environment].yaml file when running Helm.
+# (See templates/configmap-gds-licensing-config-template.yaml)
+config:
+  # MongoDB Config
+  mongo:
+  #   dbHosts: mongo:27017
+    dbReferenceName: licensify-refdata
+    dbAuditName: licensify-audit
+    dbAuthEnabled: true
+    dbAuthUsername: master
+    dbAuthPassword: ExternalSecret
+    dbSlaveOk: false
 
-  # Backend Config
-  backend:
-    fullnameOverride: "licensify-backend"
+  # ELMS/Licensify Service Endpoints
+  # elmsFrontendHost: http://frontend:9903/
+  # elmsAdminHost: http://backend:9920/
+  elmsPdfApiHost: https://gdspreprodaws.aptosolutions.co.uk/GDSELMS-5/
 
-    image:
-      repository: ghcr.io/alphagov/licensify/backend
-      tag: release_209-eafeb428
-      pullPolicy: IfNotPresent
+  # Other Service Endpoints
+  clamAntivirusHost: clamav
+  # calendarApiUrl: https://www.gov.uk/bank-holidays.json
+  # performancePlatformServiceUrl: http://dummyservices:9910/fake-performance-data/send
+  placesApiUrl: http://places-api:9700/places
 
-    count: 1
+  # Client Credentials
+  clientId: ExternalSecret
+  clientSecret: ExternalSecret
+  performancePlatformBearerToken: ExternalSecret
 
-    ingress:
-      enabled: false
+  # Callback URLs
+  # accessTokenUrl: http://dummyservices:9910/fake-oauth/token
+  # authorizationUrl: http://dummyservices:9910/fake-oauth
+  # oauthCallbackUrlOverride: http://backend:9920/licence-management/admin/oauth
+  # signonUrl: http://dummyservices:9910/fake-oauth
+  # userDetailsUrl: http://dummyservices:9910/fake-oauth/user.json
 
-    service:
-      type: NodePort
-      nodePort: 30920
-      port: 9920
-      targetPort: 9920
+  # Notify Configuration
+  # noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
+  notifyKeyApi: ExternalSecret
+  # notifyKeyService: ab58b387-ffef-42f0-a67f-9784aecc1e92
+  # notifyTemplateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
 
-# Dummyservices Config (Dev Only)
-  dummyservices:
-    fullnameOverride: "licensify-dummyservices"
+  # Dev Environment Overrides
+  # ldgWebserviceUrl: http://dummyservices:9910/fake-ldg
+  # paymentCapitaFormUrl: http://dummyservices:9910/fake-capita
+  # paymentCivicaFormUrl: http://dummyservices:9910/fake-civica
+  # paymentCivicaQueryAuthSrvUrl: http://dummyservices:9910/fake-civica/queryAuthService
+  # paymentNorthgateFormUrlFake: "true"
+  # paymentWorldpayFormUrl: http://dummyservices:9910/fake-worldpay
+  # paymentsTestMode: true
+  # s3Url: http://s3mock:9911/
 
-    image:
-      repository: ghcr.io/alphagov/licensify/dummyservices
-      tag: release_209-eafeb428
-      pullPolicy: IfNotPresent
-
-    count: 1
-
-    ingress:
-      enabled: true
-      annotations: {}
-      class: "nginx"
-      hosts:
-        - host: dummyservices
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-
-      tls: []
-      #  - secretName: chart-example-tls
-      #    hosts:
-      #      - chart-example.local
-
-    service:
-      type: NodePort
-      nodePort: 30910
-      port: 9910
-      targetPort: 9910
-
-  # Feed Config
-  feed:
-    fullnameOverride: "licensify-feed"
-
-    image:
-      repository: ghcr.io/alphagov/licensify/feed
-      tag: release_209-eafeb428
-      pullPolicy: IfNotPresent
-
-    count: 1
-
-    ingress:
-      enabled: true
-      annotations: {}
-      class: "nginx"
-      hosts:
-        - host: feed
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-
-      tls: []
-      #  - secretName: chart-example-tls
-      #    hosts:
-      #      - chart-example.local
-
-    service:
-      type: ClusterIP
-      nodePort: 30940
-      port: 80
-      targetPort: 9940
-
-  # Frontend Config
-  frontend:
-    fullnameOverride: "licensify-frontend"
-
-    image:
-      repository: ghcr.io/alphagov/licensify/frontend
-      tag: release_209-eafeb428
-      pullPolicy: IfNotPresent
-
-    count: 1
-
-    ingress:
-      enabled: true
-      annotations: {}
-      class: "nginx"
-      hosts:
-        - host: frontend
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-
-      tls: []
-      #  - secretName: chart-example-tls
-      #    hosts:
-      #      - chart-example.local
-
-    service:
-      type: NodePort
-      nodePort: 30903
-      port: 80
-      targetPort: 9903
-
-  # Shared EnvVars
-  env:
-    - name: SBT_MODE
-      value: docker
-    - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
-      value: key
-    - name: APPLICATION_FORM_AWS_SECRET_KEY
-      value: seekrit
-    - name: APPLICATION_FORM_AWS_REGION
-      value: eu-west-1
-    - name: APPLICATION_FORM_BUCKET_NAME
-      value: liz
-    - name: GDS_CONFIG_FILE
-      value: /etc/licensing/gds-licensing-config.properties
-
-
-  # imagePullSecrets:
-  #   - name: ghcr-alphagov
-
-  # Config for GDS Licensing Config .properties File
-  # Specify a values.[environment].yaml file when running Helm.
-  # (See templates/configmap-gds-licensing-config-template.yaml)
-  config:
-    # MongoDB Config
-    mongo:
-    #   dbHosts: mongo:27017
-      dbReferenceName: licensify-refdata
-      dbAuditName: licensify-audit
-      dbAuthEnabled: true
-      dbAuthUsername: master
-      dbAuthPassword: ExternalSecret
-      dbSlaveOk: false
-
-    # ELMS/Licensify Service Endpoints
-    # elmsFrontendHost: http://frontend:9903/
-    # elmsAdminHost: http://backend:9920/
-    elmsPdfApiHost: https://gdspreprodaws.aptosolutions.co.uk/GDSELMS-5/
-
-    # Other Service Endpoints
-    clamAntivirusHost: clamav
-    # calendarApiUrl: https://www.gov.uk/bank-holidays.json
-    # performancePlatformServiceUrl: http://dummyservices:9910/fake-performance-data/send
-    placesApiUrl: http://places-api:9700/places
-
-    # Client Credentials
-    clientId: ExternalSecret
-    clientSecret: ExternalSecret
-    performancePlatformBearerToken: ExternalSecret
-
-    # Callback URLs
-    # accessTokenUrl: http://dummyservices:9910/fake-oauth/token
-    # authorizationUrl: http://dummyservices:9910/fake-oauth
-    # oauthCallbackUrlOverride: http://backend:9920/licence-management/admin/oauth
-    # signonUrl: http://dummyservices:9910/fake-oauth
-    # userDetailsUrl: http://dummyservices:9910/fake-oauth/user.json
-
-    # Notify Configuration
-    # noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
-    notifyKeyApi: ExternalSecret
-    # notifyKeyService: ab58b387-ffef-42f0-a67f-9784aecc1e92
-    # notifyTemplateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
-
-    # Dev Environment Overrides
-    # ldgWebserviceUrl: http://dummyservices:9910/fake-ldg
-    # paymentCapitaFormUrl: http://dummyservices:9910/fake-capita
-    # paymentCivicaFormUrl: http://dummyservices:9910/fake-civica
-    # paymentCivicaQueryAuthSrvUrl: http://dummyservices:9910/fake-civica/queryAuthService
-    # paymentNorthgateFormUrlFake: "true"
-    # paymentWorldpayFormUrl: http://dummyservices:9910/fake-worldpay
-    # paymentsTestMode: true
-    # s3Url: http://s3mock:9911/
-
-    # Other Settings
-    appTimezoneId: Europe/London
-    elmsMaxAppProcessAttemptCount: 6
-    feedActor: true
-    isMasterNode: true
-    paymentsTestMode: true
-    performanceDataSenderCronExpression: 0 0 1 * * ?
-    scheduledVirusScanCronExpression: 0 0 16 * * ?
-    # isTest: true
-    # licenceApplicationPurgeExpiredAfter: 2
-    # performanceDataSenderCronExpression: 0 0 1 * * ?
-    # pdfCacheSeconds: 0
-    # scheduledVirusScanCronExpression: 0 0 2 * * ?
-    # uncollectedExpiryEnabled: "true"
+  # Other Settings
+  appTimezoneId: Europe/London
+  elmsMaxAppProcessAttemptCount: 6
+  feedActor: true
+  isMasterNode: true
+  paymentsTestMode: true
+  performanceDataSenderCronExpression: 0 0 1 * * ?
+  scheduledVirusScanCronExpression: 0 0 16 * * ?
+  # isTest: true
+  # licenceApplicationPurgeExpiredAfter: 2
+  # performanceDataSenderCronExpression: 0 0 1 * * ?
+  # pdfCacheSeconds: 0
+  # scheduledVirusScanCronExpression: 0 0 2 * * ?
+  # uncollectedExpiryEnabled: "true"
 
 
 # Service Components

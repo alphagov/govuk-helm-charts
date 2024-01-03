@@ -1316,82 +1316,102 @@ govukApplications:
 
   - name: info-frontend
 
-  - name: licensify
+  - name: licensify-admin
     chartPath: charts/licensify
     helmValues:
-      licensify:
-        admin:
-          count: 1
-          autoscaling:
-            enabled: false
-          ingress:
-            enabled: true
-            annotations:
-              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-              alb.ingress.kubernetes.io/healthcheck-path: /
-            hosts:
-            - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
-        backend:
-          count: 1
-          autoscaling:
-            enabled: false
-        feed:
-          count: 1
-          autoscaling:
-            enabled: false
-          ingress:
-            enabled: true
-            annotations:
-              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-              alb.ingress.kubernetes.io/healthcheck-path: /licence-management/feed/process-applications
-            hosts:
-            - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
-        frontend:
-          count: 1
-          autoscaling:
-            enabled: false
-          ingress:
-            enabled: true
-            annotations:
-              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-              alb.ingress.kubernetes.io/healthcheck-path: /apply-for-a-licence
-            hosts:
-            - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
-        env:
-        - name: SBT_MODE
-          value: docker
-        - name: APPLICATION_FORM_AWS_REGION
-          value: eu-west-1
-        - name: APPLICATION_FORM_BUCKET_NAME
-          value: govuk-licensing-application-forms-integration
-        - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
-          value: do-not-use
-        - name: APPLICATION_FORM_AWS_SECRET_KEY
-          value: do-not-use
-        - name: GDS_CONFIG_FILE
-          value: /etc/licensing/gds-licensing-config.properties
-        config:
-          mongo:
-            dbHosts: licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
-          elmsAdminHost: https://licensify-admin.eks.integration.govuk.digital/
-          elmsFrontendHost: https://licensify.eks.integration.govuk.digital/
-          govukUrl: https://licensify.eks.integration.govuk.digital/
-          licenceFinderUrl: https://www-origin.integration.publishing.service.gov.uk/licence-finder
-          performancePlatformServiceUrl: https://www.integration.performance.service.gov.uk/data/licensing/application
-          accessTokenUrl: https://signon.integration.publishing.service.gov.uk/oauth/access_token
-          authorizationUrl: https://signon.integration.publishing.service.gov.uk/oauth/authorize
-          oauthCallbackUrlOverride: https://licensify-admin.eks.integration.govuk.digital/licence-management/admin/oauth
-          signonUrl: https://signon.integration.publishing.service.gov.uk
-          uploadUrlBase: https://licensify.eks.integration.govuk.digital/
-          userDetailsUrl: https://signon.integration.publishing.service.gov.uk/user.json
-          worldpayRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayComplete
-          worldpayCancelledRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayCancelled
-          googleAnalytics:
-            accountAdmin: UA-34519962-2
-            domainAdmin: integration.publishing.service.gov.uk
-            accountFrontend: UA-34519962-1
-            domainFrontend: integration.publishing.service.gov.uk
-          noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
+      replicaCount: 1
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/healthcheck-path: /
+        hosts:
+        - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
+      service:
+        targetPort: 9950
+      env: &licensify-shared-env
+      - name: SBT_MODE
+        value: docker
+      - name: APPLICATION_FORM_AWS_REGION
+        value: eu-west-1
+      - name: APPLICATION_FORM_BUCKET_NAME
+        value: govuk-licensing-application-forms-integration
+      - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
+        value: do-not-use
+      - name: APPLICATION_FORM_AWS_SECRET_KEY
+        value: do-not-use
+      - name: GDS_CONFIG_FILE
+        value: /etc/licensing/gds-licensing-config.properties
+      config: &licensify-shared-config
+        mongo:
+          dbHosts: licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+        elmsAdminHost: https://licensify-admin.eks.integration.govuk.digital/
+        elmsFrontendHost: https://licensify.eks.integration.govuk.digital/
+        govukUrl: https://licensify.eks.integration.govuk.digital/
+        licenceFinderUrl: https://www-origin.integration.publishing.service.gov.uk/licence-finder
+        performancePlatformServiceUrl: https://www.integration.performance.service.gov.uk/data/licensing/application
+        accessTokenUrl: https://signon.integration.publishing.service.gov.uk/oauth/access_token
+        authorizationUrl: https://signon.integration.publishing.service.gov.uk/oauth/authorize
+        oauthCallbackUrlOverride: https://licensify-admin.eks.integration.govuk.digital/licence-management/admin/oauth
+        signonUrl: https://signon.integration.publishing.service.gov.uk
+        uploadUrlBase: https://licensify.eks.integration.govuk.digital/
+        userDetailsUrl: https://signon.integration.publishing.service.gov.uk/user.json
+        worldpayRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayComplete
+        worldpayCancelledRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayCancelled
+        googleAnalytics:
+          accountAdmin: UA-34519962-2
+          domainAdmin: integration.publishing.service.gov.uk
+          accountFrontend: UA-34519962-1
+          domainFrontend: integration.publishing.service.gov.uk
+        noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
+
+  - name: licensify-backend
+    chartPath: charts/licensify
+    helmValues:
+      replicaCount: 1
+      ingress:
+        enabled: false
+      service:
+        port: 9920
+        targetPort: 9920
+        readinessPath: "/"
+      env: *licensify-shared-env
+      config: *licensify-shared-config
+
+  - name: licensify-feed
+    chartPath: charts/licensify
+    helmValues:
+      replicaCount: 1
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/healthcheck-path: /licence-management/feed/process-applications
+        hosts:
+        - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
+      service:
+        targetPort: 9940
+        readinessPath: "/licence-management/feed/process-applications"
+      env: *licensify-shared-env
+      config: *licensify-shared-config
+
+  - name: licensify-frontend
+    chartPath: charts/licensify
+    helmValues:
+      replicaCount: 1
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/healthcheck-path: /apply-for-a-licence
+        hosts:
+        - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
+      service:
+        targetPort: 9903
+        readinessPath: "/apply-for-a-licence"
+      env: *licensify-shared-env
+      config: *licensify-shared-config
+        
 
   - name: link-checker-api
     helmValues:
