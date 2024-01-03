@@ -9,7 +9,7 @@ args:
   - --config
   - /etc/mongo/mongodb.conf
   - --replSet
-  - production/router-mongo-0,router-backend-1,router-backend-2,router-backend-3
+  - production/router-mongo-0.router-mongo,router-mongo-1.router-mongo,router-backend-1,router-backend-2,router-backend-3
 
 podSecurityContext:
   fsGroup: &uid 999
