@@ -17,7 +17,8 @@ spec:
         - values.yaml
       parameters:
         - name: account
-          value: '123456' # Dummy value
+          # Dummy value string for testing purpose
+          value: "mgsQy3ett5"
         - name: clusterName
           value: 'govuk-integration-new'
         - name: server
