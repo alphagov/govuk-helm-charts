@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "licensify.frontend.fullname" . }}
+  labels:
+    {{- include "licensify.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.licensify.frontend.autoscaling.enabled }}
+  replicas: {{ .Values.licensify.frontend.count }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "licensify.frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- if .Values.podAnnotations -}}
+        {{- toYaml .Values.podAnnotations | indent 8 }}
+        {{- end }}
+        checksum/config: {{ tpl (toYaml .Values) . | sha256sum }}
+      labels:
+        {{- include "licensify.frontend.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.licensify.frontend.image.repository }}:{{ .Values.licensify.frontend.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.licensify.frontend.image.pullPolicy }}
+          env:
+          {{- with .Values.licensify.env }}
+            {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.licensify.frontend.service.targetPort }}
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.licensify.frontend.service.targetPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 2
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.licensify.frontend.service.targetPort }}
+              path: /apply-for-a-licence
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: gds-licensing-config
+            mountPath: "/etc/licensing"
+            readOnly: true
+      volumes:
+      - name: gds-licensing-config
+        {{- if .Values.externalSecret.enabled }}
+        secret:
+          secretName: gds-licensing-config.properties
+        {{- else }}
+        configMap:
+          name: gds-licensing-config
+          items:
+          - key: "gds-licensing-config.properties"
+            path: "gds-licensing-config.properties"
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,108 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gds-licensing-config-template
+data:
+  gds-licensing-config.properties: |
+    {{ if .Values.licensify.config.clamAntivirusHost }}
+    clam.antivirus.host={{ .Values.licensify.config.clamAntivirusHost }}
+    {{ end }}
+
+    # AWS Config
+    amazon.key.access={{ `{{ .aws_access_key_id }}` }}
+    amazon.key.secret={{ `{{ .aws_access_secret_key }}` }}
+
+    # MongoDB Config
+    mongo.database.hosts={{ .Values.licensify.config.mongo.dbHosts }}
+    mongo.database.reference.name={{ .Values.licensify.config.mongo.dbReferenceName }}
+    mongo.database.audit.name={{ .Values.licensify.config.mongo.dbAuditName }}
+    mongo.database.auth.enabled={{ .Values.licensify.config.mongo.dbAuthEnabled }}
+    mongo.database.auth.username={{ .Values.licensify.config.mongo.dbAuthUsername }}
+    {{ if eq .Values.licensify.config.mongo.dbAuthPassword "ExternalSecret" }}
+    mongo.database.auth.password={{ `{{ .mongo_database_auth_password }}` }}
+    {{ else if .Values.licensify.config.mongo.dbAuthPassword }}
+    mongo.database.auth.password={{ .Values.licensify.config.mongo.dbAuthPassword }}
+    {{ end }}
+
+    mongo.database.slaveok={{ .Values.licensify.config.mongo.dbSlaveOk }}
+    places.api.url={{ .Values.licensify.config.placesApiUrl }}
+    feedActor={{ .Values.licensify.config.feedActor }}
+    oauth_callback_url_override={{ .Values.licensify.config.oauthCallbackUrlOverride }}
+    uploadUrlBase={{ .Values.licensify.config.uploadUrlBase }}
+    elms.frontend.host={{ .Values.licensify.config.elmsFrontendHost }}
+    elms.admin.host={{ .Values.licensify.config.elmsAdminHost }}
+    elms.pdf.apihost={{ .Values.licensify.config.elmsPdfApiHost }}
+    elms.max.appProcessAttemptCount="{{ .Values.licensify.config.elmsMaxAppProcessAttemptCount }}"
+    access_token_url={{ .Values.licensify.config.accessTokenUrl }}
+    authorization_url={{ .Values.licensify.config.authorizationUrl }}
+    user_details_url={{ .Values.licensify.config.userDetailsUrl }}
+    {{ if .Values.licensify.config.s3Url }}
+    s3_url={{ .Values.licensify.config.s3Url }}
+    {{ end }}
+
+    {{ if eq .Values.licensify.config.clientId "ExternalSecret" }}
+    client_id={{ `{{ .client_id }}` }}
+    {{ else if .Values.licensify.config.clientId }}
+    client_id={{ .Values.licensify.config.clientId }}
+    {{ end }}
+
+    {{ if eq .Values.licensify.config.clientSecret "ExternalSecret" }}
+    client_secret={{ `{{ .client_secret }}` }}
+    {{ else if .Values.licensify.config.clientSecret }}
+    client_secret={{ .Values.licensify.config.clientSecret }}
+    {{ end }}
+
+    {{- if hasKey .Values.licensify.config "googleAnalytics" }}
+    googleAnalytics.account.admin={{ .Values.licensify.config.googleAnalytics.accountAdmin }}
+    googleAnalytics.domain.admin={{ .Values.licensify.config.googleAnalytics.domainAdmin }}
+    googleAnalytics.account.frontend={{ .Values.licensify.config.googleAnalytics.accountFrontend }}
+    googleAnalytics.domain.frontend={{ .Values.licensify.config.googleAnalytics.domainFrontend }}
+    {{- end }}
+
+    signon.url={{ .Values.licensify.config.signonUrl }}
+    worldpay.redirectUrl={{ .Values.licensify.config.worldpayRedirectUrl }}
+    worldpay.cancelled.redirectUrl={{ .Values.licensify.config.worldpayCancelledRedirectUrl }}
+    paymentsTestMode={{ .Values.licensify.config.paymentsTestMode }}
+    noReplyMailAddress={{ .Values.licensify.config.noReplyMailAddress }}
+    govuk.url={{ .Values.licensify.config.govukUrl }}
+    licenceFinderUrl={{ .Values.licensify.config.licenceFinderUrl }}
+    scheduled.virus.scan.cron.expression={{ .Values.licensify.config.scheduledVirusScanCronExpression }}
+    {{ if eq .Values.licensify.config.performancePlatformBearerToken "ExternalSecret" }}
+    performance.platform.bearer.token={{ `{{ .performance_platform_bearer_token }}` }}
+    {{ else if .Values.licensify.config.performancePlatformBearerToken }}
+    performance.platform.bearer.token={{ .Values.licensify.config.performancePlatformBearerToken }}
+    {{ end }}
+
+    {{ if .Values.licensify.config.paymentNorthgateFormUrlFake }}
+    payment.northgate.formUrl.fake={{ .Values.licensify.config.paymentNorthgateFormUrlFake }}
+    {{ end }}
+
+    performance.data.sender.cron.expression={{ .Values.licensify.config.performanceDataSenderCronExpression }}
+    performance.platform.service.url={{ .Values.licensify.config.performancePlatformServiceUrl }}
+
+    {{ if eq .Values.licensify.config.notifyKeyApi "ExternalSecret" }}
+    notify.key.api={{ `{{ .notify_key_api }}` }}
+    {{ else if .Values.licensify.config.notifyKeyApi }}
+    notify.key.api={{ .Values.licensify.config.notifyKeyApi }}
+    {{ end }}
+    {{ if .Values.licensify.config.notifyKeyService }}
+    notify.key.service={{ .Values.licensify.config.notifyKeyService }}
+    {{ end }}
+    {{ if .Values.licensify.config.notifyTemplateAuthority }}
+    notify.template.authority={{ .Values.licensify.config.notifyTemplateAuthority }}
+    {{ end }}
+
+    app.timezone.id={{ .Values.licensify.config.appTimezoneId }}
+    is.master.node={{ .Values.licensify.config.isMasterNode }}
+    {{ if .Values.licensify.config.isTest }}
+    is.test={{ .Values.licensify.config.isTest }}
+    {{ end }}
+    {{ if .Values.licensify.config.licenceApplicationPurgeExpiredAfter }}
+    licenceApplication.purgeExpiredAfter={{ .Values.licensify.config.licenceApplicationPurgeExpiredAfter }}
+    {{ end }}
+    {{ if .Values.licensify.config.pdfCacheSeconds }}
+    pdfCacheSeconds= {{ .Values.licensify.config.pdfCacheSeconds }}
+    {{ end }}
+    {{ if .Values.licensify.config.uncollectedExpiryEnabled }}
+    uncollected.expiry.enabled= {{ .Values.licensify.config.uncollectedExpiryEnabled }}
+    {{ end }}

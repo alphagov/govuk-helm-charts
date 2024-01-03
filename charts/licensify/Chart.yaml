@@ -1,0 +1,19 @@
+apiVersion: v2
+name: gov-uk-licensify
+description: A Helm chart for GOV.UK Licensing
+type: application
+version: 0.1.0
+appVersion: "r178"
+kubeVersion: ">=1.23.0-0"
+maintainers:
+- name: GOV.UK Developers
+  email: govuk-dev@digital.cabinet-office.gov.uk
+dependencies:
+- name: clamav
+  repository: file://charts/clamav
+  version: 0.1.0
+  condition: clamav.enabled
+- name: mongo
+  repository: file://charts/mongo
+  version: 0.1.0
+  condition: mongo.enabled

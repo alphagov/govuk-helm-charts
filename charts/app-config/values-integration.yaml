@@ -1316,6 +1316,64 @@ govukApplications:
 
   - name: info-frontend
 
+  - name: licensify
+    chartPath: charts/licensify
+    helmValues:
+      licensify:
+        admin:
+          count: 1
+          autoscaling:
+            enabled: false
+          ingress:
+            enabled: true
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+              alb.ingress.kubernetes.io/healthcheck-path: /
+            hosts:
+            - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
+        backend:
+          count: 1
+          autoscaling:
+            enabled: false
+        feed:
+          count: 1
+          autoscaling:
+            enabled: false
+          ingress:
+            enabled: true
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+              alb.ingress.kubernetes.io/healthcheck-path: /licence-management/feed/process-applications
+            hosts:
+            - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
+        frontend:
+          count: 1
+          autoscaling:
+            enabled: false
+          ingress:
+            enabled: true
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+              alb.ingress.kubernetes.io/healthcheck-path: /apply-for-a-licence
+            hosts:
+            - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
+        env:
+        - name: SBT_MODE
+          value: docker
+        - name: APPLICATION_FORM_AWS_REGION
+          value: eu-west-1
+        - name: APPLICATION_FORM_BUCKET_NAME
+          value: govuk-licensing-application-forms-integration
+        - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
+          value: do-not-use
+        - name: APPLICATION_FORM_AWS_SECRET_KEY
+          value: do-not-use
+        - name: GDS_CONFIG_FILE
+          value: /etc/licensing/gds-licensing-config.properties
+        config:
+          mongo:
+            dbHosts: licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+
   - name: link-checker-api
     helmValues:
       dbMigrationEnabled: true
