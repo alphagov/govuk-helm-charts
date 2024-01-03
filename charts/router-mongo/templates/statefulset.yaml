@@ -36,6 +36,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 12 }}
       dnsConfig:
         searches:
+          - {{ $fullName }}.{{ .Release.Namespace }}.svc.cluster.local
           - blue.{{ $.Values.govukEnvironment }}.govuk-internal.digital
       volumes:
         - name: config
