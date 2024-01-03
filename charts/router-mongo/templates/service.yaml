@@ -1,3 +1,4 @@
+{{- if eq (int .Values.replicas) 1 }}
 ---
 # TODO: remove this Service once the out-of-cluster replicaset members are gone.
 apiVersion: v1
@@ -24,3 +25,22 @@ spec:
   ports:
     - port: 27017
       name: mongodb
+{{- else }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "router-mongo.fullname" . }}
+  labels:
+    {{- include "router-mongo.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Headless service for the router-mongo statefulset.
+spec:
+  clusterIP: None
+  selector:
+    {{- include "router-mongo.selectorLabels" . | nindent 4 }}
+  ports:
+    - port: 27017
+      name: mongodb
+{{- end }}

@@ -12,7 +12,7 @@ metadata:
       Router database.
 spec:
   serviceName: {{ $fullName }}
-  replicas: 1  # TODO: run two in-cluster replicas once the old EC2 ones are gone.
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       {{- include "router-mongo.selectorLabels" $ | nindent 6 }}
