@@ -1855,10 +1855,7 @@ govukApplications:
               name: signon-app-router-api
               key: oauth_secret
         - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-          value: "mongodb://\
-            router-mongo-0,\
-            router-backend-2,\
-            router-backend-3/router"
+          value: "mongodb://router-mongo-0/router"
 
   - name: draft-router-api
     repoName: router-api
@@ -1880,10 +1877,7 @@ govukApplications:
               name: signon-app-draft-router-api
               key: oauth_secret
         - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-          value: "mongodb://\
-            router-mongo-0,\
-            router-backend-2,\
-            router-backend-3/draft_router"
+          value: "mongodb://router-mongo-0/draft_router"
 
   - name: router
     helmValues:
@@ -1961,10 +1955,7 @@ govukApplications:
         - name: ROUTER_APIADDR
           value: ":9394"
         - name: ROUTER_MONGO_URL
-          value: &router_mongo_hosts "\
-            router-mongo-0,\
-            router-backend-2,\
-            router-backend-3"
+          value: &router_mongo_hosts "router-mongo-0"
         - name: BACKEND_URL_collections
           value: "http://collections"
         - name: BACKEND_URL_content-store
