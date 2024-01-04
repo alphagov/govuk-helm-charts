@@ -1342,22 +1342,15 @@ govukApplications:
         value: do-not-use
       - name: GDS_CONFIG_FILE
         value: /etc/licensing/gds-licensing-config.properties
-      config: &licensify-shared-config
+      config:
+        createSecret: true
         mongo:
           dbHosts: licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
-        elmsAdminHost: https://licensify-admin.eks.integration.govuk.digital/
-        elmsFrontendHost: https://licensify.eks.integration.govuk.digital/
-        govukUrl: https://licensify.eks.integration.govuk.digital/
+        baseUrl: https://licensify-admin.eks.integration.govuk.digital
+        frontendBaseUrl: https://licensify.eks.integration.govuk.digital
+        signonBaseUrl: https://signon.integration.publishing.service.gov.uk
         licenceFinderUrl: https://www-origin.integration.publishing.service.gov.uk/licence-finder
-        performancePlatformServiceUrl: https://www.integration.performance.service.gov.uk/data/licensing/application
-        accessTokenUrl: https://signon.integration.publishing.service.gov.uk/oauth/access_token
-        authorizationUrl: https://signon.integration.publishing.service.gov.uk/oauth/authorize
-        oauthCallbackUrlOverride: https://licensify-admin.eks.integration.govuk.digital/licence-management/admin/oauth
-        signonUrl: https://signon.integration.publishing.service.gov.uk
-        uploadUrlBase: https://licensify.eks.integration.govuk.digital/
-        userDetailsUrl: https://signon.integration.publishing.service.gov.uk/user.json
-        worldpayRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayComplete
-        worldpayCancelledRedirectUrl: https://licensify.eks.integration.govuk.digital/apply-for-a-licence/payment/worldpayCancelled
+        performancePlatformUrl: https://www.integration.performance.service.gov.uk/data/licensing/application
         googleAnalytics:
           accountAdmin: UA-34519962-2
           domainAdmin: integration.publishing.service.gov.uk
@@ -1376,7 +1369,6 @@ govukApplications:
         targetPort: 9920
         readinessPath: "/"
       env: *licensify-shared-env
-      config: *licensify-shared-config
 
   - name: licensify-feed
     chartPath: charts/licensify
@@ -1393,7 +1385,6 @@ govukApplications:
         targetPort: 9940
         readinessPath: "/licence-management/feed/process-applications"
       env: *licensify-shared-env
-      config: *licensify-shared-config
 
   - name: licensify-frontend
     chartPath: charts/licensify
@@ -1410,8 +1401,6 @@ govukApplications:
         targetPort: 9903
         readinessPath: "/apply-for-a-licence"
       env: *licensify-shared-env
-      config: *licensify-shared-config
-        
 
   - name: link-checker-api
     helmValues:
