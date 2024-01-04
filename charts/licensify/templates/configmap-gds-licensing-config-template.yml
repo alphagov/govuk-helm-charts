@@ -7,6 +7,7 @@ data:
     {{ if .Values.config.clamAntivirusHost }}
     clam.antivirus.host={{ .Values.config.clamAntivirusHost }}
     {{ end }}
+    scheduled.virus.scan.cron.expression={{ .Values.config.scheduledVirusScanCronExpression }}
 
     # AWS Config
     amazon.key.access={{ `{{ .aws_access_key_id }}` }}
@@ -18,73 +19,50 @@ data:
     mongo.database.audit.name={{ .Values.config.mongo.dbAuditName }}
     mongo.database.auth.enabled={{ .Values.config.mongo.dbAuthEnabled }}
     mongo.database.auth.username={{ .Values.config.mongo.dbAuthUsername }}
-    {{ if eq .Values.config.mongo.dbAuthPassword "ExternalSecret" }}
     mongo.database.auth.password={{ `{{ .mongo_database_auth_password }}` }}
-    {{ else if .Values.config.mongo.dbAuthPassword }}
-    mongo.database.auth.password={{ .Values.config.mongo.dbAuthPassword }}
-    {{ end }}
-
     mongo.database.slaveok={{ .Values.config.mongo.dbSlaveOk }}
+
+    # Elms config
     places.api.url={{ .Values.config.placesApiUrl }}
     feedActor={{ .Values.config.feedActor }}
-    oauth_callback_url_override={{ .Values.config.oauthCallbackUrlOverride }}
-    uploadUrlBase={{ .Values.config.uploadUrlBase }}
-    elms.frontend.host={{ .Values.config.elmsFrontendHost }}
-    elms.admin.host={{ .Values.config.elmsAdminHost }}
+    uploadUrlBase={{ .Values.config.frontendBaseUrl }}/
+    elms.frontend.host={{ .Values.config.frontendBaseUrl }}/
+    elms.admin.host={{ .Values.config.baseUrl }}/
     elms.pdf.apihost={{ .Values.config.elmsPdfApiHost }}
     elms.max.appProcessAttemptCount="{{ .Values.config.elmsMaxAppProcessAttemptCount }}"
-    access_token_url={{ .Values.config.accessTokenUrl }}
-    authorization_url={{ .Values.config.authorizationUrl }}
-    user_details_url={{ .Values.config.userDetailsUrl }}
-    {{ if .Values.config.s3Url }}
-    s3_url={{ .Values.config.s3Url }}
-    {{ end }}
+    govuk.url={{ .Values.config.frontendBaseUrl }}
 
-    {{ if eq .Values.config.clientId "ExternalSecret" }}
+    # Authorization config
+    signon.url={{ .Values.config.signonBaseUrl }}
+    access_token_url={{ .Values.config.signonBaseUrl }}/oauth/access_token
+    authorization_url={{ .Values.config.signonBaseUrl }}/oauth/authorize/oauth/authorize
+    user_details_url={{ .Values.config.signonBaseUrl }}/user.json
+    oauth_callback_url_override={{ .Values.config.baseUrl }}/licence-management/admin/oauth
+
+    # Google Analytics config
     client_id={{ `{{ .client_id }}` }}
-    {{ else if .Values.config.clientId }}
-    client_id={{ .Values.config.clientId }}
-    {{ end }}
-
-    {{ if eq .Values.config.clientSecret "ExternalSecret" }}
     client_secret={{ `{{ .client_secret }}` }}
-    {{ else if .Values.config.clientSecret }}
-    client_secret={{ .Values.config.clientSecret }}
-    {{ end }}
-
-    {{- if hasKey .Values.config "googleAnalytics" }}
     googleAnalytics.account.admin={{ .Values.config.googleAnalytics.accountAdmin }}
     googleAnalytics.domain.admin={{ .Values.config.googleAnalytics.domainAdmin }}
     googleAnalytics.account.frontend={{ .Values.config.googleAnalytics.accountFrontend }}
     googleAnalytics.domain.frontend={{ .Values.config.googleAnalytics.domainFrontend }}
-    {{- end }}
 
-    signon.url={{ .Values.config.signonUrl }}
-    worldpay.redirectUrl={{ .Values.config.worldpayRedirectUrl }}
-    worldpay.cancelled.redirectUrl={{ .Values.config.worldpayCancelledRedirectUrl }}
+    # Payment provider config
+    worldpay.redirectUrl={{ .Values.config.frontendBaseUrl }}/apply-for-a-licence/payment/worldpayComplete
+    worldpay.cancelled.redirectUrl={{ .Values.config.frontendBaseUrl }}/apply-for-a-licence/payment/worldpayCancelled
     paymentsTestMode={{ .Values.config.paymentsTestMode }}
     noReplyMailAddress={{ .Values.config.noReplyMailAddress }}
-    govuk.url={{ .Values.config.govukUrl }}
+
+    # License Finder config
     licenceFinderUrl={{ .Values.config.licenceFinderUrl }}
-    scheduled.virus.scan.cron.expression={{ .Values.config.scheduledVirusScanCronExpression }}
-    {{ if eq .Values.config.performancePlatformBearerToken "ExternalSecret" }}
+
+    # Performance platform config
+    performance.platform.service.url={{ .Values.config.performancePlatformUrl }}
     performance.platform.bearer.token={{ `{{ .performance_platform_bearer_token }}` }}
-    {{ else if .Values.config.performancePlatformBearerToken }}
-    performance.platform.bearer.token={{ .Values.config.performancePlatformBearerToken }}
-    {{ end }}
-
-    {{ if .Values.config.paymentNorthgateFormUrlFake }}
-    payment.northgate.formUrl.fake={{ .Values.config.paymentNorthgateFormUrlFake }}
-    {{ end }}
-
     performance.data.sender.cron.expression={{ .Values.config.performanceDataSenderCronExpression }}
-    performance.platform.service.url={{ .Values.config.performancePlatformServiceUrl }}
 
-    {{ if eq .Values.config.notifyKeyApi "ExternalSecret" }}
+    # Notify config
     notify.key.api={{ `{{ .notify_key_api }}` }}
-    {{ else if .Values.config.notifyKeyApi }}
-    notify.key.api={{ .Values.config.notifyKeyApi }}
-    {{ end }}
     {{ if .Values.config.notifyKeyService }}
     notify.key.service={{ .Values.config.notifyKeyService }}
     {{ end }}
@@ -92,8 +70,11 @@ data:
     notify.template.authority={{ .Values.config.notifyTemplateAuthority }}
     {{ end }}
 
+    # Other config
     app.timezone.id={{ .Values.config.appTimezoneId }}
     is.master.node={{ .Values.config.isMasterNode }}
+
+    # Development config
     {{ if .Values.config.isTest }}
     is.test={{ .Values.config.isTest }}
     {{ end }}

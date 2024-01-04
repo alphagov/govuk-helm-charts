@@ -54,7 +54,6 @@ config:
     dbAuditName: licensify-audit
     dbAuthEnabled: true
     dbAuthUsername: master
-    dbAuthPassword: ExternalSecret
     dbSlaveOk: false
 
   # ELMS/Licensify Service Endpoints
