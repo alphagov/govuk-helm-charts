@@ -2043,7 +2043,7 @@ govukApplications:
     chartPath: charts/router-mongo
     postSyncWorkflowEnabled: "false"
     helmValues:
-      replicas: 3
+      replicas: 1
 
   - name: search-admin
     helmValues:
