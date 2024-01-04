@@ -1,21 +1,6 @@
 # Licensify Components
 replicaCount: 1
 
-ingress:
-  enabled: true
-  annotations: {}
-  class: "aws-alb"
-  hosts:
-    - host: admin
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
 securityContext:
   runAsNonRoot: true
   allowPrivilegeEscalation: false
@@ -27,6 +12,46 @@ service:
   port: 80
   targetPort: 9950
   readinessPath: "/"
+
+licensifyAdmin:
+  name: licensify-admin
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 9950
+    readinessPath: "/"
+
+licensifyBackend:
+  name: licensify-backend
+  service:
+    type: NodePort
+    port: 9920
+    targetPort: 9920
+    readinessPath: "/"
+
+licensifyFeed:
+  name: licensify-feed
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 9940
+    readinessPath: "/licence-management/feed/process-applications"
+
+licensifyFrontend:
+  name: licensify-frontend
+  service:
+    type: NodePort
+    port: 80
+    targetPort: 9903
+    readinessPath: "/apply-for-a-licence"
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1500Mi
+  requests:
+    cpu: 500m
+    memory: 800Mi
 
 # Shared EnvVars
 env:
@@ -120,13 +145,3 @@ clamav:
 mongo:
   enabled: false
   count: 0
-
-# External Secret
-# Stored in AWS Secrets Manager
-externalSecret:
-  enabled: true
-  name: licensify
-  key: govuk/licensify
-  secretStoreRef:
-    name: aws-secretsmanager
-    kind: ClusterSecretStore

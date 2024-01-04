@@ -1,4 +1,3 @@
-{{- if .Values.config.createSecret -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -88,4 +87,3 @@ data:
     {{ if .Values.config.uncollectedExpiryEnabled }}
     uncollected.expiry.enabled= {{ .Values.config.uncollectedExpiryEnabled }}
     {{ end }}
-{{- end }}
