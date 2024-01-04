@@ -31,7 +31,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.images.LicensifyBackend.repository }}:{{ .Values.images.LicensifyBackend.tag }}"
-          imagePullPolicy: "Always"
+          imagePullPolicy: "IfNotPresent"
           env:
             {{- with .Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
@@ -62,7 +62,11 @@ spec:
             - name: gds-licensing-config
               mountPath: "/etc/licensing"
               readOnly: true
+            - name: app-tmp
+              mountPath: /tmp
       volumes:
         - name: gds-licensing-config
           secret:
             secretName: gds-licensing-config.properties
+        - name: app-tmp
+          emptyDir: {}
