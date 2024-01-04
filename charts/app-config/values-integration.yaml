@@ -2033,8 +2033,6 @@ govukApplications:
   - name: router-mongo
     chartPath: charts/router-mongo
     postSyncWorkflowEnabled: "false"
-    helmValues:
-      replicas: 3
 
   - name: search-admin
     helmValues:
