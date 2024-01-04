@@ -1342,7 +1342,8 @@ govukApplications:
         value: do-not-use
       - name: GDS_CONFIG_FILE
         value: /etc/licensing/gds-licensing-config.properties
-      config: &licensify-shared-config
+      config:
+        createSecret: true
         mongo:
           dbHosts: licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com,licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
         baseUrl: https://licensify-admin.eks.integration.govuk.digital
@@ -1368,7 +1369,6 @@ govukApplications:
         targetPort: 9920
         readinessPath: "/"
       env: *licensify-shared-env
-      config: *licensify-shared-config
 
   - name: licensify-feed
     chartPath: charts/licensify
@@ -1385,7 +1385,6 @@ govukApplications:
         targetPort: 9940
         readinessPath: "/licence-management/feed/process-applications"
       env: *licensify-shared-env
-      config: *licensify-shared-config
 
   - name: licensify-frontend
     chartPath: charts/licensify
@@ -1402,8 +1401,6 @@ govukApplications:
         targetPort: 9903
         readinessPath: "/apply-for-a-licence"
       env: *licensify-shared-env
-      config: *licensify-shared-config
-        
 
   - name: link-checker-api
     helmValues:
