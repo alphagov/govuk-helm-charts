@@ -1316,32 +1316,53 @@ govukApplications:
 
   - name: info-frontend
 
-  - name: licensify-admin
+  - name: licensify
     chartPath: charts/licensify
+    imageValues:
+      - "licensify-admin"
+      - "licensify-backend"
+      - "licensify-feed"
+      - "licensify-frontend"
     helmValues:
-      replicaCount: 1
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/healthcheck-path: /
-        hosts:
-        - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
-      service:
-        targetPort: 9950
-      env: &licensify-shared-env
-      - name: SBT_MODE
-        value: docker
-      - name: APPLICATION_FORM_AWS_REGION
-        value: eu-west-1
-      - name: APPLICATION_FORM_BUCKET_NAME
-        value: govuk-licensing-application-forms-integration
-      - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
-        value: do-not-use
-      - name: APPLICATION_FORM_AWS_SECRET_KEY
-        value: do-not-use
-      - name: GDS_CONFIG_FILE
-        value: /etc/licensing/gds-licensing-config.properties
+      licensifyAdmin:
+        replicaCount: 1
+        ingress:
+          annotations:
+            <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            alb.ingress.kubernetes.io/healthcheck-path: /
+          hosts:
+          - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
+      licensifyBackend:
+        replicaCount: 1
+      licensifyFeed:
+        replicaCount: 1
+        ingress:
+          annotations:
+            <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            alb.ingress.kubernetes.io/healthcheck-path: /licence-management/feed/process-applications
+          hosts:
+          - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
+      licensifyFrontend:
+        replicaCount: 1
+        ingress:
+          annotations:
+            <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            alb.ingress.kubernetes.io/healthcheck-path: /apply-for-a-licence
+          hosts:
+          - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
+      extraEnv:
+        - name: SBT_MODE
+          value: docker
+        - name: APPLICATION_FORM_AWS_REGION
+          value: eu-west-1
+        - name: APPLICATION_FORM_BUCKET_NAME
+          value: govuk-licensing-application-forms-integration
+        - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
+          value: do-not-use
+        - name: APPLICATION_FORM_AWS_SECRET_KEY
+          value: do-not-use
+        - name: GDS_CONFIG_FILE
+          value: /etc/licensing/gds-licensing-config.properties
       config:
         createSecret: true
         mongo:
@@ -1357,50 +1378,6 @@ govukApplications:
           accountFrontend: UA-34519962-1
           domainFrontend: integration.publishing.service.gov.uk
         noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
-
-  - name: licensify-backend
-    chartPath: charts/licensify
-    helmValues:
-      replicaCount: 1
-      ingress:
-        enabled: false
-      service:
-        port: 9920
-        targetPort: 9920
-        readinessPath: "/"
-      env: *licensify-shared-env
-
-  - name: licensify-feed
-    chartPath: charts/licensify
-    helmValues:
-      replicaCount: 1
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/healthcheck-path: /licence-management/feed/process-applications
-        hosts:
-        - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
-      service:
-        targetPort: 9940
-        readinessPath: "/licence-management/feed/process-applications"
-      env: *licensify-shared-env
-
-  - name: licensify-frontend
-    chartPath: charts/licensify
-    helmValues:
-      replicaCount: 1
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/healthcheck-path: /apply-for-a-licence
-        hosts:
-        - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
-      service:
-        targetPort: 9903
-        readinessPath: "/apply-for-a-licence"
-      env: *licensify-shared-env
 
   - name: link-checker-api
     helmValues:
