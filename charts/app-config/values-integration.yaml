@@ -1911,9 +1911,9 @@ govukApplications:
               key: oauth_secret
         - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
           value: "mongodb://\
-            router-backend-1,\
-            router-backend-2,\
-            router-backend-3/router"
+            router-mongo-0.router-mongo,\
+            router-mongo-1.router-mongo,\
+            router-mongo-2.router-mongo/router"
 
   - name: draft-router-api
     repoName: router-api
@@ -1936,9 +1936,9 @@ govukApplications:
               key: oauth_secret
         - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
           value: "mongodb://\
-            router-backend-1,\
-            router-backend-2,\
-            router-backend-3/draft_router"
+            router-mongo-0.router-mongo,\
+            router-mongo-1.router-mongo,\
+            router-mongo-2.router-mongo/draft_router"
 
   - name: router
     helmValues:
@@ -2010,9 +2010,9 @@ govukApplications:
           value: ":9394"
         - name: ROUTER_MONGO_URL
           value: &router_mongo_hosts "\
-            router-backend-1,\
-            router-backend-2,\
-            router-backend-3"
+            router-mongo-0.router-mongo,\
+            router-mongo-1.router-mongo,\
+            router-mongo-2.router-mongo"
         - name: BACKEND_URL_collections
           value: "http://collections"
         - name: BACKEND_URL_content-store
@@ -2092,6 +2092,10 @@ govukApplications:
           value: "https://licensify.integration.govuk-internal.digital"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
+
+  - name: router-mongo
+    chartPath: charts/router-mongo
+    postSyncWorkflowEnabled: "false"
 
   - name: search-admin
     helmValues:

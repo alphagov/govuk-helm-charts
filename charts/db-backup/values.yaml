@@ -35,7 +35,7 @@ _s5cmdRamWorkaround: &s5cmd-ram-workaround
     limits:
       memory: 2048Mi
     requests:
-      memory: 1536Mi
+      memory: 2048Mi
 
 _mongoResources: &mongo-resources
   resources:

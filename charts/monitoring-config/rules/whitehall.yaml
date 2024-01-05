@@ -1,0 +1,14 @@
+groups:
+  - name: WhitehallAlerts
+    rules:
+      - alert: WhitehallScheduledPublicationsOverdue
+        expr: |
+          whitehall_scheduled_publishing_overdue > 0
+        for: 10m
+        annotations:
+          summary: Whitehall scheduled publications are overdue
+          description: >-
+            There are scheduled editions which have passed their publication due date
+            but haven't been published by the scheduled publishing workers
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/alerts/whitehall-scheduled-publishing.html

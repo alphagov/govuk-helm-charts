@@ -34,6 +34,7 @@ spec:
       enableServiceLinks: false
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 12 }}
+      # TODO: remove dnsConfig once #1668 is done.
       dnsConfig:
         searches:
           - {{ $fullName }}.{{ .Release.Namespace }}.svc.cluster.local
