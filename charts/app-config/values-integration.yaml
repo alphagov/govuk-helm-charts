@@ -459,6 +459,11 @@ govukApplications:
             secretKeyRef:
               name: signon-token-content-data-admin-content-data-api
               key: bearer_token
+        - name: EMAIL_ALERT_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-content-data-admin-email-alert-api
+              key: bearer_token
         - name: SITEIMPROVE_API_CLIENT_USERNAME
           valueFrom:
             secretKeyRef:
