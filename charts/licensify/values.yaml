@@ -1,0 +1,115 @@
+# Licensify Components
+replicaCount: 1
+
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  runAsUser: 1001
+  runAsGroup: 1001
+
+clamav:
+  name: clamav
+  replicaCount: 1
+  image:
+    repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/clamav
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 3310
+
+licensifyAdmin:
+  name: licensify-admin
+  replicaCount: 1
+  port: 9950
+  healthcheckPath: "/"
+  ingress:
+    annotations: {}
+  service:
+    port: 80
+
+licensifyBackend:
+  name: licensify-backend
+  replicaCount: 1
+  port: 9920
+  healthcheckPath: "/"
+  service:
+    port: 9920
+
+licensifyFeed:
+  name: licensify-feed
+  replicaCount: 1
+  port: 9940
+  healthcheckPath: "/licence-management/feed/process-applications"
+  ingress:
+    annotations: {}
+  service:
+    port: 80
+
+licensifyFrontend:
+  name: licensify-frontend
+  replicaCount: 1
+  port: 9903
+  healthcheckPath: "/apply-for-a-licence"
+  ingress:
+    annotations: {}
+  service:
+    port: 80
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1500Mi
+  requests:
+    cpu: 500m
+    memory: 800Mi
+
+extraEnv: []
+
+config:
+  clamAntivirusHost: clamav
+
+  mongo:
+    dbHosts: []
+    dbReferenceName: licensify-refdata
+    dbAuditName: licensify-audit
+    dbAuthEnabled: true
+    dbAuthUsername: master
+    dbSlaveOk: false
+
+  elmsPdfApiHost: https://gdspreprodaws.aptosolutions.co.uk/GDSELMS-5/
+  elmsMaxAppProcessAttemptCount: 6
+
+  baseUrl: https://licensify-admin
+  frontendBaseUrl: https://licensify
+  signonBaseUrl: https://signon
+  licenceFinderUrl: https://www.test.publishing.service.gov.uk/licence-finder
+
+  placesApiUrl: http://places-api:9700/places
+
+  appTimezoneId: Europe/London
+  feedActor: true
+  isMasterNode: true
+  paymentsTestMode: true
+  performanceDataSenderCronExpression: 0 0 1 * * ?
+  scheduledVirusScanCronExpression: 0 0 16 * * ?
+
+  performancePlatformUrl: >-
+    https://performance/data/licensing/application
+  googleAnalytics:
+    accountAdmin: UA-XXXXXXXX-X
+    domainAdmin: test.publishing.service.gov.uk
+    accountFrontend: UA-XXXXXXXX-X
+    domainFrontend: test.publishing.service.gov.uk
+  noReplyMailAddress: test@example.com
+
+images:
+  LicensifyFeed:
+    repository: licensify-feed
+    tag: latest
+  LicensifyBackend:
+    repository: licensify-backend
+    tag: latest
+  LicensifyFrontend:
+    repository: licensify-frontend
+    tag: latest

@@ -1321,6 +1321,61 @@ govukApplications:
 
   - name: info-frontend
 
+  - name: licensify
+    chartPath: charts/licensify
+    imageValues:
+      - "licensify-admin"
+      - "licensify-backend"
+      - "licensify-feed"
+      - "licensify-frontend"
+    helmValues:
+      assetManagerNFS: *assets-nfs
+      licensifyAdmin:
+        ingress:
+          annotations:
+            <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            alb.ingress.kubernetes.io/healthcheck-path: /
+          hosts:
+            - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
+      licensifyFeed:
+        ingress:
+          annotations:
+            <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            alb.ingress.kubernetes.io/healthcheck-path: >-
+              /licence-management/feed/process-applications
+          hosts:
+            - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
+      licensifyFrontend:
+        ingress:
+          annotations:
+            <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            alb.ingress.kubernetes.io/healthcheck-path: /apply-for-a-licence
+          hosts:
+            - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
+      extraEnv:
+        - name: APPLICATION_FORM_AWS_REGION
+          value: eu-west-1
+        - name: APPLICATION_FORM_BUCKET_NAME
+          value: govuk-licensing-application-forms-integration
+      config:
+        mongo:
+          dbHosts:
+            - licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+        baseUrl: https://licensify-admin.eks.integration.govuk.digital
+        frontendBaseUrl: https://licensify.eks.integration.govuk.digital
+        signonBaseUrl: https://signon.integration.publishing.service.gov.uk
+        licenceFinderUrl: https://www-origin.integration.publishing.service.gov.uk/licence-finder
+        performancePlatformUrl: >-
+          https://www.integration.performance.service.gov.uk/data/licensing/application
+        googleAnalytics:
+          accountAdmin: UA-34519962-2
+          domainAdmin: integration.publishing.service.gov.uk
+          accountFrontend: UA-34519962-1
+          domainFrontend: integration.publishing.service.gov.uk
+        noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
+
   - name: link-checker-api
     helmValues:
       dbMigrationEnabled: true
