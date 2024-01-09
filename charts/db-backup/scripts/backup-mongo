@@ -16,7 +16,7 @@ backup () {
 }
 
 dump_is_readable () {
-  s5cmd cat "$1" | gzip -d | head -c 100 | grep -q concurrent_collections
+  s5cmd cat -c 1 -p 1 "$1" | gzip -d | head -c 100 | grep -q concurrent_collections
 }
 
 restore () {
@@ -27,7 +27,7 @@ restore () {
   local s3_url="$BUCKET/$DB_HOST/$FILENAME"
   dump_is_readable "$s3_url"
 
-  s5cmd cat "$s3_url" | gzip -d | mongorestore "$db_url" --archive --drop -j 1
+  s5cmd cat -c 1 "$s3_url" | gzip -d | mongorestore "$db_url" --archive --drop -j 1
 }
 
 transform () {
