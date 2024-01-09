@@ -19,7 +19,7 @@ transform () {
 }
 
 dump_is_readable () {
-  s5cmd cat "$1" | gzip -d | head -n5 \
+  s5cmd cat -c 1 -p 1 "$1" | gzip -d | head -n5 \
     | tee /dev/fd/2 | grep 'MySQL dump' >/dev/null 2>&1
 }
 
@@ -32,7 +32,7 @@ restore () {
   dump_is_readable "$s3_url"
   mysqladmin drop -f "$DB_DATABASE" || true
   mysqladmin create "$DB_DATABASE"
-  s5cmd cat "$s3_url" | gzip -d | progress | mysql "$DB_DATABASE"
+  s5cmd cat -c 1 "$s3_url" | gzip -d | progress | mysql "$DB_DATABASE"
 }
 
 write_config () {
