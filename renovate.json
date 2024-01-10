@@ -36,7 +36,10 @@
       "automergeType": "branch"
     },
     {
-      "matchPackageNames": ["external-secrets"],
+      "matchPackageNames": [
+        "external-dns",
+        "external-secrets"
+      ],
       "matchUpdateTypes": ["patch"],
       "automerge": true,
       "automergeType": "branch"
