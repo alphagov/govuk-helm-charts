@@ -37,8 +37,11 @@
     },
     {
       "matchPackageNames": [
+        "aws-ebs-csi-driver",
+        "cluster-autoscaler",
         "external-dns",
-        "external-secrets"
+        "external-secrets",
+        "oauth2-proxy"
       ],
       "matchUpdateTypes": ["patch"],
       "automerge": true,
