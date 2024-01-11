@@ -41,6 +41,7 @@
         "cluster-autoscaler",
         "external-dns",
         "external-secrets",
+        "kube-prometheus-stack",
         "oauth2-proxy"
       ],
       "matchUpdateTypes": ["patch"],
