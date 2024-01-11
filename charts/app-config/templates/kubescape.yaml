@@ -13,16 +13,13 @@ spec:
     repoURL: 'https://github.com/kubescape/helm-charts'
     targetRevision: HEAD
     helm:
-      valueFiles:
-        - values.yaml
-      parameters:
-        - name: account
-          # Dummy value string for testing purpose
-          value: "mgsQy3ett5"
-        - name: clusterName
-          value: 'govuk-integration-new'
-        - name: server
-          value: 'https://kubernetes.default.svc'
+      values: |
+        # Dummy value account string for testing purpose
+        account: "mgsQy3ett5"
+        clusterName: govuk-integration-new
+        server: api.armosec.io
+        credentials:
+          cloudSecret: false
   project: default
   syncPolicy:
     syncOptions:
