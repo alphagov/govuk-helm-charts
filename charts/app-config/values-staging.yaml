@@ -1495,6 +1495,8 @@ govukApplications:
             secretKeyRef:
               name: locations-api-postgres
               key: DATABASE_URL
+        - name: RAILS_LOG_LEVEL
+          value: warn
         - name: OS_PLACES_API_KEY
           valueFrom:
             secretKeyRef:
