@@ -182,6 +182,8 @@ govukApplications:
             secretKeyRef:
               name: asset-manager-docdb
               key: MONGODB_URI
+        - name: RAILS_LOG_LEVEL
+          value: warn
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: AWS_REGION
