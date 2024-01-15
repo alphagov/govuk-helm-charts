@@ -1,40 +1,41 @@
-{{ $app := .Values.licensifyFeed }}
-{{ $_ := set .Values "appName" $app.name }}
+{{- range .Values.apps }}
+{{ $_ := set $.Values "appName" .name }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ $app.name }}
+  name: {{ .name }}
   labels:
-    {{- include "licensify.labels" . | nindent 4}}
-    app: {{ $app.name }}
+    {{- include "licensify.labels" $ | nindent 4}}
+    app: {{ .name }}
     app.kubernetes.io/component: app
 spec:
-  replicas: {{ $app.replicaCount }}
+  replicas: {{ .replicaCount }}
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: {{ $app.name }}
+      app: {{ .name }}
   template:
     metadata:
       labels:
-        {{- include "licensify.labels" . | nindent 8}}
-        app: {{ $app.name }}
+        {{- include "licensify.labels" $ | nindent 8}}
+        app: {{ .name }}
         app.kubernetes.io/component: app
     spec:
       securityContext:
-        fsGroup: {{ .Values.securityContext.runAsGroup }}
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        fsGroup: {{ $.Values.securityContext.runAsGroup }}
+        runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
+        runAsUser: {{ $.Values.securityContext.runAsUser }}
+        runAsGroup: {{ $.Values.securityContext.runAsGroup }}
       containers:
         - name: main
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.images.LicensifyFeed.repository }}:{{ .Values.images.LicensifyFeed.tag }}"
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ $.Values.images.LicensifyFrontend.repository }}:{{ $.Values.images.LicensifyFrontend.tag }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: APP_PORT
-              value: "{{ $app.port }}"
+              value: "{{ .port }}"
             - name: SBT_MODE
               value: docker
             - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
@@ -43,15 +44,15 @@ spec:
               value: do-not-use
             - name: GDS_CONFIG_FILE
               value: /etc/licensing/config.properties
-            {{- with .Values.extraEnv }}
+            {{- with $.Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
           ports:
             - name: http
-              containerPort: {{ $app.port }}
+              containerPort: {{ .port }}
           livenessProbe: &app-probe
             httpGet:
-              path: {{ $app.healthcheckPath }} 
+              path: {{ .healthcheckPath }} 
               port: http
             failureThreshold: 3
             periodSeconds: 5
@@ -65,7 +66,7 @@ spec:
             periodSeconds: 2
             timeoutSeconds: 2
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml $.Values.resources | nindent 12 }}
           volumeMounts:
             - name: licensify-config
               mountPath: "/etc/licensing"
@@ -78,3 +79,4 @@ spec:
             secretName: licensify-config
         - name: app-tmp
           emptyDir: {}
+{{- end }}
