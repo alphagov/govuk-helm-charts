@@ -1367,6 +1367,60 @@ govukApplications:
 
   - name: info-frontend
 
+  - name: licensify
+    chartPath: charts/licensify
+    imageValues:
+      - "licensify-admin"
+      - "licensify-backend"
+      - "licensify-feed"
+      - "licensify-frontend"
+    helmValues:
+      assetManagerNFS: *assets-nfs
+      apps:
+        licensifyAdmin:
+          ingress:
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            hosts:
+              - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
+        licensifyFeed:
+          ingress:
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            hosts:
+              - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
+        licensifyFrontend:
+          ingress:
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            hosts:
+              - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
+      extraEnv:
+        - name: APPLICATION_FORM_AWS_REGION
+          value: eu-west-1
+        - name: APPLICATION_FORM_BUCKET_NAME
+          value: govuk-licensing-application-forms-production
+      config:
+        mongo:
+          dbHosts:
+            - licensify-documentdb-0.cafmt8xopqlp.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-1.cafmt8xopqlp.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-2.cafmt8xopqlp.eu-west-1.docdb.amazonaws.com
+        elmsPdfApiHost: https://gdsprodaws.aptosolutions.co.uk/GDSELMS-5/
+        baseUrl: https://licensify-admin.eks.production.govuk.digital
+        frontendBaseUrl: https://licensify.eks.production.govuk.digital
+        signonBaseUrl: https://signon.publishing.service.gov.uk
+        licenceFinderUrl: https://www-origin.publishing.service.gov.uk/licence-finder
+        performancePlatformUrl: >-
+          https://www.performance.service.gov.uk/data/licensing/application
+        googleAnalytics:
+          accountAdmin: UA-34530684-2
+          domainAdmin: publishing.service.gov.uk
+          accountFrontend: UA-26179049-1
+          domainFrontend: www.gov.uk
+        noReplyMailAddress: noreply-licensing@digital.cabinet-office.gov.uk
+        paymentsTestMode: false
+
   - name: link-checker-api
     helmValues:
       dbMigrationEnabled: true

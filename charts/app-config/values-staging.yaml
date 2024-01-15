@@ -1331,6 +1331,58 @@ govukApplications:
 
   - name: info-frontend
 
+  - name: licensify
+    chartPath: charts/licensify
+    imageValues:
+      - "licensify-admin"
+      - "licensify-backend"
+      - "licensify-feed"
+      - "licensify-frontend"
+    helmValues:
+      assetManagerNFS: *assets-nfs
+      apps:
+        licensifyAdmin:
+          ingress:
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            hosts:
+              - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
+        licensifyFeed:
+          ingress:
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            hosts:
+              - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
+        licensifyFrontend:
+          ingress:
+            annotations:
+              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+            hosts:
+              - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
+      extraEnv:
+        - name: APPLICATION_FORM_AWS_REGION
+          value: eu-west-1
+        - name: APPLICATION_FORM_BUCKET_NAME
+          value: govuk-licensing-application-forms-staging
+      config:
+        mongo:
+          dbHosts:
+            - licensify-documentdb-0.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-1.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-2.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
+        baseUrl: https://licensify-admin.eks.staging.govuk.digital
+        frontendBaseUrl: https://licensify.eks.staging.govuk.digital
+        signonBaseUrl: https://signon.staging.publishing.service.gov.uk
+        licenceFinderUrl: https://www-origin.staging.publishing.service.gov.uk/licence-finder
+        performancePlatformUrl: >-
+          https://www.staging.performance.service.gov.uk/data/licensing/application
+        googleAnalytics:
+          accountAdmin: UA-34530684-2
+          domainAdmin: staging.publishing.service.gov.uk
+          accountFrontend: UA-26179049-20
+          domainFrontend: staging.publishing.service.gov.uk
+        noReplyMailAddress: noreply-licensing+staging@digital.cabinet-office.gov.uk
+
   - name: link-checker-api
     helmValues:
       dbMigrationEnabled: true
