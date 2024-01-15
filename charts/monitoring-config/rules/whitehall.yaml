@@ -12,3 +12,14 @@ groups:
             but haven't been published by the scheduled publishing workers
           runbook_url: >-
             https://docs.publishing.service.gov.uk/manual/alerts/whitehall-scheduled-publishing.html
+      - alert: WhitehallUnenqueuedScheduledPublications
+        expr: |
+          whitehall_unenqueued_scheduled_publications > 0
+        for: 10m
+        annotations:
+          summary: Scheduled publications in Whitehall not queued
+          description: >-
+            The number of editions in the database which are scheduled to be published in the
+            future is different from the number currently in the queue
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/alerts/whitehall-scheduled-publishing.html
