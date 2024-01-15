@@ -28,6 +28,17 @@ spec:
         runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
         runAsUser: {{ $.Values.securityContext.runAsUser }}
         runAsGroup: {{ $.Values.securityContext.runAsGroup }}
+      volumes:
+        - name: licensify-config
+          secret:
+            secretName: licensify-config
+        - name: app-tmp
+          emptyDir: {}
+        - name: nginx-conf
+          configMap:
+            name: {{ .name }}-nginx-conf
+        - name: nginx-tmp
+          emptyDir: {}
       containers:
         - name: main
           securityContext:
@@ -74,10 +85,35 @@ spec:
               readOnly: true
             - name: app-tmp
               mountPath: /tmp
-      volumes:
-        - name: licensify-config
-          secret:
-            secretName: licensify-config
-        - name: app-tmp
-          emptyDir: {}
+        - name: nginx
+          image: "{{ $.Values.images.nginx.repository }}:{{ $.Values.images.nginx.tag }}"
+          imagePullPolicy: {{ $.Values.images.nginx.pullPolicy | default "Always" }}
+          ports:
+            - name: http
+              containerPort: {{ $.Values.nginx.port }}
+          livenessProbe: &nginx-probe
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 2
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 20
+          readinessProbe:
+            <<: *nginx-probe  # Intentionally same path as liveness.
+            failureThreshold: 2
+            timeoutSeconds: 15
+          {{- with $.Values.nginx.resources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: nginx-tmp
+              mountPath: /tmp
 {{- end }}
