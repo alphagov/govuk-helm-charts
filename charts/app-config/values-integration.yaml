@@ -1337,22 +1337,18 @@ govukApplications:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-              alb.ingress.kubernetes.io/healthcheck-path: /
             hosts:
               - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
         licensifyFeed:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-              alb.ingress.kubernetes.io/healthcheck-path: >-
-                /licence-management/feed/process-applications
             hosts:
               - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
         licensifyFrontend:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-              alb.ingress.kubernetes.io/healthcheck-path: /apply-for-a-licence
             hosts:
               - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
