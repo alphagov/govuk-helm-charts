@@ -5,6 +5,8 @@ groups:
         expr: |
           whitehall_scheduled_publishing_overdue > 0
         for: 10m
+        labels:
+          severity: page
         annotations:
           summary: Whitehall scheduled publications are overdue
           description: >-
@@ -16,6 +18,8 @@ groups:
         expr: |
           whitehall_unenqueued_scheduled_publications > 0
         for: 10m
+        labels:
+          severity: page
         annotations:
           summary: Scheduled publications in Whitehall not queued
           description: >-
