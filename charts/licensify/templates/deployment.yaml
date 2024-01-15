@@ -1,5 +1,6 @@
 {{- range .Values.apps }}
 {{ $_ := set $.Values "appName" .name }}
+{{ $appImage := get $.Values.images (camelcase ( .useImage | default .name )) }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -31,7 +32,7 @@ spec:
         - name: main
           securityContext:
             {{- toYaml $.Values.securityContext | nindent 12 }}
-          image: "{{ $.Values.images.LicensifyFrontend.repository }}:{{ $.Values.images.LicensifyFrontend.tag }}"
+          image: "{{ $appImage.repository }}:{{ $appImage.tag }}"
           imagePullPolicy: "IfNotPresent"
           env:
             - name: APP_PORT
