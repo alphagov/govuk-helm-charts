@@ -18,43 +18,49 @@ clamav:
     type: ClusterIP
     port: 3310
 
-licensifyAdmin:
-  name: licensify-admin
-  replicaCount: 1
-  port: 9950
-  healthcheckPath: "/"
-  ingress:
-    annotations: {}
-  service:
-    port: 80
+apps:
+  licensifyAdmin:
+    name: licensify-admin
+    replicaCount: 1
+    port: 9950
+    healthcheckPath: "/"
+    ingress:
+      enabled: true
+      annotations: {}
+    service:
+      port: 80
 
-licensifyBackend:
-  name: licensify-backend
-  replicaCount: 1
-  port: 9920
-  healthcheckPath: "/"
-  service:
+  licensifyBackend:
+    name: licensify-backend
+    replicaCount: 1
     port: 9920
+    healthcheckPath: "/"
+    ingress:
+      enabled: false
+    service:
+      port: 9920
 
-licensifyFeed:
-  name: licensify-feed
-  replicaCount: 1
-  port: 9940
-  healthcheckPath: "/licence-management/feed/process-applications"
-  ingress:
-    annotations: {}
-  service:
-    port: 80
+  licensifyFeed:
+    name: licensify-feed
+    replicaCount: 1
+    port: 9940
+    healthcheckPath: "/licence-management/feed/process-applications"
+    ingress:
+      enabled: true
+      annotations: {}
+    service:
+      port: 80
 
-licensifyFrontend:
-  name: licensify-frontend
-  replicaCount: 1
-  port: 9903
-  healthcheckPath: "/apply-for-a-licence"
-  ingress:
-    annotations: {}
-  service:
-    port: 80
+  licensifyFrontend:
+    name: licensify-frontend
+    replicaCount: 1
+    port: 9903
+    healthcheckPath: "/apply-for-a-licence"
+    ingress:
+      enabled: true
+      annotations: {}
+    service:
+      port: 80
 
 resources:
   limits:

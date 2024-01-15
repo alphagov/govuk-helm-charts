@@ -1,0 +1,20 @@
+{{- range .Values.apps }}
+{{ $_ := set $.Values "appName" .name }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "licensify.labels" $ | nindent 4}}
+    app: {{ .name }}
+    app.kubernetes.io/component: app
+spec:
+  type: NodePort
+  ports:
+    - name: app
+      port: {{ .service.port }}
+      targetPort: {{ .port }}
+  selector:
+    app: {{ .name }}
+{{- end }}
