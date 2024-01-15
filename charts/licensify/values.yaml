@@ -21,6 +21,7 @@ clamav:
 apps:
   licensifyAdmin:
     name: licensify-admin
+    useImage: licensify-backend
     replicaCount: 1
     port: 9950
     healthcheckPath: "/"
