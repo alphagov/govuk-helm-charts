@@ -14,7 +14,7 @@ spec:
   ports:
     - name: app
       port: {{ .service.port }}
-      targetPort: {{ .port }}
+      targetPort: {{ $.Values.nginx.port }}
   selector:
     app: {{ .name }}
 {{- end }}

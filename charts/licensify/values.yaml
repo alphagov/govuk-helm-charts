@@ -18,6 +18,19 @@ clamav:
     type: ClusterIP
     port: 3310
 
+nginx:
+  port: 8080
+  proxyConnectTimeout: 30s
+  proxyReadTimeout: 15s
+  clientMaxBodySize: 200M
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 50m
+      memory: 512Mi
+
 apps:
   licensifyAdmin:
     name: licensify-admin
@@ -111,6 +124,10 @@ config:
   noReplyMailAddress: test@example.com
 
 images:
+  nginx:
+    repository: public.ecr.aws/nginx/nginx
+    tag: stable
+    pullPolicy: Always
   LicensifyFeed:
     repository: licensify-feed
     tag: latest
