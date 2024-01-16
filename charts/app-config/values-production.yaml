@@ -2156,6 +2156,10 @@ govukApplications:
         - name: BACKEND_URL_search-api
           value: "http://search-api"
 
+  - name: router-mongo
+    chartPath: charts/router-mongo
+    postSyncWorkflowEnabled: "false"
+
   - name: search-admin
     helmValues:
       dbMigrationEnabled: true
