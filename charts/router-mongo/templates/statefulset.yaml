@@ -13,6 +13,9 @@ metadata:
 spec:
   serviceName: {{ $fullName }}
   replicas: {{ .Values.replicas }}
+  {{- with .Values.minReadySeconds }}
+  minReadySeconds: {{ . }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "router-mongo.selectorLabels" $ | nindent 6 }}
