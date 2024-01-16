@@ -2345,6 +2345,9 @@ govukApplications:
         - command: ['bin/rake', 'document_sync_worker:run']
           name: document-sync-worker
       extraEnv:
+        # Required for document sync worker to be able to export metrics
+        - name: GOVUK_PROMETHEUS_EXPORTER
+          value: force
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
           value: search_api_v2_published_documents
         - name: RABBITMQ_URL
