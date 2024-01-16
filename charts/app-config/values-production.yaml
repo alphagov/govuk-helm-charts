@@ -1968,7 +1968,10 @@ govukApplications:
           value: "mongodb://\
             router-backend-1,\
             router-backend-2,\
-            router-backend-3/router"
+            router-backend-3,\
+            router-mongo-0.router-mongo,\
+            router-mongo-1.router-mongo,\
+            router-mongo-2.router-mongo/router"
 
   - name: draft-router-api
     repoName: router-api
@@ -1993,7 +1996,10 @@ govukApplications:
           value: "mongodb://\
             router-backend-1,\
             router-backend-2,\
-            router-backend-3/draft_router"
+            router-backend-3,\
+            router-mongo-0.router-mongo,\
+            router-mongo-1.router-mongo,\
+            router-mongo-2.router-mongo/draft_router"
 
   - name: router
     helmValues:
@@ -2074,7 +2080,10 @@ govukApplications:
           value: &router_mongo_hosts "\
             router-backend-1,\
             router-backend-2,\
-            router-backend-3"
+            router-backend-3,\
+            router-mongo-0.router-mongo,\
+            router-mongo-1.router-mongo,\
+            router-mongo-2.router-mongo"
         - name: BACKEND_URL_collections
           value: "http://collections"
         - name: BACKEND_URL_content-store
