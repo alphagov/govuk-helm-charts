@@ -34,6 +34,7 @@ nginx:
 apps:
   licensifyAdmin:
     name: licensify-admin
+    enabled: true
     useImage: licensify-backend
     replicaCount: 1
     port: 9950
@@ -46,6 +47,7 @@ apps:
 
   licensifyBackend:
     name: licensify-backend
+    enabled: true
     replicaCount: 1
     port: 9920
     healthcheckPath: "/"
@@ -56,6 +58,7 @@ apps:
 
   licensifyFeed:
     name: licensify-feed
+    enabled: true
     replicaCount: 1
     port: 9940
     healthcheckPath: "/licence-management/feed/process-applications"
@@ -67,6 +70,7 @@ apps:
 
   licensifyFrontend:
     name: licensify-frontend
+    enabled: true
     replicaCount: 1
     port: 9903
     healthcheckPath: "/apply-for-a-licence"
