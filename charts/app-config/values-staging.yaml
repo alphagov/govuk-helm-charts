@@ -2114,6 +2114,12 @@ govukApplications:
   - name: router-mongo
     chartPath: charts/router-mongo
     postSyncWorkflowEnabled: "false"
+    helmValues:
+      args:
+        - --config
+        - /etc/mongo/mongodb.conf
+        - --replSet
+        - production/router-mongo-0.router-mongo,router-mongo-1.router-mongo,router-mongo-2.router-mongo
 
   - name: search-admin
     helmValues:
