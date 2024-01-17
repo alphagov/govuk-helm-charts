@@ -9,7 +9,7 @@ args:
   - --config
   - /etc/mongo/mongodb.conf
   - --replSet
-  - production/router-mongo-0.router-mongo,router-mongo-1.router-mongo,router-mongo-2.router-mongo,router-backend-1,router-backend-2,router-backend-3
+  - production/router-mongo-0.router-mongo,router-mongo-1.router-mongo,router-mongo-2.router-mongo
 
 podSecurityContext:
   fsGroup: &uid 999
@@ -25,6 +25,7 @@ securityContext:
   runAsNonRoot: true
   runAsUser: *uid
 
+minReadySeconds: 60
 replicas: 3
 
 resources:
