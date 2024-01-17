@@ -1,3 +1,3 @@
-image_tag: v101
-promote_deployment: true
+image_tag: release-8cfdc607df4921cf3bf50f2e3c444bea8a8ea5b7
+promote_deployment: false
 automatic_deploys_enabled: true
