@@ -2092,13 +2092,6 @@ govukApplications:
   - name: router-mongo
     chartPath: charts/router-mongo
     postSyncWorkflowEnabled: "false"
-    helmValues:  # TODO(#1668): remove overrides once defaults updated.
-      minReadySeconds: 60
-      args:
-        - --config
-        - /etc/mongo/mongodb.conf
-        - --replSet
-        - production/router-mongo-0.router-mongo,router-mongo-1.router-mongo,router-mongo-2.router-mongo
 
   - name: search-admin
     helmValues:
