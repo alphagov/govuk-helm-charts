@@ -73,7 +73,7 @@ apps:
     enabled: true
     replicaCount: 1
     port: 9903
-    healthcheckPath: "/apply-for-a-licence"
+    healthcheckPath: "/api/licences"
     ingress:
       enabled: true
       annotations: {}
