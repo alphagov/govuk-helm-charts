@@ -219,6 +219,8 @@ cronjobs:
         - op: backup
           db: travel_advice_publisher_production
         - op: backup
+          db: govuk_content_production
+        - op: backup
           db: govuk_assets_production
 
     signon-mysql:
@@ -441,6 +443,9 @@ cronjobs:
           db: short_url_manager_production
         - op: restore
           bucket: s3://govuk-production-database-backups
+          db: govuk_content_production
+        - op: restore
+          bucket: s3://govuk-production-database-backups
           db: travel_advice_publisher_production
         - op: backup
           db: maslow_production
@@ -450,6 +455,8 @@ cronjobs:
           db: short_url_manager_production
         - op: backup
           db: travel_advice_publisher_production
+        - op: backup
+          db: govuk_content_production
         - op: restore
           bucket: s3://govuk-production-database-backups
           db: govuk_assets_production
@@ -677,6 +684,9 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
           db: travel_advice_publisher_production
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+          db: govuk_content_production
         - op: backup
           db: maslow_production
         - op: backup
@@ -685,6 +695,8 @@ cronjobs:
           db: short_url_manager_production
         - op: backup
           db: travel_advice_publisher_production
+        - op: backup
+          db: govuk_content_production
         - op: restore
           bucket: s3://govuk-staging-database-backups
           db: govuk_assets_production
