@@ -35,6 +35,9 @@ spec:
         - name: licensify-config
           secret:
             secretName: licensify-config
+        - name: logging-config
+          configMap:
+            name: licensify-logging-config
         - name: app-tmp
           emptyDir: {}
         - name: nginx-conf
@@ -61,6 +64,8 @@ spec:
               value: do-not-use
             - name: GDS_CONFIG_FILE
               value: /etc/licensing/config.properties
+            - name: LOGGING_CONFIG_FILE
+              value: ../../../app/conf/logging.xml
             {{- with $.Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
@@ -88,6 +93,9 @@ spec:
             - name: licensify-config
               mountPath: "/etc/licensing"
               readOnly: true
+            - name: logging-config
+              mountPath: /app/conf/logging.xml
+              subPath: logging.xml
             - name: app-tmp
               mountPath: /tmp
         - name: nginx
