@@ -1362,10 +1362,10 @@ govukApplications:
             - licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
-        baseUrl: https://licensify-admin.eks.integration.govuk.digital
+        adminBaseUrl: https://licensify-admin.eks.integration.govuk.digital
         frontendBaseUrl: https://licensify.eks.integration.govuk.digital
         signonBaseUrl: https://signon.integration.publishing.service.gov.uk
-        licenceFinderUrl: https://www-origin.integration.publishing.service.gov.uk/licence-finder
+        govukBaseUrl: https://www.integration.publishing.service.gov.uk
         performancePlatformUrl: >-
           https://www.integration.performance.service.gov.uk/data/licensing/application
         googleAnalytics:
@@ -1373,7 +1373,12 @@ govukApplications:
           domainAdmin: integration.publishing.service.gov.uk
           accountFrontend: UA-34519962-1
           domainFrontend: integration.publishing.service.gov.uk
-        noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
+        payments:
+          testMode: true
+        notify:
+          noReplyMailAddress: noreply-licensing-preview@digital.cabinet-office.gov.uk
+        uncollectedExpiry:
+          enabled: false
 
   - name: link-checker-api
     helmValues:

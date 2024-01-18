@@ -4,9 +4,8 @@ metadata:
   name: licensify-config-template
 data:
   config.properties: |
-    {{ if .Values.config.clamAntivirusHost }}
+    # Virus scan config
     clam.antivirus.host={{ .Values.config.clamAntivirusHost }}
-    {{ end }}
     scheduled.virus.scan.cron.expression={{ .Values.config.scheduledVirusScanCronExpression }}
 
     # AWS Config
@@ -23,21 +22,19 @@ data:
     mongo.database.slaveok={{ .Values.config.mongo.dbSlaveOk }}
 
     # Elms config
-    places.api.url={{ .Values.config.placesApiUrl }}
-    feedActor={{ .Values.config.feedActor }}
+    govuk.url={{ .Values.config.govukBaseUrl }}/
     uploadUrlBase={{ .Values.config.frontendBaseUrl }}/
     elms.frontend.host={{ .Values.config.frontendBaseUrl }}/
-    elms.admin.host={{ .Values.config.baseUrl }}/
+    elms.admin.host={{ .Values.config.adminBaseUrl }}/
     elms.pdf.apihost={{ .Values.config.elmsPdfApiHost }}
-    elms.max.appProcessAttemptCount="{{ .Values.config.elmsMaxAppProcessAttemptCount }}"
-    govuk.url={{ .Values.config.frontendBaseUrl }}
+    elms.max.appProcessAttemptCount={{ .Values.config.elmsMaxAppProcessAttemptCount }}
 
     # Authorization config
     signon.url={{ .Values.config.signonBaseUrl }}
     access_token_url={{ .Values.config.signonBaseUrl }}/oauth/access_token
     authorization_url={{ .Values.config.signonBaseUrl }}/oauth/authorize
     user_details_url={{ .Values.config.signonBaseUrl }}/user.json
-    oauth_callback_url_override={{ .Values.config.baseUrl }}/licence-management/admin/oauth
+    oauth_callback_url_override={{ .Values.config.adminBaseUrl }}/licence-management/admin/oauth
     client_id={{ `{{ .client_id }}` }}
     client_secret={{ `{{ .client_secret }}` }}
 
@@ -48,42 +45,54 @@ data:
     googleAnalytics.domain.frontend={{ .Values.config.googleAnalytics.domainFrontend }}
 
     # Payment provider config
+    paymentsTestMode={{ .Values.config.payments.testMode }}
+
+    {{- if not .Values.config.payments.testMode }}
+    # Unsure if these are used
+    payment.bibit.formUrl={{ .Values.config.payments.bibitFormUrl }}
+    payment.capita.formUrl={{ .Values.config.payments.capitaFormUrl }}
+    payment.northgate.callback.override={{ .Values.config.payments.northgateCallbackOverride }}
+    payment.worldpay.formUrl={{ .Values.config.payments.worldpayFormUrl }}
+    {{- end }}
     worldpay.redirectUrl={{ .Values.config.frontendBaseUrl }}/apply-for-a-licence/payment/worldpayComplete
     worldpay.cancelled.redirectUrl={{ .Values.config.frontendBaseUrl }}/apply-for-a-licence/payment/worldpayCancelled
-    paymentsTestMode={{ .Values.config.paymentsTestMode }}
-    noReplyMailAddress={{ .Values.config.noReplyMailAddress }}
 
     # License Finder config
-    licenceFinderUrl={{ .Values.config.licenceFinderUrl }}
+    licencefinder.url={{ .Values.config.govukBaseUrl }}/licence-finder
+
+    # Notify config
+    noReplyMailAddress={{ .Values.config.notify.noReplyMailAddress }}
+    notify.key.api={{ `{{ .notify_key_api }}` }}
+    notify.template.applicant.none={{ .Values.config.notify.templateApplicatNone }}
+    notify.template.applicant.offline={{ .Values.config.notify.templateApplicatOffline }}
+    notify.template.applicant.online={{ .Values.config.notify.templateApplicatOnline }}
+    notify.template.authority={{ .Values.config.notify.templateAuthority }}
+    notify.template.periodic={{ .Values.config.notify.templatePeriodic }}
+
+    email.periodic.enabled={{ .Values.config.notify.emailPeriodicEnabled }}
+    notify.periodic.email.cron={{ .Values.config.notify.periodicEmailCron }}
+
+    {{- if .Values.config.notify.emailOverrideRecipient }}
+    email.override.recipient={{ .Values.config.notify.emailOverrideRecipient }}
+    {{- end }}
+
+    # Other config
+    licenceApplication.expirationPeriod={{ .Values.config.licenseApplicationExpirationPeriod }}
+
+    # Feed config
+    feedActor={{ .Values.config.feedActor }}
+    is.master.node={{ .Values.config.isMasterNode }}
+
+    {{- if .Values.config.uncollectedExpiry.enabled }}
+    uncollected.expiry.enabled={{ .Values.config.uncollectedExpiry.enabled }}
+    uncollected.expiry.cron={{ .Values.config.uncollectedExpiry.cron }}
+    uncollected.expiry.purge.days={{ .Values.config.uncollectedExpiry.purgeDays }}
+    uncollected.expiry.start.days={{ .Values.config.uncollectedExpiry.startDays }}
+    {{- end }}
 
     # Performance platform config
     performance.platform.service.url={{ .Values.config.performancePlatformUrl }}
     performance.platform.bearer.token={{ `{{ .performance_platform_bearer_token }}` }}
     performance.data.sender.cron.expression={{ .Values.config.performanceDataSenderCronExpression }}
 
-    # Notify config
-    notify.key.api={{ `{{ .notify_key_api }}` }}
-    {{ if .Values.config.notifyKeyService }}
-    notify.key.service={{ .Values.config.notifyKeyService }}
-    {{ end }}
-    {{ if .Values.config.notifyTemplateAuthority }}
-    notify.template.authority={{ .Values.config.notifyTemplateAuthority }}
-    {{ end }}
-
-    # Other config
-    app.timezone.id={{ .Values.config.appTimezoneId }}
-    is.master.node={{ .Values.config.isMasterNode }}
-
-    # Development config
-    {{ if .Values.config.isTest }}
-    is.test={{ .Values.config.isTest }}
-    {{ end }}
-    {{ if .Values.config.licenceApplicationPurgeExpiredAfter }}
-    licenceApplication.purgeExpiredAfter={{ .Values.config.licenceApplicationPurgeExpiredAfter }}
-    {{ end }}
-    {{ if .Values.config.pdfCacheSeconds }}
-    pdfCacheSeconds= {{ .Values.config.pdfCacheSeconds }}
-    {{ end }}
-    {{ if .Values.config.uncollectedExpiryEnabled }}
-    uncollected.expiry.enabled= {{ .Values.config.uncollectedExpiryEnabled }}
-    {{ end }}
+    places.api.url={{ .Values.config.placesApiUrl }}

@@ -92,6 +92,7 @@ extraEnv: []
 
 config:
   clamAntivirusHost: clamav
+  scheduledVirusScanCronExpression: 0 0 16 * * ?
 
   mongo:
     dbHosts: []
@@ -104,28 +105,55 @@ config:
   elmsPdfApiHost: https://gdspreprodaws.aptosolutions.co.uk/GDSELMS-5/
   elmsMaxAppProcessAttemptCount: 6
 
-  baseUrl: https://licensify-admin
+  adminBaseUrl: https://licensify-admin
   frontendBaseUrl: https://licensify
   signonBaseUrl: https://signon
-  licenceFinderUrl: https://www.test.publishing.service.gov.uk/licence-finder
+  govukBaseUrl: https://www.test.publishing.service.gov.uk
 
-  placesApiUrl: http://places-api:9700/places
-
-  appTimezoneId: Europe/London
-  feedActor: true
+  licenseApplicationExpirationPeriod: 7
+  # Sets whether feed should be master node
   isMasterNode: true
-  paymentsTestMode: true
-  performanceDataSenderCronExpression: 0 0 1 * * ?
-  scheduledVirusScanCronExpression: 0 0 16 * * ?
+  feedActor: true
 
-  performancePlatformUrl: >-
-    https://performance/data/licensing/application
   googleAnalytics:
     accountAdmin: UA-XXXXXXXX-X
     domainAdmin: test.publishing.service.gov.uk
     accountFrontend: UA-XXXXXXXX-X
     domainFrontend: test.publishing.service.gov.uk
   noReplyMailAddress: test@example.com
+
+  uncollectedExpiry:
+    enabled: true
+    cron: 0 0 4 * * ?
+    purgeDays: 7
+    startDays: 90
+
+  payments:
+    testMode: false
+    bibitFormUrl: https://secure.wp3.rbsworldpay.com/jsp/merchant/xml/paymentService.jsp
+    capitaFormUrl: https://sbs.e-paycapita.com/portal/PortalServlet
+    northgateCallbackOverride: >-
+      https://online.ukwelcomes.businesslink.gov.uk/eff/action/northgateResponse
+    worldpayFormUrl: https://secure.worldpay.com/wcc/purchase
+
+  notify:
+    templateApplicatNone: test
+    templateApplicatOffline: test
+    templateApplicatOnline: test
+    templateAuthority: test
+    templatePeriodic: test
+    # Configures whether licensify should sends periodic emails to authorities
+    emailPeriodicEnabled: true
+    periodicEmailCron: 0 0 6 3 * ?
+    emailOverrideRecipient: ""
+
+  # Performance platform has been decomission useless config
+  performancePlatformUrl: >-
+    https://performance/data/licensing/application
+  performanceDataSenderCronExpression: 0 0 1 * * ?
+
+  placesApiUrl: http://places-api:9700/places
+
 
 images:
   nginx:
