@@ -1370,10 +1370,10 @@ govukApplications:
             - licensify-documentdb-0.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-1.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-2.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
-        baseUrl: https://licensify-admin.eks.staging.govuk.digital
+        adminBaseUrl: https://licensify-admin.eks.staging.govuk.digital
         frontendBaseUrl: https://licensify.eks.staging.govuk.digital
         signonBaseUrl: https://signon.staging.publishing.service.gov.uk
-        licenceFinderUrl: https://www-origin.staging.publishing.service.gov.uk/licence-finder
+        govukBaseUrl: https://www.staging.publishing.service.gov.uk
         performancePlatformUrl: >-
           https://www.staging.performance.service.gov.uk/data/licensing/application
         googleAnalytics:
@@ -1381,7 +1381,16 @@ govukApplications:
           domainAdmin: staging.publishing.service.gov.uk
           accountFrontend: UA-26179049-20
           domainFrontend: staging.publishing.service.gov.uk
-        noReplyMailAddress: noreply-licensing+staging@digital.cabinet-office.gov.uk
+        payments:
+          testMode: false
+        notify:
+          noReplyMailAddress: noreply-licensing+staging@digital.cabinet-office.gov.uk
+          emailOverrideRecipient: licensing-notifications+staging@digital.cabinet-office.gov.uk
+          templateApplicatNone: f324cd8c-a0b1-48fa-b009-69bdf8ba81b0
+          templateApplicatOffline: bbbc408b-4276-498f-9d94-8f76663b258e
+          templateApplicatOnline: 8ca00761-7902-4ec3-89a2-e3aa006d3ed8
+          templateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
+          templatePeriodic: a3a54578-2695-4953-9787-d7c73aaf08c0
 
   - name: link-checker-api
     helmValues:
