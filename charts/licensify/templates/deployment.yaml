@@ -49,6 +49,8 @@ spec:
           image: "{{ $appImage.repository }}:{{ $appImage.tag }}"
           imagePullPolicy: "IfNotPresent"
           env:
+            - name: LANG
+              value: en_GB.UTF-8
             - name: APP_PORT
               value: "{{ .port }}"
             - name: SBT_MODE
