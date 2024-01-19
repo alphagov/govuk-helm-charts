@@ -101,7 +101,7 @@ spec:
           {{- with .Values.appProbes }}
             {{- . | toYaml | trim | nindent 10 }}
           {{- else }}
-          startupProbe: &app-probe  # TODO: check the Rails apps aren't picky about the Host header.
+          startupProbe: &app-probe
             httpGet:
               path: /healthcheck/live
               port: http
@@ -114,9 +114,6 @@ spec:
             periodSeconds: 5
           readinessProbe:
             <<: *app-probe
-            httpGet:
-              path: /healthcheck/live  # TODO: fix readiness check so that we can use it here.
-              port: http
             failureThreshold: 2
             periodSeconds: 5
           {{- end }}
