@@ -66,6 +66,9 @@ spec:
               value: /etc/licensing/config.properties
             - name: LOGGING_CONFIG_FILE
               value: /app/conf/logging.xml
+            {{- with $.Values.extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
             {{- with .extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
