@@ -1894,9 +1894,6 @@ govukApplications:
 
   - name: router-api
     helmValues: &router-api
-      dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
-        searches:
-          - blue.integration.govuk-internal.digital
       uploadAssets:
         enabled: false
       extraEnv:
@@ -1947,9 +1944,6 @@ govukApplications:
         enabled: false
       uploadAssets:
         enabled: false
-      dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
-        searches:
-          - blue.integration.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
@@ -2049,9 +2043,6 @@ govukApplications:
         createSecret: false  # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
-      dnsConfig:  # TODO: remove dnsConfig once MongoDB migrated to DocDB.
-        searches:
-          - blue.integration.govuk-internal.digital
       appProbes: *router-app-probes
       nginxConfigMap:
         create: false
