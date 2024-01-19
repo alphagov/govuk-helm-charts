@@ -65,8 +65,8 @@ spec:
             - name: GDS_CONFIG_FILE
               value: /etc/licensing/config.properties
             - name: LOGGING_CONFIG_FILE
-              value: ../../../app/conf/logging.xml
-            {{- with $.Values.extraEnv }}
+              value: /app/conf/logging.xml
+            {{- with .extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
           ports:

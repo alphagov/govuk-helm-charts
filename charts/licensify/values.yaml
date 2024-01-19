@@ -79,6 +79,11 @@ apps:
       annotations: {}
     service:
       port: 80
+    extraEnv:
+      - name: JAVA_OPTIONS
+        value: >-
+          -Dplay.http.session.sameSite="None"
+          -Dplay.akka.actor.retrieveBodyParserTimeout="30 seconds"
 
 resources:
   limits:
@@ -87,8 +92,6 @@ resources:
   requests:
     cpu: 500m
     memory: 800Mi
-
-extraEnv: []
 
 config:
   clamAntivirusHost: clamav
