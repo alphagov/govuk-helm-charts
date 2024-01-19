@@ -1,8 +1,5 @@
-# After modifying this configmap, you will need to restart deployments (kubectl
-# rollout restart) in order to pick up changes to environment variables.
-#
-# TODO: consider whether to use https://github.com/stakater/Reloader or similar
-# so that changes are rolled out automatically.
+# Reloader will automatically roll out deployments etc. which refer to this
+# configmap upon any change.
 apiVersion: v1
 kind: ConfigMap
 metadata:
