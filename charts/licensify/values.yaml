@@ -44,6 +44,13 @@ apps:
       annotations: {}
     service:
       port: 80
+    extraEnv:
+      - name: JAVA_OPTIONS
+        value: >-
+          -J-Xms512M
+          -J-Xmx2048M
+          -J-XX:ParallelGCThreads=4
+          -J-XX:+UseParallelOldGC
 
   licensifyBackend:
     name: licensify-backend
@@ -55,6 +62,13 @@ apps:
       enabled: false
     service:
       port: 9920
+    extraEnv:
+      - name: JAVA_OPTIONS
+        value: >-
+          -J-Xms512M
+          -J-Xmx2048M
+          -J-XX:ParallelGCThreads=4
+          -J-XX:+UseParallelOldGC
 
   licensifyFeed:
     name: licensify-feed
@@ -67,6 +81,13 @@ apps:
       annotations: {}
     service:
       port: 80
+    extraEnv:
+      - name: JAVA_OPTIONS
+        value: >-
+          -J-Xms512M
+          -J-Xmx2048M
+          -J-XX:ParallelGCThreads=4
+          -J-XX:+UseParallelOldGC
 
   licensifyFrontend:
     name: licensify-frontend
@@ -82,6 +103,10 @@ apps:
     extraEnv:
       - name: JAVA_OPTIONS
         value: >-
+          -J-Xms512M
+          -J-Xmx2048M
+          -J-XX:ParallelGCThreads=4
+          -J-XX:+UseParallelOldGC
           -Dplay.http.session.sameSite=None
           -Dplay.akka.actor.retrieveBodyParserTimeout=30s
 
@@ -90,7 +115,7 @@ extraEnv: []
 resources:
   limits:
     cpu: 1
-    memory: 1500Mi
+    memory: 2Gi
   requests:
     cpu: 500m
     memory: 800Mi
