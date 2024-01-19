@@ -5,6 +5,8 @@
 #
 # See values-${env}.yaml for per-environment and per-app values.
 
+awsRegion: eu-west-1
+
 appsNamespace: apps
 argoNamespace: cluster-services
 monitoringNamespace: monitoring
