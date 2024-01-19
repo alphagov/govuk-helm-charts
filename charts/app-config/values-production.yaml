@@ -186,8 +186,6 @@ govukApplications:
           value: warn
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
-        - name: AWS_REGION
-          value: eu-west-1
         - name: AWS_S3_BUCKET_NAME
           value: govuk-assets-production
 
@@ -500,8 +498,6 @@ govukApplications:
             secretKeyRef:
               name: content-data-admin-aws
               key: secret_key
-        - name: AWS_REGION
-          value: eu-west-1
         - name: AWS_CSV_EXPORT_BUCKET_NAME
           value: govuk-production-content-data-csvs
         - name: DATABASE_URL
@@ -637,8 +633,6 @@ govukApplications:
         hosts:
           - name: content-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
-        - name: AWS_REGION  # TODO: consider moving this to cm/govuk-apps-env?
-          value: eu-west-1
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -1563,8 +1557,6 @@ govukApplications:
           value: "false"
         - name: AWS_S3_ASSET_BUCKET_NAME
           value: "govuk-app-assets-production"
-        - name: AWS_REGION
-          value: "eu-west-1"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -1812,8 +1804,6 @@ govukApplications:
           value: *publishing-notify-template
         - name: REPORTS_S3_BUCKET_NAME
           value: govuk-production-publisher-csvs
-        - name: AWS_REGION
-          value: eu-west-1
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
 
@@ -2260,8 +2250,6 @@ govukApplications:
         - command: ['rake', 'message_queue:bulk_insert_data_into_govuk']
           name: bulk-reindex-queue-listener
       extraEnv:
-        - name: AWS_REGION
-          value: eu-west-1
         - name: AWS_S3_RELEVANCY_BUCKET_NAME
           value: govuk-production-search-relevancy
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
@@ -2780,8 +2768,6 @@ govukApplications:
             secretKeyRef:
               name: specialist-publisher-aws
               key: secret_key
-        - name: AWS_REGION
-          value: eu-west-1
         - name: AWS_S3_BUCKET_NAME
           value: govuk-production-specialist-publisher-csvs
         - name: MONGODB_URI
@@ -2823,8 +2809,6 @@ govukApplications:
             secretKeyRef:
               name: support-aws
               key: access_key
-        - name: AWS_REGION
-          value: eu-west-1
         - name: AWS_S3_BUCKET_NAME
           value: govuk-production-support-api-csvs
         - name: AWS_SECRET_ACCESS_KEY
@@ -2900,8 +2884,6 @@ govukApplications:
             secretKeyRef:
               name: support-aws
               key: access_key
-        - name: AWS_REGION
-          value: eu-west-1
         - name: AWS_S3_BUCKET_NAME
           value: govuk-production-support-api-csvs
         - name: AWS_SECRET_ACCESS_KEY
@@ -2994,8 +2976,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-transition
               key: oauth_secret
-        - name: AWS_REGION
-          value: eu-west-1
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -3165,8 +3145,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-whitehall-search-api
               key: bearer_token
-        - name: AWS_REGION
-          value: eu-west-1
         - name: AWS_S3_BUCKET_NAME
           value: govuk-production-whitehall-csvs
         - name: GOVUK_NOTIFY_TEMPLATE_ID
