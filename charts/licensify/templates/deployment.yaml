@@ -82,6 +82,7 @@ spec:
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 30
+            initialDelaySeconds: 5
           readinessProbe:
             <<: *app-probe  # Intentionally same path as liveness.
             failureThreshold: 2
