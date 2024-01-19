@@ -4,6 +4,9 @@ metadata:
   name: licensify-config-template
 data:
   config.properties: |
+    # Play config
+    play.http.secret.key={{ `{{ .play_secret_key }}` }}
+
     # Virus scan config
     clam.antivirus.host={{ .Values.config.clamAntivirusHost }}
     scheduled.virus.scan.cron.expression={{ .Values.config.scheduledVirusScanCronExpression }}
