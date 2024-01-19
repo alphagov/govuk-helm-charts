@@ -85,6 +85,8 @@ apps:
           -Dplay.http.session.sameSite="None"
           -Dplay.akka.actor.retrieveBodyParserTimeout="30 seconds"
 
+extraEnv: []
+
 resources:
   limits:
     cpu: 1
