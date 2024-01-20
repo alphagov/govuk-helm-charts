@@ -121,15 +121,8 @@ http {
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header   Cookie '';
 
-      # If slug has trailing URL, direct after trimming.
-      location ~ ^\/(.+)\/$ {
-        rewrite ^\/(.+)\/$ $scheme://$host/$1 permanent;
-      }
-
-      # If slug has trailing fullstop, direct after trimming.
-      location ~ ^\/(.+)\.$ {
-        rewrite ^\/(.+)\.$ $scheme://$host/$1 permanent;
-      }
+      # Redirect to trim a (single) trailing slash or dot.
+      rewrite ^\/(.+)[/.]$ $scheme://$host/$1 permanent;
     }
 
     # Allow cookie headers to pass for services that require them
@@ -163,9 +156,7 @@ http {
       add_header "Access-Control-Allow-Headers" "origin, authorization";
     }
 
-    # Endpoint that isn't cached, which is used to assert that an external
-    # service can receive a response from GOV.UK origin on www hostname. It
-    # is intended for pingdom monitoring
+    # Uncacheable resource for use by external probers (Pingdom).
     location = /__canary__ {
       default_type application/json;
       add_header cache-control "max-age=0,no-store,no-cache";
@@ -181,7 +172,7 @@ http {
       root /usr/share/nginx/html;
     }
 
-    # 1stline use this URL in their zendesk template
+    # 1st-line User Support use this URL in their Zendesk email template.
     location = /static/gov.uk_logotype_crown.png {
       absolute_redirect off;
       return 301 /media/5c810ef4ed915d43e50ce260/gov.uk_logotype_crown.png;
