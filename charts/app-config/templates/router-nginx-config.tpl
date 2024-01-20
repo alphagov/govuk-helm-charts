@@ -1,8 +1,6 @@
 {{- define "app-config.router-nginx-config" -}}
 user nginx;
 
-load_module /usr/lib/nginx/modules/ngx_http_perl_module.so;
-
 error_log  /dev/stderr warn;
 pid        /tmp/nginx.pid;
 
@@ -29,11 +27,6 @@ http {
 
   sendfile        on;
   keepalive_timeout  65;
-
-  perl_set $uri_lowercase 'sub {
-    my $r = shift;
-    return lc($r->uri);
-  }';
 
   # Set GOVUK-Request-Id if not set
   map $http_govuk_request_id $govuk_request_id {
@@ -127,13 +120,6 @@ http {
       proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header   Cookie '';
-
-      # If slug is ALL CAPS then lowercase it, e.g.:
-      #   /GOVERNMENT/GUIDANCE -> /government/guidance
-      #   /GoVeRnMeNt/gUiDaNcE -> /GoVeRnMeNt/gUiDaNcE (but see next rule below)
-      location ~ ^\/[A-Z]+[A-Z\W\d]+$ {
-        rewrite ^(.*)$ $scheme://$host$uri_lowercase permanent;
-      }
 
       # If slug has trailing URL, direct after trimming.
       location ~ ^\/(.+)\/$ {
