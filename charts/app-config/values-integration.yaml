@@ -1331,20 +1331,25 @@ govukApplications:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+              alb.ingress.kubernetes.io/group.order: "115"
+              alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+                [{"field": "host-header", "hostHeaderConfig": { "values": [
+                    "licensify-admin.{{ .Values.publishingDomainSuffix }}"
+                ]}}]
             hosts:
-              - name: licensify-admin.{{ .Values.publishingDomainSuffix }}
+              - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
         licensifyFeed:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
             hosts:
-              - name: licensify-feed.{{ .Values.publishingDomainSuffix }}
+              - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
         licensifyFrontend:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
             hosts:
-              - name: licensify.{{ .Values.publishingDomainSuffix }}
+              - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
         - name: APPLICATION_FORM_AWS_REGION
           value: eu-west-1
