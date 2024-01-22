@@ -1,15 +1,17 @@
+{{- range .Values.cronJobs }}
+---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: smokey
+  name: {{ .name }}
 spec:
   concurrencyPolicy: Allow
   failedJobsHistoryLimit: 3
   successfulJobsHistoryLimit: 3
-  schedule: {{ .Values.cronSchedule | quote }}
+  schedule: {{ .schedule | quote }}
   jobTemplate:
     metadata:
-      name: smokey
+      name: {{ .name }}
     spec:
       activeDeadlineSeconds: 600
       backoffLimit: 0
@@ -27,12 +29,11 @@ spec:
             name: tmp
           containers:
           - args:
-            - cucumber
-            - --profile={{ .Values.govukEnvironment }}
-            - --strict-undefined
-            - --tags=not @not{{ .Values.govukEnvironment }}
-            image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-            name: smokey
+            {{- with .args }}
+              {{- tpl (toYaml .) $ | nindent 14 }}
+            {{- end }}
+            image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+            name: {{ .name }}
             resources:
               limits:
                 cpu: "2"
@@ -53,21 +54,21 @@ spec:
                   key: bearer_token
                   name: signon-token-smokey-asset-manager
             - name: ENVIRONMENT
-              value: {{ .Values.govukEnvironment }}
+              value: {{ $.Values.govukEnvironment }}
             - name: GOVUK_APP_DOMAIN
               value: ""
             - name: GOVUK_APP_DOMAIN_EXTERNAL
-              value: {{ .Values.publishingDomainSuffix }}
+              value: {{ $.Values.publishingDomainSuffix }}
             - name: GOVUK_ASSET_ROOT
-              value: https://{{ .Values.assetsDomain }}
+              value: https://{{ $.Values.assetsDomain }}
             - name: GOVUK_WEBSITE_ROOT
-              value: https://www.{{ .Values.externalDomainSuffix }}
+              value: https://www.{{ $.Values.externalDomainSuffix }}
             - name: PLEK_SERVICE_ASSETS_URI
-              value: https://{{ .Values.assetsDomain }}
+              value: https://{{ $.Values.assetsDomain }}
             - name: PLEK_SERVICE_ASSETS_ORIGIN_URI
-              value: https://assets-origin.{{ .Values.publishingDomainSuffix }}
+              value: https://assets-origin.{{ $.Values.publishingDomainSuffix }}
             - name: PLEK_SERVICE_CONTENT_DATA_ADMIN_URI
-              value: https://content-data.{{ .Values.publishingDomainSuffix }}
+              value: https://content-data.{{ $.Values.publishingDomainSuffix }}
             - name: PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS
               value: "1"
             - name: SIGNON_EMAIL
@@ -81,17 +82,21 @@ spec:
                   key: password
                   name: smokey-signon-account
             - name: SENTRY_CURRENT_ENV
-              value: {{ .Values.govukEnvironment }}
+              value: {{ $.Values.govukEnvironment }}
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.repoName }}-sentry
+                  name: {{ $.Values.repoName }}-sentry
                   key: dsn
             - name: SENTRY_RELEASE
-              value: "{{ .Values.appImage.tag }}"
+              value: "{{ $.Values.appImage.tag }}"
             - name: SE_CACHE_PATH
               value: "/tmp/.cache/selenium"
             - name: XDG_CONFIG_HOME
               value: "/tmp/.chrome"
             - name: XDG_CACHE_HOME
               value: "/tmp/.chrome"
+            {{- with .extraEnv }}
+              {{- . | toYaml | nindent 12 }}
+            {{- end }}
+{{- end }}
