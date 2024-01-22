@@ -1332,7 +1332,7 @@ govukApplications:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
               alb.ingress.kubernetes.io/group.order: "115"
-              alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+              alb.ingress.kubernetes.io/conditions.licensify-admin: >
                 [{"field": "host-header", "hostHeaderConfig": { "values": [
                     "licensify-admin.{{ .Values.publishingDomainSuffix }}"
                 ]}}]
