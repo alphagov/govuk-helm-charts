@@ -50,7 +50,7 @@ data:
   PLEK_SERVICE_ASSETS_URI: https://{{ .Values.assetsDomain }}
   PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
 
-  {{- if eq .Values.govukEnvironment "integration" }}
+  {{- if ne .Values.govukEnvironment "production" }}
   PLEK_SERVICE_LICENSIFY_URI: http://licensify-frontend.licensify
   {{- else }}
   # Services which remain in EC2 for a while after "MVP launch".
