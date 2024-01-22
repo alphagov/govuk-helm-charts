@@ -1,0 +1,24 @@
+groups:
+  - name: EmailAlertAPIAlerts
+    rules:
+      - alert: TravelAdviceAlert
+        expr: >
+          email_alert_api_current_travel_advice_alerts -
+            email_alert_api_delivered_travel_advice_alerts > 0
+        labels:
+          severity: page
+        annotations:
+          summary: No delivery reports for a Travel Advice update created >1 hour ago
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/alerts/email-alerts-travel-medical.html
+
+      - alert: MedicalSafetyAlert
+        expr: >
+          email_alert_api_current_medical_safety_alerts -
+            email_alert_api_delivered_medical_safety_alerts > 0
+        labels:
+          severity: page
+        annotations:
+          summary: No delivery reports for a Medical Safety Alert update created >1 hour ago
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/alerts/email-alerts-travel-medical.html
