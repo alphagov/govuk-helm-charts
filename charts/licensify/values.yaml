@@ -52,24 +52,6 @@ apps:
           -J-XX:ParallelGCThreads=4
           -J-XX:+UseParallelOldGC
 
-  licensifyBackend:
-    name: licensify-backend
-    enabled: true
-    replicaCount: 1
-    port: 9920
-    healthcheckPath: "/"
-    ingress:
-      enabled: false
-    service:
-      port: 9920
-    extraEnv:
-      - name: JAVA_OPTIONS
-        value: >-
-          -J-Xms512M
-          -J-Xmx2048M
-          -J-XX:ParallelGCThreads=4
-          -J-XX:+UseParallelOldGC
-
   licensifyFeed:
     name: licensify-feed
     enabled: true
