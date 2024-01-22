@@ -1338,12 +1338,6 @@ govukApplications:
                 ]}}]
             hosts:
               - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
-        licensifyFeed:
-          ingress:
-            annotations:
-              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-            hosts:
-              - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
         licensifyFrontend:
           ingress:
             annotations:
