@@ -1349,8 +1349,6 @@ govukApplications:
                 ]}}]
             hosts:
               - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
-        licensifyFeed:
-          enabled: false
         licensifyFrontend:
           replicaCount: 3
           ingress:
