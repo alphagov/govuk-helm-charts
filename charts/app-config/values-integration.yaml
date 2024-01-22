@@ -1332,19 +1332,19 @@ govukApplications:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
             hosts:
-              - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
+              - name: licensify-admin.{{ .Values.publishingDomainSuffix }}
         licensifyFeed:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
             hosts:
-              - name: licensify-feed.{{ .Values.k8sExternalDomainSuffix }}
+              - name: licensify-feed.{{ .Values.publishingDomainSuffix }}
         licensifyFrontend:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
             hosts:
-              - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
+              - name: licensify.{{ .Values.publishingDomainSuffix }}
       extraEnv:
         - name: APPLICATION_FORM_AWS_REGION
           value: eu-west-1
@@ -1356,8 +1356,8 @@ govukApplications:
             - licensify-documentdb-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
-        adminBaseUrl: https://licensify-admin.eks.integration.govuk.digital
-        frontendBaseUrl: https://licensify.eks.integration.govuk.digital
+        adminBaseUrl: https://licensify-admin.integration.publishing.service.gov.uk
+        frontendBaseUrl: https://www.integration.publishing.service.gov.uk
         signonBaseUrl: https://signon.integration.publishing.service.gov.uk
         govukBaseUrl: https://www.integration.publishing.service.gov.uk
         performancePlatformUrl: >-
@@ -2021,7 +2021,7 @@ govukApplications:
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
         - name: BACKEND_URL_licensify
-          value: "https://licensify.integration.govuk-internal.digital"
+          value: "http://licensify-frontend"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
   - name: draft-router
@@ -2071,7 +2071,7 @@ govukApplications:
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
         - name: BACKEND_URL_licensify
-          value: "https://licensify.integration.govuk-internal.digital"
+          value: "http://licensify-frontend"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
 
