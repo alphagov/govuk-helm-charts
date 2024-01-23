@@ -61,7 +61,7 @@ nginxImage:
   pullPolicy: Always
   tag: stable
 nginxPort: 8080
-nginxProxyConnectTimeout: 1s
+nginxProxyConnectTimeout: 2s
 nginxProxyReadTimeout: 15s
 nginxClientMaxBodySize: 1M
 nginxConfigMap:
