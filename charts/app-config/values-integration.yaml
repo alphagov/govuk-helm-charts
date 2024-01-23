@@ -1987,7 +1987,7 @@ govukApplications:
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
         - name: BACKEND_URL_licensify
-          value: "http://licensify-frontend"
+          value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
   - name: draft-router
@@ -2037,7 +2037,7 @@ govukApplications:
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
         - name: BACKEND_URL_licensify
-          value: "http://licensify-frontend"
+          value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
 
