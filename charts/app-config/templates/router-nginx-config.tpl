@@ -1,6 +1,4 @@
 {{- define "app-config.router-nginx-config" -}}
-user nginx;
-
 error_log  /dev/stderr warn;
 pid        /tmp/nginx.pid;
 
