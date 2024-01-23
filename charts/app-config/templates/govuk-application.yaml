@@ -58,5 +58,8 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
     - ApplyOutOfSyncOnly=true
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: {{ $.Values.argoNamespace | default $.Release.Namespace }}
 ---
 {{ end }}
