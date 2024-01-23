@@ -1327,7 +1327,7 @@ govukApplications:
 
   - name: licensify
     chartPath: charts/licensify
-    appsNamespace: licensify
+    namespace: licensify
     imageValues:
       - "licensify-admin"
       - "licensify-backend"
