@@ -59,7 +59,7 @@ appProbes: {}
 nginxImage:
   repository: public.ecr.aws/nginx/nginx
   pullPolicy: Always
-  tag: stable-perl
+  tag: stable
 nginxPort: 8080
 nginxProxyConnectTimeout: 1s
 nginxProxyReadTimeout: 15s
