@@ -1340,6 +1340,11 @@ govukApplications:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+              alb.ingress.kubernetes.io/group.order: "115"
+              alb.ingress.kubernetes.io/conditions.licensify-admin: >
+                [{"field": "host-header", "hostHeaderConfig": { "values": [
+                    "licensify-admin.{{ .Values.publishingDomainSuffix }}"
+                ]}}]
             hosts:
               - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
         licensifyFrontend:
@@ -1359,8 +1364,8 @@ govukApplications:
             - licensify-documentdb-0.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-1.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-2.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
-        adminBaseUrl: https://licensify-admin.eks.staging.govuk.digital
-        frontendBaseUrl: https://licensify.eks.staging.govuk.digital
+        adminBaseUrl: https://licensify-admin.staging.publishing.service.gov.uk
+        frontendBaseUrl: https://www.staging.publishing.service.gov.uk
         signonBaseUrl: https://signon.staging.publishing.service.gov.uk
         govukBaseUrl: https://www.staging.publishing.service.gov.uk
         performancePlatformUrl: >-
@@ -2041,7 +2046,7 @@ govukApplications:
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
         - name: BACKEND_URL_licensify
-          value: "https://licensify.staging.govuk-internal.digital"
+          value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
 
@@ -2092,7 +2097,7 @@ govukApplications:
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
         - name: BACKEND_URL_licensify
-          value: "https://licensify.staging.govuk-internal.digital"
+          value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
 
