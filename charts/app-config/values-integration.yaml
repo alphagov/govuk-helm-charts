@@ -2234,7 +2234,7 @@ govukApplications:
           name: document-sync-worker
       cronTasks:
         - name: quality-monitoring-result-invariants
-          task: "rake quality_monitoring:check_result_invariants"
+          task: "quality_monitoring:check_result_invariants"
           schedule: "09 9 * * *"  # 09:09am daily
           suspend: true  # Too noisy for integration to run on schedule, but can be run manually.
       extraEnv:
