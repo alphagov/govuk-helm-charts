@@ -25,7 +25,7 @@ spec:
           - --profile={{ .Values.govukEnvironment }}
           - --strict-undefined
           - --tags=not @not{{ .Values.govukEnvironment }}
-          - --tags={{ `{{ inputs.parameters.extra-args }}` | quote }}
+          - --tags={{ `{{ inputs.parameters.extra-args }}` }}
         env:
           - name: BEARER_TOKEN
             valueFrom:
