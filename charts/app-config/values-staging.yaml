@@ -2286,6 +2286,11 @@ govukApplications:
       workers:
         - command: ['bin/rake', 'document_sync_worker:run']
           name: document-sync-worker
+      cronTasks:
+        - name: quality-monitoring-result-invariants
+          task: "quality_monitoring:check_result_invariants"
+          schedule: "09 9 * * *"  # 09:09am daily
+          suspend: true  # Too noisy for staging to run on schedule, but can be run manually.
       extraEnv:
         # Required for document sync worker to be able to export metrics
         - name: GOVUK_PROMETHEUS_EXPORTER
