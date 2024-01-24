@@ -73,7 +73,7 @@ apps:
   licensifyFrontend:
     name: licensify-frontend
     enabled: true
-    replicaCount: 1
+    replicaCount: 2
     port: 9903
     healthcheckPath: "/api/licences"
     ingress:

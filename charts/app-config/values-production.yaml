@@ -1347,6 +1347,7 @@ govukApplications:
         licensifyFeed:
           enabled: false
         licensifyFrontend:
+          replicaCount: 3
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
