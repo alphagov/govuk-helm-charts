@@ -21,11 +21,11 @@ spec:
       container:
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command:
-          - bundle
-          - exec
-          - >-
-            cucumber --profile={{ .Values.govukEnvironment }} --strict-undefined --tags='not
-            @notreplatforming' --tags='not @not{{ .Values.govukEnvironment }}' --tags="{{"{{ inputs.parameters.extra-args }}"}}"
+          - cucumber
+          - --profile={{ .Values.govukEnvironment }}
+          - --strict-undefined
+          - --tags=not @not{{ .Values.govukEnvironment }}
+          - --tags={{ `{{ inputs.parameters.extra-args }}` | quote }}
         env:
           - name: BEARER_TOKEN
             valueFrom:

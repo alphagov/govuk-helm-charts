@@ -30,7 +30,7 @@ spec:
             - cucumber
             - --profile={{ .Values.govukEnvironment }}
             - --strict-undefined
-            - --tags=not @notreplatforming and not @not{{ .Values.govukEnvironment }}
+            - --tags=not @not{{ .Values.govukEnvironment }}
             image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
             name: smokey
             resources:
