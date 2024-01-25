@@ -69,7 +69,7 @@ spec:
             - name: PLAY_HTTP_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .name }}-envs
+                  name: licensify-envs
                   key: {{ .name }}-play-secret-key
             {{- with $.Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
