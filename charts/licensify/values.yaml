@@ -1,5 +1,4 @@
-# Licensify Components
-replicaCount: 1
+# Default values for licensify chart.
 
 securityContext:
   runAsNonRoot: true
