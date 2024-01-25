@@ -2057,7 +2057,7 @@ govukApplications:
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
         - name: BACKEND_URL_licensify
-          value: "http://licensify-frontend.licensify"
+          value: "https://licensify.production.govuk-internal.digital"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
 
@@ -2108,7 +2108,7 @@ govukApplications:
         - name: BACKEND_URL_info-frontend
           value: "http://info-frontend"
         - name: BACKEND_URL_licensify
-          value: "http://licensify-frontend.licensify"
+          value: "https://licensify.production.govuk-internal.digital"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
 
