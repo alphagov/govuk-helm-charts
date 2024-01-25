@@ -158,14 +158,6 @@ config:
     periodicEmailCron: 0 0 6 3 * ?
     emailOverrideRecipient: ""
 
-  # Performance platform has been decomission useless config
-  performancePlatformUrl: >-
-    https://performance/data/licensing/application
-  performanceDataSenderCronExpression: 0 0 1 * * ?
-
-  placesApiUrl: http://places-api:9700/places
-
-
 images:
   nginx:
     repository: public.ecr.aws/nginx/nginx
