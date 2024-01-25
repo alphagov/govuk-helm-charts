@@ -1,4 +1,4 @@
-image_tag: v8
+image_tag: v13
 automatic_deploys_enabled: true
 manual_deployment: true
-promote_deployment: false
+promote_deployment: true
