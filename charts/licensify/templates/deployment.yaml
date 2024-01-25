@@ -66,6 +66,11 @@ spec:
               value: /etc/licensing/config.properties
             - name: LOGGING_CONFIG_FILE
               value: /app/conf/logging.xml
+            - name: PLAY_HTTP_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .name }}-envs
+                  key: {{ .name }}-play-secret-key
             {{- with $.Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
