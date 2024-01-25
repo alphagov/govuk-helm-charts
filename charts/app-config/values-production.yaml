@@ -1342,6 +1342,11 @@ govukApplications:
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+              alb.ingress.kubernetes.io/group.order: "115"
+              alb.ingress.kubernetes.io/conditions.licensify-admin: >
+                [{"field": "host-header", "hostHeaderConfig": { "values": [
+                    "licensify-admin.{{ .Values.publishingDomainSuffix }}"
+                ]}}]
             hosts:
               - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
         licensifyFeed:
@@ -1365,8 +1370,8 @@ govukApplications:
             - licensify-documentdb-1.cafmt8xopqlp.eu-west-1.docdb.amazonaws.com
             - licensify-documentdb-2.cafmt8xopqlp.eu-west-1.docdb.amazonaws.com
         govukBaseUrl: https://www.gov.uk
-        frontendBaseUrl: https://licensify.eks.production.govuk.digital
-        adminBaseUrl: https://licensify-admin.eks.production.govuk.digital
+        frontendBaseUrl: https://www.gov.uk
+        adminBaseUrl: https://licensify-admin.publishing.service.gov.uk
         signonBaseUrl: https://signon.publishing.service.gov.uk
         elmsPdfApiHost: https://gdsprodaws.aptosolutions.co.uk/GDSELMS-5/
         performancePlatformUrl: >-
