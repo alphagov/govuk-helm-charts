@@ -44,13 +44,6 @@ apps:
       annotations: {}
     service:
       port: 80
-    extraEnv:
-      - name: JAVA_OPTIONS
-        value: >-
-          -J-Xms512M
-          -J-Xmx2048M
-          -J-XX:ParallelGCThreads=4
-          -J-XX:+UseParallelOldGC
 
   licensifyFeed:
     name: licensify-feed
@@ -62,13 +55,6 @@ apps:
       enabled: false
     service:
       port: 80
-    extraEnv:
-      - name: JAVA_OPTIONS
-        value: >-
-          -J-Xms512M
-          -J-Xmx2048M
-          -J-XX:ParallelGCThreads=4
-          -J-XX:+UseParallelOldGC
 
   licensifyFrontend:
     name: licensify-frontend
@@ -84,10 +70,6 @@ apps:
     extraEnv:
       - name: JAVA_OPTIONS
         value: >-
-          -J-Xms512M
-          -J-Xmx2048M
-          -J-XX:ParallelGCThreads=4
-          -J-XX:+UseParallelOldGC
           -Dplay.http.session.sameSite=None
           -Dplay.akka.actor.retrieveBodyParserTimeout=30s
 
