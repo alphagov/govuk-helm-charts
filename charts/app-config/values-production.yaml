@@ -2301,7 +2301,7 @@ govukApplications:
       cronTasks:
         - name: quality-monitoring-result-invariants
           task: "quality_monitoring:check_result_invariants"
-          schedule: "09 9 * * *"  # 09:09am daily
+          schedule: "09 8-17 * * *"  # 9 minutes past the hour every day from 8am-5pm
       extraEnv:
         # Required for document sync worker to be able to export metrics
         - name: GOVUK_PROMETHEUS_EXPORTER
