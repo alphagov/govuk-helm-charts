@@ -8,18 +8,14 @@ data:
   logging.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <configuration>
-
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
         </appender>
-
-        <logger name="application" level="INFO"/>
-        <logger name="akka" level="INFO"/>
-        <logger name="play" level="INFO"/>
-        <logger name="uk.gov" level="INFO"/>
-
-        <root level="INFO">
+        <logger name="application" level="WARN"/>
+        <logger name="akka" level="WARN"/>
+        <logger name="play" level="WARN"/>
+        <logger name="uk.gov" level="WARN"/>
+        <root level="WARN">
             <appender-ref ref="STDOUT"/>
         </root>
-
     </configuration>
