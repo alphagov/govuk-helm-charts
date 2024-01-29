@@ -13,7 +13,7 @@ cspReportURI: https://csp-reporter.staging.publishing.service.gov.uk/report
 
 replicaCount: 2
 workerReplicaCount: 2
-podDisruptionBudget:
+podDisruptionBudget: &pdb
   minAvailable: 1
 appResources:
   limits:
@@ -1348,6 +1348,7 @@ govukApplications:
             hosts:
               - name: licensify-admin.{{ .Values.k8sExternalDomainSuffix }}
         licensifyFrontend:
+          podDisruptionBudget: *pdb
           ingress:
             annotations:
               <<: [*alb-ingress-group-backend, *alb-ingress-defaults]

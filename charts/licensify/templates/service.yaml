@@ -6,9 +6,7 @@ kind: Service
 metadata:
   name: {{ .name }}
   labels:
-    {{- include "licensify.labels" $ | nindent 4}}
-    app: {{ .name }}
-    app.kubernetes.io/component: app
+    {{- include "licensify.labels" $ | nindent 4 }}
 spec:
   type: NodePort
   ports:
@@ -16,5 +14,5 @@ spec:
       port: {{ .service.port }}
       targetPort: {{ $.Values.nginx.port }}
   selector:
-    app: {{ .name }}
+    {{- include "licensify.selectorLabels" $ | nindent 4 }}
 {{- end }}
