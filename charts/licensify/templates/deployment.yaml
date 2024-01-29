@@ -1,8 +1,6 @@
 {{- range .Values.apps }}
 {{ $_ := set $.Values "appName" .name }}
 {{ $appImage := get $.Values.images (camelcase ( .useImage | default .name )) }}
-# TODO: Remove "if enabled" once live in production. This is to allow us to
-# disable feed in production before migration.
 ---
 apiVersion: apps/v1
 kind: Deployment
