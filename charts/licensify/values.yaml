@@ -36,6 +36,7 @@ apps:
     enabled: true
     useImage: licensify-backend
     replicaCount: 1
+    podDisruptionBudget: {}
     port: 9950
     healthcheckPath: "/"
     ingress:
@@ -52,6 +53,7 @@ apps:
     name: licensify-feed
     enabled: true
     replicaCount: 1
+    podDisruptionBudget: {}
     port: 9940
     healthcheckPath: "/licence-management/feed/process-applications"
     ingress:
@@ -63,6 +65,7 @@ apps:
     name: licensify-frontend
     enabled: true
     replicaCount: 2
+    podDisruptionBudget: {}
     port: 9903
     healthcheckPath: "/api/licences"
     ingress:
