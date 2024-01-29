@@ -1,5 +1,4 @@
-# Licensify Components
-replicaCount: 1
+# Default values for licensify chart.
 
 securityContext:
   runAsNonRoot: true
@@ -109,7 +108,7 @@ config:
   govukBaseUrl: https://www.test.publishing.service.gov.uk
 
   licenseApplicationExpirationPeriod: 7
-  # Sets whether feed should be master node
+  # isMasterNode determines whether Feed should process tasks (true) or do nothing (false).
   isMasterNode: true
   feedActor: true
 
@@ -140,18 +139,11 @@ config:
     templateApplicatOnline: test
     templateAuthority: test
     templatePeriodic: test
-    # Configures whether licensify should sends periodic emails to authorities
+    # emailPeriodicEnabled determines whether Licensify should send periodic
+    # emails to authorities.
     emailPeriodicEnabled: true
     periodicEmailCron: 0 0 6 3 * ?
     emailOverrideRecipient: ""
-
-  # Performance platform has been decomission useless config
-  performancePlatformUrl: >-
-    https://performance/data/licensing/application
-  performanceDataSenderCronExpression: 0 0 1 * * ?
-
-  placesApiUrl: http://places-api:9700/places
-
 
 images:
   nginx:

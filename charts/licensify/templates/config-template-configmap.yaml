@@ -84,15 +84,18 @@ data:
     is.master.node={{ .Values.config.isMasterNode }}
 
     {{- if .Values.config.uncollectedExpiry.enabled }}
-    uncollected.expiry.enabled={{ .Values.config.uncollectedExpiry.enabled }}
+    uncollected.expiry.enabled=true
     uncollected.expiry.cron={{ .Values.config.uncollectedExpiry.cron }}
     uncollected.expiry.purge.days={{ .Values.config.uncollectedExpiry.purgeDays }}
     uncollected.expiry.start.days={{ .Values.config.uncollectedExpiry.startDays }}
     {{- end }}
 
-    # Performance platform config
-    performance.platform.service.url={{ .Values.config.performancePlatformUrl }}
-    performance.platform.bearer.token={{ `{{ .performance_platform_bearer_token }}` }}
-    performance.data.sender.cron.expression={{ .Values.config.performanceDataSenderCronExpression }}
+    # TODO: remove dummy config for disused Performance Platform once
+    # https://github.com/alphagov/licensify/pull/651 lands.
+    performance.platform.service.url=http://localhost/
+    performance.platform.bearer.token=disused
+    performance.data.sender.cron.expression="0 0 1 * * ?"
 
-    places.api.url={{ .Values.config.placesApiUrl }}
+    # TODO: remove dummy config for disused Places API client once
+    # https://github.com/alphagov/licensify/pull/652 lands.
+    places.api.url=http://localhost/
