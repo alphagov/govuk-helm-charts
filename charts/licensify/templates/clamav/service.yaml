@@ -12,6 +12,5 @@ spec:
     - name: app
       port: {{ $app.service.port }}
       targetPort: clamav
-      protocol: TCP
   selector:
     {{- include "licensify.selectorLabels" . | nindent 4 }}
