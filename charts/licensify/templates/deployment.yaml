@@ -3,7 +3,6 @@
 {{ $appImage := get $.Values.images (camelcase ( .useImage | default .name )) }}
 # TODO: Remove "if enabled" once live in production. This is to allow us to
 # disable feed in production before migration.
-{{- if .enabled }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -138,5 +137,4 @@ spec:
               subPath: nginx.conf
             - name: nginx-tmp
               mountPath: /tmp
-{{- end }}
 {{- end }}
