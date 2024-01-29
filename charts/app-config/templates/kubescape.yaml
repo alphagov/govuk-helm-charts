@@ -20,11 +20,11 @@ spec:
         - name: account
           value: "mgsQy3ett5"
         - name: clusterName
-          value: govuk-integration-new
+          value: "govuk-integration-new"
         - name: server
-          value: api.armosec.io
+          value: "api.armosec.io"
         - name: "credentials.cloudSecret"
-          value: false
+          value: "false"
   project: default
   syncPolicy:
     syncOptions:
