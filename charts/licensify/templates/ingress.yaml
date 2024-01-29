@@ -8,9 +8,7 @@ kind: Ingress
 metadata:
   name: {{ .name }}
   labels:
-    {{- include "licensify.labels" $ | nindent 4}}
-    app: {{ .name }}
-    app.kubernetes.io/component: app
+    {{- include "licensify.labels" $ | nindent 4 }}
   annotations:
     {{- (tpl (toYaml .ingress.annotations) $) | trim | nindent 4 }}
 spec:

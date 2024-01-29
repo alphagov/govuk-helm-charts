@@ -6,9 +6,7 @@ kind: ConfigMap
 metadata:
   name: {{ .name }}-nginx-conf
   labels:
-    {{- include "licensify.labels" $ | nindent 4}}
-    app: {{ .name }}
-    app.kubernetes.io/component: nginx
+    {{- include "licensify.labels" $ | nindent 4 }}
 data:
   nginx.conf: |-
     error_log  /dev/stderr warn;

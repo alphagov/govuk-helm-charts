@@ -2,6 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: licensify-logging-config
+  labels:
+    {{- include "licensify.labels" . | nindent 4 }}
 data:
   logging.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
