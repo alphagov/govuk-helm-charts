@@ -134,6 +134,9 @@ http {
       proxy_set_header   X-Forwarded-Server $host;
       proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+
+      # Allow large uploads to licensify-frontend
+      client_max_body_size 10M;
     }
 
     location /assets {
