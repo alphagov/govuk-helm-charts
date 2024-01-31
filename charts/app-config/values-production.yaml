@@ -2298,8 +2298,8 @@ govukApplications:
         - command: ['bin/rake', 'document_sync_worker:run']
           name: document-sync-worker
       cronTasks:
-        - name: quality-monitoring-result-invariants
-          task: "quality_monitoring:check_result_invariants"
+        - name: quality-monitoring-assert-invariants
+          task: "quality_monitoring:assert_invariants"
           schedule: "09 8-17 * * *"  # 9 minutes past the hour every day from 8am-5pm
       extraEnv:
         # Required for document sync worker to be able to export metrics
