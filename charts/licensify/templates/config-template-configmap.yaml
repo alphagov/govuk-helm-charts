@@ -91,13 +91,3 @@ data:
     uncollected.expiry.purge.days={{ .Values.config.uncollectedExpiry.purgeDays }}
     uncollected.expiry.start.days={{ .Values.config.uncollectedExpiry.startDays }}
     {{- end }}
-
-    # TODO: remove dummy config for disused Performance Platform once
-    # https://github.com/alphagov/licensify/pull/651 lands.
-    performance.platform.service.url=http://localhost/
-    performance.platform.bearer.token=disused
-    performance.data.sender.cron.expression="0 0 1 * * ?"
-
-    # TODO: remove dummy config for disused Places API client once
-    # https://github.com/alphagov/licensify/pull/652 lands.
-    places.api.url=http://localhost/
