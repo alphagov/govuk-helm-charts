@@ -2561,6 +2561,28 @@ govukApplications:
 
   - name: smokey
     chartPath: charts/smokey
+    helmValues:
+      cronJobs:
+        - name: smokey
+          schedule: "*/10 * * * *"
+          args:
+            - cucumber
+            - --profile={{ .Values.govukEnvironment }}
+            - --strict-undefined
+        - name: smokey-failover
+          schedule: "0 9 * * 1-5"
+          args:
+            - cucumber
+            - --strict-undefined
+            - --tags=not @notcloudfront
+          extraEnv:
+            - name: GOVUK_PROXY_PROFILE
+              value: failoverCDN
+            - name: FAILOVER_CDN_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: FAILOVER_CDN_HOST
+                  name: smokey-failover-cdn-host
 
   - name: static
     helmValues:

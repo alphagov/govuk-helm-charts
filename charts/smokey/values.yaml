@@ -4,7 +4,13 @@ k8sExternalDomainSuffix: eks.test.govuk.digital
 publishingDomainSuffix: test.publishing.service.gov.uk
 assetsDomain: assets.test.publishing.service.gov.uk
 
-cronSchedule: "*/10 * * * *"
+cronJobs:
+  - name: smokey
+    schedule: "*/10 7-19 * * 1-5"
+    args:
+      - cucumber
+      - --profile={{ .Values.govukEnvironment }}
+      - --strict-undefined
 
 appImage:
   repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smokey
