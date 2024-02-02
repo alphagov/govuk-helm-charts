@@ -2,6 +2,6 @@
 https://kubernetes-sigs.github.io/aws-ebs-csi-driver aws-ebs-csi-driver: "2.27.0"
 https://kubernetes.github.io/autoscaler cluster-autoscaler: "9.34.1"
 https://charts.dexidp.io dex: "0.16.0"
-https://charts.bitnami.com/bitnami external-dns: "6.31.4"
+https://charts.bitnami.com/bitnami external-dns: "6.31.5"
 https://charts.external-secrets.io external-secrets: "0.9.11"
 https://stakater.github.io/stakater-charts reloader: "1.0.65"
