@@ -1194,6 +1194,11 @@ govukApplications:
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+        - name: PUBLISHING_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-government-frontend-publishing-api
+              key: bearer_token
 
   - name: draft-government-frontend
     repoName: government-frontend
@@ -1207,6 +1212,11 @@ govukApplications:
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
+        - name: PUBLISHING_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-government-frontend-publishing-api
+              key: bearer_token
 
   - name: govuk-exporter
     chartPath: charts/govuk-exporter
