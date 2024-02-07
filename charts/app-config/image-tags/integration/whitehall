@@ -1,3 +1,3 @@
-image_tag: release-f4260317a92145fd895f1cf790952c3bf7c05d51
+image_tag: v656
 automatic_deploys_enabled: true
-promote_deployment: false
+promote_deployment: true
