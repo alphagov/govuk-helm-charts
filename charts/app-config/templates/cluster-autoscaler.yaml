@@ -25,6 +25,7 @@ spec:
           balance-similar-node-groups: true
           scale-down-utilization-threshold: "0.55"
           skip-nodes-with-local-storage: false
+          v: "0"
         replicaCount: {{ .Values.replicaCount }}
   destination:
     server: https://kubernetes.default.svc
