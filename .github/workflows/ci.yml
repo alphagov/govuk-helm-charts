@@ -27,9 +27,8 @@ jobs:
       - name: Helm template
         run: |
           mkdir helm-dist
-          for c in $(ls charts)
-          do
-            helm template "${c}" "charts/${c}" --output-dir helm-dist
+          for c in charts/*; do
+            helm template "$(basename "$c")" "$c" --output-dir helm-dist
           done
 
       - name: Read Kubernetes version from /kubernetes_version
@@ -42,7 +41,8 @@ jobs:
           args: >
             -kubernetes-version ${{ env.KUBERNETES_VERSION }}
             -schema-location default
-            -schema-location "./schemas/{{ .ResourceKind }}_{{ .ResourceAPIVersion }}.json"
+            -schema-location
+            "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
             -summary
             helm-dist
 

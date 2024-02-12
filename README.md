@@ -76,8 +76,29 @@ You can then run `helm search repo <alias>` to see the charts.
 
 ## Schemas
 
-`kubeconform` runs as a pre-merge check. The JSON schemas that it validates
-against are in the [`schemas/`](schemas) directory.
+We have several Custom Resource Definitions (CRDs) installed in our Kubernetes clusters, and referenced by the Helm charts
+in this repository.
+
+We use [kubeconform] to validate our Kubernetes manifests against schemas for
+those resources. This helps us ensure that our Helm charts are correct.
+
+`kubeconform` runs in a GitHub Action as a pre-merge check and can also be run
+locally.
+
+You can run the validation tests locally by installing `kubeconform` and running
+
+```shell
+mkdir helm-dist
+for c in charts/*; do
+  helm template "$(basename "$c")" "$c" --output-dir helm-dist
+done
+
+kubeconform -schema-location default \
+-schema-location "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json" \
+-summary helm-dist
+```
+
+[kubeconform]: https://github.com/yannh/kubeconform
 
 ## Team
 
