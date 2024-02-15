@@ -30,7 +30,10 @@
       "automergeType": "branch"
     },
     {
-      "matchPackageNames": ["reloader"],
+      "matchPackageNames": [
+        "external-dns",
+        "reloader"
+      ],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "automergeType": "branch"
@@ -39,7 +42,6 @@
       "matchPackageNames": [
         "aws-ebs-csi-driver",
         "cluster-autoscaler",
-        "external-dns",
         "external-secrets",
         "kube-prometheus-stack",
         "oauth2-proxy"
