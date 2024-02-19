@@ -1,3 +1,3 @@
-image_tag: v90
+image_tag: release-3f44a1d53cff7082fb570a31dfbee2b708f4c438
 automatic_deploys_enabled: true
-promote_deployment: true
+promote_deployment: false
