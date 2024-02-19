@@ -6,10 +6,8 @@ ignore: |
 rules:
   comments-indentation: disable
   document-start: disable
-  # TODO: set `forbid-duplicated-merge-keys` once
-  # https://www.github.com/adrienverge/yamllint/issues/561 lands.
-  # key-duplicates:
-  #   forbid-duplicated-merge-keys: true
+  key-duplicates:
+    forbid-duplicated-merge-keys: true
   line-length:
     max: 100
     allow-non-breakable-words: true
