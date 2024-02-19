@@ -1,3 +1,3 @@
-image_tag: v80
+image_tag: release-f1a08e8d8afe5f1a1f04f056ddfa3828993f79d9
 automatic_deploys_enabled: true
-promote_deployment: true
+promote_deployment: false
