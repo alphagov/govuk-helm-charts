@@ -698,6 +698,7 @@ govukApplications:
 
   - name: content-store
     helmValues: &content-store
+      dbMigrationEnabled: true
       nginxClientMaxBodySize: 20M
       cronTasks:
         - name: report-delays
