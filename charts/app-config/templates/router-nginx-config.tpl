@@ -21,6 +21,8 @@ http {
   # fit comfortably within this in order to avoid performance issues.
   proxy_buffers 24 16k;
 
+  resolver kube-dns.kube-system.svc.cluster.local.;
+
   server_tokens off;
 
   sendfile        on;

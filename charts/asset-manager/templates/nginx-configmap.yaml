@@ -32,6 +32,8 @@ data:
       sendfile        on;
       keepalive_timeout  65;
 
+      resolver kube-dns.kube-system.svc.cluster.local.;
+
       upstream {{ $fullName }} {
         server 127.0.0.1:{{ .Values.appPort }};
       }
@@ -90,7 +92,6 @@ data:
 
         add_header Permissions-Policy interest-cohort=();
         add_header X-Content-Type-Options "nosniff" always;
-
 
         proxy_set_header Host $http_host;
 
@@ -209,8 +210,6 @@ data:
           # that hides response headers sent FROM S3 to the client; whereas we
           # want to unset a request header sent TO S3 by nginx.
           proxy_set_header Authorization "";
-
-          resolver kube-dns.kube-system.svc.cluster.local.;
 
           # Download the file and send it to client
           proxy_pass $download_url;
