@@ -64,7 +64,7 @@ jobs:
           show-progress: false
       - run: yamllint --version && yamllint -f github .
 
-  promcheck:
+  promtool:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -74,14 +74,8 @@ jobs:
         uses: ./.github/actions/promtool
         with:
           args: >
-            check rules $(find charts/monitoring-config/rules -name *.yaml -not -name *_tests.yaml)
-
-  promtest:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          show-progress: false
+            check rules $(find charts/monitoring-config/rules -name '*.yaml' \
+              -not -name '*_tests.yaml')
       - name: Run promtool tests
         uses: ./.github/actions/promtool
         with:
