@@ -1,0 +1,19 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: govuk-grafana-database
+  namespace: {{ .Values.monitoringNamespace }}
+  annotations:
+    kubernetes.io/description: >
+      This secret contains credentials for Grafana to connect to its database
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: govuk-grafana-database
+    creationPolicy: Owner
+  dataFrom:
+    - extract:
+        key: govuk/grafana/database

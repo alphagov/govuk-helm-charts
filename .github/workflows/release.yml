@@ -1,0 +1,37 @@
+# See /README.md#versioned-vs-unversioned-charts.
+name: Release versioned charts
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          show-progress: false
+          sparse-checkout: |
+            charts/argo-bootstrap
+            charts/ingress-class
+            charts/cluster-secret-store
+            charts/cluster-secrets
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.6.0
+        env:
+          CR_SKIP_EXISTING: "true"
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

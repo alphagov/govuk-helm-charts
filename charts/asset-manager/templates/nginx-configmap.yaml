@@ -1,0 +1,232 @@
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}-nginx-conf
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: nginx
+data:
+  nginx.conf: |
+    error_log /dev/stderr warn;
+    pid /tmp/nginx.pid;
+
+    events {
+      worker_connections 1024;
+    }
+
+    http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+
+      client_body_temp_path /tmp/client_temp;
+      proxy_temp_path       /tmp/proxy_temp_path;
+      fastcgi_temp_path     /tmp/fastcgi_temp;
+      uwsgi_temp_path       /tmp/uwsgi_temp;
+      scgi_temp_path        /tmp/scgi_temp;
+
+      server_tokens off;
+
+      sendfile        on;
+      keepalive_timeout  65;
+
+      resolver kube-dns.kube-system.svc.cluster.local.;
+
+      upstream {{ $fullName }} {
+        server 127.0.0.1:{{ .Values.appPort }};
+      }
+
+      # Map the passed in X-Forwarded-Host if present and default to the server host otherwise.
+      map $http_x_forwarded_host $proxy_add_x_forwarded_host {
+        default $http_x_forwarded_host;
+        ''      $http_host;
+      }
+
+      # This map creates a $sts_default variable for later use.
+      # If this header is already set by upstream, then $sts_default will
+      # be an empty string, which will later lead to:
+      #    add_header Strict-Transport-Security ''
+      # which will be ignored according to http://serverfault.com/a/598106
+      # If the header is not set by upstream, then $sts_default will be set
+      # and later uses in add_header will be effective.
+      map $upstream_http_strict_transport_security $sts_default {
+        '' "max-age=31536000; preload";
+      }
+
+      log_format json_event escape=json '{'
+        '"@timestamp":"$time_iso8601",'
+        '"body_bytes_sent":$body_bytes_sent,'
+        '"bytes_sent":$bytes_sent,'
+        '"govuk_request_id":"$govuk_request_id",'
+        '"http_host":"$http_host",'
+        '"http_referer":"$http_referer",'
+        '"http_user_agent":"$http_user_agent",'
+        '"http_x_forwarded_for":"$http_x_forwarded_for",'
+        '"remote_addr":"$remote_addr",'
+        '"remote_user":"$remote_user",'
+        '"request_method":"$request_method",'
+        '"request_time":$request_time,'
+        '"request_uri":"$request_uri",'
+        '"sent_http_content_type":"$sent_http_content_type",'
+        '"sent_http_location":"$sent_http_location",'
+        '"server_protocol":"$server_protocol",'
+        '"status":$status,'
+        '"upstream_addr":"$upstream_addr",'
+        '"upstream_response_time":"$upstream_response_time"'
+      '}';
+    
+      # Set GOVUK-Request-Id if not set
+      map $http_govuk_request_id $govuk_request_id {
+        default $http_govuk_request_id;
+        ''      "$pid-$msec-$remote_addr-$request_length";
+      }
+
+      server {
+        server_name asset-manager asset-manager.*  ;
+        listen {{ .Values.nginxPort }};
+
+        # Send the Strict-Transport-Security header
+        add_header Strict-Transport-Security $sts_default;
+
+        add_header Permissions-Policy interest-cohort=();
+        add_header X-Content-Type-Options "nosniff" always;
+
+        proxy_set_header Host $http_host;
+
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header X-Forwarded-Host $proxy_add_x_forwarded_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header GOVUK-Request-Id $govuk_request_id;
+        proxy_redirect off;
+        proxy_connect_timeout {{ .Values.nginxProxyConnectTimeout }};
+        proxy_read_timeout    {{ .Values.nginxProxyReadTimeout }};
+
+        access_log /dev/stdout json_event;
+        error_log /dev/stderr;
+
+        # Add as an ALB rule and direct to whitehall service
+        rewrite ^/government/assets/(.*)$ /assets/whitehall/$1 permanent;
+
+        location / {
+          proxy_buffer_size 16k;  # Max total size of response headers.
+          # n * m = max response size before spooling to disk. p95 response size should
+          # fit comfortably within this in order to avoid performance issues.
+          proxy_buffers 24 16k;
+
+          try_files $uri/index.html $uri.html $uri @app;
+        }
+
+        location @app {
+          proxy_pass http://{{ $fullName }};
+        }
+
+        client_max_body_size 500M;
+
+        # Store values from Rails response headers for use in the
+        # cloud-storage-proxy location block below.
+        set $etag_from_rails $upstream_http_etag;
+        set $last_modified_from_rails $upstream_http_last_modified;
+        set $x_frame_options_from_rails $upstream_http_x_frame_options;
+        set $link_from_rails $upstream_http_link;
+
+        # For public assets requests, the Rails app will respond with the
+        # X-Accel-Redirect header set to a path prefixed with
+        # /cloud-storage-proxy/. This triggers an Nginx internal redirect
+        # to that path which is then handled by this location block.
+        location ~ /cloud-storage-proxy/(.*) {
+          # Prevent requests to this location from outside Nginx
+          internal;
+
+          # Construct download URL from:
+          # $1:       Host + path from regexp match in location
+          # $is_args: Optional ? delimiter
+          # $args:    Optional querystring params
+          set $download_url $1$is_args$args;
+
+          # The X-Accel-Redirect header contains a signed URL, $download_url, for
+          # the asset on S3. The signature of this URL is based in part on the
+          # request headers set in the asset-manager Rails app at the time the URL
+          # is generated. The headers we send now must match otherwise Nginx will
+          # not be allowed to make the request. Since this location block inherits
+          # `proxy_set_header` directives from previous levels[1], we explicitly
+          # set the Host so that the inherited headers are over-written.
+          #
+          # [1] http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_set_header
+          proxy_set_header Host $proxy_host;
+
+          # Set response headers in the proxied response based on values stored
+          # from the Rails response headers. This is so that the Rails app can
+          # remain the canonical source of response headers, even though we are
+          # proxying the request to S3. This is particularly relevant in the case
+          # of ETag & Last-Modified, because we want keep these the same as when
+          # Nginx serves the files from NFS to avoid unnecessary cache
+          # invalidation. Note that Cache-Control, Content-Disposition and Content-Type
+          # headers are copied from the Rails response into the proxied response by
+          # default, so we do not have to do that explicitly here.
+          add_header ETag $etag_from_rails;
+          add_header Last-Modified $last_modified_from_rails;
+          # Respect the optional Link header set by the Rails application,
+          # this optional header refers to the asset's owning document.
+          add_header Link $link_from_rails;
+
+
+          # Additionally, we always prohibit passing on these headers from S3 to
+          # the client as they are very likely to be wrong. There appears to be
+          # a race condition or similar in Nginx that allows the S3 headers to
+          # overwrite those set here or by Rails, possibly depending on the order
+          # in which S3 sends them.
+          proxy_hide_header ETag;
+          proxy_hide_header Last-Modified;
+          proxy_hide_header Content-Type;
+          proxy_hide_header Content-Disposition;
+          proxy_hide_header Cache-Control;
+
+          # Control whether the asset can be embedded in other pages[1] by
+          # respecting X-Frame-Options from the Rails application.
+          # [1]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+          add_header X-Frame-Options $x_frame_options_from_rails;
+
+          # Remove S3 HTTP headers including those listed in:
+          # http://docs.aws.amazon.com/AmazonS3/latest/API/RESTCommonResponseHeaders.html
+          # This keeps this HTTP response as similar as possible to the response
+          # sent when using Sendfile to serve files from NFS
+          proxy_hide_header x-amz-delete-marker;
+          proxy_hide_header x-amz-id-2;
+          proxy_hide_header x-amz-request-id;
+          proxy_hide_header x-amz-version-id;
+          proxy_hide_header x-amz-replication-status;
+          proxy_hide_header x-amz-meta-md5-hexdigest;
+
+          # Remove CloudFront headers that interfere with S3 request
+          # if CloudFront is being used as the CDN service
+          proxy_set_header x-amz-cf-id "";
+          proxy_set_header x-amz-cf-pop "";
+
+          # Strip any Authorization header from the client, as this will cause
+          # S3 to return an error.  We do not use proxy_hide_header here, as
+          # that hides response headers sent FROM S3 to the client; whereas we
+          # want to unset a request header sent TO S3 by nginx.
+          proxy_set_header Authorization "";
+
+          # Download the file and send it to client
+          proxy_pass $download_url;
+        }
+
+        # Endpoint that isn't cached, which is used to assert that an external
+        # service can receive a response from GOV.UK origin on the "assets"
+        # hostname. It is intended for Pingdom monitoring.
+        location = /__canary__ {
+          default_type application/json;
+          add_header cache-control "max-age=0,no-store,no-cache";
+          return 200 '{"message": "Tweet tweet"}\n';
+        }
+
+        # Endpoint for liveness and readiness checks of the nginx container.
+        location = /readyz {
+          return 200 'ok\n';
+        }
+      }
+    }

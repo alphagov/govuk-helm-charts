@@ -1,0 +1,65 @@
+{{ range .Values.govukApplications }}
+{{- $reponame := .repoName | default .name }}
+{{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.govukEnvironment $reponame) | fromYaml }}
+{{- $imageTag := $imageTagConfig.image_tag }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .name }}
+  namespace: {{ $.Values.argoNamespace | default $.Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    slackChannel: "{{ .slackChannel }}"
+    repoName: "{{ $reponame }}"
+    imageTag: "{{ $imageTag }}"
+    notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
+    notifications.argoproj.io/subscribe.deployment.grafana: "deployment|{{ .name }}"
+    postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
+spec:
+  project: govuk
+  source:
+    repoURL: git@github.com/alphagov/govuk-helm-charts
+    path: "{{ .chartPath | default "charts/generic-govuk-app" }}"
+    targetRevision: {{ .targetRevision | default "HEAD" }}
+    helm:
+      # Environment-specific Helm values. These take precedence over the app
+      # chart's values.yaml.
+      values: |
+        {{- toYaml (omit $.Values "govukApplications") | nindent 8 }}
+        repoName: {{ $reponame }}
+        {{- if .imageValues }}
+        images:
+        {{ range .imageValues }}
+          {{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.govukEnvironment . ) | fromYaml }}
+          {{- $imageTag := $imageTagConfig.image_tag }}
+          {{ camelcase . }}:
+            repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ . }}
+            tag: {{ $imageTag }}
+        {{- end }}
+        {{- else }}
+        appImage:
+          repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}
+          tag: {{ $imageTag }}
+          pullPolicy: {{ .appImagePullPolicy | default "IfNotPresent" }}
+        {{- end }}
+        {{- with .helmValues }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .namespace | default $.Values.appsNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - ApplyOutOfSyncOnly=true
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: {{ $.Values.argoNamespace | default $.Release.Namespace }}
+---
+{{ end }}

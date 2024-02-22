@@ -1,0 +1,18 @@
+{{- if .Values.monitoring.enabled }}
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app: {{ $fullName }}
+  podMetricsEndpoints:
+  - port: metrics
+{{- end }}

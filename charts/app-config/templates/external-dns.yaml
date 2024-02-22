@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: default
+  source:
+    {{- include "app-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://charts.bitnami.com/bitnami" "chart" "external-dns") )
+        | nindent 4 }}
+    helm:
+      values: |
+        aws:
+          region: eu-west-1
+          zoneType: public
+        serviceAccount:
+          name: external-dns
+          annotations:
+            eks.amazonaws.com/role-arn: arn:aws:iam::{{ .Values.awsAccountId }}:role/external-dns-govuk
+        txtOwnerId: govuk
+        domainFilters:
+          - {{ .Values.k8sExternalDomainSuffix }}
+        interval: 5m
+        triggerLoopOnEvent: true
+        replicaCount: {{ .Values.replicaCount | default 1 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.argoNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true

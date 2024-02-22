@@ -1,0 +1,5 @@
+apiVersion: v2
+name: search-index-env-sync
+description: Cronjobs for copying Elasticsearch indices from prod to non-prod
+type: application
+version: 1.0.0

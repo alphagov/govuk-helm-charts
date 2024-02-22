@@ -1,0 +1,12 @@
+awsAccountId:
+govukEnvironment:
+argocdUrl:
+argoWorkflowsUrl:
+argoEventsHost:
+rbacTeams:
+  read_only:
+  read_write:
+iamRoleServiceAccounts:
+  tagImageWorkflow:
+    name:
+    iamRoleArn:

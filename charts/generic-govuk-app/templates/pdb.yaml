@@ -1,0 +1,18 @@
+{{- if and .Values.appEnabled .Values.podDisruptionBudget }}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $fullName }}
+      app.kubernetes.io/component: app
+  {{- .Values.podDisruptionBudget | toYaml | nindent 2 }}
+{{- end }}

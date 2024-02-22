@@ -1,0 +1,6 @@
+monitoringNamespace: monitoring
+monitoring:
+  authorisation:
+    githubOrganisation: alphagov
+    readOnlyGithubTeam: gov-uk
+    readWriteGithubTeam: gov-uk-production-deploy

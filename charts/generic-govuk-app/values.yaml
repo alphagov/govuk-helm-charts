@@ -1,0 +1,145 @@
+# Default/example values for a Rails application.
+
+service:
+  type: NodePort
+  annotations: {}
+  port: 80
+
+ingress:
+  enabled: false
+
+# appEnabled determines whether the web app Deployment is created.
+appEnabled: true
+replicaCount: 2
+podDisruptionBudget: {}
+
+# workerEnabled should be true if the app uses Sidekiq, false otherwise.
+workerEnabled: false
+workerReplicaCount: 2
+workers:
+  - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+    name: worker
+
+# dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
+dbMigrationEnabled: false
+dbMigrationCommand: ["rails", "db:migrate"]
+
+# cronTasks is a list of {name, command, schedule} and/or {name, task,
+# schedule}, which represent CronJobs to run either an arbitrary command or a
+# Rake task. An optional `suspend` field is passed through to the CronJob spec
+# if present.
+cronTasks: []
+#  - name: mail-fetcher
+#    command: "script/mail_fetcher"
+#    schedule: "*/15 * * * *"
+#  - name: reports-generate
+#    task: "reports:generate"  # Rake task.
+#    schedule: "3 * * * *"
+
+# extraVolumes defines Volumes on the app Pods (in both deployment.yaml and
+# worker-deployment.yaml).
+extraVolumes: []
+
+repoName: "example"  # Dummy value, overridden in ArgoCD config.
+appImage:
+  repository: ""  # Dummy value, overridden in ArgoCD config.
+  pullPolicy: Always
+  tag: latest
+appPort: 3000
+# appExtraVolumeMounts defines VolumeMounts on the app container (in both
+# deployment.yaml and worker-deployment.yaml).
+appExtraVolumeMounts: []
+
+# appProbes defines liveness/readiness/startup probes for the app container.
+# See templates/deployment.yaml file for the default values.
+# When overriding these probes, you must override all three probes if you need
+# them - the whole block is replaced.
+appProbes: {}
+
+nginxImage:
+  repository: public.ecr.aws/nginx/nginx
+  pullPolicy: Always
+  tag: stable
+nginxPort: 8080
+nginxProxyConnectTimeout: 2s
+nginxProxyReadTimeout: 15s
+nginxClientMaxBodySize: 1M
+nginxConfigMap:
+  create: true
+nginxExtraVolumeMounts: []
+nginxDenyCrawlers: false
+proxyRailsAssetsToS3: true
+serveRailsAssetsFromFilesystem: false
+
+appResources:
+  limits:
+    cpu: 1
+    memory: 1500Mi
+  requests:
+    cpu: 500m
+    memory: 800Mi
+
+workerResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+jobResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+nginxResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 50m
+    memory: 512Mi
+
+# dnsConfig is passed directly into the pod specs in the app and worker
+# deployment templates.
+dnsConfig: {}
+
+# extraEnv is a list of (name, value) pairs representing additional environment
+# variables to pass to app containers. extraEnv is evaluated through `tpl`, so
+# Helm values can be substituted using Go template syntax. Use sparingly.
+extraEnv: {}
+#  - name: RETICULATE_SPLINES
+#    value: "true"
+#  - name: SPLINE_SERVER
+#    value: "https://splines.{{ .Values.externalDomain }}"
+
+govukEnvironment: test
+uploadAssets:
+  enabled: true
+
+metricsPort: 9394
+monitoring:
+  # monitoring.enabled determines whether PodMonitor and other Prometheus
+  # Operator custom resources are to be created or not.
+  enabled: false
+
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  runAsUser: 1001
+  runAsGroup: 1001
+
+sentry:
+  enabled: true
+  createSecret: true
+
+rails:
+  enabled: true
+  createKeyBaseSecret: true
+
+externalSecrets:
+  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
+  deletionPolicy: Delete

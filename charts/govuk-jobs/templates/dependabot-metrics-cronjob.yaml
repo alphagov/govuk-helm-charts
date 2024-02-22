@@ -1,0 +1,54 @@
+{{- if eq .Values.govukEnvironment "production" }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "dependabot-metrics"
+  labels:
+    app: "dependabot-metrics"
+    app.kubernetes.io/component: "dependabot-metrics"
+spec:
+  schedule: "26 4 * * *"
+  jobTemplate:
+    metadata:
+      name: "dependabot-metrics"
+      labels:
+        app: "dependabot-metrics"
+        app.kubernetes.io/component: "dependabot-metrics"
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: "dependabot-metrics"
+          labels:
+            app: "dependabot-metrics"
+            app.kubernetes.io/component: "dependabot-metrics"
+        spec:
+          enableServiceLinks: false
+          securityContext:
+            fsGroup: {{ .Values.securityContext.runAsGroup }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+          restartPolicy: Never
+          containers:
+            - name: main
+              image: "{{ .Values.images.GovukDependencyChecker.repository }}:{{ .Values.images.GovukDependencyChecker.tag }}"
+              imagePullPolicy: "Always"
+              command: ["./dependabot_prometheus_metrics"]
+              env:
+                - name: GITHUB_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: govuk-ci-github-creds
+                      key: token
+                - name: PROMETHEUS_PUSHGATEWAY_URL
+                  value: http://prometheus-pushgateway.monitoring.svc.cluster.local:9091
+              {{- with .Values.resources }}
+              resources:
+                {{- . | toYaml | trim | nindent 16 }}
+              {{- end }}
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+{{- end }}

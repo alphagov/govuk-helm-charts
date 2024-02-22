@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dex
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: default
+  source:
+    {{- include "app-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://charts.dexidp.io" "chart" "dex") )
+        | nindent 4 }}
+    helm:
+      values: |
+        {{- include "app-config.dex-values" . | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.argoNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true

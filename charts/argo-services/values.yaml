@@ -1,0 +1,15 @@
+awsAccountId: "1112223334"
+govukEnvironment: test
+argocdUrl:
+argoWorkflowsUrl:
+argoEventsHost:
+nextEnvironment:
+workflowsNamespace:
+enableWebhookIngress: false
+rbacTeams:
+  read_only:
+  read_write:
+iamRoleServiceAccounts:
+  tagImageWorkflow:
+    name: service-account-name
+    iamRoleArn: arn:aws:iam::$account_id:role/$role_name

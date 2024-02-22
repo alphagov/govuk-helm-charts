@@ -1,0 +1,129 @@
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}-worker
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}-worker
+    app.kubernetes.io/name: {{ $fullName }}-worker
+    app.kubernetes.io/component: worker
+spec:
+  replicas: {{ .Values.workerReplicaCount }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ $fullName }}-worker
+  template:
+    metadata:
+      labels:
+        {{- include "asset-manager.labels" . | nindent 8 }}
+        app: {{ $fullName }}-worker
+        app.kubernetes.io/name: {{ $fullName }}-worker
+        app.kubernetes.io/component: worker
+    spec:
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        fsGroup: &old-ec2-deploy-uid 2899
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      {{- with .Values.dnsConfig }}
+      dnsConfig:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: app-tmp
+          emptyDir: {}
+        - name: clamd-tmp
+          emptyDir: {}
+        - name: asset-manager-efs
+          nfs:
+            server: "{{ .Values.assetManagerNFS }}"
+            path: /asset-manager
+        - name: clam-virus-db
+          nfs:
+            server: "{{ .Values.assetManagerNFS }}"
+            path: /clamav-db
+            readOnly: true
+        - name: etc-clamav
+          configMap:
+            name: {{ $fullName }}-etc-clamav
+        {{- with .Values.extraVolumes }}
+          {{ . | toYaml | trim | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: app
+          image: "{{ required "appImage.repository is required" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+          command: ["sidekiq", "-C", "config/sidekiq.yml"]
+          ports:
+            - name: metrics
+              containerPort: {{ .Values.metricsPort }}
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /tmp
+            - name: asset-manager-efs
+              mountPath: &uploads-path /mnt/asset-manager
+            - name: etc-clamav
+              mountPath: {{ .Values.clamMountConfigPath }}
+            {{- with .Values.appExtraVolumeMounts }}
+              {{ . | toYaml | trim | nindent 12 }}
+            {{- end }}
+          envFrom:
+            - configMapRef:
+                name: govuk-apps-env
+          env:
+            - name: GOVUK_UPLOADS_ROOT
+              value: *uploads-path
+            {{- if .Values.sentry.enabled }}
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.repoName }}-sentry
+                  key: dsn
+            - name: SENTRY_RELEASE
+              value: "{{ .Values.appImage.tag }}"
+            {{- end }}
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.repoName }}-rails-secret-key-base
+                  key: secret-key-base
+            {{- with .Values.extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
+          {{- with .Values.workerResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            # Asset Manager shares an NFS volume with its EC2 counterpart.
+            runAsUser: *old-ec2-deploy-uid
+            runAsGroup: *old-ec2-deploy-uid
+        - name: clamd
+          image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+          command: ["clamd"]
+          args: ["--foreground"]
+          {{- with .Values.clamdResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: asset-manager-efs
+              mountPath: *uploads-path
+            - name: clam-virus-db
+              mountPath: /var/lib/clamav
+            - name: clamd-tmp
+              mountPath: /tmp
+            - name: etc-clamav
+              mountPath: {{ .Values.clamMountConfigPath }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true

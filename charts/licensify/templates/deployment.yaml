@@ -1,0 +1,134 @@
+{{- range .Values.apps }}
+{{ $_ := set $.Values "appName" .name }}
+{{ $appImage := get $.Values.images (camelcase ( .useImage | default .name )) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "licensify.labels" $ | nindent 4 }}
+spec:
+  replicas: {{ .replicaCount }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      {{- include "licensify.selectorLabels" $ | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "licensify.labels" $ | nindent 8 }}
+    spec:
+      securityContext:
+        fsGroup: {{ $.Values.securityContext.runAsGroup }}
+        runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
+        runAsUser: {{ $.Values.securityContext.runAsUser }}
+        runAsGroup: {{ $.Values.securityContext.runAsGroup }}
+      volumes:
+        - name: licensify-config
+          secret:
+            secretName: licensify-config
+        - name: logging-config
+          configMap:
+            name: licensify-logging-config
+        - name: app-tmp
+          emptyDir: {}
+        - name: nginx-conf
+          configMap:
+            name: {{ .name }}-nginx-conf
+        - name: nginx-tmp
+          emptyDir: {}
+      containers:
+        - name: main
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 12 }}
+          image: "{{ $appImage.repository }}:{{ $appImage.tag }}"
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: LANG
+              value: en_GB.UTF-8
+            - name: APP_PORT
+              value: "{{ .port }}"
+            - name: SBT_MODE
+              value: docker
+            - name: APPLICATION_FORM_AWS_ACCESS_KEY_ID
+              value: do-not-use
+            - name: APPLICATION_FORM_AWS_SECRET_KEY
+              value: do-not-use
+            - name: GDS_CONFIG_FILE
+              value: /etc/licensing/config.properties
+            - name: LOGGING_CONFIG_FILE
+              value: /app/conf/logging.xml
+            - name: PLAY_HTTP_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: licensify-envs
+                  key: {{ .name }}-play-secret-key
+            {{- with $.Values.extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
+            {{- with .extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .port }}
+          livenessProbe: &app-probe
+            httpGet:
+              path: {{ .healthcheckPath }} 
+              port: http
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 30
+            initialDelaySeconds: 10
+          readinessProbe:
+            <<: *app-probe  # Intentionally same path as liveness.
+            failureThreshold: 2
+          startupProbe:
+            <<: *app-probe
+            failureThreshold: 15
+            periodSeconds: 2
+            timeoutSeconds: 2
+          resources:
+            {{- toYaml $.Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: licensify-config
+              mountPath: "/etc/licensing"
+              readOnly: true
+            - name: logging-config
+              mountPath: /app/conf/logging.xml
+              subPath: logging.xml
+            - name: app-tmp
+              mountPath: /tmp
+        - name: nginx
+          image: "{{ $.Values.images.nginx.repository }}:{{ $.Values.images.nginx.tag }}"
+          imagePullPolicy: {{ $.Values.images.nginx.pullPolicy | default "Always" }}
+          ports:
+            - name: http
+              containerPort: {{ $.Values.nginx.port }}
+          livenessProbe: &nginx-probe
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 2
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 20
+          readinessProbe:
+            <<: *nginx-probe  # Intentionally same path as liveness.
+            failureThreshold: 2
+            timeoutSeconds: 15
+          {{- with $.Values.nginx.resources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+            - name: nginx-tmp
+              mountPath: /tmp
+{{- end }}

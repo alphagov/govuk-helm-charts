@@ -1,0 +1,15 @@
+extends: default
+
+ignore: |
+  charts/*/templates/
+
+rules:
+  comments-indentation: disable
+  document-start: disable
+  key-duplicates:
+    forbid-duplicated-merge-keys: true
+  line-length:
+    max: 100
+    allow-non-breakable-words: true
+  truthy:
+    check-keys: false  # GitHub Actions uses `on` as a key :(

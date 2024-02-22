@@ -1,0 +1,91 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: deploy-image
+spec:
+  entrypoint: deploy-image
+  onExit: exit-handler
+  arguments:
+    parameters:
+      - name: environment
+      - name: repoName
+      - name: imageTag
+      - name: promoteDeployment
+  templates:
+    - name: deploy-image
+      steps:
+        - - name: update-image-tag
+            templateRef:
+              name: update-image-tag
+              template: update-image-tag
+            arguments:
+              parameters:
+                - name: environment
+                  value: "{{"{{workflow.parameters.environment}}"}}"
+                - name: repoName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
+                - name: imageTag
+                  value: "{{"{{workflow.parameters.imageTag}}"}}"
+                - name: promoteDeployment
+                  value: "{{"{{workflow.parameters.promoteDeployment}}"}}"
+        - - name: add-deployed-to-tag
+            templateRef:
+              name: add-tag-to-image
+              template: add-tag-to-image
+            arguments:
+              parameters:
+                - name: awsAccount
+                  value: "{{ .Values.awsAccountId }}"
+                - name: repositoryName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
+                - name: referenceTag
+                  value: "{{"{{workflow.parameters.imageTag}}"}}"
+                - name: newTag
+                  value: "deployed-to-{{"{{workflow.parameters.environment}}"}}"
+          - name: record-deployment-in-release
+            templateRef:
+              name: notify-release
+              template: notify-release
+            arguments:
+              parameters:
+                - name: environment
+                  value: "{{"{{workflow.parameters.environment}}"}}"
+                - name: repositoryName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
+                - name: commitSha
+                  value: "{{"{{= sprig.trimPrefix('release-', workflow.parameters.imageTag) }}"}}"
+
+    - name: exit-handler
+      steps:
+        - - name: notify-slack
+            when: "{{"{{workflow.status}}"}} != Succeeded"
+            templateRef:
+              name: notify-slack
+              template: notify-slack
+            arguments:
+              parameters:
+                - name: slackChannel
+                  # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
+                  # send to team slack channel.
+                  value: "govuk-deploy-alerts"
+                - name: text
+                  value: "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} to {{"{{workflow.parameters.environment}}"}} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                - name: blocks
+                  value: |
+                    [{
+                      "type": "section",
+                      "text": {
+                          "type": "mrkdwn",
+                          "text": "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} to {{"{{workflow.parameters.environment}}"}} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                      },
+                      "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "View workflow",
+                            "emoji": true
+                        },
+                        "url": "https://argo-workflows.eks.{{ .Values.govukEnvironment }}.govuk.digital/workflows/apps/{{"{{ workflow.name }}"}}",
+                        "action_id": "view-workflow"
+                      }
+                    }]

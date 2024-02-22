@@ -1,0 +1,4 @@
+apiVersion: v2
+name: external-secrets
+description: GOV.UK ExternalSecrets resources for integration with AWS Secrets Manager.
+version: 1.0.0

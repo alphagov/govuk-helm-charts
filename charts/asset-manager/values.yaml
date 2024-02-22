@@ -1,0 +1,117 @@
+# Values for Asset-manager Rails application.
+
+service:
+  type: NodePort
+  annotations: {}
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-path: /healthcheck/ready
+    alb.ingress.kubernetes.io/shield-advanced-protection: "true"
+  hosts:
+    - name: assets-origin
+      paths:
+        - path: /
+          pathType: Prefix
+
+replicaCount: 1
+podDisruptionBudget: {}
+
+workerReplicaCount: 1
+
+appImage:
+  repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/asset-manager"
+  tag: latest
+appPort: 3000
+
+# appProbes defines liveness/readiness/startup probes for the app container.
+# See templates/deployment.yaml file for the default values.
+# When overriding these probes, you must override all three probes if you need
+# them - the whole block is replaced.
+appProbes: {}
+
+nginxImage:
+  repository: public.ecr.aws/nginx/nginx
+  pullPolicy: Always
+  tag: stable
+nginxPort: 8080
+nginxProxyConnectTimeout: 2s
+nginxProxyReadTimeout: 60s
+nginxConfigMap:
+  create: true
+nginxExtraVolumeMounts: []
+extraVolumes: []
+
+appResources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 700Mi
+
+workerResources:
+  limits:
+    cpu: 1000m
+    memory: 2500Mi
+  requests:
+    cpu: 200m
+    memory: 700Mi
+
+freshclamResources:
+  limits:
+    cpu: 1000m
+    memory: 200Mi
+  requests:
+    cpu: 200m
+    memory: 200Mi
+
+clamdResources:
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+  requests:
+    cpu: 500m
+    memory: 2000Mi
+
+# clamMountConfigPath is the path to which the clamav.conf and freshclam.conf are mounted
+clamMountConfigPath: "/usr/local/etc"
+
+# assetManagerNFS is the address of the NFSv4 (or Amazon EFS) server where uploaded
+assetManagerNFS: "asset-manager-efs.dev.gov.uk"
+
+# dnsConfig is passed directly into the pod specs in the app and worker
+# deployment templates.
+dnsConfig: {}
+
+# extraEnv is a list of (name, value) pairs representing additional environment
+# variables to pass to app containers. extraEnv is evaluated through `tpl`, so
+# Helm values can be substituted using Go template syntax. Use sparingly.
+extraEnv: {}
+#  - name: RETICULATE_SPLINES
+#    value: "true"
+#  - name: SPLINE_SERVER
+#    value: "https://splines.{{ .Values.externalDomain }}"
+
+metricsPort: 9394
+monitoring:
+  # monitoring.enabled determines whether PodMonitor and other Prometheus
+  # Operator custom resources are to be created or not.
+  enabled: false
+
+sentry:
+  enabled: true
+  createSecret: true
+
+rails:
+  createKeyBaseSecret: true
+
+externalSecrets:
+  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
+  deletionPolicy: Delete

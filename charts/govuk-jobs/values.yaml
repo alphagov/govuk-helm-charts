@@ -1,0 +1,60 @@
+# ⚠️ DEPRECATED; please do not add new jobs to this chart. See README.md for
+# better alternatives.
+
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  runAsUser: 1001
+  runAsGroup: 1001
+resources:
+  limits:
+    cpu: 1
+    memory: 1500Mi
+  requests:
+    cpu: 0.1
+    memory: 800Mi
+images:
+  ContentStore:
+    repository: "content-store"
+    tag: "release"
+  ContentStorePostgresqlBranch:
+    repository: "content-store-postgresql-branch"
+    tag: "release"
+  GovukDependencyChecker:
+    repository: "govuk-dependency-checker"
+    tag: "release"
+  SearchApi:
+    repository: "search-api"
+    tag: "release"
+  SearchApiLearnToRank:
+    repository: "search-api-learn-to-rank"
+    tag: "release"
+
+govukMirrorSync:
+  schedule: "0 0 * * *"
+
+learnToRank:
+  elasticsearchUri: ""
+  trainingInstance:
+    type: ""
+    count: '1'
+  deployInstance:
+    type: ""
+    count: '1'
+  sageMakerImage: ""
+  sagemakerIamRole: ""
+  serviceAccountIamRole: ""
+
+draftContentStoreMongoPostgresCron:
+  schedule: ""
+  mongoExport:
+    mongoDbUri: ""
+  postgresImport:
+    databaseUrlSecretName: "draft-content-store-postgres"
+
+contentStoreMongoPostgresCron:
+  schedule: ""
+  mongoExport:
+    mongoDbUri: ""
+  postgresImport:
+    databaseUrlSecretName: "content-store-postgres"

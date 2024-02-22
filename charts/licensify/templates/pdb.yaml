@@ -1,0 +1,17 @@
+{{- range .Values.apps }}
+{{ $_ := set $.Values "appName" .name }}
+{{- if .podDisruptionBudget }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "licensify.labels" $ | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "licensify.selectorLabels" $ | nindent 6 }}
+  {{- .podDisruptionBudget | toYaml | nindent 2 }}
+{{- end }}
+{{- end }}

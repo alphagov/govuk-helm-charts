@@ -1,0 +1,40 @@
+# This file is pulled into templates/argocd-notifications/cm.yaml to avoid
+# nesting template languages. Helm uses Go and Argo uses Jinja2. Both use the
+# `{{}}` syntax.
+service.webhook.argo_events: |
+  headers:
+  - name: "Content-Type"
+    value: "application/json"
+  - name: Authorization
+    value: Bearer $argo_events_webhook_token
+  url: "http://argo-events-service.apps.svc.cluster.local:12000"
+service.grafana: |
+  apiUrl: http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local/api
+  apiKey: $grafana_api_key
+template.send-argo-events-webhook: |
+  webhook:
+    argo_events:
+      body: |
+        {
+          "application": "{{.app.metadata.name}}",
+          "state": "{{.app.status.operationState.phase}}",
+          "commitSha": "{{.app.status.sync.revision}}",
+          "argoUrl": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+          "slackChannel": "{{.app.metadata.annotations.slackChannel}}",
+          "repoName": "{{.app.metadata.annotations.repoName}}",
+          "imageTag": "{{.app.metadata.annotations.imageTag}}"
+        }
+      method: "POST"
+      path: "/post-sync"
+# yamllint disable rule:line-length
+template.send-grafana: |
+  message: |
+    "Application {{.app.metadata.name}} is now running new version of deployments manifests. Revision: {{.app.status.sync.revision}}"
+trigger.deployment: |
+  - oncePer: "app.status.operationState.syncResult.revision"
+    send: ["send-grafana"]
+    when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'"
+trigger.on-deployed: |
+  - send: ["send-argo-events-webhook"]
+    when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
+      == 'Healthy' and app.metadata.annotations['postSyncWorkflowEnabled'] == 'true' "

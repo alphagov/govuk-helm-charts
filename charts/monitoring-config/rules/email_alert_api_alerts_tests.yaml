@@ -1,0 +1,90 @@
+rule_files:
+  - email_alert_api_alerts.yaml
+
+evaluation_interval: 1m
+
+tests:
+  # Alert does not fire if current and delivered are identical
+  - name: travel_advice_alert_test_identical
+    input_series:
+      - series: 'email_alert_api_current_travel_advice_alerts'
+        values: '2'
+      - series: 'email_alert_api_delivered_travel_advice_alerts'
+        values: '2'
+
+    alert_rule_test:
+      - alertname: TravelAdviceAlert
+        exp_alerts: []
+
+  # Alert does not fire if current and delivered are zero
+  - name: travel_advice_alert_test_zeros
+    input_series:
+      - series: 'email_alert_api_current_travel_advice_alerts'
+        values: '0'
+      - series: 'email_alert_api_delivered_travel_advice_alerts'
+        values: '0'
+
+    alert_rule_test:
+      - alertname: TravelAdviceAlert
+        exp_alerts: []
+
+  # Alert fires if current and delivered are different
+  - name: travel_advice_alert_test
+    input_series:
+      - series: 'email_alert_api_current_travel_advice_alerts'
+        values: '1'
+      - series: 'email_alert_api_delivered_travel_advice_alerts'
+        values: '0'
+
+    alert_rule_test:
+      - alertname: TravelAdviceAlert
+        exp_alerts:
+          - exp_labels:
+              severity: page
+            exp_annotations:
+              summary: No delivery reports for a Travel Advice update created >1 hour ago
+              runbook_url:
+                'https://docs.publishing.service.gov.uk/manual/alerts/email-alerts-travel-medical.html'
+
+
+  # Alert does not fire if current and delivered are identical
+  - name: medical_safety_alert_test_identical
+    input_series:
+      - series: 'email_alert_api_current_medical_safety_alerts'
+        values: '2'
+      - series: 'email_alert_api_delivered_medical_safety_alerts'
+        values: '2'
+
+    alert_rule_test:
+      - alertname: MedicalSafetyAlert
+        exp_alerts: []
+
+  # Alert does not fire if current and delivered are zero
+  - name: medical_safety_alert_test_zeros
+    input_series:
+      - series: 'email_alert_api_current_medical_safety_alerts'
+        values: '0'
+      - series: 'email_alert_api_delivered_medical_safety_alerts'
+        values: '0'
+
+    alert_rule_test:
+      - alertname: MedicalSafetyAlert
+        exp_alerts: []
+
+  # Alert fires if current and delivered are different
+  - name: medical_safety_alert_test
+    input_series:
+      - series: 'email_alert_api_current_medical_safety_alerts'
+        values: '1'
+      - series: 'email_alert_api_delivered_medical_safety_alerts'
+        values: '0'
+
+    alert_rule_test:
+      - alertname: MedicalSafetyAlert
+        exp_alerts:
+          - exp_labels:
+              severity: page
+            exp_annotations:
+              summary: No delivery reports for a Medical Safety Alert update created >1 hour ago
+              # yamllint disable-line rule:line-length
+              runbook_url: 'https://docs.publishing.service.gov.uk/manual/alerts/email-alerts-travel-medical.html'

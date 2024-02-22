@@ -1,0 +1,645 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 2022,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Total requests",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 3,
+        "maxDataPoints": 1670,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "dimensions": {
+              "BucketName": "govuk-production-mirror",
+              "FilterId": "all"
+            },
+            "expression": "",
+            "hide": false,
+            "id": "",
+            "label": "All Requests Mirror",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "AllRequests",
+            "metricQueryType": 0,
+            "namespace": "AWS/S3",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "C",
+            "region": "eu-west-2",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "exemplar": true,
+            "expr": "sum(rate(http_requests_total{namespace=\"apps\"}[$__rate_interval]))",
+            "hide": false,
+            "legendFormat": "All Requests Apps",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Mirror(S3) vs App",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "cloudwatch"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Total HTTP requests/s",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 12
+        },
+        "id": 1,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "dimensions": {
+              "BucketName": "govuk-production-mirror",
+              "FilterId": "all"
+            },
+            "expression": "",
+            "id": "",
+            "key": "Q-27ccd33e-72f0-4418-957a-a65d9698395e-0",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "AllRequests",
+            "metricQueryType": 0,
+            "namespace": "AWS/S3",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "eu-west-2",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          },
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "dimensions": {
+              "BucketName": "govuk-production-mirror",
+              "FilterId": "all"
+            },
+            "expression": "",
+            "id": "",
+            "key": "Q-c3354e82-917c-4afd-a720-da07688bb49e-2",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "GetRequests",
+            "metricQueryType": 0,
+            "namespace": "AWS/S3",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "eu-west-2",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          },
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "dimensions": {
+              "BucketName": "govuk-production-mirror",
+              "FilterId": "all"
+            },
+            "expression": "",
+            "id": "",
+            "key": "Q-c3354e82-917c-4afd-a720-da07688bb49e-2",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "PutRequests",
+            "metricQueryType": 0,
+            "namespace": "AWS/S3",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "D",
+            "region": "eu-west-2",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          },
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "dimensions": {
+              "BucketName": "govuk-production-mirror",
+              "FilterId": "all"
+            },
+            "expression": "",
+            "id": "",
+            "key": "Q-c3354e82-917c-4afd-a720-da07688bb49e-2",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "HeadRequests",
+            "metricQueryType": 0,
+            "namespace": "AWS/S3",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "C",
+            "region": "eu-west-2",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          },
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "dimensions": {
+              "BucketName": "govuk-production-mirror",
+              "FilterId": "all"
+            },
+            "expression": "",
+            "id": "",
+            "key": "Q-c3354e82-917c-4afd-a720-da07688bb49e-2",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "ListRequests",
+            "metricQueryType": 0,
+            "namespace": "AWS/S3",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "E",
+            "region": "eu-west-2",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          }
+        ],
+        "title": "govuk-production-mirror requests by HTTP method per second",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "cloudwatch",
+          "uid": "cloudwatch"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "Total HTTP errors/s",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green"
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 26
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "dimensions": {
+              "BucketName": "govuk-production-mirror",
+              "FilterId": "all"
+            },
+            "expression": "",
+            "id": "",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "4xxErrors",
+            "metricQueryType": 0,
+            "namespace": "AWS/S3",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "eu-west-2",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          },
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "dimensions": {
+              "BucketName": "govuk-production-mirror",
+              "FilterId": "all"
+            },
+            "expression": "",
+            "hide": false,
+            "id": "",
+            "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 0,
+            "metricName": "5xxErrors",
+            "metricQueryType": 0,
+            "namespace": "AWS/S3",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "B",
+            "region": "eu-west-2",
+            "sqlExpression": "",
+            "statistic": "Sum"
+          }
+        ],
+        "title": "govuk-production-mirror error per second",
+        "type": "timeseries"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "apps",
+            "value": "apps"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "label_values(router_backend_handler_response_duration_seconds_count,namespace)",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "namespace",
+          "options": [],
+          "query": {
+            "query": "label_values(router_backend_handler_response_duration_seconds_count,namespace)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "label_values(router_backend_handler_response_duration_seconds_count,backend_id)",
+          "hide": 0,
+          "includeAll": true,
+          "multi": true,
+          "name": "backend_app",
+          "options": [],
+          "query": {
+            "query": "label_values(router_backend_handler_response_duration_seconds_count,backend_id)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "label_values(router_backend_handler_response_duration_seconds_count{namespace=\"${namespace}\"},response_code)",
+          "description": "HTTP Error Status",
+          "hide": 0,
+          "includeAll": true,
+          "label": "HTTP Error Status",
+          "multi": true,
+          "name": "error_status",
+          "options": [],
+          "query": {
+            "query": "label_values(router_backend_handler_response_duration_seconds_count{namespace=\"${namespace}\"},response_code)",
+            "refId": "PrometheusVariableQueryEditor-VariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "0.99",
+            "value": "0.99"
+          },
+          "hide": 0,
+          "includeAll": false,
+          "label": "quantile",
+          "multi": false,
+          "name": "quantile",
+          "options": [
+            {
+              "selected": true,
+              "text": "0.99",
+              "value": "0.99"
+            },
+            {
+              "selected": false,
+              "text": "0.95",
+              "value": "0.95"
+            },
+            {
+              "selected": false,
+              "text": "0.9",
+              "value": "0.9"
+            },
+            {
+              "selected": false,
+              "text": "0.5",
+              "value": "0.5"
+            },
+            {
+              "selected": false,
+              "text": "0.1",
+              "value": "0.1"
+            },
+            {
+              "selected": false,
+              "text": "0.01",
+              "value": "0.01"
+            }
+          ],
+          "query": "0.99, 0.95, 0.9, 0.5, 0.1, 0.01",
+          "skipUrlSync": false,
+          "type": "custom"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Static mirror requests",
+    "uid": "bf166f12-d1d7-4c99-98bd-6b9d90dbd1ae",
+    "version": 5,
+    "weekStart": ""
+}

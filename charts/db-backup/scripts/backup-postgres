@@ -1,0 +1,84 @@
+#!/bin/bash
+set -eu
+
+source_dir=$(dirname "${BASH_SOURCE[0]}")
+. "$source_dir/lib.sh"
+
+export PGUSER=$DB_USER
+export PGPASSWORD=$DB_PASSWORD
+export PGHOST=$DB_HOST
+export PGDATABASE=postgres
+
+backup () {
+  local s3_path
+  s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
+  set -o pipefail
+  PGDATABASE=$DB_DATABASE \
+    pg_dump -Fc -Z1 | progress | s5cmd pipe "$BUCKET/$s3_path"
+  set +o pipefail
+}
+
+transform () {
+  shift
+  (cd "$source_dir" && psql "$DB_DATABASE" < "$1")
+}
+
+dump_is_readable () {
+  s5cmd cat -c 1 -p 1 "$1" | head | file - | tee /dev/fd/2 \
+    | grep -iq 'PostgreSQL custom database dump'
+}
+
+db_exists () {
+  psql -Alqt | grep -Eo '^[^|]+\|' | grep -Fq "$1|"
+}
+
+rename_db () {
+  psql -1v ON_ERROR_STOP=1 <<EOF
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity
+WHERE pid <> pg_backend_pid() AND usename <> 'rdsadmin' AND datname = '$1';
+ALTER DATABASE "$1" OWNER TO session_user;
+ALTER DATABASE "$1" RENAME TO "$2";
+EOF
+}
+
+swap_dbs () {
+  psql -1v ON_ERROR_STOP=1 <<EOF
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity
+WHERE pid <> pg_backend_pid() AND usename <> 'rdsadmin'
+  AND datname IN ('$1', '$2');
+ALTER DATABASE "$2" OWNER TO session_user;
+ALTER DATABASE "$2" RENAME TO "$3";
+ALTER DATABASE "$1" RENAME TO "$2";
+EOF
+}
+
+restore () {
+  : "${FILENAME:=$(list | tail -1)}"  # Use latest dump if not specified.
+  if [[ "$GOVUK_ENVIRONMENT" = *"prod"* ]]; then
+    : "${REALLY_RESTORE_ONTO_PRODUCTION?}"
+  fi
+  local s3_url="$BUCKET/$DB_HOST/$FILENAME"
+  dump_is_readable "$s3_url"
+
+  dropdb -ef --if-exists "$DB_DATABASE-restore"
+  createdb -eT template0 "$DB_DATABASE-restore"
+  s5cmd cat -c 1 "$s3_url" | progress | pg_restore --no-comments -f - \
+    | psql -d "$DB_DATABASE-restore" -c "SET session_replication_role = 'replica';" -f -
+
+  if db_exists "$DB_DATABASE"; then
+    dropdb -ef --if-exists "$DB_DATABASE-old"
+    swap_dbs "$DB_DATABASE-restore" "$DB_DATABASE" "$DB_DATABASE-old"
+  else
+    rename_db "$DB_DATABASE-restore" "$DB_DATABASE"
+  fi
+  psql -c "ALTER DATABASE \"$DB_DATABASE\" OWNER TO \"$DB_OWNER\";" || true
+
+  dropdb -ef --if-exists "$DB_DATABASE-old"
+}
+
+subcommand=${1:-}
+[[ $(type -t "$subcommand") == function ]] || usage
+
+[[ "${VERBOSE:-0}" -ge 1 ]] && set -x
+$subcommand "$@"
+echo "done"

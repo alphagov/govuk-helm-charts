@@ -1,0 +1,42 @@
+#!/bin/bash
+set -eu
+
+source_dir=$(dirname "${BASH_SOURCE[0]}")
+. "$source_dir/lib.sh"
+
+db_url="${DB_MONGO_CONNECTION_STRING%/}/$DB_DATABASE"
+
+backup () {
+  local s3_path
+  s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
+  set -o pipefail
+  mongodump "$db_url" --archive \
+    | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path"
+  set +o pipefail
+}
+
+dump_is_readable () {
+  s5cmd cat -c 1 -p 1 "$1" | gzip -d | head -c 100 | grep -q concurrent_collections
+}
+
+restore () {
+  : "${FILENAME:=$(list | tail -1)}"  # Use latest dump if not specified.
+  if [[ "$GOVUK_ENVIRONMENT" = *"prod"* ]]; then
+    : "${REALLY_RESTORE_ONTO_PRODUCTION?}"
+  fi
+  local s3_url="$BUCKET/$DB_HOST/$FILENAME"
+  dump_is_readable "$s3_url"
+
+  s5cmd cat -c 1 "$s3_url" | gzip -d | mongorestore "$db_url" --archive --drop -j 1
+}
+
+transform () {
+  shift
+  (cd "$source_dir" && mongosh --quiet "$db_url" < "$1")
+}
+
+subcommand=${1:-}
+[[ $(type -t "$subcommand") == function ]] || usage
+
+$subcommand "$@"
+echo "done"

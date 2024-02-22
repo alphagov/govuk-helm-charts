@@ -1,0 +1,118 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "govuk-mirror-sync"
+  labels:
+    app: "govuk-mirror-sync"
+    app.kubernetes.io/component: "mirror-sync"
+spec:
+  schedule: "{{ .Values.govukMirrorSync.schedule }}"
+  jobTemplate:
+    metadata:
+      name: "govuk-mirror-sync"
+      labels:
+        app: "govuk-mirror-sync"
+        app.kubernetes.io/component: "mirror-sync"
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: "govuk-mirror-sync"
+          labels:
+            app: "govuk-mirror-sync"
+            app.kubernetes.io/component: "mirror-sync"
+        spec:
+          enableServiceLinks: false
+          serviceAccountName: govuk-mirror-sync
+          securityContext:
+            fsGroup: {{ .Values.securityContext.runAsGroup }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+          restartPolicy: Never
+          volumes:
+            - name: app-mirror-sync
+              persistentVolumeClaim:
+                claimName: govuk-mirror-sync
+            - name: app-tmp
+              emptyDir: {}
+          initContainers:
+            - name: scrape
+              image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/govuk-mirror:latest
+              imagePullPolicy: "Always"
+              workingDir: /data
+              resources:
+                limits:
+                  cpu: 4
+                  memory: 20000Mi
+                requests:
+                  cpu: 2
+                  memory: 15000Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: app-mirror-sync
+                  mountPath: /data
+                - name: app-tmp
+                  mountPath: /tmp
+              env:
+                - name: SITE
+                  value: https://www.{{ .Values.externalDomainSuffix }}/sitemap.xml
+                - name: ALLOWED_DOMAINS
+                  value: www.{{ .Values.externalDomainSuffix }},{{ .Values.assetsDomain }}
+                - name: DISALLOWED_URL_RULES
+                  value: '/apply-for-a-licence(/|$),/business-finance-support(/|$),/drug-device-alerts\.atom,/drug-safety-update\.atom,/foreign-travel-advice\.atom,/government/announcements\.atom,/government/publications\.atom,/government/statistics\.atom,/licence-finder/,/search(/|$),\.csv/preview$'
+                - name: CONCURRENCY
+                  value: "30"
+                - name: RATE_LIMIT_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: govuk-mirror-sync
+                      key: rate-limit-token
+                - name: HEADERS
+                  value: 'rate-limit-token:$(RATE_LIMIT_TOKEN)'
+          containers:
+            - name: upload-to-s3
+              image: peakcom/s5cmd:v2.2.2
+              imagePullPolicy: "Always"
+              resources:
+                limits:
+                  cpu: 4
+                  memory: 8000Mi
+                requests:
+                  cpu: 2
+                  memory: 5000Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+              volumeMounts:
+                - name: app-mirror-sync
+                  mountPath: /data
+                - name: app-tmp
+                  mountPath: /tmp
+              env:
+                - name: AWS_REGION
+                  value: eu-west-2
+                - name: BUCKET_NAME
+                  value: govuk-{{ .Values.govukEnvironment }}-mirror
+                - name: WWW_DOMAIN
+                  value: www.{{ .Values.externalDomainSuffix }}
+                - name: ASSETS_DOMAIN
+                  value: {{ .Values.assetsDomain }}
+              command:
+                - /bin/sh
+                - -c
+                - |-
+                  set -eu
+                  # Retrieve error template
+                  mkdir -p /data/error && wget -q -O /data/error/503.html https://${ASSETS_DOMAIN}/templates/503.html.erb
+
+                  # Sync mirrors
+                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/"
+                  /s5cmd sync --size-only "/data/${ASSETS_DOMAIN}" "s3://${BUCKET_NAME}/"
+
+                  # Upload file for checking mirror freshness
+                  touch "/data/${WWW_DOMAIN}/last-updated.txt"
+                  /s5cmd cp "/data/${WWW_DOMAIN}/last-updated.txt" "s3://${BUCKET_NAME}/${WWW_DOMAIN}/last-updated.txt"

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "platformAutomerge": true,
+  "argocd": {
+    "fileMatch": [
+      "charts\\/.*\\.yaml$"
+    ]
+  },
+  "helm-values":{
+    "fileMatch": [
+      "charts\\/.*\\.yaml$"
+    ],
+    "pinDigests": false
+  },
+  "kubernetes": {
+    "fileMatch": [
+      "charts\\/.*\\.yaml$"
+    ]
+  },
+  "ignorePaths": [
+    "charts/app-config/image-tags/**"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["renovate/renovate"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "matchPackageNames": [
+        "external-dns",
+        "kube-prometheus-stack",
+        "prometheus-pushgateway",
+        "reloader"
+      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "matchPackageNames": [
+        "aws-ebs-csi-driver",
+        "cluster-autoscaler",
+        "external-secrets",
+        "oauth2-proxy"
+      ],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "matchFileNames": ["**/helm-versions/*"],
+      "additionalBranchPrefix": "{{replace '^.+\\/' '' packageFile}}-",
+      "commitMessageSuffix": " ({{replace '^.+\\/' '' packageFile}})"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [".*\\/helm-versions\\/.*"],
+      "datasourceTemplate": "helm",
+      "matchStrings": [
+        "(?<registryUrl>.+) (?<depName>.+): \"(?<currentValue>[0-9\\.]+)\""
+      ]
+    }
+  ]
+}

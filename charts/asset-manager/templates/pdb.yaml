@@ -1,0 +1,18 @@
+{{- if .Values.podDisruptionBudget }}
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: app
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $fullName }}
+      app.kubernetes.io/component: app
+  {{- .Values.podDisruptionBudget | toYaml | nindent 2 }}
+{{- end }}

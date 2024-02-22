@@ -1,0 +1,23 @@
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $fullName }}-freshclam
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}-freshclam
+    app.kubernetes.io/name: {{ $fullName }}-freshclam
+    app.kubernetes.io/component: freshclam
+spec:
+  schedule: "19 * * * *"
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "asset-manager.labels" . | nindent 8 }}
+        app: {{ $fullName }}-freshclam
+        app.kubernetes.io/name: {{ $fullName }}-freshclam
+        app.kubernetes.io/component: freshclam
+    spec:
+      backoffLimit: 1
+      template:
+        {{- include "asset-manager.freshclam.podspec" . | indent 8 }}

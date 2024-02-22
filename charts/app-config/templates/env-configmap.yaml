@@ -1,0 +1,56 @@
+# Reloader will automatically roll out deployments etc. which refer to this
+# configmap upon any change.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: govuk-apps-env
+  labels:
+    {{- include "app-config.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Environment variables applied to every GOV.UK app.
+data:
+  AWS_REGION: {{ .Values.awsRegion }}
+  BOOTSNAP_READONLY: "1"
+  GOVUK_APP_DOMAIN: ""
+  GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.publishingDomainSuffix }}
+  GOVUK_ASSET_ROOT: https://{{ .Values.assetsDomain }}
+  GOVUK_CSP_REPORT_URI: {{ .Values.cspReportURI | quote }}
+  GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
+  GOVUK_ENVIRONMENT_NAME: {{ .Values.govukEnvironment }}
+  GOVUK_PROMETHEUS_EXPORTER: "true"
+  GOVUK_PERSONALISATION_FEEDBACK_URI: https://signin.account.gov.uk/support
+  {{- if eq .Values.govukEnvironment "production" }}
+  GOVUK_PERSONALISATION_MANAGE_URI: "https://account.gov.uk?link=manage-account"
+  GOVUK_PERSONALISATION_SECURITY_URI: "https://account.gov.uk?link=security-privacy"
+  {{- else }}
+  GOVUK_PERSONALISATION_MANAGE_URI: "https://integration.account.gov.uk?link=manage-account"
+  GOVUK_PERSONALISATION_SECURITY_URI: "https://integration.account.gov.uk?link=security-privacy"
+  {{- end }}
+  GOVUK_SIDEKIQ_JSON_LOGGING: "1"
+  GOVUK_WEBSITE_ROOT: https://www.{{ .Values.externalDomainSuffix }}
+  PLEK_UNPREFIXABLE_HOSTS: account-api,asset-manager,feedback,imminence,info-frontend,licensify,local-links-manager,locations-api,search-api,signon
+  PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS: "true"
+  PROMETHEUS_PUSHGATEWAY_URL: http://prometheus-pushgateway.monitoring.svc.cluster.local:9091
+  RAILS_LOG_TO_STDOUT: "true"
+  SENTRY_CURRENT_ENV: {{ .Values.govukEnvironment }}
+  GOVUK_RAILS_JSON_LOGGING: "true"
+
+  # Data sync period used by sentry to ignore application errors during that time. Only relevant to integration and staging.
+  {{- if ne .Values.govukEnvironment "production" }}
+  GOVUK_DATA_SYNC_PERIOD: "22:0-8:0"
+  {{- end }}
+
+  {{- if ne .Values.govukEnvironment "production" }}
+  # TODO(#1827): fix OTel nil dereference so we can re-enable it in production.
+  ENABLE_OPEN_TELEMETRY: "true"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://tempo-distributor.monitoring.svc.cluster.local:4318"
+  OTEL_TRACES_SAMPLER: "traceidratio"
+  OTEL_TRACES_SAMPLER_ARG: '0.001'
+  OTEL_RUBY_INSTRUMENTATION_RACK_CONFIG_OPTS: "untraced_endpoints=/healthcheck/live"
+  {{- end }}
+
+  PLEK_SERVICE_ASSETS_URI: https://{{ .Values.assetsDomain }}
+  PLEK_SERVICE_DRAFT_ASSETS_URI: https://draft-assets.{{ .Values.publishingDomainSuffix }}
+
+  PLEK_SERVICE_LICENSIFY_URI: http://licensify-frontend.licensify

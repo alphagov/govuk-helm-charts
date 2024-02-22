@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: smoke-test
+spec:
+  entrypoint: smoke-test
+  arguments:
+    parameters:
+      - name: extra-args
+  templates:
+    - name: smoke-test
+      inputs:
+        parameters:
+          - name: extra-args
+      retryStrategy:
+        limit: 2
+        backoff:
+          duration: "2m"
+          factor: 2
+          maxDuration: "16m"
+      container:
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        command:
+          - cucumber
+          - --profile={{ .Values.govukEnvironment }}
+          - --strict-undefined
+          - --tags=not @not{{ .Values.govukEnvironment }}
+          - --tags={{ `{{ inputs.parameters.extra-args }}` }}
+        env:
+          - name: BEARER_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: bearer_token
+                name: signon-token-smokey-asset-manager
+          - name: ENVIRONMENT
+            value: {{ .Values.govukEnvironment }}
+          - name: GOVUK_APP_DOMAIN
+            value: ""
+          - name: GOVUK_APP_DOMAIN_EXTERNAL
+            value: {{ .Values.publishingDomainSuffix }}
+          - name: GOVUK_ASSET_ROOT
+            value: https://{{ .Values.assetsDomain }}
+          - name: GOVUK_WEBSITE_ROOT
+            value: https://www.{{ .Values.externalDomainSuffix }}
+          - name: PLEK_SERVICE_ASSETS_URI
+            value: https://{{ .Values.assetsDomain }}
+          - name: PLEK_SERVICE_ASSETS_ORIGIN_URI
+            value: https://assets-origin.{{ .Values.publishingDomainSuffix }}
+          - name: PLEK_SERVICE_CONTENT_DATA_ADMIN_URI
+            value: https://content-data.{{ .Values.publishingDomainSuffix }}
+          - name: PLEK_USE_HTTP_FOR_SINGLE_LABEL_DOMAINS
+            value: "1"
+          - name: SIGNON_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: smokey-signon-account
+                key: email
+          - name: SIGNON_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: smokey-signon-account
+                key: password
+          - name: SE_CACHE_PATH
+            value: "/tmp/.cache/selenium"
+          - name: XDG_CONFIG_HOME
+            value: "/tmp/.chrome"
+          - name: XDG_CACHE_HOME
+            value: "/tmp/.chrome"

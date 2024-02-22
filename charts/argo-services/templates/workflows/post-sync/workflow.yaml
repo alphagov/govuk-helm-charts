@@ -1,0 +1,147 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: post-sync
+spec:
+  entrypoint: handle-sync-event
+  onExit: exit-handler
+  retryStrategy:
+    expression: "asInt(lastRetry.exitCode) > 1"
+    limit: 3
+    backoff:
+      duration: "2m"
+      factor: 2
+      maxDuration: "16m"
+  arguments:
+    parameters:
+      - name: application
+      - name: commitSha
+      - name: argoUrl
+      - name: slackChannel
+      - name: repoName
+      - name: imageTag
+  templates:
+    - name: handle-sync-event
+      dag:
+        tasks:
+          - name: smoke-test
+            templateRef:
+              name: smoke-test
+              template: smoke-test
+            arguments:
+              parameters:
+                - name: extra-args
+                  value: "{{"@app-{{workflow.parameters.application}}"}}"
+    {{ if .Values.nextEnvironment }}
+          - name: check-for-promotion
+            depends: smoke-test.Succeeded
+            when: "{{"'{{workflow.parameters.application}}' !~ '^draft-'"}}"
+            template: check-for-promotion
+            arguments:
+              parameters:
+                - name: environment
+                  value: "{{ .Values.govukEnvironment }}"
+                - name: repoName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
+          - name: promote-release
+            depends: check-for-promotion.Succeeded
+            when: "{{"'{{tasks.check-for-promotion.outputs.result}}' == 'true'"}}"
+            template: send-webhook
+            arguments:
+              parameters:
+                - name: environment
+                  value: "{{ .Values.nextEnvironment }}"
+                - name: repoName
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
+                - name: imageTag
+                  value: "{{"{{workflow.parameters.imageTag}}"}}"
+                - name: promoteDeployment
+                  value: "true"
+
+    - name: check-for-promotion
+      inputs:
+        parameters:
+        - name: environment
+        - name: repoName
+      script:
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github-cli:latest
+        command: [/bin/bash]
+        env:
+          - name: ENVIRONMENT
+            value: "{{"{{inputs.parameters.environment}}"}}"
+          - name: REPO_NAME
+            value: "{{"{{inputs.parameters.repoName}}"}}"
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: govuk-ci-github-creds
+                key: token
+        source: |
+          {{- .Files.Get "scripts/check-for-promotion.sh" | nindent 14 }}
+    - name: send-webhook
+      inputs:
+        parameters:
+        - name: environment
+        - name: repoName
+        - name: imageTag
+        - name: promoteDeployment
+      script:
+        image: curlimages/curl
+        command:
+          - sh
+        source: >
+          curl -s "${WEBHOOK_URL}/update-image-tag" \
+            -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
+            --json '{
+              "environment": "{{"{{inputs.parameters.environment}}"}}",
+              "repoName": "{{"{{inputs.parameters.repoName}}"}}",
+              "imageTag": "{{"{{inputs.parameters.imageTag}}"}}",
+              "promoteDeployment": "{{"{{inputs.parameters.promoteDeployment}}"}}"
+            }'
+        env:
+          - name: WEBHOOK_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: deploy-image-webhook-endpoint
+                key: token
+          - name: WEBHOOK_URL
+            valueFrom:
+              secretKeyRef:
+                name: deploy-image-webhook-endpoint
+                key: url
+    {{- end }}
+
+    - name: exit-handler
+      steps:
+        - - name: notify-slack
+            when: "{{"{{workflow.status}}"}} != Succeeded"
+            templateRef:
+              name: notify-slack
+              template: notify-slack
+            arguments:
+              parameters:
+                - name: slackChannel
+                  # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
+                  # send to team slack channel.
+                  value: "govuk-deploy-alerts"
+                - name: text
+                  value: "Post-deploy (smoke test and promote-to-next-environment) workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                - name: blocks
+                  value: |
+                    [{
+                      "type": "section",
+                      "text": {
+                          "type": "mrkdwn",
+                          "text": "Post-deploy (smoke test and promote-to-next-environment) workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                      },
+                      "accessory": {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "View workflow",
+                            "emoji": true
+                        },
+                        "url": "https://argo-workflows.eks.{{ .Values.govukEnvironment }}.govuk.digital/workflows/apps/{{"{{ workflow.name }}"}}",
+                        "action_id": "view-workflow"
+                      }
+                    }]
