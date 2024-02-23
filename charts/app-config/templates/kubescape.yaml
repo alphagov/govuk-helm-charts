@@ -16,9 +16,6 @@ spec:
       valueFiles:
         - values.yaml
       parameters:
-        # Dummy value account string for testing purpose
-        - name: account
-          value: "mgsQy3ett5"
         - name: clusterName
           value: "govuk-integration-new"
         - name: server
