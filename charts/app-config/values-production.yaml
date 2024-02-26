@@ -2301,6 +2301,7 @@ govukApplications:
   - name: search-api-v2
     helmValues:
       dbMigrationEnabled: false
+      replicaCount: 6
       uploadAssets:
         enabled: false
       workerEnabled: true
