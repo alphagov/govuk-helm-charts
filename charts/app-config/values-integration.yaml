@@ -494,18 +494,10 @@ govukApplications:
             secretKeyRef:
               name: signon-app-content-data
               key: oauth_secret
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: content-data-admin-aws
-              key: access_key
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: content-data-admin-aws
-              key: secret_key
         - name: AWS_CSV_EXPORT_BUCKET_NAME
           value: govuk-integration-content-data-csvs
+        - name: AWS_SITEIMPROVE_SITEMAPS_BUCKET_NAME
+          value: govuk-integration-content-data-siteimprove-sitemaps
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
