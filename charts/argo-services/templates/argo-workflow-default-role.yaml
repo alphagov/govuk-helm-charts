@@ -1,0 +1,30 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: argo-workflow-default
+  annotations:
+    workflows.argoproj.io/description: |
+      Recomended minimum permissions for the `emissary` executor.
+rules:
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - workflowtaskresults
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - workflowtasksets
+      - workflowartifactgctasks
+    verbs:
+      - list
+      - watch
+  - apiGroups:
+      - argoproj.io
+    resources:
+      - workflowtasksets/status
+      - workflowartifactgctasks/status
+    verbs:
+      - patch
