@@ -5,7 +5,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: argo-workflow-default-role
+  name: argo-workflow-default
 subjects:
   - kind: ServiceAccount
     name: argo-workflow-default
