@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowEventBinding
+metadata:
+  name: post-sync
+spec:
+  event:
+    selector: payload.application != "" && payload.repoName != "" && payload.imageTag != "" && discriminator == "post-sync"
+  submit:
+    workflowTemplateRef:
+      name: post-sync
+    arguments:
+      parameters:
+        - name: application
+          valueFrom:
+            event: payload.application
+        - name: repoName
+          valueFrom:
+            event: payload.repoName
+        - name: imageTag
+          valueFrom:
+            event: payload.imageTag
