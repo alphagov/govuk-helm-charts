@@ -7,7 +7,7 @@ service.webhook.argo_events: |
     value: "application/json"
   - name: Authorization
     value: Bearer $argo_events_webhook_token
-  url: "http://argo-events-service.apps.svc.cluster.local:12000"
+  url: "http://argo-workflows-server.cluster-services.svc.cluster.local:2746"
 service.grafana: |
   apiUrl: http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local/api
   apiKey: $grafana_api_key
@@ -18,9 +18,6 @@ template.send-argo-events-webhook: |
         {
           "application": "{{.app.metadata.name}}",
           "state": "{{.app.status.operationState.phase}}",
-          "commitSha": "{{.app.status.sync.revision}}",
-          "argoUrl": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
-          "slackChannel": "{{.app.metadata.annotations.slackChannel}}",
           "repoName": "{{.app.metadata.annotations.repoName}}",
           "imageTag": "{{.app.metadata.annotations.imageTag}}"
         }
