@@ -22,7 +22,7 @@ template.send-argo-events-webhook: |
           "imageTag": "{{.app.metadata.annotations.imageTag}}"
         }
       method: "POST"
-      path: "/post-sync"
+      path: "/api/v1/events/apps/post-sync"
 # yamllint disable rule:line-length
 template.send-grafana: |
   message: |
