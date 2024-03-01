@@ -15,9 +15,6 @@ spec:
   arguments:
     parameters:
       - name: application
-      - name: commitSha
-      - name: argoUrl
-      - name: slackChannel
       - name: repoName
       - name: imageTag
   templates:
