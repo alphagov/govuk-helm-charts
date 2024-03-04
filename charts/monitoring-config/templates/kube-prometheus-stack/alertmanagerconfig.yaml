@@ -13,10 +13,12 @@ spec:
     - matchers:
         - name: severity
           value: page
+          matchType: =
       receiver: 'pagerduty'
     - matchers:
         - name: alertname
           value: SignonApiUserTokenExpirySoon
+          matchType: =
       receiver: 'slack-signon-token-expiry'
       repeatInterval: 1d
       groupWait: 12h
@@ -26,6 +28,7 @@ spec:
     - matchers:
         - name: alertname
           value: MirrorFreshnessAlert
+          matchType: =
       receiver: 'slack-mirror-freshness'
       repeatInterval: 1d
       groupWait: 12h
@@ -35,6 +38,7 @@ spec:
     - matchers:
       - name: destination
         value: slack-platform-engineering
+        matchType: =
       receiver: 'generic-slack-platform-engineering'
       repeatInterval: 1d
       groupWait: 12h
@@ -44,6 +48,7 @@ spec:
     - matchers:
       - name: destination
         value: slack-search-team
+        matchType: =
       receiver: 'slack-search-team'
       repeatInterval: 3h
       groupWait: 1m
