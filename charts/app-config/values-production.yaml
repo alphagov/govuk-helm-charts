@@ -1336,8 +1336,6 @@ govukApplications:
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
 
-  - name: info-frontend
-
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
@@ -2064,8 +2062,6 @@ govukApplications:
           value: "http://feedback"
         - name: BACKEND_URL_finder-frontend
           value: "http://finder-frontend"
-        - name: BACKEND_URL_info-frontend
-          value: "http://info-frontend"
         - name: BACKEND_URL_licensify
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
@@ -2115,8 +2111,6 @@ govukApplications:
           value: "http://feedback"
         - name: BACKEND_URL_finder-frontend
           value: "http://finder-frontend"
-        - name: BACKEND_URL_info-frontend
-          value: "http://info-frontend"
         - name: BACKEND_URL_licensify
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
