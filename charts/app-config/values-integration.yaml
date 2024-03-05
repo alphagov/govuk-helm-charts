@@ -1753,10 +1753,11 @@ govukApplications:
         - name: events-export
           task: "events:export_to_s3"
           schedule: "38 5 * * 0"
+        # In non-production envs, run Search API v2 bulk import every week to bring it to parity
+        # with Publishing API state (which gets refreshed from production DB every night).
         - name: search-api-v2-bulk-import
           task: "queue:requeue_all_the_published_things[bulk.search_api_v2_sync]"
-          schedule: "0 0 1 11 *"  # arbitrary value (only used as a template but field is required)
-          suspend: true
+          schedule: "0 8 * * 0"  # every Sunday at 8am
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
