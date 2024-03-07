@@ -1702,6 +1702,7 @@ govukApplications:
             ]}}]
         hosts:
           - name: publisher.{{ .Values.k8sExternalDomainSuffix }}
+      nginxProxyReadTimeout: 30s
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
