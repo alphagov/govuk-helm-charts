@@ -2242,6 +2242,8 @@ govukApplications:
           value: force
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
           value: search_api_v2_published_documents
+        - name: REDIS_URL
+          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: RABBITMQ_URL
           valueFrom:
             secretKeyRef:
