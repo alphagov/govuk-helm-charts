@@ -34,3 +34,66 @@ tests:
               description: >-
                 Invariant dataset 'dataset1' has dropped below 100% recall (i.e. the expected
                 results are not being returned for one or more queries in this dataset)
+
+  - interval: 1m
+    input_series:
+      # Perfect 100% success
+      - series: >-
+          http_requests_total{
+          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
+          }
+        values: '1000+100x15'
+      - series: >-
+          http_requests_total{
+          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
+          }
+        values: '0x15'
+    alert_rule_test:
+      - alertname: HighQueryFailureRate
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # consistent <99.5% success for 15 minutes
+      - series: >-
+          http_requests_total{
+          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
+          }
+        values: '1000x15'
+      - series: >-
+          http_requests_total{
+          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
+          }
+        values: '100+100x15'
+    alert_rule_test:
+      - alertname: HighQueryFailureRate
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: HighQueryFailureRate
+              severity: critical
+              destination: slack-search-team
+            exp_annotations:
+              summary: Elevated rate of query failures in search-api-v2
+              description: >-
+                The success rate of search requests to search-api-v2 has dropped below 99.5% for
+                more than 10 consecutive minutes.
+
+  - interval: 1m
+    input_series:
+      # brief but inconsistent blips
+      - series: >-
+          http_requests_total{
+          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
+          }
+        values: '1000 1000 1000 900 1000 1000 1000 900 1000 1000 1000 1000 1000 0 1000'
+      - series: >-
+          http_requests_total{
+          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
+          }
+        values: '0 0 0 100 0 0 0 100 0 0 0 0 0 1000 0'
+    alert_rule_test:
+      - alertname: HighQueryFailureRate
+        eval_time: 15m
+        exp_alerts: []
