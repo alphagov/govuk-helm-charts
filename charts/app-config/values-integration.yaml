@@ -2804,18 +2804,8 @@ govukApplications:
           task: "anonymous_feedback_deduplication:recent"
           schedule: "*/5 * * * *"
       extraEnv:
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: support-aws
-              key: access_key
         - name: AWS_S3_BUCKET_NAME
           value: govuk-integration-support-api-csvs
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: support-aws
-              key: secret_key
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
