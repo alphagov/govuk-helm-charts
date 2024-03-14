@@ -2867,6 +2867,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      workerReplicaCount: 2
       cronTasks:
         - name: feedback-deduplication-nightly
           task: "anonymous_feedback_deduplication:nightly"
