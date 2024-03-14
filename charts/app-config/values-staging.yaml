@@ -702,7 +702,7 @@ govukApplications:
     helmValues: &content-store
       dbMigrationEnabled: true
       nginxClientMaxBodySize: 20M
-      replicaCount: 6
+      replicaCount: 7
       cronTasks:
         - name: report-delays
           task: "publishing_delay_report:report_delays"
