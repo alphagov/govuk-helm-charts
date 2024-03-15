@@ -11,3 +11,30 @@ groups:
           description: >-
             Invariant dataset '{{ $labels.dataset_name }}' has dropped below 100% recall (i.e. the
             expected results are not being returned for one or more queries in this dataset)
+
+      - alert: HighQueryFailureRate
+        expr: >-
+          sum(rate(http_requests_total{
+            namespace="apps",
+            job="search-api-v2",
+            controller="searches",
+            action="show",
+            status="200"
+          }[2m]))
+          /
+          sum(rate(http_requests_total{
+            namespace="apps",
+            job="search-api-v2",
+            controller="searches",
+            action="show"
+          }[2m]))
+          < 0.995
+        for: 10m
+        labels:
+          severity: critical
+          destination: slack-search-team
+        annotations:
+          summary: Elevated rate of query failures in search-api-v2
+          description: >-
+            The success rate of search requests to search-api-v2 has dropped below 99.5% for more
+            than 10 consecutive minutes.
