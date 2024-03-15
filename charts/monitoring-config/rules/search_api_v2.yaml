@@ -14,20 +14,20 @@ groups:
 
       - alert: HighQueryFailureRate
         expr: >-
-          sum(increase(http_requests_total{
+          sum(rate(http_requests_total{
             namespace="apps",
             job="search-api-v2",
             controller="searches",
             action="show",
             status="200"
-          }[1m]))
+          }[2m]))
           /
-          sum(increase(http_requests_total{
+          sum(rate(http_requests_total{
             namespace="apps",
             job="search-api-v2",
             controller="searches",
             action="show"
-          }[1m]))
+          }[2m]))
           < 0.995
         for: 10m
         labels:
