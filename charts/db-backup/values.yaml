@@ -112,6 +112,7 @@ cronjobs:
 
     content-data-api-postgresql-primary:
       schedule: "35 23 * * *"
+      host: blue-content-data-api-postgresql-primary-postgres
       db: content_performance_manager_production
       dbms: postgres
       operations:
@@ -294,6 +295,7 @@ cronjobs:
 
     content-data-api-postgresql-primary:
       schedule: "35 1 * * 6"
+      host: blue-content-data-api-postgresql-primary-postgres
       db: content_performance_manager_production
       dbms: postgres
       operations:
@@ -549,6 +551,7 @@ cronjobs:
     content-data-api-postgresql-primary:
       suspend: true
       schedule: "35 6 * * 6"
+      host: blue-content-data-api-postgresql-primary-postgres
       db: content_performance_manager_production
       dbms: postgres
       operations:
