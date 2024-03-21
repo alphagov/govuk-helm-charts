@@ -52,9 +52,14 @@ snapshot_valid () {
 
 restore () {
   snapshot_valid
-  $curl -XDELETE "$ES_URL/_all"
+  $curl -XDELETE "$ES_URL/*,-.*" >&2  # Delete all except system indices.
+  sleep 2  # TODO: use ?wait_for_shards=all once our ES version supports it.
   local result
-  result=$($curl -XPOST "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME/_restore")
+  result=$(
+    # TODO: use curl --json once available.
+    $curl -XPOST -H'Content-Type: application/json' -d'{"indices": "*,-.*"}' \
+      "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME/_restore"
+  )
   echo "$result" | jq -e .accepted >/dev/null
 }
 
@@ -105,7 +110,7 @@ fi
 : "${REQUEST_DEADLINE_SECONDS:=900}"  # Keep this > ES's 30s timeout to preserve error messages.
 readonly GOVUK_ENVIRONMENT ES_URL SNAPSHOTS_TO_KEEP REQUEST_DEADLINE_SECONDS
 
-curl="curl -Ssfm$REQUEST_DEADLINE_SECONDS"
+curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body"
 
 [[ "${VERBOSE:-0}" -ge 1 ]] && set -x
 $subcommand
