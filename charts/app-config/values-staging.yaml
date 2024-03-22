@@ -2534,12 +2534,12 @@ govukApplications:
         - name: ZENDESK_CLIENT_USERNAME
           valueFrom:
             secretKeyRef:
-              name: smartanswers-zendesk-client
+              name: support-zendesk
               key: username
         - name: ZENDESK_CLIENT_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: smartanswers-zendesk-client
+              name: support-zendesk
               key: password
 
   - name: smokey
