@@ -53,7 +53,7 @@ snapshot_valid () {
 restore () {
   snapshot_valid
   $curl -XDELETE "$ES_URL/*,-.*" >&2  # Delete all except system indices.
-  sleep 20  # TODO: use ?wait_for_shards=all once our ES version supports it.
+  sleep 20  # TODO: use ?wait_for_active_shards=all once our ES version supports it.
   local result
   result=$(
     # TODO: use curl --json once available.
