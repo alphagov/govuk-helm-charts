@@ -26,7 +26,7 @@ cronjobs:
       args: [create_and_clean_up]
   integration:
     - name: copy-from-stag
-      schedule: "53 2 * * *"
+      schedule: "17 6 * * *"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
