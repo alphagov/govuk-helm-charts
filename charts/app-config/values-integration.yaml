@@ -976,11 +976,6 @@ govukApplications:
           value: fee22233-2f28-4b0b-8b6c-4410979f2275
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
           value: eb9ba220-7d74-4aab-975a-bdbe718f69a3
-        - name: SUPPORT_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-feedback-support
-              key: bearer_token
         - name: SUPPORT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
