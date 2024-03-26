@@ -960,6 +960,7 @@ govukApplications:
             secretKeyRef:
               name: signon-token-email-alert-service-email-alert-api
               key: bearer_token
+        # TODO: remove GOVUK_PROMETHEUS_EXPORTER once govuk_app_config >=9.10 is everywhere.
         - name: GOVUK_PROMETHEUS_EXPORTER
           value: force
         - name: RABBITMQ_URL
@@ -2314,7 +2315,7 @@ govukApplications:
           task: "quality_monitoring:assert_invariants"
           schedule: "09 8-17 * * *"  # 9 minutes past the hour every day from 8am-5pm
       extraEnv:
-        # Required for document sync worker to be able to export metrics
+        # TODO: remove GOVUK_PROMETHEUS_EXPORTER once govuk_app_config >=9.10 is everywhere.
         - name: GOVUK_PROMETHEUS_EXPORTER
           value: force
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
