@@ -2656,6 +2656,10 @@ govukApplications:
             ]}}]
         hosts:
           - name: specialist-publisher.{{ .Values.k8sExternalDomainSuffix }}
+      cronTasks:
+        - name: publish-finders
+          task: "publishing_api:publish_finders"
+          schedule: "49 7 * * 1-5"
       extraEnv:
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
