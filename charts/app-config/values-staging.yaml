@@ -1061,6 +1061,7 @@ govukApplications:
 
   - name: frontend
     helmValues:
+      replicaCount: 6
       ingress:
         enabled: true
         annotations:
