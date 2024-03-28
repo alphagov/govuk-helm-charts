@@ -2911,6 +2911,10 @@ govukApplications:
 
   - name: travel-advice-publisher
     helmValues:
+      cronTasks:
+        - name: publish-scheduled-editions
+          task: "publish_scheduled_editions"
+          schedule: "29 5 * * *"
       nginxClientMaxBodySize: *max-upload-size
       workerEnabled: true
       ingress:
