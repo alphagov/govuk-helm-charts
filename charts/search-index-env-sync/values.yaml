@@ -26,7 +26,6 @@ cronjobs:
       args: [create_and_clean_up]
   integration:
     - name: copy-from-stag
-      suspend: true
       schedule: "17 6 * * *"
       args: [restore_latest]
       extraEnv:
