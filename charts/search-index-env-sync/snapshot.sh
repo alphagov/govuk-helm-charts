@@ -44,6 +44,14 @@ list () {
   $curl "$ES_URL/_snapshot/$SNAPSHOT_REPO/_all" | jq -e '.snapshots'
 }
 
+# Enable or disable automatic index creation on insert.
+# usage: set_auto_create_index true|false
+set_auto_create_index () {
+  # TODO: use curl --json once available (requires curl >= 7.82).
+  $curl -XPUT "$ES_URL/_cluster/settings" -H 'Content-Type: application/json' \
+    -d '{ "persistent": { "action.auto_create_index": "'"$1"'" } }' >&2
+}
+
 snapshot_valid () {
   : "${SNAPSHOT_NAME:?required}"
   list | jq -r '. | map(select(.state == "SUCCESS"))[].snapshot' \
@@ -52,6 +60,10 @@ snapshot_valid () {
 
 restore () {
   snapshot_valid
+
+  set_auto_create_index false
+  trap 'set_auto_create_index true' EXIT HUP INT TERM
+
   $curl -XDELETE "$ES_URL/*,-.*" >&2  # Delete all except system indices.
   local result
   result=$(
@@ -59,6 +71,7 @@ restore () {
     $curl -XPOST -H'Content-Type: application/json' -d'{"indices": "*,-.*"}' \
       "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME/_restore"
   )
+
   echo "$result" | jq -e .accepted >/dev/null
 }
 
