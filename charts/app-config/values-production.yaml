@@ -2766,16 +2766,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-specialist-publisher
               key: oauth_secret
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: specialist-publisher-aws
-              key: access_key
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: specialist-publisher-aws
-              key: secret_key
         - name: AWS_S3_BUCKET_NAME
           value: govuk-production-specialist-publisher-csvs
         - name: MONGODB_URI
