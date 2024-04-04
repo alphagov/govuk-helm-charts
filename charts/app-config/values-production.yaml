@@ -2846,6 +2846,8 @@ govukApplications:
             secretKeyRef:
               name: support-zendesk
               key: ticket_email
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: support-api
     helmValues:
