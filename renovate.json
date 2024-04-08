@@ -33,6 +33,7 @@
       "matchPackageNames": [
         "external-dns",
         "kube-prometheus-stack",
+        "oauth2-proxy",
         "prometheus-pushgateway",
         "reloader"
       ],
@@ -44,8 +45,7 @@
       "matchPackageNames": [
         "aws-ebs-csi-driver",
         "cluster-autoscaler",
-        "external-secrets",
-        "oauth2-proxy"
+        "external-secrets"
       ],
       "matchUpdateTypes": ["patch"],
       "automerge": true,
