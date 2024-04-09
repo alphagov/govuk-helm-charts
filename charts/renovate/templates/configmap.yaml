@@ -5,5 +5,5 @@ metadata:
 data:
   config.json: |-
     {
-      "repositories": ["alphagov/govuk-helm-charts"]
+      "repositories": ["alphagov/govuk-helm-charts", "alphagov/govuk-infrastructure"]
     }
