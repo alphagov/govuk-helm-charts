@@ -660,7 +660,7 @@ govukApplications:
         # These GTM values are not secrets (not even the the gtm_auth one).
         # https://github.com/alphagov/govuk-puppet/pull/8041
         - name: GOOGLE_TAG_MANAGER_ID
-          value: &publishing-design-system-gtm-id GTM-P93SHJ4Z
+          value: *publishing-design-system-gtm-id
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
