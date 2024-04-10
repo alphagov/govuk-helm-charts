@@ -978,10 +978,6 @@ govukApplications:
   - name: feedback
     helmValues:
       extraEnv:
-        - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_REPLY_TO_ID
-          value: b5baae45-0a68-4b63-91a1-66b05640d27e
-        - name: GOVUK_NOTIFY_ACCESSIBLE_FORMAT_REQUEST_TEMPLATE_ID
-          value: ceefedd7-3214-4774-8b57-f27c89aac90d
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
           value: e8b2d8a6-db5f-4346-9fbd-49b16b531e1c
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
