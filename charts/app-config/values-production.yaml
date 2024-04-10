@@ -478,6 +478,8 @@ govukApplications:
         # https://www.github.com/alphagov/govuk-puppet/pull/8041
         - name: GOOGLE_TAG_MANAGER_ID
           value: GTM-NZG8SF2
+        - name: GOOGLE_TAG_MANAGER_GA4_ID
+          value: &publishing-design-system-gtm-id GTM-P93SHJ4Z
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:

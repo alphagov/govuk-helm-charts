@@ -484,6 +484,12 @@ govukApplications:
           value: GTM-NZG8SF2
         - name: GOOGLE_TAG_MANAGER_PREVIEW
           value: env-7
+        - name: GOOGLE_TAG_MANAGER_GA4_ID
+          value: &publishing-design-system-gtm-id GTM-P93SHJ4Z
+        - name: GOOGLE_TAG_MANAGER_GA4_AUTH  # Non-prod only
+          value: &publishing-design-system-gtm-auth 8jHx-VNEguw67iX9TBC6_g
+        - name: GOOGLE_TAG_MANAGER_GA4_PREVIEW  # Non-prod only
+          value: &publishing-design-system-gtm-preview env-50
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
