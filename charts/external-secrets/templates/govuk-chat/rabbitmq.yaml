@@ -1,0 +1,24 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: govuk-chat-rabbitmq
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      RabbitMQ connection string for govuk-chat. Fields in SecretsManager
+      are username, password, host, port.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: govuk-chat-rabbitmq
+    template:
+      data:
+        RABBITMQ_URL: '{{ $.Files.Get "externalsecrets-templates/amqp-conn-string.tpl" | trim }}'
+  dataFrom:
+    - extract:
+        key: govuk/govuk-chat/rabbitmq
