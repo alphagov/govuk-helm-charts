@@ -1812,6 +1812,8 @@ govukApplications:
 
   - name: release
     helmValues:
+      appImage:
+        arch: arm64
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2846,6 +2848,8 @@ govukApplications:
 
   - name: transition
     helmValues:
+      appImage:
+        arch: arm64
       ingress:
         enabled: true
         annotations:
