@@ -45,6 +45,7 @@ appImage:
   repository: ""  # Dummy value, overridden in ArgoCD config.
   pullPolicy: Always
   tag: latest
+  arch: amd64
 appPort: 3000
 # appExtraVolumeMounts defines VolumeMounts on the app container (in both
 # deployment.yaml and worker-deployment.yaml).
