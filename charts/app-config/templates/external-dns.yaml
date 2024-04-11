@@ -7,23 +7,29 @@ spec:
   project: default
   source:
     {{- include "app-config.helm-release"
-        ( merge (deepCopy .) (dict "repoURL" "https://charts.bitnami.com/bitnami" "chart" "external-dns") )
+        ( merge (deepCopy .) (dict "repoURL" "https://kubernetes-sigs.github.io/external-dns" "chart" "external-dns") )
         | nindent 4 }}
     helm:
       values: |
-        aws:
-          region: eu-west-1
-          zoneType: public
+        provider: aws
+        env:
+          - name: AWS_DEFAULT_REGION
+            value: eu-west-1
+        extraArgs:
+          - --aws-zone-type=public
         serviceAccount:
           name: external-dns
           annotations:
             eks.amazonaws.com/role-arn: arn:aws:iam::{{ .Values.awsAccountId }}:role/external-dns-govuk
+        automountServiceAccountToken: true
+        revisionHistoryLimit: 10
+        strategy:
+          type: RollingUpdate
         txtOwnerId: govuk
         domainFilters:
           - {{ .Values.k8sExternalDomainSuffix }}
         interval: 5m
         triggerLoopOnEvent: true
-        replicaCount: {{ .Values.replicaCount | default 1 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.argoNamespace }}
