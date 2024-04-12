@@ -727,7 +727,7 @@ govukApplications:
               name: signon-app-content-store
               key: oauth_secret
         - name: DEFAULT_TTL
-          value: "1"
+          value: "300"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
