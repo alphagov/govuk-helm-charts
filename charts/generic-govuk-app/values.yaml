@@ -41,11 +41,14 @@ cronTasks: []
 extraVolumes: []
 
 repoName: "example"  # Dummy value, overridden in ArgoCD config.
+# arch determines whether the app should schedule on amd64 or arm64 nodes.
+# TODO: remove `arch` once the ARM migration is complete and we're not longer
+# running mixed-arch clusters.
+arch: amd64
 appImage:
   repository: ""  # Dummy value, overridden in ArgoCD config.
   pullPolicy: Always
   tag: latest
-  arch: amd64
 appPort: 3000
 # appExtraVolumeMounts defines VolumeMounts on the app container (in both
 # deployment.yaml and worker-deployment.yaml).
