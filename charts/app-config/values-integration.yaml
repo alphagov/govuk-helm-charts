@@ -1265,9 +1265,11 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "110"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "places-manager.{{ .Values.publishingDomainSuffix }}",
                 "imminence.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
+          - name: places-manager.{{ .Values.k8sExternalDomainSuffix }}
           - name: imminence.{{ .Values.k8sExternalDomainSuffix }}
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 60s
