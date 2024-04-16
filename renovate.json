@@ -45,6 +45,7 @@
       "matchPackageNames": [
         "aws-ebs-csi-driver",
         "cluster-autoscaler",
+        "dex",
         "external-secrets"
       ],
       "matchUpdateTypes": ["patch"],
