@@ -182,7 +182,7 @@ spec:
                 command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
       {{- if eq "arm64" .Values.arch }}
       tolerations:
-        - key: kubernetes.io/arch
+        - key: arch
           operator: Equal
           value: {{ .Values.arch }}
           effect: NoSchedule
