@@ -163,7 +163,7 @@ govukApplications:
               - path: /government/assets/
               - path: /media/
               - path: /auth/gds  # Viewing draft assets requires user auth.
-      assetManagerNFS: &assets-nfs assets.blue.integration.govuk-internal.digital
+      assetManagerNFS: &assets-nfs assets.integration.govuk-internal.digital
       clamMountConfigPath: /usr/local/etc
       nginxConfigMap:
         create: false
