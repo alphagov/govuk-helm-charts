@@ -154,7 +154,7 @@ govukApplications:
               - path: /government/assets/
               - path: /media/
               - path: /auth/gds  # Viewing draft assets requires user auth.
-      assetManagerNFS: &assets-nfs "10.13.31.41"  # assets.production.govuk-internal.digital
+      assetManagerNFS: &assets-nfs assets.production.govuk-internal.digital
       nginxConfigMap:
         create: false
         name: asset-manager-nginx-conf
