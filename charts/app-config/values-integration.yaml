@@ -2719,6 +2719,7 @@ govukApplications:
 
   - name: support
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
