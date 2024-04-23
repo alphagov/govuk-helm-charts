@@ -1,3 +1,3 @@
-image_tag: v265
+image_tag: deb33585a6b6803d6a42af758883d3a75b3c80b8
 automatic_deploys_enabled: true
-promote_deployment: true
+promote_deployment: false
