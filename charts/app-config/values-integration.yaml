@@ -2057,6 +2057,7 @@ govukApplications:
 
   - name: search-admin
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workerEnabled: true
       ingress:
