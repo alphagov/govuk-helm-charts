@@ -2157,11 +2157,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-search-admin-publishing-api
               key: bearer_token
-        - name: RUMMAGER_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-search-admin-search-api
-              key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: GOVUK_NOTIFY_API_KEY
