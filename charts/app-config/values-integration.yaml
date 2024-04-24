@@ -1192,6 +1192,65 @@ govukApplications:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
 
+  - name: govuk-chat
+    helmValues:
+      dbMigrationEnabled: true
+      workerEnabled: true
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "95"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "chat.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: chat.{{ .Values.k8sExternalDomainSuffix }}
+      extraEnv:
+        - name: BASIC_AUTH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-basic-auth
+              key: username
+        - name: BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-basic-auth
+              key: password
+        - name: CHAT_API_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-chat-api
+              key: username
+        - name: CHAT_API_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-chat-api
+              key: password
+        - name: CHAT_API_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-chat-api
+              key: url
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-postgres
+              key: DATABASE_URL
+        - name: OPENAI_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-open-ai
+              key: access_token
+        - name: RABBITMQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-rabbitmq
+              key: RABBITMQ_URL
+        - name: REDIS_URL
+          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+
   - name: govuk-jobs
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
