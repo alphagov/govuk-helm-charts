@@ -2314,6 +2314,10 @@ govukApplications:
           value: force
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
           value: search_api_v2_published_documents
+        - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_THREADS
+          value: "30"
+        - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_MAX_UNACKED
+          value: "30"
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: RABBITMQ_URL
