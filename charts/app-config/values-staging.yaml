@@ -2117,6 +2117,7 @@ govukApplications:
     postSyncWorkflowEnabled: "false"
 
   - name: search-admin
+    arch: arm64
     helmValues:
       dbMigrationEnabled: true
       workerEnabled: true
