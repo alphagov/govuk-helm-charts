@@ -3069,6 +3069,7 @@ govukApplications:
   - name: whitehall-admin
     repoName: whitehall
     helmValues:
+      arch: arm64
       securityContext:
         # Use the same uid/gid for NFS permissions as the old stack, so that
         # files uploaded by whitehall-admin on k8s can be processed by
