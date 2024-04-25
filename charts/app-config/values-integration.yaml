@@ -60,6 +60,7 @@ _alb-ingress-group-backend: &alb-ingress-group-backend
 govukApplications:
   - name: account-api
     helmValues:
+      arch: arm64
       uploadAssets:
         enabled: false
       dbMigrationEnabled: true
