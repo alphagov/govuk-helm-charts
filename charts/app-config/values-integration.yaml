@@ -2289,6 +2289,7 @@ govukApplications:
 
   - name: search-api-v2
     helmValues:
+      arch: arm64
       dbMigrationEnabled: false
       uploadAssets:
         enabled: false
