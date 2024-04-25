@@ -2541,6 +2541,7 @@ govukApplications:
   - name: smartanswers
     repoName: smart-answers
     helmValues:
+      arch: arm64
       uploadAssets:
         # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
         path: /app/public/assets/smartanswers
