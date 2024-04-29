@@ -1167,6 +1167,7 @@ govukApplications:
 
   - name: government-frontend
     helmValues:
+      arch: arm64
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
