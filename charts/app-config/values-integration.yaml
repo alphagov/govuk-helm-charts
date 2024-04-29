@@ -1708,6 +1708,7 @@ govukApplications:
 
   - name: publisher
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workerEnabled: true
       cronTasks:
