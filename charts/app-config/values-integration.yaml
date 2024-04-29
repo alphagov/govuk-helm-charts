@@ -1180,6 +1180,7 @@ govukApplications:
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
