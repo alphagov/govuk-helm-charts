@@ -285,6 +285,7 @@ govukApplications:
 
   - name: collections
     helmValues:
+      arch: arm64
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
@@ -297,6 +298,7 @@ govukApplications:
   - name: draft-collections
     repoName: collections
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
