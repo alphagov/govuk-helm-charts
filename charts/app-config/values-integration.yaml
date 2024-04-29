@@ -1664,6 +1664,7 @@ govukApplications:
 
   - name: maslow
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
