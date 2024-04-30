@@ -2168,6 +2168,12 @@ govukApplications:
             secretKeyRef:
               name: search-admin-mysql
               key: DATABASE_URL
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-design-system-gtm-id
+        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+          value: *publishing-design-system-gtm-auth
+        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+          value: *publishing-design-system-gtm-preview
 
   - name: search-api
     helmValues:
