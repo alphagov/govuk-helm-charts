@@ -9,6 +9,7 @@ metadata:
     app: {{ $fullName }}
     app.kubernetes.io/name: {{ $fullName }}
     app.kubernetes.io/component: app
+    app.kubernetes.io/arch: {{ .Values.arch }}
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
@@ -24,6 +25,7 @@ spec:
         app: {{ $fullName }}
         app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/component: app
+        app.kubernetes.io/arch: {{ .Values.arch }}
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
