@@ -2536,6 +2536,8 @@ govukApplications:
               key: DEVISE_SECRET_KEY
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-design-system-gtm-id
 
   - name: smartanswers
     repoName: smart-answers
@@ -2963,6 +2965,8 @@ govukApplications:
               key: DATABASE_URL
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: travel-advice-publisher
     helmValues:
