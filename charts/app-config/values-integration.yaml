@@ -244,6 +244,7 @@ govukApplications:
 
   - name: bouncer
     helmValues:
+      arch: arm64
       rails:
         enabled: false
       uploadAssets:
