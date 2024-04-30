@@ -2965,6 +2965,8 @@ govukApplications:
               key: DATABASE_URL
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
+        - name: GOOGLE_TAG_MANAGER_ID
+          value: *publishing-bootstrap-gtm-id
 
   - name: travel-advice-publisher
     helmValues:
