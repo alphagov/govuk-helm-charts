@@ -381,6 +381,7 @@ govukApplications:
 
   - name: contacts-admin
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
