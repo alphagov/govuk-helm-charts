@@ -21,7 +21,7 @@ spec:
         app: "{{ $fullName }}-{{ .name }}"
         app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
         app.kubernetes.io/component: "{{ .name }}"
-        app.kubernetes.io/arch: {{ .Values.arch }}
+        app.kubernetes.io/arch: {{ $.Values.arch }}
     spec:
       backoffLimit: 0
       template:
@@ -32,7 +32,7 @@ spec:
             app: "{{ $fullName }}-{{ .name }}"
             app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
             app.kubernetes.io/component: "{{ .name }}"
-            app.kubernetes.io/arch: {{ .Values.arch }}
+            app.kubernetes.io/arch: {{ $.Values.arch }}
         spec:
           automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
           enableServiceLinks: false
@@ -103,13 +103,13 @@ spec:
                 {{- with $.Values.appExtraVolumeMounts }}
                   {{- . | toYaml | trim | nindent 16 }}
                 {{- end }}
-          {{- if eq "arm64" .Values.arch }}
+          {{- if eq "arm64" $.Values.arch }}
           tolerations:
             - key: arch
               operator: Equal
-              value: {{ .Values.arch }}
+              value: {{ $.Values.arch }}
               effect: NoSchedule
           nodeSelector:
-            kubernetes.io/arch: {{ .Values.arch }}
+            kubernetes.io/arch: {{ $.Values.arch }}
           {{- end }}
 {{- end }}
