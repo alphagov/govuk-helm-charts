@@ -1216,6 +1216,8 @@ govukApplications:
             ]}}]
         hosts:
           - name: chat.{{ .Values.k8sExternalDomainSuffix }}
+      uploadAssets:
+        enabled: false
       extraEnv:
         - name: BASIC_AUTH_USERNAME
           valueFrom:
