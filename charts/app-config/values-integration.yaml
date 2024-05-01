@@ -2877,6 +2877,7 @@ govukApplications:
 
   - name: support-api
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
