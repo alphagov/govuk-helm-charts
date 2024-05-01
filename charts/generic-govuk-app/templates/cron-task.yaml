@@ -35,6 +35,8 @@ spec:
           automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
           enableServiceLinks: false
           securityContext:
+            seccompProfile:
+              type: RuntimeDefault
             fsGroup: {{ $.Values.securityContext.runAsGroup }}
             runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
             runAsUser: {{ $.Values.securityContext.runAsUser }}
@@ -91,6 +93,8 @@ spec:
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
               volumeMounts:
                 - name: app-tmp
                   mountPath: /tmp
