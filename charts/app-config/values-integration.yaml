@@ -631,6 +631,7 @@ govukApplications:
 
   - name: content-publisher
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       nginxClientMaxBodySize: &max-upload-size 500M
       workerEnabled: true
@@ -705,6 +706,7 @@ govukApplications:
 
   - name: content-store
     helmValues: &content-store
+      arch: arm64
       dbMigrationEnabled: true
       nginxClientMaxBodySize: 20M
       cronTasks:
@@ -790,6 +792,7 @@ govukApplications:
 
   - name: content-tagger
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workerEnabled: true
       ingress:
@@ -1111,6 +1114,7 @@ govukApplications:
   - name: draft-frontend
     repoName: frontend
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
