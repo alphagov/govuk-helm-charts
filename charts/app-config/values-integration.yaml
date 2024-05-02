@@ -1264,6 +1264,16 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-rabbitmq
               key: RABBITMQ_URL
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-chat
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-chat
+              key: oauth_secret
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 
