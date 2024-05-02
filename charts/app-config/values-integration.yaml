@@ -135,6 +135,7 @@ govukApplications:
   - name: asset-manager
     chartPath: charts/asset-manager
     helmValues:
+      arch: arm64
       workerEnabled: true
       ingress:
         enabled: true
@@ -844,6 +845,7 @@ govukApplications:
 
   - name: email-alert-api
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
@@ -1037,6 +1039,7 @@ govukApplications:
 
   - name: finder-frontend
     helmValues:
+      arch: arm64
       cronTasks:
         - name: registries-refresh
           task: "registries:cache_refresh"
@@ -1211,6 +1214,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workerEnabled: true
       ingress:
@@ -1307,6 +1311,7 @@ govukApplications:
 
   - name: hmrc-manuals-api
     helmValues:
+      arch: arm64
       nginxClientMaxBodySize: 2M
       ingress:
         enabled: true

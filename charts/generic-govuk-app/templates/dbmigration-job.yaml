@@ -9,6 +9,7 @@ metadata:
     app: {{ $fullName }}-dbmigrate
     app.kubernetes.io/name: {{ $fullName }}-dbmigrate
     app.kubernetes.io/component: dbmigrate
+    app.kubernetes.io/arch: {{ .Values.arch }}
   annotations:
     argocd.argoproj.io/hook: PreSync
 spec:
@@ -22,6 +23,7 @@ spec:
         app: {{ $fullName }}-dbmigrate
         app.kubernetes.io/name: {{ $fullName }}-dbmigrate
         app.kubernetes.io/component: dbmigrate
+        app.kubernetes.io/arch: {{ .Values.arch }}
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
@@ -75,4 +77,13 @@ spec:
             {{- with .Values.appExtraVolumeMounts }}
               {{- . | toYaml | trim | nindent 12 }}
             {{- end }}
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
 {{- end }}
