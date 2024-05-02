@@ -2503,11 +2503,11 @@ govukApplications:
           schedule: "27 11 * * *"
           serviceAccount: signon
         - name: sync-app-secrets-to-k8s
-          task: "kubernetes:sync_app_secrets[signon-secrets-sync-conf]"
+          task: "kubernetes:sync_app_secrets"
           schedule: "6 1 * * *"
           serviceAccount: signon
         - name: sync-token-secrets-to-k8s
-          task: "kubernetes:sync_token_secrets[signon-secrets-sync-conf]"
+          task: "kubernetes:sync_token_secrets"
           schedule: "7 1 * * *"
           serviceAccount: signon
       extraEnv:
