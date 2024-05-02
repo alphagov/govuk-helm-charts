@@ -205,6 +205,7 @@ govukApplications:
 
   - name: authenticating-proxy
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -429,6 +430,7 @@ govukApplications:
 
   - name: content-data-admin
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         redirect: true
@@ -529,6 +531,7 @@ govukApplications:
 
   - name: content-data-api
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -980,6 +983,7 @@ govukApplications:
 
   - name: feedback
     helmValues:
+      arch: arm64
       extraEnv:
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
           value: fee22233-2f28-4b0b-8b6c-4410979f2275
@@ -1607,6 +1611,7 @@ govukApplications:
 
   - name: manuals-publisher
     helmValues:
+      arch: arm64
       nginxClientMaxBodySize: *max-upload-size
       workerEnabled: true
       ingress:
@@ -3010,6 +3015,7 @@ govukApplications:
 
   - name: travel-advice-publisher
     helmValues:
+      arch: arm64
       cronTasks:
         - name: publish-scheduled-editions
           task: "publish_scheduled_editions"
