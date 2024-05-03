@@ -1451,6 +1451,7 @@ govukApplications:
 
   - name: link-checker-api
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
@@ -1491,6 +1492,7 @@ govukApplications:
 
   - name: local-links-manager
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
