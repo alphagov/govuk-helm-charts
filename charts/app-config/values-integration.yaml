@@ -1967,6 +1967,7 @@ govukApplications:
 
   - name: router-api
     helmValues: &router-api
+      arch: arm64
       uploadAssets:
         enabled: false
       extraEnv:
@@ -2013,6 +2014,7 @@ govukApplications:
 
   - name: router
     helmValues:
+      arch: arm64
       rails:
         enabled: false
       uploadAssets:
