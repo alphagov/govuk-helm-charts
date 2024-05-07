@@ -33,5 +33,6 @@ trigger.deployment: |
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'"
 trigger.on-deployed: |
   - send: ["send-argo-events-webhook"]
+    oncePer: 'app.status.operationState.syncResult.revision'
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
       == 'Healthy' and app.metadata.annotations['postSyncWorkflowEnabled'] == 'true' "
