@@ -2770,6 +2770,7 @@ govukApplications:
 
   - name: specialist-publisher
     helmValues:
+      arch: arm64
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workerEnabled: true
