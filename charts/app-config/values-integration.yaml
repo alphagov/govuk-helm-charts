@@ -2443,6 +2443,7 @@ govukApplications:
 
   - name: service-manual-publisher
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       ingress:
         enabled: true
