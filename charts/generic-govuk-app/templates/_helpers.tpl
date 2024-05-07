@@ -41,6 +41,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 
 {{/*
 Selector labels
