@@ -1,3 +1,3 @@
-image_tag: 3f56bf9b94884045bd7481b0accd12fbf44dfc8b
-promote_deployment: false
+image_tag: v42
+promote_deployment: true
 automatic_deploys_enabled: true
