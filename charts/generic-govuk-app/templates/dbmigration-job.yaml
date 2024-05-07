@@ -9,7 +9,6 @@ metadata:
     app: {{ $fullName }}-dbmigrate
     app.kubernetes.io/name: {{ $fullName }}-dbmigrate
     app.kubernetes.io/component: dbmigrate
-    app.kubernetes.io/arch: {{ .Values.arch }}
   annotations:
     argocd.argoproj.io/hook: PreSync
 spec:
@@ -23,7 +22,6 @@ spec:
         app: {{ $fullName }}-dbmigrate
         app.kubernetes.io/name: {{ $fullName }}-dbmigrate
         app.kubernetes.io/component: dbmigrate
-        app.kubernetes.io/arch: {{ .Values.arch }}
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false

@@ -21,7 +21,6 @@ spec:
         app: "{{ $fullName }}-{{ .name }}"
         app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
         app.kubernetes.io/component: "{{ .name }}"
-        app.kubernetes.io/arch: {{ $.Values.arch }}
     spec:
       backoffLimit: 0
       template:
@@ -32,7 +31,6 @@ spec:
             app: "{{ $fullName }}-{{ .name }}"
             app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
             app.kubernetes.io/component: "{{ .name }}"
-            app.kubernetes.io/arch: {{ $.Values.arch }}
         spec:
           automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
           enableServiceLinks: false

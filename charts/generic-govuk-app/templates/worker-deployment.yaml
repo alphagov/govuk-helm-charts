@@ -9,7 +9,6 @@ metadata:
     app: {{ $fullName }}-worker
     app.kubernetes.io/name: {{ $fullName }}-worker
     app.kubernetes.io/component: worker
-    app.kubernetes.io/arch: {{ .Values.arch }}
 spec:
   replicas: {{ .Values.workerReplicaCount }}
   revisionHistoryLimit: 2
@@ -23,7 +22,6 @@ spec:
         app: {{ $fullName }}-worker
         app.kubernetes.io/name: {{ $fullName }}-worker
         app.kubernetes.io/component: worker
-        app.kubernetes.io/arch: {{ .Values.arch }}
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
