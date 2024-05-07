@@ -1,4 +1,3 @@
-{{- if ne .Values.govukEnvironment "staging" }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -117,4 +116,3 @@ spec:
                   # Upload file for checking mirror freshness
                   touch "/data/${WWW_DOMAIN}/last-updated.txt"
                   /s5cmd cp "/data/${WWW_DOMAIN}/last-updated.txt" "s3://${BUCKET_NAME}/${WWW_DOMAIN}/last-updated.txt"
-{{- end }}
