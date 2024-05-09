@@ -1237,16 +1237,6 @@ govukApplications:
         s3Directory: chat
         path: /app/public/assets/chat
       extraEnv:
-        - name: BASIC_AUTH_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: govuk-chat-basic-auth
-              key: username
-        - name: BASIC_AUTH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: govuk-chat-basic-auth
-              key: password
         - name: CHAT_API_USERNAME
           valueFrom:
             secretKeyRef:
