@@ -1267,6 +1267,21 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-rabbitmq
               key: RABBITMQ_URL
+        - name: OPENSEARCH_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-opensearch
+              key: url
+        - name: OPENSEARCH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-opensearch
+              key: username
+        - name: OPENSEARCH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-opensearch
+              key: password
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
