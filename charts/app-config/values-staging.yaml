@@ -2219,8 +2219,6 @@ govukApplications:
           value: govuk-staging-sitemaps
         - name: ELASTICSEARCH_URI
           value: *elasticsearch-uri
-        - name: ENABLE_LTR
-          value: "true"
         - name: LOG_LEVEL
           value: warn
         - name: GDS_SSO_OAUTH_ID
