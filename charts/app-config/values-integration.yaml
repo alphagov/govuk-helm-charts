@@ -1755,7 +1755,7 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "110"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "places-manager.{{ .Values.publishingDomainSuffix }}",
+                "places-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
           - name: places-manager.{{ .Values.k8sExternalDomainSuffix }}
