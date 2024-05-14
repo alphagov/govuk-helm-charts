@@ -1,3 +1,4 @@
+{{ if ne .Values.govukEnvironment "integration" }}
 # Temporary additional service name for places-manager/
 # imminence to allow a smooth switchover when we rename
 # the app. To be removed when the app is renamed fully
@@ -18,3 +19,4 @@ spec:
       targetPort: 8080
   selector:
     app: imminence
+{{ end }}
