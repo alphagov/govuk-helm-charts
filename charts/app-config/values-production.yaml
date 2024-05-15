@@ -1304,42 +1304,6 @@ govukApplications:
         - name: PUMA_TIMEOUT
           value: "300"
 
-  - name: imminence
-    helmValues:
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/group.order: "110"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-            [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "imminence.{{ .Values.publishingDomainSuffix }}"
-            ]}}]
-        hosts:
-          - name: imminence.{{ .Values.k8sExternalDomainSuffix }}
-      nginxClientMaxBodySize: *max-upload-size
-      nginxProxyReadTimeout: 60s
-      dbMigrationEnabled: true
-      workerEnabled: true
-      extraEnv:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: imminence-postgres
-              key: DATABASE_URL
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-imminence
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-imminence
-              key: oauth_secret
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
-
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
