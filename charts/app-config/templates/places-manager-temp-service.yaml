@@ -1,4 +1,4 @@
-{{ if ne .Values.govukEnvironment "integration" }}
+{{ if eq .Values.govukEnvironment "production" }}
 # Temporary additional service name for places-manager/
 # imminence to allow a smooth switchover when we rename
 # the app. To be removed when the app is renamed fully
