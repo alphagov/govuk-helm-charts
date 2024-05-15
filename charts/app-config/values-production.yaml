@@ -1112,6 +1112,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
+        - name: PLEK_SERVICE_PLACES_MANAGER_URI
+          value: 'http://imminence'
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
