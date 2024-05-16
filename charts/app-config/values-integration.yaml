@@ -1576,6 +1576,7 @@ govukApplications:
 
   - name: locations-api
     helmValues:
+      arch: arm64
       uploadAssets:
         enabled: false
       dbMigrationEnabled: true
