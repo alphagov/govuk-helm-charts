@@ -29,7 +29,7 @@
   "prometheusSpec":
     "externalUrl": "https://prometheus.eks.production.govuk.digital"
     "externalLabels":
-      - "environment": "production"
+      "environment": "production"
     "podAntiAffinity": "hard"
     "podDisruptionBudget":
       "enabled": true

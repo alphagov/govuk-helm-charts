@@ -29,7 +29,7 @@
   "prometheusSpec":
     "externalUrl": "https://prometheus.eks.staging.govuk.digital"
     "externalLabels":
-      - "environment": "staging"
+      "environment": "staging"
     "podAntiAffinity": "hard"
     "podDisruptionBudget":
       "enabled": true
