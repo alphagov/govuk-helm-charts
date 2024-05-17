@@ -2115,6 +2115,7 @@ govukApplications:
   - name: draft-router
     repoName: router
     helmValues:
+      arch: arm64
       rails:
         enabled: false
       sentry:
@@ -2685,6 +2686,7 @@ govukApplications:
   - name: draft-static
     repoName: static
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
