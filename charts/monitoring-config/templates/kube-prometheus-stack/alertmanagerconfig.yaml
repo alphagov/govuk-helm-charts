@@ -19,6 +19,9 @@ spec:
         - name: alertname
           value: SignonApiUserTokenExpirySoon
           matchType: =
+        - name: environment
+          value: integration|production
+          matchType: =~
       receiver: 'slack-signon-token-expiry'
       repeatInterval: 1d
       groupWait: 12h
