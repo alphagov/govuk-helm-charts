@@ -28,6 +28,8 @@
 "prometheus":
   "prometheusSpec":
     "externalUrl": "https://prometheus.eks.integration.govuk.digital"
+    "externalLabels":
+      - "environment": "integration"
     "podAntiAffinity": ""
     "podDisruptionBudget":
       "enabled": false
