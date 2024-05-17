@@ -1713,6 +1713,7 @@ govukApplications:
 
   - name: places-manager
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
