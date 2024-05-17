@@ -2716,6 +2716,7 @@ govukApplications:
 
   - name: short-url-manager
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
