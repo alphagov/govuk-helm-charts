@@ -2793,7 +2793,7 @@ govukApplications:
       cronTasks:
         - name: publish-finders
           task: "publishing_api:publish_finders"
-          schedule: "49 7 * * 1-5"
+          schedule: "55 8 * * 1-5"
       extraEnv:
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
