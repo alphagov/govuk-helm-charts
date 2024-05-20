@@ -932,6 +932,7 @@ govukApplications:
 
   - name: email-alert-frontend
     helmValues:
+      arch: arm64
       extraEnv:
         - name: SUBSCRIPTION_MANAGEMENT_ENABLED
           value: "yes"
