@@ -2400,6 +2400,7 @@ govukApplications:
 
   - name: search-v2-evaluator
     helmValues:
+      arch: arm64
       dbMigrationEnabled: false
       ingress:
         enabled: true
