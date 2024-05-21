@@ -956,6 +956,7 @@ govukApplications:
 
   - name: email-alert-service
     helmValues:
+      arch: arm64
       appEnabled: false
       podDisruptionBudget: {}
       rails:
