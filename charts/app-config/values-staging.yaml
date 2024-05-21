@@ -1226,6 +1226,88 @@ govukApplications:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
 
+  - name: govuk-chat
+    helmValues:
+      dbMigrationEnabled: true
+      workerEnabled: true
+      workers:
+        - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+          name: worker
+        - command: ['rake', 'message_queue:published_documents_consumer']
+          name: published-documents-consumer
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "95"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "chat.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: chat.{{ .Values.k8sExternalDomainSuffix }}
+      uploadAssets:
+        s3Directory: chat
+        path: /app/public/assets/chat
+      extraEnv:
+        - name: CHAT_API_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-chat-api
+              key: username
+        - name: CHAT_API_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-chat-api
+              key: password
+        - name: CHAT_API_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-chat-api
+              key: url
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-postgres
+              key: DATABASE_URL
+        - name: OPENAI_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-open-ai
+              key: access_token
+        - name: RABBITMQ_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-rabbitmq
+              key: RABBITMQ_URL
+        - name: OPENSEARCH_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-opensearch
+              key: url
+        - name: OPENSEARCH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-opensearch
+              key: username
+        - name: OPENSEARCH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-opensearch
+              key: password
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-chat
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-chat
+              key: oauth_secret
+        - name: REDIS_URL
+          value: redis://chat-redis.eks.staging.govuk-internal.digital
+
   - name: govuk-exporter
     chartPath: charts/govuk-exporter
     helmValues:
