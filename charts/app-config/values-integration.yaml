@@ -3124,6 +3124,7 @@ govukApplications:
 
   - name: govuk-replatform-test-app
     helmValues:
+      arch: arm64
       rails:
         enabled: false
       sentry:
