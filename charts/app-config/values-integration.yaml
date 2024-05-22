@@ -1607,6 +1607,7 @@ govukApplications:
 
   - name: manuals-publisher
     helmValues:
+      arch: arm64
       nginxClientMaxBodySize: *max-upload-size
       workerEnabled: true
       ingress:
