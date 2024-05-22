@@ -18,6 +18,7 @@ spec:
   backoffLimit: 1
   template:
     metadata: 
+      name: {{ $fullName }}-upload-assets
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 4 }}
         app: {{ $fullName }}-upload-assets
