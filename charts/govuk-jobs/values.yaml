@@ -29,6 +29,9 @@ images:
   SearchApiLearnToRank:
     repository: "search-api-learn-to-rank"
     tag: "release"
+  GovukMirror:
+    repository: "govuk-mirror"
+    tag: "release"
 
 govukMirrorSync:
   schedule: "0 0 * * *"
