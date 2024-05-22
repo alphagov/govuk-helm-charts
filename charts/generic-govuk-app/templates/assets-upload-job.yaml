@@ -17,6 +17,12 @@ spec:
   activeDeadlineSeconds: 900
   backoffLimit: 1
   template:
+    metadata: 
+      labels:
+        {{- include "generic-govuk-app.labels" . | nindent 4 }}
+        app: {{ $fullName }}-upload-assets
+        app.kubernetes.io/name: {{ $fullName }}-upload-assets
+        app.kubernetes.io/component: upload-assets
     spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
