@@ -1244,6 +1244,7 @@ govukApplications:
       - "content-store-postgresql-branch"
       - "search-api"
       - "search-api-learn-to-rank"
+      - "govuk-mirror"
     helmValues:
       govukMirrorSync:
         iamRoleArn: arn:aws:iam::696911096973:role/govuk-mirror-sync

@@ -1242,6 +1242,7 @@ govukApplications:
       - "govuk-dependency-checker"
       - "search-api"
       - "search-api-learn-to-rank"
+      - "govuk-mirror"
     helmValues:
       govukMirrorSync:
         iamRoleArn: arn:aws:iam::172025368201:role/govuk-mirror-sync
