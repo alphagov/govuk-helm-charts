@@ -1294,7 +1294,7 @@ govukApplications:
               name: signon-app-chat
               key: oauth_secret
         - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          value: redis://chat-redis.eks.integration.govuk-internal.digital
 
   - name: govuk-jobs
     chartPath: charts/govuk-jobs
