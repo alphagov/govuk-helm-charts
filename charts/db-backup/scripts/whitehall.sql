@@ -1,8 +1,5 @@
 -- sqlfluff:dialect:mysql
 
--- This is a SQL port of
--- https://github.com/alphagov/whitehall/blob/main/script/scrub-database
-
 SET @lipsum_line = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
 SET @lipsum_slug = 'lorem-ipsum-dolor-sit-amet-elit-';
 SET @lipsum_body
