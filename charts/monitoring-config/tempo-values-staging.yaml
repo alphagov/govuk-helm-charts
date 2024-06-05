@@ -1,0 +1,20 @@
+storage:
+  - trace:
+      - backend: s3
+        s3:
+          - bucket: govuk-staging-tempo
+            region: eu-west-1
+            endpoint: s3.dualstack.eu-west-1.amazonaws.com
+serviceAccount:
+  - name: tempo
+    annotations:
+      - eks.amazonaws.com/role-arn: "arn:aws:iam::696911096973:role/tempo-govuk"
+metricsGenerator:
+  - enabled: true
+    config:
+      - storage:
+          - remote_write:
+              - url: >
+                  http://prometheus-kube-prometheus-stack-prometheus-0.kube-prometheus-stack-prometheus:9090/api/v1/write
+              - url: >
+                  http://prometheus-kube-prometheus-stack-prometheus-1.kube-prometheus-stack-prometheus:9090/api/v1/write

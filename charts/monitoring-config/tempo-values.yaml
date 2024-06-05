@@ -1,0 +1,22 @@
+reportingEnabled: false
+ingester:
+  - persistence:
+      - enabled: true
+        size: 30Gi
+        storageClass: ebs-gp3
+metaMonitoring:
+  - serviceMonitor:
+      - enabled: true
+        namespace: monitoring
+traces:
+  - otlp:
+      - grpc:
+          - enabled: true
+        http:
+          - enabled: true
+overrides:
+  - '*':
+      - ingestion_burst_size_bytes: 20000000
+        metrics_generator_processors:
+          - service-graphs
+          - span-metrics
