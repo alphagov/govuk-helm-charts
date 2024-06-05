@@ -1216,6 +1216,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workerEnabled: true
       workers:
