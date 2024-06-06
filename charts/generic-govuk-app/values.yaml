@@ -75,6 +75,15 @@ nginxDenyCrawlers: false
 proxyRailsAssetsToS3: true
 serveRailsAssetsFromFilesystem: false
 
+clamavEnabled: false
+clamavImage:
+  repository: hub.docker.com/clamav/clamav
+  pullPolicy: Always
+  tag: stable
+clamavPort: 3310
+clamavConfigMap:
+  create: true
+
 appResources:
   limits:
     cpu: 1
@@ -106,6 +115,14 @@ nginxResources:
   requests:
     cpu: 50m
     memory: 512Mi
+
+clamavResources:
+  limits:
+    cpu: 1
+    memory: 4Gi
+  requests:
+    cpu: 500m
+    memory: 2Gi
 
 # dnsConfig is passed directly into the pod specs in the app and worker
 # deployment templates.

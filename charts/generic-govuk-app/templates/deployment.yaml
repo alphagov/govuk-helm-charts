@@ -180,6 +180,44 @@ spec:
             preStop:
               exec:
                 command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
+        {{- if .Values.clamavEnabled }}
+        - name: clamav
+          image: "{{ .Values.clamavImage.repository }}:{{ .Values.clamavImage.tag }}"
+          imagePullPolicy: {{ .Values.clamavImage.pullPolicy | default "Always" }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.clamavPort }}
+          livenessProbe: &clamav-probe
+            tcpSocket:
+              port: clamav
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 30
+          readinessProbe:
+            <<: *clamav-probe  # Intentionally same path as liveness.
+            failureThreshold: 2
+          startupProbe:
+            <<: *clamav-probe
+            failureThreshold: 15
+            periodSeconds: 5
+            timeoutSeconds: 2
+            initialDelaySeconds: 10
+          {{- with .Values.clamavResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+        volumeMounts:
+            - name: {{ .Values.clamavConfigMap.name | default (printf "%s-clamav-conf" $fullName) }}
+              mountPath: /etc/clamav/clamd.conf
+              subPath: clamd.conf
+            - name: clamav-tmp
+              mountPath: /tmp
+      {{- end }}
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
