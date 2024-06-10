@@ -1119,6 +1119,8 @@ govukApplications:
               key: bearer_token
         - name: WEB_CONCURRENCY
           value: '4'
+        - name: SLIMMER_WRAPPER_CHECK
+          value: 'true'
 
   - name: draft-frontend
     repoName: frontend
