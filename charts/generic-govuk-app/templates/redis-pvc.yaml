@@ -1,0 +1,19 @@
+{{ if .Values.redis.enabled }}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $fullName }}-redis
+  labels:
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: redis
+spec:
+  storageClassName: {{ .Values.redis.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.redis.storage }}
+{{ end }}

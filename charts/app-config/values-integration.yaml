@@ -1426,6 +1426,11 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &link-checker-redis redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *link-checker-redis
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -1457,9 +1462,6 @@ govukApplications:
             secretKeyRef:
               name: link-checker-api-postgres
               key: DATABASE_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-
   - name: local-links-manager
     helmValues:
       arch: arm64

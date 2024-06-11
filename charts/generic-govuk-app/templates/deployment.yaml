@@ -17,6 +17,7 @@ spec:
   selector:
     matchLabels:
       app: {{ $fullName }}
+      app.kubernetes.io/component: app
   template:
     metadata:
       labels:
@@ -94,6 +95,10 @@ spec:
                   key: dsn
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
+            {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: REDIS_URL
+              value: {{ .Values.redis.redisUrlOverride.app | default (printf "redis://%s-redis" $fullName) }}
             {{- end }}
             {{- with .Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
