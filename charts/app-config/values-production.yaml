@@ -904,8 +904,6 @@ govukApplications:
           value: &frontend-notify-template cb633abc-6ae6-4843-ae6f-82ca500b6de2
         - name: GOVUK_NOTIFY_RECIPIENTS
           value: '*'
-        - name: RAILS_LOG_LEVEL
-          value: warn
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: WEB_CONCURRENCY

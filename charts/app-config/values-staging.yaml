@@ -908,8 +908,6 @@ govukApplications:
           value: &frontend-notify-template 2844a647-6bf1-4b01-a25c-569d2cc00849
         - name: GOVUK_NOTIFY_RECIPIENTS
           value: email-alert-api-staging@digital.cabinet-office.gov.uk
-        - name: RAILS_LOG_LEVEL
-          value: warn
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: WEB_CONCURRENCY
