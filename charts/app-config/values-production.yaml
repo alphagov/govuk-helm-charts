@@ -547,7 +547,7 @@ govukApplications:
       cronTasks:
         - name: etl
           task: "etl:main"
-          schedule: "9 7 * * *"
+          schedule: "10 9 * * *"
       extraEnv:
         - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
           valueFrom:
