@@ -20,6 +20,27 @@ workers:
   - command: ["sidekiq", "-C", "config/sidekiq.yml"]
     name: worker
 
+# redis.enabled controls whether a Redis database is set up for the app
+# REDIS_URL is automatically set unless redis.redisUrlOverride values are provided
+redis:
+  enabled: false
+  image:
+    repository: redis
+    tag: "7.2"
+    pullPolicy: Always
+  storageClassName: ebs-gp3
+  storage: 10Gi
+  resources:
+    limits:
+      cpu: 1
+      memory: 1000Mi
+    requests:
+      cpu: 500m
+      memory: 500Mi
+  redisUrlOverride:
+    app: ""
+    workers: ""
+
 # dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
 dbMigrationEnabled: false
 dbMigrationCommand: ["rails", "db:migrate"]

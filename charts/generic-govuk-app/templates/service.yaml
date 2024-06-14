@@ -21,3 +21,4 @@ spec:
       targetPort: {{ .Values.nginxPort }}
   selector:
     app: {{ $fullName }}
+    app.kubernetes.io/component: app
