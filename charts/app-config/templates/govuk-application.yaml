@@ -21,7 +21,7 @@ spec:
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
     path: "{{ .chartPath | default "charts/generic-govuk-app" }}"
-    targetRevision: {{ .targetRevision | default "HEAD" }}
+    targetRevision: {{ .targetRevision | default "samsimpson1/redis" }}
     helm:
       # Environment-specific Helm values. These take precedence over the app
       # chart's values.yaml.
