@@ -6,8 +6,8 @@ metadata:
   name: {{ $fullName }}-redis
   labels:
     {{- include "generic-govuk-app.labels" . | nindent 4 }}
-    app: {{ $fullName }}
-    app.kubernetes.io/name: {{ $fullName }}
+    app: {{ $fullName }}-redis
+    app.kubernetes.io/name: {{ $fullName }}-redis
     app.kubernetes.io/component: redis
   annotations:
     reloader.stakater.com/auto: "true"
@@ -16,14 +16,14 @@ spec:
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: {{ $fullName }}
+      app: {{ $fullName }}-redis
       app.kubernetes.io/component: redis
   template:
     metadata:
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
-        app: {{ $fullName }}
-        app.kubernetes.io/name: {{ $fullName }}
+        app: {{ $fullName }}-redis
+        app.kubernetes.io/name: {{ $fullName }}-redis
         app.kubernetes.io/component: redis
     spec:
       automountServiceAccountToken: false
