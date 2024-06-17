@@ -86,6 +86,12 @@ cronjobs:
       operations:
         - op: backup
 
+    govuk-chat-postgres:
+      schedule: "47 23 * * *"
+      db: govuk_chat_production
+      operations:
+        - op: backup
+
     ckan-postgres:
       schedule: "43 4 * * *"
       db: ckan_production
@@ -255,6 +261,14 @@ cronjobs:
     authenticating-proxy-postgres:
       schedule: "23 1 * * 1-5"
       db: authenticating_proxy_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    govuk-chat-postgres:
+      schedule: "47 1 * * 1-5"
+      db: govuk_chat_production
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -515,6 +529,13 @@ cronjobs:
     authenticating-proxy-postgres:
       schedule: "23 3 * * 1-5"
       db: authenticating_proxy_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+
+    govuk-chat-postgres:
+      schedule: "47 3 * * 1-5"
+      db: govuk_chat_production
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
