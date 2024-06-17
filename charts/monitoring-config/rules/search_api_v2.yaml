@@ -1,16 +1,30 @@
 groups:
   - name: SearchApiV2
     rules:
+      # Immediate significant drop alert
       - alert: LowInvariantScore
-        expr: search_api_v2_quality_monitoring_score{dataset_type="invariants"} < 1
+        expr: search_api_v2_quality_monitoring_score{dataset_type="invariants"} < 0.9
+        for: 1m
         labels:
-          severity: warning
+          severity: critical
           destination: slack-search-team
         annotations:
           summary: Low invariant recall score for '{{ $labels.dataset_name }}'
           description: >-
-            Invariant dataset '{{ $labels.dataset_name }}' has dropped below 100% recall (i.e. the
-            expected results are not being returned for one or more queries in this dataset)
+            Invariant dataset '{{ $labels.dataset_name }}' has dropped below the critical threshold (0.9).
+
+      # Gradual decline alert
+      - alert: GradualDeclineInvariantScore
+        expr: (search_api_v2_quality_monitoring_score{dataset_type="invariants"} - search_api_v2_quality_monitoring_score{dataset_type="invariants"} offset 6h) / search_api_v2_quality_monitoring_score{dataset_type="invariants"} offset 6h < -0.02
+        for: 6h
+        labels:
+          severity: warning
+          destination: slack-search-team
+        annotations:
+          summary: Gradual decline in invariant recall score for '{{ $labels.dataset_name }}'
+          description: >-
+            Invariant dataset '{{ $labels.dataset_name }}' has shown a decline of more than 2% in recall score over the past 6 hours.
+
 
       - alert: HighQueryFailureRate
         expr: >-
