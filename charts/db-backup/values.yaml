@@ -86,7 +86,7 @@ cronjobs:
       operations:
         - op: backup
 
-    chat-postgres:
+    govuk-chat-postgres:
       schedule: "47 23 * * *"
       db: govuk_chat_production
       operations:
@@ -266,7 +266,7 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    chat-postgres:
+    govuk-chat-postgres:
       schedule: "47 1 * * 1-5"
       db: govuk_chat_production
       operations:
@@ -533,7 +533,7 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-    chat-postgres:
+    govuk-chat-postgres:
       schedule: "47 3 * * 1-5"
       db: govuk_chat_production
       operations:
