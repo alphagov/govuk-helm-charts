@@ -86,12 +86,6 @@ cronjobs:
       operations:
         - op: backup
 
-    govuk-chat-postgres:
-      schedule: "47 23 * * *"
-      db: govuk_chat_production
-      operations:
-        - op: backup
-
     ckan-postgres:
       schedule: "43 4 * * *"
       db: ckan_production
@@ -152,6 +146,12 @@ cronjobs:
     email-alert-api-postgres:
       schedule: "54 23 * * *"
       db: email-alert-api_production
+      operations:
+        - op: backup
+
+    govuk-chat-postgres:
+      schedule: "47 23 * * *"
+      db: govuk_chat_production
       operations:
         - op: backup
 
@@ -267,15 +267,6 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    govuk-chat-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
-      schedule: "47 1 * * 1-5"
-      db: govuk_chat_production
-      operations:
-        - op: restore
-          bucket: s3://govuk-production-database-backups
-        - op: backup
-
     ckan-postgres:
       suspend: true
       schedule: "43 1 * * 0"
@@ -371,6 +362,14 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: transform
           script: email-alert-api.sql
+        - op: backup
+
+    govuk-chat-postgres:
+      schedule: "47 1 * * 1-5"
+      db: govuk_chat_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
         - op: backup
 
     imminence-postgres:
@@ -557,13 +556,6 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
 
-    govuk-chat-postgres:
-      schedule: "47 3 * * 1-5"
-      db: govuk_chat_production
-      operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-
     ckan-postgres:
       suspend: true
       schedule: "43 3 * * 0"
@@ -644,6 +636,13 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
+
+    govuk-chat-postgres:
+      schedule: "47 3 * * 1-5"
+      db: govuk_chat_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
 
     imminence-postgres:
       schedule: "18 3 * * 1-5"
