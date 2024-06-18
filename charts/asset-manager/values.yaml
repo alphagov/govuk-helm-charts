@@ -25,6 +25,7 @@ podDisruptionBudget: {}
 
 workerReplicaCount: 1
 
+arch: amd64
 appImage:
   repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/asset-manager"
   tag: latest
