@@ -164,3 +164,13 @@ spec:
             preStop:
               exec:
                 command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
+      
