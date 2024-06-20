@@ -132,13 +132,13 @@ cronjobs:
 
     content-store-postgres:
       <<: *s5cmd-ram-workaround
-      schedule: "06 21 * * *"  # Keep this before publishing-api.
+      schedule: "06 21 * * *"  # Keep this the same as publishing-api.
       db: content_store_production
       operations:
         - op: backup
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
-      schedule: "16 21 * * *"  # Keep this before publishing-api.
+      schedule: "06 21 * * *"  # Keep this the same as publishing-api.
       db: draft_content_store_production
       operations:
         - op: backup
@@ -181,7 +181,7 @@ cronjobs:
 
     publishing-api-postgres:
       <<: *s5cmd-ram-workaround
-      schedule: "36 21 * * *"
+      schedule: "06 21 * * *"  # Keep this the same as Content Store.
       db: publishing_api_production
       operations:
         - op: backup
@@ -337,7 +337,7 @@ cronjobs:
       <<: *s5cmd-ram-workaround
       suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       db: content_store_production
-      schedule: "06 22 * * 1-5"
+      schedule: "36 5 * * 1-5"  # Keep this the same as Publishing API.
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -346,7 +346,7 @@ cronjobs:
       <<: *s5cmd-ram-workaround
       suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       db: draft_content_store_production
-      schedule: "16 22 * * 1-5"
+      schedule: "36 5 * * 1-5"  # Keep this the same as Publishing API.
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -411,7 +411,7 @@ cronjobs:
     publishing-api-postgres:
       <<: *s5cmd-ram-workaround
       suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
-      schedule: "36 1 * * 1-5"
+      schedule: "36 5 * * 1-5"  # Keep this the same as Content Store.
       db: publishing_api_production
       operations:
         - op: restore
@@ -613,7 +613,7 @@ cronjobs:
     content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: content_store_production
-      schedule: "06 23 * * 1-5"
+      schedule: "36 5 * * 1-5"  # Keep this the same as Publishing API.
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -623,7 +623,7 @@ cronjobs:
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: draft_content_store_production
-      schedule: "16 23 * * 1-5"
+      schedule: "36 5 * * 1-5"  # Keep this the same as Publishing API.
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -674,7 +674,7 @@ cronjobs:
 
     publishing-api-postgres:
       <<: *s5cmd-ram-workaround
-      schedule: "36 5 * * 1-5"
+      schedule: "36 5 * * 1-5"  # Keep this the same as Content Store.
       db: publishing_api_production
       operations:
         - op: restore
