@@ -20,6 +20,9 @@ spec:
       image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
       imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
       command: ["freshclam"]
+      args:
+        - "--foreground"
+        - "--stdout"
       {{ with .Values.freshclamResources }}
       resources:
         {{- . | toYaml | trim | nindent 8 }}
