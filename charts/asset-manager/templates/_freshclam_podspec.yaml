@@ -28,6 +28,8 @@ spec:
         {{- . | toYaml | trim | nindent 8 }}
       {{ end }}
       volumeMounts:
+        - name: clam-tmp
+          mountPath: /tmp
         - name: clam-virus-db
           mountPath: /var/lib/clamav
         - name: etc-clamav
@@ -36,6 +38,8 @@ spec:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
   volumes:
+    - name: clam-tmp
+      emptyDir: {}
     - name: clam-virus-db
       nfs:
         server: "{{ .Values.assetManagerNFS }}"
