@@ -15,8 +15,8 @@ metricsGenerator:
     storage:
       remote_write:
         - url: >-
-            http://prometheus-kube-prometheus-stack-prometheus-0.kube-prometheus-stack-prometheus:9090/api/v1/write
+            http://prometheus-kube-prometheus-stack-prometheus-0.prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
         - url: >-
-            http://prometheus-kube-prometheus-stack-prometheus-1.kube-prometheus-stack-prometheus:9090/api/v1/write
+            http://prometheus-kube-prometheus-stack-prometheus-1.prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
         - url: >-
-            http://prometheus-kube-prometheus-stack-prometheus-2.kube-prometheus-stack-prometheus:9090/api/v1/write
+            http://prometheus-kube-prometheus-stack-prometheus-2.prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
