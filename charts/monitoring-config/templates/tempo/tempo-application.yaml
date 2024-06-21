@@ -1,0 +1,27 @@
+{{ $baseValues := fromYaml (.Files.Get "tempo-values.yaml") }}
+{{ $envValues := fromYaml (.Files.Get (printf "tempo-values-%s.yaml" .Values.govukEnvironment)) }}
+{{ $mergedValues := toYaml (merge $envValues $baseValues) }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tempo
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+spec:
+  project: default
+  source:
+    {{- include "monitoring-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://grafana.github.io/helm-charts" "chart" "tempo-distributed") )
+        | nindent 4 }}
+    helm:
+      values: |
+        {{ $mergedValues | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.monitoringNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
