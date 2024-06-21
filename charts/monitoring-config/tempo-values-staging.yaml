@@ -14,7 +14,7 @@ metricsGenerator:
   config:
     storage:
       remote_write:
-        - url: >
+        - url: >-
             http://prometheus-kube-prometheus-stack-prometheus-0.kube-prometheus-stack-prometheus:9090/api/v1/write
-        - url: >
+        - url: >-
             http://prometheus-kube-prometheus-stack-prometheus-1.kube-prometheus-stack-prometheus:9090/api/v1/write
