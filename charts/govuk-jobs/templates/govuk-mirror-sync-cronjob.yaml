@@ -114,5 +114,5 @@ spec:
                   /s5cmd sync --size-only "/data/${ASSETS_DOMAIN}" "s3://${BUCKET_NAME}/"
 
                   # Upload file for checking mirror freshness
-                  date "+%Y-%m-%d %H:%M:%S" > "/data/${WWW_DOMAIN}/last-updated.txt"
+                  date --iso-8601=seconds > "/data/${WWW_DOMAIN}/last-updated.txt"
                   /s5cmd cp "/data/${WWW_DOMAIN}/last-updated.txt" "s3://${BUCKET_NAME}/${WWW_DOMAIN}/last-updated.txt"
