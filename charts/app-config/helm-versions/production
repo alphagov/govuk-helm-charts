@@ -1,5 +1,5 @@
 # $repo_url $chart_name: "$chart_version"
-https://kubernetes-sigs.github.io/aws-ebs-csi-driver aws-ebs-csi-driver: "2.31.0"
+https://kubernetes-sigs.github.io/aws-ebs-csi-driver aws-ebs-csi-driver: "2.32.0"
 https://kubernetes.github.io/autoscaler cluster-autoscaler: "9.37.0"
 https://charts.dexidp.io dex: "0.18.0"
 https://kubernetes-sigs.github.io/external-dns external-dns: "1.14.5"
