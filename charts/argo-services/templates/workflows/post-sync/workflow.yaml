@@ -17,6 +17,14 @@ spec:
       - name: application
       - name: repoName
       - name: imageTag
+  podSpecPatch: |
+    containers:
+      - name: main
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 256Mi
   templates:
     - name: handle-sync-event
       dag:
