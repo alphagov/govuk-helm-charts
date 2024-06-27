@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{- include "smokey.name" . -}}
+  name: {{ include "smokey.name" . }}
   labels:
     {{- include "smokey.labels" . | nindent 4 }}
     app: {{ .name }}
