@@ -3,7 +3,12 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ .name }}
+  name: {{ include "smokey.name" $ }}
+  labels:
+    {{- include "smokey.labels" $ | nindent 4 }}
+    app: {{ .name }}
+    app.kubernetes.io/name: {{ .name }}
+    app.kubernetes.io/component: {{ .name }}
 spec:
   concurrencyPolicy: Allow
   failedJobsHistoryLimit: 3
@@ -12,6 +17,11 @@ spec:
   jobTemplate:
     metadata:
       name: {{ .name }}
+      labels:
+        {{- include "smokey.labels" $ | nindent 8 }}
+        app: {{ .name }}
+        app.kubernetes.io/name: {{ .name }}
+        app.kubernetes.io/component: {{ .name }}
     spec:
       activeDeadlineSeconds: 600
       backoffLimit: 0
@@ -99,4 +109,13 @@ spec:
             {{- with .extraEnv }}
               {{- . | toYaml | nindent 12 }}
             {{- end }}
+          {{- if eq "arm64" $.Values.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ $.Values.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ $.Values.arch }}
+          {{- end }}
 {{- end }}
