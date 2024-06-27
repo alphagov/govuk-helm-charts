@@ -3,9 +3,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "smokey.name" . }}
+  name: {{ include "smokey.name" $ }}
   labels:
-    {{- include "smokey.labels" . | nindent 4 }}
+    {{- include "smokey.labels" $ | nindent 4 }}
     app: {{ .name }}
     app.kubernetes.io/name: {{ .name }}
     app.kubernetes.io/component: {{ .name }}
@@ -18,7 +18,7 @@ spec:
     metadata:
       name: {{ .name }}
       labels:
-        {{- include "smokey.labels" . | nindent 8 }}
+        {{- include "smokey.labels" $ | nindent 8 }}
         app: {{ .name }}
         app.kubernetes.io/name: {{ .name }}
         app.kubernetes.io/component: {{ .name }}
@@ -109,13 +109,13 @@ spec:
             {{- with .extraEnv }}
               {{- . | toYaml | nindent 12 }}
             {{- end }}
-          {{- if eq "arm64" .Values.arch }}
+          {{- if eq "arm64" $.Values.arch }}
           tolerations:
             - key: arch
               operator: Equal
-              value: {{ .Values.arch }}
+              value: {{ $.Values.arch }}
               effect: NoSchedule
           nodeSelector:
-            kubernetes.io/arch: {{ .Values.arch }}
+            kubernetes.io/arch: {{ $.Values.arch }}
           {{- end }}
 {{- end }}
