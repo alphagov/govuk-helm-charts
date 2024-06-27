@@ -7,6 +7,9 @@ spec:
   arguments:
     parameters:
       - name: extra-args
+  workflowMetadata:
+    labels:
+      {{- include "smokey.labels" . | nindent 6 }}
   templates:
     - name: smoke-test
       inputs:
@@ -66,3 +69,12 @@ spec:
             value: "/tmp/.chrome"
           - name: XDG_CACHE_HOME
             value: "/tmp/.chrome"
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}

@@ -2641,6 +2641,8 @@ govukApplications:
 
   - name: smokey
     chartPath: charts/smokey
+    helmValues:
+      arch: arm64
 
   - name: static
     helmValues:
