@@ -259,7 +259,6 @@ cronjobs:
 
   staging:
     authenticating-proxy-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "23 1 * * 1-5"
       db: authenticating_proxy_production
       operations:
@@ -285,7 +284,6 @@ cronjobs:
         - op: backup
 
     collections-publisher-mysql:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "21 1 * * 1-5"
       db: collections_publisher_production
       operations:
@@ -294,7 +292,6 @@ cronjobs:
         - op: backup
 
     contacts-admin-mysql:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "49 1 * * 1-5"
       db: contacts_production
       operations:
@@ -303,7 +300,6 @@ cronjobs:
         - op: backup
 
     content-data-admin-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "4 1 * * 1-5"
       db: content_data_admin_production
       operations:
@@ -312,7 +308,6 @@ cronjobs:
         - op: backup
 
     content-data-api-postgresql-primary:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "35 1 * * 6"
       host: blue-content-data-api-postgresql-primary-postgres
       db: content_performance_manager_production
@@ -323,7 +318,6 @@ cronjobs:
         - op: backup
 
     content-publisher-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "9 1 * * 1-5"
       db: content_publisher_production
       operations:
@@ -335,7 +329,6 @@ cronjobs:
 
     content-store-postgres:
       <<: *s5cmd-ram-workaround
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       db: content_store_production
       schedule: "06 22 * * 1-5"
       operations:
@@ -344,7 +337,6 @@ cronjobs:
         - op: backup
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       db: draft_content_store_production
       schedule: "16 22 * * 1-5"
       operations:
@@ -353,7 +345,6 @@ cronjobs:
         - op: backup
 
     content-tagger-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "31 1 * * 1-5"
       db: content_tagger_production
       operations:
@@ -362,7 +353,6 @@ cronjobs:
         - op: backup
 
     email-alert-api-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "54 1 * * 1-5"
       db: email-alert-api_production
       operations:
@@ -373,7 +363,6 @@ cronjobs:
         - op: backup
 
     imminence-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "18 1 * * 1-5"
       db: imminence_production
       operations:
@@ -382,7 +371,6 @@ cronjobs:
         - op: backup
 
     link-checker-api-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "43 1 * * 1-5"
       db: link_checker_api_production
       operations:
@@ -391,7 +379,6 @@ cronjobs:
         - op: backup
 
     local-links-manager-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "8 1 * * 1-5"
       db: local-links-manager_production
       operations:
@@ -400,7 +387,6 @@ cronjobs:
         - op: backup
 
     locations-api-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "32 1 * * 1-5"
       db: locations_api_production
       operations:
@@ -410,7 +396,6 @@ cronjobs:
 
     publishing-api-postgres:
       <<: *s5cmd-ram-workaround
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "36 1 * * 1-5"
       db: publishing_api_production
       operations:
@@ -430,7 +415,6 @@ cronjobs:
 
     router-mongo:
       <<: *mongo-resources
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "23 0 * * 1-5"
       operations:
         - op: restore
@@ -445,7 +429,6 @@ cronjobs:
           db: router
 
     search-admin-mysql:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "56 1 * * 1-5"
       db: search_admin_production
       operations:
@@ -454,7 +437,6 @@ cronjobs:
         - op: backup
 
     service-manual-publisher-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "49 1 * * 1-5"
       db: service-manual-publisher_production
       operations:
@@ -464,7 +446,6 @@ cronjobs:
 
     shared-documentdb:
       <<: *mongo-resources
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "13 1 * * 1-5"
       operations:
         - op: restore
@@ -502,7 +483,6 @@ cronjobs:
           db: govuk_assets_production
 
     signon-mysql:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "3 1 * * 1-5"
       db: signon_production
       operations:
@@ -510,7 +490,6 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
 
     support-api-postgres:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "38 1 * * 1-5"
       db: support_contacts_production
       operations:
@@ -519,7 +498,6 @@ cronjobs:
         - op: backup
 
     transition-postgresql-primary:
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "24 1 * * 1-5"
       db: transition_production
       dbms: postgres
@@ -530,7 +508,6 @@ cronjobs:
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
-      suspend: true  # Temporarily suspended to preview history mode (richard.towers 2024-06-17)
       schedule: "28 1 * * 1-5"
       db: whitehall_production
       operations:
