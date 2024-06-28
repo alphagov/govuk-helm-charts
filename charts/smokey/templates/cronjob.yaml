@@ -102,6 +102,12 @@ spec:
               value: "{{ $.Values.appImage.tag }}"
             - name: SE_CACHE_PATH
               value: "/tmp/.cache/selenium"
+            - name: SE_AVOID_STATS
+              value: true
+            - name: SE_AVOID_BROWSER_DOWNLOAD
+              value: true
+            - name: SE_OS
+              value: "linux"
             - name: XDG_CONFIG_HOME
               value: "/tmp/.chrome"
             - name: XDG_CACHE_HOME
@@ -110,6 +116,8 @@ spec:
               {{- . | toYaml | nindent 12 }}
             {{- end }}
           {{- if eq "arm64" $.Values.arch }}
+            - name: SE_ARCH
+              value: arm64
           tolerations:
             - key: arch
               operator: Equal
