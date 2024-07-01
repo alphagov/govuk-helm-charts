@@ -135,6 +135,7 @@ govukApplications:
   - name: asset-manager
     chartPath: charts/asset-manager
     helmValues:
+      arch: arm64
       workerEnabled: true
       ingress:
         enabled: true
