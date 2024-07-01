@@ -103,9 +103,9 @@ spec:
             - name: SE_CACHE_PATH
               value: "/tmp/.cache/selenium"
             - name: SE_AVOID_STATS
-              value: true
+              value: "true"
             - name: SE_AVOID_BROWSER_DOWNLOAD
-              value: true
+              value: "true"
             - name: SE_OS
               value: linux
             - name: XDG_CONFIG_HOME
