@@ -107,17 +107,19 @@ spec:
             - name: SE_AVOID_BROWSER_DOWNLOAD
               value: true
             - name: SE_OS
-              value: "linux"
+              value: linux
             - name: XDG_CONFIG_HOME
               value: "/tmp/.chrome"
             - name: XDG_CACHE_HOME
               value: "/tmp/.chrome"
+            {{- if eq "arm64" $.Values.arch }}
+            - name: SE_ARCH
+              value: arm64
+            {{- end }}
             {{- with .extraEnv }}
               {{- . | toYaml | nindent 12 }}
             {{- end }}
           {{- if eq "arm64" $.Values.arch }}
-            - name: SE_ARCH
-              value: arm64
           tolerations:
             - key: arch
               operator: Equal
