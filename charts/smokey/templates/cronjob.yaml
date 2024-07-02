@@ -26,6 +26,13 @@ spec:
       activeDeadlineSeconds: 600
       backoffLimit: 0
       template:
+        metadata:
+          name: {{ .name }}
+          labels:
+            {{- include "smokey.labels" $ | nindent 12 }}
+            app: {{ .name }}
+            app.kubernetes.io/name: {{ .name }}
+            app.kubernetes.io/component: {{ .name }}
         spec:
           automountServiceAccountToken: false
           enableServiceLinks: false
