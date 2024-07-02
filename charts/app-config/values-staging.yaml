@@ -1313,6 +1313,8 @@ govukApplications:
       extraEnv:
         - name: MIRROR_FRESHNESS_URL
           value: https://www.{{ .Values.externalDomainSuffix }}/last-updated.txt
+        - name: MIRROR_AVAILABILITY_URL
+          value: https://www.{{ .Values.externalDomainSuffix }}
         - name: BACKENDS
           value: "mirrorS3,mirrorGCS"
 
