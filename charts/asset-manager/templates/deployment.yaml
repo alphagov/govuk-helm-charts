@@ -27,6 +27,8 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
+        seccompProfile:
+          type: RuntimeDefault
         fsGroup: &old-ec2-deploy-uid 2899
         runAsUser: 1001
         runAsGroup: 1001
@@ -119,6 +121,8 @@ spec:
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
             readOnlyRootFilesystem: true
             # Asset Manager shares an NFS volume with its EC2 counterpart.
             runAsUser: *old-ec2-deploy-uid
@@ -159,6 +163,8 @@ spec:
             {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
             readOnlyRootFilesystem: true
           lifecycle:
             preStop:
