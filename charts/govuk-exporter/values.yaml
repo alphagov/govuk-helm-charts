@@ -27,6 +27,8 @@ resources:
 extraEnv:
   - name: MIRROR_FRESHNESS_URL
     value: ""
+  - name: MIRROR_AVAILABILITY_URL
+    value: ""
   - name: BACKENDS
     value: ""
   - name: REFRESH_INTERVAL
