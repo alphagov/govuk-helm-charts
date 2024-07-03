@@ -51,13 +51,10 @@ spec:
             {{- end }}
             image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
             name: {{ .name }}
+            {{- with $.Values.appResources }}
             resources:
-              limits:
-                cpu: "2"
-                memory: 2Gi
-              requests:
-                cpu: "1"
-                memory: 2Gi
+              {{- . | toYaml | trim | nindent 14 }}
+            {{- end }}
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true

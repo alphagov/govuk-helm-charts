@@ -17,6 +17,14 @@ appImage:
   repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smokey
   tag: latest
 
+appResources:
+  limits:
+    cpu: "2"
+    memory: 2Gi
+  requests:
+    cpu: "1"
+    memory: 2Gi
+
 externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.
   deletionPolicy: Delete
