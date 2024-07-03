@@ -8,5 +8,6 @@ OUTPUT_PATH=/tmp/output
 mkdir -p "${OUTPUT_PATH}"
 cd "${OUTPUT_PATH}"
 curl --fail-early -fo '#1.html' "${SERVICE}/templates/{${ERROR_PAGES_COMMA_SEPARATED}}.html.erb"
+touch healthcheck.html
 eval ls "{$ERROR_PAGES_COMMA_SEPARATED}.html" || (echo Failed to download one or more files.; exit 1)
 aws s3 sync . "s3://govuk-app-assets-${GOVUK_ENVIRONMENT}/error_pages/"
