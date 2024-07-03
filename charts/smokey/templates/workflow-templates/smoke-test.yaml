@@ -69,13 +69,10 @@ spec:
             value: "/tmp/.chrome"
           - name: XDG_CACHE_HOME
             value: "/tmp/.chrome"
+        {{- with .Values.appResources }}
         resources:
-          limits:
-            cpu: "2"
-            memory: 2Gi
-          requests:
-            cpu: "1"
-            memory: 2Gi
+          {{- . | toYaml | trim | nindent 10 }}
+        {{- end }}
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
