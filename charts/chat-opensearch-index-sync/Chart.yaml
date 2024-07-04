@@ -1,0 +1,5 @@
+apiVersion: v2
+name: chat-opensearch-index-sync
+description: Cronjobs for copying Opensearch indices from prod to non-prod
+type: application
+version: 1.0.0
