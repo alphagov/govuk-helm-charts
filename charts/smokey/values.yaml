@@ -23,7 +23,7 @@ appResources:
     memory: 2Gi
   requests:
     cpu: "1"
-    memory: 2Gi
+    memory: 1Gi
 
 externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.
