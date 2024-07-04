@@ -12,6 +12,7 @@ spec:
       {{- include "smokey.labels" . | nindent 6 }}
   templates:
     - name: smoke-test
+      podSpecPatch: '{"containers":[{"name":"main","resources":{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":1,"memory":"1Gi"}}}]}'
       inputs:
         parameters:
           - name: extra-args
@@ -65,10 +66,20 @@ spec:
                 key: password
           - name: SE_CACHE_PATH
             value: "/tmp/.cache/selenium"
+          - name: SE_AVOID_STATS
+              value: "true"
+          - name: SE_AVOID_BROWSER_DOWNLOAD
+            value: "true"
+          - name: SE_OS
+            value: linux
           - name: XDG_CONFIG_HOME
             value: "/tmp/.chrome"
           - name: XDG_CACHE_HOME
             value: "/tmp/.chrome"
+          {{- if eq "arm64" .Values.arch }}
+          - name: SE_ARCH
+            value: arm64
+          {{- end }}
         {{- with .Values.appResources }}
         resources:
           {{- . | toYaml | trim | nindent 10 }}

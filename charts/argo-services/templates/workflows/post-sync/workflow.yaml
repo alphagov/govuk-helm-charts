@@ -22,11 +22,10 @@ spec:
       - name: main
         resources:
           limits:
-            memory: 512Mi
-          requests:
-            memory: 256Mi
+            memory: 2Gi
   templates:
     - name: handle-sync-event
+      podSpecPatch: '{"containers":[{"name":"main","resources":{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":1,"memory":"1Gi"}}}]}'
       dag:
         tasks:
           - name: smoke-test
