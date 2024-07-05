@@ -1878,6 +1878,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      workerReplicaCount: 6
       workerResources:
         limits:
           cpu: 4000m
