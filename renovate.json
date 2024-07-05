@@ -35,7 +35,8 @@
         "kube-prometheus-stack",
         "oauth2-proxy",
         "prometheus-pushgateway",
-        "reloader"
+        "reloader",
+        "tempo-distributed"
       ],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
