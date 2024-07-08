@@ -1,5 +1,0 @@
-# This is a placeholder to prevent licensify promotion check failures during
-# post sync workflow for licensify-frontend, licensify-feed and licensify-backend.
-# The workflow expects the image tag file name to match the ArgoCD App name.
-automatic_deploys_enabled: false
-promote_deployment: false
