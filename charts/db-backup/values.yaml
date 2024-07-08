@@ -334,6 +334,8 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
+        - op: transform
+          script: content-store.sql
         - op: backup
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
@@ -342,6 +344,8 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
+        - op: transform
+          script: content-store.sql
         - op: backup
 
     content-tagger-postgres:
