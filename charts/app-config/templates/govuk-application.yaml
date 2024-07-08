@@ -39,7 +39,11 @@ spec:
         {{- end }}
         {{- else }}
         appImage:
+          {{- if .useImagePullThroughCache }}
+          repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/{{ $reponame }}
+          {{- else }}
           repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ $reponame }}
+          {{- end }}
           tag: {{ $imageTag }}
           pullPolicy: {{ .appImagePullPolicy | default "IfNotPresent" }}
         {{- end }}
