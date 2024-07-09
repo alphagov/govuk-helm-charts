@@ -26,10 +26,7 @@ spec:
         spec:
           enableServiceLinks: false
           securityContext:
-            fsGroup: {{ .Values.securityContext.runAsGroup }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-            runAsUser: {{ .Values.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
           restartPolicy: Never
           containers:
             - name: main
@@ -49,6 +46,5 @@ spec:
                 {{- . | toYaml | trim | nindent 16 }}
               {{- end }}
               securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
+                {{- toYaml $.Values.securityContext | nindent 16 }}
 {{- end }}

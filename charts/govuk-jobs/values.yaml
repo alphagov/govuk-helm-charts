@@ -1,11 +1,21 @@
 # ⚠️ DEPRECATED; please do not add new jobs to this chart. See README.md for
 # better alternatives.
 
-securityContext:
+podSecurityContext:
+  fsGroup: 1001
+  fsGroupChangePolicy: OnRootMismatch
   runAsNonRoot: true
-  allowPrivilegeEscalation: false
   runAsUser: 1001
   runAsGroup: 1001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1001
+
 resources:
   limits:
     cpu: 1
