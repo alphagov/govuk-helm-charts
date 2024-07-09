@@ -1301,26 +1301,10 @@ govukApplications:
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
     imageValues:
-      - "content-store"
-      - "content-store-postgresql-branch"
-      - "search-api"
-      - "search-api-learn-to-rank"
-      - "govuk-mirror"
+      - govuk-mirror
     helmValues:
       govukMirrorSync:
         iamRoleArn: arn:aws:iam::210287912431:role/govuk-mirror-sync
-      learnToRank:
-        elasticsearchUri: &elasticsearch-uri
-          https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
-        trainingInstance:
-          type: ml.c5.xlarge
-          count: '1'
-        deployInstance:
-          type: ml.t2.medium
-          count: '2'
-        sageMakerImage: 210287912431.dkr.ecr.eu-west-1.amazonaws.com/search
-        sagemakerIamRole: arn:aws:iam::210287912431:role/learn-to-rank-sagemaker
-        serviceAccountIamRole: arn:aws:iam::210287912431:role/search-api-learn-to-rank-govuk
 
   - name: hmrc-manuals-api
     helmValues:
@@ -2287,7 +2271,8 @@ govukApplications:
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
           value: govuk-integration-sitemaps
         - name: ELASTICSEARCH_URI
-          value: *elasticsearch-uri
+          value:
+            https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
           value: warn
         - name: SEARCH_INDEX

@@ -13,51 +13,14 @@ resources:
   requests:
     cpu: 0.1
     memory: 800Mi
+
 images:
-  ContentStore:
-    repository: "content-store"
-    tag: "release"
-  ContentStorePostgresqlBranch:
-    repository: "content-store-postgresql-branch"
-    tag: "release"
   GovukDependencyChecker:
-    repository: "govuk-dependency-checker"
-    tag: "release"
-  SearchApi:
-    repository: "search-api"
-    tag: "release"
-  SearchApiLearnToRank:
-    repository: "search-api-learn-to-rank"
-    tag: "release"
+    repository: govuk-dependency-checker
+    tag: release
   GovukMirror:
-    repository: "govuk-mirror"
-    tag: "release"
+    repository: govuk-mirror
+    tag: release
 
 govukMirrorSync:
-  schedule: "0 0 * * *"
-
-learnToRank:
-  elasticsearchUri: ""
-  trainingInstance:
-    type: ""
-    count: '1'
-  deployInstance:
-    type: ""
-    count: '1'
-  sageMakerImage: ""
-  sagemakerIamRole: ""
-  serviceAccountIamRole: ""
-
-draftContentStoreMongoPostgresCron:
-  schedule: ""
-  mongoExport:
-    mongoDbUri: ""
-  postgresImport:
-    databaseUrlSecretName: "draft-content-store-postgres"
-
-contentStoreMongoPostgresCron:
-  schedule: ""
-  mongoExport:
-    mongoDbUri: ""
-  postgresImport:
-    databaseUrlSecretName: "content-store-postgres"
+  schedule: "1 43 * * *"
