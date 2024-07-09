@@ -1,0 +1,55 @@
+# Default values for chat-opensearch-index-sync.
+
+nameOverride: ""
+fullnameOverride: ""
+imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/toolbox"
+
+# govukEnvironment determines which set of cronjobs to use from `cronjobs`
+# below. When running under Argo CD, the ../app-config chart passes the
+# appropriate value for govukEnvironment by default.
+govukEnvironment: staging
+
+cronjobs:
+  production:
+    - name: snapshot
+      schedule: "12 1 * * *"
+      args: [create_and_clean_up]
+  staging:
+    - name: copy-from-prod  # These names have to be fairly short :(
+      schedule: "12 2 * * *"
+      args: [restore_latest]
+      extraEnv:
+        - name: SNAPSHOT_REPO
+          value: govuk-production
+    - name: snapshot
+      schedule: "12 3 * * *"
+      args: [create_and_clean_up]
+  integration:
+    - name: copy-from-stag
+      schedule: "12 4 * * *"
+      args: [restore_latest]
+      extraEnv:
+        - name: SNAPSHOT_REPO
+          value: govuk-staging
+
+podSecurityContext:
+  fsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1001
+
+resources:
+  limits:
+    cpu: 50m
+    memory: 64Mi
+  requests:
+    cpu: 10m
+    memory: 32Mi

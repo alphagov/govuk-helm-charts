@@ -286,6 +286,11 @@ govukApplications:
             proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
           }
 
+  - name: chat-opensearch-index-sync
+    # See ../chat-opensearch-index-sync/values.yaml for job configuration.
+    chartPath: charts/chat-opensearch-index-sync
+    postSyncWorkflowEnabled: "false"
+
   - name: collections
     helmValues:
       arch: arm64
