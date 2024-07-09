@@ -33,4 +33,4 @@ images:
     tag: release
 
 govukMirrorSync:
-  schedule: "1 43 * * *"
+  schedule: "43 1 * * *"
