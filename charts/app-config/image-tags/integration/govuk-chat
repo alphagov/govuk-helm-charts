@@ -1,3 +1,3 @@
-image_tag: fc704d7e5094af4f06cfc7f39e1d3bd00e99136f
-promote_deployment: false
+image_tag: v220
+promote_deployment: true
 automatic_deploys_enabled: true
