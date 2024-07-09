@@ -1322,26 +1322,10 @@ govukApplications:
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
     imageValues:
-      - "content-store"
-      - "content-store-postgresql-branch"
-      - "search-api"
-      - "search-api-learn-to-rank"
-      - "govuk-mirror"
+      - govuk-mirror
     helmValues:
       govukMirrorSync:
         iamRoleArn: arn:aws:iam::696911096973:role/govuk-mirror-sync
-      learnToRank:
-        elasticsearchUri: &elasticsearch-uri
-          https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com
-        trainingInstance:
-          type: ml.c5.xlarge
-          count: '1'
-        deployInstance:
-          type: ml.c5.large
-          count: '4'
-        sageMakerImage: 696911096973.dkr.ecr.eu-west-1.amazonaws.com/search
-        sagemakerIamRole: arn:aws:iam::696911096973:role/learn-to-rank-sagemaker
-        serviceAccountIamRole: arn:aws:iam::696911096973:role/search-api-learn-to-rank-govuk
 
   - name: hmrc-manuals-api
     helmValues:
@@ -2300,7 +2284,8 @@ govukApplications:
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
           value: govuk-staging-sitemaps
         - name: ELASTICSEARCH_URI
-          value: *elasticsearch-uri
+          value:
+            https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
           value: warn
         - name: GDS_SSO_OAUTH_ID

@@ -1319,27 +1319,11 @@ govukApplications:
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
     imageValues:
-      - "content-store"
-      - "content-store-postgresql-branch"
-      - "govuk-dependency-checker"
-      - "search-api"
-      - "search-api-learn-to-rank"
-      - "govuk-mirror"
+      - govuk-dependency-checker
+      - govuk-mirror
     helmValues:
       govukMirrorSync:
         iamRoleArn: arn:aws:iam::172025368201:role/govuk-mirror-sync
-      learnToRank:
-        elasticsearchUri: &elasticsearch-uri
-          https://vpc-blue-elasticsearch6-domain-2hnib7uydv3tgebhabx74gdelq.eu-west-1.es.amazonaws.com
-        trainingInstance:
-          type: ml.c5.xlarge
-          count: '1'
-        deployInstance:
-          type: ml.c5.large
-          count: '6'
-        sageMakerImage: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/search
-        sagemakerIamRole: arn:aws:iam::172025368201:role/learn-to-rank-sagemaker
-        serviceAccountIamRole: arn:aws:iam::172025368201:role/search-api-learn-to-rank-govuk
 
   - name: govuk-sli-collector
     chartPath: charts/govuk-sli-collector
@@ -2313,7 +2297,8 @@ govukApplications:
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
           value: govuk-production-sitemaps
         - name: ELASTICSEARCH_URI
-          value: *elasticsearch-uri
+          value:
+            https://vpc-blue-elasticsearch6-domain-2hnib7uydv3tgebhabx74gdelq.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
           value: warn
         - name: GDS_SSO_OAUTH_ID

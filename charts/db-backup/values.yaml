@@ -15,12 +15,6 @@ extraEnv:
   - name: VERBOSE
     value: "1"
 
-podSecurityContext:
-  fsGroup: 1001
-  runAsNonRoot: true
-  runAsUser: 1001
-  runAsGroup: 1001
-
 resources:
   limits:
     cpu: 2000m
@@ -43,6 +37,12 @@ _mongoResources: &mongo-resources
       memory: 1280Mi
     requests:
       memory: 768Mi
+
+podSecurityContext:
+  fsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
 
 securityContext:
   allowPrivilegeEscalation: false
