@@ -68,7 +68,7 @@ spec:
         - name: environment
         - name: repoName
       script:
-        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/toolbox:latest
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
         command: [/bin/bash]
         env:
           - name: ENVIRONMENT

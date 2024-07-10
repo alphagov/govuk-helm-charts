@@ -34,7 +34,11 @@ spec:
           {{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.govukEnvironment . ) | fromYaml }}
           {{- $imageTag := $imageTagConfig.image_tag }}
           {{ camelcase . }}:
+            {{- if ne $.Values.govukEnvironment "production" }}
+            repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/{{ . }}
+            {{- else }}
             repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/{{ . }}
+            {{- end }}
             tag: {{ $imageTag }}
         {{- end }}
         {{- else }}

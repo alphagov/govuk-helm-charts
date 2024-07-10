@@ -3,7 +3,7 @@
 nameOverride: ""
 fullnameOverride: ""
 # https://github.com/alphagov/govuk-infrastructure/tree/main/images/toolbox
-imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/toolbox"
+imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox"
 
 externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.
