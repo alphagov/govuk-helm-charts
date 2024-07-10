@@ -51,7 +51,7 @@ spec:
               drop: ["ALL"]
       containers:
         - name: upload-assets
-          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/toolbox:latest
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
           command:
             - aws
             - s3

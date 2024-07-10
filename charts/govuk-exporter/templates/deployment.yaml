@@ -26,7 +26,7 @@ spec:
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
       containers:
         - name: app
-          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/govuk-exporter:latest 
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-exporter:latest 
           imagePullPolicy: "Always"
           securityContext:
             allowPrivilegeEscalation: false

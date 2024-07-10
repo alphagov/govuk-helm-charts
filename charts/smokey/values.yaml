@@ -14,7 +14,7 @@ cronJobs:
 
 arch: amd64
 appImage:
-  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/smokey
+  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/smokey
   tag: latest
 
 appResources:

@@ -30,7 +30,7 @@ spec:
           emptyDir: {}
       containers:
         - name: upload-static-error-pages
-          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/toolbox:latest
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

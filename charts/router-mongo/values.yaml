@@ -2,7 +2,7 @@
 
 nameOverride: ""
 fullnameOverride: ""
-imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/mongodb"
+imageRef: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/mongodb"
 govukEnvironment: staging
 
 args:
