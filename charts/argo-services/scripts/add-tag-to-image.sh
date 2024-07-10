@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Add pull-through cache prefix
+REPOSITORY_NAME="github/alphagov/govuk/${REPOSITORY_NAME}"
+
 # Check if image is already tagged
 TAG_EXISTS=$(aws ecr describe-images \
   --registry-id "${AWS_ACCOUNT}" \
