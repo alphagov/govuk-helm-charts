@@ -28,20 +28,6 @@ spec:
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
                 - name: promoteDeployment
                   value: "{{"{{workflow.parameters.promoteDeployment}}"}}"
-        - - name: add-deployed-to-tag
-            templateRef:
-              name: add-tag-to-image
-              template: add-tag-to-image
-            arguments:
-              parameters:
-                - name: awsAccount
-                  value: "{{ .Values.awsAccountId }}"
-                - name: repositoryName
-                  value: "{{"{{workflow.parameters.repoName}}"}}"
-                - name: referenceTag
-                  value: "{{"{{workflow.parameters.imageTag}}"}}"
-                - name: newTag
-                  value: "deployed-to-{{"{{workflow.parameters.environment}}"}}"
           - name: record-deployment-in-release
             templateRef:
               name: notify-release
