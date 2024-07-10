@@ -1912,7 +1912,6 @@ govukApplications:
           value: "true"
 
   - name: release
-    useImagePullThroughCache: true
     helmValues:
       arch: arm64
       dbMigrationEnabled: true
