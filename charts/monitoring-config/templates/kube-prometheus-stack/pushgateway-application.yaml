@@ -11,6 +11,8 @@ spec:
         | nindent 4 }}
     helm:
       values: |
+        serviceMonitor:
+          enabled: true
         resources:
           requests:
             cpu: 50m
