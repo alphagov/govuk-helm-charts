@@ -96,7 +96,7 @@ cleanup () {
 }
 
 create_and_clean_up () {
-  SNAPSHOT_NAME=$(date +%Y-%m-%d%H:%M:%S)-elasticsearch6 create
+  SNAPSHOT_NAME=$(date +%Y-%m-%d%H:%M:%S)-$SUBDOMAIN create
   SNAPSHOT_REPO="govuk-$GOVUK_ENVIRONMENT" cleanup
 }
 
@@ -111,8 +111,8 @@ if ! echo '[true]' | jq -e '.[-1]' >/dev/null 2>&1; then
   exit 69  # EX_UNAVAILABLE
 fi
 
-if [[ -n "$GOVUK_ENVIRONMENT" ]]; then
-  : "${ES_URL:=https://elasticsearch6.$GOVUK_ENVIRONMENT.govuk-internal.digital}"
+if [[ -n "$GOVUK_ENVIRONMENT" && -n "$SUBDOMAIN" ]]; then
+  : "${ES_URL:=https://$SUBDOMAIN.$GOVUK_ENVIRONMENT.govuk-internal.digital}"
   : "${SNAPSHOT_REPO:=govuk-$GOVUK_ENVIRONMENT}"
 fi
 

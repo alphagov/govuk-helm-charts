@@ -1,12 +1,12 @@
 {{- $_ := .Values.govukEnvironment | required "govukEnvironment is required" }}
 {{- $fullName := include "search-index-env-sync.fullname" . }}
-{{- range get .Values.cronjobs .Values.govukEnvironment }}
-  {{- $jobName := printf "%s-%s" $fullName .name }}
+{{- range $jobName, $job := get .Values.cronjobs .Values.govukEnvironment }}
+  {{- $jobFullName := printf "%s-%s" $fullName $jobName }}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ $jobName }}
+  name: {{ $jobFullName }}
   labels:
     {{- include "search-index-env-sync.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $jobName }}
@@ -23,10 +23,10 @@ metadata:
       These jobs are not involved in making backups for disaster recovery
       purposes; those are handled separately within AWS Managed Elasticsearch.
 spec:
-  schedule: {{ .schedule | quote }}
+  schedule: {{ $job.schedule | quote }}
   jobTemplate:
     metadata:
-      name: {{ $jobName }}
+      name: {{ $jobFullName }}
       labels:
         {{- include "search-index-env-sync.selectorLabels" $ | nindent 8 }}
         app.kubernetes.io/component: {{ $jobName }}
@@ -34,7 +34,7 @@ spec:
       backoffLimit: 0
       template:
         metadata:
-          name: {{ $jobName }}
+          name: {{ $jobFullName }}
           labels:
             {{- include "search-index-env-sync.selectorLabels" $ | nindent 12 }}
             app.kubernetes.io/component: {{ $jobName }}
@@ -54,13 +54,13 @@ spec:
               command:
                 - /opt/bin/snapshot
               args:
-                {{- toYaml .args | nindent 16 }}
+                {{- toYaml $job.args | nindent 16 }}
               env:
                 - name: GOVUK_ENVIRONMENT
                   value: {{ $.Values.govukEnvironment | required "govukEnvironment is required" }}
                 - name: VERBOSE
                   value: "1"
-                {{- with .extraEnv }}
+                {{- with $job.extraEnv }}
                   {{- toYaml . | nindent 16 }}
                 {{- end }}
               resources:
