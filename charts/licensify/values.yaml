@@ -1,5 +1,7 @@
 # Default values for licensify chart.
 
+arch: amd64
+
 securityContext:
   runAsNonRoot: true
   allowPrivilegeEscalation: false

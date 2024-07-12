@@ -131,4 +131,13 @@ spec:
               subPath: nginx.conf
             - name: nginx-tmp
               mountPath: /tmp
+      {{- if eq "arm64" $.Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ $.Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ $.Values.arch }}
+      {{- end }}
 {{- end }}
