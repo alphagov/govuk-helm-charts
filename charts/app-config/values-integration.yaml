@@ -1356,6 +1356,7 @@ govukApplications:
       - "licensify-feed"
       - "licensify-frontend"
     helmValues:
+      arch: arm64
       assetManagerNFS: *assets-nfs
       apps:
         licensifyAdmin:
