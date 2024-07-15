@@ -11,26 +11,66 @@ govukEnvironment: staging
 
 cronjobs:
   production:
-    - name: snapshot
+    blue-es6-snapshot:  # This would be too long as blue-elasticsearch6-domain-snapshot
       schedule: "21 1 * * *"
       args: [create_and_clean_up]
+      extraEnv:
+        - name: SUBDOMAIN
+          value: elasticsearch6
+    chat-engine-snapshot:
+      schedule: "12 1 * * *"
+      args: [create_and_clean_up]
+      extraEnv:
+        - name: SUBDOMAIN
+          value: chat-opensearch
+
   staging:
-    - name: copy-from-prod  # These names have to be fairly short :(
+    blue-es6-cp-prod:  # This would be too long as blue-elasticsearch6-domain-cp-prod
       schedule: "37 1 * * *"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
           value: govuk-production
-    - name: snapshot
+        - name: SUBDOMAIN
+          value: elasticsearch6
+    blue-es6-snapshot:  # This would be too long as blue-elasticsearch6-domain-snapshot
       schedule: "37 2 * * *"
       args: [create_and_clean_up]
+      extraEnv:
+        - name: SUBDOMAIN
+          value: elasticsearch6
+    chat-engine-cp-prod:
+      schedule: "12 2 * * *"
+      args: [restore_latest]
+      extraEnv:
+        - name: SNAPSHOT_REPO
+          value: govuk-production
+        - name: SUBDOMAIN
+          value: chat-opensearch
+    chat-engine-snapshot:
+      schedule: "12 3 * * *"
+      args: [create_and_clean_up]
+      extraEnv:
+        - name: SUBDOMAIN
+          value: chat-opensearch
+
   integration:
-    - name: copy-from-stag
+    blue-es6-cp-stag:  # This would be too long as blue-elasticsearch6-domain-cp-stag
       schedule: "17 6 * * *"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
           value: govuk-staging
+        - name: SUBDOMAIN
+          value: elasticsearch6
+    chat-engine-cp-stag:
+      schedule: "12 4 * * *"
+      args: [restore_latest]
+      extraEnv:
+        - name: SNAPSHOT_REPO
+          value: govuk-staging
+        - name: SUBDOMAIN
+          value: chat-opensearch
 
 podSecurityContext:
   fsGroup: 1001
