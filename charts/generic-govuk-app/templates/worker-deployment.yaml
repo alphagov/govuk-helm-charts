@@ -9,6 +9,8 @@ metadata:
     app: {{ $fullName }}-worker
     app.kubernetes.io/name: {{ $fullName }}-worker
     app.kubernetes.io/component: worker
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.workerReplicaCount }}
   revisionHistoryLimit: 2
