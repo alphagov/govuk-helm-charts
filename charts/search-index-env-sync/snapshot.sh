@@ -122,7 +122,11 @@ fi
 : "${REQUEST_DEADLINE_SECONDS:=900}"  # Keep this > ES's 30s timeout to preserve error messages.
 readonly GOVUK_ENVIRONMENT ES_URL SNAPSHOTS_TO_KEEP REQUEST_DEADLINE_SECONDS
 
-curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body"
+if [[ -n $SEARCH_USERNAME && -n $SEARCH_PASSWORD ]]; then
+  curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body -u \"$SEARCH_USERNAME:$SEARCH_PASSWORD\""
+else
+  curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body"
+fi
 
 [[ "${VERBOSE:-0}" -ge 1 ]] && set -x
 $subcommand
