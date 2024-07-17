@@ -120,10 +120,12 @@ fi
 : "${SNAPSHOT_REPO:?required}"
 : "${SNAPSHOTS_TO_KEEP:=1}"
 : "${REQUEST_DEADLINE_SECONDS:=900}"  # Keep this > ES's 30s timeout to preserve error messages.
+: "${SEARCH_USERNAME:=}"
+: "${SEARCH_PASSWORD:=}"
 readonly GOVUK_ENVIRONMENT ES_URL SNAPSHOTS_TO_KEEP REQUEST_DEADLINE_SECONDS
 
 if [[ -n $SEARCH_USERNAME && -n $SEARCH_PASSWORD ]]; then
-  curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body -u \"$SEARCH_USERNAME:$SEARCH_PASSWORD\""
+  curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body -u $SEARCH_USERNAME:$SEARCH_PASSWORD"
 else
   curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body"
 fi
