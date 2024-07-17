@@ -1,0 +1,20 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: search-admin-google-cloud-discovery-engine-configuration
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Configuration for Google Cloud Discovery Engine for search-admin
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: search-admin-google-cloud-discovery-engine-configuration
+  dataFrom:
+    - extract:
+        key: govuk/search-admin/google-cloud-discovery-engine-configuration

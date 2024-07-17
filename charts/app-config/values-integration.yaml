@@ -2210,6 +2210,21 @@ govukApplications:
           value: *publishing-design-system-gtm-auth
         - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
           value: *publishing-design-system-gtm-preview
+        - name: GOOGLE_CLOUD_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: search-admin-google-cloud-discovery-engine-configuration
+              key: GOOGLE_CLOUD_CREDENTIALS
+        - name: DISCOVERY_ENGINE_ENGINE
+          valueFrom:
+            secretKeyRef:
+              name: search-admin-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_ENGINE
+        - name: DISCOVERY_ENGINE_SERVING_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: search-admin-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_SERVING_CONFIG
 
   - name: search-api
     helmValues:
