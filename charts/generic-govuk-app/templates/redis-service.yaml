@@ -5,8 +5,8 @@ kind: Service
 metadata:
   name: {{ $fullName }}-redis
   labels:
-    app: {{ $fullName }}
-    app.kubernetes.io/name: {{ $fullName }}
+    app: {{ $fullName }}-redis
+    app.kubernetes.io/name: {{ $fullName }}-redis
     app.kubernetes.io/component: redis
 spec:
   type: NodePort
@@ -15,6 +15,6 @@ spec:
       port: 6379
       targetPort: 6379
   selector:
-    app: {{ $fullName }}
+    app: {{ $fullName }}-redis
     app.kubernetes.io/component: redis
 {{ end }}
