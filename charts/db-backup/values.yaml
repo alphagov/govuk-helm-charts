@@ -9,6 +9,8 @@ externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.
   deletionPolicy: Delete
 
+arch: amd64
+
 extraEnv:
   - name: GOGC
     value: "30"

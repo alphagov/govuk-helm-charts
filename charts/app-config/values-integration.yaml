@@ -746,6 +746,7 @@ govukApplications:
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
     helmValues:
+      arch: arm64
       # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/db_backup_s3.tf
       serviceAccount:
         annotations:

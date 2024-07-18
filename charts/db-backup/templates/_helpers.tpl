@@ -49,6 +49,7 @@ Selector labels
 app: {{ include "db-backup.name" . }}
 app.kubernetes.io/name: {{ include "db-backup.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 {{- end }}
 
 {{/*
