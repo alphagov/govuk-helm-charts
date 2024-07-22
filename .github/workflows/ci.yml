@@ -42,7 +42,7 @@ jobs:
             -kubernetes-version ${{ env.KUBERNETES_VERSION }}
             -schema-location default
             -schema-location
-            "https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
+            "https://alphagov.github.io/govuk-crd-library/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
             -summary
             helm-dist
 
