@@ -115,6 +115,7 @@ spec:
                   readOnly: true
                 - name: tmp
                   mountPath: /tmp
+  {{- end }}
           {{- if eq "arm64" $.Values.arch }}
           tolerations:
             - key: arch
@@ -124,5 +125,4 @@ spec:
           nodeSelector:
             kubernetes.io/arch: {{ $.Values.arch }}
           {{- end }}
-  {{- end }}
 {{- end }}
