@@ -1,0 +1,5 @@
+apiVersion: v2
+name: GOV.UK E2E Tests
+description: A Helm chart for GOV.UK E2E Tests
+type: application
+version: 0.1.0

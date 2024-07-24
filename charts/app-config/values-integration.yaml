@@ -1298,6 +1298,15 @@ govukApplications:
         - name: REDIS_URL
           value: redis://chat-redis.eks.integration.govuk-internal.digital
 
+  - name: govuk-e2e-tests
+    chartPath: charts/govuk-e2e-tests
+    helmValues:
+      arch: arm64
+      cronJobs:
+        - name: govuk-e2e-tests
+          schedule: "*/10 7-19 * * 1-5"
+          project: chromium
+
   - name: govuk-jobs
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
