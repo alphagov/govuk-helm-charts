@@ -139,7 +139,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
+                command: ["sleep", "60"] # To allow time for ALB to deregister pod before termination
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
@@ -183,7 +183,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
+                command: ["sleep", "60"] # To allow time for ALB to deregister pod before termination
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
