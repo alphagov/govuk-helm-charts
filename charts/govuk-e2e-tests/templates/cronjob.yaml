@@ -1,0 +1,105 @@
+{{- range .Values.cronJobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "govuk-e2e-tests.labels" $ | nindent 4 }}
+    app: {{ .name }}
+    app.kubernetes.io/name: {{ .name }}
+    app.kubernetes.io/component: {{ .name }}
+spec:
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 3
+  schedule: {{ .schedule | quote }}
+  jobTemplate:
+    metadata:
+      name: {{ .name }}
+      labels:
+        {{- include "govuk-e2e-tests.labels" $ | nindent 8 }}
+        app: {{ .name }}
+        app.kubernetes.io/name: {{ .name }}
+        app.kubernetes.io/component: {{ .name }}
+    spec:
+      activeDeadlineSeconds: 600
+      backoffLimit: 0
+      template:
+        metadata:
+          name: {{ .name }}
+          labels:
+            {{- include "govuk-e2e-tests.labels" $ | nindent 12 }}
+            app: {{ .name }}
+            app.kubernetes.io/name: {{ .name }}
+            app.kubernetes.io/component: {{ .name }}
+        spec:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          restartPolicy: Never
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+          volumes:
+          - emptyDir: {}
+            name: tmp
+          - emptyDir: {}
+            name: app-tmp
+          containers:
+          - command:
+            - yarn
+            args:
+            - playwright
+            - test
+            - --reporter=list
+            - --workers=2
+            - --project={{ .project }}
+            image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+            name: {{ .name }}
+            {{- with $.Values.appResources }}
+            resources:
+              {{- . | toYaml | trim | nindent 14 }}
+            {{- end }}
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]
+            volumeMounts:
+            - mountPath: /tmp
+              name: tmp
+            - mountPath: /app/tmp
+              name: app-tmp
+            env:
+            - name: YARN_CACHE_FOLDER
+              value: /tmp/.cache/yarn
+            - name: PUBLIC_DOMAIN
+              value: www.{{ $.Values.externalDomainSuffix }}
+            - name: PUBLISHING_DOMAIN
+              value: {{ $.Values.publishingDomainSuffix }}
+            - name: SIGNON_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  key: email
+                  name: smokey-signon-account
+            - name: SIGNON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: smokey-signon-account
+            {{- with .extraEnv }}
+              {{- . | toYaml | nindent 12 }}
+            {{- end }}
+          {{- if eq "arm64" $.Values.arch }}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: {{ $.Values.arch }}
+              effect: NoSchedule
+          nodeSelector:
+            kubernetes.io/arch: {{ $.Values.arch }}
+          {{- end }}
+{{- end }}

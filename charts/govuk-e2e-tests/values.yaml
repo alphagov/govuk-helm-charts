@@ -1,0 +1,19 @@
+externalDomainSuffix: www.test.publishing.service.gov.uk
+publishingDomainSuffix: test.publishing.service.gov.uk
+
+cronJobs:
+  - name: govuk-e2e-tests
+    schedule: "*/10 7-19 * * 1-5"
+
+arch: amd64
+appImage:
+  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-e2e-tests
+  tag: latest
+
+appResources:
+  limits:
+    cpu: "2"
+    memory: 2Gi
+  requests:
+    cpu: "1"
+    memory: 1Gi
