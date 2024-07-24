@@ -538,6 +538,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     chat-postgres:
       schedule: "47 3 * * 1-5"
@@ -545,6 +546,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     ckan-postgres:
       suspend: true
@@ -553,6 +555,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     collections-publisher-mysql:
       schedule: "21 3 * * 1-5"
@@ -560,6 +563,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     contacts-admin-mysql:
       schedule: "49 3 * * 1-5"
@@ -567,6 +571,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     content-data-admin-postgres:
       schedule: "4 3 * * 1-5"
@@ -574,6 +579,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     content-data-api-postgresql-primary:
       suspend: true
@@ -584,6 +590,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     content-publisher-postgres:
       schedule: "9 3 * * 1-5"
@@ -618,6 +625,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     email-alert-api-postgres:
       schedule: "54 3 * * 1-5"
@@ -633,6 +641,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     link-checker-api-postgres:
       schedule: "43 3 * * 1-5"
@@ -640,6 +649,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     local-links-manager-postgres:
       schedule: "8 3 * * 1-5"
@@ -647,6 +657,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     locations-api-postgres:
       schedule: "32 3 * * 1-5"
@@ -654,6 +665,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     publishing-api-postgres:
       <<: *s5cmd-ram-workaround
@@ -670,6 +682,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     router-mongo:
       <<: *mongo-resources
@@ -690,6 +703,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     service-manual-publisher-postgres:
       schedule: "49 3 * * 1-5"
@@ -697,6 +711,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     shared-documentdb:
       <<: *mongo-resources
@@ -765,6 +780,7 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
@@ -773,3 +789,4 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
