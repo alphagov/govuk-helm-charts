@@ -1,9 +1,19 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "search-index-env-sync.fullname" . }}
+  name: {{ include "search-index-env-sync.fullname" . }}-script
   labels:
     {{- include "search-index-env-sync.labels" . | nindent 4 }}
 data:
   snapshot: |
     {{- $.Files.Get "snapshot.sh" | trim | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "search-index-env-sync.fullname" . }}-config
+  labels:
+    {{- include "search-index-env-sync.labels" . | nindent 4 }}
+data:
+  configfile: |
+    -u $USERNAME:$PASSWORD

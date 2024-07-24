@@ -125,7 +125,7 @@ fi
 readonly GOVUK_ENVIRONMENT ES_URL SNAPSHOTS_TO_KEEP REQUEST_DEADLINE_SECONDS
 
 if [[ -n $SEARCH_USERNAME && -n $SEARCH_PASSWORD ]]; then
-  curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body -u $SEARCH_USERNAME:$SEARCH_PASSWORD"
+  curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body --config /opt/etc/configfile"
 else
   curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body"
 fi
