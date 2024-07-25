@@ -46,12 +46,8 @@ spec:
           volumes:
             - name: scripts
               configMap:
-                name: {{ $fullName }}-script
+                name: {{ $fullName }}
                 defaultMode: 0555  # world-executable
-            - name: configs
-              configMap:
-                name: {{ $fullName }}-config
-                defaultMode: 0444
           containers:
             - name: main
               image: {{ $.Values.imageRef | quote }}
@@ -74,8 +70,5 @@ spec:
               volumeMounts:
                 - name: scripts
                   mountPath: /opt/bin
-                  readOnly: true
-                - name: configs
-                  mountPath: /opt/etc
                   readOnly: true
 {{- end }}
