@@ -102,7 +102,7 @@ spec:
 
         *Environment:* {{ .Values.govukEnvironment }}
 
-        *Mirror*: {{ "{{ $labels.backend }}" }}
+        *Mirror*: {{ "{{ .Labels.backend }}" }}
       apiURL: *slack_api_url
   - name: 'generic-slack-platform-engineering'
     slackConfigs:
