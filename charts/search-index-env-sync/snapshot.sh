@@ -28,27 +28,27 @@ EOF
 create () {
   : "${SNAPSHOT_NAME:?required}"
   local result
-  result=$($curl -XPUT "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME?wait_for_completion=true")
+  result=$(curl -XPUT "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME?wait_for_completion=true")
   echo "$result" | jq
   echo "$result" | jq -r .snapshot.state | grep -Fx "SUCCESS"
 }
 
 delete () {
   local result
-  result=$($curl -XDELETE "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME")
+  result=$(curl -XDELETE "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME")
   echo "$result" | jq -e .acknowledged >/dev/null
 }
 
 # List all snapshots in ascending date order (as returned by ES).
 list () {
-  $curl "$ES_URL/_snapshot/$SNAPSHOT_REPO/_all" | jq -e '.snapshots'
+  curl "$ES_URL/_snapshot/$SNAPSHOT_REPO/_all" | jq -e '.snapshots'
 }
 
 # Enable or disable automatic index creation on insert.
 # usage: set_auto_create_index true|false
 set_auto_create_index () {
   # TODO: use curl --json once available (requires curl >= 7.82).
-  $curl -XPUT "$ES_URL/_cluster/settings" -H 'Content-Type: application/json' \
+  curl -XPUT "$ES_URL/_cluster/settings" -H 'Content-Type: application/json' \
     -d '{ "persistent": { "action.auto_create_index": "'"$1"'" } }' >&2
 }
 
@@ -64,11 +64,11 @@ restore () {
   set_auto_create_index false
   trap 'set_auto_create_index true' EXIT HUP INT TERM
 
-  $curl -XDELETE "$ES_URL/*,-.*" >&2  # Delete all except system indices.
+  curl -XDELETE "$ES_URL/*,-.*" >&2  # Delete all except system indices.
   local result
   result=$(
     # TODO: use curl --json once available.
-    $curl -XPOST -H'Content-Type: application/json' -d'{"indices": "*,-.*"}' \
+    curl -XPOST -H'Content-Type: application/json' -d'{"indices": "*,-.*"}' \
       "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME/_restore"
   )
 
@@ -125,9 +125,9 @@ fi
 readonly GOVUK_ENVIRONMENT ES_URL SNAPSHOTS_TO_KEEP REQUEST_DEADLINE_SECONDS
 
 if [[ -n $SEARCH_USERNAME && -n $SEARCH_PASSWORD ]]; then
-  curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body --config /opt/etc/configfile"
+  alias curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body -u $SEARCH_USERNAME:$SEARCH_PASSWORD"
 else
-  curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body"
+  alias curl="curl -Ssm$REQUEST_DEADLINE_SECONDS --fail-with-body"
 fi
 
 [[ "${VERBOSE:-0}" -ge 1 ]] && set -x
