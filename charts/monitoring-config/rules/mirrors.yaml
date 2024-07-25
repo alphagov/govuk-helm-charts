@@ -8,6 +8,8 @@ groups:
       - alert: MirrorFreshnessAlert
         expr: |
           global:govuk_mirror_freshness_seconds > 172800
+        labels:
+          severity: warning
         annotations:
           summary: Mirror freshness has exceeded two days
           description: >-
