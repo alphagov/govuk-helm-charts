@@ -28,6 +28,7 @@ tests:
         exp_alerts:
           - exp_labels:
               backend: backend1
+              severity: warning
             exp_annotations:
               summary: Mirror freshness has exceeded two days
               description: The mirror hasn't been updated in more than two days
