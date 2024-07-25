@@ -65,7 +65,7 @@ spec:
                 - name: DISALLOWED_URL_RULES
                   value: '/apply-for-a-licence(/|$),/business-finance-support(/|$),/drug-device-alerts\.atom,/drug-safety-update\.atom,/foreign-travel-advice\.atom,/government/announcements\.atom,/government/publications\.atom,/government/statistics\.atom,/licence-finder/,/search(/|$),\.csv/preview$'
                 - name: CONCURRENCY
-                  value: "30"
+                  value: "15"
                 - name: RATE_LIMIT_TOKEN
                   valueFrom:
                     secretKeyRef:
