@@ -1223,8 +1223,8 @@ govukApplications:
       workers:
         - command: ["sidekiq", "-C", "config/sidekiq.yml"]
           name: worker
-        - command: ['rake', 'message_queue:published_documents_consumer']
-          name: published-documents-consumer
+        # - command: ['rake', 'message_queue:published_documents_consumer']
+        #   name: published-documents-consumer
       ingress:
         enabled: true
         annotations:
