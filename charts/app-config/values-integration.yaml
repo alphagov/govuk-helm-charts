@@ -1322,6 +1322,15 @@ govukApplications:
         - name: govuk-e2e-tests-mirror-gcs
           schedule: "*/30 7-19 * * 1-5"
           project: mirrorGCS
+        - name: govuk-e2e-tests-mirror-cloudfront
+          schedule: "*/30 7-19 * * 1-5"
+          project: cloudfront
+          extraEnv:
+            - name: PUBLIC_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  key: FAILOVER_CDN_HOST
+                  name: smokey-failover-cdn-host
 
   - name: govuk-jobs
     chartPath: charts/govuk-jobs
