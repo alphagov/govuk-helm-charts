@@ -1260,6 +1260,11 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-postgres
               key: DATABASE_URL
+        - name: GOVUK_NOTIFY_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-notify
+              key: GOVUK_NOTIFY_API_KEY
         - name: OPENAI_ACCESS_TOKEN
           valueFrom:
             secretKeyRef:
