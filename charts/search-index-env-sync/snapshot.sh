@@ -126,7 +126,9 @@ readonly GOVUK_ENVIRONMENT ES_URL SNAPSHOTS_TO_KEEP REQUEST_DEADLINE_SECONDS
 
 if [[ -n $SEARCH_USERNAME && -n $SEARCH_PASSWORD ]]; then
   mycurl () {
+    set +x
     curl -Ssm"$REQUEST_DEADLINE_SECONDS" --fail-with-body -u "$SEARCH_USERNAME:$SEARCH_PASSWORD" "$@"
+    [[ "${VERBOSE:-0}" -ge 1 ]] && set -x
   }
 else
   mycurl () {
