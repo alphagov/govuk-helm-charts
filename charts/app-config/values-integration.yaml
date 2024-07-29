@@ -1313,24 +1313,6 @@ govukApplications:
         - name: govuk-e2e-tests
           schedule: "*/10 7-19 * * 1-5"
           project: chromium
-        - name: govuk-e2e-tests-mirror-s3
-          schedule: "*/30 7-19 * * 1-5"
-          project: mirrorS3
-        - name: govuk-e2e-tests-mirror-s3-replica
-          schedule: "*/30 7-19 * * 1-5"
-          project: mirrorS3Replica
-        - name: govuk-e2e-tests-mirror-gcs
-          schedule: "*/30 7-19 * * 1-5"
-          project: mirrorGCS
-
-  - name: govuk-jobs
-    chartPath: charts/govuk-jobs
-    postSyncWorkflowEnabled: "false"
-    imageValues:
-      - govuk-mirror
-    helmValues:
-      govukMirrorSync:
-        iamRoleArn: arn:aws:iam::210287912431:role/govuk-mirror-sync
 
   - name: hmrc-manuals-api
     helmValues:
