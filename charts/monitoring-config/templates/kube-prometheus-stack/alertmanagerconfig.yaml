@@ -137,18 +137,19 @@ spec:
     slackConfigs:
     - channel: '#govuk-search-improvement'
       sendResolved: true
-      iconEmoji: '{{ if eq .Status "firing" }}:warning:{{ else }}:white_check_mark:{{ end }}'
-      color: '{{ if eq .Status "firing" }}#FFFF00{{ else }}#36a64f{{ end }}'
-      title: Quality monitoring warning
-      text: >-
+      iconEmoji: '{{ `{{ if eq .Status "firing" }}:warning:{{ else }}:white_check_mark:{{ end }}` }}'
+      color: '{{ `{{ if eq .Status "firing" }}#FFFF00{{ else }}#36a64f{{ end }}` }}'
+      title: '{{ `{{ if eq .Status "firing" }}Quality monitoring warning{{ else }}Quality monitoring issues resolved{{ end }}` }}'
+      text: |-
+        {{ `{{ "[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ len .Alerts.Firing }}{{ end }}]" }}
         {{ if eq .Status "firing" }}
           {{ len .Alerts.Firing }} invariant dataset(s) have scores lower than 95%:
-          {{ range .Alerts }}
+          {{ range .Alerts.Firing }}
             • {{ .Labels.dataset_name }}: {{ printf "%.2f" (mul .Value 100) }}%
           {{ end }}
         {{ else }}
-        All invariant datasets have returned to normal levels (95% or above).
-        {{ end }}
+          All invariant datasets have returned to normal levels (95% or above).
+        {{ end }}` }}
       actions:
       - type: button
         text: 'View logs in Kibana'
