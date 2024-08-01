@@ -1,4 +1,5 @@
 name: Promtool
+description: Run promtool with the given arguments.
 
 inputs:
   args:

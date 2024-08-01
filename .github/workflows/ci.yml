@@ -32,7 +32,8 @@ jobs:
           done
 
       - name: Read Kubernetes version from /kubernetes_version
-        run: "grep KUBERNETES_VERSION kubernetes_version >> $GITHUB_ENV"
+        run: |
+          grep KUBERNETES_VERSION kubernetes_version >> "$GITHUB_ENV"
 
       - name: kubeconform
         uses: docker://ghcr.io/yannh/kubeconform:latest-alpine
