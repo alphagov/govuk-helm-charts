@@ -6,21 +6,35 @@ evaluation_interval: 1m
 tests:
   - interval: 1m
     input_series:
-      # Should alert (too low)
+      # Should alert (below threshold)
       - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset1", dataset_type="invariants"}
-        values: '0.9 0.99 1 0.95'
-      # Should not alert (perfect scores)
+          search_api_v2_quality_monitoring_score{dataset_name="dataset1",
+          dataset_type="invariants"}
+        values: '0.94 0.94 0.94 0.94 0.94'
+      # Should not alert (at threshold)
       - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset2", dataset_type="invariants"}
-        values: '1 1 1 1'
-      # Should not alert (wrong type)
+          search_api_v2_quality_monitoring_score{dataset_name="dataset2",
+          dataset_type="invariants"}
+        values: '0.95 0.95 0.95 0.95 0.95'
+      # Should not alert (above threshold)
       - series: >-
           search_api_v2_quality_monitoring_score{dataset_name="dataset3",
+          dataset_type="invariants"}
+        values: '0.96 0.96 0.96 0.96 0.96'
+      # Should not alert (wrong type)
+      - series: >-
+          search_api_v2_quality_monitoring_score{dataset_name="dataset4",
           dataset_type="something_else"}
-        values: '0.1 0.2 0.3 0.4'
+        values: '0.90 0.90 0.90 0.90 0.90'
+      # Should alert (drops below threshold)
+      - series: >-
+          search_api_v2_quality_monitoring_score{dataset_name="dataset5",
+          dataset_type="invariants"}
+        values: '0.96 0.95 0.94 0.94 0.94'
+
+
     alert_rule_test:
-      - eval_time: 4m
+      - eval_time: 5m
         alertname: LowInvariantScore
         exp_alerts:
           - exp_labels:
@@ -28,12 +42,13 @@ tests:
               dataset_name: "dataset1"
               dataset_type: "invariants"
               severity: "warning"
-              destination: "slack-search-team"
-            exp_annotations:
-              summary: "Low invariant recall score for 'dataset1'"
-              description: >-
-                Invariant dataset 'dataset1' has dropped below 100% recall (i.e. the expected
-                results are not being returned for one or more queries in this dataset)
+              destination: "slack-search-quality-monitoring"
+          - exp_labels:
+              alertname: LowInvariantScore
+              dataset_name: "dataset5"
+              dataset_type: "invariants"
+              severity: "warning"
+              destination: "slack-search-quality-monitoring"
 
   - interval: 1m
     input_series:

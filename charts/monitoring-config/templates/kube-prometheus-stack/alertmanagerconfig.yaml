@@ -58,6 +58,16 @@ spec:
       groupInterval: 30m
       activeTimeIntervals:
         - inhours
+    - matchers:
+      - name: destination
+        value: slack-search-quality-monitoring
+        matchType: =
+      receiver: slack-search-quality-monitoring
+      repeatInterval: 24h
+      groupWait: 5m
+      groupInterval: 30m
+      activeTimeIntervals:
+        - inhours
   receivers:
   - name: 'null'
   - name: 'pagerduty'
@@ -122,6 +132,27 @@ spec:
       iconURL: https://avatars3.githubusercontent.com/u/3380462
       text: |-
         {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
+      apiURL: *slack_api_url
+  - name: slack-search-quality-monitoring
+    slackConfigs:
+    - channel: '#govuk-search-improvement'
+      sendResolved: true
+      iconEmoji: '{{ if eq .Status "firing" }}:warning:{{ else }}:white_check_mark:{{ end }}'
+      color: '{{ if eq .Status "firing" }}#FFFF00{{ else }}#36a64f{{ end }}'
+      title: Quality monitoring warning
+      text: >-
+        {{ if eq .Status "firing" }}
+          {{ len .Alerts.Firing }} invariant dataset(s) have scores lower than 95%:
+          {{ range .Alerts }}
+            • {{ .Labels.dataset_name }}: {{ printf "%.2f" (mul .Value 100) }}%
+          {{ end }}
+        {{ else }}
+        All invariant datasets have returned to normal levels (95% or above).
+        {{ end }}
+      actions:
+      - type: button
+        text: 'View logs in Kibana'
+        url: "https://kibana.logit.io/s/13d1a0b1-f54f-407b-a4e5-f53ba653fac3/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-24h,to:now))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.labels.app_kubernetes_io%2Fname,negate:!f,params:(query:search-api-v2-quality-monitoring-assert-invariants),type:phrase),query:(match_phrase:(kubernetes.labels.app_kubernetes_io%2Fname:search-api-v2-quality-monitoring-assert-invariants)))),sort:!())"
       apiURL: *slack_api_url
   muteTimeIntervals:
   - name: inhours
