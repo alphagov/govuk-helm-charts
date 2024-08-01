@@ -111,6 +111,24 @@ cronjobs:
             secretKeyRef:
               name: govuk-chat-opensearch
               key: password
+    test-chat-cp-prod:
+      schedule: "12 5 * * *"
+      args: [restore_latest]
+      extraEnv:
+        - name: SNAPSHOT_REPO
+          value: govuk-production
+        - name: SUBDOMAIN
+          value: chat-opensearch-test
+        - name: SEARCH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-opensearch-test
+              key: username
+        - name: SEARCH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-opensearch-test
+              key: password
 
 podSecurityContext:
   fsGroup: 1001
