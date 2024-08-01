@@ -1314,7 +1314,7 @@ govukApplications:
         - name: govuk-e2e-tests-mirror-gcs
           schedule: "*/30 7-19 * * 1-5"
           project: mirrorGCS
-        - name: govuk-e2e-tests-mirror-cloudfront
+        - name: govuk-e2e-tests-cloudfront
           schedule: "*/30 7-19 * * 1-5"
           project: cloudfront
           extraEnv:
