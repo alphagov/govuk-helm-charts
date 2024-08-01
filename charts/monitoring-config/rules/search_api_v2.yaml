@@ -2,15 +2,10 @@ groups:
   - name: SearchApiV2
     rules:
       - alert: LowInvariantScore
-        expr: search_api_v2_quality_monitoring_score{dataset_type="invariants"} < 1
+        expr: search_api_v2_quality_monitoring_score{dataset_type="invariants"} < 0.95
         labels:
           severity: warning
-          destination: slack-search-team
-        annotations:
-          summary: Low invariant recall score for '{{ $labels.dataset_name }}'
-          description: >-
-            Invariant dataset '{{ $labels.dataset_name }}' has dropped below 100% recall (i.e. the
-            expected results are not being returned for one or more queries in this dataset)
+          destination: slack-search-quality-monitoring
 
       - alert: HighQueryFailureRate
         expr: >-
