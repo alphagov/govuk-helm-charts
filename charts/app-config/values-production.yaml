@@ -6,6 +6,7 @@ externalDomainSuffix: gov.uk
 k8sExternalDomainSuffix: eks.production.govuk.digital
 publishingDomainSuffix: publishing.service.gov.uk
 assetsDomain: assets.publishing.service.gov.uk
+dguDomain: data.gov.uk
 
 awsAccountId: "172025368201"
 

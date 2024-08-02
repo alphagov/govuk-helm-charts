@@ -6,6 +6,7 @@ externalDomainSuffix: integration.publishing.service.gov.uk
 k8sExternalDomainSuffix: eks.integration.govuk.digital
 publishingDomainSuffix: integration.publishing.service.gov.uk
 assetsDomain: assets.integration.publishing.service.gov.uk
+dguDomain: integration.data.gov.uk
 
 awsAccountId: "210287912431"
 

@@ -6,6 +6,7 @@ externalDomainSuffix: staging.publishing.service.gov.uk
 k8sExternalDomainSuffix: eks.staging.govuk.digital
 publishingDomainSuffix: staging.publishing.service.gov.uk
 assetsDomain: assets.staging.publishing.service.gov.uk
+dguDomain: staging.data.gov.uk
 
 awsAccountId: "696911096973"
 
