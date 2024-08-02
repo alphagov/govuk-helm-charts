@@ -140,9 +140,8 @@ spec:
       iconEmoji: '{{ `{{ if eq .Status "firing" }}:warning:{{ else }}:white_check_mark:{{ end }}` }}'
       color: '{{ `{{ if eq .Status "firing" }}#FFFF00{{ else }}#36a64f{{ end }}` }}'
       title: '{{ `{{ if eq .Status "firing" }}Quality monitoring warning{{ else }}Quality monitoring issues resolved{{ end }}` }}'
-      text: |-
-        {{ `{{ "[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ len .Alerts.Firing }}{{ end }}]" }}
-        {{ if eq .Status "firing" }}
+      text: |
+        {{ `{{ if eq .Status "firing" }}
           {{ len .Alerts.Firing }} invariant dataset(s) have scores lower than 95%:
           {{ range .Alerts.Firing }}
             • {{ .Labels.dataset_name }}: {{ printf "%.2f" (mul .Value 100) }}%
