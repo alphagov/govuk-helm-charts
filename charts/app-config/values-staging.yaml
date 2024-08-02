@@ -1886,6 +1886,9 @@ govukApplications:
         - name: events-export
           task: "events:export_to_s3"
           schedule: "38 5 * * 0"
+        - name: metrics-report-to-prometheus
+          task: "metrics:report_to_prometheus"
+          schedule: "22 * * * *"  # every hour, at 22 minutes past the hour
         # In non-production envs, run Search API v2 bulk import every week to bring it to parity
         # with Publishing API state (which gets refreshed from production DB every night).
         - name: search-api-v2-bulk-import

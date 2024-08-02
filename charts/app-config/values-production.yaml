@@ -1892,6 +1892,9 @@ govukApplications:
         - name: events-export
           task: "events:export_to_s3"
           schedule: "38 5 * * 0"
+        - name: metrics-report-to-prometheus
+          task: "metrics:report_to_prometheus"
+          schedule: "22 * * * *"  # every hour, at 22 minutes past the hour
         - name: search-api-v2-bulk-import
           task: "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"
           schedule: "0 0 1 11 *"  # arbitrary value (only used as a template but field is required)
