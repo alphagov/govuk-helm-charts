@@ -80,6 +80,8 @@ spec:
               value: www.{{ $.Values.externalDomainSuffix }}
             - name: PUBLISHING_DOMAIN
               value: {{ $.Values.publishingDomainSuffix }}
+            - name: DGU_DOMAIN
+              value: www.{{ $.Values.dguDomain }}
             - name: SIGNON_EMAIL
               valueFrom:
                 secretKeyRef:
