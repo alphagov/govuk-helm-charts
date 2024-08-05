@@ -46,19 +46,24 @@ to our Helm repository when a change to `Chart.Version` is merged.
 
 ### Installing an application chart without Argo CD
 
+Inspect the template output of your application chart:
+
 ```sh
 cd charts/app-config
 
 ENVIRONMENT=integration
 APP=content-publisher
-helm install $USER-${APP?} ../generic-govuk-app --values <(
+helm template $USER-${APP?} ../generic-govuk-app --values <(
   helm template . --values values-${ENVIRONMENT}.yaml |
   yq e '.|select(.metadata.name=="'$APP'").spec.source.helm.values'
 ) --set sentry.enabled=false --set rails.createKeyBaseSecret=false
 ```
 
-You can inspect the final template output by running `helm template` instead of
-`helm install`.
+To deploy it, run `helm install $USER-...` instead of `helm template $USER...`.
+You should see your deployed pod(s) in the list at `kubernetes get pods`, and
+be able to interact with it as normal.
+
+Use `helm uninstall $USER-${APP?}` to uninstall your chart when you've finished.
 
 ### Chart repository
 
