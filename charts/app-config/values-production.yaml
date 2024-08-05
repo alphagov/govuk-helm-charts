@@ -2201,6 +2201,8 @@ govukApplications:
           value: "http://draft-content-store"
         - name: BACKEND_URL_email-alert-frontend
           value: "http://draft-email-alert-frontend"
+        - name: BACKEND_URL_finder-frontend
+          value: "http://draft-finder-frontend"
         - name: BACKEND_URL_frontend
           value: "http://draft-frontend"
         - name: BACKEND_URL_government-frontend
@@ -2213,8 +2215,6 @@ govukApplications:
           value: "http://account-api"
         - name: BACKEND_URL_feedback
           value: "http://feedback"
-        - name: BACKEND_URL_finder-frontend
-          value: "http://finder-frontend"
         - name: BACKEND_URL_licensify
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
