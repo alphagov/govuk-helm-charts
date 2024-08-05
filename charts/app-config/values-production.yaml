@@ -1452,8 +1452,6 @@ govukApplications:
       workerEnabled: true
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
