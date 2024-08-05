@@ -1445,6 +1445,11 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &link-checker-redis redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *link-checker-redis
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
