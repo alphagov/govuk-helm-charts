@@ -142,12 +142,12 @@ spec:
       title: '{{ `{{ if eq .Status "firing" }}Quality monitoring warning{{ else }}Quality monitoring issues resolved{{ end }}` }}'
       text: |
         {{ `{{ if eq .Status "firing" }}
-          {{ len .Alerts.Firing }} invariant dataset(s) have scores lower than 95%:
+          {{ len .Alerts.Firing }} invariant dataset(s) have scores lower than 0.95:
           {{ range .Alerts.Firing }}
-            • {{ .Labels.dataset_name }}: {{ printf "%.2f" (mul .Value 100) }}%
+            • {{ .Labels.dataset_name }}: {{ printf "%.2f" .Value }}
           {{ end }}
         {{ else }}
-          All invariant datasets have returned to normal levels (95% or above).
+          All invariant datasets have returned to normal levels (0.95 or above).
         {{ end }}` }}
       actions:
       - type: button
