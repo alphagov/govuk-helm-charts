@@ -6,6 +6,12 @@ groups:
         labels:
           severity: warning
           destination: slack-search-quality-monitoring
+        annotations:
+          summary: 'Low score for invariant dataset {{ $labels.dataset_name }}'
+          description: >-
+            The score on invariant dataset {{ $labels.dataset_name }} is too low
+            ({{ humanizePercentage $value }})
+          slack_bullet: '• *{{ $labels.dataset_name }}*: {{ humanizePercentage $value }}'
 
       - alert: HighQueryFailureRate
         expr: >-
