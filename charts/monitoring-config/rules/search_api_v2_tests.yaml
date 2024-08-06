@@ -43,12 +43,18 @@ tests:
               dataset_type: "invariants"
               severity: "warning"
               destination: "slack-search-quality-monitoring"
+            exp_annotations:
+              summary: Low score for invariant dataset dataset1
+              percentageValue: 94%
           - exp_labels:
               alertname: LowInvariantScore
               dataset_name: "dataset5"
               dataset_type: "invariants"
               severity: "warning"
               destination: "slack-search-quality-monitoring"
+            exp_annotations:
+              summary: Low score for invariant dataset dataset5
+              percentageValue: 94%
 
   - interval: 1m
     input_series:
