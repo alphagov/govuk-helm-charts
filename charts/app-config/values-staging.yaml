@@ -1068,9 +1068,6 @@ govukApplications:
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
         hosts:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
-            path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
-            pathType: ImplementationSpecific
-          - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /media/*/*/preview
             pathType: ImplementationSpecific
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
@@ -1139,9 +1136,6 @@ govukApplications:
                 "draft-assets*.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
-          - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
-            path: /government/uploads/system/uploads/attachment_data/file/*/*/preview
-            pathType: ImplementationSpecific
           - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
             path: /media/*/*/preview
             pathType: ImplementationSpecific
