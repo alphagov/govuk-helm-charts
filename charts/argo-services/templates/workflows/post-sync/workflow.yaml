@@ -115,8 +115,27 @@ spec:
                 key: url
     {{- end }}
 
+    - name: parse-failures
+      inputs: {}
+      outputs:
+        parameters:
+          - name: message
+            valueFrom:
+              path: /tmp/message.txt
+      script:
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
+        command:
+          - /bin/bash
+        resources: {}
+        source: >
+          #!/usr/bin/env bash
+
+          echo {{"{{workflow.failures}}"}} | jq -r 'group_by(.templateName) | map({templateName: .[0].templateName, errorMessages: [.[].message | select(length > 0)] | unique}) | map("- \(.templateName): " + (["\(.errorMessages[])"] | join(",")) ) | .[]' > /tmp/message.txt
     - name: exit-handler
       steps:
+        - - name: parse-failures
+            template: parse-failures
+            when: "{{"{{workflow.status}}"}} != Succeeded"
         - - name: notify-slack
             when: "{{"{{workflow.status}}"}} != Succeeded"
             templateRef:
@@ -129,14 +148,14 @@ spec:
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
                 - name: text
-                  value: "Post-deploy (smoke test and promote-to-next-environment) workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                  value: "Post-deploy workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}. \n\n {{"{{ steps.parse-failures.outputs.parameters.message }}"}}"
                 - name: blocks
                   value: |
                     [{
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Post-deploy (smoke test and promote-to-next-environment) workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                          "text": "Post-deploy workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}. \n\n {{"{{ steps.parse-failures.outputs.parameters.message }}"}}"
                       },
                       "accessory": {
                         "type": "button",
