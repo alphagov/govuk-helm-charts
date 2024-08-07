@@ -1059,6 +1059,29 @@ govukApplications:
         - name: DISABLE_LTR_ON_PATHS
           value: /find-licences
 
+  - name: draft-finder-frontend
+    repoName: finder-frontend
+    helmValues:
+      arch: arm64
+      rails:
+        createKeyBaseSecret: false
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+      uploadAssets:
+        enabled: false
+      cronTasks:
+        - name: registries-refresh
+          task: "registries:cache_refresh"
+          schedule: "15 * * * *"
+      extraEnv:
+        - name: PLEK_HOSTNAME_PREFIX
+          value: draft-
+        - name: PUBLISHING_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-finder-frontend-email-alert-api
+              key: bearer_token
+
   - name: frontend
     helmValues:
       arch: arm64
@@ -2123,6 +2146,8 @@ govukApplications:
           value: "http://draft-content-store"
         - name: BACKEND_URL_email-alert-frontend
           value: "http://draft-email-alert-frontend"
+        - name: BACKEND_URL_finder-frontend
+          value: "http://draft-finder-frontend"
         - name: BACKEND_URL_frontend
           value: "http://draft-frontend"
         - name: BACKEND_URL_government-frontend
@@ -2135,8 +2160,6 @@ govukApplications:
           value: "http://account-api"
         - name: BACKEND_URL_feedback
           value: "http://feedback"
-        - name: BACKEND_URL_finder-frontend
-          value: "http://finder-frontend"
         - name: BACKEND_URL_licensify
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
