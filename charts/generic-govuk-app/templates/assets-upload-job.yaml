@@ -1,6 +1,7 @@
 {{- if .Values.uploadAssets.enabled -}}
 {{- $destDir := .Values.uploadAssets.s3Directory | default .Values.repoName }}
 {{- $sourcePath := .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Values.repoName) }}
+{{- $sharedSourcePath := .Values.uploadSharedAssets.path | default "/app/public/assets/shared" }}
 {{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: batch/v1
 kind: Job
@@ -17,7 +18,7 @@ spec:
   activeDeadlineSeconds: 900
   backoffLimit: 1
   template:
-    metadata: 
+    metadata:
       name: {{ $fullName }}-upload-assets
       labels:
         {{- include "generic-govuk-app.labels" . | nindent 8 }}
@@ -37,10 +38,12 @@ spec:
         - name: copy-assets-for-upload
           image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
-          command:
-            - sh
+          command: ['sh']
+          args:
             - -c
-            - "cp -R {{ $sourcePath }}/* /assets-to-upload"
+            - >-
+              "cp -R {{ $sourcePath }}/* /assets-to-upload/{{ .Values.repoName }} &&"
+              "cp -R {{ $sharedSourcePath }}/* /assets-to-upload/shared &&"
           volumeMounts: &volumeMounts
             - name: assets-to-upload
               mountPath: /assets-to-upload
@@ -52,12 +55,12 @@ spec:
       containers:
         - name: upload-assets
           image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
-          command:
-            - aws
-            - s3
-            - sync
-            - /assets-to-upload
-            - "{{- printf "s3://govuk-app-assets-%s/assets/%s/" .Values.govukEnvironment $destDir }}"
+          command: ['sh']
+          args:
+            - -c
+            - >-
+              "aws s3 sync /assets-to-upload/{{ .Values.repoName }} {{- printf "s3://govuk-app-assets-%s/assets/%s/" .Values.govukEnvironment $destDir }}"
+              "aws s3 sync /assets-to-upload/shared {{- printf "s3://govuk-app-assets-%s/assets/shared/" .Values.govukEnvironment }}"
           {{- with .Values.jobResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
