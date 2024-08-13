@@ -44,8 +44,10 @@ data:
 
   ENABLE_OPEN_TELEMETRY: "true"
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://tempo-distributor.monitoring.svc.cluster.local:4318"
+  {{- if eq .Values.govukEnvironment "production" }}
   OTEL_TRACES_SAMPLER: "traceidratio"
   OTEL_TRACES_SAMPLER_ARG: '0.001'
+  {{- end }}
   OTEL_RUBY_INSTRUMENTATION_RACK_CONFIG_OPTS: "untraced_endpoints=/healthcheck/live"
 
   PLEK_SERVICE_ASSETS_URI: https://{{ .Values.assetsDomain }}
