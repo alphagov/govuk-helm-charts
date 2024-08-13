@@ -36,6 +36,14 @@ spec:
               parameters:
                 - name: extra-args
                   value: "{{"@app-{{workflow.parameters.application}}"}}"
+          - name: govuk-e2e-tests
+            templateRef:
+              name: govuk-e2e-tests
+              template: govuk-e2e-tests
+            arguments:
+              parameters:
+                - name: grep
+                  value: "{{"@app-{{workflow.parameters.application}}"}}"
     {{ if .Values.nextEnvironment }}
           - name: check-for-promotion
             depends: smoke-test.Succeeded

@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: govuk-e2e-tests
+spec:
+  entrypoint: govuk-e2e-tests
+  arguments:
+    parameters:
+      - name: grep
+  workflowMetadata:
+    labels:
+      {{- include "govuk-e2e-tests.labels" . | nindent 6 }}
+  templates:
+    - name: govuk-e2e-tests
+      podSpecPatch: '{"containers":[{"name":"main","resources":{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":1,"memory":"1Gi"}}}]}'
+      inputs:
+        parameters:
+          - name: grep
+      retryStrategy:
+        limit: 2
+        backoff:
+          duration: "15s"
+          factor: 2
+          maxDuration: "16m"
+      container:
+        image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+        command:
+          - yarn
+        args:
+          - playwright
+          - test
+          - --pass-with-no-tests
+          - --reporter=list
+          - --workers=4
+          - --project=main
+          - "--grep={{ `{{ inputs.parameters.grep }}` }}"
+        env:
+          - name: YARN_CACHE_FOLDER
+            value: /tmp/.cache/yarn
+          - name: PUBLIC_DOMAIN
+            value: www.{{ $.Values.externalDomainSuffix }}
+          - name: PUBLISHING_DOMAIN
+            value: {{ $.Values.publishingDomainSuffix }}
+          - name: DGU_DOMAIN
+            value: www.{{ $.Values.dguDomain }}
+          - name: SIGNON_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: smokey-signon-account
+                key: email
+          - name: SIGNON_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: smokey-signon-account
+                key: password
+        {{- with .Values.appResources }}
+        resources:
+          {{- . | toYaml | trim | nindent 10 }}
+        {{- end }}
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
