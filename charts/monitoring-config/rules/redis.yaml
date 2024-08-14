@@ -1,0 +1,45 @@
+groups:
+  - name: RedisAlerts
+    rules:
+      - alert: RedisDiskSpaceLow
+        expr: >
+          kubelet_volume_stats_available_bytes{persistentvolumeclaim=~".*-redis"}
+            <
+          (1024^3 * 2) # 2GB
+        labels:
+          severity: warning
+        annotations:
+          summary: Disk space for Redis instance is low
+          description: >-
+            Less than 2GB of disk space is remaining on the Redis data volume.
+            Increase by setting redis.storage value in app-config.
+      - alert: RedisDiskSpaceCritical
+        expr: >
+          kubelet_volume_stats_available_bytes{persistentvolumeclaim=~".*-redis"}
+            <
+          (1024^2 * 512) # 512MB
+        labels:
+          severity: page
+        annotations:
+          summary: Disk space for Redis instance is critical
+          description: >-
+            Less than 512MB of disk space is remaining on the Redis data volume.
+            Increase by setting redis.storage value in app-config.
+      - record: global:redis:memory_usage_percentage
+        expr: >
+          avg(container_memory_usage_bytes{namespace="apps", container=~".*redis.*"}) by (pod)
+            /
+          avg(cluster:namespace:pod_memory:active:kube_pod_container_resource_limits{
+            namespace="apps", container=~".*redis.*"
+          }) by (pod)
+            * 100
+      - alert: RedisMemoryUsageHigh
+        expr: >
+          global:redis:memory_usage_percentage > 90
+        labels:
+          severity: warning
+        annotations:
+          summary: Redis memory usage is high
+          description: >-
+            Redis memory usage exceeds 90%.
+            Ensure Sidekiq queues are being processed and increase memory limit if necessary.

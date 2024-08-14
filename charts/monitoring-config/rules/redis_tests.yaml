@@ -1,0 +1,73 @@
+rule_files:
+  - redis.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'kubelet_volume_stats_available_bytes{persistentvolumeclaim="test-redis"}'
+        values: '3221225472' # 3GB remaining
+      - series: 'global:redis:memory_usage_percentage{pod="test-app-redis-abc213"}'
+        values: '25' # 25% of memory limit used
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: RedisDiskSpaceLow
+        exp_alerts: []
+      - eval_time: 5m
+        alertname: RedisMemoryUsageHigh
+        exp_alerts: []
+
+  # Warn with >90% memory usage
+  - interval: 1m
+    input_series:
+      - series: 'global:redis:memory_usage_percentage{pod="test-app-redis-abc213"}'
+        values: '95' # 95% of memory limit used
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: RedisMemoryUsageHigh
+        exp_alerts:
+          - exp_labels:
+              pod: test-app-redis-abc213
+              severity: warning
+            exp_annotations:
+              summary: Redis memory usage is high
+              description: >-
+                Redis memory usage exceeds 90%.
+                Ensure Sidekiq queues are being processed and increase memory limit if necessary.
+
+  # Warn with <2GB remaining
+  - interval: 1m
+    input_series:
+      - series: 'kubelet_volume_stats_available_bytes{persistentvolumeclaim="test-redis"}'
+        values: '1610612736' # 1.5GB remaining
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: RedisDiskSpaceLow
+        exp_alerts:
+          - exp_labels:
+              persistentvolumeclaim: test-redis
+              severity: warning
+            exp_annotations:
+              summary: Disk space for Redis instance is low
+              description: >-
+                Less than 2GB of disk space is remaining on the Redis data volume.
+                Increase by setting redis.storage value in app-config.
+
+  # Page with <512MB remaining
+  - interval: 1m
+    input_series:
+      - series: 'kubelet_volume_stats_available_bytes{persistentvolumeclaim="test-redis"}'
+        values: '322122547' # 300MB remaining
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: RedisDiskSpaceCritical
+        exp_alerts:
+          - exp_labels:
+              persistentvolumeclaim: test-redis
+              severity: page
+            exp_annotations:
+              summary: Disk space for Redis instance is critical
+              description: >-
+                Less than 512MB of disk space is remaining on the Redis data volume.
+                Increase by setting redis.storage value in app-config.
