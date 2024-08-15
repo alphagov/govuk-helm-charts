@@ -902,7 +902,7 @@ govukApplications:
               name: email-alert-api-notify
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: &frontend-notify-template cb633abc-6ae6-4843-ae6f-82ca500b6de2
+          value: cb633abc-6ae6-4843-ae6f-82ca500b6de2
         - name: GOVUK_NOTIFY_RECIPIENTS
           value: '*'
         - name: REDIS_URL
@@ -1079,8 +1079,6 @@ govukApplications:
           cpu: 2
           memory: 1Gi
       extraEnv:
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *frontend-notify-template
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN
@@ -1166,8 +1164,6 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *frontend-notify-template
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
         - name: ACCOUNT_API_BEARER_TOKEN
