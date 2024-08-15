@@ -906,7 +906,7 @@ govukApplications:
               name: email-alert-api-notify
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: &frontend-notify-template 2844a647-6bf1-4b01-a25c-569d2cc00849
+          value: 2844a647-6bf1-4b01-a25c-569d2cc00849
         - name: GOVUK_NOTIFY_RECIPIENTS
           value: email-alert-api-staging@digital.cabinet-office.gov.uk
         - name: REDIS_URL
@@ -1104,8 +1104,6 @@ govukApplications:
           cpu: 2
           memory: 1Gi
       extraEnv:
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *frontend-notify-template
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN
@@ -1170,8 +1168,6 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *frontend-notify-template
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
         - name: ACCOUNT_API_BEARER_TOKEN
