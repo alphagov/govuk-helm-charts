@@ -915,7 +915,7 @@ govukApplications:
               name: email-alert-api-notify
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: &frontend-notify-template 1fc69d3a-09a2-40f9-852b-03f6fcef5340
+          value: 1fc69d3a-09a2-40f9-852b-03f6fcef5340
         - name: GOVUK_NOTIFY_RECIPIENTS
           value: email-alert-api-integration@digital.cabinet-office.gov.uk
         - name: REDIS_URL
@@ -1103,8 +1103,6 @@ govukApplications:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /government/placeholder/
       extraEnv:
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *frontend-notify-template
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN
@@ -1167,8 +1165,6 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *frontend-notify-template
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
         - name: ACCOUNT_API_BEARER_TOKEN
