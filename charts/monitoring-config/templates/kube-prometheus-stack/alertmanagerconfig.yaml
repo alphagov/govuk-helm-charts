@@ -48,6 +48,25 @@ spec:
       groupInterval: 12h
       activeTimeIntervals:
         - inhours
+    - receiver: search-slack-warning
+      groupBy:
+        - destination
+      groupWait: 1m
+      groupInterval: 10m
+      repeatInterval: 1h
+      matchers:
+        - name: destination
+          value: search-alerts
+      routes:
+        - matchers:
+            - name: severity
+              value: critical|page
+              matchType: =~
+          continue: true
+          groupWait: 1m
+          groupInterval: 15m
+          repeatInterval: 24h
+          receiver: search-slack-critical
   receivers:
   - name: 'null'
   - name: 'pagerduty'
@@ -105,6 +124,63 @@ spec:
       text: |-
         {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
       apiURL: *slack_api_url
+  - name: search-slack-warning
+    slackConfigs:
+    - &search-slack-config
+      channel: '#govuk-search-improvement-alerts'
+      username: Search health alerts
+      iconEmoji: '{{ "{{ if eq .Status \"firing\" }}:warning:{{ else }}:large_green_circle:{{ end }}" }}'
+      color: '{{ "{{ if eq .Status \"firing\" }}#ffdd00{{ else }}#00703c{{ end }}" }}'
+      title: >-
+        {{ "{{ if eq .Status \"firing\" }}" }}
+          {{ "{{ len .Alerts.Firing }} search health warning(s) ongoing" }}
+        {{ "{{ else }}" }}
+          All search health warnings resolved
+        {{ "{{ end }}" }}
+      text: >-
+        {{ "{{- if eq .Status \"firing\" -}}" }}
+          {{ "{{- range .Alerts.Firing -}}" }}
+            • *{{ "{{ .Annotations.summary }}" }}* ({{ "{{ .Annotations.description }}" }}){{ "{{- \"\\n\" -}}" }}
+          {{ "{{- end -}}" }}
+        {{ "{{- else -}}" }}
+          All search health warnings have now been resolved :raised_hands:
+        {{ "{{- end -}}" }}
+      actions:
+        - type: button
+          text: ':grafana: Service dashboard'
+          url: >-
+            https://grafana.eks.production.govuk.digital/d/e4f052f5-e292-42d2-9ca9-32c53bd7ee6d/christian-sutterat-search-api-v2?orgId=1&refresh=1m&from=now-24h&to=now
+        - type: button
+          text: ':elasticsearch: Invariant check logs'
+          url: >-
+            https://kibana.logit.io/s/13d1a0b1-f54f-407b-a4e5-f53ba653fac3/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-24h,to:now))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.labels.app_kubernetes_io%2Fname,negate:!f,params:(query:search-api-v2-quality-monitoring-assert-invariants),type:phrase),query:(match_phrase:(kubernetes.labels.app_kubernetes_io%2Fname:search-api-v2-quality-monitoring-assert-invariants)))),sort:!())
+        - type: button
+          text: ':book: Documentation'
+          url: https://docs.publishing.service.gov.uk/repos/search-api-v2.html
+      sendResolved: true
+      apiURL:
+        key: slack_api_url
+        name: alertmanager-receivers
+  - name: search-slack-critical
+    slackConfigs:
+    - <<: *search-slack-config
+      channel: '#govuk-search-improvement'
+      iconEmoji: '{{ "{{ if eq .Status \"firing\" }}:sos:{{ else }}:large_green_circle:{{ end }}" }}'
+      color: '{{ "{{ if eq .Status \"firing\" }}#d4351c{{ else }}#00703c{{ end }}" }}'
+      title: >-
+        {{ "{{ if eq .Status \"firing\" }}" }}
+          {{ "{{ len .Alerts.Firing }} critical search health issue(s) ongoing" }}
+        {{ "{{ else }}" }}
+          Critical search health issues resolved
+        {{ "{{ end }}" }}
+      text: >-
+        {{ "{{- if eq .Status \"firing\" -}}" }}
+          {{ "{{- range .Alerts.Firing -}}" }}
+            • *{{ "{{ .Annotations.summary }}" }}* ({{ "{{ .Annotations.description }}" }}){{ "{{- \"\\n\" -}}" }}
+          {{ "{{- end -}}" }}
+        {{ "{{- else -}}" }}
+          All critical search health issues have now been resolved. :raised_hands:
+        {{ "{{- end -}}" }}
   muteTimeIntervals:
   - name: inhours
     timeIntervals:
