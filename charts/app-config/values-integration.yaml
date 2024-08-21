@@ -400,6 +400,11 @@ govukApplications:
         - name: org-import
           task: "organisations:import"
           schedule: "0 3 * * *"
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &cntcts-admin-redis redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *cntcts-admin-redis
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
