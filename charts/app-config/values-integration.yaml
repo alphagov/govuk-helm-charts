@@ -2260,6 +2260,13 @@ govukApplications:
           env:
             - name: AWS_SEARCH_ANALYTICS_BUCKET
               value: govuk-search-analytics-integration
+          resources:
+            limits:
+              cpu: 1
+              memory: 2500Mi
+            requests:
+              cpu: 0.1
+              memory: 800Mi
         - name: update-detailed-index-popularity
           task: "search:update_popularity"
           schedule: "42 4 * * *"

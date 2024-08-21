@@ -86,7 +86,7 @@ spec:
                 {{- with .env }}
                   {{- . | toYaml | trim | nindent 16 }}
                 {{- end }}
-              {{- with $.Values.appResources }}
+              {{- with .resources | default $.Values.appResources }}
               resources:
                 {{- . | toYaml | trim | nindent 16 }}
               {{- end }}
