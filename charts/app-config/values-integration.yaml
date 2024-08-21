@@ -463,6 +463,11 @@ govukApplications:
           - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &content-data-redis redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *content-data-redis
       extraEnv:
         - name: CONTENT_DATA_API_BEARER_TOKEN
           valueFrom:
