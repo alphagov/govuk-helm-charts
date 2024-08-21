@@ -941,8 +941,6 @@ govukApplications:
     helmValues:
       arch: arm64
       extraEnv:
-        - name: SUBSCRIPTION_MANAGEMENT_ENABLED
-          value: "yes"
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN

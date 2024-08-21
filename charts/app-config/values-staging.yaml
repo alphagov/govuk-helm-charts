@@ -927,8 +927,6 @@ govukApplications:
   - name: email-alert-frontend
     helmValues:
       extraEnv:
-        - name: SUBSCRIPTION_MANAGEMENT_ENABLED
-          value: "yes"
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN
