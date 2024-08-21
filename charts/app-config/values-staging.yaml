@@ -945,6 +945,36 @@ govukApplications:
               name: email-alert-auth
               key: token
 
+  - name: draft-email-alert-frontend
+    repoName: email-alert-frontend
+    helmValues:
+      rails:
+        createKeyBaseSecret: false
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+      uploadAssets:
+        enabled: false
+      extraEnv:
+        - name: PLEK_HOSTNAME_PREFIX
+          value: draft-
+        - name: REDIS_URL
+          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+        - name: ACCOUNT_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-email-alert-frontend-account-api
+              key: bearer_token
+        - name: EMAIL_ALERT_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-email-alert-frontend-email-alert-api
+              key: bearer_token
+        - name: EMAIL_ALERT_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: email-alert-auth
+              key: token
+
   - name: email-alert-service
     helmValues:
       appEnabled: false
