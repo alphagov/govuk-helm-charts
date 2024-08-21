@@ -2239,6 +2239,13 @@ govukApplications:
 
   - name: search-api
     helmValues:
+      appResources:
+        limits:
+          cpu: 1
+          memory: 2500Mi
+        requests:
+          cpu: 1
+          memory: 1Gi
       arch: arm64
       rails:
         enabled: false
