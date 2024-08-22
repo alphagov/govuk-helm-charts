@@ -402,8 +402,6 @@ govukApplications:
           schedule: "0 3 * * *"
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
