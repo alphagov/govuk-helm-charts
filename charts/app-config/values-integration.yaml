@@ -403,8 +403,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &cntcts-admin-redis redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *cntcts-admin-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
