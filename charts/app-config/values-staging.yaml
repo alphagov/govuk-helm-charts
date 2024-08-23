@@ -561,6 +561,11 @@ govukApplications:
             secretKeyRef:
               name: content-data-api-google-analytics
               key: view-id
+        - name: GOOGLE_ACCOUNT_TYPE
+          valueFrom:
+            secretKeyRef:
+              name: search-api-google-analytics
+              key: account-type
         - name: GOOGLE_CLIENT_EMAIL
           valueFrom:
             secretKeyRef:
