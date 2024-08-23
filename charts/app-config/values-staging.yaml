@@ -400,6 +400,8 @@ govukApplications:
         - name: org-import
           task: "organisations:import"
           schedule: "0 3 * * *"
+      redis:
+        enabled: true
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
@@ -421,8 +423,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-contacts-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
   - name: content-data-admin
     helmValues:
