@@ -423,8 +423,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-contacts-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: GOOGLE_TAG_MANAGER_ID
           value: &publishing-bootstrap-gtm-id GTM-W573BJPG
         - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
