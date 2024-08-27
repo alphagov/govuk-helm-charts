@@ -1395,6 +1395,15 @@ govukApplications:
               key: oauth_secret
         - name: REDIS_URL
           value: redis://chat-redis.eks.production.govuk-internal.digital
+        - name: BIGQUERY_PROJECT
+          value: "gov-uk-chat-production"
+        - name: BIGQUERY_DATASET
+          value: "chat_export"
+        - name: BIGQUERY_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-bigquery
+              key: credentials
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
