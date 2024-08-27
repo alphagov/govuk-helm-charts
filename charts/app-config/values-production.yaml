@@ -1054,6 +1054,66 @@ govukApplications:
               name: support-zendesk
               key: password
 
+  - name: draft-feedback
+    repoName: feedback
+    helmValues:
+      arch: arm64
+      rails:
+        createKeyBaseSecret: false
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+      uploadAssets:
+        enabled: false
+      extraEnv:
+        - name: PLEK_HOSTNAME_PREFIX
+          value: draft-
+        - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
+          value: e8b2d8a6-db5f-4346-9fbd-49b16b531e1c
+        - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
+          value: 54168fa9-3946-4860-a2f8-27ddbb14babe
+        - name: SUPPORT_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-feedback-support-api
+              key: bearer_token
+        - name: PUBLISHING_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-feedback-publishing-api
+              key: bearer_token
+        - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: feedback-assisted-digital-google-sheet
+              key: sheet_id
+        - name: GOOGLE_CLIENT_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: feedback-assisted-digital-google-sheet
+              key: client_email
+        - name: GOOGLE_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: feedback-assisted-digital-google-sheet
+              key: private_key
+        - name: GOVUK_NOTIFY_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: feedback-notify
+              key: GOVUK_NOTIFY_API_KEY
+        - name: MEMCACHE_SERVERS
+          value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+        - name: ZENDESK_CLIENT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: support-zendesk
+              key: username
+        - name: ZENDESK_CLIENT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: support-zendesk
+              key: password
+
   - name: finder-frontend
     helmValues:
       replicaCount: 9
@@ -2238,7 +2298,7 @@ govukApplications:
         - name: BACKEND_URL_account-api
           value: "http://account-api"
         - name: BACKEND_URL_feedback
-          value: "http://feedback"
+          value: "http://draft-feedback"
         - name: BACKEND_URL_licensify
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
