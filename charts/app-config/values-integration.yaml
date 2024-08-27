@@ -465,8 +465,6 @@ govukApplications:
       workerEnabled: true
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       extraEnv:
         - name: CONTENT_DATA_API_BEARER_TOKEN
           valueFrom:
