@@ -1,0 +1,25 @@
+{{ if .Values.redis.enabled }}
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullName }}-redis-conf
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: redis
+data:
+  redis.conf: |-
+    bind *
+    port 6379
+
+    protected-mode no
+
+    daemonize no
+
+    # Use AOF for persistence
+    dir /data
+    appendonly yes
+    save ""
+{{ end }}

@@ -93,6 +93,10 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.repoName }}-rails-secret-key-base
                   key: secret-key-base
+            {{- if $.Values.redis.enabled }}
+            - name: REDIS_URL
+              value: {{ $.Values.redis.redisUrlOverride.workers | default (printf "redis://%s-redis" $fullName) }}
+            {{- end }}
             {{- with .Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
