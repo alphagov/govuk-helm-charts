@@ -138,6 +138,12 @@ govukApplications:
     helmValues:
       arch: arm64
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &asset-manager-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *asset-manager-redis
       ingress:
         enabled: true
         annotations:
@@ -194,8 +200,6 @@ govukApplications:
             secretKeyRef:
               name: asset-manager-docdb
               key: MONGODB_URI
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: AWS_S3_BUCKET_NAME
           value: govuk-assets-integration
 
