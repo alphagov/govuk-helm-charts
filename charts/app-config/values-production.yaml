@@ -1345,6 +1345,10 @@ govukApplications:
       uploadAssets:
         s3Directory: chat
         path: /app/public/assets/chat
+      cronTasks:
+        - name: bigquery-export
+          task: "bigquery:export"
+          schedule: "0 7 * * *"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
