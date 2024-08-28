@@ -158,9 +158,3 @@ spec:
   - name: inhours
     timeIntervals:
     - weekdays: ['monday:friday']
-  - name: pagerduty_drill
-    timeIntervals:
-    - weekdays: ['monday']
-      times:
-      - startTime: 10:00
-        endTime: 10:03
