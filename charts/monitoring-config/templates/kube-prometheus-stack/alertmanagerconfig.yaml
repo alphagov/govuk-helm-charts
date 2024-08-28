@@ -160,7 +160,7 @@ spec:
     - weekdays: ['monday:friday']
   - name: pagerduty_drill
     timeIntervals:
-    - weekdays: ['wednesday']
+    - weekdays: ['monday']
       times:
       - startTime: 10:00
         endTime: 10:03
