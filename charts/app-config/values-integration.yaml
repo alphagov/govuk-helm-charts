@@ -1331,20 +1331,12 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
-          alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
-          alb.ingress.kubernetes.io/load-balancer-name: www-origin
-          alb.ingress.kubernetes.io/group.order: "10"
-          alb.ingress.kubernetes.io/load-balancer-attributes: >
-            access_logs.s3.enabled=true,
-            access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-            access_logs.s3.prefix=elb/govuk-chat
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "95"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "www.{{ .Values.externalDomainSuffix }}",
-                "www-origin.{{ .Values.publishingDomainSuffix }}",
-                "www.{{ .Values.k8sExternalDomainSuffix }}"
-            ]}},{"field":"path-pattern","pathPatternConfig":{"values":["/chat","/chat/*"]}}]
+                "chat.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
         hosts:
           - name: chat.{{ .Values.k8sExternalDomainSuffix }}
       uploadAssets:
@@ -2137,7 +2129,6 @@ govukApplications:
           <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
           alb.ingress.kubernetes.io/load-balancer-name: www-origin
-          alb.ingress.kubernetes.io/group.order: "20"
           alb.ingress.kubernetes.io/load-balancer-attributes: >
             access_logs.s3.enabled=true,
             access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
