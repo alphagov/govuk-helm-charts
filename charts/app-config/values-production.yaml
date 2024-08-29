@@ -627,9 +627,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &content-publisher-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *content-publisher-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
