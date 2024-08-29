@@ -141,8 +141,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &asset-man-redis redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *asset-man-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
