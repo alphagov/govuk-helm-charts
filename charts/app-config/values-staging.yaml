@@ -630,6 +630,12 @@ govukApplications:
       dbMigrationEnabled: true
       nginxClientMaxBodySize: &max-upload-size 500M
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &content-publisher-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *content-publisher-redis
       ingress:
         enabled: true
         annotations:
@@ -691,8 +697,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-content-publisher-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: WHITEHALL_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
