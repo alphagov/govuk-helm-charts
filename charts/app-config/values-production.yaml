@@ -425,9 +425,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &content-data-redis >
-            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-          workers: *content-data-redis
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       ingress:
         enabled: true
         redirect: true
