@@ -422,6 +422,12 @@ govukApplications:
 
   - name: content-data-admin
     helmValues:
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &content-data-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *content-data-redis
       ingress:
         enabled: true
         redirect: true
@@ -515,8 +521,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: FIND_CONTENT_QUERY_PAGE_SIZE
           value: "1000"
 
