@@ -1702,6 +1702,8 @@ govukApplications:
       arch: arm64
       nginxClientMaxBodySize: *max-upload-size
       workerEnabled: true
+      redis:
+        enabled: true
       ingress:
         enabled: true
         annotations:

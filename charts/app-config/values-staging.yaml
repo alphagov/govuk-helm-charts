@@ -792,10 +792,6 @@ govukApplications:
       workerEnabled: true
       redis:
         enabled: true
-        redisUrlOverride:
-          app: &content-tagger-redis >
-            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-          workers: *content-tagger-redis
       ingress:
         enabled: true
         annotations:

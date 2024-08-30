@@ -35,6 +35,9 @@ spec:
                 name: {{ $fullName }}
                 port:
                   number: {{ $svcPort }}
+          {{- if .extraPaths }}
+          {{- toYaml .extraPaths | nindent 10 }}
+          {{- end }}
           {{- if $.Values.ingress.redirect }}
           - path: /
             pathType: Prefix
