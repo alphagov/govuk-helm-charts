@@ -57,6 +57,10 @@ spec:
             - name: SECRET_KEY_BASE
               value: unused_for_dbmigrate_but_still_required
             {{- end }}
+            {{- if .Values.redis.enabled }}
+            - name: REDIS_URL
+              value: {{ .Values.redis.redisUrlOverride.app | default (printf "redis://%s-redis" $fullName) }}
+            {{- end }}
             {{- with .Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
