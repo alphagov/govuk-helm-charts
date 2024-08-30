@@ -1328,17 +1328,6 @@ govukApplications:
           name: worker
         - command: ['rake', 'message_queue:published_documents_consumer']
           name: published-documents-consumer
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/group.order: "95"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-            [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "chat.{{ .Values.publishingDomainSuffix }}"
-            ]}}]
-        hosts:
-          - name: chat.{{ .Values.k8sExternalDomainSuffix }}
       uploadAssets:
         s3Directory: chat
         path: /app/public/assets/chat
@@ -2143,6 +2132,14 @@ govukApplications:
             ]}}]
         hosts:
           - name: www-origin.{{ .Values.k8sExternalDomainSuffix }}
+            extraPaths:
+              - path: /chat
+                pathType: Prefix
+                backend:
+                  service:
+                    name: govuk-chat
+                    port:
+                      name: app
       nginxConfigMap:
         create: false
         name: live-router-nginx-conf
