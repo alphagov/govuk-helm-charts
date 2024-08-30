@@ -1349,6 +1349,9 @@ govukApplications:
         - name: bigquery-export
           task: "bigquery:export"
           schedule: "0 7 * * *"
+        - name: promote-waiting-list
+          task: "users:promote_waiting_list"
+          schedule: "0 * * * *"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
