@@ -2138,7 +2138,8 @@ govukApplications:
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "www.{{ .Values.externalDomainSuffix }}",
-                "www-origin.{{ .Values.publishingDomainSuffix }}"
+                "www-origin.{{ .Values.publishingDomainSuffix }}",
+                "www.{{ .Values.k8sExternalDomainSuffix }}"
             ]}}]
         hosts:
           - name: www-origin.{{ .Values.k8sExternalDomainSuffix }}
