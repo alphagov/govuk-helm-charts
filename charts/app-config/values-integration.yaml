@@ -2127,8 +2127,7 @@ govukApplications:
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &router-conditions >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "www.{{ .Values.externalDomainSuffix }}",
-                "www-origin.{{ .Values.publishingDomainSuffix }}",
-                "www.{{ .Values.k8sExternalDomainSuffix }}"
+                "www-origin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
           alb.ingress.kubernetes.io/conditions.govuk-chat: *router-conditions
         hosts:
