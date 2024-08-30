@@ -80,6 +80,10 @@ spec:
                 - name: SENTRY_RELEASE
                   value: "{{ $.Values.appImage.tag }}"
                 {{- end }}
+                {{- if .Values.redis.enabled }}
+                - name: REDIS_URL
+                  value: {{ .Values.redis.redisUrlOverride.app | default (printf "redis://%s-redis" $fullName) }}
+                {{- end }}
                 {{- with $.Values.extraEnv }}
                   {{- . | toYaml | trim | nindent 16 }}
                 {{- end }}
