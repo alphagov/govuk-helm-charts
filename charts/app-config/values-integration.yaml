@@ -2135,12 +2135,11 @@ govukApplications:
             access_logs.s3.enabled=true,
             access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
             access_logs.s3.prefix=elb/www-origin
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &router-conditions >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "www.{{ .Values.externalDomainSuffix }}",
                 "www-origin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/conditions.govuk-chat: *router-conditions
         hosts:
           - name: www-origin.{{ .Values.k8sExternalDomainSuffix }}
       nginxConfigMap:
