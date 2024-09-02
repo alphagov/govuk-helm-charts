@@ -786,6 +786,12 @@ govukApplications:
     helmValues:
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &content-tagger-redis >
+            redis://shared-redis-govuk.eks.production.govuk-internal.digital
+          workers: *content-tagger-redis
       ingress:
         enabled: true
         annotations:
@@ -830,8 +836,6 @@ govukApplications:
             secretKeyRef:
               name: content-tagger-postgres
               key: DATABASE_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
 
   - name: email-alert-api
     helmValues:
