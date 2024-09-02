@@ -1224,6 +1224,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-publishing-api
               key: bearer_token
+        - name: RAILS_SERVE_STATIC_FILES
+          value: "true"
 
   - name: draft-frontend
     repoName: frontend
