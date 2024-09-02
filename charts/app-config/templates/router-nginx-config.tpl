@@ -181,6 +181,28 @@ http {
       return 301 /media/5c810ef4ed915d43e50ce260/gov.uk_logotype_crown.png;
     }
 
+    # Google Search Console (gov.uk) verification files
+    # See https://gov-uk.atlassian.net/wiki/spaces/GOVUK/pages/3585441793/Google+Search+Console for ownership of these verification tokens
+
+{{- if (ne .Values.govukEnvironment "production") }}
+    location = /googlea6393a390aadfbaa.html {
+      add_header Content-Type text/html;
+      return 200 'google-site-verification: googlea6393a390aadfbaa.html';
+    }
+
+    location = /googlec908b3bc32386239.html {
+      add_header Content-Type text/html;
+      return 200 'google-site-verification: googlec908b3bc32386239.html';
+    }
+
+    # Bing (gov.uk) verification files
+
+    location = /BingSiteAuth.xml {
+      add_header Content-Type application/xml;
+      return 200 '<?xml version="1.0"?><users><user>66F6ADB7C4481C94247D1E08FA04C6A4</user></users>';
+    }
+{{- end }}
+
     # DWP YouTube Channel Verification
     location = /dla-ending/google6db9c061ce178960.html {
       add_header Content-Type text/html;
