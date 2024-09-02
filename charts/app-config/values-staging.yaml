@@ -1741,6 +1741,12 @@ govukApplications:
     helmValues:
       nginxClientMaxBodySize: *max-upload-size
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &manuals-publisher-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *manuals-publisher-redis
       ingress:
         enabled: true
         annotations:
