@@ -3058,8 +3058,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &support-api-redis redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *support-api-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       cronTasks:
         - name: feedback-deduplication-nightly
           task: "anonymous_feedback_deduplication:nightly"
