@@ -397,9 +397,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &contacts-admin-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *contacts-admin-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
