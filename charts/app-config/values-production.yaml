@@ -394,6 +394,12 @@ govukApplications:
         - name: org-import
           task: "organisations:import"
           schedule: "0 3 * * *"
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &contacts-admin-redis >
+            redis://shared-redis-govuk.eks.production.govuk-internal.digital
+          workers: *contacts-admin-redis
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
@@ -415,8 +421,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-contacts-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: GOOGLE_TAG_MANAGER_ID
           value: &publishing-bootstrap-gtm-id GTM-W573BJPG
 
