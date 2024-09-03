@@ -1342,6 +1342,10 @@ govukApplications:
       uploadAssets:
         s3Directory: chat
         path: /app/public/assets/chat
+      cronTasks:
+        - name: promote-waiting-list
+          task: "users:promote_waiting_list"
+          schedule: "0 7-19 * * *"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
