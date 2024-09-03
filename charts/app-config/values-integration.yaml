@@ -1745,8 +1745,6 @@ govukApplications:
             secretKeyRef:
               name: manuals-publisher-docdb
               key: MONGODB_URI
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
         - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
