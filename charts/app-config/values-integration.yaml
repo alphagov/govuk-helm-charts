@@ -3055,6 +3055,11 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &support-api-redis redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *support-api-redis
       cronTasks:
         - name: feedback-deduplication-nightly
           task: "anonymous_feedback_deduplication:nightly"
@@ -3093,8 +3098,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: ZENDESK_CLIENT_USERNAME
           valueFrom:
             secretKeyRef:
