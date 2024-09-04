@@ -2842,6 +2842,10 @@ govukApplications:
         - name: organisations-import
           task: "organisations:import"
           schedule: "0 4 * * *"
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -2872,8 +2876,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-short-url-manager-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
   - name: specialist-publisher
     helmValues:
