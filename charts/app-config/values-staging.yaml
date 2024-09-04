@@ -2880,6 +2880,12 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &specialist-publisher-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *specialist-publisher-redis
       ingress:
         enabled: true
         annotations:
@@ -2931,8 +2937,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
   - name: support
     helmValues:
