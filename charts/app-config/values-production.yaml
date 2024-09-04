@@ -1772,9 +1772,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &manuals-publisher-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *manuals-publisher-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
