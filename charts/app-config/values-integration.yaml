@@ -2917,8 +2917,6 @@ govukApplications:
       workerEnabled: true
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
