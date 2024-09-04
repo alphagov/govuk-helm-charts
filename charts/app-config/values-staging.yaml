@@ -2885,9 +2885,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &specialist-publisher-redis >
-            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-          workers: *specialist-publisher-redis
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
