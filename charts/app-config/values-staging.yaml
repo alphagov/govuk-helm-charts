@@ -1748,9 +1748,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &manuals-publisher-redis >
-            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-          workers: *manuals-publisher-redis
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
@@ -1803,8 +1801,6 @@ govukApplications:
             secretKeyRef:
               name: manuals-publisher-docdb
               key: MONGODB_URI
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
   - name: maslow
     helmValues:
