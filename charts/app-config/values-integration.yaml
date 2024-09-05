@@ -1834,6 +1834,12 @@ govukApplications:
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &places-manager-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *places-manager-redis
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
@@ -1850,8 +1856,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-imminence
               key: oauth_secret
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 
   - name: publisher
     helmValues:
