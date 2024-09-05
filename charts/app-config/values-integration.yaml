@@ -1347,6 +1347,9 @@ govukApplications:
           task: "users:promote_waiting_list"
           schedule: "0 7-19 * * *"
       extraEnv:
+        # remove the need for signon to access frontend of chat
+        - name: AVAILABLE_WITHOUT_SIGNON_AUTHENTICATION
+          value: true
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
