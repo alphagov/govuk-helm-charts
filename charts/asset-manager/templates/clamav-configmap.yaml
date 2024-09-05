@@ -26,7 +26,7 @@ data:
     # sync with StreamMaxLen, because clamdscan streams when connecting via TCP
     # (as opposed to UNIX socket).
     MaxFileSize 500M
-    MaxScanSize 2000M
+    MaxScanSize 2500M
     MaxScanTime 0
     MaxThreads 20
     SelfCheck 900
