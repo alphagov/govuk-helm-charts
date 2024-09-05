@@ -1562,6 +1562,12 @@ govukApplications:
   - name: local-links-manager
     helmValues:
       arch: arm64
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &local-links-manager-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *local-links-manager-redis
       ingress:
         enabled: true
         annotations:
@@ -1648,8 +1654,6 @@ govukApplications:
               key: LINK_CHECKER_API_SECRET_TOKEN
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: RUN_LINK_GA_EXPORT
           value: "false"
         - name: AWS_S3_ASSET_BUCKET_NAME
