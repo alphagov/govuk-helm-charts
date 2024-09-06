@@ -1861,9 +1861,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &places-manager-redis >
-            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-          workers: *places-manager-redis
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
