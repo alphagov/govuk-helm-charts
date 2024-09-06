@@ -1601,7 +1601,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital=======
       ingress:
         enabled: true
         annotations:
@@ -1856,6 +1856,10 @@ govukApplications:
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
@@ -1872,9 +1876,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-imminence
               key: oauth_secret
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-
 
   - name: publisher
     helmValues:
@@ -2435,6 +2436,11 @@ govukApplications:
             secretKeyRef:
               name: search-api-google-analytics
               key: govuk-view-id
+        - name: GOOGLE_ACCOUNT_TYPE
+          valueFrom:
+            secretKeyRef:
+              name: search-api-google-analytics
+              key: account-type
         - name: GOOGLE_CLIENT_EMAIL
           valueFrom:
             secretKeyRef:
@@ -2517,6 +2523,11 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: GOOGLE_CLOUD_CREDENTIALS
+        - name: DISCOVERY_ENGINE_DATASTORE
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_DATASTORE
         - name: DISCOVERY_ENGINE_DATASTORE_BRANCH
           valueFrom:
             secretKeyRef:
