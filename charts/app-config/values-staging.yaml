@@ -1367,6 +1367,8 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: 70883fba-853d-487a-9580-3ea1931ecb49
+        - name: GOVUK_NOTIFY_REPLY_TO_ID
+          value: govuk-chat-notifications-staging@digital.cabinet-office.gov.uk
         - name: OPENAI_ACCESS_TOKEN
           valueFrom:
             secretKeyRef:
