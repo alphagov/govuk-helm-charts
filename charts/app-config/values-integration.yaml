@@ -1410,6 +1410,14 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-bigquery
               key: credentials
+      nginxConfigMap:
+        extraServerConf: |
+          location /chat {
+            if ($http_x_forwarded_host = 'chat.integration.publishing.service.gov.uk' ) {
+              return 301 https://www.integration.publishing.service.gov.uk$request_uri;
+            }
+            proxy_pass http://govuk-chat;
+          }
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
