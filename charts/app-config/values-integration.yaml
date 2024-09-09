@@ -1059,16 +1059,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
 
   - name: draft-feedback
     repoName: feedback
@@ -1119,16 +1109,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
 
   - name: finder-frontend
     helmValues:
@@ -2777,16 +2757,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
 
   - name: smokey
     chartPath: charts/smokey
@@ -3052,16 +3022,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-support-support-api
               key: bearer_token
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
         - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
           valueFrom:
             secretKeyRef:
