@@ -459,19 +459,6 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "code",
-          "expr": "quantile(0.75, rate(http_request_duration_seconds_sum{job=\"govuk-chat\"}[$__rate_interval]))",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "requests/ps",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
           "disableTextWrap": false,
           "editorMode": "code",
           "expr": "quantile(0.75, sum(rate(http_request_duration_seconds_sum{job=\"govuk-chat\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{job=\"govuk-chat\"}[$__rate_interval])))",
@@ -479,7 +466,7 @@
           "hide": false,
           "includeNullMetadata": true,
           "instant": false,
-          "legendFormat": "quantileV2",
+          "legendFormat": "requests/ps",
           "range": true,
           "refId": "B",
           "useBackend": false
