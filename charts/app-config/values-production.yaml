@@ -3028,16 +3028,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-support-support-api
               key: bearer_token
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
         - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
           valueFrom:
             secretKeyRef:
