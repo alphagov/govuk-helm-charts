@@ -1960,9 +1960,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &publishing-api-redis >
-            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *publishing-api-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       cronTasks:
         - name: events-export
           task: "events:export_to_s3"
