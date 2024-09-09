@@ -1604,8 +1604,6 @@ govukApplications:
     helmValues:
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
