@@ -1966,9 +1966,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &publishing-api-redis >
-            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-          workers: *publishing-api-redis
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       workerResources:
         limits:
           cpu: 4000m
