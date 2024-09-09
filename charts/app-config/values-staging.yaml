@@ -1573,8 +1573,6 @@ govukApplications:
             secretKeyRef:
               name: link-checker-api-postgres
               key: DATABASE_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
   - name: local-links-manager
     helmValues:
