@@ -2777,16 +2777,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
 
   - name: smokey
     chartPath: charts/smokey
