@@ -1959,6 +1959,12 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &publishing-api-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *publishing-api-redis
       cronTasks:
         - name: events-export
           task: "events:export_to_s3"
@@ -2002,8 +2008,6 @@ govukApplications:
             secretKeyRef:
               name: publishing-api-rabbitmq
               key: RABBITMQ_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: EVENT_LOG_AWS_BUCKETNAME
           value: govuk-publishing-api-event-log-integration
         - name: GOVUK_CONTENT_SCHEMAS_PATH
