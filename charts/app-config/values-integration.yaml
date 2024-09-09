@@ -1059,16 +1059,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
 
   - name: draft-feedback
     repoName: feedback
@@ -1119,16 +1109,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
 
   - name: finder-frontend
     helmValues:
