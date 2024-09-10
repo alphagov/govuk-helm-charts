@@ -1,0 +1,102 @@
+rule_files:
+  - chat_ai.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      # No alert with 5xx errors < 10%
+      - series: >-
+          http_requests_total{
+          job="govuk-chat",
+          status="200"
+          }
+        values: '1000+100x15'
+      - series: >-
+          http_requests_total{
+          job="govuk-chat",
+          status="500"
+          }
+        values: '0+10x15'
+    alert_rule_test:
+      - alertname: High5xxRate
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert with 5xx errors > 10%
+      - series: >-
+          http_requests_total{
+          job="govuk-chat",
+          status="200"
+          }
+        values: '1000x15'
+      - series: >-
+          http_requests_total{
+          job="govuk-chat",
+          status="500"
+          }
+        values: '0+100x15'
+    alert_rule_test:
+      - alertname: High5xxRate
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: High5xxRate
+              severity: critical
+              destination: slack-chat-notifications
+            exp_annotations:
+              summary: Elevated rate of 5xx return codes for Chat AI
+              description: >-
+                The rate of http 5xx return codes is above 10% of total requests
+                for more than 5 minutes.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+
+  - interval: 1m
+    input_series:
+      # No alert for LongRequestDuration
+      - series: >-
+          http_request_duration_seconds_sum{
+          job="govuk-chat",
+          }
+        values: '50+1x15'
+      - series: >-
+          http_request_duration_seconds_count{
+          job="govuk-chat",
+          }
+        values: '20000+1000x15'
+    alert_rule_test:
+      - alertname: LongRequestDuration
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for LongRequestDuration
+      - series: >-
+          http_request_duration_seconds_sum{
+          job="govuk-chat"
+          }
+        values: '0+10x15'
+      - series: >-
+          http_request_duration_seconds_count{
+          job="govuk-chat"
+          }
+        values: '0+1x15'
+    alert_rule_test:
+      - alertname: LongRequestDuration
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: LongRequestDuration
+              severity: critical
+              destination: slack-chat-notifications
+            exp_annotations:
+              summary: Elevated HTTP request duration for Chat AI
+              description: >-
+                75th percentile HTTP request duration over 1 second for more than 5 minutes.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html

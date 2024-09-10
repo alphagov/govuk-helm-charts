@@ -1,0 +1,48 @@
+groups:
+  - name: ChatAI
+    rules:
+      - alert: High5xxRate
+        expr: >-
+          sum(rate(http_requests_total{
+            job="govuk-chat",
+            status=~"5.."
+          }[60m]))
+          /
+          (sum(rate(http_requests_total{
+            job="govuk-chat"
+          }[60m])) / 100)
+          > 10
+        for: 5m
+        labels:
+          severity: critical
+          destination: slack-chat-notifications
+        annotations:
+          summary: Elevated rate of 5xx return codes for Chat AI
+          description: >-
+            The rate of http 5xx return codes is above 10% of total requests
+            for more than 5 minutes.
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+
+      - alert: LongRequestDuration
+        expr: >-
+          quantile(0.75,
+            sum(rate(http_request_duration_seconds_sum{
+              job="govuk-chat"
+            }[60m]))
+            /
+            sum(rate(http_request_duration_seconds_count{
+              job="govuk-chat"
+            }[60m]))
+          )
+          > 1
+        for: 5m
+        labels:
+          severity: critical
+          destination: slack-chat-notifications
+        annotations:
+          summary: Elevated HTTP request duration for Chat AI
+          description: >-
+            75th percentile HTTP request duration over 1 second for more than 5 minutes.
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
