@@ -2889,8 +2889,6 @@ govukApplications:
           schedule: "0 4 * * *"
       redis:
         enabled: true
-        redisUrlOverride:
-          app: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
