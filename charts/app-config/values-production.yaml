@@ -318,6 +318,12 @@ govukApplications:
     helmValues:
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &collections-publisher-redis >
+            redis://shared-redis-govuk.eks.production.govuk-internal.digital
+          workers: *collections-publisher-redis
       ingress:
         enabled: true
         annotations:
@@ -374,8 +380,6 @@ govukApplications:
             secretKeyRef:
               name: collections-publisher-mysql
               key: DATABASE_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
 
   - name: contacts-admin
     helmValues:
