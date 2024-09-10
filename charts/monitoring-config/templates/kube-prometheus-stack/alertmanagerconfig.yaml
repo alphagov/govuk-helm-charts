@@ -68,6 +68,16 @@ spec:
       groupInterval: 30m
       activeTimeIntervals:
         - inhours
+    - matchers:
+      - name: destination
+        value: slack-chat-notifications
+        matchType: =
+      receiver: 'slack-chat-notifications'
+      repeatInterval: 1d
+      groupWait: 12h
+      groupInterval: 12h
+      activeTimeIntervals:
+        - inhours
   receivers:
   - name: 'null'
   - name: 'pagerduty'
@@ -100,6 +110,20 @@ spec:
       apiURL: &slack_api_url
         name: alertmanager-receivers
         key: slack_api_url
+  - name: 'slack-chat-notifications'
+    slackConfigs:
+    - channel: '#dev-notifications-ai-govuk'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      title: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+      text: >-
+        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+
+        *Environment:* {{ .Values.govukEnvironment }}
+
+        *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
+      apiURL: *slack_api_url
   - name: 'slack-mirror-freshness'
     slackConfigs:
     - channel: '#govuk-platform-engineering'
