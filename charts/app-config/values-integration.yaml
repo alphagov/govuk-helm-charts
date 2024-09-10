@@ -1849,9 +1849,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &mainstream-publisher-redis >
-            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *mainstream-publisher-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       cronTasks:
         - name: mail-fetcher
           command: "script/mail_fetcher"
