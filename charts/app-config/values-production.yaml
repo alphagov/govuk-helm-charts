@@ -1991,9 +1991,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &publishing-api-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *publishing-api-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       workerReplicaCount: 12
       workerResources:
         limits:
