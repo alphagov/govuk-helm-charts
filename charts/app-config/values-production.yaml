@@ -3159,6 +3159,12 @@ govukApplications:
           schedule: "29 5 * * *"
       nginxClientMaxBodySize: *max-upload-size
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &travel-advice-publisher-redis >
+            redis://shared-redis-govuk.eks.production.govuk-internal.digital
+          workers: *travel-advice-publisher-redis
       ingress:
         enabled: true
         annotations:
@@ -3211,8 +3217,6 @@ govukApplications:
             secretKeyRef:
               name: travel-advice-publisher-docdb
               key: MONGODB_URI
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
 
