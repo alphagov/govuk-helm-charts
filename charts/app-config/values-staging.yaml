@@ -166,6 +166,7 @@ govukApplications:
               - path: /government/assets/
               - path: /media/
               - path: /auth/gds  # Viewing draft assets requires user auth.
+              - path: /robots.txt
       assetManagerNFS: &assets-nfs assets.staging.govuk-internal.digital
       nginxConfigMap:
         create: false
