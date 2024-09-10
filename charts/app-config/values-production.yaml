@@ -3167,9 +3167,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &travel-advice-publisher-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *travel-advice-publisher-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
