@@ -1846,6 +1846,12 @@ govukApplications:
       arch: arm64
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &mainstream-publisher-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *mainstream-publisher-redis
       cronTasks:
         - name: mail-fetcher
           command: "script/mail_fetcher"
@@ -1924,8 +1930,6 @@ govukApplications:
             secretKeyRef:
               name: publisher-docdb
               key: MONGODB_URI
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: EMAIL_GROUP_BUSINESS
           value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
         - name: EMAIL_GROUP_CITIZEN
