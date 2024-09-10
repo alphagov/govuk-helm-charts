@@ -1850,9 +1850,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &places-manager-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *places-manager-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
