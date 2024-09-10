@@ -1368,6 +1368,12 @@ govukApplications:
         - name: promote-waiting-list
           task: "users:promote_waiting_list"
           schedule: "0 * * * *"
+        - name: increment-instant-access-places
+          task: "settings:increment_pilot_places[instant_access]"
+          schedule: "0 9,11,13,15 * * 1-5"
+        - name: increment-delayed-access-places
+          task: "settings:increment_pilot_places[delayed_access]"
+          schedule: "1 9,11,13,15 * * 1-5"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
