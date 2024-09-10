@@ -76,7 +76,7 @@ data:
         '"upstream_addr":"$upstream_addr",'
         '"upstream_response_time":"$upstream_response_time"'
       '}';
-    
+
       # Set GOVUK-Request-Id if not set
       map $http_govuk_request_id $govuk_request_id {
         default $http_govuk_request_id;
@@ -227,6 +227,11 @@ data:
         # Endpoint for liveness and readiness checks of the nginx container.
         location = /readyz {
           return 200 'ok\n';
+        }
+
+        # Temporary robots.txt to stop indexing of files specified
+        location = /robots.txt {
+          return 200 'User-agent: *\nDisallow: /media/6582f7c4ed3c3400133bfc8f/pc1-interactive.pdf\nDisallow: /government/uploads/system/uploads/attachment_data/file/881746/pc1-print.pdf';
         }
       }
     }
