@@ -1973,9 +1973,6 @@ govukApplications:
           cpu: 100m
           memory: 512Mi
       cronTasks:
-        - name: events-export
-          task: "events:export_to_s3"
-          schedule: "38 5 * * 0"
         - name: metrics-report-to-prometheus
           task: "metrics:report_to_prometheus"
           schedule: "22 * * * *"  # every hour, at 22 minutes past the hour
