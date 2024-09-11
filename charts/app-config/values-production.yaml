@@ -1890,6 +1890,12 @@ govukApplications:
     helmValues:
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &mainstream-publisher-redis >
+            redis://shared-redis-govuk.eks.production.govuk-internal.digital
+          workers: *mainstream-publisher-redis
       cronTasks:
         - name: reports-generate
           task: "reports:generate"
@@ -1965,8 +1971,6 @@ govukApplications:
             secretKeyRef:
               name: publisher-docdb
               key: MONGODB_URI
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: EMAIL_GROUP_BUSINESS
           value: publisher-alerts-business@digital.cabinet-office.gov.uk
         - name: EMAIL_GROUP_CITIZEN
