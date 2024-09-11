@@ -1893,9 +1893,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &mainstream-publisher-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *mainstream-publisher-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       cronTasks:
         - name: reports-generate
           task: "reports:generate"
