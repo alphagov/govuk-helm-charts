@@ -100,3 +100,169 @@ tests:
                 75th percentile HTTP request duration over 1 second for more than 5 minutes.
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+
+  - interval: 1m
+    input_series:
+      # No alert for FE Pod High CPU
+      - series: >-
+          node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{
+          pod="govuk-chat-abcdefghij-abcde",
+          container="app"
+          }
+        values: '0+0.1x7 0.7-0.1x6'
+    alert_rule_test:
+      - alertname: HighPodCPUFE
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for FE Pod High CPU
+      - series: >-
+          node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{
+          pod="govuk-chat-abcdefghij-abcde",
+          container="app"
+          }
+        values: '0+0.1x15'
+    alert_rule_test:
+      - alertname: HighPodCPUFE
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: HighPodCPUFE
+              severity: critical
+              container: app
+              destination: slack-chat-notifications
+            exp_annotations:
+              summary: Elevated level of FE Pod CPU being consumed for Chat AI
+              description: >-
+                The FE Pod CPU usage is above 80% for a container for more than 5 minutes.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+
+  - interval: 1m
+    input_series:
+      # No alert for Worker Pod High CPU
+      - series: >-
+          node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{
+          pod="govuk-chat-worker-abcdefghij-abcde",
+          container="worker"
+          }
+        values: '0+0.1x7 0.7-0.1x6'
+    alert_rule_test:
+      - alertname: HighPodCPUWorker
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for Worker Pod High CPU
+      - series: >-
+          node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{
+          pod="govuk-chat-worker-abcdefghij-abcde",
+          container="worker"
+          }
+        values: '0+0.1x15'
+    alert_rule_test:
+      - alertname: HighPodCPUWorker
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: HighPodCPUWorker
+              severity: critical
+              container: worker
+              destination: slack-chat-notifications
+            exp_annotations:
+              summary: Elevated level of Worker Pod CPU being consumed for Chat AI
+              description: >-
+                The Worker Pod CPU usage is above 80% for a container for more than 5 minutes.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+
+  - interval: 1m
+    input_series:
+      # No alert for FE Pod High Memory
+      - series: >-
+          container_memory_working_set_bytes{
+          job="kubelet",
+          metrics_path="/metrics/cadvisor",
+          pod="govuk-chat-abcdefghij-abcde",
+          container="app"
+          }
+        values: '1073741824+1048576x15'
+    alert_rule_test:
+      - alertname: HighPodMemoryFE
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for FE Pod High Memory
+      - series: >-
+          container_memory_working_set_bytes{
+          job="kubelet",
+          metrics_path="/metrics/cadvisor",
+          pod="govuk-chat-abcdefghij-abcde",
+          container="app"
+          }
+        values: '1717986918+1048576x15'
+        #values: '1610612736+1048576x15'
+    alert_rule_test:
+      - alertname: HighPodMemoryFE
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: HighPodMemoryFE
+              severity: critical
+              container: app
+              destination: slack-chat-notifications
+            exp_annotations:
+              summary: Elevated level of FE Pod Memory being consumed for Chat AI
+              description: >-
+                The FE Pod Memory usage is above 80% for a container for more than 5 minutes.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+
+  - interval: 1m
+    input_series:
+      # No alert for Worker Pod High Memory
+      - series: >-
+          container_memory_working_set_bytes{
+          job="kubelet",
+          metrics_path="/metrics/cadvisor",
+          pod="govuk-chat-worker-abcdefghij-abcde",
+          container="worker"
+          }
+        values: '1073741824+1048576x15'
+    alert_rule_test:
+      - alertname: HighPodMemoryWorker
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for Worker Pod High Memory
+      - series: >-
+          container_memory_working_set_bytes{
+          job="kubelet",
+          metrics_path="/metrics/cadvisor",
+          pod="govuk-chat-worker-abcdefghij-abcde",
+          container="worker"
+          }
+        values: '1717986918+1048576x15'
+        #values: '1610612736+1048576x15'
+    alert_rule_test:
+      - alertname: HighPodMemoryWorker
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: HighPodMemoryWorker
+              severity: critical
+              container: worker
+              destination: slack-chat-notifications
+            exp_annotations:
+              summary: Elevated level of Worker Pod Memory being consumed for Chat AI
+              description: >-
+                The Worker Pod Memory usage is above 80% for a container for more than 5 minutes.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
