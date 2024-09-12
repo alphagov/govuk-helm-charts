@@ -2999,9 +2999,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &support-redis >
-            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *support-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       extraEnv:
         - name: AWS_S3_BUCKET_NAME
           value: govuk-integration-support-api-csvs
