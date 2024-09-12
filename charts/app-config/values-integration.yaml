@@ -1678,6 +1678,12 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &locations-api-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *locations-api-redis
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
@@ -1696,8 +1702,6 @@ govukApplications:
               key: api-secret
         - name: OS_PLACES_API_POSTCODES_PER_SECOND
           value: "1"
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
 
   - name: manuals-publisher
     helmValues:
