@@ -1705,8 +1705,6 @@ govukApplications:
       workerEnabled: true
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
