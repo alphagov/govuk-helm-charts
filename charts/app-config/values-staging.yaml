@@ -64,6 +64,10 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
@@ -128,8 +132,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-account-api
               key: oauth_secret
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
   - name: asset-manager
     chartPath: charts/asset-manager
