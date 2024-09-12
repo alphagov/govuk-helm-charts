@@ -3002,8 +3002,6 @@ govukApplications:
       workerEnabled: true
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       extraEnv:
         - name: AWS_S3_BUCKET_NAME
           value: govuk-production-support-api-csvs
