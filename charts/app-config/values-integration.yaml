@@ -69,9 +69,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &account-api-redis >
-            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *account-api-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
