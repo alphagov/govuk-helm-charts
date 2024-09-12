@@ -847,9 +847,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &email-alert-api-redis >
-            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
-          workers: *email-alert-api-redis
+          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
