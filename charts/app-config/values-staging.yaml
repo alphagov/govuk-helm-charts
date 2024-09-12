@@ -844,6 +844,12 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &email-alert-api-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *email-alert-api-redis
       ingress:
         enabled: true
         annotations:
@@ -910,8 +916,6 @@ govukApplications:
           value: 2844a647-6bf1-4b01-a25c-569d2cc00849
         - name: GOVUK_NOTIFY_RECIPIENTS
           value: email-alert-api-staging@digital.cabinet-office.gov.uk
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '10'
       nginxConfigMap:
