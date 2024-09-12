@@ -3000,6 +3000,12 @@ govukApplications:
       uploadAssets:
         path: /app/public/assets/support
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &support-redis >
+            redis://shared-redis-govuk.eks.production.govuk-internal.digital
+          workers: *support-redis
       extraEnv:
         - name: AWS_S3_BUCKET_NAME
           value: govuk-production-support-api-csvs
@@ -3023,8 +3029,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-support-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: SUPPORT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
