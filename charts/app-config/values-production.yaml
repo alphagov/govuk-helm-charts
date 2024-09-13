@@ -1308,21 +1308,21 @@ govukApplications:
       replicaCount: 8
       appResources:
         limits:
-          cpu: 4
-          memory: 2500Mi
+          cpu: 6
+          memory: 3Gi
         requests:
-          cpu: 2
+          cpu: 4
           memory: 2Gi
       dbMigrationEnabled: true
       workerEnabled: true
       workerReplicaCount: 4
       workerResources:
         limits:
-          cpu: 2
+          cpu: 4
           memory: 2500Mi
         requests:
-          cpu: 1
-          memory: 1500Mi
+          cpu: 2
+          memory: 2Gi
       workers:
         - command: ["sidekiq", "-C", "config/sidekiq.yml"]
           name: worker
