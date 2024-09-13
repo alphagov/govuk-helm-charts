@@ -14,15 +14,14 @@ groups:
           > 10
         for: 5m
         labels:
-          severity: critical
-          destination: slack-chat-notifications
+          severity: page
         annotations:
           summary: Elevated rate of 5xx return codes for Chat AI
           description: >-
             The rate of http 5xx return codes is above 10% of total requests
             for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
 
       - alert: LongRequestDuration
         expr: >-
@@ -38,14 +37,13 @@ groups:
           > 1
         for: 5m
         labels:
-          severity: critical
-          destination: slack-chat-notifications
+          severity: page
         annotations:
           summary: Elevated HTTP request duration for Chat AI
           description: >-
             75th percentile HTTP request duration over 1 second for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
 
       - alert: HighPodCPUFE
         expr: >-
@@ -63,7 +61,7 @@ groups:
           description: >-
             The FE Pod CPU usage is above 80% for a container for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
 
       - alert: HighPodCPUWorker
         expr: >-
@@ -81,7 +79,7 @@ groups:
           description: >-
             The Worker Pod CPU usage is above 80% for a container for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
 
       - alert: HighPodMemoryFE
         expr: >-
@@ -101,7 +99,7 @@ groups:
           description: >-
             The FE Pod Memory usage is above 80% for a container for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
 
       - alert: HighPodMemoryWorker
         expr: >-
@@ -121,4 +119,4 @@ groups:
           description: >-
             The Worker Pod Memory usage is above 80% for a container for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
