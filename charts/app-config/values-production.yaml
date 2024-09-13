@@ -1466,6 +1466,14 @@ govukApplications:
           value: "25"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
           value: "100"
+      nginxConfigMap:
+        extraServerConf: |
+          location /chat {
+            if ($http_host = 'chat.publishing.service.gov.uk' ) {
+              return 301 https://www.gov.uk$request_uri;
+            }
+            proxy_pass http://govuk-chat;
+          }
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
