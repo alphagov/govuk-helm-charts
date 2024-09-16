@@ -2066,8 +2066,6 @@ govukApplications:
             secretKeyRef:
               name: release-github
               key: token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: SLACK_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
