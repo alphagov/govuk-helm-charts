@@ -2073,6 +2073,12 @@ govukApplications:
         hosts:
           - name: release.{{ .Values.k8sExternalDomainSuffix }}
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &release-redis >
+            redis://shared-redis-govuk.eks.production.govuk-internal.digital
+          workers: *release-redis
       replicaCount: 2
       workerReplicaCount: 1
       podDisruptionBudget:
@@ -2121,8 +2127,6 @@ govukApplications:
             secretKeyRef:
               name: release-github
               key: token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: SLACK_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
