@@ -1730,9 +1730,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &locations-api-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *locations-api-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
