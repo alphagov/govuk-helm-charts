@@ -2356,8 +2356,6 @@ govukApplications:
       workerReplicaCount: 3
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       cronTasks:
         - name: reindex-with-new-schemas
           task: "search:migrate_schema"
