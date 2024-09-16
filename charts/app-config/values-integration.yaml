@@ -2356,6 +2356,12 @@ govukApplications:
         enabled: false
       workerEnabled: true
       workerReplicaCount: 3
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &search-api-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *search-api-redis
       cronTasks:
         - name: reindex-with-new-schemas
           task: "search:migrate_schema"
@@ -2479,8 +2485,6 @@ govukApplications:
             secretKeyRef:
               name: search-api-rabbitmq
               key: RABBITMQ_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: TENSORFLOW_SAGEMAKER_ENDPOINT
           value: govuk-integration-search-ltr-endpoint
 
