@@ -2076,9 +2076,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &release-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *release-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       replicaCount: 2
       workerReplicaCount: 1
       podDisruptionBudget:
