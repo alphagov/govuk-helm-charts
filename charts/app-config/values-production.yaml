@@ -2390,9 +2390,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &search-api-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *search-api-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       cronTasks:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
