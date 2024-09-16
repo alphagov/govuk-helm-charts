@@ -2665,6 +2665,12 @@ govukApplications:
     helmValues:
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &signon-redis >
+            redis://shared-redis-govuk.eks.production.govuk-internal.digital
+          workers: *signon-redis
       ingress:
         enabled: true
         annotations:
@@ -2742,8 +2748,6 @@ govukApplications:
             secretKeyRef:
               name: signon-devise-secret
               key: DEVISE_SECRET_KEY
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
 
