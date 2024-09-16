@@ -2630,6 +2630,12 @@ govukApplications:
     helmValues:
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &signon-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *signon-redis
       ingress:
         enabled: true
         annotations:
@@ -2695,8 +2701,6 @@ govukApplications:
             secretKeyRef:
               name: signon-devise-secret
               key: DEVISE_SECRET_KEY
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: SIGNON_APPS_URI_SUB_PATTERN
           value: publishing.service.gov.uk
         - name: SIGNON_APPS_URI_SUB_REPLACEMENT
