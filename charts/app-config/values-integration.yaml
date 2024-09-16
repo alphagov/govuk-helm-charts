@@ -2657,9 +2657,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &signon-redis >
-            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *signon-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       ingress:
         enabled: true
         annotations:
