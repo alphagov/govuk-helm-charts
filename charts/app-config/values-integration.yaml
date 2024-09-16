@@ -535,6 +535,12 @@ govukApplications:
   - name: content-data-api
     helmValues:
       arch: arm64
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &content-data-api-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *content-data-api-redis
       ingress:
         enabled: true
         annotations:
@@ -608,8 +614,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-content-data-api-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
