@@ -5,7 +5,8 @@ groups:
         expr: >-
           sum(rate(http_requests_total{
             job="govuk-chat",
-            status=~"5.."
+            status=~"5..",
+            status!~"503"
           }[60m]))
           /
           (sum(rate(http_requests_total{
@@ -37,7 +38,8 @@ groups:
           > 1
         for: 5m
         labels:
-          severity: page
+          severity: critical
+          destination: slack-chat-notifications
         annotations:
           summary: Elevated HTTP request duration for Chat AI
           description: >-

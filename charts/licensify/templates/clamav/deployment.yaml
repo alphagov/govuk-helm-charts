@@ -56,10 +56,14 @@ spec:
           volumeMounts:
             - name: app-tmp
               mountPath: /tmp
+            - name: app-clamav-log
+              mountPath: /var/log/clamav
             - name: app-clamav-db
               mountPath: /var/lib/clamav
       volumes:
         - name: app-tmp
+          emptyDir: {}
+        - name: app-clamav-log
           emptyDir: {}
         - name: app-clamav-db
           nfs:
