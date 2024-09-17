@@ -535,6 +535,8 @@ govukApplications:
   - name: content-data-api
     helmValues:
       arch: arm64
+      redis:
+        enabled: true
       ingress:
         enabled: true
         annotations:
@@ -608,8 +610,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-content-data-api-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -1327,6 +1327,12 @@ govukApplications:
         - name: promote-waiting-list
           task: "users:promote_waiting_list"
           schedule: "0 7-19 * * *"
+        - name: increment-instant-access-places
+          task: "settings:increment_pilot_places[instant_access]"
+          schedule: "0 9,11,13,15 * * 1-5"
+        - name: increment-delayed-access-places
+          task: "settings:increment_pilot_places[delayed_access]"
+          schedule: "1 9,11,13,15 * * 1-5"
       extraEnv:
         # remove the need for signon to access frontend of chat
         - name: AVAILABLE_WITHOUT_SIGNON_AUTHENTICATION
@@ -1394,9 +1400,9 @@ govukApplications:
               name: govuk-chat-bigquery
               key: credentials
         - name: INSTANT_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "26"
+          value: "0"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "26"
+          value: "0"
       nginxConfigMap:
         extraServerConf: |
           location /chat {
@@ -2060,8 +2066,6 @@ govukApplications:
             secretKeyRef:
               name: release-github
               key: token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: SLACK_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
@@ -2350,6 +2354,8 @@ govukApplications:
         enabled: false
       workerEnabled: true
       workerReplicaCount: 3
+      redis:
+        enabled: true
       cronTasks:
         - name: reindex-with-new-schemas
           task: "search:migrate_schema"
@@ -2473,8 +2479,6 @@ govukApplications:
             secretKeyRef:
               name: search-api-rabbitmq
               key: RABBITMQ_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: TENSORFLOW_SAGEMAKER_ENDPOINT
           value: govuk-integration-search-ltr-endpoint
 
@@ -2654,6 +2658,8 @@ govukApplications:
       arch: arm64
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
       ingress:
         enabled: true
         annotations:
@@ -2731,8 +2737,6 @@ govukApplications:
             secretKeyRef:
               name: signon-devise-secret
               key: DEVISE_SECRET_KEY
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
         - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only

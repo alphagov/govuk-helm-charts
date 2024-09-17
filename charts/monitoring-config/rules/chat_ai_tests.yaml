@@ -204,7 +204,6 @@ tests:
           container="app"
           }
         values: '1717986918+1048576x15'
-        #values: '1610612736+1048576x15'
     alert_rule_test:
       - alertname: HighPodMemoryFE
         eval_time: 15m
@@ -248,7 +247,6 @@ tests:
           container="worker"
           }
         values: '1717986918+1048576x15'
-        #values: '1610612736+1048576x15'
     alert_rule_test:
       - alertname: HighPodMemoryWorker
         eval_time: 15m

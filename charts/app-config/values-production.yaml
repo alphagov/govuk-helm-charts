@@ -523,6 +523,8 @@ govukApplications:
 
   - name: content-data-api
     helmValues:
+      redis:
+        enabled: true
       ingress:
         enabled: true
         annotations:
@@ -596,8 +598,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-content-data-api-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -1349,6 +1349,12 @@ govukApplications:
         - name: promote-waiting-list
           task: "users:promote_waiting_list"
           schedule: "0 * * * *"
+        - name: increment-instant-access-places
+          task: "settings:increment_pilot_places[instant_access]"
+          schedule: "0 9,11,13,15 * * 1-5"
+        - name: increment-delayed-access-places
+          task: "settings:increment_pilot_places[delayed_access]"
+          schedule: "1 9,11,13,15 * * 1-5"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
@@ -1413,9 +1419,9 @@ govukApplications:
               name: govuk-chat-bigquery
               key: credentials
         - name: INSTANT_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "26"
+          value: "0"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "26"
+          value: "0"
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
@@ -1727,6 +1733,8 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
@@ -1747,8 +1755,6 @@ govukApplications:
               key: api-secret
         - name: OS_PLACES_API_POSTCODES_PER_SECOND
           value: "3"
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
 
   - name: manuals-publisher
     helmValues:
@@ -2067,6 +2073,8 @@ govukApplications:
         hosts:
           - name: release.{{ .Values.k8sExternalDomainSuffix }}
       workerEnabled: true
+      redis:
+        enabled: true
       replicaCount: 2
       workerReplicaCount: 1
       podDisruptionBudget:
@@ -2115,8 +2123,6 @@ govukApplications:
             secretKeyRef:
               name: release-github
               key: token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: SLACK_WEBHOOK_URL
           valueFrom:
             secretKeyRef:
@@ -2665,6 +2671,8 @@ govukApplications:
     helmValues:
       dbMigrationEnabled: true
       workerEnabled: true
+      redis:
+        enabled: true
       ingress:
         enabled: true
         annotations:
@@ -2742,8 +2750,6 @@ govukApplications:
             secretKeyRef:
               name: signon-devise-secret
               key: DEVISE_SECRET_KEY
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
 
