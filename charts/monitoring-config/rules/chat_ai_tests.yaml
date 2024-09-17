@@ -26,6 +26,26 @@ tests:
 
   - interval: 1m
     input_series:
+      # No alert with 503 errors > 10%
+      - series: >-
+          http_requests_total{
+          job="govuk-chat",
+          status="200"
+          }
+        values: '1000x15'
+      - series: >-
+          http_requests_total{
+          job="govuk-chat",
+          status="503"
+          }
+        values: '0+100x15'
+    alert_rule_test:
+      - alertname: High5xxRate
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
       # Alert with 5xx errors > 10%
       - series: >-
           http_requests_total{
@@ -91,7 +111,8 @@ tests:
         exp_alerts:
           - exp_labels:
               alertname: LongRequestDuration
-              severity: page
+              severity: critical
+              destination: slack-chat-notifications
             exp_annotations:
               summary: Elevated HTTP request duration for Chat AI
               description: >-
