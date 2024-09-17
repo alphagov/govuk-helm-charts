@@ -2376,13 +2376,13 @@ govukApplications:
           schedule: "50 2 * * *"
         - name: load-page-traffic
           command: "./bin/load_page_traffic.sh"
-          schedule: "32 4 * * *"
+          schedule: "0 22 * * *"
           env:
             - name: AWS_SEARCH_ANALYTICS_BUCKET
               value: govuk-search-analytics-staging
         - name: update-detailed-index-popularity
           task: "search:update_popularity"
-          schedule: "42 4 * * *"
+          schedule: "15 22 * * *"
           env:
             - name: SEARCH_INDEX
               value: detailed
@@ -2390,7 +2390,7 @@ govukApplications:
               value: "true"
         - name: update-government-index-popularity
           task: "search:update_popularity"
-          schedule: "12 5 * * *"
+          schedule: "35 22 * * *"
           env:
             - name: SEARCH_INDEX
               value: government
@@ -2398,7 +2398,7 @@ govukApplications:
               value: "true"
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
-          schedule: "42 5 * * *"
+          schedule: "35 00 * * *"
           env:
             - name: SEARCH_INDEX
               value: govuk
