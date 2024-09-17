@@ -2389,6 +2389,13 @@ govukApplications:
       workerEnabled: true
       redis:
         enabled: true
+        resources:
+          limits:
+            cpu: 1
+            memory: 8Gi
+          requests:
+            cpu: 500m
+            memory: 6Gi
         redisUrlOverride:
           app: &search-api-redis >
             redis://shared-redis-govuk.eks.production.govuk-internal.digital
