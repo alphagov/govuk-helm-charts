@@ -36,7 +36,7 @@ cronjobs:
 
   staging:
     blue-es6-cp-prod:  # This would be too long as blue-elasticsearch6-domain-cp-prod
-      schedule: "37 1 * * *"
+      schedule: "00 3 * * *"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
