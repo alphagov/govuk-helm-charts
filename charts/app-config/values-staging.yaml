@@ -2368,6 +2368,12 @@ govukApplications:
       uploadAssets:
         enabled: false
       workerEnabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &search-api-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *search-api-redis
       cronTasks:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
@@ -2479,8 +2485,6 @@ govukApplications:
             secretKeyRef:
               name: search-api-rabbitmq
               key: RABBITMQ_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: TENSORFLOW_SAGEMAKER_ENDPOINT
           value: govuk-staging-search-ltr-endpoint
 
