@@ -1,9 +1,7 @@
 -- sqlfluff:dialect:mysql
 
--- This is supposed to be identical to
--- https://github.com/alphagov/content-publisher/blob/main/db/scrub_access_limited.sql
--- TODO: Fix the CI in alphagov/content-publisher to pull in this script
--- (perhaps via git submodule) instead of running tests against its own copy.
+-- This is tested on Content Publisher's CI as of
+-- https://github.com/alphagov/content-publisher/pull/3254
 
 -- Remove current status of any access limited editions
 UPDATE editions
