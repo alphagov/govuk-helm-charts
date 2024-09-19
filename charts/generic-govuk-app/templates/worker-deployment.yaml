@@ -79,7 +79,7 @@ spec:
               value: {{ $.Values.redis.redisUrlOverride.workers | default (printf "redis://%s-redis" $fullName) }}
             {{- end }}
             {{- with $.Values.extraEnv }}
-              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+              {{- . | toYaml | trim | nindent 12 }}
             {{- end }}
             {{- with .env }}
               {{- . | toYaml | trim | nindent 12 }}
