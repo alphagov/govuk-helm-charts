@@ -81,6 +81,9 @@ spec:
             {{- with $.Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
+            {{- with .env }}
+              {{- . | toYaml | trim | nindent 12 }}
+            {{- end }}
           {{- with $.Values.workerResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
