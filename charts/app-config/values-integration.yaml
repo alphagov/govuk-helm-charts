@@ -324,7 +324,6 @@ govukApplications:
       arch: arm64
       dbMigrationEnabled: true
       workerEnabled: true
-      workerReplicaCount: 5
       redis:
         enabled: true
       ingress:
