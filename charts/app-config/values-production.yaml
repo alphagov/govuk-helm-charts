@@ -1058,7 +1058,6 @@ govukApplications:
   - name: draft-feedback
     repoName: feedback
     helmValues:
-      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
