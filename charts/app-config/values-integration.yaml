@@ -2961,10 +2961,6 @@ govukApplications:
             ]}}]
         hosts:
           - name: specialist-publisher.{{ .Values.k8sExternalDomainSuffix }}
-      cronTasks:
-        - name: publish-pre-production-finders
-          task: "publishing_api:publish_pre_production_finders"
-          schedule: "55 8 * * 1-5"
       extraEnv:
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
@@ -3005,8 +3001,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
-        - name: PUBLISH_PRE_PRODUCTION_FINDERS
-          value: "yes"
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
         - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
