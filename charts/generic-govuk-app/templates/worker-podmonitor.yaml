@@ -1,4 +1,4 @@
-{{- if (and .Values.workerEnabled .Values.monitoring.enabled) -}}
+{{- if (and .Values.workers.enabled .Values.monitoring.enabled) -}}
 {{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor

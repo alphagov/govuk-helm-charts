@@ -23,7 +23,9 @@ ingress:
 replicaCount: 1
 podDisruptionBudget: {}
 
-workerReplicaCount: 1
+workers:
+  enabled: true
+  replicaCount: 1
 
 arch: amd64
 appImage:

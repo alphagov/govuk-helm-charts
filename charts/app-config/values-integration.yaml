@@ -12,7 +12,9 @@ awsAccountId: "210287912431"
 
 cspReportURI: https://csp-reporter.integration.publishing.service.gov.uk/report
 
-workerReplicaCount: 1
+workers:
+  replicaCount: 1
+
 appResources:
   limits:
     cpu: 1
@@ -65,7 +67,8 @@ govukApplications:
       uploadAssets:
         enabled: false
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -137,7 +140,8 @@ govukApplications:
     chartPath: charts/asset-manager
     helmValues:
       arch: arm64
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -323,7 +327,8 @@ govukApplications:
     helmValues:
       arch: arm64
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -463,7 +468,8 @@ govukApplications:
         hosts:
           - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       extraEnv:
@@ -552,14 +558,15 @@ govukApplications:
       uploadAssets:
         enabled: false
       dbMigrationEnabled: true
-      workerEnabled: true
       workers:
-        - command: ["sidekiq", "-C", "config/sidekiq.yml"]
-          name: worker
-        - command: ['rake', 'publishing_api:consumer']
-          name: publishing-api-consumer
-        - command: ['rake', 'publishing_api:bulk_import_consumer']
-          name: bulk-import-publishing-api-consumer
+        enabled: true
+        types:
+          - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+            name: worker
+          - command: ['rake', 'publishing_api:consumer']
+            name: publishing-api-consumer
+          - command: ['rake', 'publishing_api:bulk_import_consumer']
+            name: bulk-import-publishing-api-consumer
       cronTasks:
         - name: etl
           task: "etl:main"
@@ -637,7 +644,8 @@ govukApplications:
       arch: arm64
       dbMigrationEnabled: true
       nginxClientMaxBodySize: &max-upload-size 500M
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -798,7 +806,8 @@ govukApplications:
     helmValues:
       arch: arm64
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -852,7 +861,8 @@ govukApplications:
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -995,10 +1005,11 @@ govukApplications:
         enabled: false
       uploadAssets:
         enabled: false
-      workerEnabled: true
       workers:
-        - command: ['bin/email-alert-service']
-          name: email-alert-service
+        enabled: true
+        types:
+          - command: ['bin/email-alert-service']
+            name: email-alert-service
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1303,12 +1314,13 @@ govukApplications:
     helmValues:
       arch: arm64
       dbMigrationEnabled: true
-      workerEnabled: true
       workers:
-        - command: ["sidekiq", "-C", "config/sidekiq.yml"]
-          name: worker
-        - command: ['rake', 'message_queue:published_documents_consumer']
-          name: published-documents-consumer
+        enabled: true
+        types:
+          - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+            name: worker
+          - command: ['rake', 'message_queue:published_documents_consumer']
+            name: published-documents-consumer
       ingress:
         enabled: true
         annotations:
@@ -1526,7 +1538,8 @@ govukApplications:
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       extraEnv:
@@ -1683,7 +1696,8 @@ govukApplications:
       uploadAssets:
         enabled: false
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       extraEnv:
@@ -1709,7 +1723,8 @@ govukApplications:
     helmValues:
       arch: arm64
       nginxClientMaxBodySize: *max-upload-size
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -1832,7 +1847,8 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       extraEnv:
@@ -1856,7 +1872,8 @@ govukApplications:
     helmValues:
       arch: arm64
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       cronTasks:
@@ -1969,7 +1986,8 @@ govukApplications:
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       cronTasks:
@@ -2039,7 +2057,8 @@ govukApplications:
             ]}}]
         hosts:
           - name: release.{{ .Values.k8sExternalDomainSuffix }}
-      workerEnabled: false
+      workers:
+        enabled: false
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -2280,7 +2299,8 @@ govukApplications:
     helmValues:
       arch: arm64
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       ingress:
         enabled: true
         annotations:
@@ -2352,8 +2372,6 @@ govukApplications:
       nginxClientMaxBodySize: 20M
       uploadAssets:
         enabled: false
-      workerEnabled: true
-      workerReplicaCount: 3
       redis:
         enabled: true
         resources:
@@ -2406,14 +2424,17 @@ govukApplications:
             - name: SEARCH_INDEX
               value: govuk
       workers:
-        - command: ["sidekiq", "-C", "config/sidekiq.yml"]
-          name: worker
-        - command: ['rake', 'message_queue:listen_to_publishing_queue']
-          name: publishing-queue-listener
-        - command: ['rake', 'message_queue:insert_data_into_govuk']
-          name: govuk-index-queue-listener
-        - command: ['rake', 'message_queue:bulk_insert_data_into_govuk']
-          name: bulk-reindex-queue-listener
+        enabled: true
+        replicaCount: 3
+        types:
+          - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+            name: worker
+          - command: ['rake', 'message_queue:listen_to_publishing_queue']
+            name: publishing-queue-listener
+          - command: ['rake', 'message_queue:insert_data_into_govuk']
+            name: govuk-index-queue-listener
+          - command: ['rake', 'message_queue:bulk_insert_data_into_govuk']
+            name: bulk-reindex-queue-listener
       extraEnv:
         - name: AWS_S3_RELEVANCY_BUCKET_NAME
           value: govuk-integration-search-relevancy
@@ -2495,11 +2516,12 @@ govukApplications:
       dbMigrationEnabled: false
       uploadAssets:
         enabled: false
-      workerEnabled: true
-      workerReplicaCount: 3
       workers:
-        - command: ['bin/rake', 'document_sync_worker:run']
-          name: document-sync-worker
+        enabled: true
+        replicaCount: 3
+        types:
+          - command: ['bin/rake', 'document_sync_worker:run']
+            name: document-sync-worker
       cronTasks:
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
@@ -2664,7 +2686,8 @@ govukApplications:
     helmValues:
       arch: arm64
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -2923,7 +2946,8 @@ govukApplications:
       arch: arm64
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -3006,7 +3030,8 @@ govukApplications:
           - name: support.{{ .Values.k8sExternalDomainSuffix }}
       uploadAssets:
         path: /app/public/assets/support
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       extraEnv:
@@ -3055,7 +3080,8 @@ govukApplications:
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       cronTasks:
@@ -3127,7 +3153,8 @@ govukApplications:
         hosts:
           - name: transition.{{ .Values.k8sExternalDomainSuffix }}
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       cronTasks:
         - name: import-all-organisations
           task: "import:all:organisations"
@@ -3190,7 +3217,8 @@ govukApplications:
           task: "publish_scheduled_editions"
           schedule: "29 5 * * *"
       nginxClientMaxBodySize: *max-upload-size
-      workerEnabled: true
+      workers:
+        enabled: true
       redis:
         enabled: true
       ingress:
@@ -3302,7 +3330,8 @@ govukApplications:
           task: "taxonomy:rebuild_cache"
           schedule: "*/10 7-20 * * *"
       dbMigrationEnabled: true
-      workerEnabled: true
+      workers:
+        enabled: true
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
       nginxProxyReadTimeout: 60s

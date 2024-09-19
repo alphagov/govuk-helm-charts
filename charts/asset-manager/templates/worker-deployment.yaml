@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/name: {{ $fullName }}-worker
     app.kubernetes.io/component: worker
 spec:
-  replicas: {{ .Values.workerReplicaCount }}
+  replicas: {{ .Values.workers.replicaCount }}
   revisionHistoryLimit: 2
   selector:
     matchLabels:
