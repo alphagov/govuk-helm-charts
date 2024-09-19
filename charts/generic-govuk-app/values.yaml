@@ -13,12 +13,13 @@ appEnabled: true
 replicaCount: 2
 podDisruptionBudget: {}
 
-# workerEnabled should be true if the app uses Sidekiq, false otherwise.
-workerEnabled: false
-workerReplicaCount: 2
+# workers.enabled should be true if the app uses Sidekiq, false otherwise.
 workers:
-  - command: ["sidekiq", "-C", "config/sidekiq.yml"]
-    name: worker
+  enabled: false
+  replicaCount: 2
+  types:
+    - name: worker
+      command: ["sidekiq", "-C", "config/sidekiq.yml"]
 
 # redis.enabled controls whether a Redis database is set up for the app
 # REDIS_URL is automatically set unless redis.redisUrlOverride values are provided

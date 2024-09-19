@@ -1,4 +1,4 @@
-{{- if .Values.workerEnabled -}}
+{{- if .Values.workers.enabled -}}
 {{- $fullName := include "generic-govuk-app.fullname" . }}
 apiVersion: apps/v1
 kind: Deployment
@@ -12,7 +12,7 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
-  replicas: {{ .Values.workerReplicaCount }}
+  replicas: {{ .Values.workers.replicaCount }}
   revisionHistoryLimit: 2
   selector:
     matchLabels:
@@ -45,7 +45,7 @@ spec:
           {{- . | toYaml | trim | nindent 8 }}
         {{- end }}
       containers:
-        {{- range .Values.workers }}
+        {{- range .Values.workers.types }}
         - name: {{ .name }}
           image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
           imagePullPolicy: {{ $.Values.appImage.pullPolicy | default "Always" }}
