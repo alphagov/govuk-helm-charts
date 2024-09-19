@@ -1326,6 +1326,11 @@ govukApplications:
       workers:
         - command: ["sidekiq", "-C", "config/sidekiq.yml"]
           name: worker
+          env:
+            - name: SIDEKIQ_CONCURRENCY
+              value: "25"
+            - name: DATABASE_POOL
+              value: "25"
         - command: ['rake', 'message_queue:published_documents_consumer']
           name: published-documents-consumer
       ingress:
