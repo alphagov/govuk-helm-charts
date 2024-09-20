@@ -1364,14 +1364,15 @@ govukApplications:
           timeZone: "Europe/London"
         - name: promote-waiting-list
           task: "users:promote_waiting_list"
-          schedule: "0 * * * *"
+          schedule: "30 7-22 * * *"
+          timeZone: "Europe/London"
         - name: increment-instant-access-places
           task: "settings:increment_pilot_places[instant_access]"
           schedule: "0 9,11,13,15 * * 1-5"
           timeZone: "Europe/London"
         - name: increment-delayed-access-places
           task: "settings:increment_pilot_places[delayed_access]"
-          schedule: "1 9,11,13,15 * * 1-5"
+          schedule: "15 9,11,13,15 * * 1-5"
           timeZone: "Europe/London"
       extraEnv:
         - name: DATABASE_URL
