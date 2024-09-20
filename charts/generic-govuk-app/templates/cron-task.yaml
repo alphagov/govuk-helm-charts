@@ -12,6 +12,7 @@ metadata:
     app.kubernetes.io/component: "{{ .name }}"
 spec:
   schedule: "{{ .schedule }}"
+  {{ if .timeZone }}timeZone: "{{ .timeZone }}"{{- end }}
   suspend: {{ .suspend | default false }}
   jobTemplate:
     metadata:
