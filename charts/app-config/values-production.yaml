@@ -1388,6 +1388,9 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-slack
               key: AI_SLACK_CHANNEL_WEBHOOK_URL
+        # remove the need for signon to access frontend of chat
+        - name: AVAILABLE_WITHOUT_SIGNON_AUTHENTICATION
+          value: "true"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
