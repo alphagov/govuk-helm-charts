@@ -1213,11 +1213,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-frontend-publishing-api
-              key: bearer_token
 
   - name: draft-frontend
     repoName: frontend
@@ -1274,11 +1269,6 @@ govukApplications:
           valueFrom:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
-              key: bearer_token
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-frontend-publishing-api
               key: bearer_token
 
   - name: government-frontend
