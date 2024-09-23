@@ -1353,6 +1353,9 @@ govukApplications:
           schedule: "15 9,11,13,15 * * 1-5"
           timeZone: "Europe/London"
       extraEnv:
+        # remove the need for signon to access frontend of chat
+        - name: AVAILABLE_WITHOUT_SIGNON_AUTHENTICATION
+          value: "true"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
