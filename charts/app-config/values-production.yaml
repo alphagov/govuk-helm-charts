@@ -1448,7 +1448,7 @@ govukApplications:
       cronJobs:
         - name: govuk-e2e-tests
           schedule: "*/10 7-19 * * 1-5"
-          project: chromium
+          project: main
         - name: govuk-e2e-tests-mirror-s3
           schedule: "*/30 7-19 * * 1-5"
           project: mirrorS3
