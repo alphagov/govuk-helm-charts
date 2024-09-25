@@ -50,8 +50,13 @@ spec:
                   cpu: 2
                   memory: 15000Mi
               securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
+                runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
+                readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
+                seccompProfile:
+                  type: RuntimeDefault
+                capabilities:
+                  drop: {{ .Values.securityContext.capabilities.drop }}
               volumeMounts:
                 - name: app-mirror-sync
                   mountPath: /data

@@ -63,6 +63,15 @@ spec:
           volumeMounts:
             - name: assets
               mountPath: /assets
+          securityContext:
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
+
       {{- end }}
       containers:
         - name: app
@@ -127,7 +136,7 @@ spec:
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-            readOnlyRootFilesystem: true
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFileSystem }}
             capabilities:
               drop: ["ALL"]
           volumeMounts:

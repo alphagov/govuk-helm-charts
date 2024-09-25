@@ -53,6 +53,8 @@ securityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1001
+  seccompProfile:
+    type: RuntimeDefault
 
 serviceAccount:
   create: true
