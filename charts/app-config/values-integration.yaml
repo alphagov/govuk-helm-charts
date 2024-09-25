@@ -57,6 +57,8 @@ _alb-ingress-group-backend: &alb-ingress-group-backend
     access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
     access_logs.s3.prefix=elb/backend
 
+emergency-banner-redis:
+  - &emergency-banner-redis redis://whitehall-admin-redis/1
 
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 
@@ -2834,6 +2836,8 @@ govukApplications:
               key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: USE_TMPDIR_PAGE_CACHE
           value: "true"
       nginxConfigMap:
@@ -2878,6 +2882,8 @@ govukApplications:
               key: bearer_token
         - name: REDIS_URL
           value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: USE_TMPDIR_PAGE_CACHE
           value: "true"
 
@@ -3399,6 +3405,10 @@ govukApplications:
           value: whitehall-emails-integration@digital.cabinet-office.gov.uk
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
+        - name: TAXONOMY_CACHE_REDIS_URL
+          value: redis://whitehall-admin-redis/2
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
