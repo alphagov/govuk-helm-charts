@@ -283,3 +283,79 @@ tests:
                 The Worker Pod Memory usage is above 80% for a container for more than 5 minutes.
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+
+  - interval: 1m
+    input_series:
+      # No alert for OpenAI token rate limit
+      - series: >-
+          govuk_chat_openai_tokens_used_percentage{endpoint="test_endpoint", model="test_model"}
+        values: '50+1x15'
+    alert_rule_test:
+      - alertname: NearTokensRateLimit
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for OpenAI token rate limit
+      - series: >-
+          govuk_chat_openai_tokens_used_percentage{
+          exported_endpoint="test_endpoint",
+          model="test_model"
+          }
+        values: '50+1x14 81'
+    alert_rule_test:
+      - alertname: NearTokensRateLimit
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: NearTokensRateLimit
+              severity: warning
+              destination: slack-chat-notifications
+              model: test_model
+              exported_endpoint: test_endpoint
+            exp_annotations:
+              summary: Exceeded 80% of OpenAI token rate limit
+              description: >-
+                Over 80% of tokens have been used for test_model on the
+                test_endpoint endpoint.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+
+  - interval: 1m
+    input_series:
+      # No alert for OpenAI requests rate limit
+      - series: >-
+          govuk_chat_openai_requests_used_percentage
+        values: '50+1x15'
+    alert_rule_test:
+      - alertname: NearRequestsRateLimit
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for OpenAI torequestsken rate limit
+      - series: >-
+          govuk_chat_openai_requests_used_percentage{
+          exported_endpoint="test_endpoint",
+          model="test_model"
+          }
+        values: '50+1x14 81'
+    alert_rule_test:
+      - alertname: NearRequestsRateLimit
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: NearRequestsRateLimit
+              severity: warning
+              destination: slack-chat-notifications
+              model: test_model
+              exported_endpoint: test_endpoint
+            exp_annotations:
+              summary: Exceeded 80% of OpenAI requests rate limit
+              description: >-
+                Over 80% of requests have been used for test_model on the
+                test_endpoint endpoint.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html

@@ -23,6 +23,425 @@
   "panels": [
     {
       "datasource": {
+        "default": true,
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "max by(model, exported_endpoint) (govuk_chat_openai_tokens_used_percentage)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{model}} ({{exported_endpoint}})",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "OpenAI Rate Limit - Tokens Used (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "max by(model, exported_endpoint) (govuk_chat_openai_requests_used_percentage)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{model}} ({{exported_endpoint}})",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "OpenAI Rate Limit - Requests Used (%)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "min by(model, exported_endpoint) (govuk_chat_openai_remaining_tokens)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{model}} ({{exported_endpoint}})",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Open AI Rate Limit - Remaining Tokens",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "min by(model, exported_endpoint) (govuk_chat_openai_remaining_requests)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{model}} ({{exported_endpoint}})",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "OpenAI Rate Limit - Remaining Requests",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
       },
@@ -87,7 +506,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 16
       },
       "id": 16,
       "options": {
@@ -194,7 +613,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 16
       },
       "id": 17,
       "options": {
@@ -334,7 +753,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 24
       },
       "id": 23,
       "options": {
@@ -435,7 +854,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 24
       },
       "id": 22,
       "options": {
@@ -540,7 +959,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 32
       },
       "id": 21,
       "options": {
@@ -649,7 +1068,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 32
       },
       "id": 19,
       "options": {
@@ -748,7 +1167,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 40
       },
       "id": 20,
       "options": {
@@ -864,7 +1283,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 40
       },
       "id": 18,
       "options": {
@@ -973,7 +1392,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 32
+        "y": 48
       },
       "id": 1,
       "options": {
@@ -1099,7 +1518,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 32
+        "y": 48
       },
       "id": 2,
       "options": {
@@ -1232,7 +1651,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 32
+        "y": 48
       },
       "id": 3,
       "options": {
@@ -1391,7 +1810,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 40
+        "y": 56
       },
       "id": 6,
       "options": {
@@ -1500,7 +1919,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 40
+        "y": 56
       },
       "id": 4,
       "options": {
@@ -1608,7 +2027,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 40
+        "y": 56
       },
       "id": 5,
       "options": {
@@ -1717,7 +2136,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 48
+        "y": 64
       },
       "id": 8,
       "options": {
@@ -1850,7 +2269,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 48
+        "y": 64
       },
       "id": 7,
       "options": {
@@ -1985,7 +2404,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 48
+        "y": 64
       },
       "id": 9,
       "options": {
@@ -2119,7 +2538,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 56
+        "y": 72
       },
       "id": 15,
       "options": {
@@ -2229,7 +2648,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 56
+        "y": 72
       },
       "id": 10,
       "options": {
@@ -2337,7 +2756,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 56
+        "y": 72
       },
       "id": 11,
       "options": {
@@ -2447,7 +2866,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 64
+        "y": 80
       },
       "id": 12,
       "options": {
@@ -2583,7 +3002,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 64
+        "y": 80
       },
       "id": 14,
       "options": {
@@ -2693,7 +3112,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 64
+        "y": 80
       },
       "id": 13,
       "options": {
@@ -2803,7 +3222,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 72
+        "y": 88
       },
       "id": 24,
       "options": {
@@ -2908,7 +3327,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 72
+        "y": 88
       },
       "id": 25,
       "options": {
@@ -3013,7 +3432,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 72
+        "y": 88
       },
       "id": 26,
       "options": {
@@ -3067,6 +3486,6 @@
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
