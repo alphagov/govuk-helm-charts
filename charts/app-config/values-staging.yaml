@@ -3091,6 +3091,12 @@ govukApplications:
       dbMigrationEnabled: true
       workers:
         enabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &transition-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *transition-redis
       cronTasks:
         - name: import-all-organisations
           task: "import:all:organisations"
@@ -3126,8 +3132,6 @@ govukApplications:
             secretKeyRef:
               name: transition-postgres
               key: DATABASE_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
   - name: travel-advice-publisher
     helmValues:
