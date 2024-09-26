@@ -3152,6 +3152,12 @@ govukApplications:
       dbMigrationEnabled: true
       workers:
         enabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &transition-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *transition-redis
       cronTasks:
         - name: import-all-organisations
           task: "import:all:organisations"
@@ -3197,8 +3203,6 @@ govukApplications:
             secretKeyRef:
               name: transition-postgres
               key: DATABASE_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
         - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
