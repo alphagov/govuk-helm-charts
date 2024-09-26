@@ -3155,9 +3155,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &transition-redis >
-            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *transition-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       cronTasks:
         - name: import-all-organisations
           task: "import:all:organisations"
