@@ -2349,8 +2349,6 @@ govukApplications:
   - name: search-admin
     helmValues:
       dbMigrationEnabled: true
-      workers:
-        enabled: true
       ingress:
         enabled: true
         annotations:
@@ -2378,8 +2376,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-search-admin-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
