@@ -2858,8 +2858,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-static-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
         - name: USE_TMPDIR_PAGE_CACHE
@@ -2899,8 +2897,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-static-publishing-api
               key: bearer_token
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.production.govuk-internal.digital
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
         - name: USE_TMPDIR_PAGE_CACHE
