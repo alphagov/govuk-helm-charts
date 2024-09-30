@@ -3221,6 +3221,12 @@ govukApplications:
       dbMigrationEnabled: true
       workers:
         enabled: true
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &whitehall-admin-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *whitehall-admin-redis
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
       nginxProxyReadTimeout: 60s
@@ -3291,8 +3297,6 @@ govukApplications:
           value: whitehall-emails-staging@digital.cabinet-office.gov.uk
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
