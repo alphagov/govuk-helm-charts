@@ -936,8 +936,6 @@ govukApplications:
     helmValues:
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       extraEnv:
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
