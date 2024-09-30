@@ -950,9 +950,13 @@ govukApplications:
   - name: email-alert-frontend
     helmValues:
       arch: arm64
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &email-alert-frontend-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *email-alert-frontend-redis
       extraEnv:
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
