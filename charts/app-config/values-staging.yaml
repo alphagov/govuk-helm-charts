@@ -1000,6 +1000,12 @@ govukApplications:
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &email-alert-service-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *email-alert-service-redis
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1014,8 +1020,6 @@ govukApplications:
             secretKeyRef:
               name: email-alert-service-rabbitmq
               key: RABBITMQ_URL
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
 
   - name: external-secrets
     chartPath: charts/external-secrets
