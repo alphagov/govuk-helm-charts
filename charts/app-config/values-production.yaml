@@ -3303,9 +3303,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &whitehall-admin-redis >
-            redis://shared-redis-govuk.eks.production.govuk-internal.digital
-          workers: *whitehall-admin-redis
+          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
       nginxProxyReadTimeout: 60s
