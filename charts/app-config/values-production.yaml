@@ -998,8 +998,6 @@ govukApplications:
             name: email-alert-service
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.production.govuk-internal.digital
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
