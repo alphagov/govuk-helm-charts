@@ -18,6 +18,13 @@ spec:
       - name: repoName
       - name: imageTag
   podSpecPatch: |
+    initContainers:
+      - name: init-main
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
     containers:
       - name: main
         resources:
@@ -25,7 +32,7 @@ spec:
             memory: 2Gi
   templates:
     - name: handle-sync-event
-      podSpecPatch: '{"containers":[{"name":"main","resources":{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":1,"memory":"1Gi"}}}]}'
+      podSpecPatch: '{"initContainers:["name":"init-main","securityContext":{"allowPrivilegeEscalation":false,"readOnlyRootFilesystem":true,"capabilities":{"drop":["ALL"]}},"containers":[{"name":"main","resources":{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":1,"memory":"1Gi"}}}]}'
       dag:
         tasks:
           - name: smoke-test
