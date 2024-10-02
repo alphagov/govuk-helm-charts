@@ -2520,9 +2520,7 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: &search-api-v2-redis >
-            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
-          workers: *search-api-v2-redis
+          workers: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
       cronTasks:
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
