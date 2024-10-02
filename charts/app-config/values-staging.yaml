@@ -2514,6 +2514,12 @@ govukApplications:
         types:
           - command: ['bin/rake', 'document_sync_worker:run']
             name: document-sync-worker
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &search-api-v2-redis >
+            redis://shared-redis-govuk.eks.staging.govuk-internal.digital
+          workers: *search-api-v2-redis
       cronTasks:
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
@@ -2529,8 +2535,6 @@ govukApplications:
           value: "30"
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_MAX_UNACKED
           value: "30"
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
         - name: RABBITMQ_URL
           valueFrom:
             secretKeyRef:
