@@ -2516,8 +2516,6 @@ govukApplications:
             name: document-sync-worker
       redis:
         enabled: true
-        redisUrlOverride:
-          workers: redis://shared-redis-govuk.eks.staging.govuk-internal.digital
       cronTasks:
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
