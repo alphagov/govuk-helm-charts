@@ -14,6 +14,8 @@ data:
         <logger name="application" level="WARN"/>
         <logger name="akka" level="WARN"/>
         <logger name="play" level="WARN"/>
+        <logger name="uk.gov.gds.payments" level="DEBUG"/>
+        <logger name="uk.gov.gds.licensing.frontend.controllers" level="DEBUG"/>
         <logger name="uk.gov" level="WARN"/>
         <root level="WARN">
             <appender-ref ref="STDOUT"/>
