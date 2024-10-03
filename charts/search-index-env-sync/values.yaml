@@ -67,22 +67,6 @@ cronjobs:
             secretKeyRef:
               name: govuk-chat-opensearch
               key: password
-    chat-engine-snapshot:
-      schedule: "12 3 * * *"
-      args: [create_and_clean_up]
-      extraEnv:
-        - name: SUBDOMAIN
-          value: chat-opensearch
-        - name: SEARCH_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: govuk-chat-opensearch
-              key: username
-        - name: SEARCH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: govuk-chat-opensearch
-              key: password
 
   integration:
     blue-es6-cp-stag:  # This would be too long as blue-elasticsearch6-domain-cp-stag
