@@ -45,8 +45,11 @@ spec:
             - name: assets-to-upload
               mountPath: /assets-to-upload
           securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
+            seccompProfile:
+              type: RuntimeDefault
             capabilities:
               drop: ["ALL"]
       containers:
