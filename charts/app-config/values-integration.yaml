@@ -975,6 +975,12 @@ govukApplications:
       arch: arm64
       rails:
         createKeyBaseSecret: false
+      redis:
+        enabled: true
+        redisUrlOverride:
+          app: &email-alert-draft-frontend-redis >
+            redis://shared-redis-govuk.eks.integration.govuk-internal.digital
+          workers: *email-alert-draft-frontend-redis
       sentry:
         createSecret: false  # Sentry DSNs are per repo.
       uploadAssets:
@@ -982,8 +988,6 @@ govukApplications:
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
