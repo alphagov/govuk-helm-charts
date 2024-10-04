@@ -32,8 +32,13 @@ spec:
         - name: upload-static-error-pages
           image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
           securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
           env:
             - name: GOVUK_ENVIRONMENT
               value: {{ .Values.govukEnvironment }}
