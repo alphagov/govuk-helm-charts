@@ -28,3 +28,8 @@ appResources:
 externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.
   deletionPolicy: Delete
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true

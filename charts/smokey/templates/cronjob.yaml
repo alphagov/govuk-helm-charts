@@ -56,8 +56,13 @@ spec:
               {{- . | toYaml | trim | nindent 14 }}
             {{- end }}
             securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              allowPrivilegeEscalation: {{ $.Values.securityContext.allowPrivilegeEscalation | default "false" }}
+              readOnlyRootFilesystem: {{ $.Values.securityContext.readOnlyRootFilesystem | default "true" }}
+              runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot | default "true" }}
+              capabilities:
+                drop: ["ALL"]
+              seccompProfile:
+                type: RuntimeDefault
             volumeMounts:
             - mountPath: /tmp
               name: tmp
