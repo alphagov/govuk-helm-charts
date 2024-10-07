@@ -38,11 +38,15 @@ spec:
           enableServiceLinks: false
           restartPolicy: Never
           securityContext:
-            seccompProfile:
-              type: RuntimeDefault
-            runAsGroup: 1001
             runAsNonRoot: true
             runAsUser: 1001
+            runAsGroup: 1001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
           volumes:
           - emptyDir: {}
             name: tmp
@@ -63,11 +67,6 @@ spec:
             resources:
               {{- . | toYaml | trim | nindent 14 }}
             {{- end }}
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop: ["ALL"]
             volumeMounts:
             - mountPath: /tmp
               name: tmp

@@ -27,9 +27,15 @@ spec:
           serviceAccountName: govuk-mirror-sync
           securityContext:
             fsGroup: {{ .Values.securityContext.runAsGroup }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
             runAsUser: {{ .Values.securityContext.runAsUser }}
             runAsGroup: {{ .Values.securityContext.runAsGroup }}
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop: ["ALL"]
           restartPolicy: Never
           volumes:
             - name: app-mirror-sync
@@ -49,14 +55,6 @@ spec:
                 requests:
                   cpu: 2
                   memory: 15000Mi
-              securityContext:
-                allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
-                runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
-                readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
-                seccompProfile:
-                  type: RuntimeDefault
-                capabilities:
-                  drop: {{ .Values.securityContext.capabilities.drop }}
               volumeMounts:
                 - name: app-mirror-sync
                   mountPath: /data
@@ -89,9 +87,6 @@ spec:
                 requests:
                   cpu: 2
                   memory: 5000Mi
-              securityContext:
-                allowPrivilegeEscalation: false
-                readOnlyRootFilesystem: true
               volumeMounts:
                 - name: app-mirror-sync
                   mountPath: /data

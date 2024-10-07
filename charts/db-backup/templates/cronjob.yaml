@@ -49,7 +49,7 @@ spec:
               - {{ $.Values.govukEnvironment }}.govuk-internal.digital
           serviceAccountName: {{ include "db-backup.serviceAccountName" $ }}
           securityContext:
-            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+            {{- toYaml $.Values.securityContext | nindent 12 }}
           volumes:
             - name: scripts
               configMap:
@@ -107,8 +107,6 @@ spec:
                 {{- end }}
               resources:
                 {{- merge ($job.resources | default dict) $.Values.resources | toYaml | nindent 16 }}
-              securityContext:
-                {{- toYaml $.Values.securityContext | nindent 16 }}
               volumeMounts:
                 - name: scripts
                   mountPath: /opt/bin

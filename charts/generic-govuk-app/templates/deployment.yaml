@@ -28,12 +28,16 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
-        seccompProfile:
-          type: RuntimeDefault
         fsGroup: {{ .Values.securityContext.runAsGroup }}
         runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+        readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFileSystem }}
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop: ["ALL"]
       {{- with .Values.dnsConfig }}
       dnsConfig:
         {{- . | toYaml | trim | nindent 8 }}
@@ -63,14 +67,6 @@ spec:
           volumeMounts:
             - name: assets
               mountPath: /assets
-          securityContext:
-            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
-            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop: ["ALL"]
 
       {{- end }}
       containers:
@@ -134,11 +130,6 @@ spec:
             periodSeconds: 2
             timeoutSeconds: 2
           {{- end }}
-          securityContext:
-            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFileSystem }}
-            capabilities:
-              drop: ["ALL"]
           volumeMounts:
             - name: app-tmp
               mountPath: /tmp
@@ -171,11 +162,6 @@ spec:
           resources:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities:
-              drop: ["ALL"]
           volumeMounts:
             - name: {{ .Values.nginxConfigMap.name | default (printf "%s-nginx-conf" $fullName) }}
               mountPath: /etc/nginx/nginx.conf

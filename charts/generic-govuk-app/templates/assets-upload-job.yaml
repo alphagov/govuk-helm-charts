@@ -28,11 +28,15 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
-        seccompProfile:
-          type: RuntimeDefault
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop: ["ALL"]
       initContainers:
         - name: copy-assets-for-upload
           image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
@@ -44,14 +48,6 @@ spec:
           volumeMounts: &volumeMounts
             - name: assets-to-upload
               mountPath: /assets-to-upload
-          securityContext:
-            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
-            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop: ["ALL"]
       containers:
         - name: upload-assets
           image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
@@ -66,11 +62,6 @@ spec:
             {{- . | toYaml | trim | nindent 12 }}
           {{- end }}
           volumeMounts: *volumeMounts
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities:
-              drop: ["ALL"]
       restartPolicy: Never
       volumes:
         - name: assets-to-upload
