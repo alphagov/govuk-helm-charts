@@ -962,6 +962,8 @@ govukApplications:
     helmValues:
       rails:
         createKeyBaseSecret: false
+      redis:
+        enabled: true
       sentry:
         createSecret: false  # Sentry DSNs are per repo.
       uploadAssets:
