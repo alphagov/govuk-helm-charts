@@ -975,6 +975,8 @@ govukApplications:
       arch: arm64
       rails:
         createKeyBaseSecret: false
+      redis:
+        enabled: true
       sentry:
         createSecret: false  # Sentry DSNs are per repo.
       uploadAssets:
