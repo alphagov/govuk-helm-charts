@@ -28,11 +28,12 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
-        seccompProfile:
-          type: RuntimeDefault
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        fsGroup: 1001
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
         runAsUser: {{ .Values.securityContext.runAsUser }}
         runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        seccompProfile:
+          type: RuntimeDefault
       initContainers:
         - name: copy-assets-for-upload
           image: "{{ .Values.appImage.repository }}:{{ required "Valid .Values.appImage.tag required!" .Values.appImage.tag }}"
@@ -46,10 +47,7 @@ spec:
               mountPath: /assets-to-upload
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
             readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
-            seccompProfile:
-              type: RuntimeDefault
             capabilities:
               drop: ["ALL"]
       containers:
@@ -67,8 +65,8 @@ spec:
           {{- end }}
           volumeMounts: *volumeMounts
           securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
             capabilities:
               drop: ["ALL"]
       restartPolicy: Never
