@@ -2,7 +2,6 @@
 # better alternatives.
 
 podSecurityContext:
-  fsGroup: 1001
   fsGroupChangePolicy: OnRootMismatch
   runAsNonRoot: true
   runAsUser: 1001
@@ -10,11 +9,7 @@ podSecurityContext:
 
 securityContext:
   allowPrivilegeEscalation: false
-  capabilities:
-    drop: ["ALL"]
   readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1001
 
 resources:
   limits:
