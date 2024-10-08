@@ -31,9 +31,14 @@ spec:
                   value: '{{ "{{{header}}}{{{table}}}{{{warnings}}}{{{notes}}}{{{changelogs}}}{{{controls}}}{{{footer}}}" }}'
               securityContext:
                 readOnlyRootFilesystem: true
-                runAsUser: 1000
-                runAsGroup: 1000
+                allowPrivilegeEscalation: false
+                runAsUser: 1001
+                runAsGroup: 1001
                 runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+                capabilities:
+                  drop: ["ALL"]
               volumeMounts:
                 - name: config
                   mountPath: /opt/renovate/
