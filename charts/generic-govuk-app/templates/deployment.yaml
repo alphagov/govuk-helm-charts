@@ -65,10 +65,7 @@ spec:
               mountPath: /assets
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
-            runAsNonRoot: {{ .Values.securityContext.runAsNonRoot | default "true" }}
             readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
-            seccompProfile:
-              type: RuntimeDefault
             capabilities:
               drop: ["ALL"]
 

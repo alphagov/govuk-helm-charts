@@ -158,8 +158,6 @@ securityContext:
   runAsUser: 1001
   runAsGroup: 1001
   readOnlyRootFilesystem: true
-  capabilities:
-    drop: ["ALL"]
 
 sentry:
   enabled: true
