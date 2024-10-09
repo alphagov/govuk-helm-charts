@@ -16,14 +16,14 @@ podSecurityContext:
   runAsNonRoot: true
   runAsUser: *uid
   runAsGroup: *uid
+  seccompProfile:
+    type: RuntimeDefault
 
 securityContext:
   allowPrivilegeEscalation: false
-  capabilities:
-    drop: [ALL]
   readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: *uid
+  capabilities:
+    drop: ["ALL"]
 
 minReadySeconds: 60
 replicas: 3
