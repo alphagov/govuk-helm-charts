@@ -2524,6 +2524,18 @@ govukApplications:
   - name: search-api-v2
     helmValues:
       dbMigrationEnabled: false
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-defaults]
+          alb.ingress.kubernetes.io/scheme: "internal"
+          alb.ingress.kubernetes.io/group.order: "172"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "search-api.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: search-api.{{ .Values.k8sExternalDomainSuffix }}
       replicaCount: 6
       uploadAssets:
         enabled: false
