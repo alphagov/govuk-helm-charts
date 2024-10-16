@@ -298,8 +298,8 @@ govukApplications:
     helmValues:
       arch: arm64
       extraEnv:
-        # - name: GOVUK_CHAT_PROMO_ENABLED
-        #   value: "true"
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "true"
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
         - name: EMAIL_ALERT_API_BEARER_TOKEN
@@ -1279,8 +1279,8 @@ govukApplications:
     helmValues:
       arch: arm64
       extraEnv:
-        # - name: GOVUK_CHAT_PROMO_ENABLED
-        #   value: "true"
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "true"
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
         - name: PUBLISHING_API_BEARER_TOKEN
