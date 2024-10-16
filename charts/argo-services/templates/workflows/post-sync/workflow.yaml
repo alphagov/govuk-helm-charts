@@ -28,14 +28,6 @@ spec:
       podSpecPatch: '{"containers":[{"name":"main","resources":{"limits":{"cpu":2,"memory":"2Gi"},"requests":{"cpu":1,"memory":"1Gi"}}}]}'
       dag:
         tasks:
-          - name: smoke-test
-            templateRef:
-              name: smoke-test
-              template: smoke-test
-            arguments:
-              parameters:
-                - name: extra-args
-                  value: "{{"@app-{{workflow.parameters.application}}"}}"
           - name: govuk-e2e-tests
             templateRef:
               name: govuk-e2e-tests
@@ -46,7 +38,7 @@ spec:
                   value: "{{"@app-{{workflow.parameters.application}}"}}"
     {{ if .Values.nextEnvironment }}
           - name: check-for-promotion
-            depends: smoke-test.Succeeded
+            depends: govuk-e2e-tests.Succeeded
             when: "{{"'{{workflow.parameters.application}}' !~ '^draft-'"}}"
             template: check-for-promotion
             arguments:
