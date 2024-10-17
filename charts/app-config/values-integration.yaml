@@ -1308,6 +1308,8 @@ govukApplications:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
 
+  - name: govspeak-preview
+
   - name: govuk-chat
     helmValues:
       arch: arm64
