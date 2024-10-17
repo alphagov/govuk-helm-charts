@@ -1310,6 +1310,18 @@ govukApplications:
               key: bearer_token
 
   - name: govspeak-preview
+    helmValues:
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "30"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "govspeak-preview.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: govspeak-preview.{{ .Values.k8sExternalDomainSuffix }}
 
   - name: govuk-chat
     helmValues:
