@@ -1,35 +1,74 @@
 groups:
-  - name: SearchApiV2
+  - name: SearchApiV2LongTermMetrics
+    interval: 12h
     rules:
-      - alert: LowInvariantScore
-        expr: search_api_v2_quality_monitoring_score{dataset_type="invariants"} < 0.95
-        labels:
-          severity: warning
-          destination: slack-search-quality-monitoring
+      - record: search_api_v2:requests:min_daily30d
+        expr: min_over_time(search_api_v2:requests:rate24h[30d])
 
-      - alert: HighQueryFailureRate
-        expr: >-
+      - record: search_api_v2:requests:max_daily30d
+        expr: max_over_time(search_api_v2:requests:rate24h[30d])
+
+  - name: SearchApiV2ShortTermMetrics
+    interval: 1m
+    rules:
+      - record: search_api_v2:requests:rate24h
+        expr: >
+          sum(increase(http_requests_total{
+            namespace="apps",
+            job="search-api-v2",
+            controller="searches",
+            action="show"
+          }[24h]))
+
+      - record: search_api_v2:requests:rate1m
+        expr: >
+          sum(
+            rate(http_requests_total{
+              namespace="apps",
+              job="search-api-v2",
+              controller="searches",
+              action="show"
+            }[5m])
+          ) * 60
+
+      - record: finder_frontend:search_api_v2_requests:latency:avg1h
+        expr: >
+          sum(rate(finder_frontend_search_request_duration_sum{api="v2"}[1h]))
+          /
+          sum(rate(finder_frontend_search_request_duration_count{api="v2"}[1h]))
+
+      # Note that unlike Search API v2, Finder Frontend can legitimately return 3xx or 4xx here so
+      # we look at non-500 specifically for success (instead of just 200).
+      - record: finder_frontend:requests:success_rate1h
+        expr: >
+          sum(rate(http_requests_total{
+            namespace="apps",
+            job="finder-frontend",
+            controller="finders",
+            action="show",
+            status!="500"
+          }[1h]))
+          /
+          clamp_min(sum(rate(http_requests_total{
+            namespace="apps",
+            job="finder-frontend",
+            controller="finders",
+            action="show"
+          }[1h])), 1)
+
+      - record: search_api_v2:requests:success_rate1h
+        expr: >
           sum(rate(http_requests_total{
             namespace="apps",
             job="search-api-v2",
             controller="searches",
             action="show",
             status="200"
-          }[2m]))
+          }[1h]))
           /
-          sum(rate(http_requests_total{
+          clamp_min(sum(rate(http_requests_total{
             namespace="apps",
             job="search-api-v2",
             controller="searches",
             action="show"
-          }[2m]))
-          < 0.995
-        for: 10m
-        labels:
-          severity: critical
-          destination: slack-search-team
-        annotations:
-          summary: Elevated rate of query failures in search-api-v2
-          description: >-
-            The success rate of search requests to search-api-v2 has dropped below 99.5% for more
-            than 10 consecutive minutes.
+          }[1h])), 1)
