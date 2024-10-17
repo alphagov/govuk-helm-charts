@@ -18,10 +18,7 @@ spec:
         {{- include "licensify.labels" . | nindent 8 }}
     spec:
       securityContext:
-        fsGroup: {{ .Values.securityContext.runAsGroup }}
-        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
-        runAsUser: 1000
-        runAsGroup: 1000
+        {{- toYaml $.Values.podSecurityContext | nindent 12 }}
       containers:
         - name: main
           command:

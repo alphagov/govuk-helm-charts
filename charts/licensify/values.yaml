@@ -2,11 +2,19 @@
 
 arch: amd64
 
-securityContext:
-  runAsNonRoot: true
-  allowPrivilegeEscalation: false
+podSecurityContext:
+  fsGroup: 1001
   runAsUser: 1001
   runAsGroup: 1001
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
 
 clamav:
   name: clamav
