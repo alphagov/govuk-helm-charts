@@ -2413,6 +2413,18 @@ govukApplications:
           env:
             - name: SEARCH_INDEX
               value: govuk
+        - name: update-specialist-finder-index-popularity
+          task: "search:update_popularity"
+          schedule: "35 00 * * *"
+          env:
+            - name: SEARCH_INDEX
+              value: specialist-finder
+        - name: update-specialist-finder-index-popularity
+          task: "search:update_popularity"
+          schedule: "35 00 * * *"
+          env:
+            - name: SEARCH_INDEX
+              value: specialist-finder
       workers:
         enabled: true
         replicaCount: 3
@@ -2423,6 +2435,8 @@ govukApplications:
             name: publishing-queue-listener
           - command: ['rake', 'message_queue:insert_data_into_govuk']
             name: govuk-index-queue-listener
+          - command: [ 'rake', 'message_queue:insert_data_into_specialist_finder' ]
+            name: specialist-finder-index-queue-listener
           - command: ['rake', 'message_queue:bulk_insert_data_into_govuk']
             name: bulk-reindex-queue-listener
       extraEnv:
