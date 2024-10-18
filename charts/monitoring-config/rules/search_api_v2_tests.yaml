@@ -4,111 +4,20 @@ rule_files:
 evaluation_interval: 1m
 
 tests:
-  - interval: 1m
+  - interval: 24h
     input_series:
-      # Should alert (below threshold)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset1",
-          dataset_type="invariants"}
-        values: '0.94 0.94 0.94 0.94 0.94'
-      # Should not alert (at threshold)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset2",
-          dataset_type="invariants"}
-        values: '0.95 0.95 0.95 0.95 0.95'
-      # Should not alert (above threshold)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset3",
-          dataset_type="invariants"}
-        values: '0.96 0.96 0.96 0.96 0.96'
-      # Should not alert (wrong type)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset4",
-          dataset_type="something_else"}
-        values: '0.90 0.90 0.90 0.90 0.90'
-      # Should alert (drops below threshold)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset5",
-          dataset_type="invariants"}
-        values: '0.96 0.95 0.94 0.94 0.94'
+      - series: 'search_api_v2:requests:rate24h'
+        values: '1000 1200 800 1500 900 1100 1300'
 
+    promql_expr_test:
+      - expr: search_api_v2:requests:min_daily30d
+        eval_time: 30d
+        exp_samples:
+          - labels: '{__name__="search_api_v2:requests:min_daily30d"}'
+            value: 800
 
-    alert_rule_test:
-      - eval_time: 5m
-        alertname: LowInvariantScore
-        exp_alerts:
-          - exp_labels:
-              alertname: LowInvariantScore
-              dataset_name: "dataset1"
-              dataset_type: "invariants"
-              severity: "warning"
-              destination: "slack-search-quality-monitoring"
-          - exp_labels:
-              alertname: LowInvariantScore
-              dataset_name: "dataset5"
-              dataset_type: "invariants"
-              severity: "warning"
-              destination: "slack-search-quality-monitoring"
-
-  - interval: 1m
-    input_series:
-      # Perfect 100% success
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
-          }
-        values: '1000+100x15'
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
-          }
-        values: '0x15'
-    alert_rule_test:
-      - alertname: HighQueryFailureRate
-        eval_time: 15m
-        exp_alerts: []
-
-  - interval: 1m
-    input_series:
-      # consistent <99.5% success for 15 minutes
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
-          }
-        values: '1000x15'
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
-          }
-        values: '100+100x15'
-    alert_rule_test:
-      - alertname: HighQueryFailureRate
-        eval_time: 15m
-        exp_alerts:
-          - exp_labels:
-              alertname: HighQueryFailureRate
-              severity: critical
-              destination: slack-search-team
-            exp_annotations:
-              summary: Elevated rate of query failures in search-api-v2
-              description: >-
-                The success rate of search requests to search-api-v2 has dropped below 99.5% for
-                more than 10 consecutive minutes.
-
-  - interval: 1m
-    input_series:
-      # brief but inconsistent blips
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
-          }
-        values: '1000 1000 1000 900 1000 1000 1000 900 1000 1000 1000 1000 1000 0 1000'
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
-          }
-        values: '0 0 0 100 0 0 0 100 0 0 0 0 0 1000 0'
-    alert_rule_test:
-      - alertname: HighQueryFailureRate
-        eval_time: 15m
-        exp_alerts: []
+      - expr: search_api_v2:requests:max_daily30d
+        eval_time: 30d
+        exp_samples:
+          - labels: '{__name__="search_api_v2:requests:max_daily30d"}'
+            value: 1500
