@@ -90,7 +90,7 @@ spec:
         {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
   - name: 'slack-signon-token-expiry'
     slackConfigs:
-    - channel: '#govuk-publishing-platform'
+    - channel: '#govuk-publishing-platform-system-alerts'
       sendResolved: true
       iconURL: https://avatars3.githubusercontent.com/u/3380462
       title: |-
