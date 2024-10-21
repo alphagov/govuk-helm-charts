@@ -33,6 +33,7 @@ spec:
           - --reporter=list
           - --workers=4
           - --project=main
+          - --grep-invert=@not-{{ .Values.govukEnvironment }}
           - "--grep={{ `{{ inputs.parameters.grep }}` }}"
         env:
           - name: YARN_CACHE_FOLDER

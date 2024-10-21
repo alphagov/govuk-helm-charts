@@ -57,6 +57,7 @@ spec:
             - --reporter=list
             - --workers=2
             - --project={{ .project }}
+            - --grep-invert=@not-{{ $.Values.govukEnvironment }}
             image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
             name: {{ .name }}
             {{- with $.Values.appResources }}
