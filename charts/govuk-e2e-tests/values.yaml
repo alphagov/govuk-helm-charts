@@ -1,6 +1,8 @@
 externalDomainSuffix: www.test.publishing.service.gov.uk
 publishingDomainSuffix: test.publishing.service.gov.uk
 
+govukEnvironment: test
+
 cronJobs:
   - name: govuk-e2e-tests
     schedule: "*/10 7-19 * * 1-5"
