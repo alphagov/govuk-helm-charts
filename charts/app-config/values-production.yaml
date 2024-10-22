@@ -1432,6 +1432,16 @@ govukApplications:
             secretKeyRef:
               name: signon-app-chat
               key: oauth_secret
+        - name: SMART_SURVEY_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-smart-survey
+              key: api_key
+        - name: SMART_SURVEY_API_KEY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-smart-survey
+              key: api_key_secret
         - name: WEB_CONCURRENCY
           value: '4'
         - name: REDIS_URL
