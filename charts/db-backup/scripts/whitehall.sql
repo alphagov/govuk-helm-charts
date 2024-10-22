@@ -80,7 +80,7 @@ WHERE id IN (
   SELECT attachments.attachment_data_id
   FROM
     attachments WHERE attachments.attachable_type = 'Edition'
-  AND attachments.attachable_id IN (SELECT id FROM editions WHERE access_limited = 1)
+  AND attachments.attachable_id IN (SELECT editions.id FROM editions WHERE editions.access_limited = 1)
 );
 
 -- Redact govspeak content data for access-limited editions.
