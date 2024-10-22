@@ -5,4 +5,4 @@ fastly-exporter:
         key: "token"
         name: "govuk/fastly/prometheus-exporter"
   options:
-    service-allowlist: '.*[Ii]ntegration.*'
+    service-allowlist: '.*[Pp]roduction.*'
