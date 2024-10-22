@@ -1135,6 +1135,8 @@ govukApplications:
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
+        - name: ENABLE_NEW_ALL_CONTENT_FINDER_UI
+          value: "true"
 
   - name: draft-finder-frontend
     repoName: finder-frontend
