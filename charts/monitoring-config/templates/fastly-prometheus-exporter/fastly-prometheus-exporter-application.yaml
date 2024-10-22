@@ -13,6 +13,9 @@ spec:
     helm:
       values: |
         {{ $envValues | nindent 8 }}
+        existingSecret:
+          name: "fastly-prometheus-exporter"
+          key: "fastly-api-token"
         serviceMonitor:
           enabled: true
         resources:
