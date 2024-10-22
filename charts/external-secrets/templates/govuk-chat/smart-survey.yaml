@@ -16,4 +16,4 @@ spec:
     deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
   dataFrom:
     - extract:
-        key: govuk/govuk-chat/smartsurvey
+        key: govuk/govuk-chat/smart-survey
