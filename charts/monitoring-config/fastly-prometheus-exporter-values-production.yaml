@@ -1,8 +1,2 @@
-fastly-exporter:
-  envValueFrom:
-    FASTLY_API_TOKEN:
-      secretKeyRef:
-        key: "token"
-        name: "govuk/fastly/prometheus-exporter"
-  options:
-    service-allowlist: '.*[Pp]roduction.*'
+options:
+  service-allowlist: '.*[Pp]roduction.*'
