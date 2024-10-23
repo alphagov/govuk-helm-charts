@@ -1929,6 +1929,9 @@ govukApplications:
         - name: reschedule-pubs-after-db-restore  # non-prod only
           task: "editions:requeue_scheduled_for_publishing"
           schedule: "47 7 * * 1-5"
+        - name: publish-missed-scheduled-editions
+          task: "editions:publish_missed_scheduled_editions"
+          schedule: "23 5 * * *"
       ingress:
         enabled: true
         annotations:
