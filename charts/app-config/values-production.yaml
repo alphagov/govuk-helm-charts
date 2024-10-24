@@ -1399,6 +1399,8 @@ govukApplications:
           value: 7eb37ba5-f331-43e2-95fa-28d7405eb90b
         - name: GOVUK_NOTIFY_REPLY_TO_ID
           value: c30aaa89-4fac-4889-b1a0-6d4c74fbcd93
+        - name: MEMCACHE_SERVERS
+          value: chat-memcached.production.govuk-internal.digital
         - name: OPENAI_ACCESS_TOKEN
           valueFrom:
             secretKeyRef:
