@@ -526,14 +526,14 @@ cronjobs:
 
   integration:
     account-api-postgres:
-      schedule: "37 3 * * 1-5"
+      schedule: "37 3 * * 1"
       db: account-api_production
       # We don't copy account-api data between environments at present.
       operations:
         - op: backup
 
     authenticating-proxy-postgres:
-      schedule: "23 3 * * 1-5"
+      schedule: "23 3 * * 1"
       db: authenticating_proxy_production
       operations:
         - op: restore
@@ -541,7 +541,7 @@ cronjobs:
         - op: backup
 
     chat-postgres:
-      schedule: "47 3 * * 1-5"
+      schedule: "47 3 * * 1"
       db: govuk_chat_production
       operations:
         - op: restore
@@ -550,7 +550,7 @@ cronjobs:
 
     ckan-postgres:
       suspend: true
-      schedule: "43 3 * * 0"
+      schedule: "43 3 * * 1"
       db: ckan_production
       operations:
         - op: restore
@@ -558,7 +558,7 @@ cronjobs:
         - op: backup
 
     collections-publisher-mysql:
-      schedule: "21 3 * * 1-5"
+      schedule: "21 3 * * 1"
       db: collections_publisher_production
       operations:
         - op: restore
@@ -566,7 +566,7 @@ cronjobs:
         - op: backup
 
     contacts-admin-mysql:
-      schedule: "49 3 * * 1-5"
+      schedule: "49 3 * * 1"
       db: contacts_production
       operations:
         - op: restore
@@ -574,7 +574,7 @@ cronjobs:
         - op: backup
 
     content-data-admin-postgres:
-      schedule: "4 3 * * 1-5"
+      schedule: "4 3 * * 1"
       db: content_data_admin_production
       operations:
         - op: restore
@@ -593,7 +593,7 @@ cronjobs:
         - op: backup
 
     content-publisher-postgres:
-      schedule: "9 3 * * 1-5"
+      schedule: "9 3 * * 1"
       db: content_publisher_production
       operations:
         - op: restore
@@ -603,7 +603,7 @@ cronjobs:
     content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: content_store_production
-      schedule: "06 23 * * 1-5"
+      schedule: "06 23 * * 1"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -613,14 +613,14 @@ cronjobs:
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: draft_content_store_production
-      schedule: "16 23 * * 1-5"
+      schedule: "16 23 * * 1"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
 
     content-tagger-postgres:
-      schedule: "31 3 * * 1-5"
+      schedule: "31 3 * * 1"
       db: content_tagger_production
       operations:
         - op: restore
@@ -628,7 +628,7 @@ cronjobs:
         - op: backup
 
     email-alert-api-postgres:
-      schedule: "54 3 * * 1-5"
+      schedule: "54 3 * * 1"
       db: email-alert-api_production
       operations:
         - op: restore
@@ -636,7 +636,7 @@ cronjobs:
         - op: backup
 
     imminence-postgres:
-      schedule: "18 3 * * 1-5"
+      schedule: "18 3 * * 1"
       db: imminence_production
       operations:
         - op: restore
@@ -644,7 +644,7 @@ cronjobs:
         - op: backup
 
     link-checker-api-postgres:
-      schedule: "43 3 * * 1-5"
+      schedule: "43 3 * * 1"
       db: link_checker_api_production
       operations:
         - op: restore
@@ -652,7 +652,7 @@ cronjobs:
         - op: backup
 
     local-links-manager-postgres:
-      schedule: "8 3 * * 1-5"
+      schedule: "8 3 * * 1"
       db: local-links-manager_production
       operations:
         - op: restore
@@ -660,7 +660,7 @@ cronjobs:
         - op: backup
 
     locations-api-postgres:
-      schedule: "32 3 * * 1-5"
+      schedule: "32 3 * * 1"
       db: locations_api_production
       operations:
         - op: restore
@@ -669,7 +669,7 @@ cronjobs:
 
     publishing-api-postgres:
       <<: *s5cmd-ram-workaround
-      schedule: "36 5 * * 1-5"
+      schedule: "36 5 * * 1"
       db: publishing_api_production
       operations:
         - op: restore
@@ -686,7 +686,7 @@ cronjobs:
 
     router-mongo:
       <<: *mongo-resources
-      schedule: "23 2 * * 1-5"
+      schedule: "23 2 * * 1"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -698,7 +698,7 @@ cronjobs:
           db: router
 
     search-admin-mysql:
-      schedule: "56 3 * * 1-5"
+      schedule: "56 3 * * 1"
       db: search_admin_production
       operations:
         - op: restore
@@ -706,7 +706,7 @@ cronjobs:
         - op: backup
 
     service-manual-publisher-postgres:
-      schedule: "49 3 * * 1-5"
+      schedule: "49 3 * * 1"
       db: service-manual-publisher_production
       operations:
         - op: restore
@@ -715,7 +715,7 @@ cronjobs:
 
     shared-documentdb:
       <<: *mongo-resources
-      schedule: "13 3 * * 1-5"
+      schedule: "13 3 * * 1"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -758,7 +758,7 @@ cronjobs:
 
     signon-mysql-restore:
       suspend: true
-      schedule: "0 0 * * 0"
+      schedule: "0 0 * * 1"
       host: signon-mysql
       db: signon_production
       operations:
@@ -766,7 +766,7 @@ cronjobs:
           bucket: s3://govuk-integration-database-backups
 
     support-api-postgres:
-      schedule: "38 3 * * 1-5"
+      schedule: "38 3 * * 1"
       db: support_contacts_production
       operations:
         - op: restore
@@ -774,7 +774,7 @@ cronjobs:
         - op: backup
 
     transition-postgresql-primary:
-      schedule: "24 3 * * 1-5"
+      schedule: "24 3 * * 1"
       db: transition_production
       dbms: postgres
       operations:
@@ -784,7 +784,7 @@ cronjobs:
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
-      schedule: "28 3 * * 1-5"
+      schedule: "28 3 * * 1"
       db: whitehall_production
       operations:
         - op: restore
