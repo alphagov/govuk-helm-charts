@@ -1327,6 +1327,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
+      replicaCount: 6
       dbMigrationEnabled: true
       workers:
         enabled: true
