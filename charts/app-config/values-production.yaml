@@ -1345,7 +1345,7 @@ govukApplications:
                 value: "25"
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
-        replicaCount: 4
+        replicaCount: 24
       workerResources:
         limits:
           cpu: 4
