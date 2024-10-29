@@ -1384,7 +1384,7 @@ govukApplications:
         - name: GOVUK_NOTIFY_REPLY_TO_ID
           value: d980e316-2338-4a8f-a318-12c827db6f5c
         - name: MEMCACHE_SERVERS
-          value: chat-memcached.staging.govuk-internal.digital
+          value: "chat-memcached-tx6sx5.serverless.euw1.cache.amazonaws.com:11211"
         - name: OPENAI_ACCESS_TOKEN
           valueFrom:
             secretKeyRef:
