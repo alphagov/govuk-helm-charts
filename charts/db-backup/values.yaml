@@ -332,7 +332,7 @@ cronjobs:
     content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: content_store_production
-      schedule: "06 22 * * 1-5"
+      schedule: "06 22 * * 0-4"
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -342,7 +342,7 @@ cronjobs:
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: draft_content_store_production
-      schedule: "16 22 * * 1-5"
+      schedule: "16 22 * * 0-4"
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -603,7 +603,7 @@ cronjobs:
     content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: content_store_production
-      schedule: "06 23 * * 1"
+      schedule: "06 23 * * 0"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -613,7 +613,7 @@ cronjobs:
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: draft_content_store_production
-      schedule: "16 23 * * 1"
+      schedule: "16 23 * * 0"
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
