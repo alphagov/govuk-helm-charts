@@ -48,6 +48,10 @@ _alb-ingress-waf-ruleset-backend: &alb-ingress-waf-ruleset-backend
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
     arn:aws:wafv2:eu-west-1:210287912431:regional/webacl/backend_public_web_acl/b5f616fd-699e-4b44-8ea2-7afd6626aa98
 
+_alb-ingress-waf-ruleset-chat: &alb-ingress-waf-ruleset-chat
+  alb.ingress.kubernetes.io/wafv2-acl-arn: >-
+    arn:aws:wafv2:eu-west-1:210287912431:regional/webacl/govuk_chat_web_acl/04b7b9f0-3205-4874-bfb4-28a55e9d0f1a
+
 _alb-ingress-group-backend: &alb-ingress-group-backend
   <<: *alb-ingress-waf-ruleset-backend
   alb.ingress.kubernetes.io/group.name: backend
@@ -1338,12 +1342,18 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-chat]
+          alb.ingress.kubernetes.io/load-balancer-name: chat
+          alb.ingress.kubernetes.io/group.name: chat
           alb.ingress.kubernetes.io/group.order: "95"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "chat.{{ .Values.publishingDomainSuffix }}"
             ]}}]
+          alb.ingress.kubernetes.io/load-balancer-attributes: >
+            access_logs.s3.enabled=true,
+            access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
+            access_logs.s3.prefix=elb/chat
         hosts:
           - name: chat.{{ .Values.k8sExternalDomainSuffix }}
       uploadAssets:
