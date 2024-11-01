@@ -2107,6 +2107,21 @@ govukApplications:
             secretKeyRef:
               name: publishing-api-postgres
               key: DATABASE_URL
+        - name: BIGQUERY_PROJECT_ID
+          valueFrom:
+            secretKeyRef:
+              name: publishing-api-bigquery
+              key: project-id
+        - name: BIGQUERY_CLIENT_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: publishing-api-bigquery
+              key: client-email
+        - name: BIGQUERY_PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: publishing-api-bigquery
+              key: client-secret
 
   - name: release
     helmValues:
