@@ -1145,8 +1145,6 @@ govukApplications:
               key: bearer_token
         - name: DISABLE_LTR_ON_PATHS
           value: /find-licences
-        - name: ENABLE_NEW_ALL_CONTENT_FINDER_UI
-          value: "true"
 
   - name: draft-finder-frontend
     repoName: finder-frontend
