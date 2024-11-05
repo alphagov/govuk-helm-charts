@@ -1322,7 +1322,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
-      replicaCount: 8
+      replicaCount: 16
       appResources:
         limits:
           cpu: 6
@@ -1343,7 +1343,7 @@ govukApplications:
                 value: "25"
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
-        replicaCount: 24
+        replicaCount: 4
       workerResources:
         limits:
           cpu: 4
