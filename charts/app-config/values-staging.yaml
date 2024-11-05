@@ -1326,6 +1326,13 @@ govukApplications:
   - name: govuk-chat
     helmValues:
       replicaCount: 16
+      appResources:
+        limits:
+          cpu: 6
+          memory: 3Gi
+        requests:
+          cpu: 4
+          memory: 2Gi
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -1428,6 +1435,8 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-smart-survey
               key: api_key_secret
+        - name: WEB_CONCURRENCY
+          value: '4'
         - name: REDIS_URL
           value: redis://chat-redis.eks.staging.govuk-internal.digital
         - name: BIGQUERY_PROJECT
