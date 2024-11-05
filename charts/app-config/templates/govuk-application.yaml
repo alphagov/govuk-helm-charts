@@ -61,5 +61,8 @@ spec:
     managedNamespaceMetadata:
       labels:
         argocd.argoproj.io/managed-by: {{ $.Values.argoNamespace | default $.Release.Namespace }}
+        pod-security.kubernetes.io/audit: "restricted"
+        pod-security.kubernetes.io/enforce: "baseline"
+        pod-security.kubernetes.io/warn: "restricted"
 ---
 {{ end }}
