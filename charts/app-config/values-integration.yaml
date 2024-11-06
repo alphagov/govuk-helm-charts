@@ -307,6 +307,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-collections-email-alert-api
               key: bearer_token
+        - name: GRAPHQL_FEATURE_FLAG
+          value: true
 
   - name: draft-collections
     repoName: collections
