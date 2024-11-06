@@ -3045,6 +3045,11 @@ govukApplications:
             secretKeyRef:
               name: signon-token-specialist-publisher-publishing-api
               key: bearer_token
+        - name: SUPPORT_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-specialist-publisher-support-api
+              key: bearer_token
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
