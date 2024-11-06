@@ -1376,11 +1376,11 @@ govukApplications:
           timeZone: "Europe/London"
         - name: increment-instant-access-places
           task: "settings:increment_pilot_places[instant_access]"
-          schedule: "0 9,11,13,15 * * 1-5"
+          schedule: "0 9,11,13,15 * * *"
           timeZone: "Europe/London"
         - name: increment-delayed-access-places
           task: "settings:increment_pilot_places[delayed_access]"
-          schedule: "15 9,11,13,15 * * 1-5"
+          schedule: "15 12 * * *"
           timeZone: "Europe/London"
       extraEnv:
         - name: AI_SLACK_CHANNEL_WEBHOOK_URL
@@ -1463,9 +1463,9 @@ govukApplications:
               name: govuk-chat-bigquery
               key: credentials
         - name: INSTANT_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "0"
+          value: "25"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "0"
+          value: "100"
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
