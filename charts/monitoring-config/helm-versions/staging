@@ -1,5 +1,5 @@
 # $repo_url $chart_name: "$chart_version"
-https://prometheus-community.github.io/helm-charts kube-prometheus-stack: "65.8.0"
+https://prometheus-community.github.io/helm-charts kube-prometheus-stack: "65.8.1"
 https://prometheus-community.github.io/helm-charts prometheus-pushgateway: "2.15.0"
 https://prometheus-community.github.io/helm-charts prometheus-fastly-exporter: "0.5.0"
 https://oauth2-proxy.github.io/manifests oauth2-proxy: "7.7.28"
