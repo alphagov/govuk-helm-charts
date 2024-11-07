@@ -1469,6 +1469,14 @@ govukApplications:
           value: "25"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
           value: "100"
+      nginxConfigMap:
+        extraServerConf: |
+          location /chat {
+            if ($http_host = 'chat.publishing.service.gov.uk' ) {
+              return 301 https://www.gov.uk$request_uri;
+            }
+            proxy_pass http://govuk-chat;
+          }
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
@@ -2270,14 +2278,22 @@ govukApplications:
             access_logs.s3.enabled=true,
             access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
             access_logs.s3.prefix=elb/www-origin
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &router-conditions >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "www.{{ .Values.externalDomainSuffix }}",
-                "www-origin.{{ .Values.publishingDomainSuffix }}",
-                "www.{{ .Values.k8sExternalDomainSuffix }}"
+                "www-origin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
+          alb.ingress.kubernetes.io/conditions.govuk-chat: *router-conditions
         hosts:
           - name: www-origin.{{ .Values.k8sExternalDomainSuffix }}
+            extraPaths:
+              - path: /chat
+                pathType: Prefix
+                backend:
+                  service:
+                    name: govuk-chat
+                    port:
+                      name: app
       nginxConfigMap:
         create: false
         name: live-router-nginx-conf
