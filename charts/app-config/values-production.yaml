@@ -1134,6 +1134,8 @@ govukApplications:
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
+        - name: SEARCH_AUTOCOMPLETE_API_URL
+          value: https://www.gov.uk/api/search.json?suggest=autocomplete
 
   - name: frontend
     helmValues:
