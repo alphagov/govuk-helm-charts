@@ -12,7 +12,7 @@ spec:
         spec:
           containers:
             - name: renovate
-              image: renovate/renovate:39.7.5
+              image: renovate/renovate:39.8.0
               env:
                 - name: RENOVATE_PLATFORM
                   value: github
