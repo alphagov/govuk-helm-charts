@@ -1472,7 +1472,7 @@ govukApplications:
               name: govuk-chat-bigquery
               key: credentials
         - name: INSTANT_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "25"
+          value: "50"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
           value: "100"
       nginxConfigMap:
