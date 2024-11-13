@@ -1328,7 +1328,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
-      replicaCount: 16
+      replicaCount: 8
       appResources:
         limits:
           cpu: 6
