@@ -1481,6 +1481,9 @@ govukApplications:
             if ($http_host = 'chat.publishing.service.gov.uk' ) {
               return 301 https://www.gov.uk$request_uri;
             }
+            if ($http_host = 'chat.eks.production.govuk.digital' ) {
+              return 301 https://www.gov.uk$request_uri;
+            }
             proxy_pass http://govuk-chat;
           }
 
