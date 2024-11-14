@@ -1147,8 +1147,6 @@ govukApplications:
               key: bearer_token
         - name: DISABLE_LTR_ON_PATHS
           value: /find-licences
-        - name: SEARCH_AUTOCOMPLETE_API_URL
-          value: https://www.gov.uk/api/search.json?suggest=autocomplete
 
   - name: draft-finder-frontend
     repoName: finder-frontend
