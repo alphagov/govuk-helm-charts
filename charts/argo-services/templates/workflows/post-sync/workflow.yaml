@@ -127,10 +127,16 @@ spec:
         command:
           - /bin/bash
         resources: {}
+        volumeMounts:
+          - name: out
+            mountPath: /tmp
         source: >
           #!/usr/bin/env bash
 
           echo {{"{{workflow.failures}}"}} | jq -r 'group_by(.templateName) | map({templateName: .[0].templateName, errorMessages: [.[].message | select(length > 0)] | unique}) | map("- \(.templateName): " + (["\(.errorMessages[])"] | join(",")) ) | .[]' > /tmp/message.txt
+      volumes:
+        - name: out
+          emptyDir: {}
     - name: exit-handler
       steps:
         - - name: parse-failures
