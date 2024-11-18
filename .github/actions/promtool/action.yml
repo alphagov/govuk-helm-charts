@@ -7,7 +7,7 @@ inputs:
 
 runs:
   using: docker
-  image: docker://prom/prometheus
+  image: docker://prom/prometheus:v2.55.1
   entrypoint: /bin/sh
   args:
     - -c
