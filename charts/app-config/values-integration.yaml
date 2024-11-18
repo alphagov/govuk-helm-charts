@@ -1179,6 +1179,7 @@ govukApplications:
   - name: frontend
     helmValues:
       arch: arm64
+      uploadFrontendErrorPagesEnabled: true
       ingress:
         enabled: true
         annotations:
