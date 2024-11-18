@@ -312,6 +312,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-collections-publishing-api
               key: bearer_token
+        - name: GRAPHQL_FEATURE_FLAG
+          value: "true"
 
   - name: draft-collections
     repoName: collections
