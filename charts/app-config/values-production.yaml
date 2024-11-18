@@ -303,6 +303,11 @@ govukApplications:
             secretKeyRef:
               name: signon-token-collections-email-alert-api
               key: bearer_token
+        - name: PUBLISHING_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-collections-publishing-api
+              key: bearer_token
 
   - name: draft-collections
     repoName: collections
