@@ -35,6 +35,7 @@
         "kube-prometheus-stack",
         "oauth2-proxy",
         "prometheus-pushgateway",
+        "prometheus-fastly-exporter",
         "reloader",
         "tempo-distributed"
       ],
