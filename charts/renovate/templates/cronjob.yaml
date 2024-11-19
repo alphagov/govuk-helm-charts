@@ -10,6 +10,13 @@ spec:
       suspend: false
       template:
         spec:
+          securityContext:
+            runAsUser: 12021
+            runAsGroup: 12021
+            fsGroup: 12021
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
           containers:
             - name: renovate
               image: renovate/renovate:39.20.1
@@ -30,11 +37,7 @@ spec:
                 - name: RENOVATE_PR_BODY_TEMPLATE
                   value: '{{ "{{{header}}}{{{table}}}{{{warnings}}}{{{notes}}}{{{changelogs}}}{{{controls}}}{{{footer}}}" }}'
               securityContext:
-                readOnlyRootFilesystem: true
                 allowPrivilegeEscalation: false
-                runAsUser: 1001
-                runAsGroup: 1001
-                runAsNonRoot: true
                 seccompProfile:
                   type: RuntimeDefault
                 capabilities:
