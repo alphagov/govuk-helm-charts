@@ -22,6 +22,11 @@ spec:
           duration: "15s"
           factor: 2
           maxDuration: "16m"
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: app-tmp
+          emptyDir: {}
       container:
         image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
         command:
@@ -35,6 +40,11 @@ spec:
           - --project=main
           - --grep-invert=@not-{{ .Values.govukEnvironment }}
           - "--grep={{ `{{ inputs.parameters.grep }}` }}"
+        volumeMounts:
+          - name: tmp
+            mountPath: /tmp
+          - name: app-tmp
+            mountPath: /app/tmp
         env:
           - name: YARN_CACHE_FOLDER
             value: /tmp/.cache/yarn
