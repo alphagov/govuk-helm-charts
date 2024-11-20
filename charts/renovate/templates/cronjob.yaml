@@ -46,7 +46,7 @@ spec:
                 - name: config
                   mountPath: /opt/renovate/
                 - name: tmp
-                  mountPath: /tmp
+                  mountPath: /tmp/renovate
           restartPolicy: Never
           volumes:
             - name: config
