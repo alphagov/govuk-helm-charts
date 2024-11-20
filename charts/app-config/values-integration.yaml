@@ -991,8 +991,6 @@ govukApplications:
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
-        - name: REDIS_URL
-          value: redis://shared-redis-govuk.eks.integration.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
