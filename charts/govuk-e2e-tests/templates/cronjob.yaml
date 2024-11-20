@@ -52,7 +52,6 @@ spec:
           - command:
             - yarn
             args:
-            - --global-folder=/tmp/global
             - playwright
             - test
             - --reporter=list
@@ -77,6 +76,10 @@ spec:
               name: app-tmp
             env:
             - name: YARN_CACHE_FOLDER
+              value: /tmp/.cache/yarn
+            - name: YARN_GLOBAL_FOLDER
+              value: /tmp/.cache/yarn
+            - name: PREFIX
               value: /tmp/.cache/yarn
             - name: PUBLIC_DOMAIN
               value: www.{{ $.Values.externalDomainSuffix }}
