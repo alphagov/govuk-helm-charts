@@ -52,6 +52,7 @@ spec:
           - command:
             - yarn
             args:
+            - --global-folder=/tmp/global
             - playwright
             - test
             - --reporter=list
