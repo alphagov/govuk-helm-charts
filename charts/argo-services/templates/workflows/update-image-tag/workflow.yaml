@@ -33,6 +33,8 @@ spec:
               secretKeyRef:
                 name: govuk-ci-github-creds
                 key: token
+          - name: GIT_CONFIG_GLOBAL
+            value: "/tmp/.gitconfig"
           - name: IMAGE_TAG
             value: "{{"{{inputs.parameters.imageTag}}"}}"
           - name: ENVIRONMENT
