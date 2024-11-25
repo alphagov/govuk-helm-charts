@@ -37,9 +37,7 @@ spec:
                 name: govuk-ci-github-creds
                 key: token
           - name: GIT_CONFIG_GLOBAL
-            value: "/tmp/git/.gitconfig"
-          - name: GH_CONFIG_DIR
-            value: "/tmp/gh"
+            value: "/tmp/.gitconfig"
           - name: IMAGE_TAG
             value: "{{"{{inputs.parameters.imageTag}}"}}"
           - name: ENVIRONMENT
