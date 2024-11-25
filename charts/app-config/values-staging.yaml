@@ -1140,6 +1140,8 @@ govukApplications:
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "false"
 
   - name: draft-finder-frontend
     repoName: finder-frontend
@@ -1193,6 +1195,8 @@ govukApplications:
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "false"
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -2776,6 +2780,8 @@ govukApplications:
         path: /app/public/assets/smartanswers
         s3Directory: "smartanswers"
       extraEnv:
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "false"
         - name: LINK_CHECKER_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
