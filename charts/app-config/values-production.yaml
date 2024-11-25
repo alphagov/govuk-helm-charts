@@ -1137,6 +1137,8 @@ govukApplications:
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "false"
 
   - name: frontend
     helmValues:
@@ -1168,6 +1170,8 @@ govukApplications:
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "false"
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -2832,6 +2836,8 @@ govukApplications:
           memory: 1Gi
           cpu: "2"
       extraEnv:
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "false"
         - name: LINK_CHECKER_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
