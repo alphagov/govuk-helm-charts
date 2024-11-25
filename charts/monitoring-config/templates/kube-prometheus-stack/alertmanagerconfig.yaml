@@ -126,7 +126,7 @@ spec:
       apiURL: *slack_api_url
   - name: 'slack-mirror-freshness'
     slackConfigs:
-    - channel: '#govuk-platform-engineering'
+    - channel: '#govuk-platform-support'
       sendResolved: true
       iconURL: https://avatars3.githubusercontent.com/u/3380462
       title: |-
@@ -143,7 +143,7 @@ spec:
       apiURL: *slack_api_url
   - name: 'generic-slack-platform-engineering'
     slackConfigs:
-    - channel: '#govuk-platform-engineering'
+    - channel: '#govuk-platform-support'
       sendResolved: true
       iconURL: https://avatars3.githubusercontent.com/u/3380462
       text: |-
