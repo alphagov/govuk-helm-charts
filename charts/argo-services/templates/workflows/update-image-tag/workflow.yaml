@@ -38,6 +38,8 @@ spec:
                 key: token
           - name: GIT_CONFIG_GLOBAL
             value: "/tmp/.gitconfig"
+          - name: GH_CONFIG_DIR
+            value: "/tmp"
           - name: IMAGE_TAG
             value: "{{"{{inputs.parameters.imageTag}}"}}"
           - name: ENVIRONMENT
