@@ -1137,8 +1137,6 @@ govukApplications:
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "false"
 
   - name: frontend
     helmValues:

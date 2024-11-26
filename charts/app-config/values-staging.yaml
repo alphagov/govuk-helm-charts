@@ -1140,8 +1140,6 @@ govukApplications:
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "false"
 
   - name: draft-finder-frontend
     repoName: finder-frontend
