@@ -8,6 +8,7 @@ git config --global user.email "${GIT_NAME}@digital.cabinet-office.gov.uk"
 git config --global user.name "${GIT_NAME}"
 
 gh auth setup-git
+cd /tmp
 gh repo clone alphagov/govuk-helm-charts -- --depth 1 --branch main
 
 cd "govuk-helm-charts" || exit 1
