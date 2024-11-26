@@ -1194,7 +1194,7 @@ govukApplications:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "false"
+          value: "true"
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -2779,7 +2779,7 @@ govukApplications:
         s3Directory: "smartanswers"
       extraEnv:
         - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "false"
+          value: "true"
         - name: LINK_CHECKER_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
