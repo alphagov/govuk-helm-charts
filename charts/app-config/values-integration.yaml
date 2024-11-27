@@ -2582,6 +2582,12 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
+        - name: user-events-import-yesterdays-events
+          task: "user_events:import_yesterdays_events"
+          schedule: "30 12 * * *"
+        - name: user-events-import-intraday-events
+          task: "user_events:import_intraday_events"
+          schedule: "45 05,11,17,23 * * *"
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
           schedule: "09 9 * * *"  # 09:09am daily
