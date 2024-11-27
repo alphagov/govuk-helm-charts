@@ -2606,6 +2606,11 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: GOOGLE_CLOUD_CREDENTIALS
+        - name: GOOGLE_CLOUD_PROJECT_ID
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: GOOGLE_CLOUD_PROJECT_ID
         - name: DISCOVERY_ENGINE_DATASTORE
           valueFrom:
             secretKeyRef:
