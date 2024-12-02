@@ -2342,6 +2342,19 @@ govukApplications:
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
+        - name: BACKEND_URL_info-frontend
+          value: 'http://info-frontend'
+        - name: BACKEND_URL_whitehall-frontend
+          value: 'http://whitehall-frontend'
+        - name: BACKEND_URL_manuals-frontend
+          value: 'http://manuals-frontend'
+        - name: CSMUX_SAMPLE_RATE
+          value: '0.0'
+        - name: CONTENT_STORE_DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: DATABASE_URL
+              name: content-store-postgres
 
   - name: draft-router
     repoName: router
@@ -2391,6 +2404,19 @@ govukApplications:
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
+        - name: BACKEND_URL_info-frontend
+          value: 'http://info-frontend'
+        - name: BACKEND_URL_whitehall-frontend
+          value: 'http://whitehall-frontend'
+        - name: BACKEND_URL_manuals-frontend
+          value: 'http://manuals-frontend'
+        - name: CSMUX_SAMPLE_RATE
+          value: '0.0'
+        - name: CONTENT_STORE_DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: draft-content-store-postgres
+              key: DATABASE_URL
 
   - name: router-mongo
     chartPath: charts/router-mongo
