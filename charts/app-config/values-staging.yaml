@@ -2242,10 +2242,10 @@ govukApplications:
       appResources:
         limits:
           cpu: 4
-          memory: 2Gi
+          memory: 6Gi
         requests:
           cpu: 2
-          memory: 1Gi
+          memory: 2Gi
       ingress:
         enabled: true
         annotations:
