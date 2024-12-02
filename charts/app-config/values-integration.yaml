@@ -2806,8 +2806,6 @@ govukApplications:
       extraEnv:
         - name: EXPOSE_GOVSPEAK
           value: "1"
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "true"
         - name: LINK_CHECKER_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
