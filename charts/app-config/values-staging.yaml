@@ -2783,8 +2783,6 @@ govukApplications:
         path: /app/public/assets/smartanswers
         s3Directory: "smartanswers"
       extraEnv:
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "true"
         - name: LINK_CHECKER_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
