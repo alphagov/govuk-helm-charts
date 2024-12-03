@@ -1165,6 +1165,7 @@ govukApplications:
 
   - name: frontend
     helmValues:
+      uploadFrontendErrorPagesEnabled: true
       ingress:
         enabled: true
         annotations:
