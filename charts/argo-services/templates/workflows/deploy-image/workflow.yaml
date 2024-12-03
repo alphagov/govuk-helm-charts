@@ -11,9 +11,6 @@ spec:
       - name: repoName
       - name: imageTag
       - name: promoteDeployment
-  synchronization:
-    mutexes:
-      - name: deploy-image
   templates:
     - name: deploy-image
       steps:
