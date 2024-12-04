@@ -2304,7 +2304,7 @@ govukApplications:
         - name: BACKEND_URL_manuals-frontend
           value: 'http://manuals-frontend'
         - name: CSMUX_SAMPLE_RATE
-          value: '0.0'
+          value: '1.0'
         - name: CONTENT_STORE_DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -2366,7 +2366,7 @@ govukApplications:
         - name: BACKEND_URL_manuals-frontend
           value: 'http://manuals-frontend'
         - name: CSMUX_SAMPLE_RATE
-          value: '0.0'
+          value: '1.0'
         - name: CONTENT_STORE_DATABASE_URL
           valueFrom:
             secretKeyRef:
