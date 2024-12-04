@@ -2201,6 +2201,13 @@ govukApplications:
         enabled: false
       uploadAssets:
         enabled: false
+      appResources:
+        limits:
+          cpu: 4
+          memory: 6Gi
+        requests:
+          cpu: 2
+          memory: 2Gi
       ingress:
         enabled: true
         annotations:
@@ -2320,6 +2327,13 @@ govukApplications:
         createSecret: false  # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
+      appResources:
+        limits:
+          cpu: 4
+          memory: 6Gi
+        requests:
+          cpu: 2
+          memory: 2Gi
       appProbes: *router-app-probes
       nginxConfigMap:
         create: false
