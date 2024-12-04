@@ -2843,11 +2843,6 @@ govukApplications:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
 
-  - name: smokey
-    chartPath: charts/smokey
-    helmValues:
-      arch: arm64
-
   - name: static
     helmValues:
       arch: arm64
