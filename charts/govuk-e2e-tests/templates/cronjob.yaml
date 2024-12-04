@@ -91,12 +91,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: email
-                  name: smokey-signon-account
+                  name: test-signon-account
             - name: SIGNON_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: password
-                  name: smokey-signon-account
+                  name: test-signon-account
             {{- with .extraEnv }}
               {{- . | toYaml | nindent 12 }}
             {{- end }}

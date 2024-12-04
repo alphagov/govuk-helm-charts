@@ -62,12 +62,12 @@ spec:
           - name: SIGNON_EMAIL
             valueFrom:
               secretKeyRef:
-                name: smokey-signon-account
+                name: test-signon-account
                 key: email
           - name: SIGNON_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: smokey-signon-account
+                name: test-signon-account
                 key: password
         {{- with .Values.appResources }}
         resources:

@@ -2821,9 +2821,6 @@ govukApplications:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
 
-  - name: smokey
-    chartPath: charts/smokey
-
   - name: static
     helmValues:
       uploadStaticErrorPagesEnabled: true

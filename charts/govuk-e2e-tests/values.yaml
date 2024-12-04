@@ -19,3 +19,7 @@ appResources:
   requests:
     cpu: "1"
     memory: 1Gi
+
+externalSecrets:
+  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
+  deletionPolicy: Delete
