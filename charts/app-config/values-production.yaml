@@ -721,6 +721,9 @@ govukApplications:
         - name: report-delays
           task: "publishing_delay_report:report_delays"
           schedule: "15 2 * * *"
+        - name: cleanup-intents
+          task: "housekeeping:cleanup_publish_intents"
+          schedule: "38 2 * * *"
       uploadAssets:
         enabled: false
       extraEnv:
