@@ -1159,6 +1159,8 @@ govukApplications:
               key: bearer_token
         - name: DISABLE_LTR_ON_PATHS
           value: /find-licences
+        - name: GOVUK_CHAT_PROMO_ENABLED
+          value: "true"
 
   - name: draft-finder-frontend
     repoName: finder-frontend
