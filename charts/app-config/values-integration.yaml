@@ -2871,7 +2871,6 @@ govukApplications:
   - name: static
     helmValues:
       arch: arm64
-      uploadStaticErrorPagesEnabled: true
       ingress:
         enabled: true
         annotations:
