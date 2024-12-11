@@ -58,7 +58,7 @@ _alb-ingress-group-backend: &alb-ingress-group-backend
 emergency-banner-redis:
   - &emergency-banner-redis redis://whitehall-admin-redis/1
 
-disableSearchAutocomplete: true
+disableSearchAutocomplete: false
 
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 
