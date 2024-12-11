@@ -2471,10 +2471,6 @@ govukApplications:
               name: draft-content-store-postgres
               key: DATABASE_URL
 
-  - name: router-mongo
-    chartPath: charts/router-mongo
-    postSyncWorkflowEnabled: "false"
-
   - name: search-admin
     helmValues:
       dbMigrationEnabled: true
