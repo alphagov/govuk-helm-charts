@@ -2214,10 +2214,10 @@ govukApplications:
         enabled: false
       appResources:
         limits:
-          cpu: 1
+          cpu: 2
           memory: 3Gi
         requests:
-          cpu: 2
+          cpu: 1
           memory: 1Gi
       ingress:
         enabled: true
@@ -2342,10 +2342,10 @@ govukApplications:
         enabled: false
       appResources:
         limits:
-          cpu: 4
+          cpu: 2
           memory: 3Gi
         requests:
-          cpu: 2
+          cpu: 1
           memory: 1Gi
       appProbes: *router-app-probes
       nginxConfigMap:
