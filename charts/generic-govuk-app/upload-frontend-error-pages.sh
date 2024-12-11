@@ -11,4 +11,4 @@ curl --fail-early -fo '#1.html' "${SERVICE}/static-error-pages/{${ERROR_PAGES_CO
 eval ls "{$ERROR_PAGES_COMMA_SEPARATED}.html" || (echo Failed to download one or more files.; exit 1)
 
 aws s3 sync . "s3://govuk-app-assets-${GOVUK_ENVIRONMENT}/error_pages/"
-aws s3 sync 503.html "s3://govuk-${GOVUK_ENVIRONMENT}-mirror/error/503.html"
+aws s3 sync ./503.html "s3://govuk-${GOVUK_ENVIRONMENT}-mirror/error/503.html"
