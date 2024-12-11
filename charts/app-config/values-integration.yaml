@@ -2254,8 +2254,6 @@ govukApplications:
           value: 'http://whitehall-frontend'
         - name: BACKEND_URL_manuals-frontend
           value: 'http://manuals-frontend'
-        - name: CSMUX_SAMPLE_RATE
-          value: '1.0'
         - name: ROUTER_ROUTE_RELOAD_INTERVAL
           value: 5m
         - name: CONTENT_STORE_DATABASE_URL
@@ -2321,8 +2319,6 @@ govukApplications:
           value: 'http://whitehall-frontend'
         - name: BACKEND_URL_manuals-frontend
           value: 'http://manuals-frontend'
-        - name: CSMUX_SAMPLE_RATE
-          value: '1.0'
         - name: ROUTER_ROUTE_RELOAD_INTERVAL
           value: 5m
         - name: CONTENT_STORE_DATABASE_URL
