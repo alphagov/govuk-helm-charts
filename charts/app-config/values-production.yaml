@@ -2229,52 +2229,6 @@ govukApplications:
               name: slack-webhook-url
               key: url
 
-  - name: router-api
-    helmValues: &router-api
-      uploadAssets:
-        enabled: false
-      extraEnv:
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-router-api
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-router-api
-              key: oauth_secret
-        - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-          value: "mongodb://\
-            router-mongo-0.router-mongo,\
-            router-mongo-1.router-mongo,\
-            router-mongo-2.router-mongo/router"
-
-  - name: draft-router-api
-    repoName: router-api
-    helmValues:
-      <<: *router-api
-      rails:
-        createKeyBaseSecret: false
-      sentry:
-        createSecret: false  # Sentry DSNs are per repo.
-      extraEnv:
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-draft-router-api
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-draft-router-api
-              key: oauth_secret
-        - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-          value: "mongodb://\
-            router-mongo-0.router-mongo,\
-            router-mongo-1.router-mongo,\
-            router-mongo-2.router-mongo/draft_router"
-
   - name: router
     helmValues:
       rails:
