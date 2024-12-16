@@ -731,11 +731,6 @@ govukApplications:
       extraEnv:
         - name: SENTRY_ENVIRONMENT
           value: "postgresql-production"
-        - name: ROUTER_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-content-store-router-api
-              key: bearer_token
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -779,11 +774,6 @@ govukApplications:
       extraEnv:
         - name: SENTRY_ENVIRONMENT
           value: "postgresql-draft-production"
-        - name: ROUTER_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-draft-content-store-draft-router-api
-              key: bearer_token
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -2122,11 +2112,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-publishing-api-draft-content-store
               key: bearer_token
-        - name: ROUTER_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-publishing-api-router-api
-              key: bearer_token
         - name: RABBITMQ_URL
           valueFrom:
             secretKeyRef:
@@ -2229,52 +2214,6 @@ govukApplications:
               name: slack-webhook-url
               key: url
 
-  - name: router-api
-    helmValues: &router-api
-      uploadAssets:
-        enabled: false
-      extraEnv:
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-router-api
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-router-api
-              key: oauth_secret
-        - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-          value: "mongodb://\
-            router-mongo-0.router-mongo,\
-            router-mongo-1.router-mongo,\
-            router-mongo-2.router-mongo/router"
-
-  - name: draft-router-api
-    repoName: router-api
-    helmValues:
-      <<: *router-api
-      rails:
-        createKeyBaseSecret: false
-      sentry:
-        createSecret: false  # Sentry DSNs are per repo.
-      extraEnv:
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-draft-router-api
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-draft-router-api
-              key: oauth_secret
-        - name: MONGODB_URI  # Hostnames need to match those shown in MongoDB rs.status().
-          value: "mongodb://\
-            router-mongo-0.router-mongo,\
-            router-mongo-1.router-mongo,\
-            router-mongo-2.router-mongo/draft_router"
-
   - name: router
     helmValues:
       rails:
@@ -2355,11 +2294,6 @@ govukApplications:
           value: ":3000"
         - name: ROUTER_APIADDR
           value: ":9394"
-        - name: ROUTER_MONGO_URL
-          value: &router_mongo_hosts "\
-            router-mongo-0.router-mongo,\
-            router-mongo-1.router-mongo,\
-            router-mongo-2.router-mongo"
         - name: BACKEND_URL_collections
           value: "http://collections"
         - name: BACKEND_URL_content-store
@@ -2390,8 +2324,6 @@ govukApplications:
           value: 'http://whitehall-frontend'
         - name: BACKEND_URL_manuals-frontend
           value: 'http://manuals-frontend'
-        - name: CSMUX_SAMPLE_RATE
-          value: '1.0'
         - name: ROUTER_ROUTE_RELOAD_INTERVAL
           value: 5m
         - name: CONTENT_STORE_DATABASE_URL
@@ -2427,10 +2359,6 @@ govukApplications:
           value: ":3000"
         - name: ROUTER_APIADDR
           value: ":9394"
-        - name: ROUTER_MONGO_URL  # Hostnames should match those shown in MongoDB rs.status().
-          value: *router_mongo_hosts
-        - name: ROUTER_MONGO_DB
-          value: draft_router
         - name: BACKEND_URL_collections
           value: "http://draft-collections"
         - name: BACKEND_URL_content-store
@@ -2461,8 +2389,6 @@ govukApplications:
           value: 'http://whitehall-frontend'
         - name: BACKEND_URL_manuals-frontend
           value: 'http://manuals-frontend'
-        - name: CSMUX_SAMPLE_RATE
-          value: '1.0'
         - name: ROUTER_ROUTE_RELOAD_INTERVAL
           value: 5m
         - name: CONTENT_STORE_DATABASE_URL
@@ -2470,10 +2396,6 @@ govukApplications:
             secretKeyRef:
               name: draft-content-store-postgres
               key: DATABASE_URL
-
-  - name: router-mongo
-    chartPath: charts/router-mongo
-    postSyncWorkflowEnabled: "false"
 
   - name: search-admin
     helmValues:
