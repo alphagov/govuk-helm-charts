@@ -79,7 +79,7 @@ spec:
                   value: 'rate-limit-token:$(RATE_LIMIT_TOKEN)'
           containers:
             - name: upload-to-s3
-              image: peakcom/s5cmd:v2.2.2
+              image: peakcom/s5cmd:v2.3.0
               imagePullPolicy: "Always"
               resources:
                 limits:
