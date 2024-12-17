@@ -1383,7 +1383,7 @@ govukApplications:
           timeZone: "Europe/London"
         - name: increment-instant-access-places
           task: "settings:increment_pilot_places[instant_access]"
-          schedule: "0 9-16 * * *"
+          schedule: "0 * * * *"
           timeZone: "Europe/London"
         - name: increment-delayed-access-places
           task: "settings:increment_pilot_places[delayed_access]"
