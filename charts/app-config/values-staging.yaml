@@ -302,8 +302,6 @@ govukApplications:
           cpu: 1
           memory: 1Gi
       extraEnv:
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "true"
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: EMAIL_ALERT_API_BEARER_TOKEN
@@ -1135,8 +1133,6 @@ govukApplications:
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "true"
 
   - name: draft-finder-frontend
     repoName: finder-frontend
@@ -1191,8 +1187,6 @@ govukApplications:
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "true"
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -1288,8 +1282,6 @@ govukApplications:
           cpu: 1
           memory: 1500Mi
       extraEnv:
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "true"
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: PUBLISHING_API_BEARER_TOKEN
