@@ -1321,35 +1321,14 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
-      replicaCount: 8
-      appResources:
-        limits:
-          cpu: 6
-          memory: 3Gi
-        requests:
-          cpu: 4
-          memory: 2Gi
       dbMigrationEnabled: true
       workers:
         enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
-            env:
-              - name: SIDEKIQ_CONCURRENCY
-                value: "25"
-              - name: DATABASE_POOL
-                value: "25"
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
-        replicaCount: 4
-      workerResources:
-        limits:
-          cpu: 4
-          memory: 2500Mi
-        requests:
-          cpu: 2
-          memory: 2Gi
       ingress:
         enabled: true
         annotations:
@@ -1451,8 +1430,6 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-smart-survey
               key: api_key_secret
-        - name: WEB_CONCURRENCY
-          value: '4'
         - name: REDIS_URL
           value: redis://chat-redis.eks.production.govuk-internal.digital
         - name: BIGQUERY_PROJECT
