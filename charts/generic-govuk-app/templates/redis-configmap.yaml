@@ -18,6 +18,9 @@ data:
 
     daemonize no
 
+    maxmemory-policy noeviction
+    maxmemory {{ .Values.redis.config.maxmemory }}
+
     # Use AOF for persistence
     dir /data
     appendonly yes

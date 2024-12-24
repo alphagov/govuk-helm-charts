@@ -34,10 +34,13 @@ redis:
   resources:
     limits:
       cpu: 1
-      memory: 1000Mi
+      memory: 1500Mi
     requests:
       cpu: 500m
       memory: 500Mi
+  config:
+    # Needs to be smaller that the memory limit with some buffer
+    maxmemory: 1000mb
   redisUrlOverride:
     app: ""
     workers: ""
