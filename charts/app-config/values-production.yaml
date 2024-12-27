@@ -2435,6 +2435,15 @@ govukApplications:
             name: bulk-reindex-queue-listener
       redis:
         enabled: true
+        config:
+          maxmemory: 8000mb
+        resources:
+          limits:
+            cpu: 1
+            memory: 10Gi
+          requests:
+            cpu: 500m
+            memory: 2Gi
       cronTasks:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
