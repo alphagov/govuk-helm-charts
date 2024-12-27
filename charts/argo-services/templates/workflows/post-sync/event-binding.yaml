@@ -6,8 +6,6 @@ spec:
   event:
     selector: payload.application != "" && payload.repoName != "" && payload.imageTag != "" && discriminator == "post-sync"
   submit:
-    metadata:
-      name: "payload.repoName + \"-post-sync-\" + string(now().Unix())"
     workflowTemplateRef:
       name: post-sync
     arguments:

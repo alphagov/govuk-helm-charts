@@ -6,8 +6,6 @@ spec:
   event:
     selector: payload.environment != "" && payload.repoName != "" && payload.imageTag != "" && discriminator == "update-image-tag"
   submit:
-    metadata:
-      name: "payload.repoName + \"-\" + payload.environment + \"-deploy-image-\" + string(now().Unix())"
     workflowTemplateRef:
       name: deploy-image
     arguments:
