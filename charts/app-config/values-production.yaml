@@ -3360,6 +3360,11 @@ govukApplications:
           value: *emergency-banner-redis
         - name: TAXONOMY_CACHE_REDIS_URL
           value: redis://whitehall-admin-redis/2
+        - name: SIGNON_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-whitehall-signon-api
+              key: bearer_token
       extraVolumes:
         - name: asset-uploads-efs
           nfs:

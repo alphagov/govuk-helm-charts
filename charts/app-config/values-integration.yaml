@@ -3407,6 +3407,11 @@ govukApplications:
           value: *publishing-design-system-gtm-auth
         - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
           value: *publishing-design-system-gtm-preview
+        - name: SIGNON_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-whitehall-signon-api
+              key: bearer_token
       extraVolumes:
         - name: asset-uploads-efs
           nfs:

@@ -3290,6 +3290,11 @@ govukApplications:
             secretKeyRef:
               name: whitehall-admin-mysql
               key: DATABASE_URL
+        - name: SIGNON_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-whitehall-signon-api
+              key: bearer_token
       extraVolumes:
         - name: asset-uploads-efs
           nfs:
