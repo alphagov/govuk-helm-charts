@@ -1151,7 +1151,7 @@ govukApplications:
             path: /assets/frontend/
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /government/placeholder/
-      replicaCount: 6
+      replicaCount: 4
       appResources:
         limits:
           cpu: 4
@@ -1648,7 +1648,6 @@ govukApplications:
 
   - name: local-links-manager
     helmValues:
-      replicaCount: 6
       redis:
         enabled: true
       ingress:
@@ -1765,13 +1764,11 @@ govukApplications:
 
   - name: locations-api
     helmValues:
-      replicaCount: 6
       uploadAssets:
         enabled: false
       dbMigrationEnabled: true
       workers:
         enabled: true
-        replicaCount: 6
       redis:
         enabled: true
       extraEnv:
