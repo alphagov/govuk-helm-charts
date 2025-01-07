@@ -65,6 +65,7 @@ disableSearchAutocomplete: false
 govukApplications:
   - name: account-api
     helmValues:
+      arch: arm64
       uploadAssets:
         enabled: false
       dbMigrationEnabled: true
@@ -140,6 +141,7 @@ govukApplications:
   - name: asset-manager
     chartPath: charts/asset-manager
     helmValues:
+      arch: arm64
       workers:
         enabled: true
       redis:
@@ -210,10 +212,12 @@ govukApplications:
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
     helmValues:
+      arch: arm64
       nextEnvironment: production
 
   - name: authenticating-proxy
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -253,6 +257,7 @@ govukApplications:
 
   - name: bouncer
     helmValues:
+      arch: arm64
       rails:
         enabled: false
       uploadAssets:
@@ -294,6 +299,7 @@ govukApplications:
 
   - name: collections
     helmValues:
+      arch: arm64
       appResources:
         limits:
           cpu: 2
@@ -318,6 +324,7 @@ govukApplications:
   - name: draft-collections
     repoName: collections
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
@@ -335,6 +342,7 @@ govukApplications:
 
   - name: collections-publisher
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -399,6 +407,7 @@ govukApplications:
 
   - name: contacts-admin
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -440,6 +449,7 @@ govukApplications:
 
   - name: content-data-admin
     helmValues:
+      arch: arm64
       redis:
         enabled: true
       ingress:
@@ -543,6 +553,7 @@ govukApplications:
 
   - name: content-data-api
     helmValues:
+      arch: arm64
       redis:
         enabled: true
       ingress:
@@ -643,6 +654,7 @@ govukApplications:
 
   - name: content-publisher
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       nginxClientMaxBodySize: &max-upload-size 500M
       workers:
@@ -718,6 +730,7 @@ govukApplications:
 
   - name: content-store
     helmValues: &content-store
+      arch: arm64
       dbMigrationEnabled: true
       nginxClientMaxBodySize: 20M
       replicaCount: 6
@@ -757,6 +770,7 @@ govukApplications:
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
     helmValues:
+      arch: arm64
       # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/db_backup_s3.tf
       serviceAccount:
         annotations:
@@ -798,6 +812,7 @@ govukApplications:
 
   - name: content-tagger
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -850,6 +865,7 @@ govukApplications:
 
   - name: email-alert-api
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
@@ -938,6 +954,7 @@ govukApplications:
 
   - name: email-alert-frontend
     helmValues:
+      arch: arm64
       redis:
         enabled: true
       extraEnv:
@@ -960,6 +977,7 @@ govukApplications:
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       redis:
@@ -989,6 +1007,7 @@ govukApplications:
 
   - name: email-alert-service
     helmValues:
+      arch: arm64
       appEnabled: false
       podDisruptionBudget: {}
       rails:
@@ -1023,6 +1042,7 @@ govukApplications:
 
   - name: feedback
     helmValues:
+      arch: arm64
       extraEnv:
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
           value: 91ee838c-ef9c-4d10-b3d6-5f73441e08b7
@@ -1064,6 +1084,7 @@ govukApplications:
   - name: draft-feedback
     repoName: feedback
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
@@ -1112,6 +1133,7 @@ govukApplications:
 
   - name: finder-frontend
     helmValues:
+      arch: arm64
       appResources:
         limits:
           cpu: 4
@@ -1137,6 +1159,7 @@ govukApplications:
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
@@ -1158,6 +1181,7 @@ govukApplications:
 
   - name: frontend
     helmValues:
+      arch: arm64
       uploadFrontendErrorPagesEnabled: true
       ingress:
         enabled: true
@@ -1218,6 +1242,7 @@ govukApplications:
   - name: draft-frontend
     repoName: frontend
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -1274,6 +1299,7 @@ govukApplications:
 
   - name: government-frontend
     helmValues:
+      arch: arm64
       appResources:
         limits:
           cpu: 2
@@ -1293,6 +1319,7 @@ govukApplications:
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
@@ -1324,6 +1351,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -1456,6 +1484,7 @@ govukApplications:
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
     helmValues:
+      arch: arm64
       cronJobs:
         - name: govuk-e2e-tests
           schedule: "*/10 7-19 * * 1-5"
@@ -1493,6 +1522,7 @@ govukApplications:
 
   - name: hmrc-manuals-api
     helmValues:
+      arch: arm64
       nginxClientMaxBodySize: 2M
       ingress:
         enabled: true
@@ -1540,6 +1570,7 @@ govukApplications:
       - "licensify-feed"
       - "licensify-frontend"
     helmValues:
+      arch: arm64
       assetManagerNFS: *assets-nfs
       apps:
         licensifyAdmin:
@@ -1595,6 +1626,7 @@ govukApplications:
 
   - name: link-checker-api
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
@@ -1636,6 +1668,7 @@ govukApplications:
 
   - name: local-links-manager
     helmValues:
+      arch: arm64
       redis:
         enabled: true
       ingress:
@@ -1752,6 +1785,7 @@ govukApplications:
 
   - name: locations-api
     helmValues:
+      arch: arm64
       uploadAssets:
         enabled: false
       dbMigrationEnabled: true
@@ -1782,6 +1816,7 @@ govukApplications:
 
   - name: manuals-publisher
     helmValues:
+      arch: arm64
       nginxClientMaxBodySize: *max-upload-size
       workers:
         enabled: true
@@ -1842,6 +1877,7 @@ govukApplications:
 
   - name: maslow
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -1879,6 +1915,7 @@ govukApplications:
 
   - name: places-manager
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -1916,6 +1953,7 @@ govukApplications:
 
   - name: publisher
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -2023,6 +2061,7 @@ govukApplications:
 
   - name: publishing-api
     helmValues:
+      arch: arm64
       nginxClientMaxBodySize: 2M
       dbMigrationEnabled: true
       uploadAssets:
@@ -2100,6 +2139,7 @@ govukApplications:
 
   - name: release
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2164,6 +2204,7 @@ govukApplications:
 
   - name: router
     helmValues:
+      arch: arm64
       rails:
         enabled: false
       uploadAssets:
@@ -2283,6 +2324,7 @@ govukApplications:
   - name: draft-router
     repoName: router
     helmValues:
+      arch: arm64
       rails:
         enabled: false
       sentry:
@@ -2347,6 +2389,7 @@ govukApplications:
 
   - name: search-admin
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2390,6 +2433,7 @@ govukApplications:
 
   - name: search-api
     helmValues:
+      arch: arm64
       rails:
         enabled: false
       nginxClientMaxBodySize: 20M
@@ -2515,6 +2559,7 @@ govukApplications:
 
   - name: search-api-v2
     helmValues:
+      arch: arm64
       dbMigrationEnabled: false
       ingress:
         enabled: true
@@ -2591,6 +2636,7 @@ govukApplications:
 
   - name: service-manual-publisher
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2649,6 +2695,7 @@ govukApplications:
 
   - name: signon
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -2727,6 +2774,7 @@ govukApplications:
   - name: smartanswers
     repoName: smart-answers
     helmValues:
+      arch: arm64
       uploadAssets:
         # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
         path: /app/public/assets/smartanswers
@@ -2745,6 +2793,7 @@ govukApplications:
 
   - name: static
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -2799,6 +2848,7 @@ govukApplications:
   - name: draft-static
     repoName: static
     helmValues:
+      arch: arm64
       rails:
         createKeyBaseSecret: false
       sentry:
@@ -2830,6 +2880,7 @@ govukApplications:
 
   - name: short-url-manager
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -2880,6 +2931,7 @@ govukApplications:
 
   - name: specialist-publisher
     helmValues:
+      arch: arm64
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
@@ -2945,6 +2997,7 @@ govukApplications:
 
   - name: support
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -2998,6 +3051,7 @@ govukApplications:
 
   - name: support-api
     helmValues:
+      arch: arm64
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
@@ -3061,6 +3115,7 @@ govukApplications:
 
   - name: transition
     helmValues:
+      arch: arm64
       ingress:
         enabled: true
         annotations:
@@ -3115,6 +3170,7 @@ govukApplications:
 
   - name: travel-advice-publisher
     helmValues:
+      arch: arm64
       cronTasks:
         - name: publish-scheduled-editions
           task: "publish_scheduled_editions"
@@ -3180,6 +3236,7 @@ govukApplications:
   - name: whitehall-admin
     repoName: whitehall
     helmValues:
+      arch: arm64
       appResources:
         limits:
           memory: 4Gi
