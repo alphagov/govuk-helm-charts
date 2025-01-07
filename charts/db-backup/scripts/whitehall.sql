@@ -46,12 +46,26 @@ SET @lipsum_body
 -- Redact access-limited drafts.
 UPDATE edition_translations
 SET title = @lipsum_line, summary = @lipsum_line, body = @lipsum_body
-WHERE edition_id IN (SELECT id FROM editions WHERE access_limited = 1);
+WHERE
+  edition_id IN (
+    SELECT id
+    FROM
+      editions
+    WHERE
+      access_limited = 1
+  );
 
 -- Redact slugs for access-limited drafts.
 UPDATE documents
 SET slug = CONCAT(@lipsum_slug, id)
-WHERE id IN (SELECT document_id FROM editions WHERE access_limited = 1);
+WHERE
+  id IN (
+    SELECT document_id
+    FROM
+      editions
+    WHERE
+      access_limited = 1
+  );
 
 -- Redact email addresses and comments in fact checks.
 UPDATE fact_check_requests
@@ -64,28 +78,50 @@ UPDATE attachments
 SET title = @lipsum_line
 WHERE
   attachable_type = 'Edition'
-  AND attachable_id IN (SELECT id FROM editions WHERE access_limited = 1);
+  AND attachable_id IN (
+    SELECT id
+    FROM
+      editions
+    WHERE
+      access_limited = 1
+  );
 
 -- Redact HTML attachment data for access-limited drafts.
 UPDATE attachments
 SET slug = CONCAT(@lipsum_slug, id)
 WHERE
   attachable_type = 'Edition'
-  AND attachable_id IN (SELECT id FROM editions WHERE access_limited = 1);
+  AND attachable_id IN (
+    SELECT id
+    FROM
+      editions
+    WHERE
+      access_limited = 1
+  );
 
 -- Redact file names for attachments on access-limited drafts.
 UPDATE attachment_data
 SET carrierwave_file = 'redacted.pdf'
-WHERE id IN (
-  SELECT attachments.attachment_data_id
-  FROM
-    attachments WHERE attachments.attachable_type = 'Edition'
-  AND attachments.attachable_id IN (SELECT editions.id FROM editions WHERE editions.access_limited = 1)
-);
+WHERE
+  id IN (
+    SELECT attachments.attachment_data_id
+    FROM
+      attachments
+    WHERE
+      attachments.attachable_type = 'Edition'
+      AND attachments.attachable_id IN (
+        SELECT editions.id
+        FROM
+          editions
+        WHERE
+          editions.access_limited = 1
+      )
+  );
 
 -- Redact govspeak content data for access-limited editions.
 UPDATE govspeak_contents
 INNER JOIN attachments ON govspeak_contents.html_attachment_id = attachments.id
 INNER JOIN editions ON attachments.attachable_id = editions.id
 SET govspeak_contents.body = @lipsum_body
-WHERE attachments.attachable_type = 'EDITION' AND editions.access_limited = 1;
+WHERE
+  attachments.attachable_type = 'EDITION' AND editions.access_limited = 1;
