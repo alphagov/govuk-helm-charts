@@ -1,0 +1,24 @@
+groups:
+  - name: FastlyAlerts
+    rules:
+      - record: global:fastly_global_bandwidth_bytes:rate1d
+        expr: |
+          sum(
+            increase(fastly_rt_body_size_total[1d])
+            + increase(fastly_rt_resp_header_bytes_total[1d])
+            + increase(fastly_rt_bereq_body_bytes_total[1d])
+            + increase(fastly_rt_bereq_header_bytes_total[1d])
+          )
+
+      - alert: HighBandwidthUsage
+        expr: global:fastly_global_bandwidth_bytes:rate1d > 5.5 * (10 ^ 12)
+        for: 1m
+        labels:
+          severity: warning
+          destination: slack-platform-engineering
+        annotations:
+          summary: Fastly global bandwidth exceeds typical daily usage
+          description: >-
+            The global daily bandwidth usage rate for Fastly services has
+            exceeded the expected threshold of 5.5 TB. This may indicate
+            abnormal traffic patterns.
