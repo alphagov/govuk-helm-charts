@@ -12,7 +12,7 @@ groups:
 
       - alert: HighBandwidthUsage
         expr: global:fastly_global_bandwidth_bytes:rate1d > 5.5 * (10 ^ 12)
-        for: 1m
+        for: 2d
         labels:
           severity: warning
           destination: slack-platform-engineering
