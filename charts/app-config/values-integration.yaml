@@ -1312,6 +1312,8 @@ govukApplications:
   - name: govspeak-preview
     helmValues:
       arch: arm64
+      monitoring:
+        enabled: false
       ingress:
         enabled: true
         annotations:

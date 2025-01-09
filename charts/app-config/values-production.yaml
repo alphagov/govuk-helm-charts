@@ -1305,6 +1305,8 @@ govukApplications:
 
   - name: govspeak-preview
     helmValues:
+      monitoring:
+        enabled: false
       ingress:
         enabled: true
         annotations:
