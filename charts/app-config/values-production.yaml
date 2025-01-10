@@ -51,8 +51,6 @@ _alb-ingress-group-backend: &alb-ingress-group-backend
 emergency-banner-redis:
   - &emergency-banner-redis redis://whitehall-admin-redis/1
 
-disableSearchAutocomplete: false
-
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 
 govukApplications:
@@ -2583,6 +2581,8 @@ govukApplications:
           task: "quality_monitoring:assert_invariants"
           schedule: "09 8-17 * * *"  # 9 minutes past the hour every day from 8am-5pm
       extraEnv:
+        - name: ENABLE_AUTOCOMPLETE
+          value: "true"
         # TODO: remove GOVUK_PROMETHEUS_EXPORTER once govuk_app_config >=9.10 is everywhere.
         - name: GOVUK_PROMETHEUS_EXPORTER
           value: force

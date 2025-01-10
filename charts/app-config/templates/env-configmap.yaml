@@ -16,9 +16,6 @@ data:
   GOVUK_APP_DOMAIN_EXTERNAL: {{ .Values.publishingDomainSuffix }}
   GOVUK_ASSET_ROOT: https://{{ .Values.assetsDomain }}
   GOVUK_CSP_REPORT_URI: {{ .Values.cspReportURI | quote }}
-  {{- if .Values.disableSearchAutocomplete }}
-  GOVUK_DISABLE_SEARCH_AUTOCOMPLETE: "1"
-  {{- end }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
   GOVUK_ENVIRONMENT_NAME: {{ .Values.govukEnvironment }}
   # TODO: remove GOVUK_PROMETHEUS_EXPORTER once govuk_app_config >=9.10 is everywhere.
