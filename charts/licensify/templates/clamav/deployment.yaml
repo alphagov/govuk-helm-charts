@@ -63,10 +63,8 @@ spec:
         - name: app-clamav-log
           emptyDir: {}
         - name: app-clamav-db
-          nfs:
-            server: "{{ .Values.assetManagerNFS }}"
-            path: /clamav-db
-            readOnly: true
+          persistentVolumeClaim:
+            claimName: {{ include "licensify.name" . }}-{{ .Values.appName }}-db
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
