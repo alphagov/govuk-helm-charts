@@ -19,6 +19,8 @@ spec:
     kind: Namespace
   - group: external-secrets.io
     kind: ClusterExternalSecret
+  - group: ''
+    kind: PersistentVolume
 
   destinations:
   - namespace: '*'
