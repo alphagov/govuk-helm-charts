@@ -4,15 +4,6 @@ name: Release versioned charts
 on:
   push:
     branches: [main]
-  workflow_dispatch:
-    inputs:
-      skip-existing-charts:
-        required: true
-        default: 'true'
-        type: choice
-        options:
-          - 'true'
-          - 'false'
 
 jobs:
   release:
@@ -41,5 +32,5 @@ jobs:
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
         env:
-          CR_SKIP_EXISTING: "${{ inputs.skip-existing-charts || 'true' }}"
+          CR_SKIP_EXISTING: "true"
           CR_TOKEN: "${{ secrets.GOVUK_CI_GITHUB_API_TOKEN }}"
