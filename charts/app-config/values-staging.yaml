@@ -2431,6 +2431,21 @@ govukApplications:
             secretKeyRef:
               name: search-admin-mysql
               key: DATABASE_URL
+        - name: GOOGLE_CLOUD_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: search-admin-google-cloud-discovery-engine-configuration
+              key: GOOGLE_CLOUD_CREDENTIALS
+        - name: DISCOVERY_ENGINE_ENGINE
+          valueFrom:
+            secretKeyRef:
+              name: search-admin-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_ENGINE
+        - name: DISCOVERY_ENGINE_SERVING_CONFIG
+          valueFrom:
+            secretKeyRef:
+              name: search-admin-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_SERVING_CONFIG
 
   - name: search-api
     helmValues:
