@@ -39,6 +39,9 @@ nginx:
     requests:
       cpu: 50m
       memory: 512Mi
+nfs:
+  # Value is arbitrary and used to check PersistentVolume and PersistentVolumeClaim compatibility
+  storage: 15Gi
 
 apps:
   licensifyAdmin:

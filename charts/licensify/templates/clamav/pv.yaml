@@ -1,0 +1,18 @@
+{{ $app := .Values.clamav }}
+{{ $_ := set .Values "appName" $app.name }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "licensify.name" . }}-{{ .Values.appName }}-db
+  labels:
+    {{- include "licensify.labels" . | nindent 4 }}
+spec:
+  capacity:
+    storage: {{ .Values.nfs.storage }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: "{{ .Values.assetManagerNFS }}"
+    path: /clamav-db
+    readOnly: true
