@@ -45,10 +45,8 @@ spec:
             server: "{{ .Values.assetManagerNFS }}"
             path: /asset-manager
         - name: clam-virus-db
-          nfs:
-            server: "{{ .Values.assetManagerNFS }}"
-            path: /clamav-db
-            readOnly: true
+          persistentVolumeClaim:
+            claimName: {{ $fullName }}-clamav-db
         - name: etc-clamav
           configMap:
             name: {{ $fullName }}-etc-clamav
