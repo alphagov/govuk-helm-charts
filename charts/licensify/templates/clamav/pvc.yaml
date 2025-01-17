@@ -8,7 +8,6 @@ metadata:
     {{- include "licensify.labels" . | nindent 4 }}
     app: {{ .Values.appName }}
     app.kubernetes.io/name: {{ .Values.appName }}
-    app.kubernetes.io/component: {{ .Values.appName }}
 spec:
   storageClassName: ""
   accessModes:
@@ -19,4 +18,3 @@ spec:
   selector:
     matchLabels:
       {{- include "licensify.selectorLabels" . | nindent 6 }}
-      app.kubernetes.io/name: {{ .Values.appName }}
