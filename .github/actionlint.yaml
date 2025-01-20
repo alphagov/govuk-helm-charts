@@ -17,5 +17,5 @@ config-variables: null
 paths:
   .github/workflows/ci.yml:
     ignore:
-      - 'file "/bin/sh" does not exist in ".+". it is specified at "entrypoint" key in "runs" section in "Promtool" action'
-      - 'missing input "args" which is required by action "Promtool" defined at ".+". all required inputs are "args"'
+      - 'file "/bin/sh" does not exist in .+'
+      - 'missing input "args" which is required by action "Promtool".+'
