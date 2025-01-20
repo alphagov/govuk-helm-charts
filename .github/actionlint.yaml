@@ -17,5 +17,5 @@ config-variables: null
 paths:
   .github/workflows/ci.yml:
     ignore:
-    - 'file "/bin/sh" does not exist in "/home/runner/work/govuk-helm-charts/govuk-helm-charts/.github/actions/promtool". it is specified at "entrypoint" key in "runs" section in "Promtool" action'
-    - 'missing input "args" which is required by action "Promtool" defined at "./.github/actions/promtool". all required inputs are "args"'
+      - 'file "/bin/sh" does not exist in ".+". it is specified at "entrypoint" key in "runs" section in "Promtool" action'
+      - 'missing input "args" which is required by action "Promtool" defined at ".+". all required inputs are "args"'
