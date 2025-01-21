@@ -1,0 +1,21 @@
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $fullName }}-efs
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}-efs
+    app.kubernetes.io/component: {{ $fullName }}-efs
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.nfs.assetStorage }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $fullName }}-efs
+      app.kubernetes.io/component: {{ $fullName }}-efs

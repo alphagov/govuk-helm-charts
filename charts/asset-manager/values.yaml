@@ -143,3 +143,4 @@ redis:
     workers: ""
 nfs:
   clamAvStorage: 15Gi
+  assetStorage: 15Gi

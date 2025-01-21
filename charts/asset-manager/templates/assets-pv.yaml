@@ -1,0 +1,19 @@
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $fullName }}-efs
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}-efs
+    app.kubernetes.io/component: {{ $fullName }}-efs
+spec:
+  capacity:
+    storage: {{ .Values.nfs.assetStorage }}
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: "{{ .Values.assetManagerNFS }}"
+    path: /asset-manager

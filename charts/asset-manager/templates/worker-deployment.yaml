@@ -41,9 +41,8 @@ spec:
         - name: clamd-tmp
           emptyDir: {}
         - name: asset-manager-efs
-          nfs:
-            server: "{{ .Values.assetManagerNFS }}"
-            path: /asset-manager
+          persistentVolumeClaim:
+            claimName: {{ $fullName }}-efs
         - name: clam-virus-db
           persistentVolumeClaim:
             claimName: {{ $fullName }}-clamav-db
