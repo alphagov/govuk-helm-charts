@@ -3419,9 +3419,8 @@ govukApplications:
               key: bearer_token
       extraVolumes:
         - name: asset-uploads-efs
-          nfs:
-            server: *assets-nfs
-            path: /whitehall  # TODO: does this work on an new/empty EFS instance?
+          persistentVolumeClaim:
+            claimName: whitehall-admin
       appExtraVolumeMounts:
         - name: asset-uploads-efs
           mountPath: *whitehall-uploads-path

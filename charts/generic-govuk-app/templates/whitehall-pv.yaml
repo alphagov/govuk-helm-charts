@@ -1,0 +1,22 @@
+{{- $fullName := include "generic-govuk-app.fullname" . }}
+{{- if eq "whitehall-admin" $fullName }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: {{ $fullName }}
+spec:
+  capacity:
+    storage: {{ .Values.nfsStorage }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: "{{ .Values.assetManagerNFS }}"
+    path: /whitehall
+    readOnly: true
+{{ end }}
