@@ -37,9 +37,8 @@ spec:
         readOnlyRootFilesystem: true
   volumes:
     - name: clam-virus-db
-      nfs:
-        server: "{{ .Values.assetManagerNFS }}"
-        path: /clamav-db
+      persistentVolumeClaim:
+        claimName: {{ $fullName }}-clamav-db
     - name: etc-clamav
       configMap:
         name: {{ $fullName }}-etc-clamav

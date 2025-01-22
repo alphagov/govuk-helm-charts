@@ -1,0 +1,20 @@
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $fullName }}-clamav-db
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}-clamav-db
+    app.kubernetes.io/component: {{ $fullName }}-clamav-db
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.nfs.clamAvStorage }}
+  selector:
+    matchLabels:
+      {{- include "asset-manager.selectorLabels" . | nindent 6 }}

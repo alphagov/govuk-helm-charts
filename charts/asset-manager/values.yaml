@@ -141,3 +141,5 @@ redis:
   redisUrlOverride:
     app: ""
     workers: ""
+nfs:
+  clamAvStorage: 15Gi
