@@ -3257,6 +3257,8 @@ govukApplications:
   - name: whitehall-admin
     repoName: whitehall
     helmValues:
+      assetManagerNFS: *assets-nfs
+      nfsStorage: 15Gi
       appResources:
         limits:
           memory: 8Gi
