@@ -2044,7 +2044,7 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "150"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "publisher.{{ .Values.publishingDomainSuffix }}"
+                "publisher-on-postgres.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
           - name: publisher-on-postgres.{{ .Values.k8sExternalDomainSuffix }}
