@@ -74,8 +74,8 @@ spec:
         matchType: =
       receiver: 'slack-chat-notifications'
       repeatInterval: 1d
-      groupWait: 12h
-      groupInterval: 12h
+      groupWait: 5m
+      groupInterval: 30m
       activeTimeIntervals:
         - inhours
   receivers:
