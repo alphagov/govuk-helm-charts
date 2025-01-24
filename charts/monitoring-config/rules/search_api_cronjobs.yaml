@@ -4,6 +4,7 @@ groups:
       - alert: CronjobFailed => CronjobSuccessThreshold
         # Set alert to trigger when last successful time is over 50 hours
         expr: >-
+          time() -
           kube_cronjob_status_last_successful_time{cronjob="search-api-load-page-traffic"}
           > 180000
         for: 5m
