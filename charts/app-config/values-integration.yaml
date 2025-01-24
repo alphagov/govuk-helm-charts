@@ -68,6 +68,13 @@ govukApplications:
       arch: arm64
       uploadAssets:
         enabled: false
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 100m
+          memory: 400Mi
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -142,6 +149,13 @@ govukApplications:
     chartPath: charts/asset-manager
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.5Gi
+        requests:
+          cpu: 100m
+          memory: 800Mi
       workers:
         enabled: true
       redis:
@@ -215,6 +229,13 @@ govukApplications:
   - name: authenticating-proxy
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 250m
+          memory: 500Mi
+        requests:
+          cpu: 50m
+          memory: 200Mi
       ingress:
         enabled: true
         annotations:
@@ -255,6 +276,13 @@ govukApplications:
   - name: bouncer
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 250m
+          memory: 250Mi
+        requests:
+          cpu: 50m
+          memory: 128Mi
       rails:
         enabled: false
       uploadAssets:
@@ -297,6 +325,13 @@ govukApplications:
   - name: collections
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 750m
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 512Mi
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
@@ -317,6 +352,13 @@ govukApplications:
     repoName: collections
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 200m
+          memory: 600Mi
+        requests:
+          cpu: 50m
+          memory: 400Mi
       rails:
         createKeyBaseSecret: false
       sentry:
