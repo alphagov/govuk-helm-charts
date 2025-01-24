@@ -1,0 +1,23 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: publisher-on-postgres-branch
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Credentials for publisher-on-postgres-branch's Postgres DB hosted in RDS.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: publisher-on-postgres
+    template:
+      data:
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/publisher_production'
+  dataFrom:
+    - extract:
+        key: govuk/publisher/postgres
