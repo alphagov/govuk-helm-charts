@@ -78,6 +78,16 @@ spec:
       groupInterval: 30m
       activeTimeIntervals:
         - inhours
+    - matchers:
+      - name: destination
+        value: slack-cronjob-notifications
+        matchType: =
+      receiver: 'slack-cronjob-notifications'
+      repeatInterval: 1d
+      groupWait: 5m
+      groupInterval: 30m
+      activeTimeIntervals:
+        - inhours
   receivers:
   - name: 'null'
   - name: 'pagerduty'
@@ -123,6 +133,22 @@ spec:
         *Environment:* {{ .Values.govukEnvironment }}
 
         *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
+      apiURL: *slack_api_url
+  - name: 'slack-cronjob-notifications'
+    slackConfigs:
+    - channel: '#dev-notifications-ai-govuk'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      title: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+      text: >-
+        *Summary:* {{ "{{ .CommonAnnotations.summary }}" }}
+
+        *Environment:* {{ .Values.govukEnvironment }}
+
+        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+
+        *ArgoCD Job:* https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/{{ "{{ .CommonAnnotations.cronjob_uri }}" }}
       apiURL: *slack_api_url
   - name: 'slack-mirror-freshness'
     slackConfigs:

@@ -13,7 +13,7 @@ tests:
           }
         values: '179300+60x15'
     alert_rule_test:
-      - alertname: CronjobFailed
+      - alertname: CronjobFailed => CronjobSuccessThreshold
         eval_time: 15m
         exp_alerts: []
 
@@ -24,17 +24,20 @@ tests:
           kube_cronjob_status_last_successful_time{
           cronjob="search-api-load-page-traffic"
           }
-        values: '180000+60x15'
+        values: '180300+60x15'
     alert_rule_test:
-      - alertname: CronjobFailed
+      - alertname: CronjobFailed => CronjobSuccessThreshold
         eval_time: 10m
         exp_alerts:
           - exp_labels:
               alertname: CronjobFailed
-              destination: slack-chat-notifications
+              destination: slack-cronjob-notifications
               cronjob: search-api-load-page-traffic
               severity: critical
             exp_annotations:
-              summary: Search api load page cronjob failed
+              summary: search-api-load-page-traffic cronjob failing
               description: >-
-                The cronjob "search-api-load-page-traffic" has been failing for over two days.
+                The cronjob "search-api-load-page-traffic" has not run successfully
+                since 1970-01-03 02:15:00 +0000 UTC
+              cronjob_uri: >-
+                applications/search-api?orphaned=false&resource=&node=batch%2FCronJob%2Fapps%2Fsearch-api-load-page-traffic%2F0&tab=logs

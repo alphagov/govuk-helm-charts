@@ -1,15 +1,19 @@
 groups:
   - name: SearchApiCronjobs
     rules:
-      - alert: CronjobFailed
+      - alert: CronjobFailed => CronjobSuccessThreshold
         # Set alert to trigger when last successful time is over 50 hours
         expr: >-
-          kube_cronjob_status_last_successful_time{cronjob="search-api-load-page-traffic"} > 180000
+          kube_cronjob_status_last_successful_time{cronjob="search-api-load-page-traffic"}
+          > 180000
         for: 5m
         labels:
           severity: critical
-          destination: slack-chat-notifications
+          destination: slack-cronjob-notifications
         annotations:
-          summary: Search api load page cronjob failed
+          summary: search-api-load-page-traffic cronjob failing
           description: >-
-            The cronjob "search-api-load-page-traffic" has been failing for over two days.
+            The cronjob "search-api-load-page-traffic" has not run successfully
+            since {{ $value | humanizeTimestamp }}
+          cronjob_uri: >-
+            applications/search-api?orphaned=false&resource=&node=batch%2FCronJob%2Fapps%2Fsearch-api-load-page-traffic%2F0&tab=logs
