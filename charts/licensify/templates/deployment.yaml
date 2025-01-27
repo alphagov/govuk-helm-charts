@@ -86,9 +86,9 @@ spec:
             failureThreshold: 15
             periodSeconds: 2
             timeoutSeconds: 2
-          {{- with $.Values.resources -}}
+          {{- with .resources }}
           resources:
-            {{- . | toYaml | trim | nindent 12 }}
+            {{- (tpl (toYaml .) $) | trim | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: licensify-config
