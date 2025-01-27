@@ -14,7 +14,7 @@ spec:
     kind: ClusterSecretStore
   target:
     deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
-    name: publisher-on-postgres
+    name: publisher-on-postgres-branch
     template:
       data:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/publisher_production'
