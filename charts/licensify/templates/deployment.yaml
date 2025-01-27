@@ -86,8 +86,10 @@ spec:
             failureThreshold: 15
             periodSeconds: 2
             timeoutSeconds: 2
+          {{- with $.Values.resources -}}
           resources:
-            {{- toYaml $.Values.resources | nindent 12 }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: licensify-config
               mountPath: "/etc/licensing"

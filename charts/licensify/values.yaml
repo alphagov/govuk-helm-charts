@@ -23,6 +23,13 @@ clamav:
     repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/clamav
     tag: latest
     pullPolicy: Always
+  resources:
+    limits:
+      cpu: 1
+      memory: 3Gi
+    requests:
+      cpu: 100m
+      memory: 1.5Gi
   service:
     type: ClusterIP
     port: 3310
@@ -55,6 +62,13 @@ apps:
     ingress:
       enabled: true
       annotations: {}
+    resources:
+      limits:
+        cpu: 1
+        memory: 1.5Gi
+      requests:
+        cpu: 100m
+        memory: 700Mi
     service:
       port: 80
     extraEnv:
@@ -71,6 +85,13 @@ apps:
     healthcheckPath: "/licence-management/feed/process-applications"
     ingress:
       enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1.5Gi
+      requests:
+        cpu: 50m
+        memory: 512Mi
     service:
       port: 80
 
@@ -84,6 +105,13 @@ apps:
     ingress:
       enabled: true
       annotations: {}
+    resources:
+      limits:
+        cpu: 1
+        memory: 1.2Gi
+      requests:
+        cpu: 100m
+        memory: 650Mi
     service:
       port: 80
     extraEnv:

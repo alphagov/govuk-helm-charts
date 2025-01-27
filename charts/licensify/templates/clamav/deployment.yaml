@@ -48,8 +48,10 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 2
             initialDelaySeconds: 10
+          {{- with $app.resources}}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: app-tmp
               mountPath: /tmp
