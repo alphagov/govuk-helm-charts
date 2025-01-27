@@ -11,10 +11,11 @@ spec:
   automountServiceAccountToken: false
   enableServiceLinks: false
   securityContext:
-    seccompProfile:
-      type: RuntimeDefault
+    runAsNonRoot: true
     runAsUser: 1001
     runAsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
   containers:
     - name: freshclam
       image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
@@ -35,6 +36,8 @@ spec:
       securityContext:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]
   volumes:
     - name: clam-virus-db
       persistentVolumeClaim:
