@@ -2103,7 +2103,7 @@ govukApplications:
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: publisher-postgres
+              name: publisher-on-postgres-branch
               key: DATABASE_URL
         - name: EMAIL_GROUP_BUSINESS
           value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
