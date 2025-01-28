@@ -2315,8 +2315,7 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
           value: *publishing-bootstrap-gtm-preview
 
-  - name: publisher-on-postgres-branch
-    repoName: publisher
+  - name: publisher-on-pg
     helmValues:
       arch: arm64
       appResources:
@@ -2327,6 +2326,10 @@ govukApplications:
           cpu: 100m
           memory: 650Mi
       dbMigrationEnabled: true
+      uploadAssets:
+        enabled: true
+        path: /app/public/assets/publisher/*
+        s3Directory: "publisher-on-pg"
       workers:
         enabled: true
       workerResources:
@@ -2358,10 +2361,10 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "150"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "publisher-on-postgres.{{ .Values.publishingDomainSuffix }}"
+                "publisher-on-pg.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
-          - name: publisher-on-postgres.{{ .Values.k8sExternalDomainSuffix }}
+          - name: publisher-on-pg.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
@@ -2417,7 +2420,7 @@ govukApplications:
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: publisher-on-postgres-branch
+              name: publisher-on-pg
               key: DATABASE_URL
         - name: EMAIL_GROUP_BUSINESS
           value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
