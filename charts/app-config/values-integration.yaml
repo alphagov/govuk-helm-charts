@@ -2020,6 +2020,9 @@ govukApplications:
     helmValues:
       arch: arm64
       dbMigrationEnabled: true
+      uploadAssets:
+        enabled: true
+        path: /app/public/assets/publisher/*
       workers:
         enabled: true
       redis:
@@ -2044,10 +2047,10 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "150"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "publisher-on-postgres.{{ .Values.publishingDomainSuffix }}"
+                "publisher-on-postgres-branch.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
-          - name: publisher-on-postgres.{{ .Values.k8sExternalDomainSuffix }}
+          - name: publisher-on-postgres-branch.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
