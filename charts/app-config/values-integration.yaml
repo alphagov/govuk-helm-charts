@@ -2328,7 +2328,7 @@ govukApplications:
       dbMigrationEnabled: true
       uploadAssets:
         enabled: true
-        path: /app/public/assets/publisher/*
+        path: /app/public/assets/publisher-on-pg/*
         s3Directory: "publisher-on-pg"
       workers:
         enabled: true
