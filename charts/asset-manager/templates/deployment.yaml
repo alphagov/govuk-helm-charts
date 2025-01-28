@@ -46,9 +46,8 @@ spec:
         - name: nginx-tmp
           emptyDir: {}
         - name: asset-manager-efs
-          nfs:
-            server: {{ .Values.assetManagerNFS }}
-            path: /asset-manager
+          persistentVolumeClaim:
+            claimName: {{ $fullName }}-efs
         {{- with .Values.extraVolumes }}
           {{ . | toYaml | trim | nindent 8 }}
         {{- end }}
