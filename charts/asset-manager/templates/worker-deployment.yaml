@@ -108,6 +108,8 @@ spec:
             # Asset Manager shares an NFS volume with its EC2 counterpart.
             runAsUser: *old-ec2-deploy-uid
             runAsGroup: *old-ec2-deploy-uid
+            capabilities:
+              drop: [ "ALL" ]
         - name: clamd
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
@@ -129,6 +131,8 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
