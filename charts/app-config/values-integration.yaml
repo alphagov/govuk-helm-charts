@@ -2316,6 +2316,7 @@ govukApplications:
           value: *publishing-bootstrap-gtm-preview
 
   - name: publisher-on-postgres-branch
+    repoName: publisher
     helmValues:
       arch: arm64
       appResources:
