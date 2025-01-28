@@ -17,4 +17,5 @@ spec:
       storage: {{ .Values.nfs.clamAvStorage }}
   selector:
     matchLabels:
-      {{- include "asset-manager.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ $fullName }}-clamav-db
+      app.kubernetes.io/component: {{ $fullName }}-clamav-db
