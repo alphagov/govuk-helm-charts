@@ -2420,6 +2420,11 @@ govukApplications:
             secretKeyRef:
               name: search-admin-google-cloud-discovery-engine-configuration
               key: GOOGLE_CLOUD_CREDENTIALS
+        - name: DISCOVERY_ENGINE_DATASTORE
+          valueFrom:
+            secretKeyRef:
+              name: search-admin-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_DATASTORE
         - name: DISCOVERY_ENGINE_ENGINE
           valueFrom:
             secretKeyRef:
