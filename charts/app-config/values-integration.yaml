@@ -2332,7 +2332,7 @@ govukApplications:
         secretKeyBaseName: publisher-rails-secret-key-base
       sentry:
         createSecret: false  # Sentry DSNs are per repo.
-        dsnSecretName: publisher-dsn
+        dsnSecretName: publisher-sentry
       uploadAssets:
         enabled: true
         path: /app/public/assets/publisher-on-pg/*
