@@ -2325,7 +2325,7 @@ govukApplications:
         requests:
           cpu: 100m
           memory: 650Mi
-      dbMigrationEnabled: false
+      dbMigrationEnabled: true
       rails:
         createKeyBaseSecret: false
         # use the same secret as the mongo publisher
