@@ -2326,6 +2326,10 @@ govukApplications:
           cpu: 100m
           memory: 650Mi
       dbMigrationEnabled: false
+      rails:
+        createKeyBaseSecret: false
+        # use the same secret as the mongo publisher
+        secretKeyBaseName: publisher-rails-secret-key-base
       uploadAssets:
         enabled: true
         path: /app/public/assets/publisher-on-pg/*
