@@ -2330,6 +2330,9 @@ govukApplications:
         createKeyBaseSecret: false
         # use the same secret as the mongo publisher
         secretKeyBaseName: publisher-rails-secret-key-base
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: publisher
       uploadAssets:
         enabled: true
         path: /app/public/assets/publisher-on-pg/*
