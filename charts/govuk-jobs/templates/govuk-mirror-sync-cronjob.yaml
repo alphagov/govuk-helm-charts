@@ -26,12 +26,7 @@ spec:
           enableServiceLinks: false
           serviceAccountName: govuk-mirror-sync
           securityContext:
-            fsGroup: {{ .Values.podSecurityContext.runAsGroup }}
-            runAsNonRoot: {{ .Values.podSecurityContext.runAsNonRoot }}
-            runAsUser: {{ .Values.podSecurityContext.runAsUser }}
-            runAsGroup: {{ .Values.podSecurityContext.runAsGroup }}
-            seccompProfile:
-              type: RuntimeDefault
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
           restartPolicy: Never
           volumes:
             - name: app-mirror-sync
@@ -52,10 +47,7 @@ spec:
                   cpu: 2
                   memory: 15000Mi
               securityContext:
-                allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
-                readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
-                capabilities:
-                  drop: ["ALL"]
+                {{- toYaml $.Values.securityContext | nindent 16 }}
               volumeMounts:
                 - name: app-mirror-sync
                   mountPath: /data
@@ -89,10 +81,7 @@ spec:
                   cpu: 2
                   memory: 5000Mi
               securityContext:
-                allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
-                readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
-                capabilities:
-                  drop: ["ALL"]
+                {{- toYaml $.Values.securityContext | nindent 16 }}
               volumeMounts:
                 - name: app-mirror-sync
                   mountPath: /data
