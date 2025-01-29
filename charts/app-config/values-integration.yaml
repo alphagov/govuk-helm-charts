@@ -2060,9 +2060,9 @@ govukApplications:
       appResources:
         limits:
           cpu: 1
-          memory: 1.5Gi
+          memory: 1.2Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 512Mi
       nginxClientMaxBodySize: *max-upload-size
       workers:
@@ -2072,8 +2072,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 256Mi
+          cpu: 10m
+          memory: 200Mi
       redis:
         enabled: true
       ingress:
@@ -2141,10 +2141,10 @@ govukApplications:
       appResources:
         limits:
           cpu: 1
-          memory: 1.5Gi
+          memory: 1.2Gi
         requests:
-          cpu: 100m
-          memory: 500Mi
+          cpu: 10m
+          memory: 400Mi
       ingress:
         enabled: true
         annotations:
@@ -2194,7 +2194,7 @@ govukApplications:
           cpu: 1
           memory: 1.5Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 512Mi
       ingress:
         enabled: true
@@ -2217,7 +2217,7 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 200Mi
       redis:
         enabled: true
@@ -2246,8 +2246,8 @@ govukApplications:
           cpu: 1
           memory: 1.5Gi
         requests:
-          cpu: 100m
-          memory: 650Mi
+          cpu: 10m
+          memory: 512Mi
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -2256,8 +2256,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 256Mi
+          cpu: 10m
+          memory: 200Mi
       redis:
         enabled: true
       cronTasks:
@@ -2393,8 +2393,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 256Mi
+          cpu: 10m
+          memory: 200Mi
       redis:
         enabled: true
       cronTasks:
@@ -2509,9 +2509,9 @@ govukApplications:
       appResources:
         limits:
           cpu: 2
-          memory: 1Gi
+          memory: 1.5Gi
         requests:
-          cpu: 200m
+          cpu: 10m
           memory: 512Mi
       nginxClientMaxBodySize: 2M
       dbMigrationEnabled: true
@@ -2522,9 +2522,9 @@ govukApplications:
       workerResources:
         limits:
           cpu: 4
-          memory: 1Gi
+          memory: 1.5Gi
         requests:
-          cpu: 500m
+          cpu: 10m
           memory: 512Mi
       redis:
         enabled: true
@@ -2598,8 +2598,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 256Mi
+          cpu: 10m
+          memory: 200Mi
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2655,11 +2655,11 @@ govukApplications:
         enabled: false
       appResources:
         limits:
-          cpu: 5
+          cpu: 4
           memory: 3Gi
         requests:
-          cpu: 1
-          memory: 1.5Gi
+          cpu: 10m
+          memory: 1Gi
       ingress:
         enabled: true
         annotations:
@@ -2776,11 +2776,11 @@ govukApplications:
         enabled: false
       appResources:
         limits:
-          cpu: 5
+          cpu: 4
           memory: 3Gi
         requests:
-          cpu: 1
-          memory: 1.5Gi
+          cpu: 10m
+          memory: 1Gi
       appProbes: *router-app-probes
       nginxConfigMap:
         create: false
@@ -2838,8 +2838,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 320Mi
+          cpu: 10m
+          memory: 256Mi
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2910,8 +2910,8 @@ govukApplications:
           cpu: 2
           memory: 1.2Gi
         requests:
-          cpu: 200m
-          memory: 600Mi
+          cpu: 10m
+          memory: 512Mi
       rails:
         enabled: false
       nginxClientMaxBodySize: 20M
@@ -2976,10 +2976,10 @@ govukApplications:
       workerResources:
         limits:
           cpu: 4
-          memory: 2Gi
+          memory: 2.5Gi
         requests:
-          cpu: 2
-          memory: 1Gi
+          cpu: 10m
+          memory: 512Mi
       extraEnv:
         - name: AWS_S3_RELEVANCY_BUCKET_NAME
           value: govuk-integration-search-relevancy
@@ -3061,10 +3061,10 @@ govukApplications:
       appResources:
         limits:
           cpu: 2
-          memory: 2Gi
+          memory: 2.5Gi
         requests:
-          cpu: 500m
-          memory: 1Gi
+          cpu: 10m
+          memory: 256Mi
       dbMigrationEnabled: false
       ingress:
         enabled: true
@@ -3089,10 +3089,10 @@ govukApplications:
       workerResources:
         limits:
           cpu: 2
-          memory: 1Gi
+          memory: 1.5Gi
         requests:
-          cpu: 100m
-          memory: 512Mi
+          cpu: 10m
+          memory: 384Mi
       redis:
         enabled: true
       cronTasks:
@@ -3162,7 +3162,7 @@ govukApplications:
           cpu: 1
           memory: 1.5Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 512Mi
       dbMigrationEnabled: true
       ingress:
@@ -3234,8 +3234,8 @@ govukApplications:
           cpu: 2
           memory: 1.5Gi
         requests:
-          cpu: 200m
-          memory: 550Mi
+          cpu: 10m
+          memory: 600Mi
       dbMigrationEnabled: true
       workers:
         enabled: true
@@ -3244,7 +3244,7 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 200Mi
       redis:
         enabled: true
@@ -3338,11 +3338,11 @@ govukApplications:
       arch: arm64
       appResources:
         limits:
-          cpu: 5
-          memory: 4Gi
+          cpu: 2
+          memory: 1Gi
         requests:
-          cpu: 500m
-          memory: 2Gi
+          cpu: 10m
+          memory: 384Mi
       uploadAssets:
         # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
         path: /app/public/assets/smartanswers
@@ -3369,8 +3369,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 320Mi
+          cpu: 10m
+          memory: 256Mi
       ingress:
         enabled: true
         annotations:
@@ -3469,8 +3469,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 256Mi
+          cpu: 10m
+          memory: 176Mi
       ingress:
         enabled: true
         annotations:
@@ -3533,8 +3533,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 500Mi
+          cpu: 10m
+          memory: 384Mi
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
@@ -3544,7 +3544,7 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 200Mi
       redis:
         enabled: true
@@ -3619,8 +3619,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 350Mi
+          cpu: 10m
+          memory: 320Mi
       ingress:
         enabled: true
         annotations:
@@ -3641,8 +3641,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 200Mi
+          cpu: 10m
+          memory: 168Mi
       redis:
         enabled: true
       extraEnv:
@@ -3693,8 +3693,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 350Mi
+          cpu: 10m
+          memory: 320Mi
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
@@ -3705,8 +3705,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 250Mi
+          cpu: 10m
+          memory: 192Mi
       redis:
         enabled: true
       cronTasks:
@@ -3771,7 +3771,7 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 400Mi
       ingress:
         enabled: true
@@ -3792,8 +3792,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 200Mi
+          cpu: 10m
+          memory: 192Mi
       redis:
         enabled: true
       cronTasks:
@@ -3856,8 +3856,8 @@ govukApplications:
           cpu: 1
           memory: 1.5Gi
         requests:
-          cpu: 100m
-          memory: 512Mi
+          cpu: 10m
+          memory: 384Mi
       cronTasks:
         - name: publish-scheduled-editions
           task: "publish_scheduled_editions"
@@ -3870,8 +3870,8 @@ govukApplications:
           cpu: 1
           memory: 1Gi
         requests:
-          cpu: 100m
-          memory: 200Mi
+          cpu: 10m
+          memory: 175Mi
       redis:
         enabled: true
       ingress:
@@ -3965,11 +3965,11 @@ govukApplications:
       arch: arm64
       appResources:
         limits:
-          cpu: 5
-          memory: 8Gi
+          cpu: 4
+          memory: 5Gi
         requests:
-          cpu: 1
-          memory: 2Gi
+          cpu: 10m
+          memory: 1.5Gi
       assetManagerNFS: *assets-nfs
       nfsStorage: 15Gi
       securityContext:
@@ -3999,7 +3999,7 @@ govukApplications:
           cpu: 2
           memory: 1.5Gi
         requests:
-          cpu: 500m
+          cpu: 10m
           memory: 512Mi
       redis:
         enabled: true

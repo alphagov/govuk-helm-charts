@@ -2091,9 +2091,23 @@ govukApplications:
   - name: manuals-publisher
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.2Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
       nginxClientMaxBodySize: *max-upload-size
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 256Mi
       redis:
         enabled: true
       ingress:
@@ -2152,6 +2166,13 @@ govukApplications:
   - name: maslow
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.2Gi
+        requests:
+          cpu: 10m
+          memory: 400Mi
       ingress:
         enabled: true
         annotations:
@@ -2190,6 +2211,13 @@ govukApplications:
   - name: places-manager
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
       ingress:
         enabled: true
         annotations:
@@ -2206,6 +2234,13 @@ govukApplications:
       dbMigrationEnabled: true
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 200Mi
       redis:
         enabled: true
       extraEnv:
@@ -2228,9 +2263,23 @@ govukApplications:
   - name: publisher
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
       dbMigrationEnabled: true
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 200Mi
       redis:
         enabled: true
       cronTasks:
@@ -2341,6 +2390,13 @@ govukApplications:
   - name: publishing-api
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 2
+          memory: 1.5Gi
+        requests:
+          cpu: 20m
+          memory: 768Mi
       nginxClientMaxBodySize: 2M
       dbMigrationEnabled: true
       uploadAssets:
@@ -2351,10 +2407,10 @@ govukApplications:
         enabled: true
       workerResources:
         limits:
-          cpu: 4000m
-          memory: 1Gi
+          cpu: 4
+          memory: 1.5Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 512Mi
       cronTasks:
         - name: metrics-report-to-prometheus
@@ -2419,6 +2475,13 @@ govukApplications:
   - name: release
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 200Mi
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2433,22 +2496,15 @@ govukApplications:
           - name: release.{{ .Values.k8sExternalDomainSuffix }}
       workers:
         enabled: false
-      podDisruptionBudget:
-        minAvailable: 1
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1Gi
-        requests:
-          cpu: 100m
-          memory: 400Mi
       workerResources:
         limits:
           cpu: 250m
           memory: 1Gi
         requests:
-          cpu: 100m
+          cpu: 10m
           memory: 400Mi
+      podDisruptionBudget:
+        minAvailable: 1
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -2493,7 +2549,7 @@ govukApplications:
           cpu: 4
           memory: 3Gi
         requests:
-          cpu: 2
+          cpu: 50m
           memory: 1Gi
       ingress:
         enabled: true
@@ -2615,7 +2671,7 @@ govukApplications:
           cpu: 4
           memory: 3Gi
         requests:
-          cpu: 2
+          cpu: 10m
           memory: 1Gi
       appProbes: *router-app-probes
       nginxConfigMap:
@@ -2669,6 +2725,13 @@ govukApplications:
   - name: search-admin
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 256Mi
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2728,6 +2791,13 @@ govukApplications:
   - name: search-api
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 2
+          memory: 1.2Gi
+        requests:
+          cpu: 100m
+          memory: 512Mi
       rails:
         enabled: false
       nginxClientMaxBodySize: 20M
@@ -2778,6 +2848,13 @@ govukApplications:
             name: govuk-index-queue-listener
           - command: ['rake', 'message_queue:bulk_insert_data_into_govuk']
             name: bulk-reindex-queue-listener
+      workerResources:
+        limits:
+          cpu: 4
+          memory: 3Gi
+        requests:
+          cpu: 10m
+          memory: 768Mi
       extraEnv:
         - name: AWS_S3_RELEVANCY_BUCKET_NAME
           value: govuk-staging-search-relevancy
@@ -2854,6 +2931,13 @@ govukApplications:
   - name: search-api-v2
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 2
+          memory: 2.5Gi
+        requests:
+          cpu: 20m
+          memory: 768Mi
       dbMigrationEnabled: false
       ingress:
         enabled: true
@@ -2875,6 +2959,13 @@ govukApplications:
         types:
           - command: ['bin/rake', 'document_sync_worker:run']
             name: document-sync-worker
+      workerResources:
+        limits:
+          cpu: 2
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 384Mi
       redis:
         enabled: true
       cronTasks:
@@ -2933,6 +3024,13 @@ govukApplications:
   - name: service-manual-publisher
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
       dbMigrationEnabled: true
       ingress:
         enabled: true
@@ -2992,9 +3090,23 @@ govukApplications:
   - name: signon
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 2
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 600Mi
       dbMigrationEnabled: true
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 200Mi
       redis:
         enabled: true
       ingress:
@@ -3071,6 +3183,14 @@ govukApplications:
     repoName: smart-answers
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 2
+          # Being strict here - smart-answers is showing signs of a memory leak
+          memory: 1Gi
+        requests:
+          cpu: 50m
+          memory: 512Mi
       uploadAssets:
         # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
         path: /app/public/assets/smartanswers
@@ -3090,6 +3210,13 @@ govukApplications:
   - name: static
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 320Mi
       ingress:
         enabled: true
         annotations:
@@ -3145,6 +3272,13 @@ govukApplications:
     repoName: static
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 320Mi
       rails:
         createKeyBaseSecret: false
       sentry:
@@ -3177,6 +3311,13 @@ govukApplications:
   - name: short-url-manager
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 256Mi
       ingress:
         enabled: true
         annotations:
@@ -3228,10 +3369,24 @@ govukApplications:
   - name: specialist-publisher
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 450Mi
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 200Mi
       redis:
         enabled: true
       ingress:
@@ -3294,6 +3449,13 @@ govukApplications:
   - name: support
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 320Mi
       ingress:
         enabled: true
         annotations:
@@ -3309,6 +3471,13 @@ govukApplications:
         path: /app/public/assets/support
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 168Mi
       redis:
         enabled: true
       extraEnv:
@@ -3348,11 +3517,25 @@ govukApplications:
   - name: support-api
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 320Mi
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 192Mi
       redis:
         enabled: true
       cronTasks:
@@ -3412,6 +3595,13 @@ govukApplications:
   - name: transition
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 400Mi
       ingress:
         enabled: true
         annotations:
@@ -3426,6 +3616,13 @@ govukApplications:
       dbMigrationEnabled: true
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 192Mi
       redis:
         enabled: true
       cronTasks:
@@ -3467,6 +3664,13 @@ govukApplications:
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 384Mi
       cronTasks:
         - name: publish-scheduled-editions
           task: "publish_scheduled_editions"
@@ -3474,6 +3678,13 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 175Mi
       redis:
         enabled: true
       ingress:
@@ -3533,15 +3744,15 @@ govukApplications:
     repoName: whitehall
     helmValues:
       arch: arm64
-      assetManagerNFS: *assets-nfs
-      nfsStorage: 15Gi
       appResources:
         limits:
+          cpu: 2
           memory: 4Gi
-          cpu: "2"
         requests:
+          cpu: 50m
           memory: 2Gi
-          cpu: "1"
+      assetManagerNFS: *assets-nfs
+      nfsStorage: 15Gi
       securityContext:
         # Use the same uid/gid for NFS permissions as the old stack, so that
         # files uploaded by whitehall-admin on k8s can be processed by
@@ -3564,6 +3775,13 @@ govukApplications:
       dbMigrationEnabled: true
       workers:
         enabled: true
+      workerResources:
+        limits:
+          cpu: 2
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
       redis:
         enabled: true
       nginxClientMaxBodySize: *max-upload-size
