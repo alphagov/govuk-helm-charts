@@ -108,7 +108,7 @@ spec:
             runAsUser: *old-ec2-deploy-uid
             runAsGroup: *old-ec2-deploy-uid
             capabilities:
-              drop: [ "ALL" ]
+              drop: ["ALL"]
         - name: clamd
           image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
