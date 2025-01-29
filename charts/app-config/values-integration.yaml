@@ -2325,7 +2325,7 @@ govukApplications:
         requests:
           cpu: 100m
           memory: 650Mi
-      dbMigrationEnabled: true
+      dbMigrationEnabled: false
       uploadAssets:
         enabled: true
         path: /app/public/assets/publisher-on-pg/*
