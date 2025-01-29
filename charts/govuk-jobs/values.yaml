@@ -6,10 +6,14 @@ podSecurityContext:
   runAsNonRoot: true
   runAsUser: 1001
   runAsGroup: 1001
+  seccompProfile:
+    type: RuntimeDefault
 
 securityContext:
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
 
 resources:
   limits:
