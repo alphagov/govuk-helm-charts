@@ -62,7 +62,7 @@ spec:
             - name: SECRET_KEY_BASE
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.rails.secretKeyBaseName | default (printf "%s-rails-secret-key-base" .Values.repoName) }}
+                  name: {{ $.Values.rails.secretKeyBaseName | default (printf "%s-rails-secret-key-base" $.Values.repoName) }}
                   key: secret-key-base
             {{- end }}
             {{- if $.Values.sentry.enabled }}
