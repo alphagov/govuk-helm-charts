@@ -1091,13 +1091,6 @@ govukApplications:
             limit_req zone=email_alert_api_public burst=20 nodelay;
             proxy_pass http://email-alert-api;
           }
-      appResources:
-        limits:
-          cpu: 2
-          memory: 2.5Gi
-        requests:
-          cpu: 20m
-          memory: 1.5Gi
 
   - name: email-alert-frontend
     helmValues:
