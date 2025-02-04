@@ -76,8 +76,6 @@ spec:
       repeatInterval: 1d
       groupWait: 5m
       groupInterval: 30m
-      activeTimeIntervals:
-        - inhours
     - matchers:
       - name: destination
         value: slack-cronjob-notifications
@@ -86,8 +84,6 @@ spec:
       repeatInterval: 1d
       groupWait: 5m
       groupInterval: 30m
-      activeTimeIntervals:
-        - inhours
   receivers:
   - name: 'null'
   - name: 'pagerduty'
