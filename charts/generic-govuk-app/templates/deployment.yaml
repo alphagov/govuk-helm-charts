@@ -25,7 +25,12 @@ spec:
         app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/component: app
     spec:
+      {{- if .Values.serviceAccount.enabled }}
+      automountServiceAccountToken: true
+      serviceAccountName: {{ .Values.serviceAccount.name | default (print $fullName "-sa") }}
+      {{- else }}
       automountServiceAccountToken: false
+      {{- end }}
       enableServiceLinks: false
       securityContext:
         seccompProfile:

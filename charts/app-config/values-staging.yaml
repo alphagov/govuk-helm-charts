@@ -3125,23 +3125,23 @@ govukApplications:
           external-dns.alpha.kubernetes.io/hostname: signon.{{ .Values.k8sExternalDomainSuffix }}
         hosts:
           - name: signon.{{ .Values.publishingDomainSuffix }}
+      serviceAccount:
+        enabled: true
+        create: false
+        name: signon
       cronTasks:
         - name: delete-expired-oauth-grants
           task: "oauth_access_grants:delete_expired"
           schedule: "53 12 * * 0"
-          serviceAccount: signon
         - name: delete-logs-older-than-two-years
           task: "event_log:delete_logs_older_than_two_years"
           schedule: "18 1 * * *"
-          serviceAccount: signon
         - name: sync-app-secrets-to-k8s
           task: "kubernetes:sync_app_secrets"
           schedule: "11 1 * * *"
-          serviceAccount: signon
         - name: sync-token-secrets-to-k8s
           task: "kubernetes:sync_token_secrets"
           schedule: "12 1 * * *"
-          serviceAccount: signon
       extraEnv:
         - name: GOVUK_CSP_REPORT_ONLY
           value: "true"
