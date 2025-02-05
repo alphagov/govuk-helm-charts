@@ -2804,16 +2804,11 @@ govukApplications:
             secretKeyRef:
               name: search-admin-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DATASTORE
-        - name: DISCOVERY_ENGINE_ENGINE
+        - name: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
           valueFrom:
             secretKeyRef:
               name: search-admin-google-cloud-discovery-engine-configuration
-              key: DISCOVERY_ENGINE_ENGINE
-        - name: DISCOVERY_ENGINE_SERVING_CONFIG
-          valueFrom:
-            secretKeyRef:
-              name: search-admin-google-cloud-discovery-engine-configuration
-              key: DISCOVERY_ENGINE_SERVING_CONFIG
+              key: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
 
   - name: search-api
     helmValues:
