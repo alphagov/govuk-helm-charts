@@ -33,7 +33,12 @@ spec:
             app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
             app.kubernetes.io/component: "{{ .name }}"
         spec:
-          automountServiceAccountToken: {{- if .serviceAccount }} true {{- else }} false {{- end }}
+          {{- if $.Values.serviceAccount.enabled }}
+          automountServiceAccountToken: true
+          serviceAccountName: {{ $.Values.serviceAccount.name | default (print $fullName "-sa") }}
+          {{- else }}
+          automountServiceAccountToken: false
+          {{- end }}
           enableServiceLinks: false
           securityContext:
             seccompProfile:
@@ -43,7 +48,6 @@ spec:
             runAsUser: {{ $.Values.securityContext.runAsUser }}
             runAsGroup: {{ $.Values.securityContext.runAsGroup }}
           restartPolicy: Never
-          {{ if .serviceAccount }}serviceAccountName: {{ .serviceAccount }}{{- end }}
           volumes:
             - name: app-tmp
               emptyDir: {}

@@ -173,3 +173,9 @@ rails:
 externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.
   deletionPolicy: Delete
+
+serviceAccount:
+  enabled: false
+  create: false
+  name: null
+  annotations: {}
