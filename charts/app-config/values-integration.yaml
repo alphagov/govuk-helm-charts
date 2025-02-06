@@ -1511,8 +1511,6 @@ govukApplications:
           cpu: 10m
           memory: 384Mi
       extraEnv:
-        - name: GOVUK_CHAT_PROMO_ENABLED
-          value: "true"
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
         - name: PUBLISHING_API_BEARER_TOKEN
