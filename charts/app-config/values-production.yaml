@@ -1618,9 +1618,6 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-slack
               key: AI_SLACK_CHANNEL_WEBHOOK_URL
-        # remove the need for signon to access frontend of chat
-        - name: AVAILABLE_WITHOUT_SIGNON_AUTHENTICATION
-          value: "true"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -1697,17 +1694,6 @@ govukApplications:
           value: "100"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
           value: "100"
-      nginxConfigMap:
-        extraServerConf: |
-          location /chat {
-            if ($http_host = 'chat.publishing.service.gov.uk' ) {
-              return 301 https://www.gov.uk$request_uri;
-            }
-            if ($http_host = 'chat.eks.production.govuk.digital' ) {
-              return 301 https://www.gov.uk$request_uri;
-            }
-            proxy_pass http://govuk-chat;
-          }
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
@@ -2581,22 +2567,13 @@ govukApplications:
             access_logs.s3.enabled=true,
             access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
             access_logs.s3.prefix=elb/www-origin
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &router-conditions >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "www.{{ .Values.externalDomainSuffix }}",
                 "www-origin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/conditions.govuk-chat: *router-conditions
         hosts:
           - name: www-origin.{{ .Values.k8sExternalDomainSuffix }}
-            extraPaths:
-              - path: /chat
-                pathType: Prefix
-                backend:
-                  service:
-                    name: govuk-chat
-                    port:
-                      name: app
       nginxConfigMap:
         create: false
         name: live-router-nginx-conf
