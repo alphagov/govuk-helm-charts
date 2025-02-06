@@ -17,7 +17,7 @@ spec:
         - name: commitSha
         - name: environment
       script:
-        image: curlimages/curl
+        image: quay.io/curl/curl
         command:
           - sh
         source: >
