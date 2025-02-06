@@ -1693,6 +1693,13 @@ govukApplications:
           value: "0"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
           value: "0"
+      # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/chat/bedrock_iam.tf
+      serviceAccount:
+        enabled: true
+        create: true
+        name: govuk-chat
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/govuk-chat-bedrock-access-role
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
