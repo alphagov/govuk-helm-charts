@@ -2880,11 +2880,6 @@ govukApplications:
             secretKeyRef:
               name: search-admin-google-cloud-discovery-engine-configuration
               key: GOOGLE_CLOUD_CREDENTIALS
-        - name: DISCOVERY_ENGINE_DATASTORE
-          valueFrom:
-            secretKeyRef:
-              name: search-admin-google-cloud-discovery-engine-configuration
-              key: DISCOVERY_ENGINE_DATASTORE
         - name: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
           valueFrom:
             secretKeyRef:
@@ -3122,26 +3117,11 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: GOOGLE_CLOUD_PROJECT_ID
-        - name: DISCOVERY_ENGINE_DATASTORE
-          valueFrom:
-            secretKeyRef:
-              name: search-api-v2-google-cloud-discovery-engine-configuration
-              key: DISCOVERY_ENGINE_DATASTORE
-        - name: DISCOVERY_ENGINE_DATASTORE_BRANCH
-          valueFrom:
-            secretKeyRef:
-              name: search-api-v2-google-cloud-discovery-engine-configuration
-              key: DISCOVERY_ENGINE_DATASTORE_BRANCH
         - name: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
           valueFrom:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
-        - name: DISCOVERY_ENGINE_SERVING_CONFIG
-          valueFrom:
-            secretKeyRef:
-              name: search-api-v2-google-cloud-discovery-engine-configuration
-              key: DISCOVERY_ENGINE_SERVING_CONFIG
 
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
