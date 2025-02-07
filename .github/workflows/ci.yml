@@ -24,6 +24,11 @@ jobs:
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yml
 
+      - name: Run govuk-app-linter
+        run: |
+          mkdir lint-tmp
+          ./govuk-app-linter.sh
+
       - name: Helm template
         run: |
           mkdir helm-dist
