@@ -2751,6 +2751,8 @@ govukApplications:
           - name: search-admin.{{ .Values.k8sExternalDomainSuffix }}
       redis:
         enabled: true
+      workers:
+        enabled: true
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
