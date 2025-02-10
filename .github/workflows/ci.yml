@@ -19,10 +19,15 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2
         with:
-          version: v3.8.0
+          version: v3.12.0
 
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yml
+
+      - name: Run govuk-app-linter
+        run: |
+          mkdir lint-tmp
+          ./govuk-app-linter.sh
 
       - name: Helm template
         run: |
