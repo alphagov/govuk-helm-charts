@@ -1,3 +1,3 @@
-image_tag: 57f822c7fe675b39a13c35778aad1e61655ab01f-on-pg
+image_tag: v543-on-pg
 automatic_deploys_enabled: true
-promote_deployment: false
+promote_deployment: true
