@@ -2383,8 +2383,8 @@ govukApplications:
         dsnSecretName: publisher-sentry
       uploadAssets:
         enabled: true
-        path: /app/public/assets/publisher-on-pg/*
-        s3Directory: "publisher-on-pg"
+        path: /app/public/assets/publisher/*
+        s3Directory: "publisher"
       workers:
         enabled: true
       workerResources:
