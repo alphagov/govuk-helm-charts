@@ -2502,6 +2502,53 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
           value: *publishing-bootstrap-gtm-preview
 
+  - name: govuk-graphql
+    helmValues:
+      arch: arm64
+      appResources:
+        limits:
+          cpu: 2
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
+      nginxClientMaxBodySize: 2M
+      dbMigrationEnabled: false
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "250"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "govuk-graphql.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: govuk-graphql.{{ .Values.k8sExternalDomainSuffix }}
+      uploadAssets:
+        enabled: false
+      workers:
+        enabled: false
+      redis:
+        enabled: false
+      extraEnv:
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-govukgraphql
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-govukgraphql
+              key: oauth_secret
+        # Intentionally connecting to the same DB as publishing-api - we should probably have a replica instead if this goes to prod
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: publishing-api-postgres
+              key: DATABASE_URL
+
   - name: publishing-api
     helmValues:
       arch: arm64
