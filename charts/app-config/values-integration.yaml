@@ -2542,7 +2542,8 @@ govukApplications:
             secretKeyRef:
               name: signon-app-govukgraphql
               key: oauth_secret
-        # Intentionally connecting to the same DB as publishing-api - we should probably have a replica instead if this goes to prod
+        # Intentionally connecting to the same DB as publishing-api - we should probably have a
+        # replica instead if this goes to prod
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
