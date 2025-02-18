@@ -45,10 +45,6 @@ jobs:
 
       - uses: azure/setup-helm@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
-
       - name: helm lint
         run: |
           EXITCODE=0
