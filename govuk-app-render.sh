@@ -42,7 +42,7 @@ for values_filename in ./charts/app-config/values-*.yaml; do
     rm -rf /tmp/chart_out
     helm template "${app_name}" "${chart_path}" -f "${app_values}" --output-dir "/tmp/chart_out"
 
-    cp -r "/tmp/chart_out/${chart_name}" "${chart_output}"
+    cp -r "/tmp/chart_out/${chart_name}/." "${chart_output}"
     cp "${chart_path}/Chart.yaml" "${chart_output}/"
   done
 
