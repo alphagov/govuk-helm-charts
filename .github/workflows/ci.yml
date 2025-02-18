@@ -48,16 +48,11 @@ jobs:
       - name: helm lint
         run: |
           EXITCODE=0
-          echo everything
-          ls
-          echo raw-charts
-          ls raw-charts
-          echo argo-services
-          ls raw-charts/argo-services
           for env in values/*; do
             for chart in ${env}/*; do
               chart_name=$(basename "${chart}")
               for app in ${chart}/*; do
+                echo "helm lint for app ${app} with chart ${chart_name}"
                 helm lint --quiet -f "${app}" "raw-charts/${chart_name}";
                 if [ $? -ne 0 ]; then
                   echo "$output";
@@ -81,7 +76,7 @@ jobs:
         with:
           entrypoint: /kubeconform
           args: >
-            -kubernetes-version 1.30.2
+            -kubernetes-version 1.31.6
             -schema-location default
             -schema-location
             "https://alphagov.github.io/govuk-crd-library/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
