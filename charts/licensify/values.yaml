@@ -37,7 +37,7 @@ clamav:
 nginx:
   port: 8080
   proxyConnectTimeout: 30s
-  proxyReadTimeout: 15s
+  proxyReadTimeout: 60s
   clientMaxBodySize: 200M
   resources:
     limits:
