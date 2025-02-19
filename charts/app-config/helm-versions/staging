@@ -2,6 +2,6 @@
 https://kubernetes-sigs.github.io/aws-ebs-csi-driver aws-ebs-csi-driver: "2.39.3"
 https://kubernetes.github.io/autoscaler cluster-autoscaler: "9.46.0"
 https://charts.dexidp.io dex: "0.22.0"
-https://kubernetes-sigs.github.io/external-dns external-dns: "1.15.1"
+https://kubernetes-sigs.github.io/external-dns external-dns: "1.15.2"
 https://charts.external-secrets.io external-secrets: "0.14.2"
 https://stakater.github.io/stakater-charts reloader: "1.2.1"
