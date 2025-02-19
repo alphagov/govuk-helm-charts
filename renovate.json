@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "platformAutomerge": true,
   "argocd": {
@@ -9,7 +9,7 @@
       "charts\\/.*\\.yaml$"
     ]
   },
-  "helm-values":{
+  "helm-values": {
     "fileMatch": [
       "charts\\/.*\\.yaml$"
     ],
@@ -25,7 +25,9 @@
   ],
   "packageRules": [
     {
-      "matchPackageNames": ["renovate/renovate"],
+      "matchPackageNames": [
+        "renovate/renovate"
+      ],
       "automerge": true,
       "automergeType": "branch"
     },
@@ -39,7 +41,10 @@
         "reloader",
         "tempo-distributed"
       ],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "automerge": true,
       "automergeType": "branch"
     },
@@ -50,12 +55,16 @@
         "dex",
         "external-secrets"
       ],
-      "matchUpdateTypes": ["patch"],
+      "matchUpdateTypes": [
+        "patch"
+      ],
       "automerge": true,
       "automergeType": "branch"
     },
     {
-      "matchFileNames": ["**/helm-versions/*"],
+      "matchFileNames": [
+        "**/helm-versions/*"
+      ],
       "additionalBranchPrefix": "{{replace '^.+\\/' '' packageFile}}-",
       "commitMessageSuffix": " ({{replace '^.+\\/' '' packageFile}})"
     }
@@ -63,7 +72,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [".*\\/helm-versions\\/.*"],
+      "fileMatch": [
+        ".*\\/helm-versions\\/.*"
+      ],
       "datasourceTemplate": "helm",
       "matchStrings": [
         "(?<registryUrl>.+) (?<depName>.+): \"(?<currentValue>[0-9\\.]+)\""
