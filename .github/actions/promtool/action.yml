@@ -1,4 +1,5 @@
 name: Promtool
+description: This is an action to access Prometheus Tooling via the promtool command
 
 inputs:
   args:
