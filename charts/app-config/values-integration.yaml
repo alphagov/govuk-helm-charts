@@ -2580,6 +2580,8 @@ govukApplications:
           memory: 512Mi
       redis:
         enabled: true
+        redisUrlOverride:
+          app: "rediss://publishing-api-h4kg8u.serverless.euw1.cache.amazonaws.com:6379"
       cronTasks:
         - name: metrics-report-to-prometheus
           task: "metrics:report_to_prometheus"
