@@ -1,7 +1,7 @@
 name: linting
 on: [push]
 jobs:
-  chart-testing:
+  render-charts:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -9,47 +9,64 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
           show-progress: false
+      - name: Run govuk-app-render
+        run: ./govuk-app-render.sh
+      - name: Archive rendered charts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-charts
+          path: output/
+          retention-days: 1
+
+  helm-lint:
+    runs-on: ubuntu-latest
+    needs: render-charts
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: rendered-charts
+          path: .
 
       - uses: azure/setup-helm@v4
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
-
-      - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2
-        with:
-          version: v3.12.0
-
-      - name: Run chart-testing (lint)
-        run: ct lint --config ct.yml
-
-      - name: Run govuk-app-linter
+      - name: helm lint
         run: |
-          mkdir lint-tmp
-          ./govuk-app-linter.sh
-
-      - name: Helm template
-        run: |
-          mkdir helm-dist
-          for c in charts/*; do
-            helm template "$(basename "$c")" "$c" --output-dir helm-dist
+          EXITCODE=0
+          for env in values/*; do
+            for chart in ${env}/*; do
+              chart_name=$(basename "${chart}")
+              for app in ${chart}/*; do
+                echo "helm lint for app ${app} with chart ${chart_name}"
+                output=$(helm lint --quiet -f "${app}" "raw-charts/${chart_name}")
+                if [ $? -ne 0 ]; then
+                  echo "$output";
+                  EXITCODE=1
+                fi
+              done
+            done
           done
+          exit "${EXITCODE}"
 
-      - name: Read Kubernetes version from /kubernetes_version
-        run: "grep KUBERNETES_VERSION kubernetes_version >> $GITHUB_ENV"
-
+  kubeconform:
+    runs-on: ubuntu-latest
+    needs: render-charts
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: rendered-charts
+          path: .
       - name: kubeconform
         uses: docker://ghcr.io/yannh/kubeconform:latest-alpine
         with:
           entrypoint: /kubeconform
           args: >
-            -kubernetes-version ${{ env.KUBERNETES_VERSION }}
+            -kubernetes-version 1.31.6
             -schema-location default
             -schema-location
             "https://alphagov.github.io/govuk-crd-library/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
+            -ignore-filename-pattern ".*/Chart.yaml"
             -summary
-            helm-dist
+            rendered-charts
 
   shellcheck:
     runs-on: ubuntu-latest
