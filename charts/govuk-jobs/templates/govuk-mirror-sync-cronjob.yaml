@@ -36,7 +36,7 @@ spec:
               emptyDir: {}
           initContainers:
             - name: scrape
-              image: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-mirror:{{ .Values.images.GovukMirror.tag }}"
+              image: "{{ .Values.images.GovukMirror.repository }}:{{ .Values.images.GovukMirror.tag }}"
               imagePullPolicy: "Always"
               workingDir: /data
               resources:
