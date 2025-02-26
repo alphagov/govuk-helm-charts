@@ -2571,6 +2571,7 @@ govukApplications:
         enabled: false
       workers:
         enabled: true
+        replicaCount: 12
       workerResources:
         limits:
           cpu: 4
