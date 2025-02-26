@@ -2965,6 +2965,13 @@ govukApplications:
         enabled: false
       redis:
         enabled: true
+        resources:
+          limits:
+            cpu: 1
+            memory: 3000Mi
+          requests:
+            cpu: 500m
+            memory: 3000Mi
       cronTasks:
         - name: reindex-with-new-schemas
           task: "search:migrate_schema"
