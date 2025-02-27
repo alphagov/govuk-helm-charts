@@ -2972,6 +2972,8 @@ govukApplications:
           requests:
             cpu: 500m
             memory: 3000Mi
+        config:
+          maxmemory: 2500mb
       cronTasks:
         - name: reindex-with-new-schemas
           task: "search:migrate_schema"
