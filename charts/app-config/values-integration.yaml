@@ -2968,12 +2968,12 @@ govukApplications:
         resources:
           limits:
             cpu: 1
-            memory: 3000Mi
+            memory: 6000Mi
           requests:
             cpu: 500m
-            memory: 3000Mi
+            memory: 6000Mi
         config:
-          maxmemory: 2500mb
+          maxmemory: 5500mb
       cronTasks:
         - name: reindex-with-new-schemas
           task: "search:migrate_schema"
