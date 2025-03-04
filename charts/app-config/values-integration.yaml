@@ -2581,7 +2581,6 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: "redis://govuk-shared.h4kg8u.ng.0001.euw1.cache.amazonaws.com:6379/0"
           workers: "redis://govuk-shared.h4kg8u.ng.0001.euw1.cache.amazonaws.com:6379/0"
       cronTasks:
         - name: metrics-report-to-prometheus
@@ -4036,7 +4035,6 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: "redis://govuk-shared.h4kg8u.ng.0001.euw1.cache.amazonaws.com:6379/1"
           workers: "redis://govuk-shared.h4kg8u.ng.0001.euw1.cache.amazonaws.com:6379/1"
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
