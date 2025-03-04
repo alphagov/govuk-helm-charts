@@ -2832,11 +2832,11 @@ govukApplications:
       redis:
         enabled: true
         config:
-          maxmemory: 8000mb
+          maxmemory: 10000mb
         resources:
           limits:
             cpu: 1
-            memory: 10Gi
+            memory: 12Gi
           requests:
             cpu: 500m
             memory: 2Gi
