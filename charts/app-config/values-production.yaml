@@ -2409,7 +2409,7 @@ govukApplications:
         enabled: false
       workers:
         enabled: true
-        replicaCount: 6
+        replicaCount: 3
       redis:
         enabled: true
       workerResources:
