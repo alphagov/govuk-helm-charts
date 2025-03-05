@@ -2812,7 +2812,7 @@ govukApplications:
         enabled: false
       workers:
         enabled: true
-        replicaCount: 8
+        replicaCount: 2
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
