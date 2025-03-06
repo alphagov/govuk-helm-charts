@@ -33,19 +33,20 @@ jobs:
         run: |
           EXITCODE=0
           for env in values/*; do
-            for chart in ${env}/*; do
-              chart_name=$(basename "${chart}")
-              for app in ${chart}/*; do
-                echo "helm lint for app ${app} with chart ${chart_name}"
-                output=$(helm lint --quiet -f "${app}" "raw-charts/${chart_name}")
-                if [ $? -ne 0 ]; then
-                  echo "$output";
+            [ -d "$env" ] || continue
+            for chart in "$env"/*; do
+              [ -d "$chart" ] || continue
+              chart_name=$(basename "$chart")
+              for app in "$chart"/*; do
+                echo "helm lint for app $app with chart $chart_name"
+                if ! output=$(helm lint --quiet -f "$app" "raw-charts/$chart_name"); then
+                  echo "$output"
                   EXITCODE=1
                 fi
               done
             done
           done
-          exit "${EXITCODE}"
+          exit "$EXITCODE"
 
   kubeconform:
     runs-on: ubuntu-latest
