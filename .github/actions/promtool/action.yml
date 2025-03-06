@@ -1,4 +1,5 @@
 name: Promtool
+description: Action to run Prometheus promtool
 
 inputs:
   args:
