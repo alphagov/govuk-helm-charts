@@ -39,4 +39,4 @@ spec:
     syncOptions:
       - ApplyOutOfSyncOnly=true
       - PrunePropagationPolicy=orphan
-{{-end }}
+{{- end }}
