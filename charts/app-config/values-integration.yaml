@@ -2641,8 +2641,6 @@ govukApplications:
             secretKeyRef:
               name: publishing-api-bigquery
               key: client-secret
-        - name: RAILS_LOG_LEVEL
-          value: debug
 
   - name: release
     helmValues:
