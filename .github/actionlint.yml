@@ -1,0 +1,6 @@
+paths:
+  .github/workflows/ci.yml:
+    ignore:
+      # Ignore some false positives in ci.yml
+      - 'file "/bin/sh" does not exist in ".+". it is specified at "entrypoint" .+'
+      - 'missing input "args" which is required by action "Promtool" .+'
