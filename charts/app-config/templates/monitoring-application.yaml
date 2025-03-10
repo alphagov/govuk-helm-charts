@@ -10,6 +10,9 @@ spec:
   project: monitoring
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
+    {{- if eq .Values.govukEnvironment "integration" }}
+    targetRevision: samsimpson1/move-to-tf
+    {{- end }}
     path: charts/monitoring-config
     helm:
       values: |
