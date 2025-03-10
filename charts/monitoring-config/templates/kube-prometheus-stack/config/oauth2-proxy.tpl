@@ -28,16 +28,16 @@ extraEnv:
   - name: OAUTH2_PROXY_CLIENT_ID
     valueFrom:
       secretKeyRef:
-        name: govuk-dex-{{ .app }}
+        name: dex-client-{{ .app }}
         key: clientID
   - name: OAUTH2_PROXY_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
-        name: govuk-dex-{{ .app }}
+        name: dex-client-{{ .app }}
         key: clientSecret
   - name: OAUTH2_PROXY_COOKIE_SECRET
     valueFrom:
       secretKeyRef:
-        name: govuk-dex-{{ .app }}
+        name: dex-client-{{ .app }}
         key: cookieSecret
 {{- end -}}
