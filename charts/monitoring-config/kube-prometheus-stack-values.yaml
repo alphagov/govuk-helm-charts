@@ -61,11 +61,11 @@
     "GF_AUTH_GENERIC_OAUTH_CLIENT_ID":
       "secretKeyRef":
         "key": "clientID"
-        "name": "govuk-dex-grafana"
+        "name": "dex-client-grafana"
     "GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET":
       "secretKeyRef":
         "key": "clientSecret"
-        "name": "govuk-dex-grafana"
+        "name": "dex-client-grafana"
     "GF_DATABASE_HOST":
       "secretKeyRef":
         "key": "host"

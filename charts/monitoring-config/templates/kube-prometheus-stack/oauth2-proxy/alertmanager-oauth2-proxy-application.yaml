@@ -21,4 +21,3 @@ spec:
       selfHeal: true
     syncOptions:
       - ApplyOutOfSyncOnly=true
-      - PrunePropagationPolicy=orphan
