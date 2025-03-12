@@ -18,6 +18,7 @@ jobs:
           show-progress: false
           sparse-checkout: |
             charts/argo-bootstrap
+            charts/argo-bootstrap-ephemeral
             charts/cluster-secret-store
             charts/cluster-secrets
 
