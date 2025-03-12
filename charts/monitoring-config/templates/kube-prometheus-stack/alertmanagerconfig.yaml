@@ -1,3 +1,4 @@
+{{- if ne .Values.govukEnvironment "ephemeral" }}
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
@@ -204,3 +205,4 @@ spec:
   - name: inhours
     timeIntervals:
     - weekdays: ['monday:friday']
+{{- end }}
