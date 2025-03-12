@@ -4,6 +4,7 @@ argocdUrl:
 argoWorkflowsUrl:
 argoEventsHost:
 clusterId:
+monitoringNamespace: monitoring
 rbacTeams:
   read_only:
   read_write:
