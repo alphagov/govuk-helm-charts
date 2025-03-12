@@ -1,6 +1,11 @@
+{{- $mergedValues := "" }}
+{{- if eq "ephemeral" .Values.govukEnvironment }}
+{{ $mergedValues = include "monitoring-config.ephemeral-tempo-config" . }}
+{{- else }}
 {{ $baseValues := fromYaml (.Files.Get "tempo-values.yaml") }}
 {{ $envValues := fromYaml (.Files.Get (printf "tempo-values-%s.yaml" .Values.govukEnvironment)) }}
-{{ $mergedValues := toYaml (merge $envValues $baseValues) }}
+{{ $mergedValues = toYaml (merge $envValues $baseValues) }}
+{{- end }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

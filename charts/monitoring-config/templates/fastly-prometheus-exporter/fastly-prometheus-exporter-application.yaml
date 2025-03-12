@@ -1,3 +1,4 @@
+{{- if ne .Values.govukEnvironment "ephemeral" }}
 {{ $envValues := toYaml (fromYaml (.Files.Get (printf "fastly-prometheus-exporter-values-%s.yaml" .Values.govukEnvironment))) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -34,3 +35,4 @@ spec:
       selfHeal: true
     syncOptions:
       - ApplyOutOfSyncOnly=true
+{{- end }}
