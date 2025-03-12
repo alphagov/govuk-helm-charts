@@ -27,6 +27,14 @@ entries:
     version: 0.0.1
   argo-bootstrap-ephemeral:
   - apiVersion: v2
+    created: "2025-03-12T14:05:10.196374797Z"
+    description: Bootstraps ArgoCD for ephemeral environments
+    digest: b00bf6f0bfef40b0bb7303396dc1483cb1d2b795305691c9244678502cca1934
+    name: argo-bootstrap-ephemeral
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-bootstrap-ephemeral-0.0.3/argo-bootstrap-ephemeral-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
     created: "2025-03-12T13:58:50.244916296Z"
     description: Bootstraps ArgoCD for ephemeral environments
     digest: e97a80071cea251f3220abd0e7a3ee1599ecd99b3ba7672cf8ac4a4b3963c54a
@@ -77,4 +85,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.9.3/cluster-secrets-0.9.3.tgz
     version: 0.9.3
-generated: "2025-03-12T13:58:50.244936694Z"
+generated: "2025-03-12T14:05:10.196394093Z"
