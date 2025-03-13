@@ -12,9 +12,7 @@ spec:
     path: charts/monitoring-config
     helm:
       values: |
-        govukEnvironment: ephemeral
-        clusterId: {{ .Values.clusterId }}
-        awsAccountId: {{ .Values.awsAccountId }}
+        {{- toYaml .Values | nindent 8 }}
         k8sExternalDomainSuffix: {{ .Values.clusterId }}.ephemeral.govuk.digital
   destination:
     server: https://kubernetes.default.svc
