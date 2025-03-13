@@ -21,6 +21,12 @@
       "domain": "grafana.{{ $domainSuffix }}"
   "ingress":
     "enabled": true
+    "annotations":
+      "alb.ingress.kubernetes.io/scheme": internet-facing
+      "alb.ingress.kubernetes.io/target-type": ip
+      "alb.ingress.kubernetes.io/listen-ports": '[{"HTTP":80},{"HTTPS":443}]'
+      "alb.ingress.kubernetes.io/ssl-redirect": "443"
+      "alb.ingress.kubernetes.io/ssl-policy": ELBSecurityPolicy-TLS-1-2-Ext-2018-06
     "hosts":
       - "grafana.{{ $domainSuffix }}"
   "replicas": 1
