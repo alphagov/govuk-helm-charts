@@ -20,6 +20,7 @@
     "server":
       "domain": "grafana.{{ $domainSuffix }}"
   "ingress":
+    "enabled": true
     "hosts":
       - "grafana.{{ $domainSuffix }}"
   "replicas": 1
