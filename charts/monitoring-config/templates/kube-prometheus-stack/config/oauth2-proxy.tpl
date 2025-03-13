@@ -6,7 +6,6 @@ ingress:
   pathType: Prefix
   hosts: [ "{{ .app }}.{{ .Values.k8sExternalDomainSuffix }}" ]
   annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: {{ .app }}
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
