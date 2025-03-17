@@ -18,6 +18,7 @@ spec:
     template:
       data:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/publishing_api_production'
+        REPLICA_DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string-replica.tpl" | trim }}/publishing_api_production'
   dataFrom:
     - extract:
         key: govuk/publishing-api/postgres
