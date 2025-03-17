@@ -2662,6 +2662,8 @@ govukApplications:
           cpu: 10m
           memory: 512Mi
       nginxClientMaxBodySize: 2M
+      uploadAssets:
+        enabled: false
       dbMigrationEnabled: false
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
