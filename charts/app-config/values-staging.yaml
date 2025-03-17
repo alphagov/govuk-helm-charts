@@ -2441,8 +2441,6 @@ govukApplications:
             secretKeyRef:
               name: publishing-api-rabbitmq
               key: RABBITMQ_URL
-        - name: EVENT_LOG_AWS_BUCKETNAME
-          value: govuk-publishing-api-event-log-staging
         - name: GOVUK_CONTENT_SCHEMAS_PATH
           value: /app/content_schemas
         - name: DATABASE_URL
