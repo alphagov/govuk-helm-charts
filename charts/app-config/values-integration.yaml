@@ -2690,6 +2690,8 @@ govukApplications:
               key: REPLICA_DATABASE_URL
         - name: RAILS_ENV
           value: production_replica
+        - name: DISABLE_QUEUE_PUBLISHER
+          value: "true"
 
   - name: release
     helmValues:
