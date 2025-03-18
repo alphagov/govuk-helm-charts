@@ -2682,7 +2682,14 @@ govukApplications:
           valueFrom:
             secretKeyRef:
               name: publishing-api-postgres
+              key: DATABASE_URL
+        - name: REPLICA_DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: publishing-api-postgres
               key: REPLICA_DATABASE_URL
+        - name: RAILS_ENV
+          value: production_replica
 
   - name: release
     helmValues:
