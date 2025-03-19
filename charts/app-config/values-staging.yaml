@@ -1132,6 +1132,8 @@ govukApplications:
             secretKeyRef:
               name: email-alert-auth
               key: token
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
 
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
@@ -1170,6 +1172,8 @@ govukApplications:
             secretKeyRef:
               name: email-alert-auth
               key: token
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
 
   - name: email-alert-service
     helmValues:
