@@ -1754,12 +1754,6 @@ govukApplications:
       govukMirrorSync:
         iamRoleArn: arn:aws:iam::172025368201:role/govuk-mirror-sync
 
-  - name: govuk-sli-collector
-    chartPath: charts/govuk-sli-collector
-    postSyncWorkflowEnabled: "false"
-    imageValues:
-      - "govuk-sli-collector"
-
   - name: hmrc-manuals-api
     helmValues:
       arch: arm64
