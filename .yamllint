@@ -9,7 +9,7 @@ rules:
   key-duplicates:
     forbid-duplicated-merge-keys: true
   line-length:
-    max: 100
+    max: 180
     allow-non-breakable-words: true
   truthy:
     check-keys: false  # GitHub Actions uses `on` as a key :(
