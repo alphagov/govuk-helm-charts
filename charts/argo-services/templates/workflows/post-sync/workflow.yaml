@@ -161,7 +161,7 @@ spec:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Post-deploy workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}. \n\n {{"{{ steps.parse-failures.outputs.parameters.message }}"}}"
+                          "text": "Post-deploy workflow for *{{"{{workflow.parameters.application}}"}}* in *{{ .Values.govukEnvironment }}* has {{"{{= sprig.lower(workflow.status) }}"}}. \n\n {{"{{ steps.parse-failures.outputs.parameters.message }}"}}"
                       },
                       "accessory": {
                         "type": "button",

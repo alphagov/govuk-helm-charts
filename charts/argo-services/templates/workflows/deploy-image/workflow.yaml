@@ -62,7 +62,7 @@ spec:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} to {{"{{workflow.parameters.environment}}"}} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                          "text": "Deploy image workflow for *{{"{{workflow.parameters.repoName}}"}}* to *{{"{{workflow.parameters.environment}}"}}* has {{"{{= sprig.lower(workflow.status) }}"}}."
                       },
                       "accessory": {
                         "type": "button",
