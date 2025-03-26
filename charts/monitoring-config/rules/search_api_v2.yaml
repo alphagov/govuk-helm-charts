@@ -1,35 +1,48 @@
 groups:
-  - name: SearchApiV2
+  - name: SearchApiV2BaseMetrics
     rules:
-      - alert: LowInvariantScore
-        expr: search_api_v2_quality_monitoring_score{dataset_type="invariants"} < 0.95
-        labels:
-          severity: warning
-          destination: slack-search-quality-monitoring
-
-      - alert: HighQueryFailureRate
+      - record: search_api_v2:search:requests:total
         expr: >-
-          sum(rate(http_requests_total{
-            namespace="apps",
-            job="search-api-v2",
-            controller="searches",
-            action="show",
-            status="200"
-          }[2m]))
-          /
-          sum(rate(http_requests_total{
-            namespace="apps",
-            job="search-api-v2",
-            controller="searches",
-            action="show"
-          }[2m]))
-          < 0.995
-        for: 10m
-        labels:
-          severity: critical
-          destination: slack-search-team
-        annotations:
-          summary: Elevated rate of query failures in search-api-v2
-          description: >-
-            The success rate of search requests to search-api-v2 has dropped below 99.5% for more
-            than 10 consecutive minutes.
+          sum by() (http_requests_total{
+            job="search-api-v2", controller="searches", action="show"
+          })
+      - record: search_api_v2:search:requests:success_total
+        expr: >-
+          sum by() (http_requests_total{
+            job="search-api-v2", controller="searches", action="show", status="200"
+          })
+
+  - name: SearchApiV2DerivedMetrics
+    rules:
+      - record: search_api_v2:search:success_rate:5m
+        expr: >-
+          min(
+            (
+              rate(search_api_v2:search:requests:success_total[5m])
+              /
+              rate(search_api_v2:search:requests:total[5m])
+            ),
+            1
+          )
+
+      - record: search_api_v2:search:success_rate:30m
+        expr: >-
+          min(
+            (
+              rate(search_api_v2:search:requests:success_total[30m])
+              /
+              rate(search_api_v2:search:requests:total[30m])
+            ),
+            1
+          )
+
+      - record: search_api_v2:search:success_rate:2h
+        expr: >-
+          min(
+            (
+              rate(search_api_v2:search:requests:success_total[2h])
+              /
+              rate(search_api_v2:search:requests:total[2h])
+            ),
+            1
+          )
