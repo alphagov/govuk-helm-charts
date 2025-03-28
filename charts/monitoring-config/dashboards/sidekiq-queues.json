@@ -24,15 +24,14 @@
       }
     ]
   },
-  "description": "",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 2775,
+  "id": 6235,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -40,6 +39,7 @@
         "y": 0
       },
       "id": 8,
+      "panels": [],
       "title": "Sidekiq",
       "type": "row"
     },
@@ -115,11 +115,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.3.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -128,7 +129,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "max by (job, queue) (sidekiq_queue_backlog{namespace=\"${namespace}\", job=~\"${app}\"})",
+          "expr": "max by (job, queue) (sidekiq_queue_backlog{namespace=\"${namespace}\", job=~\"${app}-worker\"})",
           "interval": "",
           "legendFormat": "{{job}}:{{queue}}",
           "range": true,
@@ -213,11 +214,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.3.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -226,7 +228,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by (job, queue) (rate(sidekiq_jobs_total{namespace=\"${namespace}\", job=~\"${app}\"}[5m]))",
+          "expr": "sum by (job, queue) (rate(sidekiq_jobs_total{namespace=\"${namespace}\", job=~\"${app}-worker\"}[5m]))",
           "interval": "",
           "legendFormat": "{{job}}:{{queue}}",
           "range": true,
@@ -310,11 +312,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.3.0",
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -323,7 +326,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "max by (job, queue) (sidekiq_queue_latency_seconds{namespace=\"${namespace}\", job=~\"${app}\"})",
+          "expr": "max by (job, queue) (sidekiq_queue_latency_seconds{namespace=\"${namespace}\", job=~\"${app}-worker\"})",
           "interval": "",
           "legendFormat": "{{job}}:{{queue}}",
           "range": true,
@@ -392,7 +395,6 @@
             }
           },
           "mappings": [],
-          "max": 100,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -426,10 +428,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -497,7 +501,6 @@
             }
           },
           "mappings": [],
-          "max": 100,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -531,10 +534,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.5.2",
       "targets": [
         {
           "datasource": {
@@ -554,14 +559,14 @@
       "type": "timeseries"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "schemaVersion": 39,
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": false,
           "text": "apps",
           "value": "apps"
         },
@@ -570,9 +575,7 @@
           "uid": "prometheus"
         },
         "definition": "label_values(sidekiq_queue_backlog,namespace)",
-        "hide": 0,
         "includeAll": true,
-        "multi": false,
         "name": "namespace",
         "options": [],
         "query": {
@@ -581,14 +584,11 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       },
       {
         "allValue": ".*",
         "current": {
-          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -597,9 +597,7 @@
           "uid": "prometheus"
         },
         "definition": "label_values(sidekiq_queue_backlog{namespace=\"${namespace}\"}, job)",
-        "hide": 0,
         "includeAll": true,
-        "multi": false,
         "name": "app",
         "options": [],
         "query": {
@@ -607,8 +605,7 @@
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
+        "regex": "/(?<name>.*)-worker/",
         "sort": 1,
         "type": "query"
       }
@@ -627,21 +624,11 @@
       "1h",
       "2h",
       "1d"
-    ],
-    "time_options": [
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
     ]
   },
   "timezone": "browser",
   "title": "Sidekiq: queue length, max delay | Redis: memory usage, disk usage",
   "uid": "sidekiq-queues",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
