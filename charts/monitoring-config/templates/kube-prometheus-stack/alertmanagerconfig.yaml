@@ -85,6 +85,14 @@ spec:
       repeatInterval: 1d
       groupWait: 5m
       groupInterval: 30m
+    - matchers:
+        - name: destination
+          value: slack-whitehall-notifications
+          matchType: =
+      receiver: 'slack-whitehall-notifications'
+      repeatInterval: 1d
+      groupWait: 5m
+      groupInterval: 30m
   receivers:
   - name: 'null'
   - name: 'pagerduty'
@@ -201,6 +209,20 @@ spec:
         text: 'View logs in Kibana'
         url: "https://kibana.logit.io/s/13d1a0b1-f54f-407b-a4e5-f53ba653fac3/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-24h,to:now))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.labels.app_kubernetes_io%2Fname,negate:!f,params:(query:search-api-v2-quality-monitoring-assert-invariants),type:phrase),query:(match_phrase:(kubernetes.labels.app_kubernetes_io%2Fname:search-api-v2-quality-monitoring-assert-invariants)))),sort:!())"
       apiURL: *slack_api_url
+  - name: 'slack-whitehall-notifications'
+    slackConfigs:
+      - channel: '#govuk-whitehall-experience-tech'
+        sendResolved: true
+        iconURL: https://avatars3.githubusercontent.com/u/3380462
+        title: |-
+          {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+        text: >-
+          *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+          
+          *Environment:* {{ .Values.govukEnvironment }}
+          
+          *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
+        apiURL: *slack_api_url
   muteTimeIntervals:
   - name: inhours
     timeIntervals:

@@ -1,0 +1,91 @@
+rule_files:
+  - whitehall.yaml
+
+evaluation_interval: 1m
+
+tests:
+  # Alert fires when threshold exceeded for too long.
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{
+          namespace="apps",
+          job="whitehall-admin",
+          controller="editions",
+          status="200"
+        }'
+        values: '0+90x15'
+      - series: 'http_requests_total{
+          namespace="apps",
+          job="whitehall-admin",
+          controller="editions",
+          status="500"
+        }'
+        values: '0+30x15'
+    promql_expr_test:
+      - expr: 'sum (global:whitehall_requests:rate5m{status=~"5.."})'
+        eval_time: 15m
+        exp_samples:
+          # 30 5xx responses per minute = 0.5 per second
+          - value: 0.5
+      - expr: 'sum (global:whitehall_5xx_responses:ratio_rate5m)'
+        eval_time: 15m
+        exp_samples:
+          # 30 5xx responses out of 120 total responses = 0.25
+          - value: 0.25
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: WhitehallErrorRatioTooHigh
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              destination: slack-whitehall-notifications
+            exp_annotations:
+              summary: Whitehall error ratio too high
+              description: >-
+                More than 10% of HTTP responses from Whitehall were 500-series errors for 10 minutes.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/alerts/whitehall-error-ratio-too-high.html
+
+  # Alert does not fire when threshold not exceeded for long enough.
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{
+          namespace="apps",
+          job="whitehall-admin",
+          controller="editions",
+          status="200",
+        }'
+        values: '0+60x15'
+      - series: 'http_requests_total{
+          namespace="apps",
+          job="whitehall-admin",
+          controller="editions",
+          status="500",
+        }'
+        values: '0+12x8 0x7'
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: WhitehallErrorRatioTooHigh
+        exp_alerts: []
+
+  # Alert does not fire when min QPS threshold is not met.
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{
+          namespace="apps",
+          job="whitehall-admin",
+          controller="editions",
+          status="200",
+        }'
+        values: '0+3x15'
+      - series: 'http_requests_total{
+          namespace="apps",
+          job="whitehall-admin",
+          controller="editions",
+          status="500",
+        }'
+        values: '0+2x15'
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: WhitehallErrorRatioTooHigh
+        exp_alerts: []

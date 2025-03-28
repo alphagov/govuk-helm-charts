@@ -1,6 +1,36 @@
 groups:
   - name: WhitehallAlerts
     rules:
+      - record: global:whitehall_requests:rate5m
+        expr: |
+          sum by (status) (
+            rate(http_requests_total{namespace="apps", job="whitehall-admin", controller!="other"}[5m])
+          )
+
+      - record: global:whitehall_5xx_responses:ratio_rate5m
+        expr: |
+          sum (global:whitehall_requests:rate5m{status=~"5.."})
+          /
+          sum (global:whitehall_requests:rate5m)
+
+      - alert: WhitehallErrorRatioTooHigh
+        # Note: Whitehall usually receives more than 0.5 requests per second during working hours.
+        #       We only alert if it's receiving more than 0.2 requests per second to avoid noise.
+        expr: |
+          sum (global:whitehall_5xx_responses:ratio_rate5m) > 0.1
+          and
+          sum (global:whitehall_requests:rate5m) > 0.2
+        for: 10m
+        labels:
+          severity: critical
+          destination: slack-whitehall-notifications
+        annotations:
+          summary: Whitehall error ratio too high
+          description: >-
+            More than 10% of HTTP responses from Whitehall were 500-series errors for 10 minutes.
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/alerts/whitehall-error-ratio-too-high.html
+
       - alert: WhitehallScheduledPublicationsOverdue
         expr: |
           whitehall_scheduled_publishing_overdue > 0
