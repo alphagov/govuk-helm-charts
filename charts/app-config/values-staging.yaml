@@ -2464,6 +2464,7 @@ govukApplications:
               key: client-secret
 
   - name: publishing-api-read-replica
+    repoName: publishing-api
     helmValues:
       arch: arm64
       appResources:
