@@ -355,6 +355,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-collections-email-alert-api
               key: bearer_token
+        - name: PLEK_SERVICE_PUBLISHING_API_URI
+          value: "http://publishing-api-read-replica"
 
   - name: draft-collections
     repoName: collections
@@ -1431,6 +1433,8 @@ govukApplications:
               key: bearer_token
         - name: WEB_CONCURRENCY
           value: '4'
+        - name: PLEK_SERVICE_PUBLISHING_API_URI
+          value: "http://publishing-api-read-replica"
 
   - name: draft-frontend
     repoName: frontend
@@ -1515,6 +1519,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
+        - name: PLEK_SERVICE_PUBLISHING_API_URI
+          value: "http://publishing-api-read-replica"
 
   - name: draft-government-frontend
     repoName: government-frontend
