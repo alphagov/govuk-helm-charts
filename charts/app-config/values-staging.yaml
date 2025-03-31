@@ -2463,6 +2463,48 @@ govukApplications:
               name: publishing-api-bigquery
               key: client-secret
 
+  - name: publishing-api-read-replica
+    helmValues:
+      arch: arm64
+      appResources:
+        limits:
+          cpu: 2
+          memory: 1.5Gi
+        requests:
+          cpu: 20m
+          memory: 768Mi
+      nginxClientMaxBodySize: 2M
+      dbMigrationEnabled: false
+      uploadAssets:
+        enabled: false
+      extraEnv:
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-publishing-api
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-publishing-api
+              key: oauth_secret
+        - name: GOVUK_CONTENT_SCHEMAS_PATH
+          value: /app/content_schemas
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: publishing-api-postgres
+              key: DATABASE_URL
+        - name: REPLICA_DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: publishing-api-postgres
+              key: REPLICA_DATABASE_URL
+        - name: RAILS_ENV
+          value: production_replica
+        - name: DISABLE_QUEUE_PUBLISHER
+          value: "true"
+
   - name: release
     helmValues:
       arch: arm64
