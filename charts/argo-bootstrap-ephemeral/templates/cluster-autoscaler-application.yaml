@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     {{- include "helm-release"
-        ( dict "repoURL" "https://kubernetes.github.io/autoscaler" "chart" "cluster-autoscaler" )
+        ( merge (deepCopy .) (dict "repoURL" "https://kubernetes.github.io/autoscaler" "chart" "cluster-autoscaler") )
         | nindent 4 }}
     helm:
       values: |
