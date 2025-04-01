@@ -1,35 +1,58 @@
 groups:
-  - name: SearchApiV2
+  - name: SearchApiV2AcuteMetrics
+    interval: 1m
     rules:
-      - alert: LowInvariantScore
-        expr: search_api_v2_quality_monitoring_score{dataset_type="invariants"} < 0.95
-        labels:
-          severity: warning
-          destination: slack-search-quality-monitoring
-
-      - alert: HighQueryFailureRate
-        expr: >-
-          sum(rate(http_requests_total{
-            namespace="apps",
-            job="search-api-v2",
-            controller="searches",
-            action="show",
-            status="200"
-          }[2m]))
+      - record: search_api_v2:search_requests:rate5m
+        expr: |
+          sum by (status) (
+            rate(
+              http_requests_total{
+                namespace="apps",
+                job="search-api-v2",
+                controller="searches"
+              }[5m]
+            )
+          )
+      - record: search_api_v2:autocomplete_requests:rate5m
+        expr: |
+          sum by (status) (
+            rate(
+              http_requests_total{
+                namespace="apps",
+                job="search-api-v2",
+                controller="autocompletes"
+              }[5m]
+            )
+          )
+      - record: search_api_v2:search_successful_requests:ratio_rate5m
+        expr: |
+          sum (search_api_v2:search_requests:rate5m{status="200"})
           /
-          sum(rate(http_requests_total{
-            namespace="apps",
-            job="search-api-v2",
-            controller="searches",
-            action="show"
-          }[2m]))
-          < 0.995
+          clamp_min(sum (search_api_v2:search_requests:rate5m), 1)
+      - record: search_api_v2:autocomplete_successful_requests:ratio_rate5m
+        expr: |
+          sum (search_api_v2:autocomplete_requests:rate5m{status="200"})
+          /
+          clamp_min(sum (search_api_v2:autocomplete_requests:rate5m), 1)
+      - alert: SearchDegradedAcute
+        expr: search_api_v2:search_successful_requests:ratio_rate5m < 0.99
         for: 10m
         labels:
-          severity: critical
+          severity: warning
           destination: slack-search-team
         annotations:
-          summary: Elevated rate of query failures in search-api-v2
+          summary: "Search API v2: Degraded search performance (acute)"
           description: >-
-            The success rate of search requests to search-api-v2 has dropped below 99.5% for more
-            than 10 consecutive minutes.
+            5 minute rolling success rate for search requests has dropped below 99% for more than 10
+            minutes.
+      - alert: AutocompleteDegradedAcute
+        expr: search_api_v2:autocomplete_successful_requests:ratio_rate5m < 0.9
+        for: 10m
+        labels:
+          severity: warning
+          destination: slack-search-team
+        annotations:
+          summary: "Search API v2: Degraded autocomplete performance (acute)"
+          description: >-
+            5 minute rolling success rate for autocomplete requests has dropped below 90% for more
+            than 10 minutes.

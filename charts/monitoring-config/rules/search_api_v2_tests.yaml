@@ -1,114 +1,149 @@
+evaluation_interval: 1m
+
 rule_files:
   - search_api_v2.yaml
 
-evaluation_interval: 1m
-
 tests:
+  # Tests for search_api_v2:search_requests:rate5m
   - interval: 1m
     input_series:
-      # Should alert (below threshold)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset1",
-          dataset_type="invariants"}
-        values: '0.94 0.94 0.94 0.94 0.94'
-      # Should not alert (at threshold)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset2",
-          dataset_type="invariants"}
-        values: '0.95 0.95 0.95 0.95 0.95'
-      # Should not alert (above threshold)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset3",
-          dataset_type="invariants"}
-        values: '0.96 0.96 0.96 0.96 0.96'
-      # Should not alert (wrong type)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset4",
-          dataset_type="something_else"}
-        values: '0.90 0.90 0.90 0.90 0.90'
-      # Should alert (drops below threshold)
-      - series: >-
-          search_api_v2_quality_monitoring_score{dataset_name="dataset5",
-          dataset_type="invariants"}
-        values: '0.96 0.95 0.94 0.94 0.94'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0+100x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0+5x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="502"}'
+        values: '0+3x5'
+    promql_expr_test:
+      - expr: round(search_api_v2:search_requests:rate5m{status="200"}, 1E-3)
+        eval_time: 5m
+        exp_samples:
+          - labels: '{status="200"}'
+            value: 1.667
+      - expr: round(search_api_v2:search_requests:rate5m{status="500"}, 1E-3)
+        eval_time: 5m
+        exp_samples:
+          - labels: '{status="500"}'
+            value: 0.083
+      - expr: round(search_api_v2:search_requests:rate5m{status="502"}, 1E-3)
+        eval_time: 5m
+        exp_samples:
+          - labels: '{status="502"}'
+            value: 0.050
 
-
-    alert_rule_test:
-      - eval_time: 5m
-        alertname: LowInvariantScore
-        exp_alerts:
-          - exp_labels:
-              alertname: LowInvariantScore
-              dataset_name: "dataset1"
-              dataset_type: "invariants"
-              severity: "warning"
-              destination: "slack-search-quality-monitoring"
-          - exp_labels:
-              alertname: LowInvariantScore
-              dataset_name: "dataset5"
-              dataset_type: "invariants"
-              severity: "warning"
-              destination: "slack-search-quality-monitoring"
-
+  # Tests for search_api_v2:autocomplete_requests:rate5m
   - interval: 1m
     input_series:
-      # Perfect 100% success
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
-          }
-        values: '1000+100x15'
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
-          }
-        values: '0x15'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="200"}'
+        values: '0+80x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="500"}'
+        values: '0+10x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="502"}'
+        values: '0+5x5'
+    promql_expr_test:
+      - expr: round(search_api_v2:autocomplete_requests:rate5m{status="200"}, 1E-3)
+        eval_time: 5m
+        exp_samples:
+          - labels: '{status="200"}'
+            value: 1.333
+      - expr: round(search_api_v2:autocomplete_requests:rate5m{status="500"}, 1E-3)
+        eval_time: 5m
+        exp_samples:
+          - labels: '{status="500"}'
+            value: 0.167
+      - expr: round(search_api_v2:autocomplete_requests:rate5m{status="502"}, 1E-3)
+        eval_time: 5m
+        exp_samples:
+          - labels: '{status="502"}'
+            value: 0.083
+
+  # Tests for search_api_v2:search_successful_requests:ratio_rate5m
+  - interval: 1m
+    input_series:
+      - series: 'search_api_v2:search_requests:rate5m{status="200"}'
+        values: '0 1.667x5'
+      - series: 'search_api_v2:search_requests:rate5m{status="500"}'
+        values: '0 0.083x5'
+      - series: 'search_api_v2:search_requests:rate5m{status="502"}'
+        values: '0 0.050x5'
+    promql_expr_test:
+      - expr: round(search_api_v2:search_successful_requests:ratio_rate5m, 1E-3)
+        eval_time: 5m
+        exp_samples:
+          - labels: '{}'
+            value: 0.926
+
+  # Tests for search_api_v2:autocomplete_successful_requests:ratio_rate5m
+  - interval: 1m
+    input_series:
+      - series: 'search_api_v2:autocomplete_requests:rate5m{status="200"}'
+        values: '0 1.333x5'
+      - series: 'search_api_v2:autocomplete_requests:rate5m{status="500"}'
+        values: '0 0.167x5'
+      - series: 'search_api_v2:autocomplete_requests:rate5m{status="502"}'
+        values: '0 0.083x5'
+    promql_expr_test:
+      - expr: round(search_api_v2:autocomplete_successful_requests:ratio_rate5m, 1E-3)
+        eval_time: 5m
+        exp_samples:
+          - labels: '{}'
+            value: 0.842
+
+  # Tests for SearchDegradedAcute - Positive Test (alert should fire)
+  - interval: 1m
+    input_series:
+      - series: 'search_api_v2:search_successful_requests:ratio_rate5m'
+        values: '1 0.980x10'
     alert_rule_test:
-      - alertname: HighQueryFailureRate
-        eval_time: 15m
+      - eval_time: 10m
+        alertname: SearchDegradedAcute
         exp_alerts: []
-
-  - interval: 1m
-    input_series:
-      # consistent <99.5% success for 15 minutes
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
-          }
-        values: '1000x15'
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
-          }
-        values: '100+100x15'
-    alert_rule_test:
-      - alertname: HighQueryFailureRate
-        eval_time: 15m
+      - eval_time: 11m
+        alertname: SearchDegradedAcute
         exp_alerts:
           - exp_labels:
-              alertname: HighQueryFailureRate
-              severity: critical
+              alertname: SearchDegradedAcute
+              severity: warning
               destination: slack-search-team
             exp_annotations:
-              summary: Elevated rate of query failures in search-api-v2
-              description: >-
-                The success rate of search requests to search-api-v2 has dropped below 99.5% for
-                more than 10 consecutive minutes.
+              summary: "Search API v2: Degraded search performance (acute)"
+              description: "5 minute rolling success rate for search requests has dropped below 99% for more than 10 minutes."
 
+  # Tests for SearchDegradedAcute - Negative Test (alert should not fire)
   - interval: 1m
     input_series:
-      # brief but inconsistent blips
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="200"
-          }
-        values: '1000 1000 1000 900 1000 1000 1000 900 1000 1000 1000 1000 1000 0 1000'
-      - series: >-
-          http_requests_total{
-          namespace="apps", job="search-api-v2", controller="searches", action="show", status="500"
-          }
-        values: '0 0 0 100 0 0 0 100 0 0 0 0 0 1000 0'
+      - series: 'search_api_v2:search_successful_requests:ratio_rate5m'
+        values: '1 0.995x14'
     alert_rule_test:
-      - alertname: HighQueryFailureRate
-        eval_time: 15m
+      - eval_time: 15m
+        alertname: SearchDegradedAcute
+        exp_alerts: []
+
+  # Tests for AutocompleteDegradedAcute - Positive Test (alert should fire)
+  - interval: 1m
+    input_series:
+      - series: 'search_api_v2:autocomplete_successful_requests:ratio_rate5m'
+        values: '1 0.850x10'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: AutocompleteDegradedAcute
+        exp_alerts: []
+      - eval_time: 11m
+        alertname: AutocompleteDegradedAcute
+        exp_alerts:
+          - exp_labels:
+              alertname: AutocompleteDegradedAcute
+              severity: warning
+              destination: slack-search-team
+            exp_annotations:
+              summary: "Search API v2: Degraded autocomplete performance (acute)"
+              description: "5 minute rolling success rate for autocomplete requests has dropped below 90% for more than 10 minutes."
+
+  # Tests for AutocompleteDegradedAcute - Negative Test (alert should not fire)
+  - interval: 1m
+    input_series:
+      - series: 'search_api_v2:autocomplete_successful_requests:ratio_rate5m'
+        values: '1 0.920x14'
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: AutocompleteDegradedAcute
         exp_alerts: []
