@@ -78,7 +78,7 @@ storage:
 serviceAccount:
   name: tempo
   annotations:
-    eks.amazonaws.com/role-arn: "arn:aws:iam::{{ .Values.awsAccountId }}:role/tempo-govuk"
+    eks.amazonaws.com/role-arn: "arn:aws:iam::{{ .Values.awsAccountId }}:role/tempo-{{ $clusterId }}"
 metricsGenerator:
   enabled: true
   config:
