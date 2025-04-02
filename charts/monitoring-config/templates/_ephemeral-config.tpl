@@ -11,14 +11,29 @@
 "grafana":
   "env":
     "AWS_ROLE_ARN": "arn:aws:iam::{{ .Values.awsAccountId }}:role/kube-prometheus-stack-grafana-govuk"
+  "envValueFrom":
+    "GF_AUTH_GENERIC_OAUTH_CLIENT_ID":
+      "secretKeyRef":
+        "key": "clientID"
+        "name": "dex-client-grafana"
+    "GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET":
+      "secretKeyRef":
+        "key": "clientSecret"
+        "name": "dex-client-grafana"
   "grafana.ini":
+    "auth":
+      "oauth_allow_insecure_email_lookup": true
+      "oauth_auto_login": true
     "auth.generic_oauth":
+      "enabled": true
       "api_url": "https://dex.{{ $domainSuffix }}/userinfo"
       "auth_url": "https://dex.{{ $domainSuffix }}/auth"
       "role_attribute_path": "'Admin'"
       "token_url": "https://dex.{{ $domainSuffix }}/token"
+      "scopes": "openid profile email groups"
     "server":
       "domain": "grafana.{{ $domainSuffix }}"
+      "root_url": "https://%(domain)s"
   "ingress":
     "enabled": true
     "annotations":
