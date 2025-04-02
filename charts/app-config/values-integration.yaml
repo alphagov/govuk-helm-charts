@@ -3078,7 +3078,7 @@ govukApplications:
           value:
             https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
-          value: warn
+          value: info
         - name: SEARCH_INDEX
           value: all
         - name: GDS_SSO_OAUTH_ID

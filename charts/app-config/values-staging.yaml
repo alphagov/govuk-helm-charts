@@ -2894,7 +2894,7 @@ govukApplications:
           value:
             https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
-          value: warn
+          value: info
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
