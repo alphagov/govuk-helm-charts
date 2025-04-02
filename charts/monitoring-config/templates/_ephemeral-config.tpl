@@ -54,9 +54,36 @@
     "externalUrl": "https://prometheus.{{ $domainSuffix }}"
     "externalLabels":
       "environment": "{{ $clusterId }}"
+    "evaluationInterval": "1m"
     "podAntiAffinity": ""
     "podDisruptionBudget":
       "enabled": false
+    "podMonitorNamespaceSelector":
+      "matchExpressions":
+        - "key": "no_monitor"
+          "operator": "DoesNotExist"
+          "values": []
+    "podMonitorSelectorNilUsesHelmValues": false
+    "probeNamespaceSelector":
+      "matchExpressions":
+        - "key": "no_monitor"
+          "operator": "DoesNotExist"
+          "values": []
+    "probeSelectorNilUsesHelmValues": false
+    "ruleNamespaceSelector":
+      "matchExpressions":
+        - "key": "no_monitor"
+          "operator": "DoesNotExist"
+          "values": []
+    "ruleSelectorNilUsesHelmValues": false
+    "scrapeInterval": "1m"
+    "scrapeTimeout": "15s"
+    "serviceMonitorNamespaceSelector":
+      "matchExpressions":
+        - "key": "no_monitor"
+          "operator": "DoesNotExist"
+          "values": []
+    "serviceMonitorSelectorNilUsesHelmValues": false
     "replicas": 1
     "storageSpec":
       "volumeClaimTemplate":
