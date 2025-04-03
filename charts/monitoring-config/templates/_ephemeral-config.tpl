@@ -8,6 +8,21 @@
     "podDisruptionBudget":
       "enabled": false
     "replicas": 1
+"defaultRules":
+  "disabled":
+    "KubePodNotReady": true
+    "NodeClockNotSynchronising": true
+    "NodeClockSkewDetected": true
+    "NodeNetworkReceiveErrs": true
+    "NodeNetworkTransmitErrs": true
+    "NodeRAIDDegraded": true
+    "NodeRAIDDiskFailure": true
+  "rules":
+    "kubeApiserverAvailbility": false
+    "kubeApiserverBurnrate": false
+    "kubeApiserverHistogram": false
+    "kubeApiserverSlos": false
+    "network": false
 "grafana":
   "env":
     "AWS_ROLE_ARN": "arn:aws:iam::{{ .Values.awsAccountId }}:role/kube-prometheus-stack-grafana-govuk"
