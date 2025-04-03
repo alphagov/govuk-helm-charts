@@ -24,6 +24,24 @@
     "kubeApiserverSlos": false
     "network": false
 "grafana":
+  "additionalDataSources":
+    - "access": "proxy"
+      "editable": false
+      "jsonData":
+        "authType": "default"
+        "defaultRegion": "eu-west-1"
+      "name": "CloudWatch"
+      "type": "cloudwatch"
+      "uid": "cloudwatch"
+    - "access": "proxy"
+      "editable": false
+      "jsonData":
+        "serviceMap":
+          "datasourceUid": "prometheus"
+      "name": "Tempo"
+      "type": "tempo"
+      "uid": "tempo"
+      "url": "http://tempo-query-frontend.monitoring.svc.cluster.local:3100"
   "env":
     "AWS_ROLE_ARN": "arn:aws:iam::{{ .Values.awsAccountId }}:role/kube-prometheus-stack-grafana-govuk"
   "envValueFrom":
