@@ -64,6 +64,17 @@
     "annotations":
       "eks.amazonaws.com/role-arn":
         "arn:aws:iam::{{ .Values.awsAccountId }}:role/kube-prometheus-stack-grafana-{{ $clusterId }}"
+"kubeApiServer":
+  "enabled": false
+"kubeControllerManager":
+  "enabled": false
+"kubeEtcd":
+  "enabled": false
+"kubeScheduler":
+  "enabled": false
+"kube_state_metrics":
+  "selfMonitor":
+    "enabled": true
 "prometheus":
   "prometheusSpec":
     "externalUrl": "https://prometheus.{{ $domainSuffix }}"
