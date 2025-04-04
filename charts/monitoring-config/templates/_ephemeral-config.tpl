@@ -8,6 +8,8 @@
     "podDisruptionBudget":
       "enabled": false
     "replicas": 1
+  "alertmanagerConfiguration":
+    "name": alertmanagerconfig-general
 "defaultRules":
   "disabled":
     "KubePodNotReady": true
