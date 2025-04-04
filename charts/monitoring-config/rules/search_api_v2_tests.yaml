@@ -59,12 +59,10 @@ tests:
   # Tests for search_api_v2:search_successful_requests:ratio_rate5m
   - interval: 1m
     input_series:
-      - series: 'search_api_v2:search_requests:rate5m{status="200"}'
-        values: '0 1.667x5'
-      - series: 'search_api_v2:search_requests:rate5m{status="500"}'
-        values: '0 0.083x5'
-      - series: 'search_api_v2:search_requests:rate5m{status="502"}'
-        values: '0 0.050x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0+100x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0+8x5'
     promql_expr_test:
       - expr: round(search_api_v2:search_successful_requests:ratio_rate5m, 1E-3)
         eval_time: 5m
@@ -72,15 +70,27 @@ tests:
           - labels: '{}'
             value: 0.926
 
+  # Test for search_api_v2:search_successful_requests:ratio_rate5m with no requests
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0x5'
+    promql_expr_test:
+      - expr: search_api_v2:search_successful_requests:ratio_rate5m
+        eval_time: 5m
+        exp_samples:
+          - labels: 'search_api_v2:search_successful_requests:ratio_rate5m'
+            value: 1
+
   # Tests for search_api_v2:autocomplete_successful_requests:ratio_rate5m
   - interval: 1m
     input_series:
-      - series: 'search_api_v2:autocomplete_requests:rate5m{status="200"}'
-        values: '0 1.333x5'
-      - series: 'search_api_v2:autocomplete_requests:rate5m{status="500"}'
-        values: '0 0.167x5'
-      - series: 'search_api_v2:autocomplete_requests:rate5m{status="502"}'
-        values: '0 0.083x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="200"}'
+        values: '0+80x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="500"}'
+        values: '0+15x5'
     promql_expr_test:
       - expr: round(search_api_v2:autocomplete_successful_requests:ratio_rate5m, 1E-3)
         eval_time: 5m
@@ -88,11 +98,27 @@ tests:
           - labels: '{}'
             value: 0.842
 
+  # Test for search_api_v2:autocomplete_successful_requests:ratio_rate5m with no requests
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="200"}'
+        values: '0x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="500"}'
+        values: '0x5'
+    promql_expr_test:
+      - expr: search_api_v2:autocomplete_successful_requests:ratio_rate5m
+        eval_time: 5m
+        exp_samples:
+          - labels: 'search_api_v2:autocomplete_successful_requests:ratio_rate5m'
+            value: 1
+
   # Tests for SearchDegradedAcute - Positive Test (alert should fire)
   - interval: 1m
     input_series:
-      - series: 'search_api_v2:search_successful_requests:ratio_rate5m'
-        values: '1 0.980x10'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0+980x10'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0+20x10'
     alert_rule_test:
       - eval_time: 10m
         alertname: SearchDegradedAcute
@@ -111,8 +137,10 @@ tests:
   # Tests for SearchDegradedAcute - Negative Test (alert should not fire)
   - interval: 1m
     input_series:
-      - series: 'search_api_v2:search_successful_requests:ratio_rate5m'
-        values: '1 0.995x14'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0+995x14'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0+5x14'
     alert_rule_test:
       - eval_time: 15m
         alertname: SearchDegradedAcute
@@ -121,8 +149,10 @@ tests:
   # Tests for AutocompleteDegradedAcute - Positive Test (alert should fire)
   - interval: 1m
     input_series:
-      - series: 'search_api_v2:autocomplete_successful_requests:ratio_rate5m'
-        values: '1 0.850x10'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="200"}'
+        values: '0+850x10'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="500"}'
+        values: '0+150x10'
     alert_rule_test:
       - eval_time: 10m
         alertname: AutocompleteDegradedAcute
@@ -141,8 +171,10 @@ tests:
   # Tests for AutocompleteDegradedAcute - Negative Test (alert should not fire)
   - interval: 1m
     input_series:
-      - series: 'search_api_v2:autocomplete_successful_requests:ratio_rate5m'
-        values: '1 0.920x14'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="200"}'
+        values: '0+920x14'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="autocompletes", status="500"}'
+        values: '0+80x14'
     alert_rule_test:
       - eval_time: 15m
         alertname: AutocompleteDegradedAcute
