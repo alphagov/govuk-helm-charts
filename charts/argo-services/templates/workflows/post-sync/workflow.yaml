@@ -3,6 +3,11 @@ kind: WorkflowTemplate
 metadata:
   name: post-sync
 spec:
+  workflowMetadata:
+    labels:
+      repoName: "{{ `{{workflow.parameters.repoName}}` }}"
+      application: "{{ `{{workflow.parameters.application}}` }}"
+      imageTag: "{{ `{{workflow.parameters.imageTag}}` }}"
   entrypoint: handle-sync-event
   onExit: exit-handler
   retryStrategy:
