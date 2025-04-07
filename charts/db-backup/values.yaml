@@ -164,7 +164,7 @@ cronjobs:
         - op: backup
 
     link-checker-api-postgres:
-      schedule: "28 1 * * *"  # must begin only after Whitehall sync has completed
+      schedule: "43 23 * * *"
       db: link_checker_api_production
       operations:
         - op: backup
@@ -244,7 +244,7 @@ cronjobs:
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
-      schedule: "28 0 * * *"  # must complete before Link Checker API sync begins
+      schedule: "28 0 * * *"
       db: whitehall_production
       operations:
         - op: backup
@@ -367,7 +367,7 @@ cronjobs:
         - op: backup
 
     link-checker-api-postgres:
-      schedule: "28 2 * * 1-5"  # must begin only after Whitehall sync has completed
+      schedule: "43 1 * * 1-5"
       db: link_checker_api_production
       operations:
         - op: restore
@@ -489,7 +489,7 @@ cronjobs:
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
-      schedule: "28 1 * * 1-5"  # must complete before Link Checker API sync begins
+      schedule: "28 1 * * 1-5"
       db: whitehall_production
       operations:
         - op: restore
@@ -619,7 +619,7 @@ cronjobs:
         - op: backup
 
     link-checker-api-postgres:
-      schedule: "28 4 * * 1"  # must begin only after Whitehall sync has completed
+      schedule: "43 3 * * 1"
       db: link_checker_api_production
       operations:
         - op: restore
@@ -746,7 +746,7 @@ cronjobs:
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
-      schedule: "28 3 * * 1"  # must complete before Link Checker API sync begins
+      schedule: "28 3 * * 1"
       db: whitehall_production
       operations:
         - op: restore
