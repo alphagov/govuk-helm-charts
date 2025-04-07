@@ -60,3 +60,36 @@ groups:
           description: >-
             5 minute rolling success rate for autocomplete requests has dropped below 90% for more
             than 10 minutes.
+
+  - name: SearchApiV2MidMetrics
+    interval: 5m
+    rules:
+      - record: search_api_v2:search_requests:rate1h
+        expr: |
+          sum by (status) (
+            rate(
+              http_requests_total{
+                namespace="apps",
+                job="search-api-v2",
+                controller="searches"
+              }[1h]
+            )
+          )
+      - record: search_api_v2:search_successful_requests:ratio_rate1h
+        expr: |
+          (
+            sum (search_api_v2:search_requests:rate1h{status="200"})
+            /
+            sum (search_api_v2:search_requests:rate1h) > 0
+          ) or vector(1)
+      - alert: SearchDegradedMid
+        expr: search_api_v2:search_successful_requests:ratio_rate1h < 0.999
+        for: 2h
+        labels:
+          severity: warning
+          destination: slack-search-team
+        annotations:
+          summary: "Search API v2: Degraded search performance (mid)"
+          description: >-
+            1 hour rolling success rate for search requests has dropped below 99.9% for more than 2
+            hours.
