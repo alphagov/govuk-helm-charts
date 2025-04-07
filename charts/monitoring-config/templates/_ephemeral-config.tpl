@@ -44,6 +44,7 @@
       "type": "tempo"
       "uid": "tempo"
       "url": "http://tempo-query-frontend.monitoring.svc.cluster.local:3100"
+  "defaultDashboardsTimezone": "Europe/London"
   "env":
     "AWS_ROLE_ARN": "arn:aws:iam::{{ .Values.awsAccountId }}:role/kube-prometheus-stack-grafana-govuk"
   "envValueFrom":
@@ -66,6 +67,9 @@
       "role_attribute_path": "'Admin'"
       "token_url": "https://dex.{{ $domainSuffix }}/token"
       "scopes": "openid profile email groups"
+    "date_formats":
+      "interval_day": "YYYY-MM-DD"
+      "interval_hour": "YYYY-MM-DD HH:mm"
     "server":
       "domain": "grafana.{{ $domainSuffix }}"
       "root_url": "https://%(domain)s"
