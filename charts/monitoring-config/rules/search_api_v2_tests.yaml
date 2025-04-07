@@ -179,3 +179,79 @@ tests:
       - eval_time: 15m
         alertname: AutocompleteDegradedAcute
         exp_alerts: []
+
+  # Tests for search_api_v2:search_requests:rate1h
+  - interval: 5m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0+100x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0+5x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="502"}'
+        values: '0+3x12'
+    promql_expr_test:
+      - expr: round(search_api_v2:search_requests:rate1h{status="200"}, 1E-3)
+        eval_time: 1h
+        exp_samples:
+          - labels: '{status="200"}'
+            value: 0.333
+      - expr: round(search_api_v2:search_requests:rate1h{status="500"}, 1E-3)
+        eval_time: 1h
+        exp_samples:
+          - labels: '{status="500"}'
+            value: 0.017
+      - expr: round(search_api_v2:search_requests:rate1h{status="502"}, 1E-3)
+        eval_time: 1h
+        exp_samples:
+          - labels: '{status="502"}'
+            value: 0.010
+
+# Tests for search_api_v2:search_successful_requests:ratio_rate1h
+  - interval: 5m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0+92x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0+8x12'
+    promql_expr_test:
+      - expr: round(search_api_v2:search_successful_requests:ratio_rate1h, 1E-3)
+        eval_time: 1h
+        exp_samples:
+          - labels: '{}'
+            value: 0.92
+
+  # Test for search_api_v2:search_successful_requests:ratio_rate1h with no requests
+  - interval: 1h
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0x12'
+    promql_expr_test:
+      - expr: search_api_v2:search_successful_requests:ratio_rate1h
+        eval_time: 1h
+        exp_samples:
+          - labels: 'search_api_v2:search_successful_requests:ratio_rate1h'
+            value: 1
+
+  # Tests for SearchDegradedMid
+  - interval: 5m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="200"}'
+        values: '0+990x24 0+980x24'
+      - series: 'http_requests_total{namespace="apps", job="search-api-v2", controller="searches", status="500"}'
+        values: '0+10x24 0+20x24'
+    alert_rule_test:
+      - eval_time: 2h1m
+        alertname: SearchDegradedMid
+        exp_alerts: []
+      - eval_time: 4h1m
+        alertname: SearchDegradedMid
+        exp_alerts:
+          - exp_labels:
+              alertname: SearchDegradedMid
+              severity: warning
+              destination: slack-search-team
+            exp_annotations:
+              summary: "Search API v2: Degraded search performance (mid)"
+              description: "1 hour rolling success rate for search requests has dropped below 99.9% for more than 2 hours."
