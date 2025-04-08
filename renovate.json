@@ -5,6 +5,7 @@
     "helpers:pinGitHubActionDigests"
   ],
   "platformAutomerge": true,
+  "labels": ["dependencies", "renovate"],
   "argocd": {
     "fileMatch": [
       "charts\\/.*\\.yaml$"
