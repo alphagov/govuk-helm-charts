@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Ensure the image tag starts with a v
+if [ "${IMAGE_TAG:0:1}" != "v" ]; then
+  echo "false"
+  exit 0
+fi
+
 # Fetch the YAML configuration
 CONFIG_URL="/repos/alphagov/govuk-helm-charts/contents/charts/app-config/image-tags/${ENVIRONMENT}/${REPO_NAME}?ref=main"
 CONFIG_CONTENT=$(gh api --cache 0 "${CONFIG_URL}" -q '.content' | base64 --decode)
