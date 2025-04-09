@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Ensure the image tag starts with a v
-if [ "${IMAGE_TAG:0:1}" != "v" ]; then
-  echo "false"
+if [[ ! "$IMAGE_TAG" =~ ^v[0-9]+$ ]]; then
+  echo "$0 - not promoting image tag ($IMAGE_TAG) as it doesn't match the required pattern (^v[0-9]+$)"
   exit 0
 fi
 
