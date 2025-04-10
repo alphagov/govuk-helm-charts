@@ -1,4 +1,4 @@
 apiVersion: v2
 name: argo-bootstrap-ephemeral
 description: Bootstraps ArgoCD for ephemeral environments
-version: 0.0.9
+version: 0.0.10
