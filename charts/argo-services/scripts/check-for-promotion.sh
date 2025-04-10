@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ ! "$IMAGE_TAG" =~ ^v[0-9]+$ ]]; then
-  echo "$0 - not promoting image tag ($IMAGE_TAG) as it doesn't match the required pattern (^v[0-9]+$)"
+  echo "false"
   exit 0
 fi
 
