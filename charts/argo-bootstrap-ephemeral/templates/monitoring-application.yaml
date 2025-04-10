@@ -5,6 +5,8 @@ metadata:
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
   annotations:
     repoName: monitoring-config
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: monitoring
   source:
