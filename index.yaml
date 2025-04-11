@@ -2,6 +2,14 @@ apiVersion: v1
 entries:
   argo-bootstrap:
   - apiVersion: v2
+    created: "2025-04-11T11:56:39.988273564Z"
+    description: Bootstraps ArgoCD with initial configuration
+    digest: 6be7d168bcee0b06ce58e403684c5ee96acba3b63bfdcc643d87c7c6dc4c9003
+    name: argo-bootstrap
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-bootstrap-0.3.4/argo-bootstrap-0.3.4.tgz
+    version: 0.3.4
+  - apiVersion: v2
     created: "2025-01-15T16:26:47.594722758Z"
     description: Bootstraps ArgoCD with initial configuration
     digest: f5645047bbf6cdf04fc58d2b4fb424a6ca076edd0ac5675c4fe0b7fee5d89062
@@ -141,4 +149,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.9.3/cluster-secrets-0.9.3.tgz
     version: 0.9.3
-generated: "2025-04-11T11:48:44.612678517Z"
+generated: "2025-04-11T11:56:39.988313198Z"
