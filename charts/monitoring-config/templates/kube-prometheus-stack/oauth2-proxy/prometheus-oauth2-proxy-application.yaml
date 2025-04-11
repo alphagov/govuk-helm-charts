@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: prometheus-oauth2-proxy
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:

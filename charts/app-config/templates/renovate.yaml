@@ -4,6 +4,8 @@ kind: Application
 metadata:
   name: renovate
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: govuk
   source:
