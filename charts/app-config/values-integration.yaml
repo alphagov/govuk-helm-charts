@@ -2584,9 +2584,6 @@ govukApplications:
           memory: 512Mi
       redis:
         enabled: true
-        redisUrlOverride:
-          app: "redis://publishing-api-valkey.integration.govuk-internal.digital:6379"
-          workers: "redis://publishing-api-valkey.integration.govuk-internal.digital:6379"
       cronTasks:
         - name: metrics-report-to-prometheus
           task: "metrics:report_to_prometheus"
@@ -4080,9 +4077,6 @@ govukApplications:
           memory: 512Mi
       redis:
         enabled: true
-        redisUrlOverride:
-          app: "redis://whitehall-admin-redis.integration.govuk-internal.digital:6379"
-          workers: "redis://whitehall-admin-redis.integration.govuk-internal.digital:6379"
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
       nginxProxyReadTimeout: 60s
