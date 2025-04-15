@@ -2585,8 +2585,8 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: "publishing-api-valkey.integration.govuk-internal.digital:6379"
-          workers: "publishing-api-valkey.integration.govuk-internal.digital:6379"
+          app: "redis://publishing-api-valkey.integration.govuk-internal.digital:6379"
+          workers: "redis://publishing-api-valkey.integration.govuk-internal.digital:6379"
       cronTasks:
         - name: metrics-report-to-prometheus
           task: "metrics:report_to_prometheus"
