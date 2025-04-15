@@ -8,3 +8,7 @@ monitoring:
 # ephemeral environment variables
 awsAccountId: "12345678"
 clusterId: "eph-xxxxxx"
+
+fastlyPrometheusExporter:
+  repository: ghcr.io/alphagov/fastly-exporter
+  tag: 0.5.1

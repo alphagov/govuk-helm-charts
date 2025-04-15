@@ -21,6 +21,10 @@ spec:
           key: "fastly-api-token"
         serviceMonitor:
           enabled: true
+        image:
+          repository: {{ .Values.fastlyPrometheusExporter.repository }}
+          tag: {{ .Values.fastlyPrometheusExporter.tag }}
+          pullPolicy: IfNotPresent
         resources:
           requests:
             cpu: 50m
