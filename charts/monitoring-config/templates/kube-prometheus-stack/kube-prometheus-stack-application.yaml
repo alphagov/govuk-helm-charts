@@ -13,8 +13,6 @@ metadata:
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  annotations:
-    argocd.argoproj.io/sync-wave: "-1"
 spec:
   project: default
   source:

@@ -26,3 +26,4 @@ spec:
     syncOptions:
     - ApplyOutOfSyncOnly=true
     - ServerSideApply=true
+    - SkipDryRunOnMissingResource=true
