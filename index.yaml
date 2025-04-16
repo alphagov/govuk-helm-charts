@@ -124,6 +124,14 @@ entries:
     version: 0.0.1
   cluster-secret-store:
   - apiVersion: v2
+    created: "2025-04-16T14:15:54.889526711Z"
+    description: An external-secrets ClusterSecretStore backed by AWS SecretsManager.
+    digest: ffa8b8a9edb61f35d7a17cde310d586eed1226b81dd3b72d0bdaadfc9b9776ee
+    name: cluster-secret-store
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secret-store-0.2.0/cluster-secret-store-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     created: "2021-12-01T11:11:07.902013645Z"
     description: A Helm chart for an external-secrets ClusterSecretStore, integrates
       with AWS SecretsManager
@@ -157,4 +165,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.9.3/cluster-secrets-0.9.3.tgz
     version: 0.9.3
-generated: "2025-04-16T10:37:43.404879553Z"
+generated: "2025-04-16T14:15:54.889567277Z"
