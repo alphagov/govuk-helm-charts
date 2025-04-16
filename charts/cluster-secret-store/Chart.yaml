@@ -1,4 +1,4 @@
 apiVersion: v2
 name: cluster-secret-store
 description: An external-secrets ClusterSecretStore backed by AWS SecretsManager.
-version: 0.1.1
+version: 0.2.0
