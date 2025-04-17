@@ -2490,6 +2490,10 @@ govukApplications:
       dbMigrationEnabled: false
       uploadAssets:
         enabled: false
+      rails:
+        createKeyBaseSecret: false
+      sentry:
+        createSecret: false
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
