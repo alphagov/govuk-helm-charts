@@ -150,7 +150,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[30m]))",
+          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -637,5 +637,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 1
+  "version": 3
 }
