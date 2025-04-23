@@ -150,7 +150,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[30m]))",
+          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -164,7 +164,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
+      "description": "Percentage of requests in the last 6 hours which have gone to graphql vs content-store",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -181,8 +181,40 @@
                 "color": "green"
               },
               {
-                "color": "red",
+                "color": "#508642",
+                "value": 10
+              },
+              {
+                "color": "green",
+                "value": 20
+              },
+              {
+                "color": "green",
+                "value": 30
+              },
+              {
+                "color": "green",
+                "value": 40
+              },
+              {
+                "color": "green",
+                "value": 50
+              },
+              {
+                "color": "green",
+                "value": 60
+              },
+              {
+                "color": "green",
+                "value": 70
+              },
+              {
+                "color": "green",
                 "value": 80
+              },
+              {
+                "color": "green",
+                "value": 90
               }
             ]
           },
@@ -222,69 +254,7 @@
           "refId": "A"
         }
       ],
-      "title": "Proportion of graphql requests",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "description": "Average time content store has taken to respond to requests for content over the past 6 hours.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 15,
-        "y": 0
-      },
-      "id": 7,
-      "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
-      },
-      "pluginVersion": "11.6.0",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "sum by (job) (rate(http_request_duration_seconds_sum{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[6h])) / sum by (job) (rate(http_request_duration_seconds_count{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[6h]))",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Content Store response time (6H)",
+      "title": "Proportion of graphql vs content-store requests",
       "type": "gauge"
     },
     {
@@ -637,5 +607,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 1
+  "version": 3
 }
