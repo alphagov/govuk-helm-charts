@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: govuk
+  finalizers:
+    # Ensure that project is not deleted until it is not referenced by any application
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: ArgoCD project containing GOV.UK applications.
+
+  sourceRepos:
+  - '*'
+
+  # Deny all cluster-scoped resources from being created, except for Namespace
+  # and (for argocd-notifications-secret) external-secrets.io:ClusterExternalSecret.
+  # See argo-services/templates/notifications/secret.yaml.
+  clusterResourceWhitelist:
+  - group: ''
+    kind: Namespace
+  - group: external-secrets.io
+    kind: ClusterExternalSecret
+  - group: ''
+    kind: PersistentVolume
+
+  destinations:
+  - namespace: '*'
+    server: https://kubernetes.default.svc
+
+  orphanedResources:
+    warn: false
