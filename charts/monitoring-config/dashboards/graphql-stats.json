@@ -27,7 +27,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 111,
+  "id": 6726,
   "links": [],
   "panels": [
     {
@@ -343,10 +343,7 @@
       "id": 1,
       "options": {
         "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
+          "calcs": [],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
@@ -427,7 +424,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Total requests per second for both the read-replica and regular content store. Spikes should track fairly evenly with load tests.",
+      "description": "Total requests per second for regular content store. Compare with the visualisation below if you want to see the difference between content-store and graphql traffic.\n\nI've made these two separate and it  was helpful to have a separate Y axis for graphql to stop it being hard to read. ",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -508,10 +505,7 @@
       "id": 2,
       "options": {
         "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
+          "calcs": [],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
@@ -535,10 +529,114 @@
           "expr": "sum(rate(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[$__rate_interval])) by (job)",
           "hide": false,
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "All Document types",
           "range": true,
           "refId": "C"
+        }
+      ],
+      "title": "Total content-store requests per second ",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Total requests per second for the read-replica. Spikes should track fairly evenly with load tests. Should be helpful to compare traffic against jumps in response time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Total (requests/s)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
         },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Errors"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E24D42",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true,
+          "width": 300
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
         {
           "datasource": {
             "type": "prometheus",
@@ -549,12 +647,12 @@
           "expr": "sum(rate(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__rate_interval])) by (job)",
           "hide": false,
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "All Document types",
           "range": true,
           "refId": "D"
         }
       ],
-      "title": "Total requests per second ",
+      "title": "Total graphql requests per second ",
       "type": "timeseries"
     }
   ],
