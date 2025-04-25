@@ -1,3 +1,3 @@
-image_tag: v660-on-pg
+image_tag: 3107b1b55bef61336a0da7ed34ddaa0cd8958b18-on-pg
 automatic_deploys_enabled: true
-promote_deployment: true
+promote_deployment: false
