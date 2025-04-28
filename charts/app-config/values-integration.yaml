@@ -3222,7 +3222,7 @@ govukApplications:
         - name: user-events-import-intraday-events
           task: "user_events:import_intraday_events"
           schedule: "45 05,11,17,23 * * *"
-        - name: user-events-purge-final-week-of-retention-period
+        - name: user-events-purge
           task: "user_events:purge_final_week_of_retention_period"
           schedule: "0 2 * * *"
         - name: quality-monitoring-assert-invariants
