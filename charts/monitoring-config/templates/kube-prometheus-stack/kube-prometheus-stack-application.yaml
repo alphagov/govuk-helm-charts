@@ -11,8 +11,6 @@ kind: Application
 metadata:
   name: kube-prometheus-stack
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
