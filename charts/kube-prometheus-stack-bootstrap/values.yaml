@@ -1,0 +1,10 @@
+monitoringNamespace: monitoring
+monitoring:
+  authorisation:
+    githubOrganisation: alphagov
+    readOnlyGithubTeam: gov-uk
+    readWriteGithubTeam: gov-uk-production-deploy
+
+# ephemeral environment variables
+awsAccountId: "12345678"
+clusterId: "eph-xxxxxx"

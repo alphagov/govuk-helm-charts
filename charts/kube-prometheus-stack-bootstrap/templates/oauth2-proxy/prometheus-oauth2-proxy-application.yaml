@@ -1,8 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: alertmanager-oauth2-proxy
+  name: prometheus-oauth2-proxy
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
@@ -11,7 +13,7 @@ spec:
         | nindent 4 }}
     helm:
       values: |
-{{ include "monitoring-config.oauth2-proxy.config" (merge (dict "app" "alertmanager" "port" 9093) . ) | indent 8 }}
+{{ include "monitoring-config.oauth2-proxy.config" (merge (dict "app" "prometheus" "port" 9090) . ) | indent 8 }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.monitoringNamespace }}
@@ -21,4 +23,3 @@ spec:
       selfHeal: true
     syncOptions:
       - ApplyOutOfSyncOnly=true
-      - PrunePropagationPolicy=orphan
