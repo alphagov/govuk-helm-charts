@@ -3019,14 +3019,14 @@ govukApplications:
           memory: 512Mi
       rails:
         enabled: false
-        redisUrlOverride:
-          app: "redis://search-api-valkey.integration.govuk-internal.digital:6379"
-          workers: "redis://search-api-valkey.integration.govuk-internal.digital:6379"
       nginxClientMaxBodySize: 20M
       uploadAssets:
         enabled: false
       redis:
         enabled: true
+        redisUrlOverride:
+          app: "redis://search-api-valkey.integration.govuk-internal.digital:6379"
+          workers: "redis://search-api-valkey.integration.govuk-internal.digital:6379"
       cronTasks:
         - name: reindex-with-new-schemas
           task: "search:migrate_schema"
