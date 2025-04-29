@@ -506,7 +506,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum by (document_type, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", document_type=~\"$content_store_document_type\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by (document_type, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", document_type=~\"$content_store_document_type\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -1080,5 +1080,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 4
+  "version": 5
 }
