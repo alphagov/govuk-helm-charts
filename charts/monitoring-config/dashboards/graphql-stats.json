@@ -35,6 +35,97 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
+      "description": "10 slowest average response times to content store, broken up by document type",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Value"
+          }
+        ]
+      },
+      "pluginVersion": "11.6.0",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "topk(10, sum by (document_type) (rate(http_request_duration_seconds_sum{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[6h])) / sum by (document_type) (rate(http_request_duration_seconds_count{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[6h])))",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "10 Slowest document types (Last 6 hours)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "description": "Total number of requests to content store, across all pods, for pieces of content over the past 6 hours",
       "fieldConfig": {
         "defaults": {
@@ -61,7 +152,7 @@
         "h": 8,
         "w": 5,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 5,
       "options": {
@@ -126,7 +217,7 @@
         "h": 8,
         "w": 5,
         "x": 5,
-        "y": 0
+        "y": 8
       },
       "id": 4,
       "options": {
@@ -226,7 +317,7 @@
         "h": 8,
         "w": 5,
         "x": 10,
-        "y": 0
+        "y": 8
       },
       "id": 6,
       "options": {
@@ -263,7 +354,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 11,
       "panels": [],
@@ -355,7 +446,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 17
       },
       "id": 12,
       "options": {
@@ -478,7 +569,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 17
       },
       "id": 13,
       "options": {
@@ -598,7 +689,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 2,
       "options": {
@@ -641,7 +732,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 30
       },
       "id": 8,
       "panels": [],
@@ -732,7 +823,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 23
+        "y": 31
       },
       "id": 9,
       "options": {
@@ -855,7 +946,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 23
+        "y": 31
       },
       "id": 10,
       "options": {
@@ -975,7 +1066,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 38
       },
       "id": 7,
       "options": {
@@ -1080,5 +1171,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 4
+  "version": 5
 }
