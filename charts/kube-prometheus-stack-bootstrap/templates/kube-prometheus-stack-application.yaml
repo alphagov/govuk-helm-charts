@@ -1,0 +1,34 @@
+{{- $mergedValues := "" }}
+{{- if eq "ephemeral" .Values.govukEnvironment }}
+{{ $mergedValues = include "monitoring-config.ephemeral-kube-prometheus-stack-config" . }}
+{{- else }}
+{{ $baseValues := fromYaml (.Files.Get "kube-prometheus-stack-values.yaml") }}
+{{ $envValues := fromYaml (.Files.Get (printf "kube-prometheus-stack-values-%s.yaml" .Values.govukEnvironment)) }}
+{{ $mergedValues = toYaml (merge $envValues $baseValues) }}
+{{- end }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    {{- include "monitoring-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "https://prometheus-community.github.io/helm-charts" "chart" "kube-prometheus-stack") )
+        | nindent 4 }}
+    helm:
+      values: |
+        {{ $mergedValues | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.monitoringNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true

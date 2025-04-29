@@ -1,0 +1,42 @@
+"alertmanager":
+  "alertmanagerSpec":
+    "externalUrl": "https://alertmanager.eks.integration.govuk.digital"
+    "podAntiAffinity": ""
+    "podDisruptionBudget":
+      "enabled": false
+    "replicas": 1
+"grafana":
+  "env":
+    "AWS_ROLE_ARN": "arn:aws:iam::210287912431:role/kube-prometheus-stack-grafana-govuk"
+  "grafana.ini":
+    "auth.generic_oauth":
+      "api_url": "https://dex.eks.integration.govuk.digital/userinfo"
+      "auth_url": "https://dex.eks.integration.govuk.digital/auth"
+      "role_attribute_path": "contains(groups[*], 'alphagov:gov-uk')
+        && 'Admin' || contains(groups[*], 'alphagov:gov-uk') && 'Viewer'"
+      "token_url": "https://dex.eks.integration.govuk.digital/token"
+    "server":
+      "domain": "grafana.eks.integration.govuk.digital"
+  "ingress":
+    "hosts":
+      - "grafana.eks.integration.govuk.digital"
+  "replicas": 1
+  "serviceAccount":
+    "annotations":
+      "eks.amazonaws.com/role-arn":
+        "arn:aws:iam::210287912431:role/kube-prometheus-stack-grafana-govuk"
+"prometheus":
+  "prometheusSpec":
+    "externalUrl": "https://prometheus.eks.integration.govuk.digital"
+    "externalLabels":
+      "environment": "integration"
+    "podAntiAffinity": ""
+    "podDisruptionBudget":
+      "enabled": false
+    "replicas": 1
+    "storageSpec":
+      "volumeClaimTemplate":
+        "spec":
+          "resources":
+            "requests":
+              "storage": "250Gi"

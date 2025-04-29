@@ -1,0 +1,230 @@
+{{- if ne .Values.govukEnvironment "ephemeral" }}
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: alertmanagerconfig-general
+spec:
+  route:
+    receiver: 'null'
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 4h
+    groupBy: [alertname, namespace]
+    routes:
+    - matchers:
+        - name: severity
+          value: page
+          matchType: =
+      receiver: 'pagerduty'
+    - matchers:
+        - name: alertname
+          value: SignonApiUserTokenExpirySoon
+          matchType: =
+        - name: environment
+          value: integration|production
+          matchType: =~
+      receiver: 'slack-signon-token-expiry'
+      repeatInterval: 1d
+      groupWait: 12h
+      groupInterval: 12h
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+        - name: alertname
+          value: MirrorFreshnessAlert
+          matchType: =
+      receiver: 'slack-mirror-freshness'
+      repeatInterval: 1d
+      groupWait: 12h
+      groupInterval: 12h
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+      - name: destination
+        value: slack-platform-engineering
+        matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 1d
+      groupWait: 12h
+      groupInterval: 12h
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+      - name: destination
+        value: slack-search-team
+        matchType: =
+      receiver: 'slack-search-team'
+      repeatInterval: 3h
+      groupWait: 1m
+      groupInterval: 30m
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+      - name: destination
+        value: slack-search-quality-monitoring
+        matchType: =
+      receiver: slack-search-quality-monitoring
+      repeatInterval: 24h
+      groupWait: 5m
+      groupInterval: 30m
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+      - name: destination
+        value: slack-chat-notifications
+        matchType: =
+      receiver: 'slack-chat-notifications'
+      repeatInterval: 1d
+      groupWait: 5m
+      groupInterval: 30m
+    - matchers:
+      - name: destination
+        value: slack-cronjob-notifications
+        matchType: =
+      receiver: 'slack-cronjob-notifications'
+      repeatInterval: 1d
+      groupWait: 5m
+      groupInterval: 30m
+    - matchers:
+        - name: destination
+          value: slack-whitehall-notifications
+          matchType: =
+      receiver: 'slack-whitehall-notifications'
+      repeatInterval: 1d
+      groupWait: 5m
+      groupInterval: 30m
+  receivers:
+  - name: 'null'
+  - name: 'pagerduty'
+    pagerdutyConfigs:
+    - routingKey:
+        name: alertmanager-receivers
+        key: pagerduty_routing_key
+      clientURL: "https://alertmanager.{{ .Values.k8sExternalDomainSuffix }}/#/alerts?receiver={{ "{{ .Receiver | urlquery }}" }}"
+      description: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
+  - name: 'slack-signon-token-expiry'
+    slackConfigs:
+    - channel: '#govuk-publishing-platform-system-alerts'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      title: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+      text: >-
+        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+
+        *Environment:* {{ .Values.govukEnvironment }}
+
+        *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
+
+        *Expiring tokens:*
+
+        {{ "{{ range .Alerts -}}" }}
+          • api_user: {{ "`{{ .Labels.api_user }}`, application: `{{ .Labels.application }}`" }}
+        {{ "{{ end }}" }}
+      apiURL: &slack_api_url
+        name: alertmanager-receivers
+        key: slack_api_url
+  - name: 'slack-chat-notifications'
+    slackConfigs:
+    - channel: '#dev-notifications-ai-govuk'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      title: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+      text: >-
+        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+
+        *Environment:* {{ .Values.govukEnvironment }}
+
+        *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
+      apiURL: *slack_api_url
+  - name: 'slack-cronjob-notifications'
+    slackConfigs:
+    - channel: '#dev-notifications-ai-govuk'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      title: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+      text: >-
+        *Summary:* {{ "{{ .CommonAnnotations.summary }}" }}
+
+        *Environment:* {{ .Values.govukEnvironment }}
+
+        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+
+        *ArgoCD Job:* https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/{{ "{{ .CommonAnnotations.cronjob_uri }}" }}
+      apiURL: *slack_api_url
+  - name: 'slack-mirror-freshness'
+    slackConfigs:
+    - channel: '#govuk-platform-support'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      title: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+      text: >-
+        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+
+        *Environment:* {{ .Values.govukEnvironment }}
+
+        *Mirrors*:
+        {{ "{{ range .Alerts -}}" }}
+          • backend: {{ "`{{ .Labels.backend }}`" }}
+        {{ "{{ end }}" }}
+      apiURL: *slack_api_url
+  - name: 'generic-slack-platform-engineering'
+    slackConfigs:
+    - channel: '#govuk-platform-support'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      text: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
+      apiURL: *slack_api_url
+  - name: 'slack-search-team'
+    slackConfigs:
+    - channel: '#govuk-search-improvement-alerts'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      text: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
+      apiURL: *slack_api_url
+  - name: slack-search-quality-monitoring
+    slackConfigs:
+    - channel: '#govuk-search-improvement'
+      sendResolved: true
+      iconEmoji: '{{ `{{ if eq .Status "firing" }}:warning:{{ else }}:white_check_mark:{{ end }}` }}'
+      color: '{{ `{{ if eq .Status "firing" }}#FFFF00{{ else }}#36a64f{{ end }}` }}'
+      title: '{{ `{{ if eq .Status "firing" }}Quality monitoring warning{{ else }}Quality monitoring issues resolved{{ end }}` }}'
+      text: |
+        {{ `{{ if eq .Status "firing" }}
+          {{ len .Alerts.Firing }} invariant dataset(s) have scores lower than 0.95:
+          {{ range .Alerts.Firing }}
+            • {{ .Labels.dataset_name }}: {{ printf "%.2f" .Value }}
+          {{ end }}
+        {{ else }}
+          All invariant datasets have returned to normal levels (0.95 or above).
+        {{ end }}` }}
+      actions:
+      - type: button
+        text: 'View logs in Kibana'
+        url: "https://kibana.logit.io/s/13d1a0b1-f54f-407b-a4e5-f53ba653fac3/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-24h,to:now))&_a=(columns:!(message),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.labels.app_kubernetes_io%2Fname,negate:!f,params:(query:search-api-v2-quality-monitoring-assert-invariants),type:phrase),query:(match_phrase:(kubernetes.labels.app_kubernetes_io%2Fname:search-api-v2-quality-monitoring-assert-invariants)))),sort:!())"
+      apiURL: *slack_api_url
+  - name: 'slack-whitehall-notifications'
+    slackConfigs:
+      - channel: '#govuk-whitehall-experience-tech'
+        sendResolved: true
+        iconURL: https://avatars3.githubusercontent.com/u/3380462
+        title: |-
+          {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
+        text: >-
+          *Description:* {{ "{{ .CommonAnnotations.description }}" }}
+          
+          *Environment:* {{ .Values.govukEnvironment }}
+          
+          *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
+        apiURL: *slack_api_url
+  muteTimeIntervals:
+  - name: inhours
+    timeIntervals:
+    - weekdays: ['monday:friday']
+{{- end }}

@@ -1,0 +1,29 @@
+{{- if .Values.monitoring.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack-bootstrap
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  annotations:
+    repoName: kube-prometheus-stack-bootstrap
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: monitoring
+  source:
+    repoURL: git@github.com/alphagov/govuk-helm-charts
+    path: charts/kube-prometheus-stack-bootstrap
+    helm:
+      values: |
+        {{- toYaml (omit .Values "govukApplications") | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.monitoringNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - ApplyOutOfSyncOnly=true
+    - ServerSideApply=true
+{{- end }}

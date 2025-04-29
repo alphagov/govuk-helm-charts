@@ -1,0 +1,5 @@
+apiVersion: v2
+name: kube-prometheus-stack-bootstrap
+description: "Configuration for kube-prometheus-stack"
+type: application
+version: 0.0.1
