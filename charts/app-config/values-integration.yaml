@@ -2961,6 +2961,11 @@ govukApplications:
         enabled: true
       workers:
         enabled: true
+      cronTasks:
+        # Re-import completion denylist to Discovery Engine so it doesn't drift from local DB
+        - name: reimport-completion-denylist
+          task: "completion:import_denylist"
+          schedule: "56 4 * * 1"  # one hour after the DB is restored from staging
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
