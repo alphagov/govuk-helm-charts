@@ -2477,6 +2477,7 @@ govukApplications:
 
   - name: publishing-api-read-replica
     repoName: publishing-api
+    postSyncWorkflowEnabled: "false"
     helmValues:
       arch: arm64
       appResources:
