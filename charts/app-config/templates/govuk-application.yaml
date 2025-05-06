@@ -3,6 +3,7 @@
 {{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.govukEnvironment $reponame) | fromYaml }}
 {{- $imageTag := $imageTagConfig.image_tag }}
 {{- $promoteDeployment := default "false" $imageTagConfig.promote_deployment }}
+{{- $autoDeploysEnabled := default "false" $imageTagConfig.automatic_deploys_enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -15,6 +16,7 @@ metadata:
     repoName: "{{ $reponame }}"
     imageTag: "{{ $imageTag }}"
     promoteDeployment: "{{ $promoteDeployment }}"
+    automaticDeploysEnabled: "{{ $autoDeploysEnabled }}"
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
     notifications.argoproj.io/subscribe.deployment.grafana: "deployment|{{ .name }}"
     postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
