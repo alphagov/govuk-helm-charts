@@ -2,6 +2,7 @@
 {{- $reponame := .repoName | default .name }}
 {{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.govukEnvironment $reponame) | fromYaml }}
 {{- $imageTag := $imageTagConfig.image_tag }}
+{{- $promoteDeployment := default "false" $imageTagConfig.promote_deployment }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -13,6 +14,7 @@ metadata:
     slackChannel: "{{ .slackChannel }}"
     repoName: "{{ $reponame }}"
     imageTag: "{{ $imageTag }}"
+    promoteDeployment: "{{ $promoteDeployment }}"
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
     notifications.argoproj.io/subscribe.deployment.grafana: "deployment|{{ .name }}"
     postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
