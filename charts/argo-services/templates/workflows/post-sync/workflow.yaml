@@ -8,6 +8,7 @@ spec:
       repoName: "{{ `{{workflow.parameters.repoName}}` }}"
       application: "{{ `{{workflow.parameters.application}}` }}"
       imageTag: "{{ `{{workflow.parameters.imageTag}}` }}"
+      promoteDeployment: "{{ `{{workflow.parameters.promoteDeployment}}` }}"
   entrypoint: handle-sync-event
   onExit: exit-handler
   retryStrategy:
@@ -22,6 +23,7 @@ spec:
       - name: application
       - name: repoName
       - name: imageTag
+      - name: promoteDeployment
   podSpecPatch: |
     containers:
       - name: main

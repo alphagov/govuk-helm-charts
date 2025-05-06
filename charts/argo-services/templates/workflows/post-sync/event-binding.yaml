@@ -19,3 +19,6 @@ spec:
         - name: imageTag
           valueFrom:
             event: payload.imageTag
+        - name: promoteDeployment
+          valueFrom:
+            event: payload.promoteDeployment
