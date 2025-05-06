@@ -2327,6 +2327,11 @@ govukApplications:
             secretKeyRef:
               name: publisher-fact-check-email-account
               key: FACT_CHECK_PASSWORD
+        - name: FACT_CHECK_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: publisher-fact-check-email-account
+              key: FACT_CHECK_API_KEY
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
