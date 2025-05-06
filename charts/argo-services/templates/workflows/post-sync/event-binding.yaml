@@ -22,3 +22,6 @@ spec:
         - name: promoteDeployment
           valueFrom:
             event: payload.promoteDeployment
+        - name: automaticDeploysEnabled
+          valueFrom:
+            event: payload.automaticDeploysEnabled

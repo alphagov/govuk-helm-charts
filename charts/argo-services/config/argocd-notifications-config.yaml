@@ -20,7 +20,8 @@ template.send-argo-events-webhook: |
           "state": "{{.app.status.operationState.phase}}",
           "repoName": "{{.app.metadata.annotations.repoName}}",
           "imageTag": "{{.app.metadata.annotations.imageTag}}",
-          "promoteDeployment": "{{.app.metadata.annotations.promoteDeployment}}"
+          "promoteDeployment": "{{.app.metadata.annotations.promoteDeployment}}",
+          "automaticDeploysEnabled": "{{.app.metadata.annotations.automaticDeploysEnabled}}"
         }
       method: "POST"
       path: "/api/v1/events/apps/post-sync"
