@@ -7,7 +7,6 @@ data:
     {
       "repositories": [
         "alphagov/govuk-helm-charts",
-        "alphagov/govuk-infrastructure",
-        "alphagov/publishing-api"
+        "alphagov/govuk-infrastructure"
       ]
     }
