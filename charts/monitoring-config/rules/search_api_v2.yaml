@@ -93,3 +93,36 @@ groups:
           description: >-
             1 hour rolling success rate for search requests has dropped below 99.9% for more than 2
             hours.
+
+  - name: SearchApiV2LongMetrics
+    interval: 1h
+    rules:
+      - record: search_api_v2:search_requests:rate24h
+        expr: |
+          sum by (status) (
+            rate(
+              http_requests_total{
+                namespace="apps",
+                job="search-api-v2",
+                controller="searches"
+              }[24h]
+            )
+          )
+      - record: search_api_v2:search_successful_requests:ratio_rate24h
+        expr: |
+          (
+            sum (search_api_v2:search_requests:rate24h{status="200"})
+            /
+            sum (search_api_v2:search_requests:rate24h) > 0
+          ) or vector(1)
+      - alert: SearchDegradedLong
+        expr: search_api_v2:search_successful_requests:ratio_rate24h < 0.9999
+        for: 24h
+        labels:
+          severity: warning
+          destination: slack-search-team
+        annotations:
+          summary: "Search API v2: Degraded search performance (long)"
+          description: >-
+            24 hour rolling success rate for search requests has dropped below 99.99% for more than 24
+            hours.
