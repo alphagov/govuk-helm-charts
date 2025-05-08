@@ -2760,6 +2760,10 @@ govukApplications:
             secretKeyRef:
               name: slack-webhook-url
               key: url
+      serviceAccount:
+        enabled: true
+        create: false
+        name: release-assumer
 
   - name: router
     helmValues:
