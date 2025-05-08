@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-release
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: {{ .Values.gather.replicaCount }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-release
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-release
+        app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+    spec:
+      serviceAccountName: ckan
+      containers:
+        - name: release
+          # image: 'local-registry:62042/release:0.2.0'
+          image: ghcr.io/kentsanggds/release:0.2.0
+          imagePullPolicy: Always
+          command: ["/bin/sh", "-c"]
+          args: ["sleep 30000"]
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 900
+            runAsGroup: 900
+            seccompProfile:
+              type: RuntimeDefault
+            # allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            # runAsUser: 0
+            # runAsGroup: 0
+            allowPrivilegeEscalation: false
+            # capabilities:
+            #   add: ["NET_ADMIN"] 
