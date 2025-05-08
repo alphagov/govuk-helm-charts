@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: release-assumed
+rules:
+  - apiGroups: [argoproj.io]
+    resources: [applications]
+    verbs: [get, watch, list]
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [get, watch, list]
+  - apiGroups: [apps]
+    resources: [deployments]
+    verbs: [get, watch, list]
