@@ -27,7 +27,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6726,
+  "id": 6815,
   "links": [],
   "panels": [
     {
@@ -35,7 +35,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "10 slowest average response times to content store, broken up by document type",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -46,7 +45,6 @@
             "cellOptions": {
               "type": "auto"
             },
-            "filterable": false,
             "inspect": false
           },
           "mappings": [],
@@ -68,36 +66,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Time"
+              "options": "Difference percent"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "document_type"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Document Type"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Average Response Time (ms)"
+                "id": "unit",
+                "value": "percent"
               }
             ]
           }
@@ -109,7 +83,7 @@
         "x": 0,
         "y": 0
       },
-      "id": 14,
+      "id": 16,
       "options": {
         "cellHeight": "sm",
         "footer": {
@@ -120,144 +94,83 @@
           ],
           "show": false
         },
+        "frameIndex": 0,
         "showHeader": true,
         "sortBy": [
           {
             "desc": true,
-            "displayName": "Value"
+            "displayName": "Difference percent"
           }
         ]
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "topk(10, sum by (document_type) (rate(http_request_duration_seconds_sum{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[6h])) / sum by (document_type) (rate(http_request_duration_seconds_count{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[6h])))",
+          "expr": "sum(rate(http_request_duration_seconds_sum{job=\"content-store\", controller=\"content_items\", action=\"show\"}[$__range]))\n  by (document_type)\n/\nsum(rate(http_request_duration_seconds_count{job=\"content-store\", controller=\"content_items\", action=\"show\"}[$__range]))\n  by (document_type)\n",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "\nsum(rate(http_request_duration_seconds_sum{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n    by (document_type)\n  /\n  sum(rate(http_request_duration_seconds_count{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n    by (document_type)\n",
           "format": "table",
           "instant": true,
-          "interval": "",
           "legendFormat": "__auto",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "10 Slowest Content Store document types (Last 6 hours)",
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "description": "10 slowest average response times to GraphQL, broken up by document type",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "filterable": false,
-            "inspect": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Average Response Time (ms)"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "document_type"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Document Type"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 15,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": false,
-            "displayName": "Document type"
-          }
-        ]
-      },
-      "pluginVersion": "11.6.0",
-      "targets": [
+      "title": "GraphQL vs. Content-Store average request times",
+      "transformations": [
         {
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "topk(10, sum by (document_type) (rate(http_request_duration_seconds_sum{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h])) / sum by (document_type) (rate(http_request_duration_seconds_count{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h])))",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "A"
+          "id": "joinByField",
+          "options": {
+            "byField": "document_type",
+            "mode": "inner"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Time 1": "",
+              "Time 2": "",
+              "Value #A": "graphql time",
+              "Value #B": "content-store time"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "diffperc"
+            }
+          }
         }
       ],
-      "title": "10 Slowest GraphQL document types (Last 6 hours)",
       "type": "table"
     },
     {
@@ -311,7 +224,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "editorMode": "code",
@@ -376,7 +289,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "editorMode": "code",
@@ -474,7 +387,7 @@
         "showThresholdMarkers": false,
         "sizing": "auto"
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "editorMode": "code",
@@ -604,7 +517,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -727,7 +640,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -845,7 +758,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -981,7 +894,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -1104,7 +1017,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -1222,7 +1135,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.6.0",
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -1310,5 +1223,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 5
+  "version": 6
 }
