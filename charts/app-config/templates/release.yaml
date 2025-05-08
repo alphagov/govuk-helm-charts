@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
     path: charts/release
-    targetRevision: HEAD
+    targetRevision: test-release
     helm:
       values: |
         awsAccountId: "{{ .Values.awsAccountId }}"
