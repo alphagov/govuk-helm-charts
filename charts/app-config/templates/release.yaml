@@ -13,7 +13,7 @@ spec:
     targetRevision: HEAD
     helm:
       values: |
-        awsAccountId: {{ .Values.awsAccountId }}
+        awsAccountId: "{{ .Values.awsAccountId }}"
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.argoNamespace }}
