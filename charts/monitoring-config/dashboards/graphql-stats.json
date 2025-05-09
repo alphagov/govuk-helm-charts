@@ -169,6 +169,31 @@
               "reducer": "diffperc"
             }
           }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Difference time (ms)",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "graphql time"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "content-store time"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
         }
       ],
       "type": "table"
@@ -1223,5 +1248,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 6
+  "version": 7
 }
