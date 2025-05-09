@@ -74,6 +74,45 @@
                 "value": "percent"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": ""
+            },
+            "properties": []
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "GraphQL Requests"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Content Store Requests"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
           }
         ]
       },
@@ -133,6 +172,36 @@
           "legendFormat": "__auto",
           "range": false,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by (document_type) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h]))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by (document_type) (increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", status=\"200\"}[6h]))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "D"
         }
       ],
       "title": "GraphQL vs. Content-Store average request times",
@@ -149,15 +218,29 @@
           "options": {
             "excludeByName": {
               "Time 1": true,
-              "Time 2": true
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true
             },
             "includeByName": {},
-            "indexByName": {},
+            "indexByName": {
+              "Time 1": 5,
+              "Time 2": 6,
+              "Time 3": 7,
+              "Time 4": 8,
+              "Value #A": 2,
+              "Value #B": 1,
+              "Value #C": 3,
+              "Value #D": 4,
+              "document_type": 0
+            },
             "renameByName": {
               "Time 1": "",
               "Time 2": "",
               "Value #A": "graphql time",
-              "Value #B": "content-store time"
+              "Value #B": "content-store time",
+              "Value #C": "GraphQL Requests",
+              "Value #D": "Content Store Requests"
             }
           }
         },
@@ -166,6 +249,10 @@
           "options": {
             "mode": "reduceRow",
             "reduce": {
+              "include": [
+                "content-store time",
+                "graphql time"
+              ],
               "reducer": "diffperc"
             }
           }
@@ -193,6 +280,23 @@
             "reduce": {
               "reducer": "sum"
             }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Content Store Requests": 6,
+              "Difference percent": 3,
+              "Difference time (ms)": 4,
+              "GraphQL Requests": 5,
+              "content-store time": 1,
+              "document_type": 0,
+              "graphql time": 2
+            },
+            "renameByName": {}
           }
         }
       ],
@@ -1248,5 +1352,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 7
+  "version": 8
 }
