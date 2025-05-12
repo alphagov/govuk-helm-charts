@@ -1731,10 +1731,6 @@ govukApplications:
         requests:
           cpu: 1
           memory: 1Gi
-      cronJobs:
-        - name: govuk-e2e-tests
-          schedule: "*/10 7-19 * * 1-5"
-          project: main
 
   - name: hmrc-manuals-api
     helmValues:
