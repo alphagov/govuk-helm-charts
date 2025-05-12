@@ -118,7 +118,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 18,
         "x": 0,
         "y": 0
       },
@@ -1352,5 +1352,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 8
+  "version": 9
 }
