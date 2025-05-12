@@ -17,7 +17,7 @@ spec:
       values: |
         {{ $envValues | nindent 8 }}
         existingSecret:
-          name: "fastly-api-token"
+          name: "govuk-fastly-api"
           key: "fastly-api-token"
         serviceMonitor:
           enabled: true
