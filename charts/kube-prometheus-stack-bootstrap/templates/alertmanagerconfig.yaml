@@ -61,16 +61,6 @@ spec:
         - inhours
     - matchers:
       - name: destination
-        value: slack-search-quality-monitoring
-        matchType: =
-      receiver: slack-search-quality-monitoring
-      repeatInterval: 24h
-      groupWait: 5m
-      groupInterval: 30m
-      activeTimeIntervals:
-        - inhours
-    - matchers:
-      - name: destination
         value: slack-chat-notifications
         matchType: =
       receiver: 'slack-chat-notifications'
