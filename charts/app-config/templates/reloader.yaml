@@ -16,12 +16,13 @@ spec:
         reloader:
           readOnlyRootFilesystem: true
           reloadStrategy: annotations
-          containerSecurityContext:
-            capabilities:
-              drop:
-                - ALL
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
+          deployment:
+            containerSecurityContext:
+              capabilities:
+                drop:
+                  - ALL
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
 
   destination:
     server: https://kubernetes.default.svc
