@@ -1390,6 +1390,11 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
+        - name: OS_MAPS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: frontend-os-maps-api
+              key: api_key
         - name: WEB_CONCURRENCY
           value: '4'
         - name: PLEK_SERVICE_PUBLISHING_API_URI
@@ -1488,6 +1493,11 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
+        - name: OS_MAPS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: frontend-os-maps-api
+              key: api_key
 
   - name: government-frontend
     helmValues:
