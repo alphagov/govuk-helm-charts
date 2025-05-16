@@ -44,9 +44,9 @@ spec:
         value: slack-platform-engineering
         matchType: =
       receiver: 'generic-slack-platform-engineering'
-      repeatInterval: 1d
-      groupWait: 12h
-      groupInterval: 12h
+      repeatInterval: 3h
+      groupWait: 1m
+      groupInterval: 30m
       activeTimeIntervals:
         - inhours
     - matchers:
