@@ -1,0 +1,15 @@
+groups:
+  - name: ArgoWorkflows
+    rules:
+      - alert: WorkflowRunsFailing
+        expr: |
+          delta(argo_workflows_gauge{status="Failed"}[1h]) > 0
+        labels:
+          severity: warning
+          destination: slack-platform-engineering
+        annotations:
+          summary: Argo Workflow runs have Failed
+          description: >-
+            One or more workflow runs in Argo Workflows ({{ .ExternalLabels.environment }}) have failed in the past hour
+
+            https://argo-workflows.eks.{{ .ExternalLabels.environment }}.govuk.digital
