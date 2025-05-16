@@ -1,0 +1,36 @@
+rule_files:
+  - argo_workflows.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1h
+    input_series:
+      - series: >-
+          argo_workflows_gauge{status="Failed"}
+        values: '0'
+    alert_rule_test:
+      - alertname: WorkflowRunsFailing
+        eval_time: 5m
+        exp_alerts: []
+  - interval: 30m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          argo_workflows_gauge{status="Failed"}
+        values: '0+5x5'
+    alert_rule_test:
+      - alertname: WorkflowRunsFailing
+        eval_time: 2h
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: slack-platform-engineering
+              status: Failed
+            exp_annotations:
+              summary: Argo Workflow runs have Failed
+              description: >-
+                One or more workflow runs in Argo Workflows (test) have failed in the past hour
+
+                https://argo-workflows.eks.test.govuk.digital
