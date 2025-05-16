@@ -237,8 +237,8 @@
             "renameByName": {
               "Time 1": "",
               "Time 2": "",
-              "Value #A": "graphql time",
-              "Value #B": "content-store time",
+              "Value #A": "GraphQL time",
+              "Value #B": "Content Store time",
               "Value #C": "GraphQL Requests",
               "Value #D": "Content Store Requests"
             }
@@ -250,8 +250,8 @@
             "mode": "reduceRow",
             "reduce": {
               "include": [
-                "content-store time",
-                "graphql time"
+                "Content Store time",
+                "GraphQL time"
               ],
               "reducer": "diffperc"
             }
@@ -265,14 +265,14 @@
               "left": {
                 "matcher": {
                   "id": "byName",
-                  "options": "graphql time"
+                  "options": "GraphQL time"
                 }
               },
               "operator": "-",
               "right": {
                 "matcher": {
                   "id": "byName",
-                  "options": "content-store time"
+                  "options": "Content Store time"
                 }
               }
             },
@@ -292,9 +292,9 @@
               "Difference percent": 3,
               "Difference time (ms)": 4,
               "GraphQL Requests": 5,
-              "content-store time": 1,
+              "Content Store time": 1,
               "document_type": 0,
-              "graphql time": 2
+              "GraphQL time": 2
             },
             "renameByName": {}
           }
@@ -307,7 +307,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Total number of requests to content store, across all pods, for pieces of content over the past 6 hours",
+      "description": "Total number of requests to Content Store, across all pods, for pieces of content over the past 6 hours",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -363,7 +363,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total requests to content store (6h)",
+      "title": "Total requests to Content Store (6h)",
       "type": "stat"
     },
     {
@@ -371,7 +371,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Total number of graphql requests over the last 6 hours",
+      "description": "Total number of GraphQL requests over the last 6 hours",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -428,7 +428,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total graphql requests (6 hours)",
+      "title": "Total GraphQL requests (6 hours)",
       "type": "stat"
     },
     {
@@ -436,7 +436,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Percentage of requests in the last 6 hours which have gone to graphql vs content-store",
+      "description": "Percentage of requests in the last 6 hours which have gone to GraphQL vs Content Store",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -526,7 +526,7 @@
           "refId": "A"
         }
       ],
-      "title": "Proportion of graphql vs content-store requests",
+      "title": "Proportion of GraphQL vs Content Store requests",
       "type": "gauge"
     },
     {
@@ -660,7 +660,7 @@
           "instant": false,
           "interval": "",
           "legendFormat": "{{document_type}}",
-          "refId": "Graph-ql median"
+          "refId": "Content Store median"
         }
       ],
       "title": "Median Request Duration",
@@ -778,12 +778,12 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum by (document_type, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", document_type=~\"$content_store_document_type\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by (document_type, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", document_type=~\"$content_store_document_type\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "{{document_type}}",
-          "refId": "Graph-ql median"
+          "refId": "Content Store 99th percentile"
         }
       ],
       "title": "99% Request Duration",
@@ -794,7 +794,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Total requests per second for regular content store. Compare with the visualisation below if you want to see the difference between content-store and graphql traffic.\n\nI've made these two separate and it  was helpful to have a separate Y axis for graphql to stop it being hard to read. ",
+      "description": "Total requests per second for regular Content Store. Compare with the visualisation below if you want to see the difference between Content Store and GraphQL traffic.\n\nI've made these two separate and it  was helpful to have a separate Y axis for GraphQL to stop it being hard to read. ",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -904,7 +904,7 @@
           "refId": "C"
         }
       ],
-      "title": "Total content-store requests per second ",
+      "title": "Total Content Store requests per second ",
       "type": "timeseries"
     },
     {
@@ -1037,7 +1037,7 @@
           "instant": false,
           "interval": "",
           "legendFormat": "{{document_type}}",
-          "refId": "Graph-ql median"
+          "refId": "GraphQL median"
         }
       ],
       "title": "Median Request Duration",
@@ -1160,7 +1160,7 @@
           "instant": false,
           "interval": "",
           "legendFormat": "{{document_type}}",
-          "refId": "Graph-ql median"
+          "refId": "GraphQL 99th percentile"
         }
       ],
       "title": "99% Request Duration",
@@ -1281,7 +1281,7 @@
           "refId": "D"
         }
       ],
-      "title": "Total graphql requests per second ",
+      "title": "Total GraphQL requests per second ",
       "type": "timeseries"
     }
   ],
@@ -1352,5 +1352,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 9
+  "version": 10
 }
