@@ -26,7 +26,7 @@ tests:
         exp_alerts:
           - exp_labels:
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-low-priority
               status: Failed
             exp_annotations:
               summary: Argo Workflow runs have Failed
