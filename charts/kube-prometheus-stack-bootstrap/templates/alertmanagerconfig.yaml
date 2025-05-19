@@ -51,6 +51,16 @@ spec:
         - inhours
     - matchers:
       - name: destination
+        value: slack-platform-engineering-low-priority
+        matchType: =
+      receiver: 'generic-slack-platform-engineering-low-priority'
+      repeatInterval: 3h
+      groupWait: 1m
+      groupInterval: 30m
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+      - name: destination
         value: slack-search-team
         matchType: =
       receiver: 'slack-search-team'
@@ -165,6 +175,14 @@ spec:
   - name: 'generic-slack-platform-engineering'
     slackConfigs:
     - channel: '#govuk-platform-support'
+      sendResolved: true
+      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      text: |-
+        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
+      apiURL: *slack_api_url
+  - name: 'generic-slack-platform-engineering-low-priority'
+    slackConfigs:
+    - channel: '#govuk-platform-engineering-low-priority-alarms'
       sendResolved: true
       iconURL: https://avatars3.githubusercontent.com/u/3380462
       text: |-
