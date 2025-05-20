@@ -180,7 +180,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (document_type) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h]))",
+          "expr": "sum by (document_type) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -195,7 +195,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (document_type) (increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", status=\"200\"}[6h]))",
+          "expr": "sum by (document_type) (increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", status=\"200\"}[$__range]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -289,12 +289,12 @@
             "includeByName": {},
             "indexByName": {
               "Content Store Requests": 6,
+              "Content Store time": 1,
               "Difference percent": 3,
               "Difference time (ms)": 4,
               "GraphQL Requests": 5,
-              "Content Store time": 1,
-              "document_type": 0,
-              "GraphQL time": 2
+              "GraphQL time": 2,
+              "document_type": 0
             },
             "renameByName": {}
           }
@@ -307,7 +307,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Total number of requests to Content Store, across all pods, for pieces of content over the past 6 hours",
+      "description": "Total number of requests to Content Store, across all pods, for pieces of content",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -357,13 +357,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", status=\"200\"}[6h]))",
+          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", status=\"200\"}[$__range]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Total requests to Content Store (6h)",
+      "title": "Total requests to Content Store",
       "type": "stat"
     },
     {
@@ -371,7 +371,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Total number of GraphQL requests over the last 6 hours",
+      "description": "Total number of GraphQL requests",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -422,13 +422,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h]))",
+          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Total GraphQL requests (6 hours)",
+      "title": "Total GraphQL requests",
       "type": "stat"
     },
     {
@@ -436,7 +436,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Percentage of requests in the last 6 hours which have gone to GraphQL vs Content Store",
+      "description": "Percentage of requests which have gone to GraphQL vs Content Store",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -520,7 +520,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "((sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h]))) / (sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[6h])) + sum(increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[6h])))) * 100",
+          "expr": "((sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))) / (sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range])) + sum(increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[$__range])))) * 100",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1352,5 +1352,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 10
+  "version": 11
 }
