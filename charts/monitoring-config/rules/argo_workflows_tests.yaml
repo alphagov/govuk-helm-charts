@@ -31,6 +31,6 @@ tests:
             exp_annotations:
               summary: Argo Workflow runs have Failed
               description: >-
-                One or more workflow runs in Argo Workflows (test) have failed in the past hour
+                Two or more workflow runs in Argo Workflows (test) have failed in the past hour
 
                 https://argo-workflows.eks.test.govuk.digital

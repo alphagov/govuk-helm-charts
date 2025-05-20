@@ -3,13 +3,13 @@ groups:
     rules:
       - alert: WorkflowRunsFailing
         expr: |
-          increase(argo_workflows_gauge{status="Failed"}[1h]) > 0
+          increase(argo_workflows_gauge{status="Failed"}[1h]) >= 2
         labels:
           severity: warning
           destination: slack-platform-engineering-low-priority
         annotations:
           summary: Argo Workflow runs have Failed
           description: >-
-            One or more workflow runs in Argo Workflows ({{ .ExternalLabels.environment }}) have failed in the past hour
+            Two or more workflow runs in Argo Workflows ({{ .ExternalLabels.environment }}) have failed in the past hour
 
             https://argo-workflows.eks.{{ .ExternalLabels.environment }}.govuk.digital
