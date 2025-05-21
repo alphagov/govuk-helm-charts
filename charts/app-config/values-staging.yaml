@@ -2846,6 +2846,8 @@ govukApplications:
         enabled: false
       redis:
         enabled: true
+        redisUrlOverride:
+          app: "redis://search-api-valkey.staging.govuk-internal.digital:6379"
       cronTasks:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
