@@ -7,7 +7,7 @@ tests:
   - interval: 1h
     input_series:
       - series: >-
-          argo_workflows_gauge{status="Failed"}
+          argo_workflows_total_count{phase="Failed"}
         values: '0'
     alert_rule_test:
       - alertname: WorkflowRunsFailing
@@ -18,7 +18,7 @@ tests:
       environment: test
     input_series:
       - series: >-
-          argo_workflows_gauge{status="Failed"}
+          argo_workflows_total_count{phase="Failed"}
         values: '0+5x5'
     alert_rule_test:
       - alertname: WorkflowRunsFailing
@@ -27,7 +27,7 @@ tests:
           - exp_labels:
               severity: warning
               destination: slack-platform-engineering-low-priority
-              status: Failed
+              phase: Failed
             exp_annotations:
               summary: Argo Workflow runs have Failed
               description: >-
