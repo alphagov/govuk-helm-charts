@@ -211,12 +211,12 @@ spec:
       channel: "#govuk-search-alerts"
       sendResolved: true
       iconEmoji: >-
-        {{ "{{ if and (eq .Status \"firing\") (eq .CommonLabels.severity \"critical\") }}" }}:octagonal_sign:{{ else if eq .Status \"firing\" }}:warning:{{ "{{ else }}" }}:white_tick:{{ "{{ end }}" }}
+        {{ "{{ if and (eq .Status \"firing\") (eq .CommonLabels.severity \"critical\") }}:octagonal_sign:{{ else if eq .Status \"firing\" }}:warning:{{ else }}:white_tick:{{ end }}" }}
       color: >-
-        {{ "{{ if and (eq .Status \"firing\") (eq .CommonLabels.severity \"critical\") }}" }}#ff0000}}#ffa500{{ "{{ else }}" }}#008000{{ "{{ end }}" }}
+        {{ "{{ if and (eq .Status \"firing\") (eq .CommonLabels.severity \"critical\") }}#ff0000{{ else if eq .Status \"firing\" }}#ffa500{{ else }}#008000{{ end }}" }}
       username: "Search alerts"
       title: >-
-        {{ "{{ if eq .Status \"firing\" }}{{ .Alerts.Firing | len }} problem(s) in {{ .CommonLabels.environment }}{{ else }}All problems resolved in {{ .CommonLabels.environment }}{{ end }}]" }}
+        {{ "{{ if eq .Status \"firing\" }}{{ .Alerts.Firing | len }} problem(s) in {{ .CommonLabels.environment }}{{ else }}All problems resolved in {{ .CommonLabels.environment }}{{ end }}" }}
       fields:
         - title: "Environment"
           value: "{{ "{{ .CommonLabels.environment }}" }}"
