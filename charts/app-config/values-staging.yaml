@@ -3830,6 +3830,7 @@ govukApplications:
         enabled: true
         redisUrlOverride:
           app: "redis://whitehall-admin-valkey.staging.govuk-internal.digital:6379"
+          workers: "redis://whitehall-admin-valkey.staging.govuk-internal.digital:6379"
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
       nginxProxyReadTimeout: 60s
