@@ -63,10 +63,27 @@ spec:
       - name: destination
         value: slack-search-team
         matchType: =
-      receiver: 'slack-search-team'
-      repeatInterval: 3h
-      groupWait: 1m
-      groupInterval: 30m
+      - name: severity
+        value: critical
+        matchType: =
+      - name: environment
+        value: production
+        matchType: =
+      receiver: 'slack-search-team-main-channel'
+      groupBy: [alertname, severity, environment]
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 6h
+      continue: true  # Allow alert to also fall through to the alerts channel receiver
+    - matchers:
+      - name: destination
+        value: slack-search-team
+        matchType: =
+      receiver: 'slack-search-team-alerts-channel'
+      groupBy: [alertname, severity, environment]
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 1d
       activeTimeIntervals:
         - inhours
     - matchers:
@@ -188,14 +205,55 @@ spec:
       text: |-
         {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
       apiURL: *slack_api_url
-  - name: 'slack-search-team'
+  - name: 'slack-search-team-alerts-channel'
     slackConfigs:
-    - channel: '#govuk-search-improvement-alerts'
+    - &slack-search-team-alerts-channel
+      channel: "#govuk-search-alerts"
       sendResolved: true
-      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      iconEmoji: >-
+        {{ "{{ if eq .Status \"firing\" }}" }}
+            {{ "{{ if eq .CommonLabels.severity \"critical\" }}" }}
+              :octagonal_sign:
+            {{ "{{ else }}" }}
+              :warning:
+            {{ "{{ end }}" }}
+        {{ "{{ else }}" }}
+          :white_tick:
+        {{ "{{ end }}" }}
+      color: >-
+        {{ "{{ if eq .Status \"firing\" }}" }}
+            {{ "{{ if eq .CommonLabels.severity \"critical\" }}" }}
+              #ff0000
+            {{ "{{ else }}" }}
+              #ffa500
+            {{ "{{ end }}" }}
+        {{ "{{ else }}" }}
+          #008000
+        {{ "{{ end }}" }}
+      username: "Search alerts"
+      title: "{{ "{{ .CommonLabels.environment | title }}" }} problems"
+      fields:
+        - title: "Environment"
+          value: "{{ "{{ .CommonLabels.environment }}" }}"
+          short: true
       text: |-
-        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
+        {{ "{{ range .Alerts }}" }}
+          {{ "{{ if eq .Status \"firing\" }}" }}
+            • *{{ "{{ .Annotations.summary }}" }}*: {{ "{{ .Annotations.description }}" }}
+          {{ "{{ end }}" }}
+        {{ "{{ end }}" }}
+      actions:
+        - text: ":chart_with_downwards_trend: Dashboard"
+          type: button
+          url: "https://grafana.eks.{{ "{{ .CommonLabels.environment }}" }}.govuk.digital/d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser"
+        - text: ":book: Runbook"
+          type: button
+          url: "https://docs.publishing.service.gov.uk/repos/search-api-v2.html"
       apiURL: *slack_api_url
+  - name: "slack-search-team-main-channel"
+    slackConfigs:
+    - <<: *slack-search-team-alerts-channel
+      channel: "#govuk-search"
   - name: 'slack-whitehall-notifications'
     slackConfigs:
       - channel: '#govuk-whitehall-experience-tech'
