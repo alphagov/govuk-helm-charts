@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: WorkflowRunsFailing
         expr: |
-          increase(argo_workflows_gauge{status="Failed"}[1h]) >= 2
+          increase(argo_workflows_total_count{phase="Failed"}[1h]) >= 2
         labels:
           severity: warning
           destination: slack-platform-engineering-low-priority
