@@ -58,7 +58,7 @@ _alb-ingress-group-backend: &alb-ingress-group-backend
     access_logs.s3.prefix=elb/backend
 
 emergency-banner-redis:
-  - &emergency-banner-redis redis://whitehall-admin-valkey.integration.govuk-internal.digital:6379/1
+  - &emergency-banner-redis redis://whitehall-admin-redis/1
 
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 
@@ -4116,8 +4116,8 @@ govukApplications:
       redis:
         enabled: true
         redisUrlOverride:
-          app: "redis://whitehall-admin-valkey.integration.govuk-internal.digital:6379"
-          workers: "redis://whitehall-admin-valkey.integration.govuk-internal.digital:6379"
+          app: "redis://whitehall-admin-redis.integration.govuk-internal.digital:6379"
+          workers: "redis://whitehall-admin-redis.integration.govuk-internal.digital:6379"
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
       nginxProxyReadTimeout: 60s
@@ -4191,7 +4191,7 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
         - name: TAXONOMY_CACHE_REDIS_URL
-          value: "redis://whitehall-admin-valkey.integration.govuk-internal.digital:6379/2"
+          value: redis://whitehall-admin-redis/2
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
