@@ -116,7 +116,7 @@ tests:
         exp_alerts:
           - exp_labels:
               alertname: SearchDegradedAcute
-              severity: warning
+              severity: critical
               destination: slack-search-team
             exp_annotations:
               summary: "Search API v2: Degraded search performance (acute)"
@@ -211,7 +211,7 @@ tests:
         exp_alerts:
           - exp_labels:
               alertname: SearchDegradedMid
-              severity: warning
+              severity: critical
               destination: slack-search-team
             exp_annotations:
               summary: "Search API v2: Degraded search performance (mid)"
@@ -278,7 +278,7 @@ tests:
         exp_alerts:
           - exp_labels:
               alertname: SearchDegradedLong
-              severity: warning
+              severity: critical
               destination: slack-search-team
             exp_annotations:
               summary: "Search API v2: Degraded search performance (long)"

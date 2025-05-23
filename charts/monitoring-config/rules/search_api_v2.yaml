@@ -42,7 +42,7 @@ groups:
         expr: search_api_v2:search_successful_requests:ratio_rate5m < 0.99
         for: 10m
         labels:
-          severity: warning
+          severity: critical
           destination: slack-search-team
         annotations:
           summary: "Search API v2: Degraded search performance (acute)"
@@ -86,7 +86,7 @@ groups:
         expr: search_api_v2:search_successful_requests:ratio_rate1h < 0.999
         for: 2h
         labels:
-          severity: warning
+          severity: critical
           destination: slack-search-team
         annotations:
           summary: "Search API v2: Degraded search performance (mid)"
@@ -119,7 +119,7 @@ groups:
         expr: search_api_v2:search_successful_requests:ratio_rate24h < 0.9999
         for: 24h
         labels:
-          severity: warning
+          severity: critical
           destination: slack-search-team
         annotations:
           summary: "Search API v2: Degraded search performance (long)"
