@@ -1,0 +1,30 @@
+{{- if eq .Values.govukEnvironment "integration" }}
+{{ $envValues := toYaml (fromYaml (.Files.Get "prometheus-adapter-values-integration.yaml")) }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-adapter
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    {{- include "monitoring-config.helm-release"
+        ( merge (deepCopy .)
+          (dict "repoURL" "https://prometheus-community.github.io/helm-charts"
+                "chart"   "prometheus-adapter") )
+        | nindent 4 }}
+    helm:
+      values: |
+        {{ $envValues | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.monitoringNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+{{- end }}
