@@ -5,7 +5,6 @@
 # Expose the adapter’s own /metrics endpoint to Prometheus.
 serviceMonitor:
   enabled: true
-  # scrapeInterval: 30s        # uncomment if you want a custom frequency
 
 # Don’t install the chart’s big bundle of default rules.
 rules:
