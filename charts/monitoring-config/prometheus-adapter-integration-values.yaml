@@ -10,6 +10,10 @@ serviceMonitor:
 rules:
   default: false
 
+prometheus:
+  url: http://kube-prometheus-stack-prometheus.monitoring.svc
+  port: 9090
+
   # Custom external metric for the Chat-AI sidekiq backlog
   external:
     - seriesQuery: 'sidekiq_queue_backlog{job=~"govuk-chat-worker"}'
