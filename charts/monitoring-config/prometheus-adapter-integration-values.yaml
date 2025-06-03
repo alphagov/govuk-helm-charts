@@ -1,0 +1,23 @@
+# Prometheus Adapter – integration environment
+# -------------------------------------------
+# These values are consumed by the Application
+
+# Expose the adapter’s own /metrics endpoint to Prometheus.
+serviceMonitor:
+  enabled: true
+  # scrapeInterval: 30s        # uncomment if you want a custom frequency
+
+# Don’t install the chart’s big bundle of default rules.
+rules:
+  default: false
+
+  # Custom external metric for the Chat-AI sidekiq backlog
+  external:
+    - seriesQuery: 'sidekiq_queue_backlog{job=~"govuk-chat-worker"}'
+      resources:
+        overrides:
+          namespace:
+            resource: apps
+      name:
+        as: ai_sidekiq_queue_backlog
+      metricsQuery: 'max(sidekiq_queue_backlog{job=~"govuk-chat-worker"})'
