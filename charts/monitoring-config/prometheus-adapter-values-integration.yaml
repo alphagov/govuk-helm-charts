@@ -10,6 +10,9 @@ prometheus:
   url: http://kube-prometheus-stack-prometheus.monitoring.svc
   port: 9090
 
+extraArguments:
+  - --enable-external-metrics
+
 # Don’t install the chart’s big bundle of default rules.
 rules:
   default: false
