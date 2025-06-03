@@ -19,7 +19,7 @@ rules:
       resources:
         overrides:
           namespace:
-            resource: apps
+            resource: namespace
       name:
         as: ai_sidekiq_queue_backlog
       metricsQuery: 'max(sidekiq_queue_backlog{job=~"govuk-chat-worker"})'
