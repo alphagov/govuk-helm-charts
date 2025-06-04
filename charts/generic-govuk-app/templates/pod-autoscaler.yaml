@@ -1,6 +1,6 @@
 {{- $fullName := include "generic-govuk-app.fullname" . }}
 {{- with .Values.podAutoscaling -}}
-{{- if .enabled -}}
+{{- if .name.enabled -}}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
