@@ -1,5 +1,6 @@
 {{- range .Values.podAutoscaling -}}
 {{- if .enabled -}}
+---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
