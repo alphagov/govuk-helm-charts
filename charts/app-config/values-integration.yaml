@@ -1719,6 +1719,41 @@ govukApplications:
         name: govuk-chat
         annotations:
           eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/govuk-chat-bedrock-access-role
+      podAutoscaling:
+        enabled: true
+        name: govuk-chat
+        spec:
+          maxReplicas: 10
+          minReplicas: 2
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: govuk-chat
+          metrics:
+            - type: Resource
+              resource:
+                name: cpu
+                target:
+                  type: Utilization
+                  averageUtilization: 65
+      workerPodAutoscaling:
+        enabled: true
+        name: govuk-chat-worker
+        spec:
+          maxReplicas: 10
+          minReplicas: 2
+          scaleTargetRef:
+            apiVersion: apps/v1
+            kind: Deployment
+            name: govuk-chat-worker
+          metrics:
+            - type: External
+              external:
+                metric:
+                  name: ai_sidekiq_queue_backlog
+                target:
+                  type: Value
+                  value: 10
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
