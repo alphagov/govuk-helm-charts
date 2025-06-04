@@ -1,5 +1,4 @@
 {{- range .Values.podAutoscaling -}}
-{{- if .enabled -}}
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
@@ -7,5 +6,4 @@ metadata:
   name: {{ .name }}
 spec:
   {{- toYaml .spec | nindent 2 }}
-{{- end -}}
 {{- end -}}
