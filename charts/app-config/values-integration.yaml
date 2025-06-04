@@ -1721,7 +1721,6 @@ govukApplications:
           eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/govuk-chat-bedrock-access-role
       podAutoscaling:
         - name: govuk-chat
-          enabled: true
           spec:
             maxReplicas: 10
             minReplicas: 2
@@ -1737,7 +1736,6 @@ govukApplications:
                     type: Utilization
                     averageUtilization: 65
         - name: govuk-chat-worker
-          enabled: true
           spec:
             maxReplicas: 10
             minReplicas: 2
