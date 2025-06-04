@@ -1,10 +1,9 @@
-{{- $fullName := include "generic-govuk-app.fullname" . }}
 {{- range .Values.podAutoscaling -}}
 {{- if .enabled -}}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ .name | default $fullName }}
+  name: {{ .name }}
 spec:
   {{- toYaml .spec | nindent 2 }}
 {{- end -}}
