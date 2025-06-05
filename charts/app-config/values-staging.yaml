@@ -522,6 +522,11 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 550Mi
+      serviceAccount:
+        enabled: true
+        create: true
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::696911096973:role/content-data-admin-staging
       redis:
         enabled: true
       ingress:
@@ -603,16 +608,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-content-data
               key: oauth_secret
-        - name: AWS_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: content-data-admin-aws
-              key: access_key
-        - name: AWS_SECRET_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: content-data-admin-aws
-              key: secret_key
         - name: AWS_CSV_EXPORT_BUCKET_NAME
           value: govuk-staging-content-data-csvs
         - name: DATABASE_URL
