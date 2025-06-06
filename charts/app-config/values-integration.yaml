@@ -527,6 +527,11 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 550Mi
+      serviceAccount:
+        enabled: true
+        create: true
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/content-data-admin-integration
       ingress:
         enabled: true
         redirect: true
