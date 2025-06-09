@@ -463,55 +463,6 @@ govukApplications:
               name: collections-publisher-mysql
               key: DATABASE_URL
 
-  - name: contacts-admin
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1Gi
-        requests:
-          cpu: 10m
-          memory: 400Mi
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/group.order: "40"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-            [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "contacts-admin.{{ .Values.publishingDomainSuffix }}"
-            ]}}]
-        hosts:
-          - name: contacts-admin.{{ .Values.k8sExternalDomainSuffix }}
-      cronTasks:
-        - name: org-import
-          task: "organisations:import"
-          schedule: "0 3 * * *"
-      redis:
-        enabled: true
-      extraEnv:
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: contacts-admin-mysql
-              key: DATABASE_URL
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-contacts
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-contacts
-              key: oauth_secret
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-contacts-publishing-api
-              key: bearer_token
-
   - name: content-data-admin
     helmValues:
       arch: arm64
