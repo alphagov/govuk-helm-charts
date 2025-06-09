@@ -1589,17 +1589,6 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-postgres
               key: DATABASE_URL
-        - name: EMAIL_ADDRESS_OVERRIDE
-          value: govuk-chat-notifications-integration@digital.cabinet-office.gov.uk
-        - name: GOVUK_NOTIFY_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: govuk-chat-notify
-              key: GOVUK_NOTIFY_API_KEY
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: 346cdea0-9d4e-4de1-a528-cded6713bc61
-        - name: GOVUK_NOTIFY_REPLY_TO_ID
-          value: f8669f4d-4923-4006-8b44-cbda1f3bc166
         - name: MEMCACHE_SERVERS
           value: "chat-memcached-h4kg8u.serverless.euw1.cache.amazonaws.com:11211"
         - name: OPENAI_ACCESS_TOKEN
