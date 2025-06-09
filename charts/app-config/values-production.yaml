@@ -1157,6 +1157,8 @@ govukApplications:
           cpu: 30m
           memory: 400Mi
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
           value: e8b2d8a6-db5f-4346-9fbd-49b16b531e1c
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
@@ -1214,6 +1216,8 @@ govukApplications:
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_REPLY_TO_ID
           value: e8b2d8a6-db5f-4346-9fbd-49b16b531e1c
         - name: GOVUK_NOTIFY_SURVEY_SIGNUP_TEMPLATE_ID
