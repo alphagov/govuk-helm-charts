@@ -106,12 +106,6 @@ cronjobs:
       operations:
         - op: backup
 
-    contacts-admin-mysql:
-      schedule: "49 23 * * *"
-      db: contacts_production
-      operations:
-        - op: backup
-
     content-data-admin-postgres:
       schedule: "4 23 * * *"
       db: content_data_admin_production
@@ -278,14 +272,6 @@ cronjobs:
     collections-publisher-mysql:
       schedule: "21 1 * * 1-5"
       db: collections_publisher_production
-      operations:
-        - op: restore
-          bucket: s3://govuk-production-database-backups
-        - op: backup
-
-    contacts-admin-mysql:
-      schedule: "49 1 * * 1-5"
-      db: contacts_production
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -535,14 +521,6 @@ cronjobs:
     collections-publisher-mysql:
       schedule: "21 3 * * 1"
       db: collections_publisher_production
-      operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-        - op: backup
-
-    contacts-admin-mysql:
-      schedule: "49 3 * * 1"
-      db: contacts_production
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
