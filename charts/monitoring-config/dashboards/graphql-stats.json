@@ -204,7 +204,7 @@
           "refId": "D"
         }
       ],
-      "title": "GraphQL vs. Content-Store average request times",
+      "title": "GraphQL vs. Content-Store average response times",
       "transformations": [
         {
           "id": "joinByField",
@@ -296,7 +296,10 @@
               "GraphQL time": 2,
               "document_type": 0
             },
-            "renameByName": {}
+            "renameByName": {
+              "Content Store time": "Content Store response time",
+              "GraphQL time": "GraphQL response time"
+            }
           }
         }
       ],
@@ -557,7 +560,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "Request Time (s)",
+            "axisLabel": "Response Time (s)",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
@@ -663,7 +666,7 @@
           "refId": "Content Store median"
         }
       ],
-      "title": "Median Request Duration",
+      "title": "Median Response Time",
       "type": "timeseries"
     },
     {
@@ -681,7 +684,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "Request Time (s)",
+            "axisLabel": "Response Time (s)",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
@@ -786,7 +789,7 @@
           "refId": "Content Store 99th percentile"
         }
       ],
-      "title": "99% Request Duration",
+      "title": "99% Response Times",
       "type": "timeseries"
     },
     {
@@ -925,7 +928,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Median request duration by document type",
+      "description": "Median response time by document type",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1040,7 +1043,7 @@
           "refId": "GraphQL median"
         }
       ],
-      "title": "Median Request Duration",
+      "title": "Median Response Time",
       "type": "timeseries"
     },
     {
@@ -1058,7 +1061,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "Request Time (s)",
+            "axisLabel": "Response Time (s)",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
@@ -1163,7 +1166,7 @@
           "refId": "GraphQL 99th percentile"
         }
       ],
-      "title": "99% Request Duration",
+      "title": "99% Response Times",
       "type": "timeseries"
     },
     {
@@ -1352,5 +1355,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 11
+  "version": 12
 }
