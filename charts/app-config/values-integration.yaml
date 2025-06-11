@@ -1682,6 +1682,19 @@ govukApplications:
                   target:
                     type: Value
                     value: 10
+            behavior:
+              scaleDown:
+                stabilizationWindowSeconds: 300
+                policies:
+                  - type: Pods
+                    value: 2
+                    periodSeconds: 180
+              scaleUp:
+                stabilizationWindowSeconds: 1
+                policies:
+                  - type: Pods
+                    value: 1
+                    periodSeconds: 10
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
