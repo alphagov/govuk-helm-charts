@@ -71,6 +71,7 @@ jobs:
             "https://alphagov.github.io/govuk-crd-library/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
             -ignore-filename-pattern ".*/Chart.yaml"
             -summary
+            -strict
             rendered-charts
 
   shellcheck:

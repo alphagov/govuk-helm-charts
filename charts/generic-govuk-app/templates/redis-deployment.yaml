@@ -57,7 +57,7 @@ spec:
             - name: redis
               containerPort: 6379
           livenessProbe: &redisProbe
-            tcpSocket:
+            tcpSocket: &redisSocket
               port: 6379
             failureThreshold: 3
             periodSeconds: 5
@@ -65,8 +65,10 @@ spec:
           readinessProbe:
             <<: *redisProbe
           startupProbe:
-            <<: *redisProbe
+            tcpSocket: *redisSocket
             failureThreshold: 5
+            periodSeconds: 5
+            timeoutSeconds: 20
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

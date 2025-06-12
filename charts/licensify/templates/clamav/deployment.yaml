@@ -33,17 +33,19 @@ spec:
           ports:
             - name: clamav
               containerPort: {{ $app.service.port }}
-          livenessProbe: &app-probe
-            tcpSocket:
+          livenessProbe:
+            tcpSocket: &app-probe
               port: clamav
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 30
           readinessProbe:
-            <<: *app-probe  # Intentionally same path as liveness.
+            tcpSocket: *app-probe
             failureThreshold: 2
+            periodSeconds: 5
+            timeoutSeconds: 30
           startupProbe:
-            <<: *app-probe
+            tcpSocket: *app-probe
             failureThreshold: 15
             periodSeconds: 5
             timeoutSeconds: 2

@@ -70,8 +70,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ .port }}
-          livenessProbe: &app-probe
-            httpGet:
+          livenessProbe:
+            httpGet: &app-probe
               path: {{ .healthcheckPath }} 
               port: http
             failureThreshold: 3
@@ -79,13 +79,17 @@ spec:
             timeoutSeconds: 30
             initialDelaySeconds: 10
           readinessProbe:
-            <<: *app-probe  # Intentionally same path as liveness.
+            httpGet: *app-probe
             failureThreshold: 2
+            periodSeconds: 5
+            timeoutSeconds: 30
+            initialDelaySeconds: 10
           startupProbe:
-            <<: *app-probe
+            httpGet: *app-probe
             failureThreshold: 15
             periodSeconds: 2
             timeoutSeconds: 2
+            initialDelaySeconds: 10
           {{- with .resources }}
           resources:
             {{- (tpl (toYaml .) $) | trim | nindent 12 }}
@@ -105,8 +109,8 @@ spec:
           ports:
             - name: http
               containerPort: {{ $.Values.nginx.port }}
-          livenessProbe: &nginx-probe
-            httpGet:
+          livenessProbe:
+            httpGet: &nginx-probe
               path: /readyz
               port: http
             initialDelaySeconds: 2
@@ -114,8 +118,10 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 20
           readinessProbe:
-            <<: *nginx-probe  # Intentionally same path as liveness.
+            httpGet: *nginx-probe
+            initialDelaySeconds: 2
             failureThreshold: 2
+            periodSeconds: 5
             timeoutSeconds: 15
           {{- with $.Values.nginx.resources }}
           resources:

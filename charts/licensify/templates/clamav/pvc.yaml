@@ -6,8 +6,6 @@ metadata:
   name: {{ include "licensify.name" . }}-{{ .Values.appName }}-db
   labels:
     {{- include "licensify.labels" . | nindent 4 }}
-    app: {{ .Values.appName }}
-    app.kubernetes.io/name: {{ .Values.appName }}
 spec:
   storageClassName: ""
   accessModes:

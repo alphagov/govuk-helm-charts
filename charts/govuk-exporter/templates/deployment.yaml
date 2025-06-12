@@ -42,18 +42,20 @@ spec:
             {{- with .Values.extraEnv }}
               {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
-          livenessProbe: &probe
-            httpGet:
+          livenessProbe:
+            httpGet: &probe
               path: /metrics
               port: metrics
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 30
           readinessProbe:
-            <<: *probe
+            httpGet: *probe
             failureThreshold: 2
+            periodSeconds: 5
+            timeoutSeconds: 30
           startupProbe:
-            <<: *probe
+            httpGet: *probe
             failureThreshold: 15
             periodSeconds: 2
             timeoutSeconds: 2
