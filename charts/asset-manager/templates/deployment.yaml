@@ -104,21 +104,23 @@ spec:
           {{- with .Values.appProbes }}
             {{- . | toYaml | trim | nindent 10 }}
           {{- else }}
-          startupProbe: &app-probe
-            httpGet:
+          startupProbe:
+            httpGet: &app-probe
               path: /healthcheck/live
               port: http
             failureThreshold: 10
             periodSeconds: 3
             timeoutSeconds: 5
           livenessProbe:
-            <<: *app-probe
+            httpGet: *app-probe
             failureThreshold: 3
             periodSeconds: 5
+            timeoutSeconds: 5
           readinessProbe:
-            <<: *app-probe
+            httpGet: *app-probe
             failureThreshold: 2
             periodSeconds: 5
+            timeoutSeconds: 5
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
