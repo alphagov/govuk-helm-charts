@@ -151,7 +151,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(rate(http_request_duration_seconds_sum{job=\"content-store\", controller=\"content_items\", action=\"show\"}[$__range]))\n  by (document_type)\n/\nsum(rate(http_request_duration_seconds_count{job=\"content-store\", controller=\"content_items\", action=\"show\"}[$__range]))\n  by (document_type)\n",
+          "expr": "sum(rate(http_request_duration_seconds_sum{job=\"content-store\", controller=\"content_items\", action=\"show\"}[$__range]))\n  by (schema_name)\n/\nsum(rate(http_request_duration_seconds_count{job=\"content-store\", controller=\"content_items\", action=\"show\"}[$__range]))\n  by (schema_name)\n",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -166,7 +166,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "\nsum(rate(http_request_duration_seconds_sum{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n    by (document_type)\n  /\n  sum(rate(http_request_duration_seconds_count{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n    by (document_type)\n",
+          "expr": "\nsum(rate(http_request_duration_seconds_sum{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n    by (schema_name)\n  /\n  sum(rate(http_request_duration_seconds_count{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n    by (schema_name)\n",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -180,7 +180,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (document_type) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))",
+          "expr": "sum by (schema_name) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -195,7 +195,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (document_type) (increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", status=\"200\"}[$__range]))",
+          "expr": "sum by (schema_name) (increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", status=\"200\"}[$__range]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -209,7 +209,7 @@
         {
           "id": "joinByField",
           "options": {
-            "byField": "document_type",
+            "byField": "schema_name",
             "mode": "inner"
           }
         },
@@ -232,7 +232,7 @@
               "Value #B": 1,
               "Value #C": 3,
               "Value #D": 4,
-              "document_type": 0
+              "schema_name": 0
             },
             "renameByName": {
               "Time 1": "",
@@ -294,11 +294,12 @@
               "Difference time (ms)": 4,
               "GraphQL Requests": 5,
               "GraphQL time": 2,
-              "document_type": 0
+              "schema_name": 0
             },
             "renameByName": {
               "Content Store time": "Content Store response time",
-              "GraphQL time": "GraphQL response time"
+              "GraphQL time": "GraphQL response time",
+              "schema_name": "Schema Name"
             }
           }
         }
@@ -658,7 +659,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum by (document_type, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", document_type=~\"$content_store_document_type\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.5, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", schema_name=~\"$content_store_schema_name\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -781,7 +782,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by (document_type, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", document_type=~\"$content_store_document_type\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", schema_name=~\"$content_store_schema_name\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -1035,7 +1036,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum by (document_type, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\", document_type=~\"$graphql_document_type\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.5, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\", schema_name=~\"$graphql_schema_name\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -1158,7 +1159,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by (document_type, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\", document_type=~\"$graphql_document_type\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\", schema_name=~\"$graphql_schema_name\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -1418,21 +1419,19 @@
     "list": [
       {
         "current": {
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
         },
-        "definition": "label_values(http_request_duration_seconds_bucket{namespace=\"apps\", job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"},document_type)",
+        "definition": "label_values(http_request_duration_seconds_bucket{namespace=\"apps\", job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"},schema_name)",
         "includeAll": true,
         "multi": true,
-        "name": "graphql_document_type",
+        "name": "graphql_schema_name",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(http_request_duration_seconds_bucket{namespace=\"apps\", job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"},document_type)",
+          "query": "label_values(http_request_duration_seconds_bucket{namespace=\"apps\", job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"},schema_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -1444,13 +1443,14 @@
           "text": "All",
           "value": "$__all"
         },
-        "definition": "label_values(http_request_duration_seconds_count{namespace=\"apps\", job=\"content-store\", controller=\"content_items\", action=\"show\"},document_type)",
+        "definition": "label_values(http_request_duration_seconds_count{namespace=\"apps\", job=\"content-store\", controller=\"content_items\", action=\"show\"},schema_name)",
         "includeAll": true,
-        "name": "content_store_document_type",
+        "multi": true,
+        "name": "content_store_schema_name",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(http_request_duration_seconds_count{namespace=\"apps\", job=\"content-store\", controller=\"content_items\", action=\"show\"},document_type)",
+          "query": "label_values(http_request_duration_seconds_count{namespace=\"apps\", job=\"content-store\", controller=\"content_items\", action=\"show\"},schema_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -1477,5 +1477,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 12
+  "version": 14
 }
