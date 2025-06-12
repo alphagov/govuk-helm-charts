@@ -1,9 +1,11 @@
 {{ range .Values.govukApplications }}
 {{- $reponame := .repoName | default .name }}
+{{- $namespace := .namespace | default $.Values.appsNamespace }}
 {{- $imageTagConfig := $.Files.Get (printf "image-tags/%s/%s" $.Values.govukEnvironment $reponame) | fromYaml }}
 {{- $imageTag := $imageTagConfig.image_tag }}
 {{- $promoteDeployment := default "false" $imageTagConfig.promote_deployment }}
 {{- $autoDeploysEnabled := default "false" $imageTagConfig.automatic_deploys_enabled }}
+{{- $podAutoscaling := dig "helmValues" "podAutoscaling" (list) . }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -52,7 +54,7 @@ spec:
         {{- end }}
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{ .namespace | default $.Values.appsNamespace }}
+    namespace: {{ $namespace }}
   syncPolicy:
     automated:
       prune: true
@@ -62,5 +64,16 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
     - ApplyOutOfSyncOnly=true
+  {{- if gt (len $podAutoscaling) 0 }}
+  ignoreDifferences:
+  {{- range $podAutoscaling }}
+    - group: "{{ mustRegexReplaceAll "(\\/.*)" .spec.scaleTargetRef.apiVersion "" }}"
+      kind: "{{ .spec.scaleTargetRef.kind }}"
+      name: "{{ .spec.scaleTargetRef.name }}"
+      namespace: "{{ $namespace }}"
+      jsonPointers:
+        - /spec/replicas
+  {{- end }}
+  {{- end }}
 ---
 {{ end }}
