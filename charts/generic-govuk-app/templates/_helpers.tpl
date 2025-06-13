@@ -48,6 +48,7 @@ Selector labels
 */}}
 {{- define "generic-govuk-app.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/repoName: {{ .repoName | default .Release.Name  }}
 {{- end }}
 
 {{/*
