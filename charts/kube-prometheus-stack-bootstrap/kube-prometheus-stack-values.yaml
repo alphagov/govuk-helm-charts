@@ -48,7 +48,7 @@
       "name": "Tempo"
       "type": "tempo"
       "uid": "tempo"
-      "url": "http://tempo-query-frontend.monitoring.svc.cluster.local:3100"
+      "url": "http://tempo-query-frontend.monitoring.svc.cluster.local:3200"
   "admin":
     "existingSecret": "grafana-admin-user"
     "passwordKey": "password"
