@@ -41,6 +41,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
+app.kubernetes.io/repoName: {{ .repoName | default .Release.Name  }}
 {{- end }}
 
 {{/*
@@ -48,7 +49,6 @@ Selector labels
 */}}
 {{- define "generic-govuk-app.selectorLabels" -}}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/repoName: {{ .repoName | default .Release.Name  }}
 {{- end }}
 
 {{/*
