@@ -1,0 +1,16 @@
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: "govuk-mirror-sync"
+  namespace: "apps"
+  labels:
+    app: "govuk-mirror-sync"
+    app.kubernetes.io/component: "mirror-sync"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: "govuk-mirror-sync"
+      app.kubernetes.io/component: "mirror-sync"
+
