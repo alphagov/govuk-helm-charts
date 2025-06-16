@@ -3006,6 +3006,11 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
+        - name: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
 
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
