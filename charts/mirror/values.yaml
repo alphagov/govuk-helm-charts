@@ -1,5 +1,16 @@
-# ⚠️ DEPRECATED; please do not add new jobs to this chart. See README.md for
-# better alternatives.
+# Mirror sync configuration
+schedule: "43 1 * * *"
+
+image:
+  repository: govuk-mirror
+  tag: release
+
+# Service account configuration
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: ""
+  name: ""
 
 podSecurityContext:
   fsGroupChangePolicy: OnRootMismatch
@@ -23,7 +34,10 @@ resources:
     cpu: 0.1
     memory: 800Mi
 
-images:
-  GovukDependencyChecker:
-    repository: govuk-dependency-checker
-    tag: release
+# PVC storage size
+storage:
+  size: 1000Gi
+
+externalDomainSuffix: ""
+assetsDomain: ""
+govukEnvironment: ""

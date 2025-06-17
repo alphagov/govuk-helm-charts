@@ -1,0 +1,13 @@
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: "{{ include "mirror.fullname" . }}"
+  labels:
+    {{- include "mirror.labels" . | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      {{- include "mirror.selectorLabels" . | nindent 6 }}
+

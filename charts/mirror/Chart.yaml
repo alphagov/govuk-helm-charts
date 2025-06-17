@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mirror
+description: A Helm chart for GOV.UK mirror sync job
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
