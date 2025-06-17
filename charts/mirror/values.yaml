@@ -1,7 +1,11 @@
 # Mirror sync configuration
 schedule: "43 1 * * *"
 
-# Image configuration is provided by app-config via imageValues
+# Image configuration - these defaults are overridden by app-config via imageValues
+images:
+  GovukMirror:
+    repository: govuk-mirror
+    tag: release
 
 # Service account configuration
 serviceAccount:
