@@ -2,43 +2,40 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: "govuk-mirror-sync"
+  name: "{{ include "mirror.fullname" . }}"
   labels:
-    app: "govuk-mirror-sync"
-    app.kubernetes.io/component: "mirror-sync"
+    {{- include "mirror.labels" . | nindent 4 }}
 spec:
-  schedule: "{{ .Values.govukMirrorSync.schedule }}"
+  schedule: "{{ .Values.schedule }}"
   jobTemplate:
     metadata:
-      name: "govuk-mirror-sync"
+      name: "{{ include "mirror.fullname" . }}"
       labels:
-        app: "govuk-mirror-sync"
-        app.kubernetes.io/component: "mirror-sync"
+        {{- include "mirror.labels" . | nindent 8 }}
     spec:
       backoffLimit: 0
       template:
         metadata:
-          name: "govuk-mirror-sync"
+          name: "{{ include "mirror.fullname" . }}"
           labels:
-            app: "govuk-mirror-sync"
-            app.kubernetes.io/component: "mirror-sync"
+            {{- include "mirror.labels" . | nindent 12 }}
           annotations:
             cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
         spec:
           enableServiceLinks: false
-          serviceAccountName: govuk-mirror-sync
+          serviceAccountName: {{ include "mirror.serviceAccountName" . }}
           securityContext:
             {{- toYaml $.Values.podSecurityContext | nindent 12 }}
           restartPolicy: Never
           volumes:
             - name: app-mirror-sync
               persistentVolumeClaim:
-                claimName: govuk-mirror-sync
+                claimName: {{ include "mirror.fullname" . }}
             - name: app-tmp
               emptyDir: {}
           initContainers:
             - name: scrape
-              image: "{{ .Values.images.GovukMirror.repository }}:{{ .Values.images.GovukMirror.tag }}"
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
               imagePullPolicy: "Always"
               workingDir: /data
               resources:
@@ -67,7 +64,7 @@ spec:
                 - name: RATE_LIMIT_TOKEN
                   valueFrom:
                     secretKeyRef:
-                      name: govuk-mirror-sync
+                      name: {{ include "mirror.fullname" . }}
                       key: rate-limit-token
                 - name: HEADERS
                   value: 'rate-limit-token:$(RATE_LIMIT_TOKEN)'

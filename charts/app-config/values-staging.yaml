@@ -1672,10 +1672,17 @@ govukApplications:
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
     imageValues:
+      - govuk-dependency-checker
+
+  - name: mirror
+    chartPath: charts/mirror
+    postSyncWorkflowEnabled: "false"
+    imageValues:
       - govuk-mirror
     helmValues:
-      govukMirrorSync:
-        iamRoleArn: arn:aws:iam::696911096973:role/govuk-mirror-sync
+      serviceAccount:
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::696911096973:role/govuk-mirror-sync
 
   - name: hmrc-manuals-api
     helmValues:

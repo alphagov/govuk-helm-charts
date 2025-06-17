@@ -1,0 +1,44 @@
+# Mirror sync configuration
+schedule: "43 1 * * *"
+
+image:
+  repository: govuk-mirror
+  tag: release
+
+# Service account configuration
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: ""
+  name: ""
+
+podSecurityContext:
+  fsGroupChangePolicy: OnRootMismatch
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1500Mi
+  requests:
+    cpu: 0.1
+    memory: 800Mi
+
+# PVC storage size
+storage:
+  size: 1000Gi
+
+# The following values are provided by app-config:
+# - externalDomainSuffix
+# - assetsDomain
+# - govukEnvironment

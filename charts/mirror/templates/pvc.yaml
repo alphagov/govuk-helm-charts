@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: govuk-mirror-sync
+  name: {{ include "mirror.fullname" . }}
 spec:
   storageClassName: ebs-gp3
   accessModes:

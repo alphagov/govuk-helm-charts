@@ -27,9 +27,3 @@ images:
   GovukDependencyChecker:
     repository: govuk-dependency-checker
     tag: release
-  GovukMirror:
-    repository: govuk-mirror
-    tag: release
-
-govukMirrorSync:
-  schedule: "43 1 * * *"
