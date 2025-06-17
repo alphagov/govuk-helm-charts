@@ -38,6 +38,7 @@ resources:
 storage:
   size: 1000Gi
 
-externalDomainSuffix: ""
-assetsDomain: ""
-govukEnvironment: ""
+# The following values are provided by app-config:
+# - externalDomainSuffix
+# - assetsDomain  
+# - govukEnvironment
