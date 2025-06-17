@@ -15,6 +15,7 @@ serviceAccount:
   name: ""
 
 podSecurityContext:
+  fsGroup: 1001
   fsGroupChangePolicy: OnRootMismatch
   runAsNonRoot: true
   runAsUser: 1001
