@@ -1,9 +1,7 @@
 # Mirror sync configuration
 schedule: "43 1 * * *"
 
-image:
-  repository: govuk-mirror
-  tag: release
+# Image configuration is provided by app-config via imageValues
 
 # Service account configuration
 serviceAccount:

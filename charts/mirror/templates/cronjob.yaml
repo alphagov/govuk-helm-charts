@@ -35,7 +35,7 @@ spec:
               emptyDir: {}
           initContainers:
             - name: scrape
-              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              image: "{{ .Values.images.GovukMirror.repository }}:{{ .Values.images.GovukMirror.tag }}"
               imagePullPolicy: "Always"
               workingDir: /data
               resources:
