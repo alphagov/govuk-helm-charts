@@ -23,6 +23,8 @@ for values_filename in ./charts/app-config/values-*.yaml; do
   # expand all the aliases
   yq 'explode(.)' "./charts/app-config/values-$env.yaml" > "/tmp/env-values.yaml"
 
+  yq 'del(.govukApplications)' "/tmp/env-values.yaml" > "/tmp/env-values-no-apps.yaml"
+
   for app_index in $(seq 0 "$array_length"); do
     app_name=$(yq ".govukApplications[$app_index].name" "$values_filename")
 
@@ -40,7 +42,7 @@ for values_filename in ./charts/app-config/values-*.yaml; do
     yq ".govukApplications[$app_index].helmValues" "/tmp/env-values.yaml" > "$app_values";
 
     rm -rf /tmp/chart_out
-    helm template "${app_name}" "${chart_path}" -f "${app_values}" --output-dir "/tmp/chart_out"
+    helm template "${app_name}" "${chart_path}" -f "/tmp/env-values-no-apps.yaml" -f "${app_values}" --output-dir "/tmp/chart_out"
 
     cp -r "/tmp/chart_out/${chart_name}/." "${chart_output}"
     cp "${chart_path}/Chart.yaml" "${chart_output}/"
