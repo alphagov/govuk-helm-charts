@@ -2560,7 +2560,7 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 512Mi
-      nginxClientMaxBodySize: 2M
+      nginxClientMaxBodySize: 3M
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
