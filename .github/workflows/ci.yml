@@ -90,7 +90,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683   # v4
         with:
           show-progress: false
-      - run: yamllint --version && yamllint -f github .
+      - run: make lint
 
   promtool:
     runs-on: ubuntu-latest
