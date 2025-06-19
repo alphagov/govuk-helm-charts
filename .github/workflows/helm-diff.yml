@@ -1,0 +1,484 @@
+name: 'Helm Diff Security Scanner'
+
+on:
+  pull_request:
+    paths:
+      - 'helm/**'
+      - 'tools/helm-diff-sanitizer/**'
+      - 'Makefile'
+      - 'main.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/helm-diff.yml'
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+env:
+  GO_VERSION: '1.21'
+  HELM_VERSION: '3.14.0'
+  KUBECTL_VERSION: '1.29.0'
+  SANITIZER_PATH: 'tools/helm-diff-sanitizer'
+
+jobs:
+  helm-diff:
+    name: 'Generate Sanitized Helm Diff'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      # =================================================================
+      # Environment Setup
+      # =================================================================
+      
+      - name: '🔍 Checkout Repository'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for proper diff context
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: '🐹 Setup Go Environment'
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+          cache-dependency-path: '${{ env.SANITIZER_PATH }}/go.sum'
+
+      - name: '⎈ Setup Helm'
+        uses: azure/setup-helm@v4
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: '🔧 Setup kubectl'
+        uses: azure/setup-kubectl@v4
+        with:
+          version: ${{ env.KUBECTL_VERSION }}
+
+      # =================================================================
+      # Configuration & Dependencies
+      # =================================================================
+      
+      - name: '📋 Configure Environment Variables'
+        run: |
+          # Set repository variables with fallbacks
+          echo "RELEASE_NAME=${{ vars.RELEASE_NAME || 'govuk-app' }}" >> $GITHUB_ENV
+          echo "NAMESPACE=${{ vars.NAMESPACE || 'default' }}" >> $GITHUB_ENV
+          echo "CHART_PATH=${{ vars.CHART_PATH || './helm/govuk-app' }}" >> $GITHUB_ENV
+          echo "VALUES_FILE=${{ vars.VALUES_FILE || './helm/values.yaml' }}" >> $GITHUB_ENV
+          
+          # Generate unique identifiers for this run
+          echo "RUN_ID=$(date +%s)-${{ github.run_number }}" >> $GITHUB_ENV
+          echo "TEMP_DIR=/tmp/helm-diff-${{ github.run_number }}" >> $GITHUB_ENV
+          
+          # Security validation patterns
+          echo "SECURITY_PATTERNS=password|secret|token|key|cert|credential|auth|bearer|api[_-]?key|private[_-]?key|ssh[_-]?key|jwt|oauth|client[_-]?secret|database[_-]?url|connection[_-]?string|webhook" >> $GITHUB_ENV
+
+      - name: '📋 Set Template Mode'
+        run: |
+          echo "ℹ️ Running in template-only mode (no cluster access required)"
+          echo "TEMPLATE_MODE=true" >> $GITHUB_ENV
+
+      - name: '📦 Initialize Dependencies'
+        working-directory: ${{ env.SANITIZER_PATH }}
+        run: |
+          # Initialize go.mod if missing
+          if [ ! -f go.mod ]; then
+            echo "📝 Initializing go.mod..."
+            go mod init helm-diff-sanitizer
+            go get gopkg.in/yaml.v3
+          fi
+          
+          # Install dependencies using Makefile
+          make install-deps
+          
+          # Verify installation
+          make show-config
+
+      # =================================================================
+      # Build & Validation
+      # =================================================================
+      
+      - name: '🔨 Build Sanitizer Tool'
+        working-directory: ${{ env.SANITIZER_PATH }}
+        run: |
+          echo "🔨 Building helm-diff-sanitizer for CI..."
+          make build-ci
+          
+          # Verify binary
+          if [ -f "./helm-diff-sanitizer-linux-amd64" ]; then
+            echo "✅ Binary built successfully"
+            chmod +x ./helm-diff-sanitizer-linux-amd64
+            ln -s ./helm-diff-sanitizer-linux-amd64 ./helm-diff-sanitizer
+          else
+            echo "❌ Build failed"
+            exit 1
+          fi
+
+      - name: '🧪 Run Security Tests'
+        working-directory: ${{ env.SANITIZER_PATH }}
+        run: |
+          echo "🧪 Running security validation tests..."
+          make security-check
+          echo "✅ Security tests passed"
+
+      - name: '📊 Validate Helm Chart'
+        run: |
+          if [ -d "${{ env.CHART_PATH }}" ]; then
+            echo "📊 Validating Helm chart at ${{ env.CHART_PATH }}..."
+            helm lint "${{ env.CHART_PATH }}" || {
+              echo "❌ Chart validation failed"
+              exit 1
+            }
+            echo "✅ Chart validation passed"
+          else
+            echo "⚠️ Chart path not found: ${{ env.CHART_PATH }}"
+            echo "Available paths:"
+            find . -name "Chart.yaml" -type f | head -10
+          fi
+
+      # =================================================================
+      # Helm Diff Generation
+      # =================================================================
+      
+      - name: '⚡ Generate Sanitized Helm Templates'
+        id: helm-diff
+        run: |
+          mkdir -p "${{ env.TEMP_DIR }}"
+          cd "${{ env.SANITIZER_PATH }}"
+          
+          # Prepare output files
+          TEMPLATE_OUTPUT="${{ env.TEMP_DIR }}/helm-templates-raw.yaml"
+          SANITIZED_OUTPUT="${{ env.TEMP_DIR }}/helm-templates-sanitized.txt"
+          METADATA_FILE="${{ env.TEMP_DIR }}/diff-metadata.json"
+          
+          echo "🔄 Rendering Helm templates..."
+          
+          # Generate helm templates with error handling
+          TEMPLATE_EXIT_CODE=0
+          if [ -f "${{ env.VALUES_FILE }}" ]; then
+            echo "📊 Rendering templates with values: ${{ env.VALUES_FILE }}"
+            helm template "${{ env.RELEASE_NAME }}" "${{ env.CHART_PATH }}" \
+              --values "${{ env.VALUES_FILE }}" \
+              --namespace "${{ env.NAMESPACE }}" \
+              --dry-run \
+              > "$TEMPLATE_OUTPUT" 2>&1 || TEMPLATE_EXIT_CODE=$?
+            
+            if [ $TEMPLATE_EXIT_CODE -eq 0 ]; then
+              echo "✅ Templates rendered successfully"
+              # Sanitize the template output
+              ./helm-diff-sanitizer diff-stdin < "$TEMPLATE_OUTPUT" > "$SANITIZED_OUTPUT" 2>&1 || TEMPLATE_EXIT_CODE=$?
+              
+              if [ $TEMPLATE_EXIT_CODE -eq 0 ]; then
+                echo "✅ Templates sanitized successfully"
+              else
+                echo "❌ Template sanitization failed with exit code: $TEMPLATE_EXIT_CODE"
+                echo "## ❌ Template Sanitization Error" > "$SANITIZED_OUTPUT"
+                echo "" >> "$SANITIZED_OUTPUT"
+                echo "The template sanitization failed. Please check the sanitizer configuration." >> "$SANITIZED_OUTPUT"
+              fi
+            else
+              echo "❌ Template rendering failed with exit code: $TEMPLATE_EXIT_CODE"
+              echo "## ❌ Template Rendering Error" > "$SANITIZED_OUTPUT"
+              echo "" >> "$SANITIZED_OUTPUT"
+              echo "The helm template command failed. Please check your chart configuration and values file." >> "$SANITIZED_OUTPUT"
+              echo "" >> "$SANITIZED_OUTPUT"
+              echo "### Error Details:" >> "$SANITIZED_OUTPUT"
+              echo '```' >> "$SANITIZED_OUTPUT"
+              cat "$TEMPLATE_OUTPUT" >> "$SANITIZED_OUTPUT" 2>/dev/null || echo "Error details not available" >> "$SANITIZED_OUTPUT"
+              echo '```' >> "$SANITIZED_OUTPUT"
+            fi
+          else
+            echo "❌ Values file not found: ${{ env.VALUES_FILE }}"
+            echo "Available values files:"
+            find . -name "values*.yaml" -type f | head -10
+            
+            echo "## ❌ Configuration Error" > "$SANITIZED_OUTPUT"
+            echo "" >> "$SANITIZED_OUTPUT"
+            echo "**Values file not found:** \`${{ env.VALUES_FILE }}\`" >> "$SANITIZED_OUTPUT"
+            echo "" >> "$SANITIZED_OUTPUT"
+            echo "### Available values files:" >> "$SANITIZED_OUTPUT"
+            find . -name "values*.yaml" -type f | head -10 | sed 's/^/- /' >> "$SANITIZED_OUTPUT"
+            TEMPLATE_EXIT_CODE=1
+          fi
+          
+          # Generate metadata
+          TEMPLATE_LINES=$(wc -l < "$SANITIZED_OUTPUT" 2>/dev/null || echo "0")
+          TEMPLATE_SIZE=$(du -h "$SANITIZED_OUTPUT" 2>/dev/null | cut -f1 || echo "0B")
+          
+          cat > "$METADATA_FILE" << EOF
+          {
+            "release_name": "${{ env.RELEASE_NAME }}",
+            "namespace": "${{ env.NAMESPACE }}",
+            "chart_path": "${{ env.CHART_PATH }}",
+            "values_file": "${{ env.VALUES_FILE }}",
+            "template_lines": $TEMPLATE_LINES,
+            "template_size": "$TEMPLATE_SIZE",
+            "exit_code": $TEMPLATE_EXIT_CODE,
+            "mode": "template-only",
+            "timestamp": "$(date -u '+%Y-%m-%d %H:%M:%S UTC')",
+            "run_id": "${{ env.RUN_ID }}",
+            "pr_number": "${{ github.event.pull_request.number }}",
+            "commit_sha": "${{ github.event.pull_request.head.sha }}"
+          }
+          EOF
+          
+          # Set outputs for next steps
+          echo "diff-file=$SANITIZED_OUTPUT" >> $GITHUB_OUTPUT
+          echo "metadata-file=$METADATA_FILE" >> $GITHUB_OUTPUT
+          echo "diff-lines=$TEMPLATE_LINES" >> $GITHUB_OUTPUT
+          echo "exit-code=$TEMPLATE_EXIT_CODE" >> $GITHUB_OUTPUT
+          
+          echo "✅ Helm template generation completed"
+
+      # =================================================================
+      # Security Validation
+      # =================================================================
+      
+      - name: '🔒 Final Security Validation'
+        id: security-check
+        run: |
+          DIFF_FILE="${{ steps.helm-diff.outputs.diff-file }}"
+          SECURITY_VIOLATIONS=""
+          
+          echo "🔒 Performing final security validation..."
+          
+          # Check for sensitive patterns in the sanitized output
+          if grep -iE "${{ env.SECURITY_PATTERNS }}" "$DIFF_FILE" | grep -v "\[REDACTED" | grep -v "SECURITY NOTICE" > /tmp/violations.txt 2>/dev/null; then
+            echo "🚨 SECURITY VIOLATION: Potentially sensitive data found in output!"
+            echo "Violations found:"
+            cat /tmp/violations.txt
+            SECURITY_VIOLATIONS="true"
+            
+            # Create security incident report
+            echo "## 🚨 Security Validation Failed" > /tmp/security-error.txt
+            echo "" >> /tmp/security-error.txt
+            echo "The automated security scan detected potentially sensitive information in the diff output." >> /tmp/security-error.txt
+            echo "This could indicate a bug in the sanitization process." >> /tmp/security-error.txt
+            echo "" >> /tmp/security-error.txt
+            echo "**Action Required:** Please review the configuration and contact the security team." >> /tmp/security-error.txt
+            
+            # Replace diff content with security notice
+            cp /tmp/security-error.txt "$DIFF_FILE"
+          else
+            echo "✅ Security validation passed - no sensitive data detected"
+            SECURITY_VIOLATIONS="false"
+          fi
+          
+          # Additional checks
+          REDACTED_COUNT=$(grep -c "\[REDACTED" "$DIFF_FILE" 2>/dev/null || echo "0")
+          echo "📊 Security Statistics:"
+          echo "  - Redacted values: $REDACTED_COUNT"
+          echo "  - Security violations: $SECURITY_VIOLATIONS"
+          
+          echo "redacted-count=$REDACTED_COUNT" >> $GITHUB_OUTPUT
+          echo "security-violations=$SECURITY_VIOLATIONS" >> $GITHUB_OUTPUT
+
+      # =================================================================
+      # Comment Generation & Posting
+      # =================================================================
+      
+      - name: '💬 Generate PR Comment'
+        id: generate-comment
+        run: |
+          DIFF_FILE="${{ steps.helm-diff.outputs.diff-file }}"
+          METADATA_FILE="${{ steps.helm-diff.outputs.metadata-file }}"
+          DIFF_LINES="${{ steps.helm-diff.outputs.diff-lines }}"
+          REDACTED_COUNT="${{ steps.security-check.outputs.redacted-count }}"
+          
+          # Read metadata
+          RELEASE_NAME=$(jq -r '.release_name' "$METADATA_FILE")
+          NAMESPACE=$(jq -r '.namespace' "$METADATA_FILE")
+          CHART_PATH=$(jq -r '.chart_path' "$METADATA_FILE")
+          TIMESTAMP=$(jq -r '.timestamp' "$METADATA_FILE")
+          
+          # Generate comment header
+          cat > /tmp/pr-comment.md << 'EOF'
+          ## ⚡ Sanitized Helm Template Results
+          
+          > 🔒 **Security Notice**: Sensitive values have been automatically redacted from these templates for security.
+          > All passwords, tokens, secrets, and other sensitive data are replaced with `[REDACTED-X-chars]` placeholders.
+          > 
+          > 📋 **Template Mode**: This shows the rendered Kubernetes manifests that would be deployed.
+          
+          EOF
+          
+          # Add metadata
+          cat >> /tmp/pr-comment.md << EOF
+          | **Configuration** | **Value** |
+          |---|---|
+          | 📦 Release | \`$RELEASE_NAME\` |
+          | 🏷️ Namespace | \`$NAMESPACE\` |
+          | 📁 Chart Path | \`$CHART_PATH\` |
+          | 📊 Template Lines | $DIFF_LINES |
+          | 🔒 Redacted Values | $REDACTED_COUNT |
+          | 🔧 Mode | Template Rendering |
+          | ⏰ Generated | $TIMESTAMP |
+          
+          EOF
+          
+          # Add template content
+          if [ "$DIFF_LINES" -gt 500 ]; then
+            echo "### 📄 Rendered Templates (Truncated - First 500 lines)" >> /tmp/pr-comment.md
+            echo "" >> /tmp/pr-comment.md
+            echo '<details><summary>Click to expand sanitized templates (truncated)</summary>' >> /tmp/pr-comment.md
+            echo "" >> /tmp/pr-comment.md
+            echo '```yaml' >> /tmp/pr-comment.md
+            head -500 "$DIFF_FILE" >> /tmp/pr-comment.md
+            echo '```' >> /tmp/pr-comment.md
+            echo "" >> /tmp/pr-comment.md
+            echo "**Note**: Templates truncated at 500 lines. Full output available in workflow artifacts." >> /tmp/pr-comment.md
+            echo '</details>' >> /tmp/pr-comment.md
+          else
+            echo "### 📄 Rendered Templates" >> /tmp/pr-comment.md
+            echo "" >> /tmp/pr-comment.md
+            echo '<details><summary>Click to expand sanitized templates</summary>' >> /tmp/pr-comment.md
+            echo "" >> /tmp/pr-comment.md
+            echo '```yaml' >> /tmp/pr-comment.md
+            cat "$DIFF_FILE" >> /tmp/pr-comment.md
+            echo '```' >> /tmp/pr-comment.md
+            echo '</details>' >> /tmp/pr-comment.md
+          fi
+          
+          # Add footer
+          cat >> /tmp/pr-comment.md << 'EOF'
+          
+          ---
+          
+          ### 🛠️ Local Development
+          
+          To render templates locally:
+          
+          ```bash
+          # Render templates with sanitization
+          cd tools/helm-diff-sanitizer
+          make build
+          helm template my-release ../../helm/chart --values ../../helm/values.yaml | ./helm-diff-sanitizer diff-stdin
+          ```
+          
+          ### 🔍 Troubleshooting
+          
+          - **Template errors?** Check your chart syntax and values file
+          - **Missing resources?** Verify that your chart templates are correct
+          - **Security concerns?** All sensitive data is automatically redacted
+          
+          ---
+          
+          <sub>🤖 Generated by Helm Diff Security Scanner | [View Workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})</sub>
+          EOF
+          
+          echo "comment-file=/tmp/pr-comment.md" >> $GITHUB_OUTPUT
+          echo "✅ PR comment generated"
+
+      - name: '📝 Post/Update PR Comment'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const commentFile = '${{ steps.generate-comment.outputs.comment-file }}';
+            const commentBody = fs.readFileSync(commentFile, 'utf8');
+            
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            
+            // Look for existing comment
+            const comments = await github.rest.issues.listComments({
+              owner,
+              repo,
+              issue_number: prNumber,
+            });
+            
+            const botComment = comments.data.find(comment => 
+              comment.user.type === 'Bot' && 
+              comment.body.includes('⚡ Sanitized Helm Template Results')
+            );
+            
+            try {
+              if (botComment) {
+                // Update existing comment
+                await github.rest.issues.updateComment({
+                  owner,
+                  repo,
+                  comment_id: botComment.id,
+                  body: commentBody
+                });
+                console.log('✅ Updated existing PR comment');
+              } else {
+                // Create new comment
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: prNumber,
+                  body: commentBody
+                });
+                console.log('✅ Created new PR comment');
+              }
+            } catch (error) {
+              console.error('❌ Failed to post comment:', error);
+              core.setFailed('Failed to post PR comment');
+            }
+
+      # =================================================================
+      # Artifacts & Cleanup
+      # =================================================================
+      
+      - name: '📦 Upload Artifacts'
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-diff-results-${{ env.RUN_ID }}
+          path: |
+            ${{ env.TEMP_DIR }}/*.txt
+            ${{ env.TEMP_DIR }}/*.json
+            ${{ env.SANITIZER_PATH }}/helm-diff-sanitizer*
+          retention-days: 7
+
+      - name: '🧹 Cleanup'
+        if: always()
+        run: |
+          echo "🧹 Cleaning up temporary files..."
+          
+          # Remove temporary directory
+          rm -rf "${{ env.TEMP_DIR }}" 2>/dev/null || true
+          
+          # No kubeconfig to remove in template mode
+          
+          # Clean up any remaining sensitive files
+          find . -name "*secret*" -type f -delete 2>/dev/null || true
+          find . -name "*password*" -type f -delete 2>/dev/null || true
+          find . -name "*token*" -type f -delete 2>/dev/null || true
+          
+          echo "✅ Cleanup completed"
+
+      # =================================================================
+      # Status Reporting
+      # =================================================================
+      
+      - name: '📊 Workflow Summary'
+        if: always()
+        run: |
+          echo "## 📊 Workflow Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| **Metric** | **Value** |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔧 Release | \`${{ env.RELEASE_NAME }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🏷️ Namespace | \`${{ env.NAMESPACE }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📊 Template Lines | ${{ steps.helm-diff.outputs.diff-lines }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔒 Redacted Values | ${{ steps.security-check.outputs.redacted-count }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| ⚠️ Security Violations | ${{ steps.security-check.outputs.security-violations }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🏃 Exit Code | ${{ steps.helm-diff.outputs.exit-code }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.security-check.outputs.security-violations }}" = "true" ]; then
+            echo "## 🚨 Security Alert" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ **Security validation failed!** Potential sensitive data detected in output." >> $GITHUB_STEP_SUMMARY
+            echo "Please review the workflow logs and contact the security team." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ✅ Security Status" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "🔒 **All security checks passed!** No sensitive data detected in output." >> $GITHUB_STEP_SUMMARY
+          fi

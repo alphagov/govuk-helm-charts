@@ -8,7 +8,7 @@
 # Application Configuration
 APP_NAME := helm-diff-sanitizer
 SANITIZER_BINARY := ./$(APP_NAME)
-GO_VERSION := 1.21
+GO_VERSION := 1.24
 
 # Build Configuration
 GOOS := $(shell go env GOOS)
