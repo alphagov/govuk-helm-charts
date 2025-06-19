@@ -54,9 +54,9 @@ spec:
                   mountPath: /tmp
               env:
                 - name: SITE
-                  value: https://www.{{ .Values.externalDomainSuffix }}/sitemap.xml
+                  value: https://www-origin.{{ .Values.externalDomainSuffix }}/sitemap.xml
                 - name: ALLOWED_DOMAINS
-                  value: www.{{ .Values.externalDomainSuffix }},{{ .Values.assetsDomain }}
+                  value: www-origin.{{ .Values.externalDomainSuffix }},{{ .Values.assetsDomain }}
                 - name: DISALLOWED_URL_RULES
                   value: '/apply-for-a-licence(/|$),/business-finance-support(/|$),/drug-device-alerts\.atom,/drug-safety-update\.atom,/foreign-travel-advice\.atom,/government/announcements\.atom,/government/publications\.atom,/government/statistics\.atom,/licence-finder/,/search(/|$),\.csv/preview$'
                 - name: CONCURRENCY
