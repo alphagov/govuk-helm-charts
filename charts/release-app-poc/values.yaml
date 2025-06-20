@@ -1,0 +1,11 @@
+replicaCount: 2
+
+image:
+  repository: nginx
+  tag: "1.21"
+  pullPolicy: IfNotPresent
+
+env:
+  NODE_ENV: production
+  LOG_LEVEL: info
+  PORT: "3000"
