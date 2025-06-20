@@ -1,3 +1,8 @@
+# Template enable flags
+enableService: true
+enablePodMonitor: true
+enableSentry: true
+
 replicaCount: 2
 
 image:
