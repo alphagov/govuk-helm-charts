@@ -45,6 +45,11 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          show-progress: false
       - uses: actions/download-artifact@v4
         with:
           name: rendered-charts-base
@@ -56,29 +61,5 @@ jobs:
       - name: Diff charts and comment on PR
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          mkdir base head
-
-          mv base-r/rendered-charts/* base/
-          mv head-r/rendered-charts/* head/
-
-          DIFF=$(diff -r base/ head/)
-
-          if [ -z "$DIFF" ]; then
-            cat <<EOF > pr.md
-            No changes detected in rendered charts.
-          EOF
-          else
-            cat <<EOF > pr.md
-            <details>
-            <summary>Rendered charts diff</summary>
-            This PR results in the following changes to rendered charts:
-
-            ```diff
-            ${DIFF}
-            ```
-            </details>
-          EOF
-          fi
-
-          gh pr comment "${{github.event.pull_request.html_url}}" --create-if-none --edit-last --body-file pr.md
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: ./create-diff-pr.sh
