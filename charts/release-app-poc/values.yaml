@@ -1,11 +1,75 @@
 replicaCount: 2
 
 image:
-  repository: nginx
-  tag: "1.21"
-  pullPolicy: IfNotPresent
+  repository: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/release
+  tag: v565
+  pullPolicy: Always
 
 env:
-  NODE_ENV: production
-  LOG_LEVEL: info
   PORT: "3000"
+  RAILS_ENV: production
+  GOVUK_ENVIRONMENT: production
+  GOVUK_APP_NAME: release
+  GOVUK_APP_ROOT: /var/govuk/release
+  RAILS_LOG_TO_STDOUT: "true"
+  RAILS_SERVE_STATIC_FILES: "true"
+  SECRET_KEY_BASE: "" # Will be populated from external secret
+  DATABASE_URL: "" # Will be populated from external secret
+  GDS_SSO_OAUTH_ID: "" # Will be populated from external secret
+  GDS_SSO_OAUTH_SECRET: "" # Will be populated from external secret
+  GITHUB_USERNAME: "" # Will be populated from external secret
+  GITHUB_ACCESS_TOKEN: "" # Will be populated from external secret
+  SLACK_WEBHOOK_URL: "" # Will be populated from external secret
+  REDIS_URL: redis://release-app-poc-redis:6379
+
+# Resources from production config
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 10m
+    memory: 400Mi
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+
+# Service configuration
+service:
+  type: NodePort
+  port: 80
+  targetPort: 3000
+
+# Pod disruption budget
+podDisruptionBudget:
+  minAvailable: 1
+
+# Service account
+serviceAccount:
+  enabled: true
+  create: false
+  name: release-assumer
+
+# Database migration
+dbMigrationEnabled: true
+
+# Redis
+redis:
+  enabled: true
+
+# Rails configuration
+rails:
+  enabled: true
+
+# Sentry monitoring
+sentry:
+  enabled: true
+
+# Monitoring
+monitoring:
+  enabled: true
+  metricsPort: 9394
