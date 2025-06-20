@@ -13,7 +13,8 @@
       "api_url": "https://dex.eks.staging.govuk.digital/userinfo"
       "auth_url": "https://dex.eks.staging.govuk.digital/auth"
       "role_attribute_path": "contains(groups[*], 'alphagov:gov-uk-production-deploy')
-        && 'Admin' || contains(groups[*], 'alphagov:gov-uk') && 'Viewer'"
+        && 'Admin' || contains(groups[*], 'alphagov:gov-uk') && 'Viewer'
+        || contains(groups[*], 'alphagov:gov-uk-ithc-and-penetration-testing') && 'Viewer'"
       "token_url": "https://dex.eks.staging.govuk.digital/token"
     "server":
       "domain": "grafana.eks.staging.govuk.digital"
