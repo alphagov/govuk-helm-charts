@@ -125,7 +125,6 @@ spec:
                  elif test("connection refused|network|dns"; "i") then "🌐 " + .
                  elif test("permission denied|forbidden|unauthorized"; "i") then "🔐 " + .
                  elif test("not found|404"; "i") then "❓ " + .
-                 elif test("database|sql|migration"; "i") then "🗄️ " + .
                  elif test("exit code [1-9]"; "i") then "❌ " + .
                  else . end)
               ] | join("\n   └ "))
