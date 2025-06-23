@@ -1,0 +1,65 @@
+name: Diff chart changes
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.repository }}-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  render-charts-base:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.base.ref }}
+          show-progress: false
+      - name: Run govuk-app-render
+        run: ./govuk-app-render.sh
+      - name: Archive rendered charts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-charts-base
+          path: output/
+          retention-days: 1
+  render-charts-head:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          show-progress: false
+      - name: Run govuk-app-render
+        run: ./govuk-app-render.sh
+      - name: Archive rendered charts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-charts-head
+          path: output/
+          retention-days: 1
+  diff-charts:
+    runs-on: ubuntu-latest
+    needs: [render-charts-base, render-charts-head]
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          show-progress: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: rendered-charts-base
+          path: base-r/
+      - uses: actions/download-artifact@v4
+        with:
+          name: rendered-charts-head
+          path: head-r/
+      - name: Diff charts and comment on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: ./create-diff-pr.sh
