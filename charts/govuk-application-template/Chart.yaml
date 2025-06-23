@@ -1,0 +1,5 @@
+apiVersion: v2
+name: govuk-application-template
+description: A library chart containing reusable application templates for GOV.UK apps (deployment, service, podmonitor, sentry, etc.)
+type: library
+version: 1.0.0
