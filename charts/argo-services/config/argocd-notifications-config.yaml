@@ -8,6 +8,9 @@ service.webhook.argo_events: |
   - name: Authorization
     value: Bearer $argo_events_webhook_token
   url: "http://argo-workflows-server.cluster-services.svc.cluster.local:2746"
+service.slack: |
+  token: $slack_url
+  channel: "#govuk-platform-engineering-low-priority-alarms"
 service.grafana: |
   apiUrl: http://kube-prometheus-stack-grafana.monitoring.svc.cluster.local/api
   apiKey: $grafana_api_key
@@ -29,6 +32,36 @@ template.send-argo-events-webhook: |
 template.send-grafana: |
   message: |
     "Application {{.app.metadata.name}} is now running new version of deployments manifests. Revision: {{.app.status.sync.revision}}"
+template.send-slack-failure: |
+  slack:
+    attachments: |
+      [{
+        "title": "Application {{.app.metadata.name}} deployment failed",
+        "title_link": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+        "color": "danger",
+        "fields": [
+          {
+            "title": "Sync Status",
+            "value": "{{.app.status.sync.status}}",
+            "short": true
+          },
+          {
+            "title": "Health Status", 
+            "value": "{{.app.status.health.status}}",
+            "short": true
+          },
+          {
+            "title": "Repository",
+            "value": "{{.app.spec.source.repoURL}}",
+            "short": true
+          },
+          {
+            "title": "Revision",
+            "value": "{{.app.status.sync.revision}}",
+            "short": true
+          }
+        ]
+      }]
 trigger.deployment: |
   - oncePer: "app.status.operationState.syncResult.revision"
     send: ["send-grafana"]
@@ -38,3 +71,9 @@ trigger.on-deployed: |
     oncePer: 'app.status.operationState.syncResult.revision'
     when: "app.status.operationState.phase in ['Succeeded'] and app.status.health.status
       == 'Healthy' and app.metadata.annotations['postSyncWorkflowEnabled'] == 'true' "
+trigger.on-sync-failed: |
+  - send: ["send-slack-failure"]
+    when: "app.status.operationState.phase in ['Error', 'Failed']"
+trigger.on-health-degraded: |
+  - send: ["send-slack-failure"]
+    when: "app.status.health.status == 'Degraded'"
