@@ -46,7 +46,7 @@ template.send-slack-failure: |
             "short": true
           },
           {
-            "title": "Health Status", 
+            "title": "Health Status",
             "value": "{{.app.status.health.status}}",
             "short": true
           },
