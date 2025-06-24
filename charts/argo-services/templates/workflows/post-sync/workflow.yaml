@@ -110,24 +110,8 @@ spec:
         resources: {}
         source: >
           #!/usr/bin/env bash
-          echo {{"{{workflow.failures}}"}} | jq -r '
-            group_by(.templateName) | map({
-              templateName: .[0].templateName, 
-              errorMessages: [.[].message | select(length > 0)] | unique,
-              phase: .[0].phase,
-              finishedAt: .[0].finishedAt
-            }) | map(
-              "🔴 *" + .templateName + "* failed\n" +
-              "   └ " + ([.errorMessages[] | 
-                (if test("timeout|timed out"; "i") then "⏰ " + .
-                 elif test("connection refused|network|dns"; "i") then "🌐 " + .
-                 elif test("permission denied|forbidden|unauthorized"; "i") then "🔐 " + .
-                 elif test("not found|404"; "i") then "❓ " + .
-                 elif test("exit code [1-9]"; "i") then "❌ " + .
-                 else . end)
-              ] | join("\n   └ "))
-            ) | join("\n\n")
-          ' > /tmp/message.txt
+
+          echo {{"{{workflow.failures}}"}} | jq -r 'group_by(.templateName) | map({templateName: .[0].templateName, errorMessages: [.[].message | select(length > 0)] | unique}) | map("🔴 *" + .templateName + "* failed\n   └ " + ([.errorMessages[] | (if test("timeout|timed out"; "i") then "⏰ " + . elif test("connection refused|network|dns"; "i") then "🌐 " + . elif test("permission denied|forbidden|unauthorized"; "i") then "🔐 " + . elif test("not found|404"; "i") then "❓ " + . elif test("database|sql|migration"; "i") then "🗄️ " + . elif test("exit code [1-9]"; "i") then "❌ " + . else . end)] | join("\n   └ "))) | join("\n\n")' > /tmp/message.txt
       volumes:
         - name: tmp
           emptyDir: {}
