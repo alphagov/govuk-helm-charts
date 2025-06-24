@@ -152,33 +152,3 @@ spec:
                         "action_id": "view-workflow"
                       }
                     }]
-        - - name: notify-content-modelling-slack
-            when: "{{`{{workflow.status}}`}} != Succeeded && {{`{{workflow.parameters.repoName}}`}} == 'govuk_content_block_tools'"
-            templateRef:
-              name: notify-slack
-              template: notify-slack
-            arguments:
-              parameters:
-                - name: slackChannel
-                  value: "murilo-testing"
-                - name: text
-                  value: "Post-deploy workflow for {{`{{workflow.parameters.application}}`}} in {{ .Values.govukEnvironment }} has {{`{{= sprig.lower(workflow.status) }}`}}. \n\n {{`{{ steps.parse-failures.outputs.parameters.message }}`}}"
-                - name: blocks
-                  value: |
-                    [{
-                      "type": "section",
-                      "text": {
-                          "type": "mrkdwn",
-                          "text": "Post-deploy workflow for *{{`{{workflow.parameters.application}}`}}* in *{{ .Values.govukEnvironment }}* has {{`{{= sprig.lower(workflow.status) }}`}}. \n\n {{`{{ steps.parse-failures.outputs.parameters.message }}`}}"
-                      },
-                      "accessory": {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "View workflow",
-                            "emoji": true
-                        },
-                        "url": "https://argo-workflows.eks.{{ .Values.govukEnvironment }}.govuk.digital/workflows/apps/{{`{{ workflow.name }}`}}",
-                        "action_id": "view-workflow"
-                      }
-                    }]
