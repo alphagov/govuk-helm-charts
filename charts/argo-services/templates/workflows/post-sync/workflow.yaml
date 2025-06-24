@@ -110,8 +110,6 @@ spec:
         resources: {}
         source: >
           #!/usr/bin/env bash
-
-          # Enhanced failure parsing with better context
           echo {{"{{workflow.failures}}"}} | jq -r '
             group_by(.templateName) | map({
               templateName: .[0].templateName, 
