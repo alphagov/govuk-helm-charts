@@ -110,8 +110,24 @@ spec:
         resources: {}
         source: >
           #!/usr/bin/env bash
-
-          echo {{"{{workflow.failures}}"}} | jq -r 'group_by(.templateName) | map({templateName: .[0].templateName, errorMessages: [.[].message | select(length > 0)] | unique}) | map("- \(.templateName): " + (["\(.errorMessages[])"] | join(",")) ) | .[]' > /tmp/message.txt
+          echo {{"{{workflow.failures}}"}} | jq -r '
+            group_by(.templateName) | map({
+              templateName: .[0].templateName, 
+              errorMessages: [.[].message | select(length > 0)] | unique,
+              phase: .[0].phase,
+              finishedAt: .[0].finishedAt
+            }) | map(
+              "🔴 *" + .templateName + "* failed\n" +
+              "   └ " + ([.errorMessages[] | 
+                (if test("timeout|timed out"; "i") then "⏰ " + .
+                 elif test("connection refused|network|dns"; "i") then "🌐 " + .
+                 elif test("permission denied|forbidden|unauthorized"; "i") then "🔐 " + .
+                 elif test("not found|404"; "i") then "❓ " + .
+                 elif test("exit code [1-9]"; "i") then "❌ " + .
+                 else . end)
+              ] | join("\n   └ "))
+            ) | join("\n\n")
+          ' > /tmp/message.txt
       volumes:
         - name: tmp
           emptyDir: {}
@@ -132,14 +148,14 @@ spec:
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
                 - name: text
-                  value: "Post-deploy workflow for {{"{{workflow.parameters.application}}"}} in {{ .Values.govukEnvironment }} has {{"{{= sprig.lower(workflow.status) }}"}}. \n\n {{"{{ steps.parse-failures.outputs.parameters.message }}"}}"
+                  value: "🔴 {{"{{workflow.parameters.application}}"}} post-deploy workflow failed in {{ .Values.govukEnvironment }}\n\nService Status: {{"{{workflow.parameters.application}}"}} deployment succeeded but post-deploy checks failed\nImage: {{"{{workflow.parameters.imageTag}}"}}\nRepo: {{"{{workflow.parameters.repoName}}"}}\n\n{{"{{ steps.parse-failures.outputs.parameters.message }}"}}\n\n💡 *Next Steps:*\n• View workflow details and logs in the Argo Workflows UI\n• Check failed step logs for specific error details\n• Service should still be operational on previous version\n• Investigate why post-deploy checks are failing"
                 - name: blocks
                   value: |
                     [{
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Post-deploy workflow for *{{"{{workflow.parameters.application}}"}}* in *{{ .Values.govukEnvironment }}* has {{"{{= sprig.lower(workflow.status) }}"}}. \n\n {{"{{ steps.parse-failures.outputs.parameters.message }}"}}"
+                          "text": "🔴 *{{"{{workflow.parameters.application}}"}}* post-deploy workflow failed in *{{ .Values.govukEnvironment }}*\n\n*Service Status:* {{"{{workflow.parameters.application}}"}} deployment succeeded but post-deploy checks failed\n*Image:* {{"{{workflow.parameters.imageTag}}"}}\n*Repo:* {{"{{workflow.parameters.repoName}}"}}\n\n{{"{{ steps.parse-failures.outputs.parameters.message }}"}}\n\n💡 *Next Steps:*\n• View workflow details and logs in the Argo Workflows UI\n• Check failed step logs for specific error details\n• Service should still be operational on previous version\n• Investigate why post-deploy checks are failing"
                       },
                       "accessory": {
                         "type": "button",
