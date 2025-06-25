@@ -132,14 +132,14 @@ spec:
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
                 - name: text
-                  value: "🔴 {{"{{workflow.parameters.application}}"}} post-deploy workflow failed in {{ .Values.govukEnvironment }}\n\nService Status: {{"{{workflow.parameters.application}}"}} deployment succeeded but post-deploy checks failed\nImage: {{"{{workflow.parameters.imageTag}}"}}\nRepo: {{"{{workflow.parameters.repoName}}"}}\n\n{{"{{ steps.parse-failures.outputs.parameters.message }}"}}\n\n💡 *Next Steps:*\n• Click 'View workflow' button below to see detailed test results\n• Check the pod logs for specific test failures (e.g., Playwright output)\n• Look for failed test names and error details in the logs\n• Service should still be operational on previous version"
+                  value: "🔴 {{"{{workflow.parameters.application}}"}} post-deploy workflow failed in {{ .Values.govukEnvironment }}\n\nService Status: {{"{{workflow.parameters.application}}"}} deployment succeeded but post-deploy checks failed\nImage: {{"{{workflow.parameters.imageTag}}"}}\nRepo: https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\n\n{{"{{ steps.parse-failures.outputs.parameters.message }}"}}\n\n💡 *Next Steps:*\n• Click 'View workflow' button below to see detailed test results\n• Check the pod logs for specific test failures (e.g., Playwright output)\n• Look for failed test names and error details in the logs\n• Service should still be operational on previous version"
                 - name: blocks
                   value: |
                     [{
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "🔴 *{{"{{workflow.parameters.application}}"}}* post-deploy workflow failed in *{{ .Values.govukEnvironment }}*\n\n*Service Status:* {{"{{workflow.parameters.application}}"}} deployment succeeded but post-deploy checks failed\n*Image:* {{"{{workflow.parameters.imageTag}}"}}\n*Repo:* {{"{{workflow.parameters.repoName}}"}}\n\n{{"{{ steps.parse-failures.outputs.parameters.message }}"}}\n\n💡 *Next Steps:*\n• Click 'View workflow' button below to see detailed test results\n• Check the pod logs for specific test failures (e.g., Playwright output)\n• Look for failed test names and error details in the logs\n• Service should still be operational on previous version"
+                          "text": "🔴 *{{"{{workflow.parameters.application}}"}}* post-deploy workflow failed in *{{ .Values.govukEnvironment }}*\n\n*Service Status:* {{"{{workflow.parameters.application}}"}} deployment succeeded but post-deploy checks failed\n*Image:* {{"{{workflow.parameters.imageTag}}"}}\n*Repo:* https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\n\n{{"{{ steps.parse-failures.outputs.parameters.message }}"}}\n\n💡 *Next Steps:*\n• Click 'View workflow' button below to see detailed test results\n• Check the pod logs for specific test failures (e.g., Playwright output)\n• Look for failed test names and error details in the logs\n• Service should still be operational on previous version"
                       },
                       "accessory": {
                         "type": "button",
