@@ -62,7 +62,7 @@ spec:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "🚀💥 *{{"{{workflow.parameters.repoName}}"}}* deployment failed to *{{"{{workflow.parameters.environment}}"}}\n\n*Status:* Image deployment failed - service may be unavailable\n*Image:* {{"{{workflow.parameters.imageTag}}"}} (failed to deploy)\n*Repo:* https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\n\n💡 *Next Steps:*\n• Check if previous version is still running\n• View workflow logs for deployment errors\n• May need immediate rollback if service is down\n• Click 'View workflow' button below for details"
+                          "text": "🚀💥 *{{"{{workflow.parameters.repoName}}"}}* deployment failed to *{{"{{workflow.parameters.environment}}"}}*\n\n*Status:* Image deployment failed - service may be unavailable\n*Image:* {{"{{workflow.parameters.imageTag}}"}} (failed to deploy)\n*Repo:* https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\n\n💡 *Next Steps:*\n• Check if previous version is still running\n• View workflow logs for deployment errors\n• May need immediate rollback if service is down\n• Click 'View workflow' button below for details"
                       },
                       "accessory": {
                         "type": "button",
