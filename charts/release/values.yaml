@@ -1,0 +1,5 @@
+awsAccountId: "111"
+
+namespaces:
+  - namespace: apps
+  - namespace: licensify
