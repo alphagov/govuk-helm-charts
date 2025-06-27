@@ -1739,6 +1739,7 @@ govukApplications:
       - "licensify-feed"
       - "licensify-frontend"
     helmValues:
+      repoName: licensify
       arch: arm64
       assetManagerNFS: *assets-nfs
       apps:
@@ -3755,6 +3756,7 @@ govukApplications:
   - name: whitehall-admin
     repoName: whitehall
     helmValues:
+      repoName: whitehall
       arch: arm64
       assetManagerNFS: *assets-nfs
       nfsStorage: 15Gi
