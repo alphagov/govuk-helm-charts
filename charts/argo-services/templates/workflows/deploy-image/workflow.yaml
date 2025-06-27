@@ -55,14 +55,14 @@ spec:
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
                 - name: text
-                  value: "Deploy image workflow for {{"{{workflow.parameters.repoName}}"}} to {{"{{workflow.parameters.environment}}"}} has {{"{{= sprig.lower(workflow.status) }}"}}."
+                  value: "🚀❌ {{"{{workflow.parameters.repoName}}"}} deployment failed to {{"{{workflow.parameters.environment}}"}}\n\nStatus: Image deployment failed - service may be unavailable\nImage: {{"{{workflow.parameters.imageTag}}"}} (failed to deploy)\nRepo: https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\n\n💡 *Next Steps:*\n• Check if previous version is still running\n• View workflow logs for deployment errors\n• May need immediate rollback if service is down\n• Click 'View workflow' button below for details"
                 - name: blocks
                   value: |
                     [{
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "Deploy image workflow for *{{"{{workflow.parameters.repoName}}"}}* to *{{"{{workflow.parameters.environment}}"}}* has {{"{{= sprig.lower(workflow.status) }}"}}."
+                          "text": "🚀💥 *{{"{{workflow.parameters.repoName}}"}}* deployment failed to *{{"{{workflow.parameters.environment}}"}}\n\n*Status:* Image deployment failed - service may be unavailable\n*Image:* {{"{{workflow.parameters.imageTag}}"}} (failed to deploy)\n*Repo:* https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\n\n💡 *Next Steps:*\n• Check if previous version is still running\n• View workflow logs for deployment errors\n• May need immediate rollback if service is down\n• Click 'View workflow' button below for details"
                       },
                       "accessory": {
                         "type": "button",
