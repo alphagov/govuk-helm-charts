@@ -15,7 +15,7 @@ groups:
           sum(increase(fastly_rt_requests_total[1d]))
 
       - alert: HighBandwidthUsage
-        expr: global:fastly_global_bandwidth_bytes:rate1d > 5.8 * (10 ^ 12)
+        expr: global:fastly_global_bandwidth_bytes:rate1d > 7.5 * (10 ^ 12)
         for: 2d
         labels:
           severity: warning
@@ -24,7 +24,7 @@ groups:
           summary: Fastly global bandwidth exceeds typical daily usage
           description: >-
             The global daily bandwidth usage rate for Fastly services has
-            exceeded the expected threshold of 5.8 TB. This may indicate
+            exceeded the expected threshold of 7.5 TB. This may indicate
             abnormal traffic patterns.
 
       - alert: HighRequestRate
