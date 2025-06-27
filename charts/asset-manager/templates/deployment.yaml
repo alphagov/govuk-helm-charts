@@ -6,6 +6,7 @@ metadata:
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
     app: {{ $fullName }}
+    app.govuk/repository-name: {{ .Values.repoName | default .Release.Name  }}
     app.kubernetes.io/name: {{ $fullName }}
     app.kubernetes.io/component: app
   annotations:

@@ -42,6 +42,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/arch: {{ default "amd64" .Values.arch }}
 app.kubernetes.io/part-of: "licensify"
+app.govuk/repository-name: {{ .Values.repoName | default .Release.Name  }}
 {{- end }}
 
 {{/*
