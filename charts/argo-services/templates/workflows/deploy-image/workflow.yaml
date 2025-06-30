@@ -5,6 +5,7 @@ metadata:
 spec:
   entrypoint: deploy-image
   onExit: exit-handler
+  generateName: "deploy-{{"{{workflow.parameters.repoName}}"}}-{{"{{workflow.parameters.environment}}"}}-{{"{{= sprig.trunc(8, workflow.parameters.imageTag) }}"}}-"
   arguments:
     parameters:
       - name: environment
