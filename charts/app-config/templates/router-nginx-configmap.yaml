@@ -20,6 +20,8 @@ metadata:
     {{- include "app-config.labels" . | nindent 4 }}
     app.kubernetes.io/component: web
 data:
+  humans.txt: |-
+    {{- $.Files.Get "humans.txt" | nindent 4 }}
   nginx.conf: |-
     {{- include "app-config.router-nginx-config" ( mergeOverwrite . ( dict "Stack" "live" ) ) | nindent 4 }}
   robots.txt: |-
