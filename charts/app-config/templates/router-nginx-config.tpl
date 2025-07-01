@@ -166,6 +166,10 @@ http {
       return 200 '{"message": "Tweet tweet"}\n';
     }
 
+    location = /humans.txt {
+      root /usr/share/nginx/html;
+    }
+
     # Endpoint for liveness and readiness checks of the nginx container.
     location = /readyz {
       return 200 'ok\n';
