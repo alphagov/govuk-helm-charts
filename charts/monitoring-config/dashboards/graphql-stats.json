@@ -27,9 +27,103 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6815,
+  "id": 7235,
   "links": [],
   "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 18,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Count"
+          }
+        ]
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum  by (graphql_contains_errors, graphql_status_code, graphql_api_timeout, job) (increase(http_requests_total{job=~\"collections|frontend\"}[$__range]))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Errors vs non errors by frontend app",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Time": "",
+              "Value": "Count",
+              "graphql_api_timeout": "GraphQL API Timeout",
+              "graphql_contains_errors": "GraphQL Contains Errors",
+              "graphql_status_code": "GraphQL Status Code",
+              "job": "App"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
     {
       "datasource": {
         "type": "prometheus",
@@ -120,7 +214,7 @@
         "h": 8,
         "w": 18,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 16,
       "options": {
@@ -337,7 +431,7 @@
         "h": 8,
         "w": 5,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 5,
       "options": {
@@ -402,7 +496,7 @@
         "h": 8,
         "w": 5,
         "x": 5,
-        "y": 8
+        "y": 16
       },
       "id": 4,
       "options": {
@@ -502,7 +596,7 @@
         "h": 8,
         "w": 5,
         "x": 10,
-        "y": 8
+        "y": 16
       },
       "id": 6,
       "options": {
@@ -539,7 +633,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 11,
       "panels": [],
@@ -631,7 +725,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 25
       },
       "id": 12,
       "options": {
@@ -754,7 +848,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 25
       },
       "id": 13,
       "options": {
@@ -874,7 +968,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 32
       },
       "id": 2,
       "options": {
@@ -917,7 +1011,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 38
       },
       "id": 8,
       "panels": [],
@@ -1008,7 +1102,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 31
+        "y": 39
       },
       "id": 9,
       "options": {
@@ -1131,7 +1225,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 31
+        "y": 39
       },
       "id": 10,
       "options": {
@@ -1251,7 +1345,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 46
       },
       "id": 7,
       "options": {
@@ -1369,7 +1463,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 52
       },
       "id": 17,
       "options": {
@@ -1456,6 +1550,15 @@
         "refresh": 1,
         "regex": "",
         "type": "query"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "filters": [],
+        "name": "Filters",
+        "type": "adhoc"
       }
     ]
   },
@@ -1477,5 +1580,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 14
+  "version": 15
 }
