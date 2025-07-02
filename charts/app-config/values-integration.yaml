@@ -3198,9 +3198,9 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
-        - name: evaluation-setup-sample-query-sets
-          task: "evaluation:setup_sample_query_sets"
-          schedule: "0 2 1 * *"
+        - name: quality-setup-sample-query-sets
+          task: "quality:setup_sample_query_sets"
+          schedule: "0 2 1 * *"  # 02:00am first day of the month
         - name: user-events-import-yesterdays-events
           task: "user_events:import_yesterdays_events"
           schedule: "30 12 * * *"
