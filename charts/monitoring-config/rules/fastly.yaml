@@ -37,5 +37,5 @@ groups:
           summary: Fastly global request rate exceeds typical daily usage
           description: >-
             The global daily request rate for Fastly has exceeded the expected
-            threshold of 200 million requests. This may indicate abnormal
+            threshold of 220 million requests. This may indicate abnormal
             traffic patterns or unexpected spikes in usage.
