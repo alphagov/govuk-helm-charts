@@ -28,7 +28,7 @@ groups:
             abnormal traffic patterns.
 
       - alert: HighRequestRate
-        expr: global:fastly_global_requests:rate1d > 2 * (10 ^ 8)
+        expr: global:fastly_global_requests:rate1d > 2.2 * (10 ^ 8)
         for: 2d
         labels:
           severity: warning
