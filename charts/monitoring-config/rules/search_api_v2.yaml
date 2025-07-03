@@ -46,7 +46,6 @@ groups:
           destination: slack-search-team
         annotations:
           summary: "Search API v2: Degraded search performance (acute)"
-          grafana_path: "d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser"
           description: >-
             5 minute rolling success rate for search requests has dropped below 99% for more than 10
             minutes.
@@ -57,7 +56,6 @@ groups:
           severity: warning
           destination: slack-search-team
         annotations:
-          grafana_path: "d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser"
           summary: "Search API v2: Degraded autocomplete performance (acute)"
           description: >-
             5 minute rolling success rate for autocomplete requests has dropped below 90% for more
@@ -91,7 +89,6 @@ groups:
           severity: critical
           destination: slack-search-team
         annotations:
-          grafana_path: "d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser"
           summary: "Search API v2: Degraded search performance (mid)"
           description: >-
             1 hour rolling success rate for search requests has dropped below 99.9% for more than 2
@@ -125,7 +122,6 @@ groups:
           severity: critical
           destination: slack-search-team
         annotations:
-          grafana_path: "d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser"
           summary: "Search API v2: Degraded search performance (long)"
           description: >-
             24 hour rolling success rate for search requests has dropped below 99.99% for more than 24
