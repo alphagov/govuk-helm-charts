@@ -1371,10 +1371,10 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__rate_interval])) by (job)",
+          "expr": "sum(rate(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__rate_interval])) by (schema_name)",
           "hide": false,
           "interval": "",
-          "legendFormat": "All Document types",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "D"
         }
@@ -1490,12 +1490,12 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(job) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[1h]))",
+          "expr": "sum by(schema_name) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[1h]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
           "interval": "",
-          "legendFormat": "All Document types",
+          "legendFormat": "__auto",
           "range": true,
           "refId": "D",
           "useBackend": false
@@ -1580,5 +1580,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 15
+  "version": 16
 }
