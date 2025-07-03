@@ -30,7 +30,7 @@ groups:
             abnormal traffic patterns.
 
       - alert: HighRequestRate
-        expr: global:fastly_global_requests:rate1d > 2 * (10 ^ 8)
+        expr: global:fastly_global_requests:rate1d > 2.2 * (10 ^ 8)
         for: 2d
         labels:
           severity: warning
@@ -41,5 +41,5 @@ groups:
             d/deqpydcv7ottse/fastly-global-traffic?orgId=1&from=now-1h&to=now&timezone=browser
           description: >-
             The global daily request rate for Fastly has exceeded the expected
-            threshold of 200 million requests. This may indicate abnormal
+            threshold of 220 million requests. This may indicate abnormal
             traffic patterns or unexpected spikes in usage.
