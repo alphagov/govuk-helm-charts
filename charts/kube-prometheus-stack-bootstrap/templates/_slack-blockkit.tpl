@@ -103,7 +103,7 @@ Slack Block Kit, as Slack Attachments are "deprecated".
         {{ if ne .CommonAnnotations.runbook_url false }}
         {
           "type": "mrkdwn",
-          "text": "*No Runbook exists for this alert.* Perhaps you should create one?"
+          "text": "*No Runbook has been configured for this alert.*"
         },
         {{ end }}
         {
