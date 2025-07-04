@@ -93,13 +93,33 @@ govukApplications:
           - name: govuk-reports-prototype.{{ .Values.k8sExternalDomainSuffix }}
       service:
         port: 8080
+      serviceAccount:
+        enabled: true
+        create: true
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::{{ .values.awsAccountId }:role/content-data-admin-integration
       healthcheck:
-        path: /api/v1/health
+        path: /api/health
       extraEnv:
-        - name: SERVER_PORT
+        - name: PORT
           value: "8080"
-        - name: GOVUK_ENVIRONMENT
+        - name: ENVIRONMENT
           value: "{{ .Values.govukEnvironment }}"
+        - name: AWS_REGION
+          value: "{{ .Values.awsRegion }}"
+
+        # Logging configuration
+        - name: LOG_LEVEL
+          value: "info"
+        - name: LOG_FORMAT
+          value: "json"
+        - name: LOG_OUTPUT
+          value: "stdout"
+        - name: LOG_TIME_FORMAT
+          value: "2006-01-02T15:04:05Z07:00"
+        - name: LOG_COLORIZE
+          value: false
+
   - name: account-api
     helmValues:
       arch: arm64
