@@ -1,4 +1,4 @@
-.PHONY: check-yamllint lint check help
+.PHONY: check-yamllint lint check kubeconform help
 
 # Default target
 help: ## Show this help message
@@ -17,7 +17,7 @@ yamllint: check-yamllint ## Run yamllint on all YAML files
 	@echo "Running yamllint..."
 	yamllint -f github .
 
-lint: check-yamllint kubeconform ## Run yamllint on all YAML files
+lint: check-yamllint kubeconform ## Run linting commands on all YAML files
 
 check: lint ## Alias for lint target
 
