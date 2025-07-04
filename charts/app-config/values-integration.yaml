@@ -118,7 +118,7 @@ govukApplications:
         - name: LOG_TIME_FORMAT
           value: "2006-01-02T15:04:05Z07:00"
         - name: LOG_COLORIZE
-          value: false
+          value: "false"
 
   - name: account-api
     helmValues:
