@@ -63,6 +63,43 @@ emergency-banner-redis:
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 
 govukApplications:
+  - name: govuk-reports-prototype
+    helmValues:
+      arch: arm64
+      uploadAssets:
+        enabled: false
+      appResources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      dbMigrationEnabled: false
+      workers:
+        enabled: false
+      redis:
+        enabled: false
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "10"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "govuk-reports-prototype.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: govuk-reports-prototype.{{ .Values.k8sExternalDomainSuffix }}
+      service:
+        port: 8080
+      healthcheck:
+        path: /api/v1/health
+      extraEnv:
+        - name: SERVER_PORT
+          value: "8080"
+        - name: GOVUK_ENVIRONMENT
+          value: "{{ .Values.govukEnvironment }}"
   - name: account-api
     helmValues:
       arch: arm64
