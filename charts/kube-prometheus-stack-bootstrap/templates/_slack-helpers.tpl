@@ -27,6 +27,16 @@
   • *{{`{{ .Annotations.summary }}`}}*: {{`{{ .Annotations.description }}`}}
   {{`{{ end }}`}}
 {{`{{ end }}`}}
+*Links:*
+{{`{{- if .CommonAnnotations.grafana_path }}`}}
+• <https://grafana.eks.{{`{{ .CommonLabels.environment }}`}}.govuk.digital/{{`{{ .CommonAnnotations.grafana_path }}`}}|:mag: View Dashboard>
+{{`{{- end -}}`}}
+{{`{{- if .CommonAnnotations.runbook_url }}`}}
+• <{{`{{ .CommonAnnotations.runbook_url }}`}}|:orange_book: View Runbook>
+{{`{{- end -}}`}}
+{{`{{- if .CommonAnnotations.cronjob_uri }}`}}
+• <{{`{{ .CommonAnnotations.cronjob_uri }}`}}|:link: View Cronjob>
+{{`{{- end -}}`}}
 {{- end -}}
 
 {{- define "slack.title" -}}
