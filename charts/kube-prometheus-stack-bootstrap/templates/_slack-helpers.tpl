@@ -20,7 +20,9 @@
 {{`{{ .CommonAnnotations.description }}`}}
 {{`{{- end -}}`}}
 *Labels*:
-{{`{{ .CommonLabels.SortedPairs | join ", " }}`}}
+{{`{{ range .CommonLabels.SortedPairs }}
+• *{{ .Name }}*: {{ .Value }}
+{{ end }}`}}
 *Firing Alerts*:
 {{`{{ range .Alerts }}`}}
   {{`{{ if eq .Status "firing" }}`}}
