@@ -189,6 +189,7 @@ spec:
           • backend: {{ "`{{ .Labels.backend }}`" }}
         {{ "{{ end }}" }}
       apiURL: *slack_api_url
+{{- if ne .Values.govukEnvironment "integration" }}
   - name: 'generic-slack-platform-engineering'
     slackConfigs:
     - channel: '#govuk-platform-support'
@@ -197,6 +198,15 @@ spec:
       text: |-
         {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
       apiURL: *slack_api_url
+{{- else }}
+  - name: 'generic-slack-platform-engineering'
+    slackConfigs:
+    - channel: '#govuk-platform-support'
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
+{{- end }}
+{{- if ne .Values.govukEnvironment "integration" }}
   - name: 'generic-slack-platform-engineering-low-priority'
     slackConfigs:
     - channel: '#govuk-platform-engineering-low-priority-alarms'
@@ -205,6 +215,14 @@ spec:
       text: |-
         {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
       apiURL: *slack_api_url
+{{- else }}
+  - name: 'generic-slack-platform-engineering-low-priority'
+    slackConfigs:
+    - channel: '#govuk-platform-engineering-low-priority-alarms'
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
+{{- end }}
   - name: 'slack-search-team-alerts-channel'
     slackConfigs:
     - &slack-search-team-alerts-channel

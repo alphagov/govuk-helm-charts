@@ -1,0 +1,34 @@
+{{- define "slack.color" -}}
+{{`{{ if and (eq .Status "firing") (eq .CommonLabels.severity "critical") }}#ff0000{{ else if eq .Status "firing" }}#ffa500{{ else }}#008000{{ end }}`}}
+{{- end -}}
+
+{{- define "slack.emoji" -}}
+{{`{{ if and (eq .Status "firing") (eq .CommonLabels.severity "critical") }}:octagonal_sign:{{ else if eq .Status "firing" }}:warning:{{ else }}:white_tick:{{ end }}`}}
+{{- end -}}
+
+{{- define "slack.pretext" -}}
+{{`{{ if eq .Status "firing" }}The following alert is firing:{{ else }}This alert is resolved:{{ end }}`}}
+{{- end -}}
+
+{{- define "slack.status" -}}
+{{`{{ if eq .Status "firing" }}:fire: Firing{{ else }}:white_tick: Resolved{{ end }}`}}
+{{- end -}}
+
+{{- define "slack.text" -}}
+{{`{{- if .CommonAnnotations.description -}}`}}
+*Description*:
+{{`{{ .CommonAnnotations.description }}`}}
+{{`{{- end -}}`}}
+*Labels*:
+{{`{{ .CommonLabels.SortedPairs | join ", " }}`}}
+*Firing Alerts*:
+{{`{{ range .Alerts }}`}}
+  {{`{{ if eq .Status "firing" }}`}}
+  • *{{`{{ .Annotations.summary }}`}}*: {{`{{ .Annotations.description }}`}}
+  {{`{{ end }}`}}
+{{`{{ end }}`}}
+{{- end -}}
+
+{{- define "slack.title" -}}
+{{`{{ if and (eq .Status "firing") (eq .CommonLabels.severity "critical") }}ERROR{{ else if eq .Status "firing" }}WARNING{{ else }}RESOLVED{{ end }}`}}
+{{- end -}}
