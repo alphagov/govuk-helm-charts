@@ -3,7 +3,7 @@
 {{- end -}}
 
 {{- define "slack.emoji" -}}
-{{`{{ if and (eq .Status "firing") (eq .CommonLabels.severity "critical") }}:octagonal_sign:{{ else if eq .Status "firing" }}:warning:{{ else }}:white_tick:{{ end }}`}}
+{{`{{ if and (eq .Status "firing") (eq .CommonLabels.severity "critical") }}:octagonal_sign:{{ else if eq .Status "firing" }}:warning:{{ else }}:green_tick:{{ end }}`}}
 {{- end -}}
 
 {{- define "slack.pretext" -}}
@@ -11,34 +11,41 @@
 {{- end -}}
 
 {{- define "slack.status" -}}
-{{`{{ if eq .Status "firing" }}:fire: Firing{{ else }}:white_tick: Resolved{{ end }}`}}
+{{`{{ if eq .Status "firing" }}:fire: Firing{{ else }}:green_tick: Resolved{{ end }}`}}
 {{- end -}}
 
 {{- define "slack.text" -}}
-{{`{{- if .CommonAnnotations.description -}}`}}
+{{`{{- if .CommonAnnotations.summary }}
+*{{ .CommonAnnotations.summary }}*
+{{- end }}`}}
+{{`{{- if .CommonAnnotations.description }}
 *Description*:
-{{`{{ .CommonAnnotations.description }}`}}
-{{`{{- end -}}`}}
+{{ .CommonAnnotations.description }}
+{{- end }}`}}
+{{`{{- if .CommonLabels }}
 *Labels*:
-{{`{{ range .CommonLabels.SortedPairs }}
+{{ range .CommonLabels.SortedPairs }}
 • *{{ .Name }}*: {{ .Value }}
-{{ end }}`}}
+{{- end }}
+{{- end }}`}}
+{{`{{- if .Alerts -}}
 *Firing Alerts*:
-{{`{{ range .Alerts }}`}}
-  {{`{{ if eq .Status "firing" }}`}}
-  • *{{`{{ .Annotations.summary }}`}}*: {{`{{ .Annotations.description }}`}}
-  {{`{{ end }}`}}
-{{`{{ end }}`}}
+{{ range .Alerts }}
+  {{ if eq .Status "firing" }}
+  • *{{ .Annotations.summary | default "Summary" }}*: 
+    {{ .Annotations.description }}
+  {{ end }}
+{{- end }}`}}
 *Links:*
-{{`{{- if .CommonAnnotations.grafana_path }}`}}
-• <https://grafana.eks.{{`{{ .CommonLabels.environment }}`}}.govuk.digital/{{`{{ .CommonAnnotations.grafana_path }}`}}|:mag: View Dashboard>
-{{`{{- end -}}`}}
-{{`{{- if .CommonAnnotations.runbook_url }}`}}
-• <{{`{{ .CommonAnnotations.runbook_url }}`}}|:orange_book: View Runbook>
-{{`{{- end -}}`}}
-{{`{{- if .CommonAnnotations.cronjob_uri }}`}}
-• <{{`{{ .CommonAnnotations.cronjob_uri }}`}}|:link: View Cronjob>
-{{`{{- end -}}`}}
+{{`{{- if .CommonAnnotations.grafana_path }}
+• <https://grafana.eks.{{ .CommonLabels.environment }}.govuk.digital/{{ .CommonAnnotations.grafana_path }}|:mag: View Dashboard>
+{{- end }}`}}
+{{`{{- if .CommonAnnotations.runbook_url }}
+• <{{ .CommonAnnotations.runbook_url }}|:orange_book: View Runbook>
+{{- end }}`}}
+{{`{{- if .CommonAnnotations.cronjob_uri }}
+• <{{ .CommonAnnotations.cronjob_uri }}|:link: View Cronjob>
+{{- end }}`}}
 {{- end -}}
 
 {{- define "slack.title" -}}
