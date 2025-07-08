@@ -33,4 +33,4 @@ footer: "Sent by Alertmanager"
 apiURL:
   name: alertmanager-receivers
   key: slack_api_url
-  {{- end -}}
+{{- end -}}
