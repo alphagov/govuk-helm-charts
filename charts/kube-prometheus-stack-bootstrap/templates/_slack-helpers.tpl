@@ -32,7 +32,7 @@
 *Firing Alerts*:
 {{ range .Alerts }}
   {{ if eq .Status "firing" }}
-  • *{{ .Annotations.summary | default "Summary" }}*: 
+  • *{{ .Annotations.summary }}*: 
     {{ .Annotations.description }}
   {{ end }}
 {{- end }}`}}
