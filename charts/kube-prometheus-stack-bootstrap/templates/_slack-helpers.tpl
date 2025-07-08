@@ -15,37 +15,45 @@
 {{- end -}}
 
 {{- define "slack.text" -}}
-{{`{{- if .CommonAnnotations.summary }}
-*{{ .CommonAnnotations.summary }}*
-{{- end }}`}}
-{{`{{- if .CommonAnnotations.description }}
+{{`{{- if .CommonAnnotations.summary }}`}}
+*{{`{{ .CommonAnnotations.summary }}`}}*
+{{`{{- end }}`}}
+
+{{`{{- if .CommonAnnotations.description }}`}}
 *Description*:
-{{ .CommonAnnotations.description }}
-{{- end }}`}}
-{{`{{- if .CommonLabels }}
+{{`{{ .CommonAnnotations.description }}`}}
+{{`{{- end }}`}}
+
+{{`{{- if .CommonLabels.SortedPairs }}`}}
 *Labels*:
-{{ range .CommonLabels.SortedPairs }}
-• *{{ .Name }}*: {{ .Value }}
-{{- end }}
-{{- end }}`}}
-{{`{{- if .Alerts -}}
+  {{`{{ range .CommonLabels.SortedPairs }}`}}
+  • *{{`{{ .Name }}`}}*: {{`{{ .Value }}`}}
+  {{`{{- end }}`}}
+{{`{{- end }}`}}
+
+{{`{{- if .Alerts -}}`}}
 *Firing Alerts*:
-{{ range .Alerts }}
-  {{ if eq .Status "firing" }}
-  • *{{ .Annotations.summary }}*: 
-    {{ .Annotations.description }}
-  {{ end }}
-{{- end }}`}}
+{{`{{ range .Alerts }}`}}
+  {{`{{ if eq .Status "firing" }}`}}
+  • *{{`{{ .Annotations.summary }}`}}*: 
+    {{`{{ .Annotations.description }}`}}
+  {{`{{ end }}`}}
+{{`{{ end }}`}}
+{{`{{- end }}`}}
+
 *Links:*
-{{`{{- if .CommonAnnotations.grafana_path }}
-• <https://grafana.eks.{{ .CommonLabels.environment }}.govuk.digital/{{ .CommonAnnotations.grafana_path }}|:mag: View Dashboard>
-{{- end }}`}}
-{{`{{- if .CommonAnnotations.runbook_url }}
-• <{{ .CommonAnnotations.runbook_url }}|:orange_book: View Runbook>
-{{- end }}`}}
-{{`{{- if .CommonAnnotations.cronjob_uri }}
-• <{{ .CommonAnnotations.cronjob_uri }}|:link: View Cronjob>
-{{- end }}`}}
+{{`{{- if .CommonAnnotations.grafana_path }}`}}
+• <https://grafana.eks.{{`{{ .CommonLabels.environment }}`}}.govuk.digital/{{`{{ .CommonAnnotations.grafana_path }}`}}|:mag: View Dashboard>
+{{`{{- end }}`}}
+
+{{`{{- if .CommonAnnotations.runbook_url }}`}}
+• <{{`{{ .CommonAnnotations.runbook_url }}`}}|:orange_book: View Runbook>
+{{`{{- end }}`}}
+
+{{`{{- if .CommonAnnotations.cronjob_uri }}`}}
+• <{{`{{ .CommonAnnotations.cronjob_uri }}`}}|:link: View Cronjob>
+{{`{{- end }}`}}
+
 {{- end -}}
 
 {{- define "slack.title" -}}
