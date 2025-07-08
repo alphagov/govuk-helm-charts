@@ -2343,9 +2343,6 @@ govukApplications:
         enabled: true
       redis:
         enabled: true
-        redisUrlOverride:
-          app: "redis://publishing-api-valkey.staging.govuk-internal.digital:6379"
-          workers: "redis://publishing-api-valkey.staging.govuk-internal.digital:6379"
       workerResources:
         limits:
           cpu: 4
