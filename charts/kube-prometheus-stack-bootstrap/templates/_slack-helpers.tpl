@@ -22,16 +22,16 @@
 {{`{{- if .CommonAnnotations.description }}`}}
 *Description*:
 {{`{{ .CommonAnnotations.description }}`}}
-{{`{{- end }}`}}
+{{`{{ end }}`}}
 
 {{`{{- if .CommonLabels.SortedPairs }}`}}
 *Labels*:
   {{`{{ range .CommonLabels.SortedPairs }}`}}
   • *{{`{{ .Name }}`}}*: {{`{{ .Value }}`}}
   {{`{{- end }}`}}
-{{`{{- end }}`}}
+{{`{{ end }}`}}
 
-{{`{{- if .Alerts -}}`}}
+{{`{{ if .Alerts }}`}}
 *Firing Alerts*:
 {{`{{ range .Alerts }}`}}
   {{`{{ if eq .Status "firing" }}`}}
@@ -39,7 +39,7 @@
     {{`{{ .Annotations.description }}`}}
   {{`{{ end }}`}}
 {{`{{ end }}`}}
-{{`{{- end }}`}}
+{{`{{ end }}`}}
 
 *Links:*
 {{`{{- if .CommonAnnotations.grafana_path }}`}}
