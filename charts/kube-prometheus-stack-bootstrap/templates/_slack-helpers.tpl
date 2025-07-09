@@ -6,6 +6,15 @@
 {{`{{ if and (eq .Status "firing") (eq .CommonLabels.severity "critical") }}:octagonal_sign:{{ else if eq .Status "firing" }}:warning:{{ else }}:green_tick:{{ end }}`}}
 {{- end -}}
 
+{{- define "slack.filterstring" -}}
+{{ "{" }}{{- $first := true -}}
+{{- range .CommonLabels.SortedPairs -}}
+  {{- if not $first }},{{ end -}}
+  {{- $first = false -}}
+  {{ .Name }}={{ printf "%q" .Value }}
+{{- end -}}{{ "}" }}
+{{- end }}
+
 {{- define "slack.pretext" -}}
 {{`{{ if eq .Status "firing" }}The following alert is firing:{{ else }}This alert is resolved:{{ end }}`}}
 {{- end -}}
@@ -42,6 +51,9 @@
 {{`{{ end }}`}}
 
 *Links:*
+• <{{`{{ .ExternalURL }}`}}/#/alerts?filter={{- include "slack.filterstring" . -}}|:mag: View Alert>
+• <{{`{{ .ExternalURL }}`}}/#/silences/new?filter={{- include "slack.filterstring" . -}}|:no_bell: Silence Alert (2h)>
+
 {{`{{- if .CommonAnnotations.grafana_path }}`}}
 • <https://grafana.eks.{{`{{ .CommonLabels.environment }}`}}.govuk.digital/{{`{{ .CommonAnnotations.grafana_path }}`}}|:mag: View Dashboard>
 {{`{{- end }}`}}
