@@ -25,12 +25,12 @@ fields:
 actions:
   - text: ":mag: View Alert"
     type: button
-    url: '{{`{{ .ExternalURL }}/#/alerts?filter={{ range .CommonLabels.SortedPairs }}{{ .Name }}%3D"{{ .Value | urlquery }}"%2C{{ end }}`}}'
+    url: '{{`{{ .ExternalURL }}/#/alerts?filter=%7B{{- range $index, $pair := .CommonLabels.SortedPairs }}{{- if $index }}, {{ end }}{{ $pair.Name }}%3D"{{ $pair.Value | urlquery }}"{{- end }}%7D`}}'
   - text: ":no_bell: Silence Alert (2h)"
     type: button
-    url: '{{`{{ .ExternalURL }}/#/silences/new?filter={{ range .CommonLabels.SortedPairs }}{{ .Name }}%3D"{{ .Value | urlquery }}"%2C{{ end }}`}}'
+    url: '{{`{{ .ExternalURL }}/#/silences/new?filter=%7B{{- range $index, $pair := .CommonLabels.SortedPairs }}{{- if $index }}, {{ end }}{{ $pair.Name }}%3D"{{ $pair.Value | urlquery }}"{{- end }}%7D`}}'
 footer: "Sent by Alertmanager"
 apiURL:
   name: alertmanager-receivers
   key: slack_api_url
-  {{- end -}}
+{{- end -}}
