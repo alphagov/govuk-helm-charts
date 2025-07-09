@@ -4174,7 +4174,7 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
         - name: TAXONOMY_CACHE_REDIS_URL
-          value: "$(REDUS_URL):6379/2"
+          value: "$(REDIS_URL):6379/2"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
