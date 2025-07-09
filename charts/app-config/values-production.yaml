@@ -49,7 +49,7 @@ _alb-ingress-group-backend: &alb-ingress-group-backend
     access_logs.s3.prefix=elb/backend
 
 emergency-banner-redis:
-  - &emergency-banner-redis redis://whitehall-admin-redis/1
+  - &emergency-banner-redis "$(REDIS_URL)/1"
 
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 
@@ -3885,7 +3885,7 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
         - name: TAXONOMY_CACHE_REDIS_URL
-          value: redis://whitehall-admin-redis/2
+          value: "$(REDIS_URL)/2"
         - name: SIGNON_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
