@@ -48,6 +48,8 @@
 
 {{`{{- if .CommonAnnotations.runbook_url }}`}}
 • <{{`{{ .CommonAnnotations.runbook_url }}`}}|:orange_book: View Runbook>
+{{`{{- else }}`}}
+• :orange_book: No Runbook has been provided
 {{`{{- end }}`}}
 
 {{`{{- if .CommonAnnotations.cronjob_uri }}`}}
