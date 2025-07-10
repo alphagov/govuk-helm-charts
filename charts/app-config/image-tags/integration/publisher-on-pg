@@ -1,3 +1,3 @@
-image_tag: v746-on-pg
+image_tag: c15bae00c2edd1372f6e5089fbd5e5cf152591ce-on-pg
 automatic_deploys_enabled: false
-promote_deployment: true
+promote_deployment: false
