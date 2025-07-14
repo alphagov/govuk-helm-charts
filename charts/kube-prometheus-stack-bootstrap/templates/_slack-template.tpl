@@ -22,13 +22,6 @@ fields:
 - title: "Environment"
   value: '{{ "{{ .CommonLabels.environment | title }}" }}'
   short: true
-actions:
-  - text: ":mag: View Alert"
-    type: button
-    url: '{{`{{ .ExternalURL }}/#/alerts?filter={{ "{" }}{{- range $index, $pair := .CommonLabels.SortedPairs }}{{- if $index }}, {{ end }}{{ $pair.Name }}%3D"{{ $pair.Value | urlquery }}"{{- end }}{{ "}" }}`}}'
-  - text: ":no_bell: Silence Alert (2h)"
-    type: button
-    url: '{{`{{ .ExternalURL }}/#/silences/new?filter={{ "{" }}{{- range $index, $pair := .CommonLabels.SortedPairs }}{{- if $index }}, {{ end }}{{ $pair.Name }}%3D"{{ $pair.Value | urlquery }}"{{- end }}{{ "}" }}`}}'
 footer: "Sent by Alertmanager"
 apiURL:
   name: alertmanager-receivers
