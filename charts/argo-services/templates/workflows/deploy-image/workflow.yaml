@@ -2,10 +2,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: deploy-image
-  generateName: "deploy-{{"{{workflow.parameters.repoName}}"}}-{{"{{workflow.parameters.environment}}"}}-{{"{{= sprig.trunc(8, workflow.parameters.imageTag) }}"}}-"
 spec:
   entrypoint: deploy-image
   onExit: exit-handler
+  generateName: "deploy-{{"{{workflow.parameters.repoName}}"}}-{{"{{workflow.parameters.environment}}"}}-{{"{{= sprig.trunc(8, workflow.parameters.imageTag) }}"}}-"
   arguments:
     parameters:
       - name: environment
