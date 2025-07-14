@@ -8,7 +8,8 @@ spec:
   submit:
     workflowTemplateRef:
       name: deploy-image
-    generateName: "deploy-{{`{{payload.repoName}}`}}-{{`{{payload.environment}}`}}-{{`{{payload.imageTag | substr 0 8}}`}}-"
+    metadata:
+      generateName: "deploy-{{`{{payload.repoName}}`}}-{{`{{payload.environment}}`}}-{{`{{payload.imageTag | substr 0 8}}`}}-"
     arguments:
       parameters:
         - name: environment
