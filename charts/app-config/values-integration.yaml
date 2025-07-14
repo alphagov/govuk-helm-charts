@@ -382,6 +382,8 @@ govukApplications:
               key: bearer_token
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
+        - name: PLEK_SERVICE_PUBLISHING_API_URI
+          value: "http://publishing-api-read-replica"
 
   - name: collections-publisher
     helmValues:
@@ -1460,6 +1462,8 @@ govukApplications:
             secretKeyRef:
               name: frontend-os-maps-api
               key: api_key
+        - name: PLEK_SERVICE_PUBLISHING_API_URI
+          value: "http://publishing-api-read-replica"
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
