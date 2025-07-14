@@ -6,6 +6,17 @@
 {{`{{ if and (eq .Status "firing") (eq .CommonLabels.severity "critical") }}:octagonal_sign:{{ else if eq .Status "firing" }}:warning:{{ else }}:green_tick:{{ end }}`}}
 {{- end -}}
 
+{{- define "slack.filterstring" -}}
+{{`{{- if .Labels.SortedPairs -}}`}}
+{{`{`}}{{`- $first := true -}`}}
+{{`{{- range .Labels.SortedPairs -}}`}}
+  {{`{{- if not $first -}},{{- end -}}`}}
+  {{`{{- $first = false -}}`}}
+  {{`{{- .Name -}}={{- printf "%q" .Value -}}`}}
+{{`{{- end -}}`}}{{`}`}}
+{{`{{- end }}`}}
+{{- end }}
+
 {{- define "slack.pretext" -}}
 {{`{{ if eq .Status "firing" }}The following alert is firing:{{ else }}This alert is resolved:{{ end }}`}}
 {{- end -}}
@@ -32,11 +43,16 @@
 {{`{{ end }}`}}
 
 {{`{{ if .Alerts }}`}}
-*Firing Alerts*:
+*Firing Alerts*
+================
 {{`{{ range .Alerts }}`}}
   {{`{{ if eq .Status "firing" }}`}}
   • *{{`{{ .Annotations.summary }}`}}*: 
     {{`{{ .Annotations.description }}`}}
+
+     Actions:
+     • <{{`{{ .ExternalURL }}`}}/#/alerts?filter={{- include "slack.filterstring" . -}}|:mag: View Alert>
+     • <{{`{{ .ExternalURL }}`}}/#/silences/new?filter={{- include "slack.filterstring" . -}}|:no_bell: Silence Alert (2h)>
   {{`{{ end }}`}}
 {{`{{ end }}`}}
 {{`{{ end }}`}}
