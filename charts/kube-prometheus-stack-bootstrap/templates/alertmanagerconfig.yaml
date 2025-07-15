@@ -123,128 +123,46 @@ spec:
   - name: 'slack-signon-token-expiry'
     slackConfigs:
     - channel: '#govuk-publishing-platform-system-alerts'
-      sendResolved: true
-      iconURL: https://avatars3.githubusercontent.com/u/3380462
-      title: |-
-        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
-      text: >-
-        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
-
-        *Environment:* {{ .Values.govukEnvironment }}
-
-        *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
-
-        *Expiring tokens:*
-
-        {{ "{{ range .Alerts -}}" }}
-          • api_user: {{ "`{{ .Labels.api_user }}`, application: `{{ .Labels.application }}`" }}
-        {{ "{{ end }}" }}
-      apiURL: &slack_api_url
-        name: alertmanager-receivers
-        key: slack_api_url
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.expiringtokenstext" . | nindent 8 }}
   - name: 'slack-chat-notifications'
     slackConfigs:
     - channel: '#dev-notifications-ai-govuk'
-      sendResolved: true
-      iconURL: https://avatars3.githubusercontent.com/u/3380462
-      title: |-
-        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
-      text: >-
-        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
-
-        *Environment:* {{ .Values.govukEnvironment }}
-
-        *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
-      apiURL: *slack_api_url
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
   - name: 'slack-cronjob-notifications'
     slackConfigs:
     - channel: '#dev-notifications-ai-govuk'
-      sendResolved: true
-      iconURL: https://avatars3.githubusercontent.com/u/3380462
-      title: |-
-        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
-      text: >-
-        *Summary:* {{ "{{ .CommonAnnotations.summary }}" }}
-
-        *Environment:* {{ .Values.govukEnvironment }}
-
-        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
-
-        *ArgoCD Job:* https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/{{ "{{ .CommonAnnotations.cronjob_uri }}" }}
-      apiURL: *slack_api_url
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
   - name: 'slack-mirror-freshness'
     slackConfigs:
     - channel: '#govuk-platform-support'
-      sendResolved: true
-      iconURL: https://avatars3.githubusercontent.com/u/3380462
-      title: |-
-        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
-      text: >-
-        *Description:* {{ "{{ .CommonAnnotations.description }}" }}
-
-        *Environment:* {{ .Values.govukEnvironment }}
-
-        *Mirrors*:
-        {{ "{{ range .Alerts -}}" }}
-          • backend: {{ "`{{ .Labels.backend }}`" }}
-        {{ "{{ end }}" }}
-      apiURL: *slack_api_url
-{{- if ne .Values.govukEnvironment "integration" }}
-  - name: 'generic-slack-platform-engineering'
-    slackConfigs:
-    - channel: '#govuk-platform-support'
-      sendResolved: true
-      iconURL: https://avatars3.githubusercontent.com/u/3380462
+      {{- include "slack.template" . | nindent 6 }}
       text: |-
-        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
-      apiURL: *slack_api_url
-{{- else }}
+        {{- include "slack.mirrortext" . | nindent 8 }}
   - name: 'generic-slack-platform-engineering'
     slackConfigs:
     - channel: '#govuk-platform-support'
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
-{{- end }}
-{{- if ne .Values.govukEnvironment "integration" }}
-  - name: 'generic-slack-platform-engineering-low-priority'
-    slackConfigs:
-    - channel: '#govuk-platform-engineering-low-priority-alarms'
-      sendResolved: true
-      iconURL: https://avatars3.githubusercontent.com/u/3380462
-      text: |-
-        {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}: {{ .CommonAnnotations.description }}" }}
-      apiURL: *slack_api_url
-{{- else }}
   - name: 'generic-slack-platform-engineering-low-priority'
     slackConfigs:
     - channel: '#govuk-platform-engineering-low-priority-alarms'
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
-{{- end }}
   - name: 'slack-search-team-alerts-channel'
     slackConfigs:
     - &slack-search-team-alerts-channel
       channel: "#govuk-search-alerts"
-      sendResolved: true
-      iconEmoji: >-
-        {{ "{{ if and (eq .Status \"firing\") (eq .CommonLabels.severity \"critical\") }}:octagonal_sign:{{ else if eq .Status \"firing\" }}:warning:{{ else }}:green_tick:{{ end }}" }}
-      color: >-
-        {{ "{{ if and (eq .Status \"firing\") (eq .CommonLabels.severity \"critical\") }}#ff0000{{ else if eq .Status \"firing\" }}#ffa500{{ else }}#008000{{ end }}" }}
-      username: "Search alerts"
-      title: >-
-        {{ "{{ if eq .Status \"firing\" }}{{ .Alerts.Firing | len }} problem(s) in {{ .CommonLabels.environment }}{{ else }}All problems resolved in {{ .CommonLabels.environment }}{{ end }}" }}
-      fields:
-        - title: "Environment"
-          value: "{{ "{{ .CommonLabels.environment }}" }}"
-          short: true
+      {{- include "slack.template" . | nindent 6 }}
       text: |-
-        {{ "{{ range .Alerts }}" }}
-          {{ "{{ if eq .Status \"firing\" }}" }}
-            • *{{ "{{ .Annotations.summary }}" }}*: {{ "{{ .Annotations.description }}" }}
-          {{ "{{ end }}" }}
-        {{ "{{ end }}" }}
+        {{- include "slack.text" . | nindent 8 }}
       actions:
         - text: ":chart_with_downwards_trend: Dashboard"
           type: button
@@ -252,25 +170,16 @@ spec:
         - text: ":book: Runbook"
           type: button
           url: "https://docs.publishing.service.gov.uk/repos/search-api-v2.html"
-      apiURL: *slack_api_url
   - name: "slack-search-team-main-channel"
     slackConfigs:
     - <<: *slack-search-team-alerts-channel
       channel: "#govuk-search"
   - name: 'slack-whitehall-notifications'
     slackConfigs:
-      - channel: '#govuk-whitehall-experience-tech'
-        sendResolved: true
-        iconURL: https://avatars3.githubusercontent.com/u/3380462
-        title: |-
-          {{ "[{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}" }}
-        text: >-
-          *Description:* {{ "{{ .CommonAnnotations.description }}" }}
-          
-          *Environment:* {{ .Values.govukEnvironment }}
-          
-          *Runbook:* {{ "{{ .CommonAnnotations.runbook_url }}" }}
-        apiURL: *slack_api_url
+    - channel: '#govuk-whitehall-experience-tech'
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
   muteTimeIntervals:
   - name: inhours
     timeIntervals:
