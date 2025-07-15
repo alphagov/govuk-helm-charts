@@ -46,8 +46,8 @@
     {{`{{ .Annotations.description }}`}}
 
      Actions:
-     • <{{`{{ .ExternalURL }}`}}/#/alerts?filter={{- include "slack.filterstring" . -}}|:mag: View Alert>
-     • <{{`{{ .ExternalURL }}`}}/#/silences/new?filter={{- include "slack.filterstring" . -}}|:no_bell: Silence Alert (2h)>
+     • <{{`{{ $.ExternalURL }}`}}/#/alerts?filter={{- include "slack.filterstring" . -}}|:mag: View Alert>
+     • <{{`{{ $.ExternalURL }}`}}/#/silences/new?filter={{- include "slack.filterstring" . -}}|:no_bell: Silence Alert (2h)>
   {{`{{ end }}`}}
 {{`{{ end }}`}}
 {{`{{ end }}`}}
