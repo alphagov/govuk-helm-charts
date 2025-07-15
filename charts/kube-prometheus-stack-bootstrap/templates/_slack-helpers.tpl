@@ -8,12 +8,13 @@
 
 {{- define "slack.filterstring" -}}
 {{`{{- if .Labels.SortedPairs -}}`}}
-{{`{`}}{{`- $first := true -}`}}
-{{`{{- range .Labels.SortedPairs -}}`}}
-  {{`{{- if not $first -}},{{- end -}}`}}
-  {{`{{- $first = false -}}`}}
-  {{`{{- .Name -}}={{- printf "%q" .Value -}}`}}
-{{`{{- end -}}`}}{{`}`}}
+%7B
+{{`{{- range $index, $pair := .Labels.SortedPairs -}}`}}
+  {{`{{- .Name }}%3D%22{{ .Value | urlquery }}%22`}}
+  {{`{{- if ne (add 1 $index) (len $.Labels.SortedPairs) }}%2C%20{{ end -}}`}}
+{{`{{- end -}}`}}
+%7D
+{{`{{- else -}}`}}
 {{`{{- end }}`}}
 {{- end }}
 
