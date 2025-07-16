@@ -47,8 +47,8 @@ groups:
       - alert: High5xxRate
         expr: |
           (
-            sum by(service_name)(rate(fastly_rt_status_group_total{status_group="5xx"}[2m]))
-          / sum by(service_name)(rate(fastly_rt_origin_fetches_total[2m]))
+            sum by(service_name)(rate(fastly_rt_status_group_total{status_group="5xx", service_name !~ ".*data.gov.uk"}[2m]))
+          / sum by(service_name)(rate(fastly_rt_origin_fetches_total{service_name !~ ".*data.gov.uk"}[2m]))
           ) >= 0.0125
         for: 6m
         labels:

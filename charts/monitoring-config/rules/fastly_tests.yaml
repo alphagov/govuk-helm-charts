@@ -4,6 +4,9 @@ rule_files:
 evaluation_interval: 1m
 
 tests:
+  ##
+  # Test case: High5xxRate happy path
+  ##
   - interval: 1m
     input_series:
       - series: 'fastly_rt_origin_fetches_total{service_name="example"}'
@@ -50,3 +53,20 @@ tests:
 
                 Fastly CDN service: example
                 5xx rate: 1.5%
+  ##
+  # Test case: High5xxRate does not fire for data.gov.uk
+  ##
+  - interval: 1m
+    input_series:
+      - series: 'fastly_rt_origin_fetches_total{service_name="environment data.gov.uk"}'
+        values: '0+10000x20' # 10k change per minute
+
+
+      - series: 'fastly_rt_status_group_total{status_group="5xx", service_name="environment data.gov.uk"}'
+        values: '50+150x20' # 50 + 150/min change (1.5%)
+
+    alert_rule_test:
+      # Rate is high enough but not alerting because it's data.gov.uk
+      - eval_time: 10m
+        alertname: High5xxRate
+        exp_alerts: []
