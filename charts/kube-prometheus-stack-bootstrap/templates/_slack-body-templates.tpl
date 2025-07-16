@@ -8,7 +8,7 @@
 {{`{{ .CommonAnnotations.description }}`}}
 {{`{{ end }}`}}
 
-{{`{{ if .Alerts }}`}}
+{{`{{ if .Alerts | len | gt 0 }}`}}
 *Expiring Tokens*
 ================
 {{`{{ range .Alerts }}`}}
@@ -45,7 +45,7 @@
 {{`{{ .CommonAnnotations.description }}`}}
 {{`{{ end }}`}}
 
-{{`{{ if .Alerts }}`}}
+{{`{{ if .Alerts | len | gt 0 }}`}}
 *Mirrors:*
 ================
 {{`{{ range .Alerts }}`}}
@@ -83,14 +83,14 @@
 {{`{{ .CommonAnnotations.description }}`}}
 {{`{{ end }}`}}
 
-{{`{{- if .CommonLabels.SortedPairs }}`}}
+{{`{{- if .CommonLabels.SortedPairs | len | gt 0 }}`}}
 *Labels*:
   {{`{{ range .CommonLabels.SortedPairs }}`}}
   • *{{`{{ .Name }}`}}*: {{`{{ .Value }}`}}
   {{`{{- end }}`}}
 {{`{{ end }}`}}
 
-{{`{{ if .Alerts }}`}}
+{{`{{ if .Alerts | len | gt 0 }}`}}
 *Firing Alerts*
 ================
 {{`{{ range .Alerts }}`}}
