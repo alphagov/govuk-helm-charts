@@ -2338,6 +2338,11 @@ govukApplications:
             secretKeyRef:
               name: publisher-docdb
               key: MONGODB_URI
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: publisher-postgres
+              key: DATABASE_URL
         - name: EMAIL_GROUP_BUSINESS
           value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
         - name: EMAIL_GROUP_CITIZEN
