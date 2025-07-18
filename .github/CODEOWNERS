@@ -1,0 +1,14 @@
+# Anyone with write access can merge by default
+*
+
+# Platform Engineering review required
+# GitHub Actions workflows and repo config
+/.github/ @alphagov/gov-uk-platform-engineering
+# Ran as part of CI system
+/govuk-app-render.sh @alphagov/gov-uk-platform-engineering
+# Helm Charts
+/charts/ @alphagov/gov-uk-platform-engineering
+
+# Allow changes to non-prod app values
+/charts/app-config/values-integration.yaml
+/charts/app-config/values-staging.yaml
