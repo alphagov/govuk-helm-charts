@@ -13,7 +13,7 @@ tests:
         values: '0+10000x30' # 10k change per minute
 
 
-      - series: 'fastly_rt_status_group_total{status_group="5xx", service_name="example"}'
+      - series: 'fastly_origin_status_group_total{status_group="5xx", service_name="example"}'
         values: '0x10 0+50x10 50+150x10' # 0 + 0/min change (0%); 0 + 50/min (0.5%) change; 50 + 150/min change (1.5%)
 
     alert_rule_test:
@@ -62,7 +62,7 @@ tests:
         values: '0+10000x20' # 10k change per minute
 
 
-      - series: 'fastly_rt_status_group_total{status_group="5xx", service_name="environment data.gov.uk"}'
+      - series: 'fastly_origin_status_group_total{status_group="5xx", service_name="environment data.gov.uk"}'
         values: '50+150x20' # 50 + 150/min change (1.5%)
 
     alert_rule_test:
@@ -80,7 +80,7 @@ tests:
         values: '0+10000x60' # 10k change per minute
 
 
-      - series: 'fastly_rt_status_group_total{status_group="5xx", service_name="environment data.gov.uk"}'
+      - series: 'fastly_origin_status_group_total{status_group="5xx", service_name="environment data.gov.uk"}'
         values: '0x10 0+50x10 50+1500x40' # 0 + 0/min change (0%); 0 + 50/min (0.5%) change; 50 + 1000/min change (10.5%)
 
     alert_rule_test:
@@ -130,7 +130,7 @@ tests:
         values: '0+10000x30' # 10k change per minute
 
 
-      - series: 'fastly_rt_status_group_total{status_group="5xx", service_name="example"}'
+      - series: 'fastly_origin_status_group_total{status_group="5xx", service_name="example"}'
         values: '1000+1000x30' # 1000 + 100/min change (1%)
 
     alert_rule_test:
