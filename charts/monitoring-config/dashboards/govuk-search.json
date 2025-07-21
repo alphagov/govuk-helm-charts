@@ -278,7 +278,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum (increase(http_requests_total{\n    namespace=\"apps\",\n    job=\"search-api-v2\",\n    controller=\"searches\"\n}[$__range])) * (2/1000)",
+          "expr": "sum (increase(http_requests_total{\n    namespace=\"apps\",\n    job=\"search-api-v2\",\n    controller=\"searches\"\n}[$__range])) * (1.5/1000)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
