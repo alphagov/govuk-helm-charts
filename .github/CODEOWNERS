@@ -12,6 +12,7 @@
 # Allow changes to non-prod app values
 /charts/app-config/values-integration.yaml
 /charts/app-config/values-staging.yaml
-# Allow changes to Grafana dashboards and Prometheus rules
+# Allow changes to monitoring config
 /charts/monitoring-config/dashboards/
 /charts/monitoring-config/rules/
+/charts/kube-prometheus-stack-bootstrap/templates/alertmanagerconfig.yaml
