@@ -132,7 +132,7 @@ spec:
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
                 - name: text
-                  value: "Service: {{"{{workflow.parameters.application}}"}}\nStage: Post-deploy :x:\nImage: {{"{{workflow.parameters.imageTag}}"}}\nEnvironment: {{ .Values.govukEnvironment }}\nRepo: https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\nHelm Chart: {{ .Chart.Name }}\nTroubleshooting: https://docs.publishing.service.gov.uk/manual/deployments.html#troubleshooting"
+                  value: "Service: {{"{{workflow.parameters.application}}"}}\nEnvironment: {{ .Values.govukEnvironment }}\nStage: Post-deploy\n\nImage: {{"{{workflow.parameters.imageTag}}"}}\nRepo: https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\nHelm chart: https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/image-tags/{{ .Values.govukEnvironment }}/{{"{{workflow.parameters.application}}"}}\nWhat's next: https://docs.publishing.service.gov.uk/manual/deployments.html#troubleshooting"
                 - name: blocks
                   value: |
                     [{
