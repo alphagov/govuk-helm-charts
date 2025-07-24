@@ -1668,7 +1668,7 @@ govukApplications:
                   name: cpu
                   target:
                     type: Utilization
-                    averageUtilization: 65
+                    averageUtilization: 80
         - name: govuk-chat-worker
           enabled: true
           spec:
