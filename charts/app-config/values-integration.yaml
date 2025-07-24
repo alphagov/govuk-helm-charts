@@ -1669,6 +1669,19 @@ govukApplications:
                   target:
                     type: Utilization
                     averageUtilization: 80
+            behavior:
+              scaleDown:
+                stabilizationWindowSeconds: 60
+                policies:
+                  - type: Pods
+                    value: 2
+                    periodSeconds: 120
+              scaleUp:
+                stabilizationWindowSeconds: 60
+                policies:
+                  - type: Pods
+                    value: 1
+                    periodSeconds: 30
         - name: govuk-chat-worker
           enabled: true
           spec:
