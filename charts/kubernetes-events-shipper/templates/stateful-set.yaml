@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: "kubernetes-events-shipper"
+  labels:
+    {{- include "kubernetes-events-shipper.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "kubernetes-events-shipper.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "kubernetes-events-shipper.labels" . | nindent 8 }}
+    spec:
+      terminationGracePeriodSeconds: 600
+      serviceAccountName: kubernetes-events-shipper
+      containers:
+        - image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          name: fluentbit
+          volumeMounts:
+            - name: fluentbit-config
+              subPath: fluent-bit.yaml
+              mountPath: /fluent-bit/etc/fluent-bit.yaml
+            - name: kubernetes-events-shipper-data
+              mountPath: /mnt/k8s-events/
+          env:
+            - name: OPENSEARCH_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: logit-opensearch
+                  key: host
+            - name: OPENSEARCH_USER
+              valueFrom:
+                secretKeyRef:
+                  name: logit-opensearch
+                  key: user
+            - name: OPENSEARCH_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: logit-opensearch
+                  key: pass
+          command: ["/fluent-bit/bin/fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.yaml"]
+      restartPolicy: Always
+      volumes:
+        - name: fluentbit-config
+          configMap:
+            name: kubernetes-events-shipper
+  volumeClaimTemplates:
+    - metadata: 
+        name: kubernetes-events-shipper-data
+      spec:
+        storageClassName: ebs-gp3
+        resources:
+          requests:
+            storage: 100Gi
+        accessModes:
+          - ReadWriteOncePod
