@@ -194,6 +194,12 @@ cronjobs:
       operations:
         - op: backup
 
+    production-publisher-postgres:
+      schedule: "41 23 * * *"
+      db: publisher_production
+      operations:
+        - op: backup
+
     service-manual-publisher-postgres:
       schedule: "49 23 * * *"
       db: service-manual-publisher_production
@@ -398,6 +404,14 @@ cronjobs:
     search-admin-mysql:
       schedule: "56 1 * * 1-5"
       db: search_admin_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    production-publisher-postgres:
+      schedule: "42 1 * * 1-5"
+      db: publisher_production
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -641,6 +655,14 @@ cronjobs:
     search-admin-mysql:
       schedule: "56 3 * * 1"
       db: search_admin_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+        - op: backup
+
+    production-publisher-postgres:
+      schedule: "41 3 * * 1"
+      db: publisher_production
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
