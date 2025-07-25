@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "kubernetes-events-shipper"
+data:
+  fluent-bit.yaml: |
+    service:
+      flush: 1
+      log_level: info
+
+    pipeline:
+      inputs:
+        - name: kubernetes_events
+          tag: k8s_events
+          db: /mnt/k8s-events/k8s-events.db
+
+      outputs:
+        - name: stdout # We probably want to ditch this when it's working
+          match: '*'
+        - name: opensearch
+          match: '*'
+          host: "${LOGIT_HOST}"
+          port: 9200
+          index: kubernetes-events
+          logstash_format: true # This causes the index to be suffixed with -YYYY.MM.DD and an @timestamp field to be added
+          suppress_type_name: true
