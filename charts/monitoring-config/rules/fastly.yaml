@@ -58,6 +58,8 @@ groups:
           summary: "Fastly CDN service {{ $labels.service_name }} is receiving elevated numbers of 5xx responses"
           grafana_path: >-
             d/deqpydcv7ottse/fastly-global-traffic?orgId=1&from=now-1h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.google.com/document/d/1x7R2Sgpdeqd4kCiwPZp5RaeHJkOWOqgzckcMvn6tIbE/
           description: >-
             The Fastly CDN service is receiving a higher proportion of 5xx responses
             from the origin than usual.
@@ -79,6 +81,8 @@ groups:
           summary: "Fastly CDN service {{ $labels.service_name }} is receiving elevated numbers of 5xx responses"
           grafana_path: >-
             d/deqpydcv7ottse/fastly-global-traffic?orgId=1&from=now-1h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.google.com/document/d/1x7R2Sgpdeqd4kCiwPZp5RaeHJkOWOqgzckcMvn6tIbE/
           description: >-
             The Fastly CDN service is receiving a higher proportion of 5xx responses
             from the origin than usual.
