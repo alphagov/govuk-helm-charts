@@ -139,7 +139,7 @@ spec:
                       "type": "section",
                       "text": {
                           "type": "mrkdwn",
-                          "text": "*Service:* {{"{{workflow.parameters.application}}"}}\n*Stage:* Post-deploy :x:\n*Image:* {{"{{workflow.parameters.imageTag}}"}}\n*Environment:* {{ .Values.govukEnvironment }}\n*Repo:* https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\n*Helm Chart:* {{ .Chart.Name }}\n*Troubleshooting:* <https://docs.publishing.service.gov.uk/manual/deployments.html#troubleshooting|Troubleshooting Guide>"
+                          "text": "*Service:* {{"{{workflow.parameters.application}}"}}\n*Environment:* {{ .Values.govukEnvironment }}\n*Stage:* Post-deploy\n\n*Image:* {{"{{workflow.parameters.imageTag}}"}}\n*Repo:* <https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}|{{"{{workflow.parameters.repoName}}"}}>>\n*Helm chart:* <https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/image-tags/{{ .Values.govukEnvironment }}/{{"{{workflow.parameters.application}}"}}|Chart values>\n*What's next:* <https://docs.publishing.service.gov.uk/manual/deployments.html#troubleshooting|Troubleshooting Guide>"
                       },
                       "accessory": {
                         "type": "button",
