@@ -1564,18 +1564,6 @@ govukApplications:
         #   task: "bigquery:export"
         #   schedule: "5 * * * *"
         #   timeZone: "Europe/London"
-        # - name: promote-waiting-list
-        #   task: "users:promote_waiting_list"
-        #   schedule: "30 7-22 * * *"
-        #   timeZone: "Europe/London"
-        # - name: increment-instant-access-places
-        #   task: "settings:increment_pilot_places[instant_access]"
-        #   schedule: "0 * * * *"
-        #   timeZone: "Europe/London"
-        # - name: increment-delayed-access-places
-        #   task: "settings:increment_pilot_places[delayed_access]"
-        #   schedule: "15 12 * * *"
-        #   timeZone: "Europe/London"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
