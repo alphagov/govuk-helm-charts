@@ -2400,7 +2400,7 @@ govukApplications:
         createSecret: false  # Sentry DSNs are per repo.
         dsnSecretName: publisher-sentry
       uploadAssets:
-        enabled: true
+        enabled: false
         path: /app/public/assets/publisher/*
         s3Directory: "publisher"
       workers:
@@ -2415,18 +2415,18 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
-        - name: mail-fetcher
-          command: "script/mail_fetcher"
-          schedule: "*/5 * * * *"
-        - name: reports-generate
-          task: "reports:generate"
-          schedule: "0 * * * *"
-        - name: reschedule-pubs-after-db-restore  # non-prod only
-          task: "editions:requeue_scheduled_for_publishing"
-          schedule: "38 7 * * 1-5"
-        - name: publish-missed-scheduled-editions
-          task: "editions:publish_missed_scheduled_editions"
-          schedule: "27 5 * * *"
+        # - name: mail-fetcher
+        #   command: "script/mail_fetcher"
+        #   schedule: "*/5 * * * *"
+        # - name: reports-generate
+        #   task: "reports:generate"
+        #   schedule: "0 * * * *"
+        # - name: reschedule-pubs-after-db-restore  # non-prod only
+        #   task: "editions:requeue_scheduled_for_publishing"
+        #   schedule: "38 7 * * 1-5"
+        # - name: publish-missed-scheduled-editions
+        #   task: "editions:publish_missed_scheduled_editions"
+        #   schedule: "27 5 * * *"
       ingress:
         enabled: true
         annotations:
@@ -2451,79 +2451,82 @@ govukApplications:
               name: signon-app-publisher-on-pg
               key: oauth_secret
         - name: ASSET_MANAGER_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-publisher-asset-manager
-              key: bearer_token
+          value: ""
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: signon-token-publisher-asset-manager
+          #     key: bearer_token
         - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-publisher-publishing-api
-              key: bearer_token
+          value: ""
+          #valueFrom:
+          #  secretKeyRef:
+          #    name: signon-token-publisher-publishing-api
+          #    key: bearer_token
         - name: FACT_CHECK_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: publisher-fact-check-email-account
-              key: FACT_CHECK_USERNAME
+          value: ""
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: publisher-fact-check-email-account
+          #     key: FACT_CHECK_USERNAME
         - name: FACT_CHECK_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: publisher-fact-check-email-account
-              key: FACT_CHECK_PASSWORD
+          value: ""
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: publisher-fact-check-email-account
+          #     key: FACT_CHECK_PASSWORD
         - name: GOVUK_NOTIFY_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: publisher-notify
-              key: GOVUK_NOTIFY_API_KEY
+          value: ""
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: publisher-notify
+          #     key: GOVUK_NOTIFY_API_KEY
         - name: JWT_AUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: authenticating-proxy-jwt-auth-secret
-              key: JWT_AUTH_SECRET
+          value: ""
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: authenticating-proxy-jwt-auth-secret
+          #     key: JWT_AUTH_SECRET
         - name: LINK_CHECKER_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-publisher-link-checker-api
-              key: bearer_token
+          value: ""
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: signon-token-publisher-link-checker-api
+          #     key: bearer_token
         - name: LINK_CHECKER_API_SECRET_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: publisher-link-checker-api-callback-token
-              key: LINK_CHECKER_API_SECRET_TOKEN
+          value: ""
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: publisher-link-checker-api-callback-token
+          #     key: LINK_CHECKER_API_SECRET_TOKEN
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
               name: publisher-on-pg
               key: DATABASE_URL
-        - name: MONGODB_URI
-          valueFrom:
-            secretKeyRef:
-              name: publisher-docdb
-              key: MONGODB_URI
-        - name: EMAIL_GROUP_BUSINESS
-          value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
-        - name: EMAIL_GROUP_CITIZEN
-          value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
-        - name: EMAIL_GROUP_DEV
-          value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
-        - name: EMAIL_GROUP_FORCE_PUBLISH_ALERTS
-          value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
-        - name: FACT_CHECK_SUBJECT_PREFIX
-          value: dev
-        - name: FACT_CHECK_REPLY_TO_ADDRESS
-          value: govuk-fact-check-integration@digital.cabinet-office.gov.uk
-        - name: FACT_CHECK_REPLY_TO_ID
-          value: 6b6ee566-54f2-48f6-98c4-21a373e6dea2
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *publishing-notify-template
-        - name: REPORTS_S3_BUCKET_NAME
-          value: govuk-integration-publisher-csvs
-        - name: GOOGLE_TAG_MANAGER_ID
-          value: *publishing-bootstrap-gtm-id
-        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
-          value: *publishing-bootstrap-gtm-auth
-        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
-          value: *publishing-bootstrap-gtm-preview
+        # - name: EMAIL_GROUP_BUSINESS
+        #   value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
+        # - name: EMAIL_GROUP_CITIZEN
+        #   value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
+        # - name: EMAIL_GROUP_DEV
+        #   value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
+        # - name: EMAIL_GROUP_FORCE_PUBLISH_ALERTS
+        #   value: mainstream-publisher-notifications-integration@digital.cabinet-office.gov.uk
+        # - name: FACT_CHECK_SUBJECT_PREFIX
+        #   value: dev
+        # - name: FACT_CHECK_REPLY_TO_ADDRESS
+        #   value: govuk-fact-check-integration@digital.cabinet-office.gov.uk
+        # - name: FACT_CHECK_REPLY_TO_ID
+        #   value: 6b6ee566-54f2-48f6-98c4-21a373e6dea2
+        # - name: GOVUK_NOTIFY_TEMPLATE_ID
+        #   value: *publishing-notify-template
+        # - name: REPORTS_S3_BUCKET_NAME
+        #   value: govuk-integration-publisher-csvs
+        # - name: GOOGLE_TAG_MANAGER_ID
+        #   value: *publishing-bootstrap-gtm-id
+        # - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only
+        #   value: *publishing-bootstrap-gtm-auth
+        # - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
+        #   value: *publishing-bootstrap-gtm-preview
 
   - name: govuk-graphql
     helmValues:
