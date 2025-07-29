@@ -1574,6 +1574,10 @@ govukApplications:
         s3Directory: chat
         path: /app/public/assets/chat
       cronTasks:
+        - name: bigquery-export
+          task: "bigquery:export"
+          schedule: "0 10 * * 4"
+          timeZone: "Europe/London"
         # cron tasks disabled while application is not available to public
         # - name: promote-waiting-list
         #   task: "users:promote_waiting_list"
