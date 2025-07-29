@@ -15,8 +15,6 @@ data:
           db: /mnt/k8s-events/k8s-events.db
 
       outputs:
-        - name: stdout # We probably want to ditch this when it's working
-          match: '*'
         - name: opensearch
           match: '*'
           host: "${OPENSEARCH_HOST}"
