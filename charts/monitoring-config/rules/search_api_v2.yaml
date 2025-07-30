@@ -48,6 +48,8 @@ groups:
           summary: "Search API v2: Degraded search performance (acute)"
           grafana_path: >-
             d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
           description: >-
             5 minute rolling success rate for search requests has dropped below 99% for more than 10
             minutes.
@@ -61,6 +63,8 @@ groups:
           summary: "Search API v2: Degraded autocomplete performance (acute)"
           grafana_path: >-
             d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
           description: >-
             5 minute rolling success rate for autocomplete requests has dropped below 90% for more
             than 10 minutes.
@@ -96,6 +100,8 @@ groups:
           summary: "Search API v2: Degraded search performance (mid)"
           grafana_path: >-
             d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
           description: >-
             1 hour rolling success rate for search requests has dropped below 99.9% for more than 2
             hours.
@@ -131,6 +137,8 @@ groups:
           summary: "Search API v2: Degraded search performance (long)"
           grafana_path: >-
             d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
           description: >-
             24 hour rolling success rate for search requests has dropped below 99.99% for more than 24
             hours.
