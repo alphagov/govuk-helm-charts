@@ -189,4 +189,15 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.9.3/cluster-secrets-0.9.3.tgz
     version: 0.9.3
-generated: "2025-07-30T10:28:05.187642659Z"
+  kubernetes-events-shipper:
+  - apiVersion: v2
+    created: "2025-07-30T13:34:35.276587528Z"
+    description: Creates a fluent bit stateful set which will send all kuberenetes
+      events in a cluster to logit
+    digest: 5bc8da1db60997e6f6fd5052d424490fe1ac674eb0b6cb7c4923e7c11b2e8c93
+    name: kubernetes-events-shipper
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/kubernetes-events-shipper-1.0.0/kubernetes-events-shipper-1.0.0.tgz
+    version: 1.0.0
+generated: "2025-07-30T13:34:35.27668064Z"
