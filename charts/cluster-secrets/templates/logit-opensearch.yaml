@@ -1,0 +1,19 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: logit-opensearch
+  namespace: {{ .Values.clusterServicesNamespace }}
+  annotations:
+    kubernetes.io/description: >
+      The Logit OpenSearch endpoint and HTTP Basic Auth credentials
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: logit-opensearch
+    creationPolicy: Owner
+  dataFrom:
+    - extract:
+        key: govuk/kubernetes-events-shipper/logit-opensearch
