@@ -17,7 +17,6 @@ data:
   GOVUK_ASSET_ROOT: https://{{ .Values.assetsDomain }}
   GOVUK_CSP_REPORT_URI: {{ .Values.cspReportURI | quote }}
   GOVUK_ENVIRONMENT: {{ .Values.govukEnvironment }}
-  GOVUK_ENVIRONMENT_NAME: {{ .Values.govukEnvironment }}
   # TODO: remove GOVUK_PROMETHEUS_EXPORTER once govuk_app_config >=9.10 is everywhere.
   GOVUK_PROMETHEUS_EXPORTER: "true"
   GOVUK_PERSONALISATION_FEEDBACK_URI: https://signin.account.gov.uk/support
