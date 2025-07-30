@@ -2380,6 +2380,8 @@ govukApplications:
           value: *publishing-bootstrap-gtm-auth
         - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
           value: *publishing-bootstrap-gtm-preview
+        - name: MAINTENANCE_MODE
+          value: "true"
 
   - name: publisher-on-pg
     helmValues:
