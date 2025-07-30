@@ -21,6 +21,7 @@ jobs:
             charts/argo-bootstrap-ephemeral
             charts/cluster-secret-store
             charts/cluster-secrets
+            charts/kubernetes-events-shipper
 
       - name: Configure Git
         run: |
