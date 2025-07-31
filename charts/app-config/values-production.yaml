@@ -2329,6 +2329,8 @@ govukApplications:
           value: govuk-production-publisher-csvs
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
+        - name: MAINTENANCE_MODE
+          value: "true"
 
   - name: publisher-on-pg
     helmValues:
