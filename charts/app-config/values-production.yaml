@@ -2341,6 +2341,17 @@ govukApplications:
           cpu: 10m
           memory: 512Mi
       dbMigrationEnabled: true
+      rails:
+        createKeyBaseSecret: false
+        # use the same secret as the mongo publisher
+        secretKeyBaseName: publisher-rails-secret-key-base
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+        dsnSecretName: publisher-sentry
+      uploadAssets:
+        enabled: false
+        path: /app/public/assets/publisher/*
+        s3Directory: "publisher"
       workers:
         enabled: true
       workerResources:
