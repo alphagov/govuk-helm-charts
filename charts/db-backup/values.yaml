@@ -516,7 +516,6 @@ cronjobs:
         - op: backup
 
     chat-postgres:
-      suspend: true  # Temporarily suspended on integration for manual evaluation of content (david.gisbey 2025-07-18)
       schedule: "47 3 * * 1"
       db: govuk_chat_production
       operations:
