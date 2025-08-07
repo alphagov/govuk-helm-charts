@@ -464,6 +464,7 @@ cronjobs:
           db: govuk_assets_production
 
     signon-mysql:
+      suspend: true # Disabled until 2025-08-15 while pen test is in progress on GOV.UK Chat.
       schedule: "3 1 * * 1-5"
       db: signon_production
       operations:
