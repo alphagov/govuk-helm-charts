@@ -260,6 +260,7 @@ cronjobs:
         - op: backup
 
     chat-postgres:
+      suspend: true # Disabled until 2025-08-15 while pen test is in progress on GOV.UK Chat.
       schedule: "47 1 * * 1-5"
       db: govuk_chat_production
       operations:
