@@ -3925,6 +3925,7 @@ govukApplications:
           task: "taxonomy:rebuild_cache"
           schedule: "*/10 7-20 * * *"
       dbMigrationEnabled: true
+      dbMigrationActiveDeadlineSeconds: 3700 # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
         enabled: true
       redis:

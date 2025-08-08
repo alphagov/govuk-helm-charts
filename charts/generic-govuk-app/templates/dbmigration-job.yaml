@@ -12,7 +12,7 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: PreSync
 spec:
-  activeDeadlineSeconds: 900
+  activeDeadlineSeconds: {{ .Values.dbMigrationActiveDeadlineSeconds }}
   backoffLimit: 1
   template:
     metadata:
