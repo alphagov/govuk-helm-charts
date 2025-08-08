@@ -2408,9 +2408,9 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
-        # - name: mail-fetcher
-        #   command: "script/mail_fetcher"
-        #   schedule: "*/5 * * * *"
+        - name: mail-fetcher
+          command: "script/mail_fetcher"
+          schedule: "*/5 * * * *"
         # - name: reports-generate
         #   task: "reports:generate"
         #   schedule: "0 * * * *"
@@ -2520,6 +2520,8 @@ govukApplications:
         #   value: *publishing-bootstrap-gtm-auth
         # - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only
         #   value: *publishing-bootstrap-gtm-preview
+        - name: MAINTENANCE_MODE
+          value: "true"
 
   - name: govuk-graphql
     helmValues:
