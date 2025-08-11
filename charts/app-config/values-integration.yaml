@@ -586,7 +586,6 @@ govukApplications:
           value: "1000"
 
   - name: content-data-api
-    targetRevision: allow-configuring-k8s-probes-per-app
     helmValues:
       arch: arm64
       appResources:
