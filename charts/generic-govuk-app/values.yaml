@@ -179,3 +179,8 @@ serviceAccount:
   create: false
   name: null
   annotations: {}
+
+kubernetesProbeEndpoints:
+  livenessProbe: "/healthcheck/live"
+  readinessProbe: "/healthcheck/live"
+  startupProbe: "/healthcheck/live"
