@@ -121,19 +121,23 @@ spec:
             {{- . | toYaml | trim | nindent 10 }}
           {{- else }}
           livenessProbe:
-            httpGet: &app-probe
-              path: /healthcheck/live
+            httpGet:
+              path: {{ .Values.kubernetesProbeEndpoints.livenessProbe }}
               port: http
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 30
           readinessProbe:
-            httpGet: *app-probe
+            httpGet:
+              path: {{ .Values.kubernetesProbeEndpoints.readinessProbe }}
+              port: http
             failureThreshold: 2
             periodSeconds: 5
             timeoutSeconds: 30
           startupProbe:
-            httpGet: *app-probe
+            httpGet:
+              path: {{ .Values.kubernetesProbeEndpoints.startupProbe }}
+              port: http
             failureThreshold: 15
             periodSeconds: 2
             timeoutSeconds: 2
