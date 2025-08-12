@@ -48,6 +48,7 @@ redis:
 # dbMigrationEnabled controls whether Rails database migrations are run on install/upgrade.
 dbMigrationEnabled: false
 dbMigrationCommand: ["rails", "db:migrate"]
+dbMigrationActiveDeadlineSeconds: 900  # default deadline for migrations
 
 # cronTasks is a list of {name, command, schedule} and/or {name, task,
 # schedule}, which represent CronJobs to run either an arbitrary command or a
