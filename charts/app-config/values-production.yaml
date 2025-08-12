@@ -2466,6 +2466,11 @@ govukApplications:
         replicaCount: 3
       redis:
         enabled: true
+        config:
+          maxmemory: 2500mb
+        resources:
+          limits:
+            memory: 3000Mi
       workerResources:
         limits:
           cpu: 4
