@@ -2085,53 +2085,6 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
 
-  - name: maslow
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1.2Gi
-        requests:
-          cpu: 10m
-          memory: 400Mi
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/group.order: "140"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-            [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "maslow.{{ .Values.publishingDomainSuffix }}"
-            ]}}]
-        hosts:
-          - name: maslow.{{ .Values.k8sExternalDomainSuffix }}
-      extraEnv:
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-maslow
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-maslow
-              key: oauth_secret
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.production.govuk-internal.digital
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-maslow-publishing-api
-              key: bearer_token
-        - name: MONGODB_URI
-          valueFrom:
-            secretKeyRef:
-              name: maslow-docdb
-              key: MONGODB_URI
-        - name: GOOGLE_TAG_MANAGER_ID
-          value: &publishing-bootstrap-gtm-id GTM-W573BJPG
-
   - name: places-manager
     helmValues:
       arch: arm64
@@ -2316,7 +2269,7 @@ govukApplications:
         - name: REPORTS_S3_BUCKET_NAME
           value: govuk-production-publisher-csvs
         - name: GOOGLE_TAG_MANAGER_ID
-          value: *publishing-bootstrap-gtm-id
+          value: &publishing-bootstrap-gtm-id GTM-W573BJPG
         - name: MAINTENANCE_MODE
           value: "false"
 

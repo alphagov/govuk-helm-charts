@@ -2084,51 +2084,6 @@ govukApplications:
               name: manuals-publisher-docdb
               key: MONGODB_URI
 
-  - name: maslow
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1.2Gi
-        requests:
-          cpu: 10m
-          memory: 400Mi
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/group.order: "140"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-            [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "maslow.{{ .Values.publishingDomainSuffix }}"
-            ]}}]
-        hosts:
-          - name: maslow.{{ .Values.k8sExternalDomainSuffix }}
-      extraEnv:
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-maslow
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-maslow
-              key: oauth_secret
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-maslow-publishing-api
-              key: bearer_token
-        - name: MONGODB_URI
-          valueFrom:
-            secretKeyRef:
-              name: maslow-docdb
-              key: MONGODB_URI
-
   - name: places-manager
     helmValues:
       arch: arm64
