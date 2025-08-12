@@ -2749,8 +2749,6 @@ govukApplications:
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
-        - name: BACKEND_URL_manuals-frontend
-          value: 'http://manuals-frontend'
         - name: ROUTER_ROUTE_RELOAD_INTERVAL
           value: 5m
         - name: CONTENT_STORE_DATABASE_URL
@@ -2811,8 +2809,6 @@ govukApplications:
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
-        - name: BACKEND_URL_manuals-frontend
-          value: 'http://manuals-frontend'
         - name: ROUTER_ROUTE_RELOAD_INTERVAL
           value: 5m
         - name: CONTENT_STORE_DATABASE_URL
