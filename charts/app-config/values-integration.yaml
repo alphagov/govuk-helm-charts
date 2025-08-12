@@ -2861,8 +2861,6 @@ govukApplications:
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
-        - name: BACKEND_URL_info-frontend
-          value: 'http://info-frontend'
         - name: BACKEND_URL_whitehall-frontend
           value: 'http://whitehall-frontend'
         - name: BACKEND_URL_manuals-frontend
@@ -2926,8 +2924,6 @@ govukApplications:
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
-        - name: BACKEND_URL_info-frontend
-          value: 'http://info-frontend'
         - name: BACKEND_URL_whitehall-frontend
           value: 'http://whitehall-frontend'
         - name: BACKEND_URL_manuals-frontend
