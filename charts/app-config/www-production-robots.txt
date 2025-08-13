@@ -1,7 +1,5 @@
 User-agent: *
 Disallow: /*/print$
-# Don't allow indexing of user needs pages
-Disallow: /info/*
 # Don't allow indexing of site search
 Disallow: /search/all*
 Sitemap: https://www.gov.uk/sitemap.xml
