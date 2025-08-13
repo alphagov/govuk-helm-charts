@@ -4,6 +4,9 @@ metadata:
   name: post-sync
 spec:
   workflowMetadata:
+    annotations:
+      workflows.argoproj.io/title: "**post-sync-{{ "{{workflow.parameters.application}}" }}-{{ "{{workflow.parameters.imageTag}}" }}**"
+      workflows.argoproj.io/description: "`promote: {{ "{{workflow.parameters.promoteDeployment}}" }} auto_deploy: {{ "{{workflow.parameters.automaticDeploysEnabled}}" }}`"
     labels:
       repoName: "{{ `{{workflow.parameters.repoName}}` }}"
       application: "{{ `{{workflow.parameters.application}}` }}"
@@ -60,6 +63,8 @@ spec:
                   value: "{{"{{workflow.parameters.imageTag}}"}}"
                 - name: promoteDeployment
                   value: "true"
+                - name: application
+                  value: "{{"{{workflow.parameters.application}}"}}"
     - name: send-webhook
       inputs:
         parameters:
@@ -67,6 +72,7 @@ spec:
         - name: repoName
         - name: imageTag
         - name: promoteDeployment
+        - name: application
       script:
         image: quay.io/curl/curl
         command:
@@ -75,6 +81,7 @@ spec:
           curl -s "${WEBHOOK_URL}/update-image-tag" \
             -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
             --json '{
+              "application": "{{"{{inputs.parameters.application}}"}}"
               "environment": "{{"{{inputs.parameters.environment}}"}}",
               "repoName": "{{"{{inputs.parameters.repoName}}"}}",
               "imageTag": "{{"{{inputs.parameters.imageTag}}"}}",

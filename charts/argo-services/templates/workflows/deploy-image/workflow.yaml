@@ -3,6 +3,9 @@ kind: WorkflowTemplate
 metadata:
   name: deploy-image
 spec:
+  annotations:
+    workflows.argoproj.io/title: "**deploy-image-{{ "{{workflow.parameters.application}}" }}-{{ "{{workflow.parameters.imageTag}}" }}**"
+    workflows.argoproj.io/description: "`env: {{ "{{workflow.parameters.environment}}" }} promote: {{ "{{workflow.parameters.promoteDeploment}}" }}`"
   entrypoint: deploy-image
   onExit: exit-handler
   arguments:
@@ -11,6 +14,7 @@ spec:
       - name: repoName
       - name: imageTag
       - name: promoteDeployment
+      - name: application
   templates:
     - name: deploy-image
       steps:
@@ -20,6 +24,8 @@ spec:
               template: update-image-tag
             arguments:
               parameters:
+                - name: application
+                  value: "{{"{{workflow.parameters.application}}"}}"
                 - name: environment
                   value: "{{"{{workflow.parameters.environment}}"}}"
                 - name: repoName
