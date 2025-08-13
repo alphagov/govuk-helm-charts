@@ -1,0 +1,29 @@
+# Default values for govuk-reports - Integration Environment
+# This is a YAML-formatted file.
+
+# ArgoCD Application configuration
+argocd:
+  application:
+    name: govuk-reports-integration
+    namespace: argocd
+    project: default
+    
+  # Source configuration
+  source:
+    repoURL: https://github.com/alphagov/govuk-reports-prototype
+    targetRevision: main
+    path: helm/govuk-reports
+    
+  # Destination configuration
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: govuk-reports-integration
+    
+  # Sync policy
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - RespectIgnoreDifferences=true
