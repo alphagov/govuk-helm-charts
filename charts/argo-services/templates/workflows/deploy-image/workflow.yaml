@@ -5,7 +5,7 @@ metadata:
 spec:
   workflowMetadata:
     annotations:
-      workflows.argoproj.io/title: "**deploy-image-{{ "{{workflow.parameters.application}}" }}-{{ "{{workflow.parameters.imageTag}}" }}**"
+      workflows.argoproj.io/title: "**deploy-image-{{ "{{workflow.parameters.repoName}}" }}-{{ "{{workflow.parameters.imageTag}}" }}**"
       workflows.argoproj.io/description: "`env: {{ "{{workflow.parameters.environment}}" }} promote: {{ "{{workflow.parameters.promoteDeploment}}" }}`"
   entrypoint: deploy-image
   onExit: exit-handler
@@ -15,7 +15,6 @@ spec:
       - name: repoName
       - name: imageTag
       - name: promoteDeployment
-      - name: application
   templates:
     - name: deploy-image
       steps:
@@ -25,8 +24,6 @@ spec:
               template: update-image-tag
             arguments:
               parameters:
-                - name: application
-                  value: "{{"{{workflow.parameters.application}}"}}"
                 - name: environment
                   value: "{{"{{workflow.parameters.environment}}"}}"
                 - name: repoName
