@@ -194,7 +194,7 @@ cronjobs:
       operations:
         - op: backup
 
-    production-publisher-postgres:
+    publisher-postgres:
       schedule: "41 23 * * *"
       db: publisher_production
       operations:
@@ -408,7 +408,7 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    production-publisher-postgres:
+    publisher-postgres:
       schedule: "42 1 * * 1-5"
       db: publisher_production
       operations:
@@ -654,7 +654,7 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
         - op: backup
 
-    production-publisher-postgres:
+    publisher-postgres:
       schedule: "41 3 * * 1"
       db: publisher_production
       operations:
