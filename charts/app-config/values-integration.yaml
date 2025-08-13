@@ -3513,7 +3513,7 @@ govukApplications:
               name: signon-token-static-publishing-api
               key: bearer_token
         - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
+          value: "$(REDIS_URL)/1"
         - name: USE_TMPDIR_PAGE_CACHE
           value: "true"
 
