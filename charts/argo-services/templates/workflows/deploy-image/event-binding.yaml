@@ -4,15 +4,12 @@ metadata:
   name: deploy-image
 spec:
   event:
-    selector: payload.application != "" && payload.environment != "" && payload.repoName != "" && payload.imageTag != "" && discriminator == "update-image-tag"
+    selector: payload.environment != "" && payload.repoName != "" && payload.imageTag != "" && discriminator == "update-image-tag"
   submit:
     workflowTemplateRef:
       name: deploy-image
     arguments:
       parameters:
-        - name: application
-          valueFrom:
-            event: payload.application
         - name: environment
           valueFrom:
             event: payload.environment
