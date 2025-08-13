@@ -3,9 +3,10 @@ kind: WorkflowTemplate
 metadata:
   name: deploy-image
 spec:
-  annotations:
-    workflows.argoproj.io/title: "**deploy-image-{{ "{{workflow.parameters.application}}" }}-{{ "{{workflow.parameters.imageTag}}" }}**"
-    workflows.argoproj.io/description: "`env: {{ "{{workflow.parameters.environment}}" }} promote: {{ "{{workflow.parameters.promoteDeploment}}" }}`"
+  workflowMetadata:
+    annotations:
+      workflows.argoproj.io/title: "**deploy-image-{{ "{{workflow.parameters.application}}" }}-{{ "{{workflow.parameters.imageTag}}" }}**"
+      workflows.argoproj.io/description: "`env: {{ "{{workflow.parameters.environment}}" }} promote: {{ "{{workflow.parameters.promoteDeploment}}" }}`"
   entrypoint: deploy-image
   onExit: exit-handler
   arguments:
