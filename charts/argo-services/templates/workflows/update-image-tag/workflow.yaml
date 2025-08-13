@@ -6,7 +6,7 @@ spec:
   workflowMetadata:
     annotations:
       workflows.argoproj.io/title: "**update-image-tag-{{ "{{workflow.parameters.repoName}}" }}-{{ "{{workflow.parameters.imageTag}}" }}**"
-      workflows.argoproj.io/description: "`env: {{ "{{workflow.parameters.environment}}" }} promote: {{ "{{workflow.parameters.promoteDeploment}}" }}`"
+      workflows.argoproj.io/description: "`env: {{ "{{workflow.parameters.environment}}" }} promote: {{ "{{workflow.parameters.promoteDeployment}}" }}`"
   entrypoint: update-image-tag
   arguments:
     parameters:
