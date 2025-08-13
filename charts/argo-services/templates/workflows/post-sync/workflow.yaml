@@ -81,7 +81,7 @@ spec:
           curl -s "${WEBHOOK_URL}/update-image-tag" \
             -H "Authorization: Bearer ${WEBHOOK_TOKEN}" \
             --json '{
-              "application": "{{"inputs.parameters.application"}}"
+              "application": "{{"{{inputs.parameters.application}}"}}"
               "environment": "{{"{{inputs.parameters.environment}}"}}",
               "repoName": "{{"{{inputs.parameters.repoName}}"}}",
               "imageTag": "{{"{{inputs.parameters.imageTag}}"}}",
