@@ -211,8 +211,6 @@ cronjobs:
       schedule: "13 0 * * *"
       operations:
         - op: backup
-          db: maslow_production
-        - op: backup
           db: publisher_production
         - op: backup
           db: short_url_manager_production
@@ -432,9 +430,6 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
-          db: maslow_production
-        - op: restore
-          bucket: s3://govuk-production-database-backups
           db: publisher_production
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -445,8 +440,6 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-production-database-backups
           db: travel_advice_publisher_production
-        - op: backup
-          db: maslow_production
         - op: backup
           db: publisher_production
         - op: backup
@@ -683,9 +676,6 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
-          db: maslow_production
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
           db: publisher_production
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -696,8 +686,6 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
           db: govuk_content_production
-        - op: backup
-          db: maslow_production
         - op: backup
           db: publisher_production
         - op: backup
