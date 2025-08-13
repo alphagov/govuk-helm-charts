@@ -1,0 +1,3 @@
+{{- if .Values.enablePodMonitor }}
+{{ include "govuk-application-template.podmonitor" . }}
+{{- end }}
