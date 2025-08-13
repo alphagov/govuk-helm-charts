@@ -445,7 +445,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -455,7 +454,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "% of request quota used",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
@@ -497,8 +496,7 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "reqps"
+          }
         },
         "overrides": []
       },
@@ -508,47 +506,48 @@
         "x": 0,
         "y": 16
       },
-      "id": 16,
+      "id": 31,
       "options": {
         "legend": {
-          "calcs": [
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "right",
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.1",
       "targets": [
+        {
+          "editorMode": "code",
+          "expr": "label_replace(\n  max by (signon_user) (govuk_chat_rate_limit_api_user_read_percentage_used), \n  \"uid_and_request_type\", \"$1 - read\", \"signon_user\", \"(.*)\"\n)",
+          "legendFormat": "{{uid_and_request_type}}",
+          "range": true,
+          "refId": "A"
+        },
         {
           "datasource": {
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(rate(http_requests_total{job=\"govuk-chat\"}[$__rate_interval]))",
-          "fullMetaSearch": false,
+          "expr": "label_replace(\n  max by (signon_user) (govuk_chat_rate_limit_api_user_write_percentage_used), \n  \"uid_and_request_type\", \"$1 - write\", \"signon_user\", \"(.*)\"\n)",
           "hide": false,
-          "includeNullMetadata": false,
           "instant": false,
-          "legendFormat": "Total",
+          "legendFormat": "{{uid_and_request_type}}",
           "range": true,
-          "refId": "A",
-          "useBackend": false
+          "refId": "B"
         }
       ],
-      "title": "FE HTTP Total Requests Per Second",
+      "title": "Application rate limits by API user",
       "type": "timeseries"
     },
     {
       "datasource": {
-        "default": true,
         "type": "prometheus",
         "uid": "prometheus"
       },
@@ -582,7 +581,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -722,7 +721,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": true,
+            "spanNulls": false,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -745,7 +744,7 @@
               }
             ]
           },
-          "unit": "percent"
+          "unit": "reqps"
         },
         "overrides": []
       },
@@ -755,7 +754,7 @@
         "x": 0,
         "y": 24
       },
-      "id": 23,
+      "id": 16,
       "options": {
         "legend": {
           "calcs": [
@@ -767,25 +766,32 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "prometheus"
           },
+          "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(rate(http_requests_total{job=\"govuk-chat\", status=~\"5..\"}[$__rate_interval])) / (sum(rate(http_requests_total{job=\"govuk-chat\"}[$__rate_interval])) / 100)",
+          "expr": "sum(rate(http_requests_total{job=\"govuk-chat\"}[$__rate_interval]))",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": false,
           "instant": false,
-          "legendFormat": "Error rate",
+          "legendFormat": "Total",
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "useBackend": false
         }
       ],
-      "title": "FE HTTP 5xx Error Rate Percentage",
+      "title": "FE HTTP Total Requests Per Second",
       "type": "timeseries"
     },
     {
@@ -837,8 +843,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -868,10 +873,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -892,6 +899,210 @@
         }
       ],
       "title": "FE HTTP Request Duration (P75)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "default": true,
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "id": 23,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(http_requests_total{job=\"govuk-chat\", status=~\"5..\"}[$__rate_interval])) / (sum(rate(http_requests_total{job=\"govuk-chat\"}[$__rate_interval])) / 100)",
+          "instant": false,
+          "legendFormat": "Error rate",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "FE HTTP 5xx Error Rate Percentage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 32
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.6.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "avg by(container) (container_memory_working_set_bytes{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"apps\", pod=~\"govuk-chat-........*-.....\", container=~\"app|nginx\"})",
+          "instant": false,
+          "legendFormat": "{{label_name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "FE Pod Memory Usage",
       "type": "timeseries"
     },
     {
@@ -943,8 +1154,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -959,7 +1169,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 40
       },
       "id": 21,
       "options": {
@@ -973,10 +1183,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -1051,8 +1263,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1068,9 +1279,9 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 40
       },
-      "id": 19,
+      "id": 18,
       "options": {
         "legend": {
           "calcs": [
@@ -1082,10 +1293,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -1093,14 +1306,23 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "avg by(container) (container_memory_working_set_bytes{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"apps\", pod=~\"govuk-chat-........*-.....\", container=~\"app|nginx\"})",
+          "expr": "avg (container_memory_working_set_bytes{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"apps\", pod=~\"govuk-chat-worker-.*\", container=~\"published-documents-consumer|worker\"}) by(container)",
           "instant": false,
           "legendFormat": "{{label_name}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "FE Pod Memory Usage",
+      "title": "Worker Pod Memory Usage",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "(published-documents-consumer)",
+            "renamePattern": "consumer"
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -1151,8 +1373,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1167,7 +1388,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 48
       },
       "id": 20,
       "options": {
@@ -1181,10 +1402,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "11.6.1",
       "targets": [
         {
           "datasource": {
@@ -1220,115 +1443,6 @@
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 40
-      },
-      "id": 18,
-      "options": {
-        "legend": {
-          "calcs": [
-            "max",
-            "mean"
-          ],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "avg (container_memory_working_set_bytes{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"apps\", pod=~\"govuk-chat-worker-.*\", container=~\"published-documents-consumer|worker\"}) by(container)",
-          "instant": false,
-          "legendFormat": "{{label_name}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Worker Pod Memory Usage",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "(published-documents-consumer)",
-            "renamePattern": "consumer"
-          }
-        }
-      ],
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
@@ -1376,266 +1490,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 48
-      },
-      "id": 1,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "cloudwatch"
-          },
-          "dimensions": {
-            "DomainName": "chat-engine"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "ClusterStatus.green",
-          "metricQueryType": 0,
-          "namespace": "AWS/ES",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Average"
-        }
-      ],
-      "title": "Opensearch Cluster Status",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "cloudwatch"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "decmbytes"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "FreeStorageSpace"
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": true,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 48
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "cloudwatch"
-          },
-          "dimensions": {
-            "DomainName": "chat-engine"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": false,
-          "metricEditorMode": 0,
-          "metricName": "FreeStorageSpace",
-          "metricQueryType": 0,
-          "namespace": "AWS/ES",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Average"
-        }
-      ],
-      "title": "Opensearch Free Storage Space",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "(27ja.*)",
-            "renamePattern": "Node 1"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "(4OTv.*)",
-            "renamePattern": "Node 2"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "(G-z4.*)",
-            "renamePattern": "Node 3"
-          }
-        }
-      ],
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "cloudwatch"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1750,6 +1605,7 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1793,16 +1649,14 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
                 "value": 80
               }
             ]
-          },
-          "unit": "bytes"
+          }
         },
         "overrides": []
       },
@@ -1812,7 +1666,7 @@
         "x": 0,
         "y": 56
       },
-      "id": 6,
+      "id": 1,
       "options": {
         "legend": {
           "calcs": [],
@@ -1832,17 +1686,17 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "DBInstanceIdentifier": "chat-postgres"
+            "DomainName": "chat-engine"
           },
           "expression": "",
           "id": "",
           "label": "",
           "logGroups": [],
-          "matchExact": true,
+          "matchExact": false,
           "metricEditorMode": 0,
-          "metricName": "FreeableMemory",
+          "metricName": "ClusterStatus.green",
           "metricQueryType": 0,
-          "namespace": "AWS/RDS",
+          "namespace": "AWS/ES",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
@@ -1851,7 +1705,7 @@
           "statistic": "Average"
         }
       ],
-      "title": "Postgres Freeable Memory",
+      "title": "Opensearch Cluster Status",
       "type": "timeseries"
     },
     {
@@ -1902,8 +1756,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1911,9 +1764,26 @@
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "decmbytes"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "FreeStorageSpace"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -1921,7 +1791,7 @@
         "x": 8,
         "y": 56
       },
-      "id": 4,
+      "id": 2,
       "options": {
         "legend": {
           "calcs": [],
@@ -1941,17 +1811,17 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "DBInstanceIdentifier": "chat-postgres"
+            "DomainName": "chat-engine"
           },
           "expression": "",
           "id": "",
           "label": "",
           "logGroups": [],
-          "matchExact": true,
+          "matchExact": false,
           "metricEditorMode": 0,
           "metricName": "FreeStorageSpace",
           "metricQueryType": 0,
-          "namespace": "AWS/RDS",
+          "namespace": "AWS/ES",
           "period": "",
           "queryMode": "Metrics",
           "refId": "A",
@@ -1960,7 +1830,30 @@
           "statistic": "Average"
         }
       ],
-      "title": "Postgres Free Storage Space",
+      "title": "Opensearch Free Storage Space",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "(27ja.*)",
+            "renamePattern": "Node 1"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "(4OTv.*)",
+            "renamePattern": "Node 2"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "(G-z4.*)",
+            "renamePattern": "Node 3"
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -2011,8 +1904,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2119,8 +2011,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2128,7 +2019,7 @@
               }
             ]
           },
-          "unit": "binBps"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -2138,7 +2029,7 @@
         "x": 0,
         "y": 64
       },
-      "id": 8,
+      "id": 6,
       "options": {
         "legend": {
           "calcs": [],
@@ -2166,7 +2057,7 @@
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "NetworkReceiveThroughput",
+          "metricName": "FreeableMemory",
           "metricQueryType": 0,
           "namespace": "AWS/RDS",
           "period": "",
@@ -2175,34 +2066,9 @@
           "region": "default",
           "sqlExpression": "",
           "statistic": "Average"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "cloudwatch"
-          },
-          "dimensions": {
-            "DBInstanceIdentifier": "chat-postgres"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "NetworkTransmitThroughput",
-          "metricQueryType": 0,
-          "namespace": "AWS/RDS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "B",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Average"
         }
       ],
-      "title": "Postgres Network Throughput",
+      "title": "Postgres Freeable Memory",
       "type": "timeseries"
     },
     {
@@ -2253,15 +2119,15 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -2271,7 +2137,7 @@
         "x": 8,
         "y": 64
       },
-      "id": 7,
+      "id": 4,
       "options": {
         "legend": {
           "calcs": [],
@@ -2299,7 +2165,7 @@
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "ReadLatency",
+          "metricName": "FreeStorageSpace",
           "metricQueryType": 0,
           "namespace": "AWS/RDS",
           "period": "",
@@ -2308,34 +2174,9 @@
           "region": "default",
           "sqlExpression": "",
           "statistic": "Average"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "cloudwatch"
-          },
-          "dimensions": {
-            "DBInstanceIdentifier": "chat-postgres"
-          },
-          "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "WriteLatency",
-          "metricQueryType": 0,
-          "namespace": "AWS/RDS",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "B",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Average"
         }
       ],
-      "title": "Postgres Read/Write Latency",
+      "title": "Postgres Free Storage Space",
       "type": "timeseries"
     },
     {
@@ -2387,8 +2228,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2521,8 +2361,379 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "binBps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 72
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "DBInstanceIdentifier": "chat-postgres"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NetworkReceiveThroughput",
+          "metricQueryType": 0,
+          "namespace": "AWS/RDS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "DBInstanceIdentifier": "chat-postgres"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "NetworkTransmitThroughput",
+          "metricQueryType": 0,
+          "namespace": "AWS/RDS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        }
+      ],
+      "title": "Postgres Network Throughput",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 72
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "DBInstanceIdentifier": "chat-postgres"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "ReadLatency",
+          "metricQueryType": 0,
+          "namespace": "AWS/RDS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "DBInstanceIdentifier": "chat-postgres"
+          },
+          "expression": "",
+          "hide": false,
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "WriteLatency",
+          "metricQueryType": 0,
+          "namespace": "AWS/RDS",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        }
+      ],
+      "title": "Postgres Read/Write Latency",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 72
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "CacheClusterId": "chat-redis-001"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "CurrConnections",
+          "metricQueryType": 0,
+          "namespace": "AWS/ElastiCache",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        }
+      ],
+      "title": "Redis Current Connections",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2538,7 +2749,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 72
+        "y": 80
       },
       "id": 15,
       "options": {
@@ -2631,8 +2842,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2648,7 +2858,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 72
+        "y": 80
       },
       "id": 10,
       "options": {
@@ -2690,114 +2900,6 @@
         }
       ],
       "title": "Redis Memory Usage Percentage",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "cloudwatch"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 72
-      },
-      "id": 11,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "cloudwatch"
-          },
-          "dimensions": {
-            "CacheClusterId": "chat-redis-001"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "CurrConnections",
-          "metricQueryType": 0,
-          "namespace": "AWS/ElastiCache",
-          "period": "",
-          "queryMode": "Metrics",
-          "refId": "A",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Average"
-        }
-      ],
-      "title": "Redis Current Connections",
       "type": "timeseries"
     },
     {
@@ -2849,8 +2951,116 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "eps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 80
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "CacheClusterId": "chat-redis-001"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "CacheHitRate",
+          "metricQueryType": 0,
+          "namespace": "AWS/ElastiCache",
+          "period": "",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        }
+      ],
+      "title": "Redis Cache Hit Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2866,7 +3076,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 80
+        "y": 88
       },
       "id": 12,
       "options": {
@@ -2985,8 +3195,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3002,7 +3211,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 80
+        "y": 88
       },
       "id": 14,
       "options": {
@@ -3048,10 +3257,10 @@
     },
     {
       "datasource": {
-        "type": "cloudwatch",
-        "uid": "cloudwatch"
+        "default": true,
+        "type": "prometheus",
+        "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,7 +3270,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "",
+            "axisLabel": "Hours:Minutes:Seconds",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
@@ -3095,8 +3304,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3104,7 +3312,7 @@
               }
             ]
           },
-          "unit": "eps"
+          "unit": "dthms"
         },
         "overrides": []
       },
@@ -3112,12 +3320,15 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 80
+        "y": 88
       },
-      "id": 13,
+      "id": 26,
       "options": {
         "legend": {
-          "calcs": [],
+          "calcs": [
+            "max",
+            "mean"
+          ],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
@@ -3130,30 +3341,22 @@
       "targets": [
         {
           "datasource": {
-            "type": "cloudwatch",
-            "uid": "cloudwatch"
+            "type": "prometheus",
+            "uid": "prometheus"
           },
-          "dimensions": {
-            "CacheClusterId": "chat-redis-001"
-          },
-          "expression": "",
-          "id": "",
-          "label": "",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "CacheHitRate",
-          "metricQueryType": 0,
-          "namespace": "AWS/ElastiCache",
-          "period": "",
-          "queryMode": "Metrics",
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "max by(job, queue) (sidekiq_queue_latency_seconds{job=~\"govuk-chat-worker\"})",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "{{job}}:{{queue}}",
+          "range": true,
           "refId": "A",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Average"
+          "useBackend": false
         }
       ],
-      "title": "Redis Cache Hit Rate",
+      "title": "Sidekiq Age Of Oldest Job In Queue",
       "type": "timeseries"
     },
     {
@@ -3205,8 +3408,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3222,7 +3424,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 88
+        "y": 96
       },
       "id": 24,
       "options": {
@@ -3310,8 +3512,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3327,7 +3528,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 88
+        "y": 96
       },
       "id": 25,
       "options": {
@@ -3365,115 +3566,11 @@
       ],
       "title": "Sidekiq Work Rate By Queue",
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "default": true,
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Hours:Minutes:Seconds",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "dthms"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 88
-      },
-      "id": 26,
-      "options": {
-        "legend": {
-          "calcs": [
-            "max",
-            "mean"
-          ],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "max by(job, queue) (sidekiq_queue_latency_seconds{job=~\"govuk-chat-worker\"})",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{job}}:{{queue}}",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "Sidekiq Age Of Oldest Job In Queue",
-      "type": "timeseries"
     }
   ],
+  "preload": false,
   "refresh": "15m",
-  "schemaVersion": 39,
+  "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": []
