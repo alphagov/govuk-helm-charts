@@ -156,6 +156,12 @@ spec:
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
+  - name: 'slack-publishing-mainstream-experience'
+    slackConfigs:
+    - channel: '#govuk-publishing-mainstream-experience-tech'
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
   - name: 'slack-search-team-alerts-channel'
     slackConfigs:
     - &slack-search-team-alerts-channel
