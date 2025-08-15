@@ -3317,6 +3317,8 @@ govukApplications:
         hosts:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         # These GA/GTM values are not secrets (not even the the gtm_auth one).
         # https://github.com/alphagov/govuk-puppet/pull/8041
@@ -3368,6 +3370,8 @@ govukApplications:
         createSecret: false
       uploadAssets:
         enabled: false
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: DRAFT_ENVIRONMENT
           value: "1"
