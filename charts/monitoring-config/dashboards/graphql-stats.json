@@ -260,7 +260,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "\nsum(rate(http_request_duration_seconds_sum{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n    by (schema_name)\n  /\n  sum(rate(http_request_duration_seconds_count{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n    by (schema_name)\n",
+          "expr": "\nsum(rate(http_request_duration_seconds_sum{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__range]))\n    by (schema_name)\n  /\n  sum(rate(http_request_duration_seconds_count{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__range]))\n    by (schema_name)\n",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -274,7 +274,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (schema_name) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))",
+          "expr": "sum by (schema_name) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__range]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -520,7 +520,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))",
+          "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__range]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -618,7 +618,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "((sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))) / (sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range])) + sum(increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[$__range])))) * 100",
+          "expr": "((sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__range]))) / (sum(increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__range])) + sum(increase(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[$__range])))) * 100",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -688,7 +688,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(sum(rate(http_request_duration_seconds_sum{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))\n  /\n  sum(rate(http_request_duration_seconds_count{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__range]))) * 1000",
+          "expr": "(sum(rate(http_request_duration_seconds_sum{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__range]))\n  /\n  sum(rate(http_request_duration_seconds_count{job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__range]))) * 1000",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -708,374 +708,375 @@
         "y": 24
       },
       "id": 11,
-      "panels": [],
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "description": "Median request duration by document type",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "Response Time (s)",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "log": 2,
+                  "type": "log"
+                },
+                "showPoints": "auto",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Errors"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#E24D42",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 0,
+            "y": 25
+          },
+          "id": 12,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "sortBy": "Name",
+              "sortDesc": true,
+              "width": 300
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "11.6.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", schema_name=~\"$content_store_schema_name\"}[$__rate_interval])))",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "legendFormat": "{{document_type}}",
+              "refId": "Content Store median"
+            }
+          ],
+          "title": "Median Response Time",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "description": "99th percentile of median response times by document type. This acts as an upper limit of median response time.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "Response Time (s)",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Errors"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#E24D42",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 12,
+            "y": 25
+          },
+          "id": 13,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true,
+              "sortBy": "Name",
+              "sortDesc": true,
+              "width": 300
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "11.6.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", schema_name=~\"$content_store_schema_name\"}[$__rate_interval])))",
+              "hide": false,
+              "instant": false,
+              "interval": "",
+              "legendFormat": "{{document_type}}",
+              "refId": "Content Store 99th percentile"
+            }
+          ],
+          "title": "99% Response Times",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "description": "Total requests per second for regular Content Store. Compare with the visualisation below if you want to see the difference between Content Store and GraphQL traffic.\n\nI've made these two separate and it  was helpful to have a separate Y axis for GraphQL to stop it being hard to read. ",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "Total (requests/s)",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "none"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Errors"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "#E24D42",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 32
+          },
+          "id": 2,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "width": 300
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "11.6.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "prometheus"
+              },
+              "editorMode": "code",
+              "exemplar": true,
+              "expr": "sum(rate(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[$__rate_interval])) by (job)",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "All Document types",
+              "range": true,
+              "refId": "C"
+            }
+          ],
+          "title": "Total Content Store requests per second ",
+          "type": "timeseries"
+        }
+      ],
       "title": "Content store visualisations",
       "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "description": "Median request duration by document type",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Response Time (s)",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "log": 2,
-              "type": "log"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Errors"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#E24D42",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 0,
-        "y": 25
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true,
-          "sortBy": "Name",
-          "sortDesc": true,
-          "width": 300
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.6.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", schema_name=~\"$content_store_schema_name\"}[$__rate_interval])))",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{document_type}}",
-          "refId": "Content Store median"
-        }
-      ],
-      "title": "Median Response Time",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "description": "99th percentile of median response times by document type. This acts as an upper limit of median response time.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Response Time (s)",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Errors"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#E24D42",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 25
-      },
-      "id": 13,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true,
-          "sortBy": "Name",
-          "sortDesc": true,
-          "width": 300
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.6.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\", schema_name=~\"$content_store_schema_name\"}[$__rate_interval])))",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{document_type}}",
-          "refId": "Content Store 99th percentile"
-        }
-      ],
-      "title": "99% Response Times",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "description": "Total requests per second for regular Content Store. Compare with the visualisation below if you want to see the difference between Content Store and GraphQL traffic.\n\nI've made these two separate and it  was helpful to have a separate Y axis for GraphQL to stop it being hard to read. ",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Total (requests/s)",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Errors"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#E24D42",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 32
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true,
-          "width": 300
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.6.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": true,
-          "expr": "sum(rate(http_requests_total{namespace=\"apps\", job=~\"content-store\", controller=\"content_items\", action=\"show\"}[$__rate_interval])) by (job)",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "All Document types",
-          "range": true,
-          "refId": "C"
-        }
-      ],
-      "title": "Total Content Store requests per second ",
-      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -1083,7 +1084,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 25
       },
       "id": 8,
       "panels": [],
@@ -1174,7 +1175,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 39
+        "y": 26
       },
       "id": 9,
       "options": {
@@ -1202,7 +1203,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\", schema_name=~\"$graphql_schema_name\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.5, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\", schema_name=~\"$graphql_schema_name\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -1297,7 +1298,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 39
+        "y": 26
       },
       "id": 10,
       "options": {
@@ -1325,7 +1326,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\", schema_name=~\"$graphql_schema_name\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by (schema_name, le) (rate(http_request_duration_seconds_bucket{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\", schema_name=~\"$graphql_schema_name\"}[$__rate_interval])))",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -1417,7 +1418,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 33
       },
       "id": 7,
       "options": {
@@ -1443,7 +1444,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[$__rate_interval])) by (schema_name)",
+          "expr": "sum(rate(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[$__rate_interval])) by (schema_name)",
           "hide": false,
           "interval": "",
           "legendFormat": "__auto",
@@ -1535,7 +1536,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 39
       },
       "id": 17,
       "options": {
@@ -1562,7 +1563,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by(schema_name) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"}[1h]))",
+          "expr": "sum by(schema_name) (increase(http_requests_total{namespace=\"apps\", job=~\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"}[1h]))",
           "fullMetaSearch": false,
           "hide": false,
           "includeNullMetadata": true,
@@ -1590,14 +1591,14 @@
             "$__all"
           ]
         },
-        "definition": "label_values(http_request_duration_seconds_bucket{namespace=\"apps\", job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"},schema_name)",
+        "definition": "label_values(http_request_duration_seconds_bucket{namespace=\"apps\", job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"},schema_name)",
         "includeAll": true,
         "multi": true,
         "name": "graphql_schema_name",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(http_request_duration_seconds_bucket{namespace=\"apps\", job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"execute\"},schema_name)",
+          "query": "label_values(http_request_duration_seconds_bucket{namespace=\"apps\", job=\"publishing-api-read-replica\", controller=\"graphql\", action=\"live_content\"},schema_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -1653,5 +1654,5 @@
   "timezone": "browser",
   "title": "Graphql stats",
   "uid": "aeh00wtwwg8owc",
-  "version": 17
+  "version": 18
 }
