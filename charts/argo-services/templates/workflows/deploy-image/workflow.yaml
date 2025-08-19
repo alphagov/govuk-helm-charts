@@ -7,6 +7,11 @@ spec:
     annotations:
       workflows.argoproj.io/title: "**deploy-image-{{ "{{workflow.parameters.repoName}}" }}-{{ "{{workflow.parameters.imageTag}}" }}**"
       workflows.argoproj.io/description: "`env: {{ "{{workflow.parameters.environment}}" }} promote: {{ "{{workflow.parameters.promoteDeployment}}" }}`"
+    labels:
+      repoName: "{{ `{{workflow.parameters.repoName}}` }}"
+      imageTag: "{{ `{{workflow.parameters.imageTag}}` }}"
+      promoteDeployment: "{{ `{{workflow.parameters.promoteDeployment}}` }}"
+      environment: "{{ `{{workflow.parameters.environment}}` }}"
   entrypoint: deploy-image
   onExit: exit-handler
   arguments:
