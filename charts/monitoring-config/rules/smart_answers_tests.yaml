@@ -1,0 +1,54 @@
+rule_files:
+  - smart_answers.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      # No alert with 5xx errors < 10%
+      - series: >-
+          http_requests_total{
+          job="smartanswers",
+          status="200"
+          }
+        values: '1000+100x15'
+      - series: >-
+          http_requests_total{
+          job="smartanswers",
+          status="500"
+          }
+        values: '0+10x15'
+    alert_rule_test:
+      - alertname: High5xxRate
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert with 5xx errors > 10%
+      - series: >-
+          http_requests_total{
+          job="smartanswers",
+          status="200"
+          }
+        values: '1000x15'
+      - series: >-
+          http_requests_total{
+          job="smartanswers",
+          status="500"
+          }
+        values: '0+100x15'
+    alert_rule_test:
+      - alertname: High5xxRate
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: High5xxRate
+              severity: warning
+              destination: slack-publishing-mainstream-experience
+            exp_annotations:
+              summary: Elevated rate of 5xx return codes for Smart Answers
+              description: >-
+                The rate of http 5xx return codes is above 10% of total requests
+                for more than 6 minutes.

@@ -1,0 +1,23 @@
+groups:
+  - name: SmartAnswers
+    rules:
+      - alert: High5xxRate
+        expr: >-
+          sum(rate(http_requests_total{
+            job="smartanswers",
+            status=~"5.."
+          }[2m]))
+          /
+          (sum(rate(http_requests_total{
+            job="smartanswers"
+          }[2m])) / 100)
+          > 10
+        for: 6m
+        labels:
+          severity: warning
+          destination: slack-publishing-mainstream-experience
+        annotations:
+          summary: Elevated rate of 5xx return codes for Smart Answers
+          description: >-
+            The rate of http 5xx return codes is above 10% of total requests
+            for more than 6 minutes.
