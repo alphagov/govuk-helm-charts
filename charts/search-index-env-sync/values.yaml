@@ -50,7 +50,6 @@ cronjobs:
         - name: SUBDOMAIN
           value: elasticsearch6
     chat-engine-cp-prod:
-      suspend: true # Disabled until 2025-08-15 while pen test is in progress on GOV.UK Chat.
       schedule: "12 2 * * *"
       args: [restore_latest]
       extraEnv:
