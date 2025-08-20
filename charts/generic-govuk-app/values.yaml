@@ -8,6 +8,9 @@ service:
 ingress:
   enabled: false
 
+anonymous_user_ids:
+  enabled: false
+
 # appEnabled determines whether the web app Deployment is created.
 appEnabled: true
 replicaCount: 2
