@@ -106,6 +106,13 @@ spec:
             - name: SENTRY_RELEASE
               value: "{{ .Values.appImage.tag }}"
             {{- end }}
+            {{- if .Values.anonymous_user_ids.enabled }}
+            - name: ANONYMOUS_USER_ID_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: anonymous-user-id
+                  key: ANONYMOUS_USER_ID_SECRET
+            {{- end }}
             {{- if .Values.redis.enabled }}
             - name: REDIS_URL
               value: {{ .Values.redis.redisUrlOverride.app | default (printf "redis://%s-redis" $fullName) }}

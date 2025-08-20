@@ -906,6 +906,8 @@ govukApplications:
           memory: 200Mi
       redis:
         enabled: true
+      anonymous_user_ids:
+        enabled: true
       ingress:
         enabled: true
         annotations:
@@ -2200,6 +2202,8 @@ govukApplications:
           memory: 200Mi
       redis:
         enabled: true
+      anonymous_user_ids:
+        enabled: true
       cronTasks:
         - name: mail-fetcher
           command: "script/mail_fetcher"
@@ -3303,6 +3307,8 @@ govukApplications:
           memory: 200Mi
       redis:
         enabled: true
+      anonymous_user_ids:
+        enabled: true
       ingress:
         enabled: true
         annotations:
@@ -4060,6 +4066,8 @@ govukApplications:
           cpu: 10m
           memory: 512Mi
       redis:
+        enabled: true
+      anonymous_user_ids:
         enabled: true
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
