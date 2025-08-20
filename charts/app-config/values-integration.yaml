@@ -419,6 +419,11 @@ govukApplications:
         hosts:
           - name: collections-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: &anonymous_user_id_secret
+            secretKeyRef:
+              name: anonymous-user-id
+              key: ANONYMOUS_USER_ID_SECRET
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -520,6 +525,8 @@ govukApplications:
       redis:
         enabled: true
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: CONTENT_DATA_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -735,6 +742,8 @@ govukApplications:
         hosts:
           - name: content-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -925,6 +934,8 @@ govukApplications:
           task: "metrics:taxonomy:record_all"
           schedule: "14 * * * *"
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -1919,6 +1930,8 @@ govukApplications:
           schedule: "0 6 * * *"
       dbMigrationEnabled: true
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
           valueFrom:
             secretKeyRef:
@@ -2079,6 +2092,8 @@ govukApplications:
         hosts:
           - name: manuals-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -2162,6 +2177,8 @@ govukApplications:
       redis:
         enabled: true
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -2226,6 +2243,8 @@ govukApplications:
           - name: publisher.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -2382,6 +2401,8 @@ govukApplications:
           - name: publisher-on-pg.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -2676,6 +2697,8 @@ govukApplications:
       workers:
         enabled: false
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -2909,6 +2932,8 @@ govukApplications:
           task: "completion:import_denylist"
           schedule: "56 4 * * 1"  # one hour after the DB is restored from staging
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -3232,6 +3257,8 @@ govukApplications:
         hosts:
           - name: service-manual-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -3341,6 +3368,8 @@ govukApplications:
           task: "kubernetes:sync_token_secrets"
           schedule: "7 1 * * *"
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GOVUK_CSP_REPORT_ONLY
           value: "true"
         - name: GOVUK_NOTIFY_TEMPLATE_ID
@@ -3545,6 +3574,8 @@ govukApplications:
       redis:
         enabled: true
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -3616,6 +3647,8 @@ govukApplications:
         hosts:
           - name: specialist-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -3702,6 +3735,8 @@ govukApplications:
       redis:
         enabled: true
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: AWS_S3_BUCKET_NAME
           value: govuk-integration-support-api-csvs
         - name: EMERGENCY_CONTACT_DETAILS
@@ -3872,6 +3907,8 @@ govukApplications:
           task: "import:hits:refresh_materialized"
           schedule: "38 0,12 * * *"
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -3942,6 +3979,8 @@ govukApplications:
         hosts:
           - name: travel-advice-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -4076,6 +4115,8 @@ govukApplications:
         hosts:
           - name: whitehall-admin.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
