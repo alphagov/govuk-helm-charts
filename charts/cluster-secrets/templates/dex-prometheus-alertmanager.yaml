@@ -1,6 +1,6 @@
 {{- range .Values.dexAlertManagerSecretsNamespaces}}
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-alertmanager
@@ -27,7 +27,7 @@ spec:
 {{- end }}
 {{- range .Values.dexPrometheusSecretsNamespaces}}
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: govuk-dex-prometheus
