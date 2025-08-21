@@ -41,6 +41,15 @@ spec:
         - inhours
     - matchers:
       - name: destination
+        value: slack-startup-probe-failures
+        matchType: =
+      receiver: 'slack-startup-probe-failures'
+      repeatInterval: 3h
+      groupWait: 1m
+      groupInterval: 30m
+      groupBy: [alertname, app_name]
+    - matchers:
+      - name: destination
         value: slack-platform-engineering
         matchType: =
       receiver: 'generic-slack-platform-engineering'
