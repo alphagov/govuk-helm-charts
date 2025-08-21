@@ -1,0 +1,27 @@
+groups:
+  - name: Startup Probes
+    rules:
+      - alert: StartupProbeFailure
+        expr: >-
+          label_replace(
+            prober_probe_total{
+              probe_type="Startup",
+              result="failed"
+            } >= 10,
+            "app_name",
+            "$1",
+            "pod",
+            "^(.*)-[A-Za-z0-9]+-[A-Za-z0-9]+$"
+          )
+          >= 30
+        labels:
+          severity: warning
+          destination: slack-startup-probe-failures
+        annotations:
+          summary: "{{ $labels.app_name }} is failing to start up"
+          description: >-
+            The {{ $labels.container }} container in the {{ $labels.app_name }} app is failing
+            to start up, the configured kubernetes startupProbe is failing (either timing out,
+            failing to connect, or returning an HTTP response code >= 400.
+
+            To find the exact reason you can run `kubectl -n {{ $labels.namespace }} describe pod {{ $labels.pod }}`
