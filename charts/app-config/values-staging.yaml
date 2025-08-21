@@ -2273,7 +2273,7 @@ govukApplications:
         - name: REPORTS_S3_BUCKET_NAME
           value: govuk-staging-publisher-csvs
         - name: MAINTENANCE_MODE
-          value: "false"
+          value: "true"
 
   - name: publisher-on-pg
     helmValues:
