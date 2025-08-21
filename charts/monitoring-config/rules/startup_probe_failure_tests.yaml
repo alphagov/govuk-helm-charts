@@ -1,0 +1,95 @@
+rule_files:
+  - startup_probe_failure.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - name: StartupProbeFailure - No alert with 29 failures
+    interval: 1m
+    input_series:
+      # No alert with 29 startupProbeFailures
+      - series: >-
+          prober_probe_total{
+          probe_type="Startup",
+          result="failed",
+          pod="draft-static-6556f687fd-94glb",
+          container="app",
+          namespace="apps"
+          }
+        values: '29x15'
+    alert_rule_test:
+      - alertname: StartupProbeFailure
+        eval_time: 5m
+        exp_alerts: []
+
+  - name: StartupProbeFailure - Alert with 30 failures correctly in apps namespace
+    interval: 1m
+    input_series:
+      # Alert with 30 startupProbeFailures in the apps namespace
+      - series: >-
+          prober_probe_total{
+          probe_type="Startup",
+          result="failed",
+          pod="draft-static-6556f687fd-94glb",
+          container="app",
+          namespace="apps"
+          }
+        values: '30x10'
+    alert_rule_test:
+      - alertname: StartupProbeFailure
+        eval_time: 5m
+        exp_alerts:
+          - exp_labels:
+              alertname: StartupProbeFailure
+              severity: warning
+              destination: slack-startup-probe-failures
+              probe_type: Startup
+              result: failed
+              pod: draft-static-6556f687fd-94glb
+              container: app
+              namespace: apps
+              app_name: draft-static
+            exp_annotations:
+              summary: draft-static is failing to start up
+              description: >-
+                The app container in the draft-static app is failing to start up, the configured
+                kubernetes startupProbe is failing (either timing out, failing to connect, or
+                returning an HTTP response code >= 400.
+
+                To find the exact reason you can run `kubectl -n apps describe pod draft-static-6556f687fd-94glb`
+
+  - name: StartupProbeFailure - Alert with 30 failures correctly in licensify namespace
+    interval: 1m
+    input_series:
+      # Alert with 30 startupProbeFailures in the licensify namespace
+      - series: >-
+          prober_probe_total{
+          probe_type="Startup",
+          result="failed",
+          pod="licensify-frontend-6556f687fd-94glb",
+          container="main",
+          namespace="licensify"
+          }
+        values: '30x10'
+    alert_rule_test:
+      - alertname: StartupProbeFailure
+        eval_time: 5m
+        exp_alerts:
+          - exp_labels:
+              alertname: StartupProbeFailure
+              severity: warning
+              destination: slack-startup-probe-failures
+              probe_type: Startup
+              result: failed
+              pod: licensify-frontend-6556f687fd-94glb
+              container: main
+              namespace: licensify
+              app_name: licensify-frontend
+            exp_annotations:
+              summary: licensify-frontend is failing to start up
+              description: >-
+                The main container in the licensify-frontend app is failing to start up, the configured
+                kubernetes startupProbe is failing (either timing out, failing to connect, or
+                returning an HTTP response code >= 400.
+
+                To find the exact reason you can run `kubectl -n licensify describe pod licensify-frontend-6556f687fd-94glb`
