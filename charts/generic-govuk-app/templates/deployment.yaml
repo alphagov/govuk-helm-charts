@@ -80,7 +80,7 @@ spec:
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           ports:
-            - name: http
+            - name: appHttpPort
               containerPort: {{ .Values.appPort }}
             - name: metrics
               containerPort: {{ .Values.metricsPort }}
@@ -161,11 +161,12 @@ spec:
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
           ports:
-            - name: http
+            - name: nginxHttpPort
               containerPort: {{ .Values.nginxPort }}
           livenessProbe:
             httpGet: &nginx-probe
               path: /readyz
+              # Which port does this go to? nginx or app?
               port: http
             initialDelaySeconds: 2
             failureThreshold: 3

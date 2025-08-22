@@ -18,7 +18,7 @@ spec:
   ports:
     - name: app
       port: {{ .Values.service.port }}
-      targetPort: {{ .Values.nginxPort }}
+      targetPort: nginxHttpPort
   selector:
     app: {{ $fullName }}
     app.kubernetes.io/component: app
