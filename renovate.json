@@ -5,21 +5,24 @@
     "helpers:pinGitHubActionDigests"
   ],
   "platformAutomerge": true,
-  "labels": ["dependencies", "renovate"],
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
   "argocd": {
-    "fileMatch": [
-      "charts\\/.*\\.yaml$"
+    "managerFilePatterns": [
+      "/charts\\/.*\\.yaml$/"
     ]
   },
   "helm-values": {
-    "fileMatch": [
-      "charts\\/.*\\.yaml$"
+    "managerFilePatterns": [
+      "/charts\\/.*\\.yaml$/"
     ],
     "pinDigests": false
   },
   "kubernetes": {
-    "fileMatch": [
-      "charts\\/.*\\.yaml$"
+    "managerFilePatterns": [
+      "/charts\\/.*\\.yaml$/"
     ]
   },
   "ignorePaths": [
@@ -74,8 +77,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        ".*\\/helm-versions\\/.*"
+      "managerFilePatterns": [
+        "/.*\\/helm-versions\\/.*/"
       ],
       "datasourceTemplate": "helm",
       "matchStrings": [
