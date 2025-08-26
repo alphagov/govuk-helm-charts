@@ -1350,7 +1350,7 @@ govukApplications:
           memory: 1Gi
         requests:
           cpu: 10m
-          memory: 400Mi
+          memory: 500Mi
       uploadFrontendErrorPagesEnabled: true
       ingress:
         enabled: true
