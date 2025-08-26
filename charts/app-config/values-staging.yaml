@@ -1363,7 +1363,7 @@ govukApplications:
           memory: 4Gi
         requests:
           cpu: 500m
-          memory: 1Gi
+          memory: 1.5Gi
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
