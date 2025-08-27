@@ -2290,7 +2290,7 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_ID
           value: &publishing-bootstrap-gtm-id GTM-W573BJPG
         - name: MAINTENANCE_MODE
-          value: "true"
+          value: "false"
 
   - name: publisher-on-pg
     helmValues:
