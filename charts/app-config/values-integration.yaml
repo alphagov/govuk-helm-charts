@@ -3424,11 +3424,15 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 384Mi
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       uploadAssets:
         # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
         path: /app/public/assets/smartanswers
         s3Directory: "smartanswers"
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: EXPOSE_GOVSPEAK
           value: "1"
         - name: LINK_CHECKER_API_BEARER_TOKEN
