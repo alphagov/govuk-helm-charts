@@ -606,6 +606,10 @@ govukApplications:
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
+          - command: ["sidekiq", "-C", "config/sidekiq_high.yml"]
+            name: worker-high
+          - command: ["sidekiq", "-C", "config/sidekiq_low.yml"]
+            name: worker-low
           - command: ['rake', 'publishing_api:consumer']
             name: publishing-api-consumer
           - command: ['rake', 'publishing_api:bulk_import_consumer']

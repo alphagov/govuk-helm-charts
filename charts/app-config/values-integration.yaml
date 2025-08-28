@@ -1568,6 +1568,10 @@ govukApplications:
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
+          - command: ["sidekiq", "-C", "config/sidekiq_high.yml"]
+            name: worker-high
+          - command: ["sidekiq", "-C", "config/sidekiq_low.yml"]
+            name: worker-low
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
       ingress:
