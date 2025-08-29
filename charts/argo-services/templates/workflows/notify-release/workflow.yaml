@@ -27,7 +27,6 @@ spec:
               "repo": "alphagov/{{"{{inputs.parameters.repositoryName}}"}}",
               "deployment": {
                 "environment": "{{"{{inputs.parameters.environment}}"}}",
-                "deployed_sha": "{{"{{inputs.parameters.commitSha}}"}}",
                 "version": "{{"{{inputs.parameters.commitSha}}"}}"
               }
             }'
