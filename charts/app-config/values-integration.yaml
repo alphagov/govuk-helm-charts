@@ -4079,9 +4079,6 @@ govukApplications:
         runAsUser: 2899
         runAsGroup: 2899
       cronTasks:
-        - name: index-consultations
-          task: "search:index:consultations"
-          schedule: "0 2-22 * * *"
         - name: send-notifications
           task: "publisher_notifications:send"
           schedule: "18 1 * * *"
