@@ -6,16 +6,16 @@ groups:
             (
               kubelet_volume_stats_available_bytes{persistentvolumeclaim=~"prometheus-kube-prometheus-stack-prometheus-db-prometheus-kube-prometheus-stack-prometheus-.*"}
               /
-              (10 * 1000 * 1000 * 1000)
+              (1000 * 1000 * 1000)
             )
             <
-            5 # GB
+            10 # GB
         labels:
           severity: warning
           destination: slack-platform-engineering
         annotations:
           summary: Prometheus disk space low
           description: >-
-            Less than 5GB of disk space remaining on Prometheus volumes
+            Less than 10GB of disk space remaining on Prometheus volumes
           runbook_url: >-
             https://docs.google.com/document/d/14SZmt1zrIB0__63TfwYxI8AlgDtVU-fFZnHalhgYh_M/edit?tab=t.0#heading=h.htgsbwue3fyz
