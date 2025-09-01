@@ -1,0 +1,25 @@
+# Prometheus Adapter – production environment
+# -------------------------------------------
+# These values are consumed by the Application
+
+# Expose the adapter’s own /metrics endpoint to Prometheus.
+serviceMonitor:
+  enabled: true
+
+prometheus:
+  url: http://kube-prometheus-stack-prometheus.monitoring.svc
+  port: 9090
+
+# Don’t install the chart’s big bundle of default rules.
+rules:
+  default: false
+  # Custom external metric for the Chat-AI sidekiq backlog
+  external:
+    - seriesQuery: 'sidekiq_queue_backlog{job=~"govuk-chat-worker"}'
+      resources:
+        overrides:
+          namespace:
+            resource: namespace
+      name:
+        as: ai_sidekiq_queue_backlog
+      metricsQuery: 'max(sidekiq_queue_backlog{job=~"govuk-chat-worker"})'
