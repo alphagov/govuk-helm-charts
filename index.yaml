@@ -2,6 +2,14 @@ apiVersion: v1
 entries:
   argo-bootstrap:
   - apiVersion: v2
+    created: "2025-09-01T12:41:01.427283071Z"
+    description: Bootstraps ArgoCD with initial configuration
+    digest: 9ea1c825e8bc5120bcce8d4d6a9d97ee7283103edf639c9fd3656388a6586608
+    name: argo-bootstrap
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-bootstrap-0.4.0/argo-bootstrap-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     created: "2025-04-11T11:56:39.988273564Z"
     description: Bootstraps ArgoCD with initial configuration
     digest: 6be7d168bcee0b06ce58e403684c5ee96acba3b63bfdcc643d87c7c6dc4c9003
@@ -34,6 +42,14 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-bootstrap-0.0.1/argo-bootstrap-0.0.1.tgz
     version: 0.0.1
   argo-bootstrap-ephemeral:
+  - apiVersion: v2
+    created: "2025-09-01T12:41:01.688745175Z"
+    description: Bootstraps ArgoCD for ephemeral environments
+    digest: 27cfc8c9285157e2c2491aabbe1ceccf404df35e736358c003ffe7045a38bd79
+    name: argo-bootstrap-ephemeral
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-bootstrap-ephemeral-0.2.0/argo-bootstrap-ephemeral-0.2.0.tgz
+    version: 0.2.0
   - apiVersion: v2
     created: "2025-04-29T14:23:07.362574099Z"
     description: Bootstraps ArgoCD for ephemeral environments
@@ -140,6 +156,14 @@ entries:
     version: 0.0.1
   cluster-secret-store:
   - apiVersion: v2
+    created: "2025-09-01T12:41:01.998349654Z"
+    description: An external-secrets ClusterSecretStore backed by AWS SecretsManager.
+    digest: cca3025c3a42672a9f625f41206ab385c1fc2ec52419d49e868742d8ced4923b
+    name: cluster-secret-store
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secret-store-0.3.0/cluster-secret-store-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     created: "2025-04-16T14:15:54.889526711Z"
     description: An external-secrets ClusterSecretStore backed by AWS SecretsManager.
     digest: ffa8b8a9edb61f35d7a17cde310d586eed1226b81dd3b72d0bdaadfc9b9776ee
@@ -157,6 +181,14 @@ entries:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secret-store-0.1.1/cluster-secret-store-0.1.1.tgz
     version: 0.1.1
   cluster-secrets:
+  - apiVersion: v2
+    created: "2025-09-01T12:41:02.270804626Z"
+    description: A Helm chart for defining ExternalSecrets for cluster-wide services.
+    digest: 7a985de27c39fd4ca6752cb562bec1a1d989425c141b17b72d8b4ace8038b6fe
+    name: cluster-secrets
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.11.0/cluster-secrets-0.11.0.tgz
+    version: 0.11.0
   - apiVersion: v2
     created: "2025-07-30T10:28:05.187589878Z"
     description: A Helm chart for defining ExternalSecrets for cluster-wide services.
@@ -191,6 +223,16 @@ entries:
     version: 0.9.3
   kubernetes-events-shipper:
   - apiVersion: v2
+    created: "2025-09-01T12:41:02.549160708Z"
+    description: Creates a fluent bit stateful set which will send all kuberenetes
+      events in a cluster to logit
+    digest: 8ee2e3393824176867d9ab48948720443a16df27b743c848122832c8ac8e8dea
+    name: kubernetes-events-shipper
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/kubernetes-events-shipper-1.1.0/kubernetes-events-shipper-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
     created: "2025-07-30T13:34:35.276587528Z"
     description: Creates a fluent bit stateful set which will send all kuberenetes
       events in a cluster to logit
@@ -200,4 +242,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/kubernetes-events-shipper-1.0.0/kubernetes-events-shipper-1.0.0.tgz
     version: 1.0.0
-generated: "2025-07-30T13:34:35.27668064Z"
+generated: "2025-09-01T12:41:02.549356636Z"
