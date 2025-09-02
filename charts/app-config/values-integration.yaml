@@ -482,6 +482,7 @@ govukApplications:
           cpu: 10m
           memory: 1.5Gi
       dbMigrationEnabled: true
+      dbMigrationCommand: ["rails", "db:prepare"]
       workers:
         enabled: true
       workerResources:
