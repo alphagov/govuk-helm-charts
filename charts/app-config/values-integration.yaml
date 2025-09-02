@@ -493,6 +493,8 @@ govukApplications:
           memory: 512Mi
       redis:
         enabled: true
+      uploadAssets:
+        enabled: false
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
