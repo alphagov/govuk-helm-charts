@@ -1,4 +1,3 @@
-{{- if ne .Values.govukEnvironment "production" }}
 {{ $envValues := toYaml (fromYaml (.Files.Get (printf "prometheus-adapter-values-%s.yaml" .Values.govukEnvironment))) }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -27,4 +26,3 @@ spec:
       selfHeal: true
     syncOptions:
       - ApplyOutOfSyncOnly=true
-{{- end }}
