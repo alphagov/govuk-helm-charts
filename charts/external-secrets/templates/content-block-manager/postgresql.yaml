@@ -1,0 +1,23 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: content-block-manager-postgres
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Credentials for Content Block Manager's Postgres DB hosted in RDS.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: content-block-manager-postgres
+    template:
+      data:
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/content_block_manager_production'
+  dataFrom:
+    - extract:
+        key: govuk/content-block-manager/postgres
