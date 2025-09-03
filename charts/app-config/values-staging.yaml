@@ -370,6 +370,18 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 1.5Gi
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "10"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "content-block-manager.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: content-block-manager.{{ .Values.k8sExternalDomainSuffix }}
+      nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workers:
         enabled: true
