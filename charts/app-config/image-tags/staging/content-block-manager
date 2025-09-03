@@ -1,3 +1,3 @@
-image_tag: 5b28cb82a124d239d3128489316f6b73e6b853b2
+image_tag: v10
 automatic_deploys_enabled: true
-promote_deployment: false
+promote_deployment: true
