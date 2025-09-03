@@ -358,6 +358,62 @@ govukApplications:
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
 
+  - name: content-block-manager
+    repoName: content-block-manager
+    helmValues:
+      repoName: content-block-manager
+      arch: arm64
+      appResources:
+        limits:
+          cpu: 4
+          memory: 5Gi
+        requests:
+          cpu: 10m
+          memory: 1.5Gi
+      dbMigrationEnabled: true
+      workers:
+        enabled: true
+      workerResources:
+        limits:
+          cpu: 2
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
+      redis:
+        enabled: true
+      extraEnv:
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-content-block-manager
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-content-block-manager
+              key: oauth_secret
+        - name: JWT_AUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: authenticating-proxy-jwt-auth-secret
+              key: JWT_AUTH_SECRET
+        - name: PUBLISHING_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-content-block-manager-publishing-api
+              key: bearer_token
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: content-block-manager-postgres
+              key: DATABASE_URL
+        - name: SIGNON_API_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-content-block-manager-signon-api
+              key: bearer_token
+
   - name: draft-collections
     repoName: collections
     helmValues:
