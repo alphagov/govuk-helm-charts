@@ -1576,6 +1576,11 @@ govukApplications:
         #   schedule: "5 * * * *"
         #   timeZone: "Europe/London"
       extraEnv:
+        - name: AI_SLACK_CHANNEL_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-chat-slack
+              key: AI_SLACK_CHANNEL_WEBHOOK_URL
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
