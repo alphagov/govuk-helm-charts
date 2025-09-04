@@ -1551,6 +1551,8 @@ govukApplications:
                 value: "25"
               - name: DATABASE_POOL
                 value: "25"
+          - command: ["sidekiq", "-C", "config/sidekiq_default.yml"]
+            name: default-worker
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
       workerResources:
