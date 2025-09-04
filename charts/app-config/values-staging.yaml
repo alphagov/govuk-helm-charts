@@ -688,10 +688,8 @@ govukApplications:
       workers:
         enabled: true
         types:
-          - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
-            name: answer-worker
-          - command: ["sidekiq", "-C", "config/sidekiq_default.yml"]
-            name: default-worker
+          - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+            name: worker
           - command: ['rake', 'publishing_api:consumer']
             name: publishing-api-consumer
           - command: ['rake', 'publishing_api:bulk_import_consumer']
@@ -1627,8 +1625,10 @@ govukApplications:
       workers:
         enabled: true
         types:
-          - command: ["sidekiq", "-C", "config/sidekiq.yml"]
-            name: worker
+          - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
+            name: answer-worker
+          - command: ["sidekiq", "-C", "config/sidekiq_default.yml"]
+            name: default-worker
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
       ingress:

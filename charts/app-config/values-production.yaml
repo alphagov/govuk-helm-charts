@@ -604,15 +604,8 @@ govukApplications:
       workers:
         enabled: true
         types:
-          - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
-            name: answer-worker
-            env:
-              - name: SIDEKIQ_CONCURRENCY
-                value: "25"
-              - name: DATABASE_POOL
-                value: "25"
-          - command: ["sidekiq", "-C", "config/sidekiq_default.yml"]
-            name: default-worker
+          - command: ["sidekiq", "-C", "config/sidekiq.yml"]
+            name: worker
           - command: ['rake', 'publishing_api:consumer']
             name: publishing-api-consumer
           - command: ['rake', 'publishing_api:bulk_import_consumer']
@@ -1551,8 +1544,13 @@ govukApplications:
       workers:
         enabled: true
         types:
-          - command: ["sidekiq", "-C", "config/sidekiq.yml"]
-            name: worker
+          - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
+            name: answer-worker
+            env:
+              - name: SIDEKIQ_CONCURRENCY
+                value: "25"
+              - name: DATABASE_POOL
+                value: "25"
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
       workerResources:
