@@ -100,6 +100,12 @@ cronjobs:
       operations:
         - op: backup
 
+    content-block-manager:
+      schedule: "43 0 * * *"
+      db: content_block_manager_production
+      operations:
+        - op: backup
+
     collections-publisher-mysql:
       schedule: "21 23 * * *"
       db: collections_publisher_production
@@ -276,6 +282,15 @@ cronjobs:
     collections-publisher-mysql:
       schedule: "21 1 * * 1-5"
       db: collections_publisher_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
+    content-block-manager-postgres:
+      schedule: "43 2 * * 1-5"
+      db: content_block_manager_production
+      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -531,6 +546,15 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: backup
+
+    content-block-manager-postgres:
+      schedule: "43 2 * * 1"
+      db: content_block_manager_production
+      dbms: postgres
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
         - op: backup
 
     content-data-admin-postgres:
