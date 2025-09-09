@@ -526,6 +526,7 @@ cronjobs:
         - op: backup
 
     collections-publisher-mysql:
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       schedule: "21 3 * * 1"
       db: collections_publisher_production
       operations:
@@ -534,6 +535,7 @@ cronjobs:
         - op: backup
 
     content-data-admin-postgres:
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       schedule: "4 3 * * 1"
       db: content_data_admin_production
       operations:
@@ -553,6 +555,7 @@ cronjobs:
         - op: backup
 
     content-publisher-postgres:
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       schedule: "9 3 * * 1"
       db: content_publisher_production
       operations:
@@ -562,6 +565,7 @@ cronjobs:
 
     content-store-postgres:
       <<: *s5cmd-ram-workaround
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       db: content_store_production
       schedule: "06 23 * * 0"
       operations:
@@ -573,6 +577,7 @@ cronjobs:
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: draft_content_store_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       schedule: "16 23 * * 0"
       operations:
         - op: restore
@@ -582,6 +587,7 @@ cronjobs:
     content-tagger-postgres:
       schedule: "31 3 * * 1"
       db: content_tagger_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -590,6 +596,7 @@ cronjobs:
     email-alert-api-postgres:
       schedule: "54 3 * * 1"
       db: email-alert-api_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -598,6 +605,7 @@ cronjobs:
     imminence-postgres:
       schedule: "18 3 * * 1"
       db: imminence_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -606,6 +614,7 @@ cronjobs:
     link-checker-api-postgres:
       schedule: "43 3 * * 1"
       db: link_checker_api_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -614,6 +623,7 @@ cronjobs:
     local-links-manager-postgres:
       schedule: "8 3 * * 1"
       db: local-links-manager_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -622,6 +632,7 @@ cronjobs:
     locations-api-postgres:
       schedule: "32 3 * * 1"
       db: locations_api_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -631,6 +642,7 @@ cronjobs:
       <<: *s5cmd-ram-workaround
       schedule: "36 5 * * 1"
       db: publishing_api_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -639,6 +651,7 @@ cronjobs:
     release-mysql:
       schedule: "11 3 * * 1"
       db: release_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -647,6 +660,7 @@ cronjobs:
     search-admin-mysql:
       schedule: "56 3 * * 1"
       db: search_admin_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -655,6 +669,7 @@ cronjobs:
     publisher-postgres:
       schedule: "41 3 * * 1"
       db: publisher_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -663,6 +678,7 @@ cronjobs:
     service-manual-publisher-postgres:
       schedule: "49 3 * * 1"
       db: service-manual-publisher_production
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -671,6 +687,7 @@ cronjobs:
     shared-documentdb:
       <<: *mongo-resources
       schedule: "13 3 * * 1"
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -716,6 +733,7 @@ cronjobs:
           bucket: s3://govuk-integration-database-backups
 
     support-api-postgres:
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       schedule: "38 3 * * 1"
       db: support_contacts_production
       operations:
@@ -724,6 +742,7 @@ cronjobs:
         - op: backup
 
     transition-postgresql-primary:
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       schedule: "24 3 * * 1"
       db: transition_production
       dbms: postgres
@@ -735,6 +754,7 @@ cronjobs:
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
       schedule: "28 3 * * 1"
+      suspend: true # disabled until start Nov while pegasus exercise in progress
       db: whitehall_production
       operations:
         - op: restore
