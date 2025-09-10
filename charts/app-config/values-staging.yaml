@@ -1615,11 +1615,8 @@ govukApplications:
     helmValues:
       arch: arm64
       appResources:
-        limits:
-          cpu: 4
-          memory: 2Gi
         requests:
-          cpu: 2
+          cpu: 500m
           memory: 1Gi
       dbMigrationEnabled: true
       workers:
@@ -1632,11 +1629,8 @@ govukApplications:
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
       workerResources:
-        limits:
-          cpu: 8
-          memory: 4Gi
         requests:
-          cpu: 4
+          cpu: 666m
           memory: 2Gi
       ingress:
         enabled: true
