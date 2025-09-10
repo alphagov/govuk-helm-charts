@@ -504,8 +504,8 @@ cronjobs:
       schedule: "23 3 * * 1"
       db: authenticating_proxy_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     chat-postgres:
@@ -568,7 +568,7 @@ cronjobs:
         # - op: restore # disabled until start Nov while pegasus exercise in progress
         #  bucket: s3://govuk-staging-database-backups
         - op: backup
-        
+
     # TODO: stop copying draft content into integration once the design quirks
     # of publishing-api that require it are rectified.
     draft-content-store-postgres:
