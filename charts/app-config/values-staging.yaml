@@ -395,6 +395,8 @@ govukApplications:
       redis:
         enabled: true
       extraEnv:
+        - name: ANONYMOUS_USER_ID_SECRET
+          valueFrom: *anonymous_user_id_secret
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
