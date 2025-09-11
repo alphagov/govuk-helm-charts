@@ -1602,6 +1602,7 @@ govukApplications:
     helmValues:
       arch: arm64
       appResources:
+        limits: {}
         requests:
           cpu: 500m
           memory: 1Gi
@@ -1621,6 +1622,7 @@ govukApplications:
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
       workerResources:
+        limits: {}
         requests:
           cpu: 666m
           memory: 2Gi
