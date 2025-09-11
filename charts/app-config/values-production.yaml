@@ -1626,12 +1626,9 @@ govukApplications:
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
       workerResources:
-        limits:
-          cpu: 1
-          memory: 1.5Gi
         requests:
-          cpu: 10m
-          memory: 256Mi
+          cpu: 0.66
+          memory: 2Gi
       ingress:
         enabled: true
         annotations:
