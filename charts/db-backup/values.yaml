@@ -519,8 +519,8 @@ cronjobs:
       schedule: "23 3 * * 1"
       db: authenticating_proxy_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     chat-postgres:
@@ -544,8 +544,8 @@ cronjobs:
       schedule: "21 3 * * 1"
       db: collections_publisher_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     content-block-manager-postgres:
@@ -561,8 +561,8 @@ cronjobs:
       schedule: "4 3 * * 1"
       db: content_data_admin_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     content-data-api-postgresql-primary:
@@ -580,8 +580,8 @@ cronjobs:
       schedule: "9 3 * * 1"
       db: content_publisher_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     content-store-postgres:
@@ -589,9 +589,10 @@ cronjobs:
       db: content_store_production
       schedule: "06 23 * * 0"
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
+
     # TODO: stop copying draft content into integration once the design quirks
     # of publishing-api that require it are rectified.
     draft-content-store-postgres:
@@ -599,56 +600,56 @@ cronjobs:
       db: draft_content_store_production
       schedule: "16 23 * * 0"
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     content-tagger-postgres:
       schedule: "31 3 * * 1"
       db: content_tagger_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     email-alert-api-postgres:
       schedule: "54 3 * * 1"
       db: email-alert-api_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     imminence-postgres:
       schedule: "18 3 * * 1"
       db: imminence_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     link-checker-api-postgres:
       schedule: "43 3 * * 1"
       db: link_checker_api_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     local-links-manager-postgres:
       schedule: "8 3 * * 1"
       db: local-links-manager_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     locations-api-postgres:
       schedule: "32 3 * * 1"
       db: locations_api_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     publishing-api-postgres:
@@ -656,58 +657,59 @@ cronjobs:
       schedule: "36 5 * * 1"
       db: publishing_api_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     release-mysql:
       schedule: "11 3 * * 1"
       db: release_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     search-admin-mysql:
       schedule: "56 3 * * 1"
       db: search_admin_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     publisher-postgres:
       schedule: "41 3 * * 1"
       db: publisher_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     service-manual-publisher-postgres:
       schedule: "49 3 * * 1"
       db: service-manual-publisher_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     shared-documentdb:
       <<: *mongo-resources
       schedule: "13 3 * * 1"
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-          db: publisher_production
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-          db: short_url_manager_production
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-          db: travel_advice_publisher_production
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-          db: govuk_content_production
+        # disabled restores until start Nov while pegasus exercise in progress
+        # - op: restore
+        #   bucket: s3://govuk-staging-database-backups
+        #   db: publisher_production
+        # - op: restore
+        #   bucket: s3://govuk-staging-database-backups
+        #   db: short_url_manager_production
+        # - op: restore
+        #   bucket: s3://govuk-staging-database-backups
+        #   db: travel_advice_publisher_production
+        # - op: restore
+        #   bucket: s3://govuk-staging-database-backups
+        #   db: govuk_content_production
         - op: backup
           db: publisher_production
         - op: backup
@@ -716,9 +718,9 @@ cronjobs:
           db: travel_advice_publisher_production
         - op: backup
           db: govuk_content_production
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-          db: govuk_assets_production
+        # - op: restore
+        #   bucket: s3://govuk-staging-database-backups
+        #   db: govuk_assets_production
         - op: backup
           db: govuk_assets_production
 
@@ -743,8 +745,8 @@ cronjobs:
       schedule: "38 3 * * 1"
       db: support_contacts_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     transition-postgresql-primary:
@@ -752,8 +754,8 @@ cronjobs:
       db: transition_production
       dbms: postgres
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
 
     whitehall-mysql:
@@ -761,6 +763,6 @@ cronjobs:
       schedule: "28 3 * * 1"
       db: whitehall_production
       operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
+        # - op: restore # disabled until start Nov while pegasus exercise in progress
+        #  bucket: s3://govuk-staging-database-backups
         - op: backup
