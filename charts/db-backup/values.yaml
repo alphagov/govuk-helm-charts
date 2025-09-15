@@ -100,7 +100,7 @@ cronjobs:
       operations:
         - op: backup
 
-    content-block-manager:
+    content-block-manager-postgres:
       schedule: "43 0 * * *"
       db: content_block_manager_production
       operations:
