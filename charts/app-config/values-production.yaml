@@ -1647,11 +1647,11 @@ govukApplications:
         s3Directory: chat
         path: /app/public/assets/chat
       cronTasks:
-        # cron tasks disabled while application is not available to public
-        # - name: bigquery-export
-        #   task: "bigquery:export"
-        #   schedule: "5 * * * *"
-        #   timeZone: "Europe/London"
+        - name: bigquery-export
+          task: "bigquery:export"
+          schedule: "5 * * * *"
+          timeZone: "Europe/London"
+        # cron task disabled while application is not available to public
         # - name: slack-daily-report
         #   task: "slack:send_previous_days_activity"
         #   schedule: "3 7 * * *"
