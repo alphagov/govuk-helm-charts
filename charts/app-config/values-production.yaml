@@ -1226,6 +1226,7 @@ govukApplications:
   - name: external-secrets
     chartPath: charts/external-secrets
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: "true"
 
   - name: feedback
     helmValues:

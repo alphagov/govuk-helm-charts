@@ -915,6 +915,7 @@ govukApplications:
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: true
     helmValues:
       arch: arm64
       appResources:
