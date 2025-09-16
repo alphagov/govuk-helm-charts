@@ -17,3 +17,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/grafana/database
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

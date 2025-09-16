@@ -20,3 +20,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/whitehall/link-checker-api-callback-token
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

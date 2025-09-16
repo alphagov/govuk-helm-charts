@@ -21,3 +21,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/govuk-chat/postgres
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

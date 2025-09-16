@@ -18,3 +18,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/content-data-admin/siteimprove-api-client
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

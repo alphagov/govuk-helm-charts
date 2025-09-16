@@ -19,3 +19,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/publisher/fact-check-email-account
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

@@ -19,3 +19,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/dex/argo-workflows
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

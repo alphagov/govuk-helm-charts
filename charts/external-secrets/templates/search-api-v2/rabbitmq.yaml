@@ -22,3 +22,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/search-api-v2/rabbitmq
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

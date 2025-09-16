@@ -21,3 +21,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/common/shared-documentdb
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

@@ -18,3 +18,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/collections-publisher/notify
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

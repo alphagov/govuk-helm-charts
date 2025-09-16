@@ -20,3 +20,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/signon/active-record-encryption
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

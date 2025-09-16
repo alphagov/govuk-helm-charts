@@ -18,3 +18,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/signon/notify
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

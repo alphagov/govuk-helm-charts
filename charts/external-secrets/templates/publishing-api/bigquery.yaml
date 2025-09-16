@@ -17,3 +17,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/publishing-api/bigquery
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

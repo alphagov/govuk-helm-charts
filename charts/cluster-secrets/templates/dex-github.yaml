@@ -18,3 +18,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/dex/github
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

@@ -21,3 +21,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/content-data-admin/postgres
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

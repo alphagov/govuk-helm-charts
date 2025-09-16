@@ -20,3 +20,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/signon/devise-pepper
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
