@@ -64,6 +64,9 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
     - ApplyOutOfSyncOnly=true
+  {{- if .serverSideApplyEnabled }}
+    - ServerSideApply=true
+  {{- end }
   {{- if gt (len $podAutoscaling) 0 }}
   ignoreDifferences:
   {{- range $podAutoscaling }}
