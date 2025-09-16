@@ -182,6 +182,14 @@ entries:
     version: 0.1.1
   cluster-secrets:
   - apiVersion: v2
+    created: "2025-09-16T12:24:34.416274584Z"
+    description: A Helm chart for defining ExternalSecrets for cluster-wide services.
+    digest: c71e0791af26f3671edae6d5f2378e3d03db3bff397d7d170b88841d2f6cf68b
+    name: cluster-secrets
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/cluster-secrets-0.12.0/cluster-secrets-0.12.0.tgz
+    version: 0.12.0
+  - apiVersion: v2
     created: "2025-09-01T12:41:02.270804626Z"
     description: A Helm chart for defining ExternalSecrets for cluster-wide services.
     digest: 7a985de27c39fd4ca6752cb562bec1a1d989425c141b17b72d8b4ace8038b6fe
@@ -242,4 +250,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/kubernetes-events-shipper-1.0.0/kubernetes-events-shipper-1.0.0.tgz
     version: 1.0.0
-generated: "2025-09-01T12:41:02.549356636Z"
+generated: "2025-09-16T12:24:34.588678037Z"
