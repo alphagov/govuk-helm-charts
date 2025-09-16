@@ -1714,8 +1714,6 @@ govukApplications:
           value: "0"
         - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
           value: "0"
-        - name: ANSWER_STRATEGY
-          value: "openai_structured_answer"
       # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/chat/bedrock_iam.tf
       serviceAccount:
         enabled: true
