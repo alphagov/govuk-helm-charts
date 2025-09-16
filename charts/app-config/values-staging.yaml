@@ -237,6 +237,7 @@ govukApplications:
   - name: argo-services
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: true
     helmValues:
       arch: arm64
       nextEnvironment: production
@@ -1878,6 +1879,7 @@ govukApplications:
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
+    serverSideApplyEnabled: true
     imageValues:
       - "licensify-admin"
       - "licensify-backend"

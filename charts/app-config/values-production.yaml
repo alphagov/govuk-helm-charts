@@ -229,6 +229,7 @@ govukApplications:
   - name: argo-services
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: true
     helmValues:
       nextEnvironment: ""
       enableWebhookIngress: true
