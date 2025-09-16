@@ -1863,6 +1863,7 @@ govukApplications:
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
+    serverSideApplyEnabled: true
     imageValues:
       - "licensify-admin"
       - "licensify-backend"
