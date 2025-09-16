@@ -1617,6 +1617,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1627,7 +1628,7 @@ govukApplications:
           memory: 1Gi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
@@ -1725,7 +1726,7 @@ govukApplications:
           eks.amazonaws.com/role-arn: arn:aws:iam::696911096973:role/govuk-chat-bedrock-access-role
       podAutoscaling:
         - name: govuk-chat
-          enabled: true
+          enabled: false
           spec:
             maxReplicas: 10
             minReplicas: 3
@@ -1754,7 +1755,7 @@ govukApplications:
                     value: 1
                     periodSeconds: 30
         - name: govuk-chat-worker
-          enabled: true
+          enabled: false
           spec:
             maxReplicas: 10
             minReplicas: 3
