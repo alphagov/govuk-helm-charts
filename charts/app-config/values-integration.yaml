@@ -1637,7 +1637,7 @@ govukApplications:
           memory: 1Gi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
