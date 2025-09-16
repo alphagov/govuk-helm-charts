@@ -908,6 +908,7 @@ govukApplications:
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: "true"
     helmValues:
       arch: arm64
       appResources:
@@ -1785,6 +1786,7 @@ govukApplications:
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
+    serverSideApplyEnabled: true
     helmValues:
       arch: arm64
       appResources:
@@ -1810,12 +1812,14 @@ govukApplications:
   - name: govuk-jobs
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: "true"
     imageValues:
       - govuk-dependency-checker
 
   - name: mirror
     chartPath: charts/mirror
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: "true"
     imageValues:
       - govuk-mirror
     helmValues:
@@ -3120,6 +3124,7 @@ govukApplications:
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
     chartPath: charts/search-index-env-sync
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: "true"
 
   - name: service-manual-publisher
     helmValues:

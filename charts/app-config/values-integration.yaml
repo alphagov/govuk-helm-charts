@@ -237,6 +237,7 @@ govukApplications:
   - name: argo-services
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: true
     helmValues:
       nextEnvironment: staging
 
@@ -1800,6 +1801,7 @@ govukApplications:
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
+    serverSideApplyEnabled: true
     helmValues:
       arch: arm64
       appResources:
@@ -3170,6 +3172,7 @@ govukApplications:
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
     chartPath: charts/search-index-env-sync
     postSyncWorkflowEnabled: "false"
+    serverSideApplyEnabled: "true"
 
   - name: service-manual-publisher
     helmValues:
