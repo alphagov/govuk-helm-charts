@@ -18,3 +18,6 @@ spec:
     - extract:
         key: govuk/govuk-chat/bigquery
 
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

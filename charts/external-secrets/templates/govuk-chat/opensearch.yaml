@@ -17,3 +17,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/govuk-chat/opensearch
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

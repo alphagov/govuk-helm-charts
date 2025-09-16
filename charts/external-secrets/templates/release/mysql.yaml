@@ -21,3 +21,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/release/mysql
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

@@ -18,3 +18,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/content-data-admin/aws
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

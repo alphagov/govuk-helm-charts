@@ -21,3 +21,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/email-alert-api/postgres
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

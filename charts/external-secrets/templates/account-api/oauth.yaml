@@ -18,3 +18,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/account-api/govuk-account-oauth
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

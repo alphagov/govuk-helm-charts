@@ -21,3 +21,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/whitehall-admin/mysql
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

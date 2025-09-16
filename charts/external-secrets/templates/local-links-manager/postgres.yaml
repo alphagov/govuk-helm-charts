@@ -21,3 +21,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/local-links-manager/postgres
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

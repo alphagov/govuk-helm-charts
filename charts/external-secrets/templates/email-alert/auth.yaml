@@ -20,3 +20,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/email-alert/auth
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

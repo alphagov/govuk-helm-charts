@@ -21,4 +21,7 @@ spec:
   dataFrom:
     - extract:
         key: govuk/dex/grafana
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
 {{- end }}

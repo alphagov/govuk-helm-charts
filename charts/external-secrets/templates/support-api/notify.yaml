@@ -18,3 +18,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/support-api/notify
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

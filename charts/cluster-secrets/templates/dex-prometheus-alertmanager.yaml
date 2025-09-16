@@ -24,6 +24,9 @@ spec:
   dataFrom:
   - extract:
       key: govuk/dex/alert-manager
+      conversionStrategy: Default
+      decodingStrategy: None
+      metadataPolicy: None
 {{- end }}
 {{- range .Values.dexPrometheusSecretsNamespaces}}
 ---
@@ -51,6 +54,9 @@ spec:
   dataFrom:
     - extract:
         key: govuk/dex/prometheus
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
 {{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1

@@ -22,3 +22,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/authenticating-proxy/postgres
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

@@ -17,3 +17,6 @@ spec:
   dataFrom:
     - extract:
         key: govuk/content-data-api/ga4
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
