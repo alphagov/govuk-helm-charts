@@ -1717,10 +1717,6 @@ govukApplications:
             secretKeyRef:
               name: govuk-chat-bigquery
               key: credentials
-        - name: INSTANT_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "100"
-        - name: DELAYED_ACCESS_PLACES_SCHEDULE_INCREMENT
-          value: "100"
       # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/chat/bedrock_iam.tf
       serviceAccount:
         enabled: true
