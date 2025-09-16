@@ -1626,6 +1626,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
+      replicaCount: 0
       arch: arm64
       appResources:
         limits:
@@ -1636,6 +1637,7 @@ govukApplications:
           memory: 1Gi
       dbMigrationEnabled: true
       workers:
+        replicaCount: 0
         enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
@@ -1739,8 +1741,8 @@ govukApplications:
         - name: govuk-chat
           enabled: true
           spec:
-            maxReplicas: 10
-            minReplicas: 2
+            maxReplicas: 0
+            minReplicas: 0
             scaleTargetRef:
               apiVersion: apps/v1
               kind: Deployment
@@ -1768,8 +1770,8 @@ govukApplications:
         - name: govuk-chat-worker
           enabled: true
           spec:
-            maxReplicas: 10
-            minReplicas: 2
+            maxReplicas: 0
+            minReplicas: 0
             scaleTargetRef:
               apiVersion: apps/v1
               kind: Deployment
