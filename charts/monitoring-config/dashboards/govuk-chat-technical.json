@@ -452,6 +452,125 @@
               },
               {
                 "color": "#EAB839",
+                "value": 3000
+              },
+              {
+                "color": "red",
+                "value": 6000
+              }
+            ]
+          },
+          "unit": "reqpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "amazon.titan-embed-text-v2:0"
+          },
+          "expression": "",
+          "id": "",
+          "label": "titan-embed-text-v2",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "1m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Bedrock Titan Invocations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "description": "If this graph turns blank, it may be that the ModelId Dimension (currently \"eu.anthropic.claude-sonnet-4-20250514-v1:0\") has changed and needs updating in Helm.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
                 "value": 100
               },
               {
@@ -467,7 +586,7 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 8
       },
       "id": 35,
@@ -493,13 +612,15 @@
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
-          "dimensions": {},
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
           "expression": "",
           "hide": false,
-          "id": "invocations",
-          "label": "Invocation Count",
+          "id": "",
+          "label": "sonnet-4-20250514",
           "logGroups": [],
-          "matchExact": true,
+          "matchExact": false,
           "metricEditorMode": 0,
           "metricName": "Invocations",
           "metricQueryType": 0,
@@ -513,7 +634,107 @@
           "statistic": "Sum"
         }
       ],
-      "title": "Bedrock Invocations",
+      "title": "Bedrock Sonnet Invocations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 72
+              },
+              {
+                "color": "red",
+                "value": 120
+              }
+            ]
+          },
+          "unit": "h"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 37,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "(time() - (max(govuk_chat_message_queue_last_content_indexed_timestamp_seconds))) / 3600",
+          "legendFormat": "HoursPassed",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Hours Since Last Document Ingested",
       "type": "timeseries"
     },
     {
@@ -580,7 +801,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 16
       },
       "id": 31,
       "options": {
@@ -689,7 +910,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 16,
       "options": {
@@ -797,7 +1018,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 24
       },
       "id": 17,
       "options": {
@@ -939,7 +1160,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 32
       },
       "id": 23,
       "options": {
@@ -1042,7 +1263,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 32
       },
       "id": 22,
       "options": {
@@ -1149,7 +1370,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 40
       },
       "id": 21,
       "options": {
@@ -1260,7 +1481,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 40
       },
       "id": 19,
       "options": {
@@ -1361,7 +1582,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 48
       },
       "id": 20,
       "options": {
@@ -1479,7 +1700,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 48
       },
       "id": 18,
       "options": {
@@ -1590,7 +1811,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 48
+        "y": 56
       },
       "id": 1,
       "options": {
@@ -1718,7 +1939,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 48
+        "y": 56
       },
       "id": 2,
       "options": {
@@ -1853,7 +2074,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 48
+        "y": 56
       },
       "id": 3,
       "options": {
@@ -2014,7 +2235,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 56
+        "y": 64
       },
       "id": 6,
       "options": {
@@ -2125,7 +2346,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 56
+        "y": 64
       },
       "id": 4,
       "options": {
@@ -2235,7 +2456,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 56
+        "y": 64
       },
       "id": 5,
       "options": {
@@ -2346,7 +2567,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 64
+        "y": 72
       },
       "id": 8,
       "options": {
@@ -2481,7 +2702,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 64
+        "y": 72
       },
       "id": 7,
       "options": {
@@ -2618,7 +2839,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 64
+        "y": 72
       },
       "id": 9,
       "options": {
@@ -2754,7 +2975,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 72
+        "y": 80
       },
       "id": 15,
       "options": {
@@ -2866,7 +3087,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 72
+        "y": 80
       },
       "id": 10,
       "options": {
@@ -2976,7 +3197,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 72
+        "y": 80
       },
       "id": 11,
       "options": {
@@ -3088,7 +3309,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 80
+        "y": 88
       },
       "id": 12,
       "options": {
@@ -3226,7 +3447,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 80
+        "y": 88
       },
       "id": 14,
       "options": {
@@ -3338,7 +3559,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 80
+        "y": 88
       },
       "id": 13,
       "options": {
@@ -3450,7 +3671,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 88
+        "y": 96
       },
       "id": 24,
       "options": {
@@ -3557,7 +3778,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 88
+        "y": 96
       },
       "id": 25,
       "options": {
@@ -3664,7 +3885,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 88
+        "y": 96
       },
       "id": 26,
       "options": {
@@ -3721,5 +3942,5 @@
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 7
+  "version": 8
 }
