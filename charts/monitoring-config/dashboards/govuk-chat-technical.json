@@ -26,7 +26,7 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "Calculation of percentage based on token limit of 3M per minute",
+      "description": "Calculation of percentage based on token limit of 300K per minute",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -93,6 +93,150 @@
         "x": 0,
         "y": 0
       },
+      "id": 39,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "amazon.titan-embed-text-v2:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "itc",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "itc / 3000",
+          "hide": false,
+          "id": "",
+          "label": "PercentageTokensUsed",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        }
+      ],
+      "title": "Bedrock Titan Tokens Used Percentage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "description": "Calculation of percentage based on token limit of 3M per minute",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
       "id": 33,
       "options": {
         "legend": {
@@ -116,7 +260,9 @@
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
-          "dimensions": {},
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
           "expression": "",
           "hide": true,
           "id": "itc",
@@ -140,7 +286,9 @@
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
-          "dimensions": {},
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
           "expression": "",
           "hide": true,
           "id": "cwitc",
@@ -164,7 +312,9 @@
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
-          "dimensions": {},
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
           "expression": "",
           "hide": true,
           "id": "otc",
@@ -208,7 +358,125 @@
           "statistic": "Average"
         }
       ],
-      "title": "Bedrock Tokens Used Percentage",
+      "title": "Bedrock Sonnet Tokens Used Percentage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 150000
+              },
+              {
+                "color": "red",
+                "value": 300000
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 38,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "amazon.titan-embed-text-v2:0"
+          },
+          "expression": "",
+          "id": "",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        }
+      ],
+      "title": "Bedrock Titan Tokens Used",
       "type": "timeseries"
     },
     {
@@ -280,7 +548,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 8
       },
       "id": 32,
       "options": {
@@ -305,7 +573,9 @@
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
-          "dimensions": {},
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
           "expression": "",
           "id": "itc",
           "label": "",
@@ -328,7 +598,9 @@
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
-          "dimensions": {},
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
           "expression": "",
           "hide": false,
           "id": "cwitc",
@@ -352,7 +624,9 @@
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
-          "dimensions": {},
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
           "expression": "",
           "hide": false,
           "id": "otc",
@@ -396,7 +670,7 @@
           "statistic": "Average"
         }
       ],
-      "title": "Bedrock Tokens Used",
+      "title": "Bedrock Sonnet Tokens Used",
       "type": "timeseries"
     },
     {
@@ -404,6 +678,7 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
+      "description": "If this graph turns blank, it may be that the ModelId Dimension (currently \"amazon.titan-embed-text-v2:0\") has changed and needs updating in Helm.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -468,7 +743,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 36,
       "options": {
@@ -500,7 +775,7 @@
           "id": "",
           "label": "titan-embed-text-v2",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
           "metricName": "Invocations",
           "metricQueryType": 0,
@@ -587,7 +862,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 16
       },
       "id": 35,
       "options": {
@@ -620,7 +895,7 @@
           "id": "",
           "label": "sonnet-4-20250514",
           "logGroups": [],
-          "matchExact": false,
+          "matchExact": true,
           "metricEditorMode": 0,
           "metricName": "Invocations",
           "metricQueryType": 0,
@@ -706,7 +981,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 37,
       "options": {
@@ -801,7 +1076,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 24
       },
       "id": 31,
       "options": {
@@ -910,7 +1185,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 32
       },
       "id": 16,
       "options": {
@@ -1018,7 +1293,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 32
       },
       "id": 17,
       "options": {
@@ -1160,7 +1435,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 40
       },
       "id": 23,
       "options": {
@@ -1263,7 +1538,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 40
       },
       "id": 22,
       "options": {
@@ -1370,7 +1645,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 48
       },
       "id": 21,
       "options": {
@@ -1481,7 +1756,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 48
       },
       "id": 19,
       "options": {
@@ -1582,7 +1857,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 56
       },
       "id": 20,
       "options": {
@@ -1700,7 +1975,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 56
       },
       "id": 18,
       "options": {
@@ -1811,7 +2086,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 56
+        "y": 64
       },
       "id": 1,
       "options": {
@@ -1939,7 +2214,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 56
+        "y": 64
       },
       "id": 2,
       "options": {
@@ -2074,7 +2349,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 56
+        "y": 64
       },
       "id": 3,
       "options": {
@@ -2235,7 +2510,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 64
+        "y": 72
       },
       "id": 6,
       "options": {
@@ -2346,7 +2621,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 64
+        "y": 72
       },
       "id": 4,
       "options": {
@@ -2456,7 +2731,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 64
+        "y": 72
       },
       "id": 5,
       "options": {
@@ -2567,7 +2842,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 72
+        "y": 80
       },
       "id": 8,
       "options": {
@@ -2702,7 +2977,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 72
+        "y": 80
       },
       "id": 7,
       "options": {
@@ -2839,7 +3114,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 72
+        "y": 80
       },
       "id": 9,
       "options": {
@@ -2975,7 +3250,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 80
+        "y": 88
       },
       "id": 15,
       "options": {
@@ -3087,7 +3362,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 80
+        "y": 88
       },
       "id": 10,
       "options": {
@@ -3197,7 +3472,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 80
+        "y": 88
       },
       "id": 11,
       "options": {
@@ -3309,7 +3584,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 88
+        "y": 96
       },
       "id": 12,
       "options": {
@@ -3447,7 +3722,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 88
+        "y": 96
       },
       "id": 14,
       "options": {
@@ -3559,7 +3834,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 88
+        "y": 96
       },
       "id": 13,
       "options": {
@@ -3671,7 +3946,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 96
+        "y": 104
       },
       "id": 24,
       "options": {
@@ -3778,7 +4053,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 96
+        "y": 104
       },
       "id": 25,
       "options": {
@@ -3885,7 +4160,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 96
+        "y": 104
       },
       "id": 26,
       "options": {
@@ -3942,5 +4217,5 @@
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 8
+  "version": 9
 }
