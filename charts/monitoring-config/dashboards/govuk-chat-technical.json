@@ -129,7 +129,7 @@
           "metricName": "InputTokenCount",
           "metricQueryType": 0,
           "namespace": "AWS/Bedrock",
-          "period": "",
+          "period": "1m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "A",
@@ -467,7 +467,7 @@
           "metricName": "InputTokenCount",
           "metricQueryType": 0,
           "namespace": "AWS/Bedrock",
-          "period": "5m",
+          "period": "1m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "A",
@@ -4217,5 +4217,5 @@
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 9
+  "version": 10
 }
