@@ -1605,7 +1605,6 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1616,7 +1615,7 @@ govukApplications:
           memory: 1Gi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
