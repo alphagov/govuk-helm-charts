@@ -1443,6 +1443,8 @@ govukApplications:
             path: /assets/frontend/
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /government/placeholder/
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
@@ -1514,6 +1516,8 @@ govukApplications:
         createSecret: false
       uploadAssets:
         enabled: false
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
