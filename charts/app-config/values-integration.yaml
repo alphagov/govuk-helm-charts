@@ -1443,6 +1443,8 @@ govukApplications:
             path: /assets/frontend/
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /government/placeholder/
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1516,6 +1518,8 @@ govukApplications:
         createSecret: false
       uploadAssets:
         enabled: false
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
