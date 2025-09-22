@@ -1444,6 +1444,8 @@ govukApplications:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /government/placeholder/
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
         - name: ACCOUNT_API_BEARER_TOKEN
@@ -1515,6 +1517,8 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
         - name: ACCOUNT_API_BEARER_TOKEN
