@@ -146,7 +146,7 @@ groups:
   - name: SearchApiV2QualityMetrics
     interval: 15m
     rules:
-      - alert: SearchQualityDegradedBinaryRecallDrop
+      - alert: SearchQualityDegradedBinaryRecall
         expr: search_api_v2_evaluation_monitoring_recall{top="3", dataset="binary", month="last_month"} < 0.90
         labels:
           severity: warning
@@ -159,7 +159,7 @@ groups:
             https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
           description: >-
             Top 3 recall for binary query set has dropped below 90%.
-      - alert: SearchQualityDegradedBinaryRecallCritical
+      - alert: SearchQualityDegradedBinaryRecall
         expr: search_api_v2_evaluation_monitoring_recall{top="3", dataset="binary", month="last_month"} < 0.80
         labels:
           severity: critical
@@ -172,7 +172,7 @@ groups:
             https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
           description: >-
             Top 3 recall for binary query set has dropped below 80%.
-      - alert: SearchQualityDegradedClickstreamNDCGDrop
+      - alert: SearchQualityDegradedClickstreamNDCG
         expr: search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"} < 0.85
         labels:
           severity: warning
@@ -185,7 +185,7 @@ groups:
             https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
           description: >-
             Top 10 NDCG for clickstream query set has dropped below 85%.
-      - alert: SearchQualityDegradedClickstreamNDCGCritical
+      - alert: SearchQualityDegradedClickstreamNDCG
         expr: search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"} < 0.75
         labels:
           severity: critical
