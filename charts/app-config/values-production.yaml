@@ -1676,11 +1676,6 @@ govukApplications:
               key: DATABASE_URL
         - name: MEMCACHE_SERVERS
           value: "chat-memcached-ufglhk.serverless.euw1.cache.amazonaws.com:11211"
-        - name: OPENAI_ACCESS_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: govuk-chat-open-ai
-              key: access_token
         - name: RABBITMQ_URL
           valueFrom:
             secretKeyRef:
