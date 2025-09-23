@@ -72,22 +72,6 @@ spec:
       - name: destination
         value: slack-search-team
         matchType: =
-      - name: severity
-        value: critical
-        matchType: =
-      - name: environment
-        value: production
-        matchType: =
-      receiver: 'slack-search-team-main-channel'
-      groupBy: [alertname, severity, environment]
-      groupWait: 30s
-      groupInterval: 5m
-      repeatInterval: 6h
-      continue: true  # Allow alert to also fall through to the alerts channel receiver
-    - matchers:
-      - name: destination
-        value: slack-search-team
-        matchType: =
       receiver: 'slack-search-team-alerts-channel'
       groupBy: [alertname, severity, environment]
       groupWait: 30s
@@ -179,8 +163,7 @@ spec:
         {{- include "slack.text" . | nindent 8 }}
   - name: 'slack-search-team-alerts-channel'
     slackConfigs:
-    - &slack-search-team-alerts-channel
-      channel: "#govuk-search-alerts"
+    - channel: "#govuk-search-alerts"
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
@@ -191,10 +174,6 @@ spec:
         - text: ":book: Runbook"
           type: button
           url: "https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager"
-  - name: "slack-search-team-main-channel"
-    slackConfigs:
-    - <<: *slack-search-team-alerts-channel
-      channel: "#govuk-search"
   - name: 'slack-whitehall-notifications'
     slackConfigs:
     - channel: '#govuk-whitehall-experience-tech'
