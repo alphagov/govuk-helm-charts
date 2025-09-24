@@ -23,6 +23,112 @@
   "panels": [
     {
       "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "% of request quota used",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 31,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "label_replace(\n  max by (signon_user) (govuk_chat_rate_limit_api_user_read_percentage_used), \n  \"uid_and_request_type\", \"$1 - read\", \"signon_user\", \"(.*)\"\n)",
+          "legendFormat": "{{uid_and_request_type}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "label_replace(\n  max by (signon_user) (govuk_chat_rate_limit_api_user_write_percentage_used), \n  \"uid_and_request_type\", \"$1 - write\", \"signon_user\", \"(.*)\"\n)",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{uid_and_request_type}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Application rate limits by API user",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
@@ -91,7 +197,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 8
       },
       "id": 39,
       "options": {
@@ -235,7 +341,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 8
       },
       "id": 33,
       "options": {
@@ -430,7 +536,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 38,
       "options": {
@@ -548,7 +654,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 16
       },
       "id": 32,
       "options": {
@@ -743,7 +849,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 36,
       "options": {
@@ -862,7 +968,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 24
       },
       "id": 35,
       "options": {
@@ -910,6 +1016,125 @@
         }
       ],
       "title": "Bedrock Sonnet Invocations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "cloudwatch",
+        "uid": "cloudwatch"
+      },
+      "description": "This tends to happen when there are issues with the Bedrock Service and throttling is taking place",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "bars",
+            "fillOpacity": 100,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 32
+      },
+      "id": 40,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "fields @timestamp, @message |\nfilter @message like /ServiceUnavailableException/ |\nstats count(*) as ExceptionCount by bin(1h)",
+          "id": "",
+          "label": "",
+          "logGroups": [
+            {
+              "accountId": "210287912431",
+              "arn": "arn:aws:logs:eu-west-1:210287912431:log-group:/aws/bedrock:*",
+              "name": "/aws/bedrock"
+            }
+          ],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "",
+          "queryLanguage": "CWLI",
+          "queryMode": "Logs",
+          "refId": "A",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average",
+          "statsGroups": [
+            "bin(1h)"
+          ]
+        }
+      ],
+      "title": "Bedrock Service Unavailable Exceptions",
       "type": "timeseries"
     },
     {
@@ -980,8 +1205,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 24
+        "x": 12,
+        "y": 32
       },
       "id": 37,
       "options": {
@@ -1010,112 +1235,6 @@
         }
       ],
       "title": "Hours Since Last Document Ingested",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "% of request quota used",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 24
-      },
-      "id": 31,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.1.1",
-      "targets": [
-        {
-          "editorMode": "code",
-          "expr": "label_replace(\n  max by (signon_user) (govuk_chat_rate_limit_api_user_read_percentage_used), \n  \"uid_and_request_type\", \"$1 - read\", \"signon_user\", \"(.*)\"\n)",
-          "legendFormat": "{{uid_and_request_type}}",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "expr": "label_replace(\n  max by (signon_user) (govuk_chat_rate_limit_api_user_write_percentage_used), \n  \"uid_and_request_type\", \"$1 - write\", \"signon_user\", \"(.*)\"\n)",
-          "hide": false,
-          "instant": false,
-          "legendFormat": "{{uid_and_request_type}}",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Application rate limits by API user",
       "type": "timeseries"
     },
     {
@@ -1185,7 +1304,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 40
       },
       "id": 16,
       "options": {
@@ -1293,7 +1412,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 40
       },
       "id": 17,
       "options": {
@@ -1435,7 +1554,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 48
       },
       "id": 23,
       "options": {
@@ -1538,7 +1657,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 48
       },
       "id": 22,
       "options": {
@@ -1645,7 +1764,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 56
       },
       "id": 21,
       "options": {
@@ -1756,7 +1875,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 56
       },
       "id": 19,
       "options": {
@@ -1857,7 +1976,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 56
+        "y": 64
       },
       "id": 20,
       "options": {
@@ -1975,7 +2094,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 56
+        "y": 64
       },
       "id": 18,
       "options": {
@@ -2086,7 +2205,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 64
+        "y": 72
       },
       "id": 1,
       "options": {
@@ -2214,7 +2333,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 64
+        "y": 72
       },
       "id": 2,
       "options": {
@@ -2349,7 +2468,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 64
+        "y": 72
       },
       "id": 3,
       "options": {
@@ -2510,7 +2629,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 72
+        "y": 80
       },
       "id": 6,
       "options": {
@@ -2621,7 +2740,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 72
+        "y": 80
       },
       "id": 4,
       "options": {
@@ -2731,7 +2850,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 72
+        "y": 80
       },
       "id": 5,
       "options": {
@@ -2842,7 +2961,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 80
+        "y": 88
       },
       "id": 8,
       "options": {
@@ -2977,7 +3096,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 80
+        "y": 88
       },
       "id": 7,
       "options": {
@@ -3114,7 +3233,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 80
+        "y": 88
       },
       "id": 9,
       "options": {
@@ -3250,7 +3369,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 88
+        "y": 96
       },
       "id": 15,
       "options": {
@@ -3362,7 +3481,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 88
+        "y": 96
       },
       "id": 10,
       "options": {
@@ -3472,7 +3591,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 88
+        "y": 96
       },
       "id": 11,
       "options": {
@@ -3584,7 +3703,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 96
+        "y": 104
       },
       "id": 12,
       "options": {
@@ -3722,7 +3841,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 96
+        "y": 104
       },
       "id": 14,
       "options": {
@@ -3834,7 +3953,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 96
+        "y": 104
       },
       "id": 13,
       "options": {
@@ -3946,7 +4065,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 104
+        "y": 112
       },
       "id": 24,
       "options": {
@@ -4053,7 +4172,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 104
+        "y": 112
       },
       "id": 25,
       "options": {
@@ -4160,7 +4279,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 104
+        "y": 112
       },
       "id": 26,
       "options": {
@@ -4210,12 +4329,12 @@
     "list": []
   },
   "time": {
-    "from": "now-30d",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 10
+  "version": 11
 }
