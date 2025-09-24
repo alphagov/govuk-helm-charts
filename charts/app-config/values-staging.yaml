@@ -3295,11 +3295,15 @@ govukApplications:
         requests:
           cpu: 50m
           memory: 512Mi
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       uploadAssets:
         # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
         path: /app/public/assets/smartanswers
         s3Directory: "smartanswers"
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: LINK_CHECKER_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
