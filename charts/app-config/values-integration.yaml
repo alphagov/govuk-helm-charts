@@ -2935,6 +2935,9 @@ govukApplications:
         - name: reindex-with-new-schemas
           task: "search:migrate_schema"
           schedule: "5 21 * * 1"
+          env:
+            - name: SEARCH_INDEX
+              value: all
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
@@ -3002,8 +3005,6 @@ govukApplications:
             https://vpc-blue-elasticsearch6-domain-uolbxqjhkiqmg5w3gg7gio5sty.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
           value: info
-        - name: SEARCH_INDEX
-          value: all
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
