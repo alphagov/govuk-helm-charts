@@ -3322,10 +3322,6 @@ govukApplications:
     repoName: smart-answers
     helmValues:
       arch: arm64
-      uploadAssets:
-        # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
-        path: /app/public/assets/smartanswers
-        s3Directory: "smartanswers"
       appResources:
         limits:
           memory: 2Gi
@@ -3333,7 +3329,15 @@ govukApplications:
         requests:
           memory: 1Gi
           cpu: "2"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
+      uploadAssets:
+        # https://github.com/alphagov/smart-answers/blob/9b65057/config/application.rb#L50
+        path: /app/public/assets/smartanswers
+        s3Directory: "smartanswers"
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: LINK_CHECKER_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
