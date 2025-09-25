@@ -237,7 +237,6 @@ govukApplications:
   - name: argo-services
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
-    serverSideApplyEnabled: true
     helmValues:
       nextEnvironment: staging
 
@@ -916,7 +915,6 @@ govukApplications:
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
-    serverSideApplyEnabled: true
     helmValues:
       arch: arm64
       appResources:
@@ -1249,7 +1247,6 @@ govukApplications:
   - name: external-secrets
     chartPath: charts/external-secrets
     postSyncWorkflowEnabled: "false"
-    serverSideApplyEnabled: "true"
 
   - name: feedback
     helmValues:
@@ -1800,7 +1797,6 @@ govukApplications:
 
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
-    serverSideApplyEnabled: true
     helmValues:
       arch: arm64
       appResources:
@@ -1862,7 +1858,6 @@ govukApplications:
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
-    serverSideApplyEnabled: true
     imageValues:
       - "licensify-admin"
       - "licensify-backend"
@@ -3173,7 +3168,6 @@ govukApplications:
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
     chartPath: charts/search-index-env-sync
     postSyncWorkflowEnabled: "false"
-    serverSideApplyEnabled: "true"
 
   - name: service-manual-publisher
     helmValues:
