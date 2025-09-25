@@ -1,4 +1,5 @@
 {{- if ne .Values.govukEnvironment "ephemeral" }}
+# See https://prometheus-operator.dev/docs/api-reference/api/#monitoring.coreos.com/v1alpha1.AlertmanagerConfig
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: AlertmanagerConfig
 metadata:
