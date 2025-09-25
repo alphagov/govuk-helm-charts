@@ -182,11 +182,15 @@ spec:
         {{- include "slack.text" . | nindent 8 }}
   inhibitRules:
   - sourceMatch:
-      severity: 'critical'
-      destination: 'slack-search-team'
+      - name: 'severity'
+        value: 'critical'
+      - name: 'destination'
+        value: 'slack-search-team'
     targetMatch:
-      severity: 'warning'
-      destination: 'slack-search-team'
+      - name: 'severity'
+        value: 'warning'
+      - name: 'destination'
+        value: 'slack-search-team'
     equal:
       - environment
       - alertname
