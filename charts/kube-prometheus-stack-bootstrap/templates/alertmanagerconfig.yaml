@@ -181,15 +181,13 @@ spec:
       text: |-
         {{- include "slack.text" . | nindent 8 }}
   inhibitRules:
-  - sourceMatch:
-      severity: 'critical'
-      destination: 'slack-search-team'
-    targetMatch:
-      severity: 'warning'
-      destination: 'slack-search-team'
-    equal:
-      - environment
-      - alertname
+  - sourceMatchers:
+      - severity = critical
+      - destination = slack-search-team
+    targetMatchers:
+      - severity = warning
+      - destination = slack-search-team
+    equal: ['environment', 'alertname']
   muteTimeIntervals:
   - name: inhours
     timeIntervals:
