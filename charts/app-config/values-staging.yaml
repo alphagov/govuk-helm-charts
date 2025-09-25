@@ -1437,6 +1437,8 @@ govukApplications:
         requests:
           cpu: 500m
           memory: 1.5Gi
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1513,6 +1515,8 @@ govukApplications:
         createSecret: false
       uploadAssets:
         enabled: false
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
