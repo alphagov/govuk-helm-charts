@@ -300,15 +300,12 @@ tests:
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "24 hour rolling success rate for search requests has dropped below 99.99% for more than 24 hours."
 
-    # Tests for SearchQualityDegradedBinaryRecall
+    # Tests for SearchQualityDegradedBinaryRecall (data below threshold)
   - interval: 15m
     input_series:
       - series: 'search_api_v2_evaluation_monitoring_recall{top="3", dataset="binary", month="last_month"}'
         values: '0.95x2 0.89 0.79'
     alert_rule_test:
-      - eval_time: 30m
-        alertname: SearchQualityDegradedBinaryRecall
-        exp_alerts: []
       - eval_time: 35m
         alertname: SearchQualityDegradedBinaryRecall
         exp_alerts: []
@@ -358,15 +355,51 @@ tests:
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "Top 3 recall for binary query set has dropped below 80%."
 
-  # Tests for SearchQualityDegradedClickstreamNDCG
+    # Tests for SearchQualityDegradedBinaryRecall (missing data)
+  - interval: 30m
+    input_series:
+      - series: 'search_api_v2_evaluation_monitoring_recall{dataset="binary", top="3", month="last_month"}'
+        values: '0.9x2'
+    alert_rule_test:
+      - eval_time: 48h
+        alertname: SearchQualityDegradedBinaryRecall
+        exp_alerts: []
+      - eval_time: 49h
+        alertname: SearchQualityDegradedBinaryRecall
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: slack-search-team
+              dataset: binary
+              month: last_month
+              top: 3
+            exp_annotations:
+              summary: "Search API v2: Degraded search result quality (binary recall top 3 has dropped)"
+              grafana_path: >-
+                d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+              description: "Top 3 recall for binary query set has dropped below 90%."
+          - exp_labels:
+              severity: critical
+              destination: slack-search-team
+              dataset: binary
+              month: last_month
+              top: 3
+            exp_annotations:
+              summary: "Search API v2: Degraded search result quality (binary recall top 3 is critical)"
+              grafana_path: >-
+                d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+              description: "Top 3 recall for binary query set has dropped below 80%."
+
+  # Tests for SearchQualityDegradedClickstreamNDCG (data below threshold)
   - interval: 15m
     input_series:
       - series: 'search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"}'
         values: '0.9x2 0.84 0.74'
     alert_rule_test:
-      - eval_time: 30m
-        alertname: SearchQualityDegradedClickstreamNDCG
-        exp_alerts: []
       - eval_time: 35m
         alertname: SearchQualityDegradedClickstreamNDCG
         exp_alerts: []
@@ -387,6 +420,45 @@ tests:
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "Top 10 NDCG for clickstream query set has dropped below 85%."
       - eval_time: 1h
+        alertname: SearchQualityDegradedClickstreamNDCG
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: slack-search-team
+              dataset: clickstream
+              month: last_month
+              top: 10
+            exp_annotations:
+              summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 has dropped)"
+              grafana_path: >-
+                d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+              description: "Top 10 NDCG for clickstream query set has dropped below 85%."
+          - exp_labels:
+              severity: critical
+              destination: slack-search-team
+              dataset: clickstream
+              month: last_month
+              top: 10
+            exp_annotations:
+              summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 is critical)"
+              grafana_path: >-
+                d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+              description: "Top 10 NDCG for clickstream query set has dropped below 75%."
+
+  # Tests for SearchQualityDegradedClickstreamNDCG (missing data)
+  - interval: 30m
+    input_series:
+      - series: 'search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"}'
+        values: '0.9x2'
+    alert_rule_test:
+      - eval_time: 48h
+        alertname: SearchQualityDegradedClickstreamNDCG
+        exp_alerts: []
+      - eval_time: 49h
         alertname: SearchQualityDegradedClickstreamNDCG
         exp_alerts:
           - exp_labels:
