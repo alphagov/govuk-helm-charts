@@ -359,7 +359,7 @@ tests:
   - interval: 30m
     input_series:
       - series: 'search_api_v2_evaluation_monitoring_recall{dataset="binary", top="3", month="last_month"}'
-        values: '0.9x2'
+        values: '0.9x2 _x100'
     alert_rule_test:
       - eval_time: 48h
         alertname: SearchQualityDegradedBinaryRecall
@@ -448,12 +448,41 @@ tests:
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "Top 10 NDCG for clickstream query set has dropped below 75%."
+      - eval_time: 60h
+        alertname: SearchQualityDegradedClickstreamNDCG
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: slack-search-team
+              dataset: clickstream
+              month: last_month
+              top: 10
+            exp_annotations:
+              summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 has dropped)"
+              grafana_path: >-
+                d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+              description: "Top 10 NDCG for clickstream query set has dropped below 85%."
+          - exp_labels:
+              severity: critical
+              destination: slack-search-team
+              dataset: clickstream
+              month: last_month
+              top: 10
+            exp_annotations:
+              summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 is critical)"
+              grafana_path: >-
+                d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+              description: "Top 10 NDCG for clickstream query set has dropped below 75%."
 
   # Tests for SearchQualityDegradedClickstreamNDCG (missing data)
   - interval: 30m
     input_series:
       - series: 'search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"}'
-        values: '0.9x2'
+        values: '0.9x2 _x100'
     alert_rule_test:
       - eval_time: 48h
         alertname: SearchQualityDegradedClickstreamNDCG
