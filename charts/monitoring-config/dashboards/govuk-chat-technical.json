@@ -1112,8 +1112,8 @@
           "label": "",
           "logGroups": [
             {
-              "accountId": "210287912431",
-              "arn": "arn:aws:logs:eu-west-1:210287912431:log-group:/aws/bedrock:*",
+              "accountId": "AWSACCOUNTID",
+              "arn": "arn:aws:logs:eu-west-1:AWSACCOUNTID:log-group:/aws/bedrock:*",
               "name": "/aws/bedrock"
             }
           ],
