@@ -359,7 +359,7 @@ tests:
   - interval: 30m
     input_series:
       - series: 'search_api_v2_evaluation_monitoring_recall{dataset="binary", top="3", month="last_month"}'
-        values: '0.9x2 -x100'
+        values: '0.9x2 stale'
     alert_rule_test:
       - eval_time: 48h
         alertname: SearchQualityDegradedBinaryRecall
@@ -482,7 +482,7 @@ tests:
   - interval: 30m
     input_series:
       - series: 'search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"}'
-        values: '0.9x2 -x100'
+        values: '0.9x2 stale'
     alert_rule_test:
       - eval_time: 48h
         alertname: SearchQualityDegradedClickstreamNDCG
