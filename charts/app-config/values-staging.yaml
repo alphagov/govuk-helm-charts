@@ -3101,6 +3101,11 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: GOOGLE_CLOUD_PROJECT_ID
+        - name: GOOGLE_CLOUD_PROJECT_ID_NUMBER
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: GOOGLE_CLOUD_PROJECT_ID_NUMBER
         - name: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
           valueFrom:
             secretKeyRef:
