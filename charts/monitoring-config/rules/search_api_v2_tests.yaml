@@ -361,10 +361,10 @@ tests:
       - series: 'search_api_v2_evaluation_monitoring_recall{dataset="binary", top="3", month="last_month"}'
         values: '0.9x2 stale'
     alert_rule_test:
-      - eval_time: 48h
+      - eval_time: 49h
         alertname: SearchQualityDegradedBinaryRecall
         exp_alerts: []
-      - eval_time: 49h
+      - eval_time: 50h
         alertname: SearchQualityDegradedBinaryRecall
         exp_alerts:
           - exp_labels:
@@ -484,10 +484,10 @@ tests:
       - series: 'search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"}'
         values: '0.9x2 stale'
     alert_rule_test:
-      - eval_time: 48h
+      - eval_time: 49h
         alertname: SearchQualityDegradedClickstreamNDCG
         exp_alerts: []
-      - eval_time: 49h
+      - eval_time: 50h
         alertname: SearchQualityDegradedClickstreamNDCG
         exp_alerts:
           - exp_labels:
