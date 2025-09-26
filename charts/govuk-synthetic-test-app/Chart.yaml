@@ -1,0 +1,4 @@
+apiVersion: v2
+name: govuk-synthetic-test-app
+description: GOV.UK Synthetic Test App
+version: 1.0.0
