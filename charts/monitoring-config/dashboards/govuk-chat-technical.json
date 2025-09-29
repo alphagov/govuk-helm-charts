@@ -1088,9 +1088,11 @@
       "id": 40,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -1107,7 +1109,7 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "fields @timestamp, @message |\nfilter @message like /ServiceUnavailableException/ |\nstats count(*) as ExceptionCount by bin(1h)",
+          "expression": "fields @timestamp, @message |\nfilter errorCode like /Exception/ |\nstats count(*) as error by bin(1h), errorCode",
           "id": "",
           "label": "",
           "logGroups": [
@@ -1130,11 +1132,12 @@
           "sqlExpression": "",
           "statistic": "Average",
           "statsGroups": [
-            "bin(1h)"
+            "bin(1h)",
+            "errorCode"
           ]
         }
       ],
-      "title": "Bedrock Service Unavailable Exceptions",
+      "title": "Bedrock Service Exceptions",
       "type": "timeseries"
     },
     {
@@ -4336,5 +4339,5 @@
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 11
+  "version": 12
 }
