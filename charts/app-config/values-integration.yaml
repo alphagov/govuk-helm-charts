@@ -1643,6 +1643,8 @@ govukApplications:
           cpu: 500m
           memory: 1Gi
       dbMigrationEnabled: true
+      kubernetesProbeEndpoints:
+        readinessProbe: "/healthcheck/ready"
       workers:
         enabled: true
         types:
