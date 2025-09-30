@@ -4,10 +4,12 @@ groups:
       - alert: StartupProbeFailure
         expr: >-
           label_replace(
-            prober_probe_total{
-              probe_type="Startup",
-              result="failed"
-            } >= 10,
+            increase(
+              prober_probe_total{
+                probe_type="Startup",
+                result="failed"
+              }[10m]
+            ),
             "app_name",
             "$1",
             "pod",
