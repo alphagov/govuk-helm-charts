@@ -7,7 +7,6 @@ tests:
   - name: StartupProbeFailure - No alert with 29 failures
     interval: 1m
     input_series:
-      # No alert with 29 startupProbeFailures
       - series: >-
           prober_probe_total{
           probe_type="Startup",
@@ -16,7 +15,7 @@ tests:
           container="app",
           namespace="apps"
           }
-        values: '29x15'
+        values: '0 10 20 23 29 29'
     alert_rule_test:
       - alertname: StartupProbeFailure
         eval_time: 5m
@@ -25,7 +24,6 @@ tests:
   - name: StartupProbeFailure - Alert with 30 failures correctly in apps namespace
     interval: 1m
     input_series:
-      # Alert with 30 startupProbeFailures in the apps namespace
       - series: >-
           prober_probe_total{
           probe_type="Startup",
@@ -34,7 +32,7 @@ tests:
           container="app",
           namespace="apps"
           }
-        values: '30x10'
+        values: '0+10x10'
     alert_rule_test:
       - alertname: StartupProbeFailure
         eval_time: 5m
@@ -61,7 +59,6 @@ tests:
   - name: StartupProbeFailure - Alert with 30 failures correctly in licensify namespace
     interval: 1m
     input_series:
-      # Alert with 30 startupProbeFailures in the licensify namespace
       - series: >-
           prober_probe_total{
           probe_type="Startup",
@@ -70,7 +67,7 @@ tests:
           container="main",
           namespace="licensify"
           }
-        values: '30x10'
+        values: '0+10x10'
     alert_rule_test:
       - alertname: StartupProbeFailure
         eval_time: 5m
@@ -93,3 +90,20 @@ tests:
                 returning an HTTP response code >= 400.
 
                 To find the exact reason you can run `kubectl -n licensify describe pod licensify-frontend-6556f687fd-94glb`
+
+  - name: StartupProbeFailure - No alert for increases which occurred in the past, but are no longer occuring
+    interval: 1m
+    input_series:
+      - series: >-
+          prober_probe_total{
+          probe_type="Startup",
+          result="failed",
+          pod="draft-static-6556f687fd-94glb",
+          container="app",
+          namespace="apps"
+          }
+        values: '0+10x5 50+0x100'
+    alert_rule_test:
+      - alertname: StartupProbeFailure
+        eval_time: 30m
+        exp_alerts: []
