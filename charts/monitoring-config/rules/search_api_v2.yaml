@@ -155,9 +155,6 @@ groups:
         labels:
           severity: warning
           destination: slack-search-team
-          top: 3
-          dataset: binary
-          month: last_month
         annotations:
           summary: "Search API v2: Degraded search result quality (binary recall top 3 has dropped)"
           grafana_path: >-
@@ -171,9 +168,6 @@ groups:
         labels:
           severity: critical
           destination: slack-search-team
-          top: 3
-          dataset: binary
-          month: last_month
         annotations:
           summary: "Search API v2: Degraded search result quality (binary recall top 3 is critical)"
           grafana_path: >-
@@ -187,9 +181,6 @@ groups:
         labels:
           severity: warning
           destination: slack-search-team
-          top: 10
-          dataset: clickstream
-          month: last_month
         annotations:
           summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 has dropped)"
           grafana_path: >-
@@ -203,9 +194,6 @@ groups:
         labels:
           severity: critical
           destination: slack-search-team
-          top: 10
-          dataset: clickstream
-          month: last_month
         annotations:
           summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 is critical)"
           grafana_path: >-
