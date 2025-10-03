@@ -537,6 +537,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-content-block-manager-signon-api
               key: bearer_token
+        - name: E2E_EMAILS
+          value: "2nd-line-support@digital.cabinet-office.gov.uk,govuk-publishing-content-modelling-team@digital.cabinet-office.gov.uk"
 
   - name: content-data-admin
     helmValues:
