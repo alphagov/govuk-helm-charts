@@ -3106,13 +3106,13 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
-        - name: quality-report-quality-metrics-clickstream
+        - name: report-quality-metrics-clickstream
           task: "quality:report_quality_metrics[clickstream]"
           schedule: "0 6 * * *" # 06:00am GMT daily
-        - name: quality-report-quality-metrics-explicit
+        - name: report-quality-metrics-explicit
           task: "quality:report_quality_metrics[explicit]"
           schedule: "0 7 * * *" # 07:00am GMT daily
-        - name: quality-report-quality-metrics-binary
+        - name: report-quality-metrics-binary
           task: "quality:report_quality_metrics[binary]"
         - name: quality-setup-sample-query-sets
           task: "quality:setup_sample_query_sets"
