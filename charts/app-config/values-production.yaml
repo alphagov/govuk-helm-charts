@@ -1385,7 +1385,7 @@ govukApplications:
             path: /assets/frontend/
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /government/placeholder/
-      replicaCount: 4
+      replicaCount: 6
       appResources:
         limits:
           cpu: 4
