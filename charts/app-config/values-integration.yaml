@@ -3110,10 +3110,10 @@ govukApplications:
       cronTasks:
         - name: report-clickstream-metrics
           task: "quality:report_quality_metrics[clickstream]"
-          schedule: "0 6 * * *" # 06:00am GMT daily
+          schedule: "0 6 * * *" # 06:00 GMT daily
         - name: report-explicit-metrics
           task: "quality:report_quality_metrics[explicit]"
-          schedule: "0 7 * * *" # 07:00am GMT daily
+          schedule: "0 7 * * *" # 07:00 GMT daily
         - name: report-binary-metrics
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
@@ -3122,7 +3122,7 @@ govukApplications:
           schedule: "0 8 * * 6,7" # at 08:00 GMT on saturday and sunday
         - name: quality-setup-sample-query-sets
           task: "quality:setup_sample_query_sets"
-          schedule: "0 2 1 * *" # 02:00am first day of the month
+          schedule: "0 2 1 * *" # 02:00 first day of the month
         - name: user-events-import-yesterdays-events
           task: "user_events:import_yesterdays_events"
           schedule: "30 12 * * *"
