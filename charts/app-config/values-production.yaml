@@ -1665,7 +1665,7 @@ govukApplications:
           timeZone: "Europe/London"
         - name: slack-daily-report
           task: "slack:send_previous_days_activity"
-          schedule: "3 7 * * *"
+          schedule: "30 9 * * *"
           timeZone: "Europe/London"
       extraEnv:
         - name: AI_SLACK_CHANNEL_WEBHOOK_URL
