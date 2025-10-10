@@ -7,7 +7,7 @@ rules:
     resources: [applications]
     verbs: [get, watch, list]
   - apiGroups: [""]
-    resources: [pod, pods]
+    resources: [pods]
     verbs: [get, watch, list]
   - apiGroups: [apps]
     resources: [deployments]
