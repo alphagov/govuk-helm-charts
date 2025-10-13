@@ -1435,7 +1435,7 @@ govukApplications:
           memory: 4Gi
         requests:
           cpu: 500m
-          memory: 1.5Gi
+          memory: 2Gi
       kubernetesProbeEndpoints:
         startupProbe: "/healthcheck/ready"
       extraEnv:
