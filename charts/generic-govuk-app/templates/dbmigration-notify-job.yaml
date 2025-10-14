@@ -1,0 +1,143 @@
+{{- if .Values.dbMigrationEnabled -}}
+{{- $fullName := include "generic-govuk-app.fullname" . }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullName }}-dbmigrate-notify
+  labels:
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app: {{ $fullName }}-dbmigrate-notify
+    app.kubernetes.io/name: {{ $fullName }}-dbmigrate-notify
+    app.kubernetes.io/component: dbmigrate-notify
+  annotations:
+    argocd.argoproj.io/hook: SyncFail
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation
+    kubernetes.io/description: >
+      Checks if the DB migration job failed
+      and sends a Slack notification if it did.
+      Runs only when a sync fails.
+spec:
+  activeDeadlineSeconds: 300
+  backoffLimit: 2
+  template:
+    metadata:
+      name: {{ $fullName }}-dbmigrate-notify
+      labels:
+        {{- include "generic-govuk-app.labels" . | nindent 8 }}
+        app: {{ $fullName }}-dbmigrate-notify
+        app.kubernetes.io/name: {{ $fullName }}-dbmigrate-notify
+        app.kubernetes.io/component: dbmigrate-notify
+    spec:
+      automountServiceAccountToken: true
+      serviceAccountName: {{ $fullName }}-dbmigrate-notify
+      enableServiceLinks: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: {{ .Values.securityContext.runAsGroup }}
+        runAsNonRoot: {{ .Values.securityContext.runAsNonRoot }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+      restartPolicy: Never
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: notify
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v4
+          command:
+            - "/bin/bash"
+            - "-c"
+            - |
+              set -e
+
+              # Get the DB migration job status
+              echo "Checking DB migration job status"
+              job_info=$(kubectl get job {{ $fullName }}-dbmigrate -n {{ .Release.Namespace }} -o json 2>/dev/null || echo "{}")
+              failed=$(echo "$job_info" | jq -r '.status.failed // 0')
+              succeeded=$(echo "$job_info" | jq -r '.status.succeeded // 0')
+
+              echo "Job status - Failed: $failed, Succeeded: $succeeded"
+
+              if [ "$failed" != "0" ] && [ "$failed" != "null" ]; then
+                echo "DB migration job failed. Sending Slack notification"
+
+                # Get pod logs for error context (first 50 lines of last pod)
+                pod_name=$(kubectl get pods -n {{ .Release.Namespace }} \
+                  -l job-name={{ $fullName }}-dbmigrate \
+                  --sort-by=.metadata.creationTimestamp \
+                  -o jsonpath='{.items[-1].metadata.name}' 2>/dev/null || echo "")
+
+                error_snippet=""
+                if [ -n "$pod_name" ]; then
+                  error_snippet=$(kubectl logs -n {{ .Release.Namespace }} "$pod_name" --tail=50 2>/dev/null || echo "Could not retrieve logs")
+                  # Escape for JSON and truncate if too long
+                  error_snippet=$(echo "$error_snippet" | head -c 500)
+                fi
+
+                # Send Slack notification using Block Kit
+                curl -X POST \
+                  -H "Content-Type: application/json" \
+                  --data @- \
+                  "$SLACK_WEBHOOK_URL" <<EOF
+              {
+                "channel": "govuk-deploy-alerts",
+                "username": "DB Migrations Failed",
+                "icon_emoji": ":argo:",
+                "text": "DB Migration Failed for {{ $fullName }}",
+                "blocks": [
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*Service:* {{ $fullName }}\n*Environment:* {{ .Values.govukEnvironment }}\n*Image Tag:* {{ .Values.appImage.tag }}\n*Repo:* <https://github.com/alphagov/{{ .Values.repoName }}|{{ .Values.repoName }}>"
+                    }
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": "*What's next:*\n• <https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/applications/{{ $fullName }}|View application in ArgoCD>\n• <https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/applications/{{ $fullName }}?node=batch%2FJob%2Fapps%2F{{ $fullName }}-dbmigrate&orphaned=false&resource=&tab=logs|View logs in ArgoCD>"
+                    }
+                  }
+                ]
+              }
+              EOF
+
+                if [ $? -eq 0 ]; then
+                  echo "Slack notification sent successfully"
+                else
+                  echo "Failed to send Slack notification"
+                  exit 1
+                fi
+              else
+                echo "DB migration job succeeded, no notification needed"
+              fi
+          imagePullPolicy: Always
+          env:
+            - name: SLACK_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: slack-webhook-url
+                  key: url
+          {{- with .Values.jobResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 12 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
+{{- end }}

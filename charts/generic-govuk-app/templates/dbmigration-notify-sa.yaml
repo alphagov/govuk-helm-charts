@@ -1,0 +1,12 @@
+{{- $fullName := include "generic-govuk-app.fullname" . }}
+{{- if .Values.dbMigrationEnabled -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $fullName }}-dbmigrate-notify
+  labels:
+    {{- include "generic-govuk-app.labels" . | nindent 4 }}
+    app: {{ $fullName }}-dbmigrate-notify
+    app.kubernetes.io/name: {{ $fullName }}-dbmigrate-notify
+    app.kubernetes.io/component: dbmigrate-notify
+{{- end -}}
