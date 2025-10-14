@@ -3980,7 +3980,6 @@ govukApplications:
           value: *publishing-design-system-gtm-preview
 
   - name: govuk-replatform-test-app
-    targetRevision: samsimpson1/db-migration-notify
     helmValues:
       arch: arm64
       rails:
