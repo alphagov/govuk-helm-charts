@@ -35,7 +35,7 @@ spec:
           - name: promoteDeployment
             default: "false"
       script:
-        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v3
         command: [/bin/bash]
         volumeMounts:
           - name: tmp
