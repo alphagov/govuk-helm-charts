@@ -62,19 +62,6 @@ spec:
               if [ "$failed" != "0" ] && [ "$failed" != "null" ]; then
                 echo "DB migration job failed. Sending Slack notification"
 
-                # Get pod logs for error context (first 50 lines of last pod)
-                pod_name=$(kubectl get pods -n {{ .Release.Namespace }} \
-                  -l job-name={{ $fullName }}-dbmigrate \
-                  --sort-by=.metadata.creationTimestamp \
-                  -o jsonpath='{.items[-1].metadata.name}' 2>/dev/null || echo "")
-
-                error_snippet=""
-                if [ -n "$pod_name" ]; then
-                  error_snippet=$(kubectl logs -n {{ .Release.Namespace }} "$pod_name" --tail=50 2>/dev/null || echo "Could not retrieve logs")
-                  # Escape for JSON and truncate if too long
-                  error_snippet=$(echo "$error_snippet" | head -c 500)
-                fi
-
                 # Send Slack notification using Block Kit
                 curl -X POST \
                   -H "Content-Type: application/json" \
@@ -111,7 +98,7 @@ spec:
                   exit 1
                 fi
               else
-                echo "DB migration job succeeded, no notification needed"
+                echo "DB migration job succeeded, not sending notification"
               fi
           imagePullPolicy: Always
           env:
