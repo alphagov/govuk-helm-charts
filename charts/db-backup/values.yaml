@@ -105,6 +105,9 @@ cronjobs:
       db: content_block_manager_production
       operations:
         - op: backup
+      extraEnv:
+        - name: DB_OWNER
+          value: content-block-manager
 
     collections-publisher-mysql:
       schedule: "21 23 * * *"
