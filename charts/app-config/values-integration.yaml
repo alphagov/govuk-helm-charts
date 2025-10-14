@@ -3117,6 +3117,9 @@ govukApplications:
         - name: report-quality-metrics-binary
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
+        - name: report-quality-metrics-binary-weekend
+          task: "quality:report_quality_metrics[binary]"
+          schedule: "0 8 * * 6,7" # at 08:00 GMT on saturday and sunday
         - name: quality-setup-sample-query-sets
           task: "quality:setup_sample_query_sets"
           schedule: "0 2 1 * *" # 02:00am first day of the month
