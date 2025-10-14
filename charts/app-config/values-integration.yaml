@@ -3108,16 +3108,16 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
-        - name: report-quality-metrics-clickstream
+        - name: report-clickstream-metrics
           task: "quality:report_quality_metrics[clickstream]"
           schedule: "0 6 * * *" # 06:00am GMT daily
-        - name: report-quality-metrics-explicit
+        - name: report-explicit-metrics
           task: "quality:report_quality_metrics[explicit]"
           schedule: "0 7 * * *" # 07:00am GMT daily
-        - name: report-quality-metrics-binary
+        - name: report-binary-metrics
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
-        - name: report-quality-metrics-binary-weekend
+        - name: report-binary-metrics-weekend
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8 * * 6,7" # at 08:00 GMT on saturday and sunday
         - name: quality-setup-sample-query-sets
