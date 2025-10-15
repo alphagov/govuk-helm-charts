@@ -32,7 +32,7 @@ spec:
           emptyDir: {}
       containers:
         - name: upload-frontend-error-pages
-          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/toolbox:latest
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v3
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
             readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
