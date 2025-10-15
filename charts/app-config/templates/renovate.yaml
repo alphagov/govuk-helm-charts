@@ -1,14 +1,10 @@
-{{ if eq .Values.govukEnvironment "thisenvdoesnotexist" }}
-
+{{ if eq .Values.govukEnvironment "production" }}
 apiVersion: argoproj.io/v1alpha1
-
 kind: Application
 metadata:
   name: renovate
   namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
   finalizers:
-
-
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: govuk
@@ -19,9 +15,6 @@ spec:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.argoNamespace }}
   syncPolicy:
-
-
-
     automated:
       prune: true
       selfHeal: true
@@ -29,13 +22,3 @@ spec:
     - ApplyOutOfSyncOnly=true
     - ServerSideApply=true
 {{ end }}
-
-
-
-
-
-
-
-
-
-
