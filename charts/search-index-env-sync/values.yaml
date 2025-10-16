@@ -5,7 +5,7 @@ fullnameOverride: ""
 toolbox:
   image:
     repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image"
-    tag: "v3"
+    tag: "v4"
 
 # govukEnvironment determines which set of cronjobs to use from `cronjobs`
 # below. When running under Argo CD, the ../app-config chart passes the
