@@ -4028,6 +4028,23 @@ govukApplications:
         - name: ENV_MESSAGE_EXAMPLE
           value: message_by_example
 
+  - name: govuk-synthetic-test-app-canary
+    helmValues:
+      arch: arm64
+      rails:
+        enabled: false
+      sentry:
+        enabled: false
+      uploadAssets:
+        enabled: false
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "300"
+        hosts:
+          - name: govuk-synthetic-test-app-canary.eks.integration.govuk.digital
+
   - name: whitehall-admin
     repoName: whitehall
     helmValues:
