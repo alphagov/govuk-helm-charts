@@ -303,7 +303,7 @@ tests:
     # Tests for SearchQualityDegradedBinaryRecall (data below threshold)
   - interval: 15m
     input_series:
-      - series: 'search_api_v2_evaluation_monitoring_recall{top="3", dataset="binary", month="last_month"}'
+      - series: 'search_api_v2_evaluation_monitoring_recall{top="3", dataset="binary", month="this_month"}'
         values: '0.95x2 0.89 0.79'
     alert_rule_test:
       - eval_time: 35m
@@ -316,7 +316,7 @@ tests:
               severity: warning
               destination: slack-search-team
               dataset: binary
-              month: last_month
+              month: this_month
               top: 3
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (binary recall top 3 has dropped)"
@@ -332,7 +332,7 @@ tests:
               severity: warning
               destination: slack-search-team
               dataset: binary
-              month: last_month
+              month: this_month
               top: 3
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (binary recall top 3 has dropped)"
@@ -345,7 +345,7 @@ tests:
               severity: critical
               destination: slack-search-team
               dataset: binary
-              month: last_month
+              month: this_month
               top: 3
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (binary recall top 3 is critical)"
@@ -361,7 +361,7 @@ tests:
               severity: warning
               destination: slack-search-team
               dataset: binary
-              month: last_month
+              month: this_month
               top: 3
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (binary recall top 3 has dropped)"
@@ -374,7 +374,7 @@ tests:
               severity: critical
               destination: slack-search-team
               dataset: binary
-              month: last_month
+              month: this_month
               top: 3
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (binary recall top 3 is critical)"
@@ -390,7 +390,7 @@ tests:
   # Tests for SearchQualityDegradedClickstreamNDCG (data below threshold)
   - interval: 15m
     input_series:
-      - series: 'search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"}'
+      - series: 'search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="this_month"}'
         values: '0.9x2 0.84 0.74'
     alert_rule_test:
       - eval_time: 35m
@@ -403,7 +403,7 @@ tests:
               severity: warning
               destination: slack-search-team
               dataset: clickstream
-              month: last_month
+              month: this_month
               top: 10
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 has dropped)"
@@ -419,7 +419,7 @@ tests:
               severity: warning
               destination: slack-search-team
               dataset: clickstream
-              month: last_month
+              month: this_month
               top: 10
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 has dropped)"
@@ -432,7 +432,7 @@ tests:
               severity: critical
               destination: slack-search-team
               dataset: clickstream
-              month: last_month
+              month: this_month
               top: 10
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 is critical)"
@@ -448,7 +448,7 @@ tests:
               severity: warning
               destination: slack-search-team
               dataset: clickstream
-              month: last_month
+              month: this_month
               top: 10
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 has dropped)"
@@ -461,7 +461,7 @@ tests:
               severity: critical
               destination: slack-search-team
               dataset: clickstream
-              month: last_month
+              month: this_month
               top: 10
             exp_annotations:
               summary: "Search API v2: Degraded search result quality (clickstream NDCG top 10 is critical)"
