@@ -557,7 +557,7 @@ cronjobs:
       dbms: postgres
       operations:
         - op: restore
-          bucket: s3://govuk-production-database-backups
+          bucket: s3://govuk-staging-database-backups
         - op: backup
       extraEnv:
         - name: DB_OWNER
