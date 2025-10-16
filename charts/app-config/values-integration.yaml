@@ -3110,21 +3110,6 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
-        - name: report-clickstream-metrics
-          task: "quality:report_quality_metrics[clickstream]"
-          schedule: "0 6 * * *" # 06:00 GMT daily
-        - name: report-explicit-metrics
-          task: "quality:report_quality_metrics[explicit]"
-          schedule: "0 7 * * *" # 07:00 GMT daily
-        - name: report-binary-metrics
-          task: "quality:report_quality_metrics[binary]"
-          schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
-        - name: report-binary-metrics-weekend
-          task: "quality:report_quality_metrics[binary]"
-          schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
-        - name: quality-setup-sample-query-sets
-          task: "quality:setup_sample_query_sets"
-          schedule: "0 2 1 * *" # 02:00 first day of the month
         - name: user-events-import-yesterdays-events
           task: "user_events:import_yesterdays_events"
           schedule: "30 12 * * *"
@@ -3155,6 +3140,51 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-rabbitmq
               key: RABBITMQ_URL
+        - name: GOOGLE_CLOUD_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: GOOGLE_CLOUD_CREDENTIALS
+        - name: GOOGLE_CLOUD_PROJECT_ID
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: GOOGLE_CLOUD_PROJECT_ID
+        - name: GOOGLE_CLOUD_PROJECT_ID_NUMBER
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: GOOGLE_CLOUD_PROJECT_ID_NUMBER
+        - name: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
+        - name: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
+          valueFrom:
+            secretKeyRef:
+              name: search-api-v2-google-cloud-discovery-engine-configuration
+              key: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
+
+  - name: search-api-v2-beta-features
+    helmValues:
+      cronTasks:
+        - name: report-clickstream-metrics
+          task: "quality:report_quality_metrics[clickstream]"
+          schedule: "0 6 * * *" # 06:00 GMT daily
+        - name: report-explicit-metrics
+          task: "quality:report_quality_metrics[explicit]"
+          schedule: "0 7 * * *" # 07:00 GMT daily
+        - name: report-binary-metrics
+          task: "quality:report_quality_metrics[binary]"
+          schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
+        - name: report-binary-metrics-weekend
+          task: "quality:report_quality_metrics[binary]"
+          schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
+        - name: quality-setup-sample-query-sets
+          task: "quality:setup_sample_query_sets"
+          schedule: "0 2 1 * *" # 02:00 first day of the month
+      extraEnv:
         - name: GOOGLE_CLOUD_CREDENTIALS
           valueFrom:
             secretKeyRef:
