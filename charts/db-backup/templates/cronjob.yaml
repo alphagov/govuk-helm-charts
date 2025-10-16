@@ -64,7 +64,7 @@ spec:
           containers:
     {{- end }}
             - name: {{ $i }}-{{ .op }}
-              image: {{ $.Values.imageRef | quote }}
+              image: "{{ $.Values.toolbox.image.repository }}:{{ $.Values.toolbox.image.tag }}"
               command:
                 - /opt/bin/backup-{{ $dbms }}
               args:
