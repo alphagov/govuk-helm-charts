@@ -50,7 +50,7 @@ spec:
                 defaultMode: 0555  # world-executable
           containers:
             - name: main
-              image: {{ $.Values.imageRef | quote }}
+              image: "{{ $.Values.toolbox.image.repository }}:{{ $.Values.toolbox.image.tag }}"
               command:
                 - /opt/bin/snapshot
               args:
