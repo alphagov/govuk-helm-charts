@@ -64,6 +64,9 @@ spec:
               {{- else if .command }}
               command: ["/bin/bash"]
               args: ["-c", "{{ .command }}"]
+              {{- else if .command_sh }}
+              command: ["/bin/sh"]
+              args: ["-c", "{{ .command }}"]
               {{- end }}
               envFrom:
                 - configMapRef:

@@ -1819,6 +1819,29 @@ govukApplications:
     imageValues:
       - govuk-dependency-checker
 
+  - name: govuk-synthetic-test-app
+    helmValues:
+      appImage:
+        repository: ghcr.io/alphagov/govuk/govuk-synthetic-test-app-runner
+        tag: 88bd484e0dd3c85f55592d0c8b76a6969a72eba3
+      arch: arm64
+      rails:
+        enabled: false
+      sentry:
+        enabled: false
+      uploadAssets:
+        enabled: false
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      cronTasks:
+        - name: run-helper-tests
+          command_sh: "ginkgo -v helpers"
+          schedule: "0 1 * * *"
+      extraEnv:
+        - name: ENVIRONMENT_NAME
+          value: "production"
+
   - name: govuk-synthetic-test-app-canary
     helmValues:
       arch: arm64
