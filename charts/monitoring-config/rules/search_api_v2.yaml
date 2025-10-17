@@ -147,9 +147,9 @@ groups:
     interval: 15m
     rules:
       - record: search_api_v2:quality_metrics:last_binary_recall
-        expr: last_over_time(search_api_v2_evaluation_monitoring_recall{top="3", dataset="binary", month="last_month"}[26h])
+        expr: last_over_time(search_api_v2_evaluation_monitoring_recall{top="3", dataset="binary", month="this_month"}[26h])
       - record: search_api_v2:quality_metrics:last_clickstream_ndcg
-        expr: last_over_time(search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="last_month"}[26h])
+        expr: last_over_time(search_api_v2_evaluation_monitoring_ndcg{dataset="clickstream", top="10", month="this_month"}[26h])
       - alert: SearchQualityDegradedBinaryRecall
         expr: search_api_v2:quality_metrics:last_binary_recall < 0.90
         labels:
