@@ -1391,7 +1391,7 @@ govukApplications:
           cpu: 4
           memory: 4Gi
         requests:
-          cpu: 1
+          cpu: 2
           memory: 2Gi
       kubernetesProbeEndpoints:
         startupProbe: "/healthcheck/ready"
