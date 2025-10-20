@@ -2141,6 +2141,8 @@ govukApplications:
               key: api-secret
         - name: OS_PLACES_API_POSTCODES_PER_SECOND
           value: "1"
+        - name: MAINTENANCE_MESSAGE
+          value: "<p>This service will be unavailable for 5-10 minutes, please try again later.</p>"
 
   - name: manuals-publisher
     helmValues:
