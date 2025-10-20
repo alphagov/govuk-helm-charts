@@ -1481,8 +1481,6 @@ govukApplications:
               key: api_key
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
-        - name: MAINTENANCE_MESSAGE
-          value: "<p>This service will be unavailable for 5-10 minutes, please try again later.</p>"
 
   - name: draft-frontend
     repoName: frontend
