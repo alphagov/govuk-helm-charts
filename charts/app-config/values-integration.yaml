@@ -63,6 +63,63 @@ emergency-banner-redis:
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 
 govukApplications:
+  - name: govuk-reports-prototype
+    helmValues:
+      arch: arm64
+      uploadAssets:
+        enabled: false
+      appResources:
+        limits:
+          cpu: 500m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      dbMigrationEnabled: false
+      workers:
+        enabled: false
+      redis:
+        enabled: false
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "10"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "govuk-reports-prototype.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: govuk-reports-prototype.{{ .Values.k8sExternalDomainSuffix }}
+      service:
+        port: 8080
+      serviceAccount:
+        enabled: true
+        create: true
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/govuk-reports-govuk
+      healthcheck:
+        path: /api/health
+      extraEnv:
+        - name: PORT
+          value: "8080"
+        - name: ENVIRONMENT
+          value: "{{ .Values.govukEnvironment }}"
+        - name: AWS_REGION
+          value: "{{ .Values.awsRegion }}"
+
+        # Logging configuration
+        - name: LOG_LEVEL
+          value: "info"
+        - name: LOG_FORMAT
+          value: "json"
+        - name: LOG_OUTPUT
+          value: "stdout"
+        - name: LOG_TIME_FORMAT
+          value: "2006-01-02T15:04:05Z07:00"
+        - name: LOG_COLORIZE
+          value: "false"
+
   - name: account-api
     helmValues:
       arch: arm64
