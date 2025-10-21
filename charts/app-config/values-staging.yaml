@@ -1468,6 +1468,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
+        - name: MAINTENANCE_MESSAGE
+          value: "The system will be unavailable for essential maintenance from 14:20-14:40, please try again later"
         - name: OS_MAPS_API_KEY
           valueFrom:
             secretKeyRef:
