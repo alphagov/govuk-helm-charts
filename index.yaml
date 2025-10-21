@@ -231,6 +231,16 @@ entries:
     version: 0.9.3
   kubernetes-events-shipper:
   - apiVersion: v2
+    created: "2025-10-21T10:34:04.99124555Z"
+    description: Creates a fluent bit stateful set which will send all kuberenetes
+      events in a cluster to logit
+    digest: fa72ee402cdae8c3d41ff65d1291bcecf07fd627f5d3f8d74de1e39879fcbb5a
+    name: kubernetes-events-shipper
+    type: application
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/kubernetes-events-shipper-1.1.1/kubernetes-events-shipper-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v2
     created: "2025-09-01T12:41:02.549160708Z"
     description: Creates a fluent bit stateful set which will send all kuberenetes
       events in a cluster to logit
@@ -250,4 +260,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/kubernetes-events-shipper-1.0.0/kubernetes-events-shipper-1.0.0.tgz
     version: 1.0.0
-generated: "2025-09-16T12:24:34.588678037Z"
+generated: "2025-10-21T10:34:04.991317374Z"
