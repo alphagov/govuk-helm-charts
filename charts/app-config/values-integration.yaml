@@ -1810,6 +1810,11 @@ govukApplications:
         requests:
           cpu: 1
           memory: 1Gi
+      cronJobs:
+        - name: govuk-e2e-tests
+          schedule: "@never"
+          project: main
+          suspend: true
 
   - name: hmrc-manuals-api
     helmValues:
