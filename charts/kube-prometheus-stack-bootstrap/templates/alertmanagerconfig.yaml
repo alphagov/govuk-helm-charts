@@ -73,7 +73,24 @@ spec:
       - name: destination
         value: slack-search-team
         matchType: =
-      receiver: 'slack-search-team-alerts-channel'
+      - name: environment
+        value: production
+        matchType: =
+      receiver: 'slack-search-team-production-alerts'
+      groupBy: [alertname, severity, environment]
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 1d
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+      - name: destination
+        value: slack-search-team
+        matchType: =
+      - name: environment
+        value: production
+        matchType: !=
+      receiver: 'slack-search-team-non-production-alerts'
       groupBy: [alertname, severity, environment]
       groupWait: 30s
       groupInterval: 5m
@@ -162,9 +179,15 @@ spec:
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
-  - name: 'slack-search-team-alerts-channel'
+  - name: 'slack-search-team-production-alerts'
     slackConfigs:
     - channel: "#govuk-search-alerts"
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
+    - name: 'slack-search-team-non-production-alerts'
+    slackConfigs:
+    - channel: "#govuk-search-alerts-nonprod"
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
