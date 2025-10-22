@@ -73,7 +73,24 @@ spec:
       - name: destination
         value: slack-search-team
         matchType: =
-      receiver: 'slack-search-team-alerts-channel'
+      - name: environment
+        value: production
+        matchType: =
+      receiver: 'slack-search-team-production-alerts'
+      groupBy: [alertname, severity, environment]
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 1d
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+      - name: destination
+        value: slack-search-team
+        matchType: =
+      - name: environment
+        value: production
+        matchType: !=
+      receiver: 'slack-search-team-non-production-alerts'
       groupBy: [alertname, severity, environment]
       groupWait: 30s
       groupInterval: 5m
@@ -162,19 +179,18 @@ spec:
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
-  - name: 'slack-search-team-alerts-channel'
+  - name: 'slack-search-team-production-alerts'
     slackConfigs:
     - channel: "#govuk-search-alerts"
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
-      actions:
-        - text: ":chart_with_downwards_trend: Dashboard"
-          type: button
-          url: "https://grafana.eks.{{ "{{ .CommonLabels.environment }}" }}.govuk.digital/d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser"
-        - text: ":book: Runbook"
-          type: button
-          url: "https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager"
+    - name: 'slack-search-team-non-production-alerts'
+    slackConfigs:
+    - channel: "#govuk-search-alerts-nonprod"
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
   - name: 'slack-whitehall-notifications'
     slackConfigs:
     - channel: '#govuk-whitehall-experience-tech'
