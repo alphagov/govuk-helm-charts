@@ -168,13 +168,6 @@ spec:
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
-      actions:
-        - text: ":chart_with_downwards_trend: Dashboard"
-          type: button
-          url: "https://grafana.eks.{{ "{{ .CommonLabels.environment }}" }}.govuk.digital/d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser"
-        - text: ":book: Runbook"
-          type: button
-          url: "https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager"
   - name: 'slack-whitehall-notifications'
     slackConfigs:
     - channel: '#govuk-whitehall-experience-tech'
