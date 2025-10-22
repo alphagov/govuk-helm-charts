@@ -1434,6 +1434,8 @@ govukApplications:
           value: '4'
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+        - name: MAINTENANCE_MESSAGE
+          value: "The system will be unavailable for essential maintenance from 11:10-11:30, please try again later"
 
   - name: draft-finder-frontend
     repoName: finder-frontend
