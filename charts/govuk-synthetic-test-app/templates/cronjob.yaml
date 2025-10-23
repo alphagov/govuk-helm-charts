@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: govuk-synthetic-test-app-cronjob
+spec:
+  schedule: "0 1 * * *"
+  jobTemplate:
+    metadata:
+      labels:
+        app: govuk-synthetic-test-app-cronjob
+        app.kubernetes.io/arch: arm64
+    spec:
+      template:
+        metadata:
+          labels:
+            app: govuk-synthetic-test-app-cronjob
+            app.kubernetes.io/arch: arm64
+        spec:
+          serviceAccountName: synthetic-test-assumer
+          restartPolicy: Never
+          containers:
+            - name: govuk-synthetic-test-app-cronjob
+              image: '172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk//govuk-synthetic-test-app:latest'
+              imagePullPolicy: Always
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: arm64
+              effect: NoSchedule
