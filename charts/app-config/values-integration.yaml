@@ -3182,19 +3182,19 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: false
       cronTasks:
-        - name: report-clickstream-metrics
+        - name: rpt-clickstream-metrics
           task: "quality:report_quality_metrics[clickstream]"
           schedule: "0 6 * * *" # 06:00 GMT daily
-        - name: report-explicit-metrics
+        - name: rpt-explicit-metrics
           task: "quality:report_quality_metrics[explicit]"
           schedule: "0 7 * * *" # 07:00 GMT daily
-        - name: report-binary-metrics
+        - name: rpt-binary-metrics
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
-        - name: report-binary-metrics-weekend
+        - name: rpt-binary-metrics-weekend
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
-        - name: quality-setup-sample-query-sets
+        - name: setup-sample-query-sets
           task: "quality:setup_sample_query_sets"
           schedule: "0 2 1 * *" # 02:00 first day of the month
       extraEnv:
