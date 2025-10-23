@@ -3176,6 +3176,9 @@ govukApplications:
       arch: arm64
       rails:
         createKeyBaseSecret: false
+        # search-api-v2-beta-features is only used for running cron tasks so it's fine to share
+        # this secret
+        secretKeyBaseName: search-api-v2-rails-secret-key-base
       sentry:
         createSecret: false  # Sentry DSNs are per repo.
       uploadAssets:
