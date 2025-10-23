@@ -3173,6 +3173,14 @@ govukApplications:
 
   - name: search-api-v2-beta-features
     helmValues:
+      arch: arm64
+      rails:
+        createKeyBaseSecret: false
+      sentry:
+        createSecret: false  # Sentry DSNs are per repo.
+      uploadAssets:
+        enabled: false
+      dbMigrationEnabled: false
       cronTasks:
         - name: report-clickstream-metrics
           task: "quality:report_quality_metrics[clickstream]"
