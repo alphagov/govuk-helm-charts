@@ -3191,7 +3191,7 @@ govukApplications:
         - name: rpt-binary-metrics
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
-        - name: rpt-binary-metrics-weekend
+        - name: rpt-binary-metric-wknd
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
         - name: setup-sample-query-sets
