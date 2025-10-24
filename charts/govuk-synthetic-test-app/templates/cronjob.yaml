@@ -2,6 +2,14 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: govuk-synthetic-test-app-cronjob
+  annotations:
+    kubernetes.io/description: >
+      This cronjob runs synthetic tests against GOV.UK cluster using a Ginkgo test framework.
+
+      The tests are currently checking that:
+      - all running pods in the apps namespace are running with arm64 images.
+      - the synthetic test assumed roles have the correct permissions and access according to 
+      the environment that they are running in.
 spec:
   schedule: "0 11 * * 1-5"
   jobTemplate:
