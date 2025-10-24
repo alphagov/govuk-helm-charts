@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: govuk-synthetic-test-app-cronjob
 spec:
-  schedule: "0 1 * * *"
+  schedule: "0 11 * * 1-5"
   jobTemplate:
     metadata:
       labels:
