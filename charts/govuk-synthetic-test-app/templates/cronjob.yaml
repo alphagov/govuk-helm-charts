@@ -2,6 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: govuk-synthetic-test-app-cronjob
+  namespace: apps
   annotations:
     kubernetes.io/description: >
       This cronjob runs synthetic tests against GOV.UK cluster using a Ginkgo test framework.
