@@ -3174,6 +3174,7 @@ govukApplications:
   - name: search-api-v2-beta-features
     helmValues:
       arch: arm64
+      appEnabled: false
       rails:
         createKeyBaseSecret: false
         # search-api-v2-beta-features is only used for running cron tasks so it's fine to share
