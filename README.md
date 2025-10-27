@@ -52,7 +52,7 @@ Inspect the template output of your application chart:
 cd charts/app-config
 
 ENVIRONMENT=integration
-APP=content-publisher
+APP=collections-publisher
 helm template $USER-${APP?} ../generic-govuk-app --values <(
   helm template . --values values-${ENVIRONMENT}.yaml |
   yq e '.|select(.metadata.name=="'$APP'").spec.source.helm.values'
