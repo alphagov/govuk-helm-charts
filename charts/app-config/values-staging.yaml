@@ -770,98 +770,6 @@ govukApplications:
         - name: RABBITMQ_QUEUE_DEAD
           value: content_data_api_dead_letter_queue
 
-  - name: content-publisher
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1Gi
-        requests:
-          cpu: 10m
-          memory: 320Mi
-      dbMigrationEnabled: true
-      nginxClientMaxBodySize: &max-upload-size 500M
-      workers:
-        enabled: true
-      workerResources:
-        limits:
-          cpu: 1
-          memory: 1Gi
-        requests:
-          cpu: 10m
-          memory: 320Mi
-      redis:
-        enabled: true
-      ingress:
-        enabled: true
-        annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
-          alb.ingress.kubernetes.io/group.order: "70"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
-            [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "content-publisher.{{ .Values.publishingDomainSuffix }}"
-            ]}}]
-        hosts:
-          - name: content-publisher.{{ .Values.k8sExternalDomainSuffix }}
-      extraEnv:
-        - name: ANONYMOUS_USER_ID_SECRET
-          valueFrom: *anonymous_user_id_secret
-        - name: ASSET_MANAGER_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-content-publisher-asset-manager
-              key: bearer_token
-        - name: AWS_S3_BUCKET
-          value: govuk-staging-content-publisher-activestorage
-        - name: DATABASE_URL
-          valueFrom:
-            secretKeyRef:
-              name: content-publisher-postgres
-              key: DATABASE_URL
-        - name: EMAIL_ADDRESS_OVERRIDE
-          value: content-publisher-notifications-staging@digital.cabinet-office.gov.uk
-        - name: GDS_SSO_OAUTH_ID
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-content-publisher
-              key: oauth_id
-        - name: GDS_SSO_OAUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: signon-app-content-publisher
-              key: oauth_secret
-        # These GTM values are not secrets (not even the the gtm_auth one).
-        # https://github.com/alphagov/govuk-puppet/pull/8041
-        - name: GOOGLE_TAG_MANAGER_ID
-          value: &static-gtm-id GTM-NQXC4TG
-        - name: GOOGLE_TAG_MANAGER_AUTH  # Non-prod only.
-          value: &static-gtm-auth QaRG0YPL6_pwZdxCbyMXPQ
-        - name: GOOGLE_TAG_MANAGER_PREVIEW  # Non-prod only.
-          value: &static-gtm-preview env-5
-        - name: GOVUK_NOTIFY_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: content-publisher-notify
-              key: GOVUK_NOTIFY_API_KEY
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *publishing-notify-template
-        - name: JWT_AUTH_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: authenticating-proxy-jwt-auth-secret
-              key: JWT_AUTH_SECRET
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-content-publisher-publishing-api
-              key: bearer_token
-        - name: WHITEHALL_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-content-publisher-whitehall
-              key: bearer_token
-
   - name: content-store
     helmValues: &content-store
       arch: arm64
@@ -2189,7 +2097,7 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 512Mi
-      nginxClientMaxBodySize: *max-upload-size
+      nginxClientMaxBodySize: &max-upload-size 500M
       workers:
         enabled: true
       workerResources:

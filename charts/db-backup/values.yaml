@@ -129,12 +129,6 @@ cronjobs:
       operations:
         - op: backup
 
-    content-publisher-postgres:
-      schedule: "9 23 * * *"
-      db: content_publisher_production
-      operations:
-        - op: backup
-
     content-store-postgres:
       <<: *s5cmd-ram-workaround
       schedule: "06 21 * * *"  # Keep this before publishing-api.
@@ -318,16 +312,6 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
-        - op: backup
-
-    content-publisher-postgres:
-      schedule: "9 1 * * 1-5"
-      db: content_publisher_production
-      operations:
-        - op: restore
-          bucket: s3://govuk-production-database-backups
-        - op: transform
-          script: content-publisher.sql
         - op: backup
 
     content-store-postgres:
@@ -580,14 +564,6 @@ cronjobs:
       host: blue-content-data-api-postgresql-primary-postgres
       db: content_performance_manager_production
       dbms: postgres
-      operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-        - op: backup
-
-    content-publisher-postgres:
-      schedule: "9 3 * * 1"
-      db: content_publisher_production
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
