@@ -1920,6 +1920,7 @@ govukApplications:
 
   - name: local-links-manager
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
