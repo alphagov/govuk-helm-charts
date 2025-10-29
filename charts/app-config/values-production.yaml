@@ -3091,6 +3091,13 @@ govukApplications:
     helmValues:
       arch: arm64
       appEnabled: false
+      appResources:
+        limits:
+          cpu: 2
+          memory: 2.5Gi
+        requests:
+          cpu: 500m
+          memory: 800Mi
       rails:
         createKeyBaseSecret: false
         # search-api-v2-beta-features is only used for running cron tasks so it's fine to share
