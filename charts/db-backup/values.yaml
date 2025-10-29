@@ -576,6 +576,8 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: transform
+          script: content-store.sql
         - op: backup
 
     # TODO: stop copying draft content into integration once the design quirks
@@ -587,6 +589,8 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: transform
+          script: content-store.sql
         - op: backup
 
     content-tagger-postgres:
