@@ -114,12 +114,7 @@ data:
           client_max_body_size {{ .Values.nginxClientMaxBodySize }};
         }
 
-{{- if .Values.serveRailsAssetsFromFilesystem }}
-        location /assets {
-          alias /assets/;
-          autoindex off;
-        }
-{{- else if .Values.proxyRailsAssetsToS3 }}
+{{- if .Values.proxyRailsAssetsToS3 }}
         location /assets {
           proxy_set_header   Authorization "";
           proxy_set_header   Connection "";

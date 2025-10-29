@@ -99,7 +99,6 @@ nginxConfigMap:
 nginxExtraVolumeMounts: []
 nginxDenyCrawlers: false
 proxyRailsAssetsToS3: true
-serveRailsAssetsFromFilesystem: false
 
 appResources:
   limits:
