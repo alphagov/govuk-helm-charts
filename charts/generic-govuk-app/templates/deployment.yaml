@@ -54,6 +54,10 @@ spec:
         {{- with .Values.extraVolumes }}
           {{- . | toYaml | trim | nindent 8 }}
         {{- end }}
+      {{- if gt (.Values.initContainers | len) 0 }}
+      initContainers:
+        {{- .Values.initContainers | toYaml | trim | nindent 8 }}
+      {{- end }}
       containers:
         - name: app
           image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"

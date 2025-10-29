@@ -184,3 +184,6 @@ kubernetesProbeEndpoints:
   livenessProbe: "/healthcheck/live"
   readinessProbe: "/healthcheck/live"
   startupProbe: "/healthcheck/live"
+
+# list of initContainers to add to main app deployment
+initContainers: []
