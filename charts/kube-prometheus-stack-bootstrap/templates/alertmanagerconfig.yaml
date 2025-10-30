@@ -185,7 +185,7 @@ spec:
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
-    - name: 'slack-search-team-non-production-alerts'
+  - name: 'slack-search-team-non-production-alerts'
     slackConfigs:
     - channel: "#govuk-search-alerts-nonprod"
       {{- include "slack.template" . | nindent 6 }}
