@@ -1716,19 +1716,19 @@ govukApplications:
           memory: 1Gi
       cronJobs:
         - name: govuk-e2e-tests
-          schedule: "*/10 7-19 * * 1-5"  # 10 minutes past every hour, between 7:00 - 19:00 UTC, Monday to Friday
+          schedule: "*/10 7-19 * * 1-5"  # every 10 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: main
           suspend: true
         - name: govuk-e2e-tests-mirror-s3
-          schedule: "*/30 7-19 * * 1-5"  # 30 minutes past every hour, between 7:00 - 19:00 UTC, Monday to Friday
+          schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: mirrorS3
           suspend: true
         - name: govuk-e2e-tests-mirror-s3-replica
-          schedule: "*/30 7-19 * * 1-5"  # 30 minutes past every hour, between 7:00 - 19:00 UTC, Monday to Friday
+          schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: mirrorS3Replica
           suspend: true
         - name: govuk-e2e-tests-mirror-gcs
-          schedule: "*/30 7-19 * * 1-5"  # 30 minutes past every hour, between 7:00 - 19:00 UTC, Monday to Friday
+          schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: mirrorGCS
           suspend: true
 
