@@ -99,7 +99,6 @@ nginxConfigMap:
 nginxExtraVolumeMounts: []
 nginxDenyCrawlers: false
 proxyRailsAssetsToS3: true
-serveRailsAssetsFromFilesystem: false
 
 appResources:
   limits:
@@ -185,3 +184,6 @@ kubernetesProbeEndpoints:
   livenessProbe: "/healthcheck/live"
   readinessProbe: "/healthcheck/live"
   startupProbe: "/healthcheck/live"
+
+# list of initContainers to add to main app deployment
+initContainers: []

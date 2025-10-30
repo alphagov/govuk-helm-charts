@@ -51,29 +51,12 @@ spec:
           emptyDir: {}
         - name: nginx-tmp
           emptyDir: {}
-        {{- if .Values.serveRailsAssetsFromFilesystem }}
-        - name: assets
-          emptyDir: {}
-        {{- end }}
         {{- with .Values.extraVolumes }}
           {{- . | toYaml | trim | nindent 8 }}
         {{- end }}
-      {{- if .Values.serveRailsAssetsFromFilesystem }}
+      {{- if gt (.Values.initContainers | len) 0 }}
       initContainers:
-        - name: copy-assets
-          image: "{{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
-          {{- $sourcePath := .Values.uploadAssets.path | default (printf "/app/public/assets/%s" .Values.repoName) }}
-          command: ["cp", "-R", "{{ $sourcePath }}", "/assets"]
-          volumeMounts:
-            - name: assets
-              mountPath: /assets
-          securityContext:
-            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation | default "false" }}
-            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem | default "true" }}
-            capabilities:
-              drop: ["ALL"]
-
+        {{- .Values.initContainers | toYaml | trim | nindent 8 }}
       {{- end }}
       containers:
         - name: app
@@ -192,10 +175,6 @@ spec:
               subPath: nginx.conf
             - name: nginx-tmp
               mountPath: /tmp
-            {{- if .Values.serveRailsAssetsFromFilesystem }}
-            - name: assets
-              mountPath: /assets
-            {{- end }}
             {{- with .Values.nginxExtraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
