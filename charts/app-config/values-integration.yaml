@@ -2631,6 +2631,26 @@ govukApplications:
         - name: router-nginx-htpasswd
           secret:
             secretName: router-nginx-htpasswd
+        - name: aws-tmp
+          emptyDir: {}
+      initContainers:
+        - name: fetch-routes
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v6
+          command: ["sh", "-c", "aws s3 cp s3://govuk-router-routes-<environment>/routes.jsonl /tmp/routes.jsonl"]
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /tmp
+            - name: aws-tmp
+              mountPath: /home/ubuntu/.aws
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      serviceAccount:
+        enabled: true
+        create: false
+        name: router-routes-load
       appProbes: &router-app-probes
         startupProbe: &router-probe
           httpGet:
@@ -2651,6 +2671,8 @@ govukApplications:
           failureThreshold: 2
           periodSeconds: 5
       extraEnv:
+        - name: ROUTER_ROUTES_FILE
+          value: /tmp/routes.jsonl
         - name: GOMAXPROCS
           value: "2"
         - name: SENTRY_ENVIRONMENT
