@@ -2641,7 +2641,7 @@ govukApplications:
             - name: app-tmp
               mountPath: /tmp
             - name: aws-tmp
-              mountPath: /home/user/.aws
+              mountPath: /home/ubuntu/.aws
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
