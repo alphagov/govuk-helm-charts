@@ -3269,6 +3269,9 @@ govukApplications:
         - name: sync-app-secrets-to-k8s
           task: "kubernetes:sync_app_secrets"
           schedule: "6 1 * * *"
+        - name: auto-rotate-internal-tokens
+          task: "access_tokens:renew_expiring_internal_tokens"
+          schedule: "0 1 * * *"
         - name: sync-token-secrets-to-k8s
           task: "kubernetes:sync_token_secrets"
           schedule: "7 1 * * *"
