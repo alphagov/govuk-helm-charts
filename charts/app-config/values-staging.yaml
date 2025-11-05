@@ -1068,8 +1068,6 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
-        - name: MAINTENANCE_MESSAGE
-          value: "Email subscription management will be unavailable between 11.45 to 12:00 for essential database updates. Please try again later."
 
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
@@ -1110,8 +1108,6 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
-        - name: MAINTENANCE_MESSAGE
-          value: "Email subscription management will be unavailable between 11.45 to 12:00 for essential database updates. Please try again later."
 
   - name: email-alert-service
     helmValues:
