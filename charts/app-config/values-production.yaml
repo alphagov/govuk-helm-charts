@@ -1572,11 +1572,6 @@ govukApplications:
       uploadAssets:
         s3Directory: chat
         path: /app/public/assets/chat
-      cronTasks:
-        - name: bigquery-export
-          task: "bigquery:export"
-          schedule: "5 * * * *"
-          timeZone: "Europe/London"
       extraEnv:
         - name: AI_SLACK_CHANNEL_WEBHOOK_URL
           valueFrom:
