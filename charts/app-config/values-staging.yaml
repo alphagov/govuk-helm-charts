@@ -3007,10 +3007,6 @@ govukApplications:
         - name: user-events-purge
           task: "user_events:purge_final_week_of_retention_period"
           schedule: "0 2 * * *"
-        - name: quality-monitoring-assert-invariants
-          task: "quality_monitoring:assert_invariants"
-          schedule: "09 9 * * *"  # 09:09am daily
-          suspend: true  # Too noisy for staging to run on schedule, but can be run manually.
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
