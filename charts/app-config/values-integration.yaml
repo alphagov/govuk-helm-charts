@@ -1126,7 +1126,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
