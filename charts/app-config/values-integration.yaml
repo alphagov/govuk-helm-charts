@@ -1126,7 +1126,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
@@ -3524,7 +3524,6 @@ govukApplications:
   - name: specialist-publisher
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -3854,7 +3853,6 @@ govukApplications:
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
