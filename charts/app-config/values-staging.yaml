@@ -3476,6 +3476,7 @@ govukApplications:
   - name: specialist-publisher
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
