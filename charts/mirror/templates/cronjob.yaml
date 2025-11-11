@@ -68,6 +68,11 @@ spec:
                       key: rate-limit-token
                 - name: HEADERS
                   value: 'rate-limit-token:$(RATE_LIMIT_TOKEN)'
+                - name: PROMETHEUS_PUSHGATEWAY_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: govuk-apps-env
+                      key: PROMETHEUS_PUSHGATEWAY_URL
           containers:
             - name: upload-to-s3
               image: peakcom/s5cmd:v2.3.0
