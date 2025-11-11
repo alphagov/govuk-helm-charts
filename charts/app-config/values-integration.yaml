@@ -1649,6 +1649,7 @@ govukApplications:
       nginxConfigMap:
         extraServerConf: |
           location ~ /answer_stream$ {
+            proxy_pass http://govuk-chat;
             proxy_buffering off;
             proxy_cache off;
           }
