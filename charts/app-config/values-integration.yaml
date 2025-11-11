@@ -1650,6 +1650,10 @@ govukApplications:
         extraServerConf: |
           location ~ /answer_stream$ {
             proxy_pass http://govuk-chat;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header GOVUK-Request-Id $govuk_request_id;
+            proxy_redirect off;
             proxy_buffering off;
             proxy_cache off;
           }
