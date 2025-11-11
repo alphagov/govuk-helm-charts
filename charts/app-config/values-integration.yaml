@@ -1652,6 +1652,12 @@ govukApplications:
             proxy_buffering off;
             proxy_cache off;
           }
+          location /cable {
+              proxy_pass http://govuk-chat:8080/cable;
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "Upgrade";
+          }
       podAutoscaling:
         - name: govuk-chat
           enabled: true
