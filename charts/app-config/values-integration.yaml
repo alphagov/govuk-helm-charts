@@ -1646,15 +1646,6 @@ govukApplications:
         name: govuk-chat
         annotations:
           eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/govuk-chat-bedrock-access-role
-      nginxConfigMap:
-        extraServerConf: |
-          location /cable {
-              proxy_pass http://govuk-chat;
-              proxy_http_version 1.1;
-              proxy_set_header Upgrade $http_upgrade;
-              proxy_set_header Connection "Upgrade";
-              proxy_set_header Host $http_host;
-          }
       podAutoscaling:
         - name: govuk-chat
           enabled: true
