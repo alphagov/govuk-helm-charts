@@ -1654,15 +1654,7 @@ govukApplications:
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header GOVUK-Request-Id $govuk_request_id;
             proxy_http_version 1.1;
-            proxy_set_header Connection '';
-            proxy_redirect off;
-            proxy_buffering off;
             proxy_cache off;
-            proxy_set_header Accept-Encoding '';
-            chunked_transfer_encoding off;
-            proxy_read_timeout 3600s;
-            proxy_send_timeout 3600s;
-            add_header X-My-Header "my-value";
           }
           location /cable {
               proxy_pass http://govuk-chat;
