@@ -2613,7 +2613,6 @@ govukApplications:
       serviceAccount:
         enabled: true
         create: false
-        name: router-routes-load
       rails:
         enabled: false
       uploadAssets:
