@@ -2891,7 +2891,7 @@ govukApplications:
             - name: SEARCH_INDEX
               value: govuk
       workers:
-        enabled: false
+        enabled: true
         replicaCount: 3
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
