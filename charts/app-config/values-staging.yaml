@@ -2394,6 +2394,11 @@ govukApplications:
         enabled: true
       redis:
         enabled: true
+        config:
+          maxmemory: 5500mb
+        resources:
+          limits:
+            memory: 6000Mi
       workerResources:
         limits:
           cpu: 4
