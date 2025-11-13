@@ -3962,6 +3962,8 @@ govukApplications:
           value: message_by_other
         - name: ENV_MESSAGE_ROSA
           value: hi
+        - name: ENV_MESSAGE_JAMIE
+          value: message_by_jamie
 
   - name: govuk-synthetic-test-app-canary
     helmValues:
