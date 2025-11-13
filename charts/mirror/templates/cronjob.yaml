@@ -5,6 +5,8 @@ metadata:
   name: "{{ include "mirror.fullname" . }}"
   labels:
     {{- include "mirror.labels" . | nindent 4 }}
+    app.kubernetes.io/name: mirror
+    app.kubernetes.io/component: cronjob
 spec:
   schedule: "{{ .Values.schedule }}"
   jobTemplate:
@@ -12,6 +14,8 @@ spec:
       name: "{{ include "mirror.fullname" . }}"
       labels:
         {{- include "mirror.labels" . | nindent 8 }}
+        app.kubernetes.io/name: mirror
+        app.kubernetes.io/component: job
     spec:
       backoffLimit: 0
       template:
@@ -19,6 +23,8 @@ spec:
           name: "{{ include "mirror.fullname" . }}"
           labels:
             {{- include "mirror.labels" . | nindent 12 }}
+            app.kubernetes.io/name: mirror
+            app.kubernetes.io/component: job
           annotations:
             cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
         spec:
