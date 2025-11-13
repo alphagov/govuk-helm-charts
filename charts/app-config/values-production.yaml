@@ -2597,6 +2597,22 @@ govukApplications:
   - name: router
     helmValues:
       arch: arm64
+      initContainers:
+        - name: fetch-routes
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v6
+          # Fill in environment name here
+          command: ["sh", "-c", "HOME=/tmp aws s3 cp s3://govuk-router-routes-production/routes.jsonl /tmp/routes.jsonl"]
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      serviceAccount:
+        enabled: true
+        create: false
       rails:
         enabled: false
       uploadAssets:
@@ -2661,6 +2677,8 @@ govukApplications:
           failureThreshold: 2
           periodSeconds: 5
       extraEnv:
+        - name: ROUTER_ROUTES_FILE
+          value: /tmp/routes.jsonl
         - name: GOMAXPROCS
           value: "4"  # Keep this similar to the CPU limit (in whole cores).
         - name: SENTRY_ENVIRONMENT
