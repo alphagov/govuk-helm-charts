@@ -14,6 +14,7 @@ func main() {
 	inputFile := flag.String("file", "", "Path to the YAML file to modify")
 	csvFile := flag.String("csv", "", "Path to the CSV file with app list (optional)")
 	action := flag.String("action", "enable", "Action to perform: 'enable' or 'disable' (default: enable)")
+	target := flag.String("target", "app", "Target field: 'app' for appEnabled or 'workers' for workers.enabled (default: app)")
 	dryRun := flag.Bool("dry-run", false, "Show what would be changed without modifying the file")
 	flag.Parse()
 
@@ -28,6 +29,11 @@ func main() {
 		enabledValue = false
 	} else if *action != "enable" {
 		fmt.Printf("Error: -action must be 'enable' or 'disable', got '%s'\n", *action)
+		os.Exit(1)
+	}
+
+	if *target != "app" && *target != "workers" {
+		fmt.Printf("Error: -target must be 'app' or 'workers', got '%s'\n", *target)
 		os.Exit(1)
 	}
 
@@ -60,7 +66,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	modifiedLines, changeCount := processYAML(lines, publishingApps, enabledValue, *dryRun)
+	modifiedLines, changeCount := processYAML(lines, publishingApps, enabledValue, *target, *dryRun)
 
 	if changeCount == 0 {
 		if *csvFile != "" {
@@ -117,7 +123,7 @@ func readPublishingApps(csvPath string) (map[string]bool, error) {
 	return publishingApps, nil
 }
 
-func processYAML(lines []string, publishingApps map[string]bool, enabledValue bool, dryRun bool) ([]string, int) {
+func processYAML(lines []string, publishingApps map[string]bool, enabledValue bool, target string, dryRun bool) ([]string, int) {
 	modifiedLines := make([]string, len(lines))
 	copy(modifiedLines, lines)
 
@@ -126,8 +132,12 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 	currentIndent := 0
 	currentAppName := ""
 	inMatchingApp := false
+	inWorkers := false
+	workersIndent := 0
 
 	appEnabledRegex := regexp.MustCompile(`^(\s*)appEnabled:\s*(true|false)\s*$`)
+	enabledRegex := regexp.MustCompile(`^(\s*)enabled:\s*(true|false)\s*$`)
+	workersRegex := regexp.MustCompile(`^\s*workers:\s*$`)
 	appNameRegex := regexp.MustCompile(`^\s*-\s*name:\s*(.+?)\s*$`)
 
 	for i, line := range lines {
@@ -145,6 +155,7 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 				inGovukApplications = false
 				currentAppName = ""
 				inMatchingApp = false
+				inWorkers = false
 			}
 		}
 
@@ -152,6 +163,7 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 			nameMatches := appNameRegex.FindStringSubmatch(line)
 			if len(nameMatches) >= 2 {
 				currentAppName = strings.TrimSpace(nameMatches[1])
+				inWorkers = false
 				if publishingApps == nil {
 					inMatchingApp = true
 				} else {
@@ -160,7 +172,22 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 			}
 		}
 
-		if inGovukApplications && inMatchingApp && appEnabledRegex.MatchString(line) {
+		// Check if we've exited workers section (must check BEFORE entering new section)
+		if inWorkers && strings.TrimSpace(line) != "" && !strings.HasPrefix(strings.TrimSpace(line), "#") {
+			lineIndent := len(line) - len(strings.TrimLeft(line, " \t"))
+			if lineIndent <= workersIndent {
+				inWorkers = false
+			}
+		}
+
+		// Check if we're entering a workers section (for workers target)
+		if target == "workers" && inGovukApplications && inMatchingApp && workersRegex.MatchString(line) {
+			inWorkers = true
+			workersIndent = len(line) - len(strings.TrimLeft(line, " \t"))
+		}
+
+		// Handle appEnabled toggle (target == "app")
+		if target == "app" && inGovukApplications && inMatchingApp && appEnabledRegex.MatchString(line) {
 			matches := appEnabledRegex.FindStringSubmatch(line)
 			if len(matches) >= 3 {
 				whitespace := matches[1]
@@ -181,6 +208,33 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 							appInfo = fmt.Sprintf(" [%s]", currentAppName)
 						}
 						fmt.Printf("Line %d%s: '%s' -> '%s'\n", i+1, appInfo, strings.TrimSpace(line), strings.TrimSpace(newLine))
+					}
+				}
+			}
+		}
+
+		// Handle workers.enabled toggle (target == "workers")
+		if target == "workers" && inGovukApplications && inMatchingApp && inWorkers && enabledRegex.MatchString(line) {
+			matches := enabledRegex.FindStringSubmatch(line)
+			if len(matches) >= 3 {
+				whitespace := matches[1]
+				currentValue := matches[2]
+				targetValue := "true"
+				if !enabledValue {
+					targetValue = "false"
+				}
+
+				if currentValue != targetValue {
+					newLine := whitespace + "enabled: " + targetValue
+					modifiedLines[i] = newLine
+					changeCount++
+
+					if dryRun {
+						appInfo := ""
+						if currentAppName != "" {
+							appInfo = fmt.Sprintf(" [%s]", currentAppName)
+						}
+						fmt.Printf("Line %d%s (workers): '%s' -> '%s'\n", i+1, appInfo, strings.TrimSpace(line), strings.TrimSpace(newLine))
 					}
 				}
 			}
