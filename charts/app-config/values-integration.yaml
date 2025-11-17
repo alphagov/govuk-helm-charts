@@ -1735,7 +1735,6 @@ govukApplications:
     chartPath: charts/govuk-e2e-tests
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
