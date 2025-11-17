@@ -2601,7 +2601,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
           alb.ingress.kubernetes.io/load-balancer-name: www-origin
           alb.ingress.kubernetes.io/load-balancer-attributes: >
@@ -2640,11 +2640,11 @@ govukApplications:
           periodSeconds: 1
           timeoutSeconds: 1
         livenessProbe:
-          <<: *router-probe
+          !!merge <<: *router-probe
           failureThreshold: 3
           periodSeconds: 5
         readinessProbe:
-          <<: *router-probe
+          !!merge <<: *router-probe
           httpGet:
             path: /healthcheck
             port: 9394
@@ -2690,6 +2690,28 @@ govukApplications:
             secretKeyRef:
               key: DATABASE_URL
               name: content-store-postgres
+        - name: ROUTER_ROUTES_FILE
+          value: /tmp/routes.jsonl
+    serviceAccount:
+      enabled: true
+      create: false
+      name: router-routes-load
+    initContainers:
+      - name: fetch-routes
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v6
+        command:
+          - sh
+          - -c
+          - HOME=/tmp aws s3 cp s3://govuk-router-routes-integration/routes.jsonl /tmp/routes.jsonl
+        volumeMounts:
+          - name: app-tmp
+            mountPath: /tmp
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            - drop:
+                - ALL
   - name: draft-router
     repoName: router
     helmValues:
