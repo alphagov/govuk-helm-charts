@@ -289,7 +289,6 @@ govukApplications:
 
   - name: bouncer
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -340,7 +339,6 @@ govukApplications:
   - name: collections
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -363,7 +361,6 @@ govukApplications:
     repoName: collections
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -845,7 +842,6 @@ govukApplications:
   - name: draft-content-store
     repoName: content-store
     helmValues:
-      appEnabled: false
       <<: *content-store
       rails:
         createKeyBaseSecret: false
@@ -1052,7 +1048,6 @@ govukApplications:
   - name: email-alert-frontend
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1085,7 +1080,6 @@ govukApplications:
     repoName: email-alert-frontend
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1125,14 +1119,13 @@ govukApplications:
   - name: email-alert-service
     helmValues:
       arch: arm64
-      appEnabled: false
       podDisruptionBudget: {}
       rails:
         enabled: false
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
@@ -1167,7 +1160,6 @@ govukApplications:
   - name: feedback
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1219,7 +1211,6 @@ govukApplications:
     repoName: feedback
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1303,7 +1294,6 @@ govukApplications:
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1334,7 +1324,6 @@ govukApplications:
   - name: frontend
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1403,7 +1392,6 @@ govukApplications:
   - name: draft-frontend
     repoName: frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1484,7 +1472,6 @@ govukApplications:
   - name: government-frontend
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1506,7 +1493,6 @@ govukApplications:
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1556,7 +1542,6 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1569,7 +1554,7 @@ govukApplications:
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
@@ -1795,7 +1780,7 @@ govukApplications:
       - "licensify-frontend"
     helmValues:
       repoName: licensify
-      enabled: false
+      enabled: true
       arch: arm64
       assetManagerNFS: *assets-nfs
       apps:
@@ -2029,7 +2014,6 @@ govukApplications:
   - name: locations-api
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2041,7 +2025,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1.5
@@ -2540,7 +2524,6 @@ govukApplications:
   - name: release
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2929,7 +2912,7 @@ govukApplications:
       #       - name: SEARCH_INDEX
       #         value: govuk
       workers:
-        enabled: false
+        enabled: true
         replicaCount: 3
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
@@ -3179,7 +3162,6 @@ govukApplications:
 
   - name: service-manual-publisher
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3361,7 +3343,6 @@ govukApplications:
     repoName: smart-answers
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -3457,7 +3438,6 @@ govukApplications:
     repoName: static
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
