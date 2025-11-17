@@ -144,3 +144,5 @@ redis:
 nfs:
   clamAvStorage: 15Gi
   assetStorage: 15Gi
+
+appEnabled: true
