@@ -11,10 +11,9 @@ import (
 )
 
 func main() {
-	// Parse command-line arguments
 	inputFile := flag.String("file", "", "Path to the YAML file to modify")
 	csvFile := flag.String("csv", "", "Path to the CSV file with app list (optional)")
-	enabledValue := flag.Bool("enabled", true, "Set appEnabled to true or false (default: true)")
+	action := flag.String("action", "enable", "Action to perform: 'enable' or 'disable' (default: enable)")
 	dryRun := flag.Bool("dry-run", false, "Show what would be changed without modifying the file")
 	flag.Parse()
 
@@ -24,7 +23,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Read publishing apps from CSV if provided
+	enabledValue := true
+	if *action == "disable" {
+		enabledValue = false
+	} else if *action != "enable" {
+		fmt.Printf("Error: -action must be 'enable' or 'disable', got '%s'\n", *action)
+		os.Exit(1)
+	}
+
 	var publishingApps map[string]bool
 	if *csvFile != "" {
 		var err error
@@ -36,7 +42,6 @@ func main() {
 		fmt.Printf("Found %d Publishing apps in CSV\n", len(publishingApps))
 	}
 
-	// Read the file
 	file, err := os.Open(*inputFile)
 	if err != nil {
 		fmt.Printf("Error opening file: %v\n", err)
@@ -44,7 +49,6 @@ func main() {
 	}
 	defer file.Close()
 
-	// Read all lines
 	var lines []string
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -56,8 +60,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Process the file
-	modifiedLines, changeCount := processYAML(lines, publishingApps, *enabledValue, *dryRun)
+	modifiedLines, changeCount := processYAML(lines, publishingApps, enabledValue, *dryRun)
 
 	if changeCount == 0 {
 		if *csvFile != "" {
@@ -73,7 +76,6 @@ func main() {
 		return
 	}
 
-	// Write the modified content back to the file
 	err = os.WriteFile(*inputFile, []byte(strings.Join(modifiedLines, "\n")+"\n"), 0644)
 	if err != nil {
 		fmt.Printf("Error writing file: %v\n", err)
@@ -98,7 +100,6 @@ func readPublishingApps(csvPath string) (map[string]bool, error) {
 
 	publishingApps := make(map[string]bool)
 
-	// Skip header row, iterate through records
 	for i, record := range records {
 		if i == 0 || len(record) < 2 {
 			continue
@@ -126,9 +127,7 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 	currentAppName := ""
 	inMatchingApp := false
 
-	// Regex to match 'appEnabled: true/false' (with any amount of whitespace)
 	appEnabledRegex := regexp.MustCompile(`^(\s*)appEnabled:\s*(true|false)\s*$`)
-	// Regex to match app name in govukApplications
 	appNameRegex := regexp.MustCompile(`^\s*-\s*name:\s*(.+?)\s*$`)
 
 	for i, line := range lines {
@@ -140,8 +139,6 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 			continue
 		}
 
-		// Check if we've exited govukApplications section
-		// (a line at the same or lesser indentation level that's not empty and not a comment)
 		if inGovukApplications && strings.TrimSpace(line) != "" && !strings.HasPrefix(strings.TrimSpace(line), "#") {
 			lineIndent := len(line) - len(strings.TrimLeft(line, " \t"))
 			if lineIndent <= currentIndent {
@@ -151,23 +148,18 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 			}
 		}
 
-		// Check for app name in govukApplications
 		if inGovukApplications {
 			nameMatches := appNameRegex.FindStringSubmatch(line)
 			if len(nameMatches) >= 2 {
 				currentAppName = strings.TrimSpace(nameMatches[1])
-				// Check if this app should be modified
 				if publishingApps == nil {
-					// No CSV filter, process all apps
 					inMatchingApp = true
 				} else {
-					// Check if app is in publishing apps list
 					inMatchingApp = publishingApps[currentAppName]
 				}
 			}
 		}
 
-		// If we're in govukApplications section and in a matching app, check appEnabled
 		if inGovukApplications && inMatchingApp && appEnabledRegex.MatchString(line) {
 			matches := appEnabledRegex.FindStringSubmatch(line)
 			if len(matches) >= 3 {
@@ -178,7 +170,6 @@ func processYAML(lines []string, publishingApps map[string]bool, enabledValue bo
 					targetValue = "false"
 				}
 
-				// Only modify if the value is different from target
 				if currentValue != targetValue {
 					newLine := whitespace + "appEnabled: " + targetValue
 					modifiedLines[i] = newLine
