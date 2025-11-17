@@ -2710,8 +2710,8 @@ govukApplications:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
-              - drop:
-                  - ALL
+              drop:
+                - ALL
   - name: draft-router
     repoName: router
     helmValues:
