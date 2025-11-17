@@ -1287,7 +1287,6 @@ govukApplications:
   - name: finder-frontend
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1.5
@@ -2868,7 +2867,6 @@ govukApplications:
   - name: search-api
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -3023,7 +3021,6 @@ govukApplications:
   - name: search-api-v2
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -3397,7 +3394,6 @@ govukApplications:
     helmValues:
       arch: arm64
       appResources:
-        appEnabled: false
         limits:
           cpu: 1
           memory: 1Gi
