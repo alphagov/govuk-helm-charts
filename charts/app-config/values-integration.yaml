@@ -708,10 +708,10 @@ govukApplications:
             name: publishing-api-consumer
           - command: ['rake', 'publishing_api:bulk_import_consumer']
             name: bulk-import-publishing-api-consumer
-      # cronTasks:
-      #   - name: etl
-      #     task: "etl:main"
-      #     schedule: "22 13 * * *"
+      cronTasks:
+        - name: etl
+          task: "etl:main"
+          schedule: "22 13 * * *"
       extraEnv:
         - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
           valueFrom:
@@ -792,13 +792,13 @@ govukApplications:
           memory: 512Mi
       dbMigrationEnabled: true
       nginxClientMaxBodySize: 20M
-      # cronTasks:
-      #   - name: report-delays
-      #     task: "publishing_delay_report:report_delays"
-      #     schedule: "15 2 * * *"
-      #   - name: cleanup-intents
-      #     task: "housekeeping:cleanup_publish_intents"
-      #     schedule: "38 2 * * *"
+      cronTasks:
+        - name: report-delays
+          task: "publishing_delay_report:report_delays"
+          schedule: "15 2 * * *"
+        - name: cleanup-intents
+          task: "housekeeping:cleanup_publish_intents"
+          schedule: "38 2 * * *"
       uploadAssets:
         enabled: false
       extraEnv:
@@ -907,13 +907,13 @@ govukApplications:
             ]}}]
         hosts:
           - name: content-tagger.{{ .Values.k8sExternalDomainSuffix }}
-      # cronTasks:
-      #   - name: taxonomy-health-checks
-      #     task: "taxonomy:health_checks"
-      #     schedule: "49 * * * *"
-      #   - name: taxonomy-metrics
-      #     task: "metrics:taxonomy:record_all"
-      #     schedule: "14 * * * *"
+      cronTasks:
+        - name: taxonomy-health-checks
+          task: "taxonomy:health_checks"
+          schedule: "49 * * * *"
+        - name: taxonomy-metrics
+          task: "metrics:taxonomy:record_all"
+          schedule: "14 * * * *"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -1276,10 +1276,10 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 400Mi
-      # cronTasks:
-      #   - name: registries-refresh
-      #     task: "registries:cache_refresh"
-      #     schedule: "15 * * * *"
+      cronTasks:
+        - name: registries-refresh
+          task: "registries:cache_refresh"
+          schedule: "15 * * * *"
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
@@ -1308,10 +1308,10 @@ govukApplications:
         createSecret: false  # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
-      # cronTasks:
-      #   - name: registries-refresh
-      #     task: "registries:cache_refresh"
-      #     schedule: "15 * * * *"
+      cronTasks:
+        - name: registries-refresh
+          task: "registries:cache_refresh"
+          schedule: "15 * * * *"
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
@@ -1716,11 +1716,11 @@ govukApplications:
         requests:
           cpu: 1
           memory: 1Gi
-    #  cronJobs:
-    #     - name: govuk-e2e-tests
-    #       schedule: "*/10 7-19 * * 1-5" # every 10 minutes, between 7:00 - 19:00 UTC, Monday to Friday
-    #       project: main
-    #       suspend: true
+      cronJobs:
+        - name: govuk-e2e-tests
+          schedule: "*/10 7-19 * * 1-5" # every 10 minutes, between 7:00 - 19:00 UTC, Monday to Friday
+          project: main
+          suspend: true
 
   - name: hmrc-manuals-api
     helmValues:
@@ -1908,22 +1908,22 @@ govukApplications:
             ]}}]
         hosts:
           - name: local-links-manager.{{ .Values.k8sExternalDomainSuffix }}
-      # cronTasks:
-      #   - name: import-interact
-      #     task: "import:service_interactions:import_all"
-      #     schedule: "0 1 * * *"
-      #   - name: check-links
-      #     task: "check-links"
-      #     schedule: "0 2 * * *"
-      #   - name: export-links
-      #     task: "export:links:s3"
-      #     schedule: "0 3 * * *"
-      #   - name: import-ga
-      #     task: "import:google_analytics"
-      #     schedule: "0 5 * * *"
-      #   - name: export-ga-bad-links
-      #     task: "export:google_analytics:bad_links"
-      #     schedule: "0 6 * * *"
+      cronTasks:
+        - name: import-interact
+          task: "import:service_interactions:import_all"
+          schedule: "0 1 * * *"
+        - name: check-links
+          task: "check-links"
+          schedule: "0 2 * * *"
+        - name: export-links
+          task: "export:links:s3"
+          schedule: "0 3 * * *"
+        - name: import-ga
+          task: "import:google_analytics"
+          schedule: "0 5 * * *"
+        - name: export-ga-bad-links
+          task: "export:google_analytics:bad_links"
+          schedule: "0 6 * * *"
       dbMigrationEnabled: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
@@ -2215,19 +2215,19 @@ govukApplications:
           memory: 200Mi
       redis:
         enabled: true
-      # cronTasks:
-      #   - name: mail-fetcher
-      #     command: "script/mail_fetcher"
-      #     schedule: "*/5 * * * *"
-      #   - name: reports-generate
-      #     task: "reports:generate"
-      #     schedule: "0 * * * *"
-      #   - name: reschedule-pubs-after-db-restore  # non-prod only
-      #     task: "editions:requeue_scheduled_for_publishing"
-      #     schedule: "38 7 * * 1-5"
-      #   - name: publish-missed-scheduled-editions
-      #     task: "editions:publish_missed_scheduled_editions"
-      #     schedule: "27 5 * * *"
+      cronTasks:
+        - name: mail-fetcher
+          command: "script/mail_fetcher"
+          schedule: "*/5 * * * *"
+        - name: reports-generate
+          task: "reports:generate"
+          schedule: "0 * * * *"
+        - name: reschedule-pubs-after-db-restore  # non-prod only
+          task: "editions:requeue_scheduled_for_publishing"
+          schedule: "38 7 * * 1-5"
+        - name: publish-missed-scheduled-editions
+          task: "editions:publish_missed_scheduled_editions"
+          schedule: "27 5 * * *"
       ingress:
         enabled: true
         annotations:
@@ -2413,15 +2413,15 @@ govukApplications:
           memory: 512Mi
       redis:
         enabled: true
-      # cronTasks:
-      #   - name: metrics-report-to-prometheus
-      #     task: "metrics:report_to_prometheus"
-      #     schedule: "22 * * * *"  # every hour, at 22 minutes past the hour
-      #   # In non-production envs, run Search API v2 bulk import every week to bring it to parity
-      #   # with Publishing API state (which gets refreshed from production DB every night).
-      #   - name: search-api-v2-bulk-import
-      #     task: "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"
-      #     schedule: "0 8 * * 0"  # every Sunday at 8am
+      cronTasks:
+        - name: metrics-report-to-prometheus
+          task: "metrics:report_to_prometheus"
+          schedule: "22 * * * *"  # every hour, at 22 minutes past the hour
+        # In non-production envs, run Search API v2 bulk import every week to bring it to parity
+        # with Publishing API state (which gets refreshed from production DB every night).
+        - name: search-api-v2-bulk-import
+          task: "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"
+          schedule: "0 8 * * 0"  # every Sunday at 8am
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -2797,11 +2797,11 @@ govukApplications:
         enabled: true
       workers:
         enabled: false
-      # cronTasks:
-      #   # Re-import completion denylist to Discovery Engine so it doesn't drift from local DB
-      #   - name: reimport-completion-denylist
-      #     task: "completion:import_denylist"
-      #     schedule: "56 4 * * 1"  # one hour after the DB is restored from staging
+      cronTasks:
+        # Re-import completion denylist to Discovery Engine so it doesn't drift from local DB
+        - name: reimport-completion-denylist
+          task: "completion:import_denylist"
+          schedule: "56 4 * * 1"  # one hour after the DB is restored from staging
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -2866,51 +2866,51 @@ govukApplications:
         enabled: false
       redis:
         enabled: true
-      # cronTasks:
-      #   - name: reindex-with-new-schemas
-      #     task: "search:migrate_schema"
-      #     schedule: "5 21 * * 1"
-      #     env:
-      #       - name: SEARCH_INDEX
-      #         value: all
-      #   - name: generate-sitemap
-      #     task: "sitemap:generate_and_upload"
-      #     schedule: "50 2 * * *"
-      #   - name: load-page-traffic
-      #     command: "./bin/load_page_traffic.sh"
-      #     schedule: "0 22 * * *"
-      #     env:
-      #       - name: AWS_SEARCH_ANALYTICS_BUCKET
-      #         value: govuk-search-analytics-integration
-      #     resources:
-      #       limits:
-      #         cpu: 1
-      #         memory: 2500Mi
-      #       requests:
-      #         cpu: 0.1
-      #         memory: 800Mi
-      #   - name: update-detailed-index-popularity
-      #     task: "search:update_popularity"
-      #     schedule: "15 22 * * *"
-      #     env:
-      #       - name: SEARCH_INDEX
-      #         value: detailed
-      #       - name: PROCESS_ALL_DATA
-      #         value: "true"
-      #   - name: update-government-index-popularity
-      #     task: "search:update_popularity"
-      #     schedule: "35 22 * * *"
-      #     env:
-      #       - name: SEARCH_INDEX
-      #         value: government
-      #       - name: PROCESS_ALL_DATA
-      #         value: "true"
-      #   - name: update-govuk-index-popularity
-      #     task: "search:update_popularity"
-      #     schedule: "35 00 * * *"
-      #     env:
-      #       - name: SEARCH_INDEX
-      #         value: govuk
+      cronTasks:
+        - name: reindex-with-new-schemas
+          task: "search:migrate_schema"
+          schedule: "5 21 * * 1"
+          env:
+            - name: SEARCH_INDEX
+              value: all
+        - name: generate-sitemap
+          task: "sitemap:generate_and_upload"
+          schedule: "50 2 * * *"
+        - name: load-page-traffic
+          command: "./bin/load_page_traffic.sh"
+          schedule: "0 22 * * *"
+          env:
+            - name: AWS_SEARCH_ANALYTICS_BUCKET
+              value: govuk-search-analytics-integration
+          resources:
+            limits:
+              cpu: 1
+              memory: 2500Mi
+            requests:
+              cpu: 0.1
+              memory: 800Mi
+        - name: update-detailed-index-popularity
+          task: "search:update_popularity"
+          schedule: "15 22 * * *"
+          env:
+            - name: SEARCH_INDEX
+              value: detailed
+            - name: PROCESS_ALL_DATA
+              value: "true"
+        - name: update-government-index-popularity
+          task: "search:update_popularity"
+          schedule: "35 22 * * *"
+          env:
+            - name: SEARCH_INDEX
+              value: government
+            - name: PROCESS_ALL_DATA
+              value: "true"
+        - name: update-govuk-index-popularity
+          task: "search:update_popularity"
+          schedule: "35 00 * * *"
+          env:
+            - name: SEARCH_INDEX
+              value: govuk
       workers:
         enabled: true
         replicaCount: 3
@@ -3043,20 +3043,20 @@ govukApplications:
           memory: 384Mi
       redis:
         enabled: true
-      # cronTasks:
-      #   - name: user-events-import-yesterdays-events
-      #     task: "user_events:import_yesterdays_events"
-      #     schedule: "30 12 * * *"
-      #   - name: user-events-import-intraday-events
-      #     task: "user_events:import_intraday_events"
-      #     schedule: "45 04,10,16,22 * * *"
-      #   - name: user-events-purge
-      #     task: "user_events:purge_final_week_of_retention_period"
-      #     schedule: "0 2 * * *"
-      #   - name: quality-monitoring-assert-invariants
-      #     task: "quality_monitoring:assert_invariants"
-      #     schedule: "09 9 * * *"  # 09:09am daily
-      #     suspend: true  # Too noisy for integration to run on schedule, but can be run manually.
+      cronTasks:
+        - name: user-events-import-yesterdays-events
+          task: "user_events:import_yesterdays_events"
+          schedule: "30 12 * * *"
+        - name: user-events-import-intraday-events
+          task: "user_events:import_intraday_events"
+          schedule: "45 04,10,16,22 * * *"
+        - name: user-events-purge
+          task: "user_events:purge_final_week_of_retention_period"
+          schedule: "0 2 * * *"
+        - name: quality-monitoring-assert-invariants
+          task: "quality_monitoring:assert_invariants"
+          schedule: "09 9 * * *"  # 09:09am daily
+          suspend: true  # Too noisy for integration to run on schedule, but can be run manually.
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
@@ -3112,22 +3112,22 @@ govukApplications:
       uploadAssets:
         enabled: false
       dbMigrationEnabled: false
-      # cronTasks:
-      #   - name: rpt-clickstream-metrics
-      #     task: "quality:report_quality_metrics[clickstream]"
-      #     schedule: "0 6 * * *" # 06:00 GMT daily
-      #   - name: rpt-explicit-metrics
-      #     task: "quality:report_quality_metrics[explicit]"
-      #     schedule: "0 7 * * *" # 07:00 GMT daily
-      #   - name: rpt-binary-metrics
-      #     task: "quality:report_quality_metrics[binary]"
-      #     schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
-      #   - name: rpt-binary-metric-wknd
-      #     task: "quality:report_quality_metrics[binary]"
-      #     schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
-      #   - name: setup-sample-query-sets
-      #     task: "quality:setup_sample_query_sets"
-      #     schedule: "0 2 1 * *" # 02:00 first day of the month
+      cronTasks:
+        - name: rpt-clickstream-metrics
+          task: "quality:report_quality_metrics[clickstream]"
+          schedule: "0 6 * * *" # 06:00 GMT daily
+        - name: rpt-explicit-metrics
+          task: "quality:report_quality_metrics[explicit]"
+          schedule: "0 7 * * *" # 07:00 GMT daily
+        - name: rpt-binary-metrics
+          task: "quality:report_quality_metrics[binary]"
+          schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
+        - name: rpt-binary-metric-wknd
+          task: "quality:report_quality_metrics[binary]"
+          schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
+        - name: setup-sample-query-sets
+          task: "quality:setup_sample_query_sets"
+          schedule: "0 2 1 * *" # 02:00 first day of the month
       extraEnv:
         - name: GOOGLE_CLOUD_CREDENTIALS
           valueFrom:
@@ -3271,28 +3271,28 @@ govukApplications:
         enabled: true
         create: false
         name: signon
-      # cronTasks:
-      #   - name: delete-expired-oauth-grants
-      #     task: "oauth_access_grants:delete_expired"
-      #     schedule: "29 12 * * 0"
-      #   - name: delete-logs-older-than-two-years
-      #     task: "event_log:delete_logs_older_than_two_years"
-      #     schedule: "16 1 * * *"
-      #   - name: fetch-whitehall-organisations
-      #     task: "organisations:fetch"
-      #     schedule: "11 11 * * *"
-      #   - name: send-suspension-reminders
-      #     task: "users:send_suspension_reminders"
-      #     schedule: "57 11 * * *"
-      #   - name: suspend-inactive-users
-      #     task: "users:suspend_inactive"
-      #     schedule: "27 11 * * *"
-      #   - name: sync-app-secrets-to-k8s
-      #     task: "kubernetes:sync_app_secrets"
-      #     schedule: "6 1 * * *"
-      #   - name: sync-token-secrets-to-k8s
-      #     task: "kubernetes:sync_token_secrets"
-      #     schedule: "7 1 * * *"
+      cronTasks:
+        - name: delete-expired-oauth-grants
+          task: "oauth_access_grants:delete_expired"
+          schedule: "29 12 * * 0"
+        - name: delete-logs-older-than-two-years
+          task: "event_log:delete_logs_older_than_two_years"
+          schedule: "16 1 * * *"
+        - name: fetch-whitehall-organisations
+          task: "organisations:fetch"
+          schedule: "11 11 * * *"
+        - name: send-suspension-reminders
+          task: "users:send_suspension_reminders"
+          schedule: "57 11 * * *"
+        - name: suspend-inactive-users
+          task: "users:suspend_inactive"
+          schedule: "27 11 * * *"
+        - name: sync-app-secrets-to-k8s
+          task: "kubernetes:sync_app_secrets"
+          schedule: "6 1 * * *"
+        - name: sync-token-secrets-to-k8s
+          task: "kubernetes:sync_token_secrets"
+          schedule: "7 1 * * *"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -3497,10 +3497,10 @@ govukApplications:
             ]}}]
         hosts:
           - name: short-url-manager.{{ .Values.k8sExternalDomainSuffix }}
-      # cronTasks:
-      #   - name: organisations-import
-      #     task: "organisations:import"
-      #     schedule: "0 4 * * *"
+      cronTasks:
+        - name: organisations-import
+          task: "organisations:import"
+          schedule: "0 4 * * *"
       redis:
         enabled: true
       extraEnv:
@@ -3730,19 +3730,19 @@ govukApplications:
           memory: 192Mi
       redis:
         enabled: true
-      # cronTasks:
-      #   - name: feedback-deduplication-nightly
-      #     task: "anonymous_feedback_deduplication:nightly"
-      #     schedule: "10 0 * * *"
-      #   - name: import-organisations
-      #     task: "api_sync:import_organisations"
-      #     schedule: "20 0 * * *"
-      #   - name: service-feedback-aggregation
-      #     task: "service_feedback_aggregation:daily"
-      #     schedule: "30 0 * * *"
-      #   - name: feedback-deduplication-recent
-      #     task: "anonymous_feedback_deduplication:recent"
-      #     schedule: "*/5 * * * *"
+      cronTasks:
+        - name: feedback-deduplication-nightly
+          task: "anonymous_feedback_deduplication:nightly"
+          schedule: "10 0 * * *"
+        - name: import-organisations
+          task: "api_sync:import_organisations"
+          schedule: "20 0 * * *"
+        - name: service-feedback-aggregation
+          task: "service_feedback_aggregation:daily"
+          schedule: "30 0 * * *"
+        - name: feedback-deduplication-recent
+          task: "anonymous_feedback_deduplication:recent"
+          schedule: "*/5 * * * *"
       extraEnv:
         - name: AWS_S3_BUCKET_NAME
           value: govuk-integration-support-api-csvs
@@ -3817,25 +3817,25 @@ govukApplications:
           memory: 192Mi
       redis:
         enabled: true
-      # cronTasks:
-      #   - name: import-all-organisations
-      #     task: "import:all:organisations"
-      #     schedule: "00 09-19 * * 1-5"
-      #   - name: import-dns
-      #     task: "import:dns_details"
-      #     schedule: "3 07-19 * * 1-5"
-      #   - name: import-hits-from-cdn-logs
-      #     task: "import:all:hits[govuk-integration-transition-fastly-logs]"
-      #     schedule: "22 3 * * *"
-      #   - name: clear-expired-sessions
-      #     task: "clear_expired_sessions"
-      #     schedule: "58 3 * * *"
-      #   - name: clear-old-mappings
-      #     task: "clear_old_mappings_batches"
-      #     schedule: "52 3 * * *"
-      #   - name: refresh-materialized-hits
-      #     task: "import:hits:refresh_materialized"
-      #     schedule: "38 0,12 * * *"
+      cronTasks:
+        - name: import-all-organisations
+          task: "import:all:organisations"
+          schedule: "00 09-19 * * 1-5"
+        - name: import-dns
+          task: "import:dns_details"
+          schedule: "3 07-19 * * 1-5"
+        - name: import-hits-from-cdn-logs
+          task: "import:all:hits[govuk-integration-transition-fastly-logs]"
+          schedule: "22 3 * * *"
+        - name: clear-expired-sessions
+          task: "clear_expired_sessions"
+          schedule: "58 3 * * *"
+        - name: clear-old-mappings
+          task: "clear_old_mappings_batches"
+          schedule: "52 3 * * *"
+        - name: refresh-materialized-hits
+          task: "import:hits:refresh_materialized"
+          schedule: "38 0,12 * * *"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -3881,10 +3881,10 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 384Mi
-      # cronTasks:
-      #   - name: publish-scheduled-editions
-      #     task: "publish_scheduled_editions"
-      #     schedule: "29 5 * * *"
+      cronTasks:
+        - name: publish-scheduled-editions
+          task: "publish_scheduled_editions"
+          schedule: "29 5 * * *"
       nginxClientMaxBodySize: *max-upload-size
       workers:
         enabled: true
@@ -4021,16 +4021,16 @@ govukApplications:
         # whitehall-admin on EC2 and vice versa. 2899 is the "deploy" user.
         runAsUser: 2899
         runAsGroup: 2899
-      # cronTasks:
-      #   - name: send-notifications
-      #     task: "publisher_notifications:send"
-      #     schedule: "18 1 * * *"
-      #   - name: send-review-reminders
-      #     task: "send_review_reminders"
-      #     schedule: "30 10 * * *"
-      #   - name: taxonomy-rebuild
-      #     task: "taxonomy:rebuild_cache"
-      #     schedule: "*/10 7-20 * * *"
+      cronTasks:
+        - name: send-notifications
+          task: "publisher_notifications:send"
+          schedule: "18 1 * * *"
+        - name: send-review-reminders
+          task: "send_review_reminders"
+          schedule: "30 10 * * *"
+        - name: taxonomy-rebuild
+          task: "taxonomy:rebuild_cache"
+          schedule: "*/10 7-20 * * *"
       dbMigrationEnabled: true
       dbMigrationActiveDeadlineSeconds: 3700  # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
