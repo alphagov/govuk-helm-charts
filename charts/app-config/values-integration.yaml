@@ -78,7 +78,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -166,7 +166,7 @@ govukApplications:
           cpu: 10m
           memory: 320Mi
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -404,7 +404,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -899,7 +899,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -971,7 +971,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1.5
@@ -1872,7 +1872,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2099,7 +2099,7 @@ govukApplications:
           memory: 512Mi
       nginxClientMaxBodySize: &max-upload-size 500M
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2238,7 +2238,7 @@ govukApplications:
           memory: 512Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2438,7 +2438,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 4
@@ -3286,7 +3286,7 @@ govukApplications:
           memory: 600Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3599,7 +3599,7 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3766,7 +3766,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3935,7 +3935,7 @@ govukApplications:
       #     schedule: "29 5 * * *"
       nginxClientMaxBodySize: *max-upload-size
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -4085,7 +4085,7 @@ govukApplications:
       dbMigrationEnabled: true
       dbMigrationActiveDeadlineSeconds: 3700  # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 2
