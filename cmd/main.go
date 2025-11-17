@@ -13,6 +13,7 @@ import (
 func main() {
 	inputFile := flag.String("file", "", "Path to the YAML file to modify")
 	csvFile := flag.String("csv", "", "Path to the CSV file with app list (optional)")
+	appType := flag.String("type", "Publishing", "CSV Type column value to filter by: 'Publishing', 'Frontend', etc. (default: Publishing)")
 	action := flag.String("action", "enable", "Action to perform: 'enable' or 'disable' (default: enable)")
 	target := flag.String("target", "app", "Target field: 'app' for appEnabled or 'workers' for workers.enabled (default: app)")
 	dryRun := flag.Bool("dry-run", false, "Show what would be changed without modifying the file")
@@ -37,15 +38,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	var publishingApps map[string]bool
+	var filteredApps map[string]bool
 	if *csvFile != "" {
 		var err error
-		publishingApps, err = readPublishingApps(*csvFile)
+		filteredApps, err = readAppsByType(*csvFile, *appType)
 		if err != nil {
 			fmt.Printf("Error reading CSV file: %v\n", err)
 			os.Exit(1)
 		}
-		fmt.Printf("Found %d Publishing apps in CSV\n", len(publishingApps))
+		fmt.Printf("Found %d apps with Type=%s in CSV\n", len(filteredApps), *appType)
 	}
 
 	file, err := os.Open(*inputFile)
@@ -66,13 +67,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	modifiedLines, changeCount := processYAML(lines, publishingApps, enabledValue, *target, *dryRun)
+	modifiedLines, changeCount := processYAML(lines, filteredApps, enabledValue, *target, *dryRun)
 
 	if changeCount == 0 {
 		if *csvFile != "" {
-			fmt.Println("No changes needed - no matching Publishing apps found with appEnabled to toggle")
+			fmt.Printf("No changes needed - no matching apps with Type=%s found to toggle\n", *appType)
 		} else {
-			fmt.Println("No changes needed - no 'appEnabled: false' found in govukApplications")
+			fmt.Println("No changes needed - no changes to make")
 		}
 		return
 	}
@@ -91,7 +92,7 @@ func main() {
 	fmt.Printf("Successfully updated %d occurrence(s)\n", changeCount)
 }
 
-func readPublishingApps(csvPath string) (map[string]bool, error) {
+func readAppsByType(csvPath string, targetType string) (map[string]bool, error) {
 	file, err := os.Open(csvPath)
 	if err != nil {
 		return nil, err
@@ -104,7 +105,7 @@ func readPublishingApps(csvPath string) (map[string]bool, error) {
 		return nil, err
 	}
 
-	publishingApps := make(map[string]bool)
+	filteredApps := make(map[string]bool)
 	for i, record := range records {
 		if i == 0 || len(record) < 2 {
 			continue
@@ -113,13 +114,12 @@ func readPublishingApps(csvPath string) (map[string]bool, error) {
 		appName := strings.TrimSpace(record[0])
 		appType := strings.TrimSpace(record[1])
 
-		// Only include apps with Type "Publishing"
-		if appType == "Publishing" && appName != "" {
-			publishingApps[appName] = true
+		if appType == targetType && appName != "" {
+			filteredApps[appName] = true
 		}
 	}
 
-	return publishingApps, nil
+	return filteredApps, nil
 }
 
 func processYAML(lines []string, publishingApps map[string]bool, enabledValue bool, target string, dryRun bool) ([]string, int) {

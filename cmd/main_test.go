@@ -292,7 +292,7 @@ func TestProcessYAML_WorkersWithComplexStructure(t *testing.T) {
 	}
 }
 
-func TestReadPublishingApps(t *testing.T) {
+func TestReadAppsByType_Publishing(t *testing.T) {
 	// Create a temporary CSV file
 	csvContent := `App,Type,Worker,cronJobs/cronTasks,,Should remove
 account-api,Publishing,,,,
@@ -309,9 +309,9 @@ publisher,Publishing,,yes,,`
 	}
 	defer deleteFile(tmpFile)
 
-	apps, err := readPublishingApps(tmpFile)
+	apps, err := readAppsByType(tmpFile, "Publishing")
 	if err != nil {
-		t.Fatalf("readPublishingApps failed: %v", err)
+		t.Fatalf("readAppsByType failed: %v", err)
 	}
 
 	expectedCount := 3
@@ -334,6 +334,51 @@ publisher,Publishing,,yes,,`
 	}
 	if apps["frontend"] {
 		t.Error("frontend should not be in Publishing apps (it's Frontend)")
+	}
+}
+
+func TestReadAppsByType_Frontend(t *testing.T) {
+	// Create a temporary CSV file
+	csvContent := `App,Type,Worker,cronJobs/cronTasks,,Should remove
+account-api,Publishing,,,,
+email-alert-service,Frontend,,,,
+content-store,Publishing,,yes,,
+frontend,Frontend,,,,
+collections,Frontend,,,,`
+
+	// Write to a temp file
+	tmpFile := "/tmp/test_apps_frontend.csv"
+	err := writeFile(tmpFile, csvContent)
+	if err != nil {
+		t.Fatalf("Failed to create test CSV: %v", err)
+	}
+	defer deleteFile(tmpFile)
+
+	apps, err := readAppsByType(tmpFile, "Frontend")
+	if err != nil {
+		t.Fatalf("readAppsByType failed: %v", err)
+	}
+
+	expectedCount := 3
+	if len(apps) != expectedCount {
+		t.Errorf("Expected %d Frontend apps, got %d", expectedCount, len(apps))
+	}
+
+	// Check specific apps
+	if !apps["email-alert-service"] {
+		t.Error("Expected email-alert-service to be in Frontend apps")
+	}
+	if !apps["frontend"] {
+		t.Error("Expected frontend to be in Frontend apps")
+	}
+	if !apps["collections"] {
+		t.Error("Expected collections to be in Frontend apps")
+	}
+	if apps["account-api"] {
+		t.Error("account-api should not be in Frontend apps (it's Publishing)")
+	}
+	if apps["content-store"] {
+		t.Error("content-store should not be in Frontend apps (it's Publishing)")
 	}
 }
 
