@@ -1359,7 +1359,7 @@ govukApplications:
           memory: 1Gi
         requests:
           cpu: 10m
-          memory: 320Mi
+          memory: 400Mi
       rails:
         createKeyBaseSecret: false
       sentry:
