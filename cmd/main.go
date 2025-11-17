@@ -105,7 +105,6 @@ func readPublishingApps(csvPath string) (map[string]bool, error) {
 	}
 
 	publishingApps := make(map[string]bool)
-
 	for i, record := range records {
 		if i == 0 || len(record) < 2 {
 			continue
