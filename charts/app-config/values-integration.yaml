@@ -65,7 +65,6 @@ emergency-banner-redis:
 govukApplications:
   - name: account-api
     helmValues:
-      appEnabled: false
       arch: arm64
       uploadAssets:
         enabled: false
@@ -157,7 +156,6 @@ govukApplications:
     chartPath: charts/asset-manager
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -245,7 +243,6 @@ govukApplications:
   - name: authenticating-proxy
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -394,7 +391,6 @@ govukApplications:
   - name: collections-publisher
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -480,7 +476,6 @@ govukApplications:
     repoName: content-block-manager
     helmValues:
       repoName: content-block-manager
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -553,7 +548,6 @@ govukApplications:
   - name: content-data-admin
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -677,7 +671,6 @@ govukApplications:
   - name: content-data-api
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -793,7 +786,6 @@ govukApplications:
   - name: content-store
     helmValues: &content-store
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -889,7 +881,6 @@ govukApplications:
   - name: content-tagger
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -959,7 +950,6 @@ govukApplications:
   - name: email-alert-api
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1542,7 +1532,6 @@ govukApplications:
 
   - name: govspeak-preview
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1751,7 +1740,6 @@ govukApplications:
   - name: hmrc-manuals-api
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1859,7 +1847,6 @@ govukApplications:
 
   - name: link-checker-api
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1916,7 +1903,6 @@ govukApplications:
   - name: local-links-manager
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2088,7 +2074,6 @@ govukApplications:
 
   - name: manuals-publisher
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -2173,7 +2158,6 @@ govukApplications:
   - name: places-manager
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2228,7 +2212,6 @@ govukApplications:
   - name: publisher
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2376,7 +2359,6 @@ govukApplications:
   - name: govuk-graphql
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -2425,7 +2407,6 @@ govukApplications:
   - name: publishing-api
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -2513,7 +2494,6 @@ govukApplications:
     postSyncWorkflowEnabled: "false"
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -2811,7 +2791,6 @@ govukApplications:
   - name: search-admin
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -3276,7 +3255,6 @@ govukApplications:
   - name: signon
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -3520,7 +3498,6 @@ govukApplications:
 
   - name: short-url-manager
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3587,7 +3564,6 @@ govukApplications:
 
   - name: specialist-publisher
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3677,7 +3653,6 @@ govukApplications:
   - name: support
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -3754,7 +3729,6 @@ govukApplications:
   - name: support-api
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -3833,7 +3807,6 @@ govukApplications:
   - name: transition
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -3920,7 +3893,6 @@ govukApplications:
 
   - name: travel-advice-publisher
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -4009,7 +3981,6 @@ govukApplications:
   - name: govuk-replatform-test-app
     helmValues:
       arch: arm64
-      appEnabled: false
       rails:
         enabled: false
       sentry:
@@ -4036,7 +4007,6 @@ govukApplications:
   - name: govuk-synthetic-test-app-canary
     helmValues:
       arch: arm64
-      appEnabled: false
       rails:
         enabled: false
       sentry:
@@ -4054,7 +4024,6 @@ govukApplications:
   - name: whitehall-admin
     repoName: whitehall
     helmValues:
-      appEnabled: false
       repoName: whitehall
       arch: arm64
       appResources:
