@@ -156,6 +156,7 @@ govukApplications:
     chartPath: charts/asset-manager
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -164,7 +165,7 @@ govukApplications:
           cpu: 10m
           memory: 320Mi
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -243,6 +244,7 @@ govukApplications:
   - name: authenticating-proxy
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -363,6 +365,7 @@ govukApplications:
     repoName: collections
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -390,6 +393,7 @@ govukApplications:
   - name: collections-publisher
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -399,7 +403,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -499,7 +503,7 @@ govukApplications:
       dbMigrationEnabled: true
       dbMigrationCommand: ["rails", "db:prepare"]
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 2
@@ -591,7 +595,7 @@ govukApplications:
           - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -705,7 +709,7 @@ govukApplications:
           cpu: 10m
           memory: 650Mi
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
@@ -788,6 +792,7 @@ govukApplications:
   - name: content-store
     helmValues: &content-store
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -847,6 +852,7 @@ govukApplications:
   - name: draft-content-store
     repoName: content-store
     helmValues:
+      appEnabled: false
       <<: *content-store
       rails:
         createKeyBaseSecret: false
@@ -892,7 +898,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -952,6 +958,7 @@ govukApplications:
   - name: email-alert-api
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -963,7 +970,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1.5
@@ -1054,6 +1061,7 @@ govukApplications:
   - name: email-alert-frontend
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1086,6 +1094,7 @@ govukApplications:
     repoName: email-alert-frontend
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1132,7 +1141,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
@@ -1167,6 +1176,7 @@ govukApplications:
   - name: feedback
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1218,6 +1228,7 @@ govukApplications:
     repoName: feedback
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1301,6 +1312,7 @@ govukApplications:
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1331,6 +1343,7 @@ govukApplications:
   - name: frontend
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1399,6 +1412,7 @@ govukApplications:
   - name: draft-frontend
     repoName: frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1479,6 +1493,7 @@ govukApplications:
   - name: government-frontend
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1500,6 +1515,7 @@ govukApplications:
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1550,7 +1566,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
-      appEnabled: true
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1563,7 +1579,7 @@ govukApplications:
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
@@ -1790,6 +1806,7 @@ govukApplications:
       - "licensify-frontend"
     helmValues:
       repoName: licensify
+      enabled: false
       arch: arm64
       assetManagerNFS: *assets-nfs
       apps:
@@ -1854,7 +1871,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -1898,6 +1915,7 @@ govukApplications:
   - name: local-links-manager
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2024,6 +2042,7 @@ govukApplications:
   - name: locations-api
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2035,7 +2054,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1.5
@@ -2079,7 +2098,7 @@ govukApplications:
           memory: 512Mi
       nginxClientMaxBodySize: &max-upload-size 500M
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -2153,6 +2172,7 @@ govukApplications:
   - name: places-manager
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2175,7 +2195,7 @@ govukApplications:
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -2217,7 +2237,7 @@ govukApplications:
           memory: 512Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -2355,6 +2375,7 @@ govukApplications:
   - name: govuk-graphql
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -2380,7 +2401,7 @@ govukApplications:
       workers:
         enabled: false
       redis:
-        enabled: false
+        enabled: true
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -2403,6 +2424,7 @@ govukApplications:
   - name: publishing-api
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -2415,7 +2437,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 4
@@ -2490,6 +2512,7 @@ govukApplications:
     postSyncWorkflowEnabled: "false"
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -2787,6 +2810,7 @@ govukApplications:
   - name: search-admin
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -2809,7 +2833,7 @@ govukApplications:
       redis:
         enabled: true
       workers:
-        enabled: true
+        enabled: false
       # cronTasks:
       #   # Re-import completion denylist to Discovery Engine so it doesn't drift from local DB
       #   - name: reimport-completion-denylist
@@ -2925,7 +2949,7 @@ govukApplications:
       #       - name: SEARCH_INDEX
       #         value: govuk
       workers:
-        enabled: true
+        enabled: false
         replicaCount: 3
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
@@ -3042,7 +3066,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
         replicaCount: 3
         types:
           - command: ['bin/rake', 'document_sync_worker:run']
@@ -3251,6 +3275,7 @@ govukApplications:
   - name: signon
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 2
@@ -3260,7 +3285,7 @@ govukApplications:
           memory: 600Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3453,6 +3478,7 @@ govukApplications:
     repoName: static
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -3572,7 +3598,7 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3672,7 +3698,7 @@ govukApplications:
       uploadAssets:
         path: /app/public/assets/support
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3727,6 +3753,7 @@ govukApplications:
   - name: support-api
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -3738,7 +3765,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3826,7 +3853,7 @@ govukApplications:
           - name: transition.{{ .Values.k8sExternalDomainSuffix }}
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3907,7 +3934,7 @@ govukApplications:
       #     schedule: "29 5 * * *"
       nginxClientMaxBodySize: *max-upload-size
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3981,6 +4008,7 @@ govukApplications:
   - name: govuk-replatform-test-app
     helmValues:
       arch: arm64
+      appEnabled: false
       rails:
         enabled: false
       sentry:
@@ -4007,6 +4035,7 @@ govukApplications:
   - name: govuk-synthetic-test-app-canary
     helmValues:
       arch: arm64
+      appEnabled: false
       rails:
         enabled: false
       sentry:
@@ -4055,7 +4084,7 @@ govukApplications:
       dbMigrationEnabled: true
       dbMigrationActiveDeadlineSeconds: 3700  # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 2
