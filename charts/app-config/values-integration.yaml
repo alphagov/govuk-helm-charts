@@ -65,6 +65,7 @@ emergency-banner-redis:
 govukApplications:
   - name: account-api
     helmValues:
+      appEnabled: false
       arch: arm64
       uploadAssets:
         enabled: false
@@ -77,7 +78,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
