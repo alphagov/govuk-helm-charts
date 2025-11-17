@@ -3162,7 +3162,6 @@ govukApplications:
 
   - name: service-manual-publisher
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
