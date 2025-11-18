@@ -1887,10 +1887,10 @@ govukApplications:
       appResources:
         limits:
           cpu: 1
-          memory: 1Gi
+          memory: 2Gi
         requests:
           cpu: 10m
-          memory: 320Mi
+          memory: 2Gi
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
