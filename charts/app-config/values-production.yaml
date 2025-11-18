@@ -1887,10 +1887,10 @@ govukApplications:
       appResources:
         limits:
           cpu: 1
-          memory: 2Gi
+          memory: 1Gi
         requests:
           cpu: 10m
-          memory: 2Gi
+          memory: 320Mi
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
@@ -1899,10 +1899,10 @@ govukApplications:
       workerResources:
         limits:
           cpu: 1
-          memory: 1Gi
+          memory: 2Gi
         requests:
           cpu: 10m
-          memory: 256Mi
+          memory: 2Gi
       redis:
         enabled: true
       extraEnv:
