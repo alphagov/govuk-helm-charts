@@ -3,7 +3,7 @@ groups:
     rules:
       - record: global:signon_api_user_token_expires_in_seconds
         expr: |
-          min(signon_api_user_token_expiry_timestamp_seconds) by (api_user, application) - time()
+          max(signon_api_user_token_expiry_timestamp_seconds) by (api_user, application) - time()
 
       - alert: SignonApiUserTokenExpirySoon
         expr: |
