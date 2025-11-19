@@ -1,4 +1,4 @@
-.PHONY: check-yamllint lint check help
+.PHONY: check-yamllint lint check kubeconform help
 
 # Default target
 help: ## Show this help message
@@ -13,8 +13,23 @@ check-yamllint: ## Check if yamllint is installed
 		exit 1; \
 	fi
 
-lint: check-yamllint ## Run yamllint on all YAML files
+yamllint: check-yamllint ## Run yamllint on all YAML files
 	@echo "Running yamllint..."
 	yamllint -f github .
 
+lint: check-yamllint kubeconform ## Run linting commands on all YAML files
+
 check: lint ## Alias for lint target
+
+kubeconform: ## Run kubeconform validation on rendered charts
+	@echo "Rendering charts..."
+	./govuk-app-render.sh
+	@echo "Running kubeconform..."
+	docker run --rm -v "$(PWD)/output:/workspace" ghcr.io/yannh/kubeconform:latest-alpine \
+		-kubernetes-version 1.31.6 \
+		-schema-location default \
+		-schema-location "https://alphagov.github.io/govuk-crd-library/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json" \
+		-ignore-filename-pattern ".*/Chart.yaml" \
+		-summary \
+		-strict \
+		/workspace/rendered-charts
