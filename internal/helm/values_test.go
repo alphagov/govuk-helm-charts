@@ -3,6 +3,7 @@ package helm
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -55,16 +56,23 @@ govukApplications:
 		t.Errorf("Change.NewValue = %v, want false", change.NewValue)
 	}
 
-	// Test enabling workers for an app without them - should fail with line-based approach
-	_, err = vf.SetWorkerEnabled("app-without-workers", true)
-	if err == nil {
-		t.Error("SetWorkerEnabled should fail for app without workers.enabled field")
+	// Test enabling workers for an app without workers section - should return nil (can't create whole section)
+	change, err = vf.SetWorkerEnabled("app-without-workers", true)
+	if err != nil {
+		t.Fatalf("SetWorkerEnabled failed: %v", err)
 	}
 
-	// Test app that doesn't exist
-	_, err = vf.SetWorkerEnabled("nonexistent-app", true)
-	if err == nil {
-		t.Error("SetWorkerEnabled should fail for nonexistent app")
+	if change != nil {
+		t.Error("SetWorkerEnabled should return nil change when workers section doesn't exist")
+	}
+
+	// Test app that doesn't exist - should return nil change
+	change, err = vf.SetWorkerEnabled("nonexistent-app", true)
+	if err != nil {
+		t.Fatalf("SetWorkerEnabled failed: %v", err)
+	}
+	if change != nil {
+		t.Error("SetWorkerEnabled should return nil change for nonexistent app")
 	}
 }
 
@@ -116,10 +124,16 @@ govukApplications:
 		t.Errorf("Change.NewValue = %v, want false", change.NewValue)
 	}
 
-	// Test enabling app without flag - should fail with line-based approach
-	_, err = vf.SetAppEnabled("app-without-flag", true)
-	if err == nil {
-		t.Error("SetAppEnabled should fail for app without appEnabled field")
+	// Test enabling app without flag - should add it
+	change, err = vf.SetAppEnabled("app-without-flag", true)
+	if err != nil {
+		t.Fatalf("SetAppEnabled failed: %v", err)
+	}
+
+	if change == nil {
+		t.Error("SetAppEnabled should create change for app without appEnabled")
+	} else if change.NewValue != "true" {
+		t.Errorf("Change.NewValue = %v, want true", change.NewValue)
 	}
 }
 
@@ -182,6 +196,99 @@ govukApplications:
 
 	if !found {
 		t.Error("workers.enabled not found or not set to false in saved file")
+	}
+}
+
+func TestSetAppEnabled_AddsField(t *testing.T) {
+	tmpDir := t.TempDir()
+	yamlPath := filepath.Join(tmpDir, "test-values.yaml")
+
+	// Create a test values file with an app that has helmValues but no appEnabled
+	yamlContent := `govukEnvironment: integration
+
+govukApplications:
+  - name: test-app
+    helmValues:
+      appResources:
+        memory: 1Gi
+      replicas: 2
+`
+
+	if err := os.WriteFile(yamlPath, []byte(yamlContent), 0644); err != nil {
+		t.Fatalf("Failed to create test YAML: %v", err)
+	}
+
+	// Load the values file
+	vf, err := LoadValuesFile(yamlPath)
+	if err != nil {
+		t.Fatalf("LoadValuesFile failed: %v", err)
+	}
+
+	// Test adding appEnabled to an app that doesn't have it
+	change, err := vf.SetAppEnabled("test-app", false)
+	if err != nil {
+		t.Fatalf("SetAppEnabled failed: %v", err)
+	}
+
+	if change == nil {
+		t.Fatal("SetAppEnabled should create change when adding field")
+	}
+
+	if change.NewValue != "false" {
+		t.Errorf("Change.NewValue = %v, want false", change.NewValue)
+	}
+
+	if change.OldValue != "" {
+		t.Errorf("Change.OldValue = %v, want empty string (field didn't exist)", change.OldValue)
+	}
+
+	// Save and verify the structure is preserved
+	if err := vf.SaveValuesFile(); err != nil {
+		t.Fatalf("SaveValuesFile failed: %v", err)
+	}
+
+	// Read back the file and check structure
+	vf2, err := LoadValuesFile(yamlPath)
+	if err != nil {
+		t.Fatalf("LoadValuesFile (second load) failed: %v", err)
+	}
+
+	// Verify appEnabled was added and other fields are preserved
+	foundAppEnabled := false
+	foundAppResources := false
+	foundReplicas := false
+	inTestApp := false
+
+	for _, line := range vf2.Lines {
+		if strings.Contains(line, "- name: test-app") {
+			inTestApp = true
+			continue
+		}
+		if inTestApp {
+			if strings.Contains(line, "appEnabled: false") {
+				foundAppEnabled = true
+			}
+			if strings.Contains(line, "appResources:") {
+				foundAppResources = true
+			}
+			if strings.Contains(line, "replicas: 2") {
+				foundReplicas = true
+			}
+			// Exit if we hit the next app or end of helmValues
+			if strings.HasPrefix(line, "  - name:") {
+				break
+			}
+		}
+	}
+
+	if !foundAppEnabled {
+		t.Error("appEnabled: false was not added to the file")
+	}
+	if !foundAppResources {
+		t.Error("appResources field was lost")
+	}
+	if !foundReplicas {
+		t.Error("replicas field was lost")
 	}
 }
 

@@ -65,7 +65,7 @@ func (vf *ValuesFile) SetWorkerEnabled(appName string, enabled bool) (*Change, e
 
 	changes, oldValue, changeCount := processYAMLForApp(vf.Lines, appName, "workers", targetValue)
 	if changeCount == 0 {
-		return nil, fmt.Errorf("no workers.enabled field found for app %s", appName)
+		return nil, nil // No change needed - already at target value or app not found
 	}
 
 	vf.Lines = changes
@@ -86,7 +86,7 @@ func (vf *ValuesFile) SetAppEnabled(appName string, enabled bool) (*Change, erro
 
 	changes, oldValue, changeCount := processYAMLForApp(vf.Lines, appName, "app", targetValue)
 	if changeCount == 0 {
-		return nil, fmt.Errorf("no appEnabled field found for app %s", appName)
+		return nil, nil // No change needed - already at target value or app not found
 	}
 
 	vf.Lines = changes
@@ -100,29 +100,32 @@ func (vf *ValuesFile) SetAppEnabled(appName string, enabled bool) (*Change, erro
 
 // processYAMLForApp processes YAML lines for a specific app and target field
 func processYAMLForApp(lines []string, appName string, target string, targetValue string) ([]string, string, int) {
-	modifiedLines := make([]string, len(lines))
-	copy(modifiedLines, lines)
-
 	changeCount := 0
 	oldValue := ""
 	inGovukApplications := false
 	currentIndent := 0
 	currentAppName := ""
 	inMatchingApp := false
+	inHelmValues := false
+	helmValuesIndent := 0
 	inWorkers := false
 	workersIndent := 0
+	foundField := false
 
 	appEnabledRegex := regexp.MustCompile(`^(\s*)appEnabled:\s*(true|false)\s*$`)
 	enabledRegex := regexp.MustCompile(`^(\s*)enabled:\s*(true|false)\s*$`)
+	helmValuesRegex := regexp.MustCompile(`^\s*helmValues:\s*$`)
 	workersRegex := regexp.MustCompile(`^\s*workers:\s*$`)
 	appNameRegex := regexp.MustCompile(`^\s*-\s*name:\s*(.+?)\s*$`)
 
-	for i, line := range lines {
+	result := []string{}
+
+	for _, line := range lines {
 		// Check if we're entering govukApplications section
 		if strings.HasPrefix(strings.TrimSpace(line), "govukApplications:") {
 			inGovukApplications = true
 			currentIndent = len(line) - len(strings.TrimLeft(line, " \t"))
-			modifiedLines[i] = line
+			result = append(result, line)
 			continue
 		}
 
@@ -132,6 +135,7 @@ func processYAMLForApp(lines []string, appName string, target string, targetValu
 				inGovukApplications = false
 				currentAppName = ""
 				inMatchingApp = false
+				inHelmValues = false
 				inWorkers = false
 			}
 		}
@@ -140,8 +144,33 @@ func processYAMLForApp(lines []string, appName string, target string, targetValu
 			nameMatches := appNameRegex.FindStringSubmatch(line)
 			if len(nameMatches) >= 2 {
 				currentAppName = strings.TrimSpace(nameMatches[1])
+				inHelmValues = false
 				inWorkers = false
+				foundField = false
 				inMatchingApp = (currentAppName == appName)
+			}
+		}
+
+		// Check if we're entering helmValues section (for app target)
+		if target == "app" && inGovukApplications && inMatchingApp && helmValuesRegex.MatchString(line) {
+			inHelmValues = true
+			helmValuesIndent = len(line) - len(strings.TrimLeft(line, " \t"))
+			foundField = false
+		}
+
+		// Check if we've exited helmValues section
+		if inHelmValues && strings.TrimSpace(line) != "" && !strings.HasPrefix(strings.TrimSpace(line), "#") {
+			lineIndent := len(line) - len(strings.TrimLeft(line, " \t"))
+			if lineIndent <= helmValuesIndent {
+				// Exiting helmValues - insert appEnabled if not found
+				if !foundField && target == "app" {
+					indent := strings.Repeat(" ", helmValuesIndent+2)
+					newLine := indent + "appEnabled: " + targetValue
+					result = append(result, newLine)
+					changeCount++
+					oldValue = "" // didn't exist before
+				}
+				inHelmValues = false
 			}
 		}
 
@@ -149,7 +178,16 @@ func processYAMLForApp(lines []string, appName string, target string, targetValu
 		if inWorkers && strings.TrimSpace(line) != "" && !strings.HasPrefix(strings.TrimSpace(line), "#") {
 			lineIndent := len(line) - len(strings.TrimLeft(line, " \t"))
 			if lineIndent <= workersIndent {
+				// Exiting workers - insert enabled if not found
+				if !foundField && target == "workers" {
+					indent := strings.Repeat(" ", workersIndent+2)
+					newLine := indent + "enabled: " + targetValue
+					result = append(result, newLine)
+					changeCount++
+					oldValue = "" // didn't exist before
+				}
 				inWorkers = false
+				foundField = false
 			}
 		}
 
@@ -157,20 +195,23 @@ func processYAMLForApp(lines []string, appName string, target string, targetValu
 		if target == "workers" && inGovukApplications && inMatchingApp && workersRegex.MatchString(line) {
 			inWorkers = true
 			workersIndent = len(line) - len(strings.TrimLeft(line, " \t"))
+			foundField = false
 		}
 
 		// Handle appEnabled toggle (target == "app")
-		if target == "app" && inGovukApplications && inMatchingApp && appEnabledRegex.MatchString(line) {
+		if target == "app" && inGovukApplications && inMatchingApp && inHelmValues && appEnabledRegex.MatchString(line) {
 			matches := appEnabledRegex.FindStringSubmatch(line)
 			if len(matches) >= 3 {
 				whitespace := matches[1]
 				currentValue := matches[2]
+				foundField = true
 
 				if currentValue != targetValue {
 					oldValue = currentValue
 					newLine := whitespace + "appEnabled: " + targetValue
-					modifiedLines[i] = newLine
+					result = append(result, newLine)
 					changeCount++
+					continue
 				}
 			}
 		}
@@ -181,18 +222,39 @@ func processYAMLForApp(lines []string, appName string, target string, targetValu
 			if len(matches) >= 3 {
 				whitespace := matches[1]
 				currentValue := matches[2]
+				foundField = true
 
 				if currentValue != targetValue {
 					oldValue = currentValue
 					newLine := whitespace + "enabled: " + targetValue
-					modifiedLines[i] = newLine
+					result = append(result, newLine)
 					changeCount++
+					continue
 				}
 			}
 		}
+
+		result = append(result, line)
 	}
 
-	return modifiedLines, oldValue, changeCount
+	// Handle case where we reached end of file while in helmValues or workers
+	if inHelmValues && !foundField && target == "app" {
+		indent := strings.Repeat(" ", helmValuesIndent+2)
+		newLine := indent + "appEnabled: " + targetValue
+		result = append(result, newLine)
+		changeCount++
+		oldValue = ""
+	}
+
+	if inWorkers && !foundField && target == "workers" {
+		indent := strings.Repeat(" ", workersIndent+2)
+		newLine := indent + "enabled: " + targetValue
+		result = append(result, newLine)
+		changeCount++
+		oldValue = ""
+	}
+
+	return result, oldValue, changeCount
 }
 
 // GetValuesFilePath returns the path to the values file for a given environment
