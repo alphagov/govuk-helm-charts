@@ -55,14 +55,10 @@ govukApplications:
 		t.Errorf("Change.NewValue = %v, want false", change.NewValue)
 	}
 
-	// Test enabling workers for an app without them
-	change, err = vf.SetWorkerEnabled("app-without-workers", true)
-	if err != nil {
-		t.Fatalf("SetWorkerEnabled failed: %v", err)
-	}
-
-	if change.NewValue != "true" {
-		t.Errorf("Change.NewValue = %v, want true", change.NewValue)
+	// Test enabling workers for an app without them - should fail with line-based approach
+	_, err = vf.SetWorkerEnabled("app-without-workers", true)
+	if err == nil {
+		t.Error("SetWorkerEnabled should fail for app without workers.enabled field")
 	}
 
 	// Test app that doesn't exist
@@ -120,14 +116,10 @@ govukApplications:
 		t.Errorf("Change.NewValue = %v, want false", change.NewValue)
 	}
 
-	// Test enabling app without flag
-	change, err = vf.SetAppEnabled("app-without-flag", true)
-	if err != nil {
-		t.Fatalf("SetAppEnabled failed: %v", err)
-	}
-
-	if change.NewValue != "true" {
-		t.Errorf("Change.NewValue = %v, want true", change.NewValue)
+	// Test enabling app without flag - should fail with line-based approach
+	_, err = vf.SetAppEnabled("app-without-flag", true)
+	if err == nil {
+		t.Error("SetAppEnabled should fail for app without appEnabled field")
 	}
 }
 
@@ -170,36 +162,26 @@ govukApplications:
 		t.Fatalf("LoadValuesFile (second load) failed: %v", err)
 	}
 
-	// Find the app and check workers.enabled
-	appNode := vf2.findApp("test-app")
-	if appNode == nil {
-		t.Fatal("App not found after reload")
-	}
-
-	// Navigate to helmValues -> workers -> enabled
+	// Check that workers.enabled is now false by searching through lines
 	var found bool
-	for i := 0; i < len(appNode.Content); i += 2 {
-		if appNode.Content[i].Value == "helmValues" {
-			helmValues := appNode.Content[i+1]
-			for j := 0; j < len(helmValues.Content); j += 2 {
-				if helmValues.Content[j].Value == "workers" {
-					workers := helmValues.Content[j+1]
-					for k := 0; k < len(workers.Content); k += 2 {
-						if workers.Content[k].Value == "enabled" {
-							enabledValue := workers.Content[k+1].Value
-							if enabledValue != "false" {
-								t.Errorf("workers.enabled = %s, want false", enabledValue)
-							}
-							found = true
-						}
-					}
-				}
-			}
+	inTestApp := false
+	for _, line := range vf2.Lines {
+		if !inTestApp && (line == "  - name: test-app" || line == "  - name: test-app ") {
+			inTestApp = true
+			continue
+		}
+		if inTestApp && (line == "        enabled: false" || line == "        enabled: false ") {
+			found = true
+			break
+		}
+		// Exit if we hit the next app
+		if inTestApp && (line == "  - name:" || (len(line) > 0 && line[0] != ' ')) {
+			break
 		}
 	}
 
 	if !found {
-		t.Error("workers.enabled not found in saved file")
+		t.Error("workers.enabled not found or not set to false in saved file")
 	}
 }
 

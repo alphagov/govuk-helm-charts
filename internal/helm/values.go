@@ -1,17 +1,18 @@
 package helm
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
-
-	"gopkg.in/yaml.v3"
+	"regexp"
+	"strings"
 )
 
 // ValuesFile represents a Helm values file
 type ValuesFile struct {
-	Path    string
-	Content *yaml.Node
+	Path  string
+	Lines []string
 }
 
 // Change represents a single YAML change
@@ -24,220 +25,174 @@ type Change struct {
 
 // LoadValuesFile loads a Helm values YAML file
 func LoadValuesFile(path string) (*ValuesFile, error) {
-	data, err := os.ReadFile(path)
+	file, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read values file: %w", err)
 	}
+	defer file.Close()
 
-	var node yaml.Node
-	if err := yaml.Unmarshal(data, &node); err != nil {
-		return nil, fmt.Errorf("failed to parse YAML: %w", err)
+	var lines []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("failed to read file: %w", err)
 	}
 
 	return &ValuesFile{
-		Path:    path,
-		Content: &node,
+		Path:  path,
+		Lines: lines,
 	}, nil
 }
 
 // SaveValuesFile writes the values file back to disk
 func (vf *ValuesFile) SaveValuesFile() error {
-	data, err := yaml.Marshal(vf.Content)
-	if err != nil {
-		return fmt.Errorf("failed to marshal YAML: %w", err)
-	}
-
-	if err := os.WriteFile(vf.Path, data, 0644); err != nil {
+	content := strings.Join(vf.Lines, "\n") + "\n"
+	if err := os.WriteFile(vf.Path, []byte(content), 0644); err != nil {
 		return fmt.Errorf("failed to write file: %w", err)
 	}
-
 	return nil
-}
-
-// findApp searches for an app in the govukApplications list
-func (vf *ValuesFile) findApp(appName string) *yaml.Node {
-	if vf.Content.Kind != yaml.DocumentNode || len(vf.Content.Content) == 0 {
-		return nil
-	}
-
-	root := vf.Content.Content[0]
-	if root.Kind != yaml.MappingNode {
-		return nil
-	}
-
-	// Find govukApplications
-	for i := 0; i < len(root.Content); i += 2 {
-		keyNode := root.Content[i]
-		valueNode := root.Content[i+1]
-
-		if keyNode.Value == "govukApplications" && valueNode.Kind == yaml.SequenceNode {
-			// Search through the sequence for the app
-			for _, appNode := range valueNode.Content {
-				if appNode.Kind != yaml.MappingNode {
-					continue
-				}
-
-				// Look for the "name" field
-				for j := 0; j < len(appNode.Content); j += 2 {
-					nameKey := appNode.Content[j]
-					nameValue := appNode.Content[j+1]
-
-					if nameKey.Value == "name" && nameValue.Value == appName {
-						return appNode
-					}
-				}
-			}
-		}
-	}
-
-	return nil
-}
-
-// getOrCreateNestedValue gets or creates a nested value in a YAML mapping
-func getOrCreateNestedValue(parent *yaml.Node, path []string) *yaml.Node {
-	if len(path) == 0 {
-		return parent
-	}
-
-	if parent.Kind != yaml.MappingNode {
-		return nil
-	}
-
-	key := path[0]
-
-	// Search for existing key
-	for i := 0; i < len(parent.Content); i += 2 {
-		keyNode := parent.Content[i]
-		if keyNode.Value == key {
-			valueNode := parent.Content[i+1]
-			if len(path) == 1 {
-				return valueNode
-			}
-			return getOrCreateNestedValue(valueNode, path[1:])
-		}
-	}
-
-	// Key doesn't exist, create it
-	keyNode := &yaml.Node{
-		Kind:  yaml.ScalarNode,
-		Value: key,
-	}
-
-	var valueNode *yaml.Node
-	if len(path) == 1 {
-		// This is the final key, create a scalar value
-		valueNode = &yaml.Node{
-			Kind:  yaml.ScalarNode,
-			Value: "",
-		}
-	} else {
-		// Create a mapping for nested keys
-		valueNode = &yaml.Node{
-			Kind:    yaml.MappingNode,
-			Content: []*yaml.Node{},
-		}
-	}
-
-	parent.Content = append(parent.Content, keyNode, valueNode)
-
-	if len(path) == 1 {
-		return valueNode
-	}
-	return getOrCreateNestedValue(valueNode, path[1:])
 }
 
 // SetWorkerEnabled sets the workers.enabled value for an app
 func (vf *ValuesFile) SetWorkerEnabled(appName string, enabled bool) (*Change, error) {
-	appNode := vf.findApp(appName)
-	if appNode == nil {
-		return nil, fmt.Errorf("app %s not found in values file", appName)
+	targetValue := "true"
+	if !enabled {
+		targetValue = "false"
 	}
 
-	// Find or create helmValues -> workers -> enabled
-	var helmValuesNode *yaml.Node
-	for i := 0; i < len(appNode.Content); i += 2 {
-		keyNode := appNode.Content[i]
-		if keyNode.Value == "helmValues" {
-			helmValuesNode = appNode.Content[i+1]
-			break
-		}
+	changes, oldValue, changeCount := processYAMLForApp(vf.Lines, appName, "workers", targetValue)
+	if changeCount == 0 {
+		return nil, fmt.Errorf("no workers.enabled field found for app %s", appName)
 	}
 
-	if helmValuesNode == nil {
-		// Create helmValues node
-		helmValuesKey := &yaml.Node{Kind: yaml.ScalarNode, Value: "helmValues"}
-		helmValuesNode = &yaml.Node{Kind: yaml.MappingNode, Content: []*yaml.Node{}}
-		appNode.Content = append(appNode.Content, helmValuesKey, helmValuesNode)
-	}
-
-	// Get or create workers.enabled
-	enabledNode := getOrCreateNestedValue(helmValuesNode, []string{"workers", "enabled"})
-	if enabledNode == nil {
-		return nil, fmt.Errorf("failed to find or create workers.enabled for app %s", appName)
-	}
-
-	oldValue := enabledNode.Value
-	newValue := "false"
-	if enabled {
-		newValue = "true"
-	}
-
-	enabledNode.Value = newValue
-	enabledNode.Tag = "!!bool"
-
+	vf.Lines = changes
 	return &Change{
 		AppName:  appName,
 		Path:     "workers.enabled",
 		OldValue: oldValue,
-		NewValue: newValue,
+		NewValue: targetValue,
 	}, nil
 }
 
 // SetAppEnabled sets the appEnabled value for an app
 func (vf *ValuesFile) SetAppEnabled(appName string, enabled bool) (*Change, error) {
-	appNode := vf.findApp(appName)
-	if appNode == nil {
-		return nil, fmt.Errorf("app %s not found in values file", appName)
+	targetValue := "true"
+	if !enabled {
+		targetValue = "false"
 	}
 
-	// Find or create helmValues -> appEnabled
-	var helmValuesNode *yaml.Node
-	for i := 0; i < len(appNode.Content); i += 2 {
-		keyNode := appNode.Content[i]
-		if keyNode.Value == "helmValues" {
-			helmValuesNode = appNode.Content[i+1]
-			break
-		}
+	changes, oldValue, changeCount := processYAMLForApp(vf.Lines, appName, "app", targetValue)
+	if changeCount == 0 {
+		return nil, fmt.Errorf("no appEnabled field found for app %s", appName)
 	}
 
-	if helmValuesNode == nil {
-		// Create helmValues node
-		helmValuesKey := &yaml.Node{Kind: yaml.ScalarNode, Value: "helmValues"}
-		helmValuesNode = &yaml.Node{Kind: yaml.MappingNode, Content: []*yaml.Node{}}
-		appNode.Content = append(appNode.Content, helmValuesKey, helmValuesNode)
-	}
-
-	// Get or create appEnabled
-	enabledNode := getOrCreateNestedValue(helmValuesNode, []string{"appEnabled"})
-	if enabledNode == nil {
-		return nil, fmt.Errorf("failed to find or create appEnabled for app %s", appName)
-	}
-
-	oldValue := enabledNode.Value
-	newValue := "false"
-	if enabled {
-		newValue = "true"
-	}
-
-	enabledNode.Value = newValue
-	enabledNode.Tag = "!!bool"
-
+	vf.Lines = changes
 	return &Change{
 		AppName:  appName,
 		Path:     "appEnabled",
 		OldValue: oldValue,
-		NewValue: newValue,
+		NewValue: targetValue,
 	}, nil
+}
+
+// processYAMLForApp processes YAML lines for a specific app and target field
+func processYAMLForApp(lines []string, appName string, target string, targetValue string) ([]string, string, int) {
+	modifiedLines := make([]string, len(lines))
+	copy(modifiedLines, lines)
+
+	changeCount := 0
+	oldValue := ""
+	inGovukApplications := false
+	currentIndent := 0
+	currentAppName := ""
+	inMatchingApp := false
+	inWorkers := false
+	workersIndent := 0
+
+	appEnabledRegex := regexp.MustCompile(`^(\s*)appEnabled:\s*(true|false)\s*$`)
+	enabledRegex := regexp.MustCompile(`^(\s*)enabled:\s*(true|false)\s*$`)
+	workersRegex := regexp.MustCompile(`^\s*workers:\s*$`)
+	appNameRegex := regexp.MustCompile(`^\s*-\s*name:\s*(.+?)\s*$`)
+
+	for i, line := range lines {
+		// Check if we're entering govukApplications section
+		if strings.HasPrefix(strings.TrimSpace(line), "govukApplications:") {
+			inGovukApplications = true
+			currentIndent = len(line) - len(strings.TrimLeft(line, " \t"))
+			modifiedLines[i] = line
+			continue
+		}
+
+		if inGovukApplications && strings.TrimSpace(line) != "" && !strings.HasPrefix(strings.TrimSpace(line), "#") {
+			lineIndent := len(line) - len(strings.TrimLeft(line, " \t"))
+			if lineIndent <= currentIndent {
+				inGovukApplications = false
+				currentAppName = ""
+				inMatchingApp = false
+				inWorkers = false
+			}
+		}
+
+		if inGovukApplications {
+			nameMatches := appNameRegex.FindStringSubmatch(line)
+			if len(nameMatches) >= 2 {
+				currentAppName = strings.TrimSpace(nameMatches[1])
+				inWorkers = false
+				inMatchingApp = (currentAppName == appName)
+			}
+		}
+
+		// Check if we've exited workers section (must check BEFORE entering new section)
+		if inWorkers && strings.TrimSpace(line) != "" && !strings.HasPrefix(strings.TrimSpace(line), "#") {
+			lineIndent := len(line) - len(strings.TrimLeft(line, " \t"))
+			if lineIndent <= workersIndent {
+				inWorkers = false
+			}
+		}
+
+		// Check if we're entering a workers section (for workers target)
+		if target == "workers" && inGovukApplications && inMatchingApp && workersRegex.MatchString(line) {
+			inWorkers = true
+			workersIndent = len(line) - len(strings.TrimLeft(line, " \t"))
+		}
+
+		// Handle appEnabled toggle (target == "app")
+		if target == "app" && inGovukApplications && inMatchingApp && appEnabledRegex.MatchString(line) {
+			matches := appEnabledRegex.FindStringSubmatch(line)
+			if len(matches) >= 3 {
+				whitespace := matches[1]
+				currentValue := matches[2]
+
+				if currentValue != targetValue {
+					oldValue = currentValue
+					newLine := whitespace + "appEnabled: " + targetValue
+					modifiedLines[i] = newLine
+					changeCount++
+				}
+			}
+		}
+
+		// Handle workers.enabled toggle (target == "workers")
+		if target == "workers" && inGovukApplications && inMatchingApp && inWorkers && enabledRegex.MatchString(line) {
+			matches := enabledRegex.FindStringSubmatch(line)
+			if len(matches) >= 3 {
+				whitespace := matches[1]
+				currentValue := matches[2]
+
+				if currentValue != targetValue {
+					oldValue = currentValue
+					newLine := whitespace + "enabled: " + targetValue
+					modifiedLines[i] = newLine
+					changeCount++
+				}
+			}
+		}
+	}
+
+	return modifiedLines, oldValue, changeCount
 }
 
 // GetValuesFilePath returns the path to the values file for a given environment
