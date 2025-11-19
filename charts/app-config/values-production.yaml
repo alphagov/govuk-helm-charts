@@ -931,7 +931,6 @@ govukApplications:
   - name: email-alert-api
     helmValues:
       arch: arm64
-      appEnabled: false
       appResources:
         limits:
           cpu: 2
