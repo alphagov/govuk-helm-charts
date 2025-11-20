@@ -1732,12 +1732,6 @@ govukApplications:
         - name: BACKENDS
           value: "mirrorS3,mirrorGCS"
 
-  - name: govuk-jobs
-    chartPath: charts/govuk-jobs
-    postSyncWorkflowEnabled: "false"
-    imageValues:
-      - govuk-dependency-checker
-
   - name: govuk-synthetic-test-app-canary
     helmValues:
       arch: arm64
