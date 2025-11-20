@@ -75,6 +75,13 @@ spec:
                     configMapKeyRef:
                       name: govuk-apps-env
                       key: PROMETHEUS_PUSHGATEWAY_URL
+                - name: MIRROR_FRESHNESS_URL
+                  value: https://www.{{ .Values.externalDomainSuffix }}/last-updated.txt
+                - name: MIRROR_AVAILABILITY_URL
+                  value: https://www.{{ .Values.externalDomainSuffix }}
+                {{- with .Values.extraEnv }}
+                  {{- (tpl (toYaml .) $) | trim | nindent 16 }}
+                {{- end }}
           containers:
             - name: upload-to-s3
               image: peakcom/s5cmd:v2.3.0
