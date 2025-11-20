@@ -2,6 +2,9 @@
 
 arch: amd64
 
+# Global toggle for enabling/disabling all deployments
+appEnabled: true
+
 podSecurityContext:
   fsGroup: 1001
   runAsUser: 1001
