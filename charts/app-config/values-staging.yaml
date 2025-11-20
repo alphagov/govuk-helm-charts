@@ -355,6 +355,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-collections-email-alert-api
               key: bearer_token
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
 
@@ -381,6 +383,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-collections-email-alert-api
               key: bearer_token
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
 
