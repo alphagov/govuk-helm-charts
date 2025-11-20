@@ -1,3 +1,4 @@
+{{- if .Values.appEnabled }}
 {{- range .Values.apps }}
 {{ $_ := set $.Values "appName" .name }}
 {{ $appImage := get $.Values.images (camelcase ( .useImage | default .name )) }}
@@ -144,4 +145,5 @@ spec:
       nodeSelector:
         kubernetes.io/arch: {{ $.Values.arch }}
       {{- end }}
+{{- end }}
 {{- end }}

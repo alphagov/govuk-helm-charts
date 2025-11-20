@@ -1721,7 +1721,7 @@ govukApplications:
         requests:
           cpu: 1
           memory: 2Gi
-      cronJobs:
+      cronTasks:
         - name: govuk-e2e-tests
           schedule: "*/10 7-19 * * 1-5" # every 10 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: main
