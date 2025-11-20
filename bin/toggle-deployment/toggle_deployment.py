@@ -65,13 +65,6 @@ def parse_args(args: Optional[list[str]] = None) -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "--repo-path",
-        type=Path,
-        default=Path.cwd(),
-        help="Path to govuk-helm-charts repository (default: current directory)",
-    )
-
-    parser.add_argument(
         "--force",
         action="store_true",
         help="Allow running with a dirty working tree (not recommended)",
@@ -190,6 +183,11 @@ def main() -> int:
     """Main entry point for the CLI."""
     args = parse_args()
 
+    # Repo path is always relative to this script location
+    script_dir = Path(__file__).parent
+    repo_path = script_dir / ".." / ".."
+    repo_path = repo_path.resolve()
+
     # Determine the target value and environment
     target_value = args.enable
     if args.integration:
@@ -206,10 +204,10 @@ def main() -> int:
     print()
 
     # Check git status
-    check_git_status(args.repo_path, args.force)
+    check_git_status(repo_path, args.force)
 
     # Find all image-tag files
-    files = find_image_tag_files(args.repo_path, environment)
+    files = find_image_tag_files(repo_path, environment)
 
     if not files:
         print(f"No files found in {environment} environment")
