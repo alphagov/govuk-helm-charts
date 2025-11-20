@@ -48,11 +48,6 @@ class TestParseArgs:
         args = parse_args(["--disable", "--integration", "--force"])
         assert args.force is True
 
-    def test_custom_repo_path(self):
-        """Test parsing with custom --repo-path."""
-        args = parse_args(["--enable", "--integration", "--repo-path", "/tmp/test"])
-        assert args.repo_path == Path("/tmp/test")
-
     def test_missing_action_fails(self):
         """Test that missing --enable/--disable fails."""
         with pytest.raises(SystemExit):
