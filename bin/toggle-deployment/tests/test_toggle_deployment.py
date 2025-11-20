@@ -174,9 +174,7 @@ class TestUpdateYamlFile:
         """Test that existing automatic_deploys_enabled is updated."""
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "test.yaml"
-            file_path.write_text(
-                "image_tag: v1.0.0\nautomatic_deploys_enabled: true\n"
-            )
+            file_path.write_text("image_tag: v1.0.0\nautomatic_deploys_enabled: true\n")
 
             result = update_yaml_file(file_path, False, dry_run=False)
 
@@ -189,9 +187,7 @@ class TestUpdateYamlFile:
         """Test that no change is made if value is already correct."""
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "test.yaml"
-            file_path.write_text(
-                "image_tag: v1.0.0\nautomatic_deploys_enabled: true\n"
-            )
+            file_path.write_text("image_tag: v1.0.0\nautomatic_deploys_enabled: true\n")
 
             result = update_yaml_file(file_path, True, dry_run=False)
 
@@ -224,9 +220,7 @@ class TestUpdateYamlFile:
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "test.yaml"
             file_path.write_text(
-                "image_tag: v2.5.0\n"
-                "promote_deployment: false\n"
-                "custom_key: custom_value\n"
+                "image_tag: v2.5.0\npromote_deployment: false\ncustom_key: custom_value\n"
             )
 
             update_yaml_file(file_path, True, dry_run=False)
