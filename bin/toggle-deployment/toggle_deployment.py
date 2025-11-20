@@ -9,8 +9,6 @@ from typing import Optional
 import git
 import yaml
 
-__version__ = "0.1.0"
-
 
 def parse_args(args: Optional[list[str]] = None) -> argparse.Namespace:
     """Parse command line arguments."""
@@ -18,12 +16,6 @@ def parse_args(args: Optional[list[str]] = None) -> argparse.Namespace:
         prog="toggle-deployment",
         description="Toggle automatic_deploys_enabled for GOV.UK Helm charts",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-
-    parser.add_argument(
-        "--version",
-        action="version",
-        version=f"%(prog)s {__version__}",
     )
 
     # Action group: enable or disable (mutually exclusive, required)
