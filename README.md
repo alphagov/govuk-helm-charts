@@ -21,6 +21,17 @@ Those charts are [automatically packaged and
 pushed](https://github.com/alphagov/govuk-helm-charts/blob/main/.github/workflows/release.yml)
 to our Helm repository when a change to `Chart.Version` is merged.
 
+## Repository operations
+
+The Makefile at the root of this repository provides common operational tasks.
+
+Run `make help` to see available targets, including:
+
+- **Linting**: `make lint` runs yamllint across the repository
+- **Deployment toggles**: `make enable-deployment-integration`, `make disable-deployment-staging`, etc. for toggling automatic deployments
+
+The `bin/` directory contains utility scripts for repository operations. See [bin/README.md](bin/README.md) for details.
+
 ## Local development
 
 ### Prerequisites

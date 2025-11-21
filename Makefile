@@ -1,4 +1,4 @@
-.PHONY: check-yamllint lint check help
+.PHONY: check-yamllint lint check help enable-deployment-integration disable-deployment-integration enable-deployment-staging disable-deployment-staging enable-deployment-production disable-deployment-production
 
 # Default target
 help: ## Show this help message
@@ -18,3 +18,22 @@ lint: check-yamllint ## Run yamllint on all YAML files
 	yamllint -f github .
 
 check: lint ## Alias for lint target
+
+# Toggle deployment targets
+enable-deployment-integration: ## Enable automatic deployments for integration
+	cd bin/toggle-deployment && uv run toggle-deployment --enable --integration
+
+disable-deployment-integration: ## Disable automatic deployments for integration
+	cd bin/toggle-deployment && uv run toggle-deployment --disable --integration
+
+enable-deployment-staging: ## Enable automatic deployments for staging
+	cd bin/toggle-deployment && uv run toggle-deployment --enable --staging
+
+disable-deployment-staging: ## Disable automatic deployments for staging
+	cd bin/toggle-deployment && uv run toggle-deployment --disable --staging
+
+enable-deployment-production: ## Enable automatic deployments for production
+	cd bin/toggle-deployment && uv run toggle-deployment --enable --production
+
+disable-deployment-production: ## Disable automatic deployments for production
+	cd bin/toggle-deployment && uv run toggle-deployment --disable --production
