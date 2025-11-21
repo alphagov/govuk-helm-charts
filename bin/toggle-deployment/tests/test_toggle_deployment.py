@@ -94,7 +94,6 @@ class TestCheckGitStatus:
 
 
 class TestFindImageTagFiles:
-
     def test_finds_files_in_environment(self):
         """Test that files are found in the correct environment directory."""
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -139,7 +138,6 @@ class TestFindImageTagFiles:
 
 
 class TestUpdateYamlFile:
-
     def test_adds_missing_key(self):
         """Test that automatic_deploys_enabled is added if missing."""
         with tempfile.TemporaryDirectory() as tmpdir:
