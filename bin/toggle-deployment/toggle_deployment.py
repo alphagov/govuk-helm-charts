@@ -167,7 +167,7 @@ def update_yaml_file(file_path: Path, target_value: bool, dry_run: bool = False)
         return False
 
 
-def run() -> int:
+def main() -> int:
     """Main entry point for the CLI."""
     args = parse_args()
 
@@ -224,4 +224,4 @@ def run() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(run())
+    sys.exit(main())
