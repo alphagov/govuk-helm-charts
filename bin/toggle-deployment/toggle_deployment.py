@@ -18,20 +18,18 @@ def parse_args(args: Optional[list[str]] = None) -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    # Action group: enable or disable (mutually exclusive, required)
-    action_group = parser.add_mutually_exclusive_group(required=True)
-    action_group.add_argument(
+    enable_group = parser.add_mutually_exclusive_group(required=True)
+    enable_group.add_argument(
         "--enable",
         action="store_true",
         help="Enable automatic deployments",
     )
-    action_group.add_argument(
+    enable_group.add_argument(
         "--disable",
         action="store_true",
         help="Disable automatic deployments",
     )
 
-    # Environment group: integration, staging, or production (mutually exclusive, required)
     env_group = parser.add_mutually_exclusive_group(required=True)
     env_group.add_argument(
         "--integration",
@@ -59,7 +57,7 @@ def parse_args(args: Optional[list[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "--force",
         action="store_true",
-        help="Allow running with a dirty working tree (not recommended)",
+        help="Allow running with a dirty working tree",
     )
 
     return parser.parse_args(args)
@@ -123,7 +121,6 @@ def update_yaml_file(file_path: Path, target_value: bool, dry_run: bool = False)
     Returns:
         True if file was (would be) modified, False otherwise
     """
-    # Read the file
     try:
         with open(file_path) as f:
             content = f.read()
@@ -131,7 +128,6 @@ def update_yaml_file(file_path: Path, target_value: bool, dry_run: bool = False)
         print(f"Warning: Could not read {file_path}: {e}", file=sys.stderr)
         return False
 
-    # Handle empty files
     if not content.strip():
         print(f"Skipping empty file: {file_path.name}")
         return False
@@ -150,7 +146,7 @@ def update_yaml_file(file_path: Path, target_value: bool, dry_run: bool = False)
         print(f"Warning: {file_path} does not contain a YAML dictionary", file=sys.stderr)
         return False
 
-    # Check if we need to make changes
+    # Do we need to make changes
     current_value = data.get("automatic_deploys_enabled")
     if current_value == target_value:
         return False
@@ -171,11 +167,11 @@ def update_yaml_file(file_path: Path, target_value: bool, dry_run: bool = False)
         return False
 
 
-def main() -> int:
+def run() -> int:
     """Main entry point for the CLI."""
     args = parse_args()
 
-    # Repo path is always relative to this script location
+    # Repo path is always relative to this script location: bin/toggle-deployment
     script_dir = Path(__file__).parent
     repo_path = script_dir / ".." / ".."
     repo_path = repo_path.resolve()
@@ -195,10 +191,8 @@ def main() -> int:
     print(f"{action} automatic deployments for {environment}{mode}")
     print()
 
-    # Check git status
     check_git_status(repo_path, args.force)
 
-    # Find all image-tag files
     files = find_image_tag_files(repo_path, environment)
 
     if not files:
@@ -208,7 +202,6 @@ def main() -> int:
     print(f"Found {len(files)} files to process")
     print()
 
-    # Process each file
     modified_count = 0
     skipped_count = 0
 
@@ -221,9 +214,7 @@ def main() -> int:
             print(f"  Skipped: {file_path.name}")
             skipped_count += 1
 
-    # Summary
-    print()
-    print(f"Summary: {modified_count} modified, {skipped_count} skipped")
+    print(f"\nSummary: {modified_count} modified, {skipped_count} skipped")
 
     if args.dry_run and modified_count > 0:
         print()
@@ -233,4 +224,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(run())

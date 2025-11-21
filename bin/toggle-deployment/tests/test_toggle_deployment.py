@@ -1,5 +1,3 @@
-"""Tests for toggle_deployment module."""
-
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch
@@ -19,7 +17,6 @@ class TestParseArgs:
     """Test argument parsing."""
 
     def test_enable_integration(self):
-        """Test parsing --enable --integration."""
         args = parse_args(["--enable", "--integration"])
         assert args.enable is True
         assert args.disable is False
@@ -28,7 +25,6 @@ class TestParseArgs:
         assert args.production is False
 
     def test_disable_staging(self):
-        """Test parsing --disable --staging."""
         args = parse_args(["--disable", "--staging"])
         assert args.enable is False
         assert args.disable is True
@@ -37,41 +33,33 @@ class TestParseArgs:
         assert args.production is False
 
     def test_production_with_dry_run(self):
-        """Test parsing with --dry-run flag."""
         args = parse_args(["--enable", "--production", "--dry-run"])
         assert args.enable is True
         assert args.production is True
         assert args.dry_run is True
 
     def test_force_flag(self):
-        """Test parsing with --force flag."""
         args = parse_args(["--disable", "--integration", "--force"])
         assert args.force is True
 
     def test_missing_action_fails(self):
-        """Test that missing --enable/--disable fails."""
         with pytest.raises(SystemExit):
             parse_args(["--integration"])
 
     def test_missing_environment_fails(self):
-        """Test that missing environment flag fails."""
         with pytest.raises(SystemExit):
             parse_args(["--enable"])
 
     def test_mutually_exclusive_actions(self):
-        """Test that --enable and --disable are mutually exclusive."""
         with pytest.raises(SystemExit):
             parse_args(["--enable", "--disable", "--integration"])
 
     def test_mutually_exclusive_environments(self):
-        """Test that environment flags are mutually exclusive."""
         with pytest.raises(SystemExit):
             parse_args(["--enable", "--integration", "--staging"])
 
 
 class TestCheckGitStatus:
-    """Test git status checking."""
-
     @patch("toggle_deployment.git.Repo")
     def test_clean_repo_passes(self, mock_repo_class):
         """Test that a clean repo passes the check."""
@@ -106,7 +94,6 @@ class TestCheckGitStatus:
 
 
 class TestFindImageTagFiles:
-    """Test file discovery logic."""
 
     def test_finds_files_in_environment(self):
         """Test that files are found in the correct environment directory."""
@@ -127,7 +114,6 @@ class TestFindImageTagFiles:
             assert {f.name for f in files} == {"app1", "app2", "app3"}
 
     def test_missing_directory_fails(self):
-        """Test that missing environment directory causes exit."""
         with tempfile.TemporaryDirectory() as tmpdir:
             repo_path = Path(tmpdir)
 
@@ -136,7 +122,6 @@ class TestFindImageTagFiles:
             assert exc_info.value.code == 1
 
     def test_ignores_subdirectories(self):
-        """Test that subdirectories are ignored."""
         with tempfile.TemporaryDirectory() as tmpdir:
             repo_path = Path(tmpdir)
             env_dir = repo_path / "charts" / "app-config" / "image-tags" / "staging"
@@ -154,7 +139,6 @@ class TestFindImageTagFiles:
 
 
 class TestUpdateYamlFile:
-    """Test YAML file updating logic."""
 
     def test_adds_missing_key(self):
         """Test that automatic_deploys_enabled is added if missing."""
@@ -171,7 +155,6 @@ class TestUpdateYamlFile:
             assert data["promote_deployment"] is True
 
     def test_updates_existing_key(self):
-        """Test that existing automatic_deploys_enabled is updated."""
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "test.yaml"
             file_path.write_text("image_tag: v1.0.0\nautomatic_deploys_enabled: true\n")
@@ -184,7 +167,6 @@ class TestUpdateYamlFile:
             assert data["image_tag"] == "v1.0.0"
 
     def test_no_change_when_already_set(self):
-        """Test that no change is made if value is already correct."""
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "test.yaml"
             file_path.write_text("image_tag: v1.0.0\nautomatic_deploys_enabled: true\n")
@@ -194,7 +176,6 @@ class TestUpdateYamlFile:
             assert result is False
 
     def test_dry_run_mode(self):
-        """Test that dry-run mode doesn't modify files."""
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "test.yaml"
             original_content = "image_tag: v1.0.0\n"
@@ -206,7 +187,6 @@ class TestUpdateYamlFile:
             assert file_path.read_text() == original_content
 
     def test_empty_file_handling(self):
-        """Test that empty files are skipped."""
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "empty.yaml"
             file_path.write_text("")
@@ -216,7 +196,6 @@ class TestUpdateYamlFile:
             assert result is False
 
     def test_preserves_existing_values(self):
-        """Test that existing keys are preserved."""
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "test.yaml"
             file_path.write_text(
@@ -232,7 +211,6 @@ class TestUpdateYamlFile:
             assert data["automatic_deploys_enabled"] is True
 
     def test_handles_malformed_yaml(self):
-        """Test that malformed YAML is handled gracefully."""
         with tempfile.TemporaryDirectory() as tmpdir:
             file_path = Path(tmpdir) / "bad.yaml"
             file_path.write_text("this is not: valid: yaml:\n  - bad")
