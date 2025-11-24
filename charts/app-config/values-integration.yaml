@@ -830,6 +830,7 @@ govukApplications:
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
     helmValues:
+      suspendAllCronJobs: false
       arch: arm64
       appResources:
         limits:
