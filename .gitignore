@@ -5,6 +5,9 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 helm-dist
 
+# Ignore the directory the govuk-app-render.sh script outptus to
+/output/
+
 # Python
 __pycache__/
 *.py[cod]
