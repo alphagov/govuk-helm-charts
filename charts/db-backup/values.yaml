@@ -2,6 +2,9 @@
 
 nameOverride: ""
 fullnameOverride: ""
+
+suspendAllCronJobs: false
+
 # https://github.com/alphagov/govuk-toolbox-image/tree/main
 toolbox:
   image:
