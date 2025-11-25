@@ -787,7 +787,6 @@ govukApplications:
 
   - name: content-store
     helmValues: &content-store
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -2430,7 +2429,6 @@ govukApplications:
 
   - name: publishing-api
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
