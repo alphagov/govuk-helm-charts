@@ -1123,7 +1123,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
@@ -1278,7 +1278,6 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
-          suspend: true
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1311,7 +1310,6 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
-          suspend: true
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
@@ -1551,7 +1549,7 @@ govukApplications:
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
@@ -1711,19 +1709,15 @@ govukApplications:
       cronTasks:
         - name: govuk-e2e-tests
           schedule: "*/10 7-19 * * 1-5"  # every 10 minutes, between 7:00 - 19:00 UTC, Monday to Friday
-          suspend: true
           project: main
         - name: govuk-e2e-tests-mirror-s3
           schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
-          suspend: true
           project: mirrorS3
         - name: govuk-e2e-tests-mirror-s3-replica
           schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
-          suspend: true
           project: mirrorS3Replica
         - name: govuk-e2e-tests-mirror-gcs
           schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
-          suspend: true
           project: mirrorGCS
 
   - name: govuk-exporter
@@ -2076,7 +2070,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1.5
@@ -2538,7 +2532,7 @@ govukApplications:
         hosts:
           - name: release.{{ .Values.k8sExternalDomainSuffix }}
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 250m
@@ -2864,18 +2858,15 @@ govukApplications:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
-          suspend: true
         - name: load-page-traffic
           command: "./bin/load_page_traffic.sh"
           schedule: "0 22 * * *"
-          suspend: true
           env:
             - name: AWS_SEARCH_ANALYTICS_BUCKET
               value: govuk-search-analytics-staging
         - name: update-detailed-index-popularity
           task: "search:update_popularity"
           schedule: "15 22 * * *"
-          suspend: true
           env:
             - name: SEARCH_INDEX
               value: detailed
@@ -2884,7 +2875,6 @@ govukApplications:
         - name: update-government-index-popularity
           task: "search:update_popularity"
           schedule: "35 22 * * *"
-          suspend: true
           env:
             - name: SEARCH_INDEX
               value: government
@@ -2893,12 +2883,11 @@ govukApplications:
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
           schedule: "35 00 * * *"
-          suspend: true
           env:
             - name: SEARCH_INDEX
               value: govuk
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
@@ -3014,7 +3003,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         replicaCount: 3
         types:
           - command: ['bin/rake', 'document_sync_worker:run']
@@ -3032,15 +3021,12 @@ govukApplications:
         - name: user-events-import-yesterdays-events
           task: "user_events:import_yesterdays_events"
           schedule: "30 12 * * *"
-          suspend: true
         - name: user-events-import-intraday-events
           task: "user_events:import_intraday_events"
           schedule: "45 04,10,16,22 * * *"
-          suspend: true
         - name: user-events-purge
           task: "user_events:purge_final_week_of_retention_period"
           schedule: "0 2 * * *"
-          suspend: true
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
           schedule: "09 9 * * *"  # 09:09am daily
