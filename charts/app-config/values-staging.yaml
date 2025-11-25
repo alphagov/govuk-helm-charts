@@ -290,7 +290,6 @@ govukApplications:
 
   - name: bouncer
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -340,7 +339,6 @@ govukApplications:
 
   - name: collections
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -365,7 +363,6 @@ govukApplications:
   - name: draft-collections
     repoName: collections
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -843,7 +840,6 @@ govukApplications:
   - name: draft-content-store
     repoName: content-store
     helmValues:
-      appEnabled: false
       <<: *content-store
       rails:
         createKeyBaseSecret: false
@@ -1049,7 +1045,6 @@ govukApplications:
 
   - name: email-alert-frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1082,7 +1077,6 @@ govukApplications:
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1123,7 +1117,6 @@ govukApplications:
   - name: email-alert-service
     helmValues:
       arch: arm64
-      appEnabled: false
       podDisruptionBudget: {}
       rails:
         enabled: false
@@ -1164,7 +1157,6 @@ govukApplications:
 
   - name: feedback
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1216,7 +1208,6 @@ govukApplications:
   - name: draft-feedback
     repoName: feedback
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1302,7 +1293,6 @@ govukApplications:
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1333,7 +1323,6 @@ govukApplications:
 
   - name: frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       uploadFrontendErrorPagesEnabled: true
       ingress:
@@ -1406,7 +1395,6 @@ govukApplications:
   - name: draft-frontend
     repoName: frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1480,7 +1468,6 @@ govukApplications:
 
   - name: government-frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1503,7 +1490,6 @@ govukApplications:
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1553,7 +1539,6 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1715,7 +1700,6 @@ govukApplications:
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -2080,7 +2064,6 @@ govukApplications:
 
   - name: locations-api
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -2534,7 +2517,6 @@ govukApplications:
 
   - name: release
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3334,7 +3316,6 @@ govukApplications:
   - name: smartanswers
     repoName: smart-answers
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3430,7 +3411,6 @@ govukApplications:
   - name: draft-static
     repoName: static
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
