@@ -75,7 +75,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -162,7 +162,7 @@ govukApplications:
           cpu: 100m
           memory: 800Mi
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -403,7 +403,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -501,7 +501,7 @@ govukApplications:
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 2
@@ -594,7 +594,7 @@ govukApplications:
           - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -697,7 +697,7 @@ govukApplications:
           cpu: 10m
           memory: 650Mi
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
@@ -890,7 +890,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -963,7 +963,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1.5
@@ -1915,7 +1915,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2146,7 +2146,7 @@ govukApplications:
           memory: 512Mi
       nginxClientMaxBodySize: &max-upload-size 500M
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2236,7 +2236,7 @@ govukApplications:
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2277,7 +2277,7 @@ govukApplications:
           memory: 512Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2425,7 +2425,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       redis:
         enabled: true
         config:
@@ -2830,7 +2830,7 @@ govukApplications:
       redis:
         enabled: true
       workers:
-        enabled: false
+        enabled: true
       cronTasks:
         # Re-import completion denylist to Discovery Engine so it doesn't drift from local DB
         - name: reimport-completion-denylist
@@ -3263,7 +3263,7 @@ govukApplications:
           memory: 600Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3566,7 +3566,7 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3659,7 +3659,7 @@ govukApplications:
       uploadAssets:
         path: /app/public/assets/support
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3719,7 +3719,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3810,7 +3810,7 @@ govukApplications:
           - name: transition.{{ .Values.k8sExternalDomainSuffix }}
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3881,7 +3881,7 @@ govukApplications:
           suspend: true
       nginxClientMaxBodySize: *max-upload-size
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3982,7 +3982,7 @@ govukApplications:
       dbMigrationEnabled: true
       dbMigrationActiveDeadlineSeconds: 3700 # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 2
