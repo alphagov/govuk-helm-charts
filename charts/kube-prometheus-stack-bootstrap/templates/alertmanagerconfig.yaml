@@ -106,14 +106,6 @@ spec:
       groupWait: 5m
       groupInterval: 30m
     - matchers:
-      - name: destination
-        value: slack-cronjob-notifications
-        matchType: =
-      receiver: 'slack-cronjob-notifications'
-      repeatInterval: 1d
-      groupWait: 5m
-      groupInterval: 30m
-    - matchers:
         - name: destination
           value: slack-whitehall-notifications
           matchType: =
@@ -144,12 +136,6 @@ spec:
       text: |-
         {{- include "slack.expiringtokenstext" . | nindent 8 }}
   - name: 'slack-chat-notifications'
-    slackConfigs:
-    - channel: '#dev-notifications-ai-govuk'
-      {{- include "slack.template" . | nindent 6 }}
-      text: |-
-        {{- include "slack.text" . | nindent 8 }}
-  - name: 'slack-cronjob-notifications'
     slackConfigs:
     - channel: '#dev-notifications-ai-govuk'
       {{- include "slack.template" . | nindent 6 }}

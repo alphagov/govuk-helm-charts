@@ -10,7 +10,7 @@ groups:
         for: 5m
         labels:
           severity: critical
-          destination: slack-cronjob-notifications
+          destination: slack-search-team
         annotations:
           summary: search-api-load-page-traffic cronjob failing
           description: >-
