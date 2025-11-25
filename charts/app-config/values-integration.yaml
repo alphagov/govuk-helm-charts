@@ -1294,6 +1294,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-finder-frontend-email-alert-api
               key: bearer_token
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: DISABLE_LTR_ON_PATHS
           value: /find-licences
 
@@ -1319,6 +1321,8 @@ govukApplications:
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
         - name: PUBLISHING_API_BEARER_TOKEN
