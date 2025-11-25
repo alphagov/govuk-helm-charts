@@ -2885,7 +2885,6 @@ govukApplications:
 
   - name: search-api
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3031,7 +3030,6 @@ govukApplications:
 
   - name: search-api-v2
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
