@@ -293,6 +293,7 @@ govukApplications:
 
   - name: bouncer
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -342,6 +343,7 @@ govukApplications:
 
   - name: collections
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -366,6 +368,7 @@ govukApplications:
   - name: draft-collections
     repoName: collections
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -851,6 +854,7 @@ govukApplications:
   - name: draft-content-store
     repoName: content-store
     helmValues:
+      appEnabled: false
       <<: *content-store
       rails:
         createKeyBaseSecret: false
@@ -1060,6 +1064,7 @@ govukApplications:
 
   - name: email-alert-frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1092,6 +1097,7 @@ govukApplications:
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1139,7 +1145,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
@@ -1173,6 +1179,7 @@ govukApplications:
 
   - name: feedback
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1224,6 +1231,7 @@ govukApplications:
   - name: draft-feedback
     repoName: feedback
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1282,6 +1290,7 @@ govukApplications:
 
   - name: finder-frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1309,6 +1318,7 @@ govukApplications:
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1339,6 +1349,7 @@ govukApplications:
 
   - name: frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       uploadFrontendErrorPagesEnabled: true
       ingress:
@@ -1411,6 +1422,7 @@ govukApplications:
   - name: draft-frontend
     repoName: frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1484,6 +1496,7 @@ govukApplications:
 
   - name: government-frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1506,6 +1519,7 @@ govukApplications:
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1556,6 +1570,7 @@ govukApplications:
 
   - name: govuk-chat
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -1568,7 +1583,7 @@ govukApplications:
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
@@ -1717,6 +1732,7 @@ govukApplications:
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -2090,6 +2106,7 @@ govukApplications:
 
   - name: locations-api
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -2102,7 +2119,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1.5
@@ -2554,6 +2571,7 @@ govukApplications:
 
   - name: release
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -2938,7 +2956,7 @@ govukApplications:
             - name: SEARCH_INDEX
               value: govuk
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
@@ -3054,7 +3072,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
         replicaCount: 3
         types:
           - command: ['bin/rake', 'document_sync_worker:run']
@@ -3363,6 +3381,7 @@ govukApplications:
   - name: smartanswers
     repoName: smart-answers
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3394,6 +3413,7 @@ govukApplications:
 
   - name: static
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3458,6 +3478,7 @@ govukApplications:
   - name: draft-static
     repoName: static
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
