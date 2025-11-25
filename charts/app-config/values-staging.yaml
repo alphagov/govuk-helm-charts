@@ -1290,7 +1290,6 @@ govukApplications:
 
   - name: finder-frontend
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -3413,7 +3412,6 @@ govukApplications:
 
   - name: static
     helmValues:
-      appEnabled: false
       arch: arm64
       appResources:
         limits:
