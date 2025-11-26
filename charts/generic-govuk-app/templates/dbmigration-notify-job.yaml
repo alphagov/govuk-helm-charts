@@ -44,7 +44,7 @@ spec:
           emptyDir: {}
       containers:
         - name: notify
-          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v6
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v13
           command:
             - "/bin/bash"
             - "-c"
