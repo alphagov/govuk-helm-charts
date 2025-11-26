@@ -33,7 +33,7 @@ spec:
                 claimName: {{ include "mirror.fullname" . }}
             - name: app-tmp
               emptyDir: {}
-          initContainers:
+          containers:
             - name: scrape
               image: "{{ .Values.images.GovukMirror.repository }}:{{ .Values.images.GovukMirror.tag }}"
               imagePullPolicy: "Always"
@@ -79,45 +79,10 @@ spec:
                   value: https://www.{{ .Values.externalDomainSuffix }}/last-updated.txt
                 - name: MIRROR_AVAILABILITY_URL
                   value: https://www.{{ .Values.externalDomainSuffix }}
+                - name: AWS_REGION
+                  value: eu-west-2
+                - name: S3_BUCKET_NAME
+                  value: govuk-{{ .Values.govukEnvironment }}-mirror
                 {{- with .Values.extraEnv }}
                   {{- (tpl (toYaml .) $) | trim | nindent 16 }}
                 {{- end }}
-          containers:
-            - name: upload-to-s3
-              image: peakcom/s5cmd:v2.3.0
-              imagePullPolicy: "Always"
-              resources:
-                limits:
-                  cpu: 4
-                  memory: 8000Mi
-                requests:
-                  cpu: 2
-                  memory: 5000Mi
-              securityContext:
-                {{- toYaml $.Values.securityContext | nindent 16 }}
-              volumeMounts:
-                - name: app-mirror-sync
-                  mountPath: /data
-                - name: app-tmp
-                  mountPath: /tmp
-              env:
-                - name: AWS_REGION
-                  value: eu-west-2
-                - name: BUCKET_NAME
-                  value: govuk-{{ .Values.govukEnvironment }}-mirror
-                - name: WWW_DOMAIN
-                  value: www.{{ .Values.externalDomainSuffix }}
-                - name: ASSETS_DOMAIN
-                  value: {{ .Values.assetsDomain }}
-              command:
-                - /bin/sh
-                - -c
-                - |-
-                  set -eu
-                  # Sync mirrors
-                  /s5cmd sync --size-only "/data/${WWW_DOMAIN}" "s3://${BUCKET_NAME}/"
-                  /s5cmd sync --size-only "/data/${ASSETS_DOMAIN}" "s3://${BUCKET_NAME}/"
-
-                  # Upload file for checking mirror freshness
-                  date -Iseconds > "/data/${WWW_DOMAIN}/last-updated.txt"
-                  /s5cmd cp "/data/${WWW_DOMAIN}/last-updated.txt" "s3://${BUCKET_NAME}/${WWW_DOMAIN}/last-updated.txt"
