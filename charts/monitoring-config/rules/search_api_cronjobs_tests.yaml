@@ -31,7 +31,7 @@ tests:
         exp_alerts:
           - exp_labels:
               alertname: CronjobFailed
-              destination: slack-cronjob-notifications
+              destination: slack-search-team
               cronjob: search-api-load-page-traffic
               severity: critical
             exp_annotations:
