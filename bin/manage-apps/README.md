@@ -1,33 +1,51 @@
 # App Management
 
-A set of Python scripts to automatically enable/disable various app components by modifying an environment's values file.
+A Python script to automatically enable/disable various app components by modifying an environment's values file.
 
-The scripts manipulate the values file as a string instead of parsing it.
-This is to preserve the format of the file and features such as comments, non-essential whitespace and anchors.
+The scripts uses yq to make changes to the values file.
+Comments, YAML anchors and general layout are preserved by yq when it rewrites the values file.
+
+## Requirements
+
+* `uv`
+* `yq` version 4 or higher
 
 ## Usage
 
-Each script takes two arguments:
-
-* path to an environment's values file (e.g. `charts/app-config/values-staging.yaml`)
-* path to a file containing a list of app names to perform the operation on
+This script requires a CSV export of the 'App categories for the migration work' spreadsheet.
+This sheet is available in Google Drive.
 
 Each script updates the provided YAML file in-place.
 
-Example:
+See `./manage-yq.py --help` for a list of all arguments.
+
+Examples:
 
 ```sh
-./bin/manage-apps/apps-disable.py charts/app-config/values-integration.yaml apps-publishing.txt
+# disable big 20 publishing app deployments in production
+./bin/manage-apps/manage-yq.py \
+  --set big20 \
+  --phase publishing \
+  --action disable \
+  --target app \
+  --values charts/app-config/values-production.yaml \
+  --manifest /path/to/spreadsheet/export.csv
+
+# enable big 20 frontend cron jobs in staging
+./bin/manage-apps/manage-yq.py \
+  --set big20 \
+  --phase frontend \
+  --action enable \
+  --target cron \
+  --values charts/app-config/values-staging.yaml \
+  --manifest /path/to/spreadsheet/export.csv
+
+# enable all small 6 workers in production
+./bin/manage-apps/manage-yq.py \
+  --set small6 \
+  --phase all \
+  --action enable \
+  --target worker \
+  --values charts/app-config/values-production.yaml \
+  --manifest /path/to/spreadsheet/export.csv
 ```
-
-## Testing
-
-The script `test-script.py` can be used to validate a script is behaving correctly.
-This executes the desired script, parses the output and validates that the expected change has taken place.
-
-Example:
-
-```sh
-./bin/manage-apps/test-script.py workers-disable.py charts/app-config/values-production.yaml apps-frontend.txt
-```
-
