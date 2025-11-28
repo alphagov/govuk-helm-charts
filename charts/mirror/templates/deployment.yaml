@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+  labels:
+    app: {{ .Values.name }}
+    app.kubernetes.io/name: {{ .Values.name }}
+    app.kubernetes.io/component: app
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+        app.kubernetes.io/name: {{ .Values.name }}
+        app.kubernetes.io/component: app
+    spec:
+      securityContext:
+        {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+      containers:
+        - name: app
+          image: {{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}
+          command: ["/bin/govuk-mirror-resp-status-check"]
+          imagePullPolicy: "Always"
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 16 }}
+          env:
+            - name: MIRROR_AVAILABILITY_URL
+              value: https://www.{{ .Values.externalDomainSuffix }}
+            - name: STATUS_CHECK_REFRESH_INTERVAL
+              value: "4h"
+            {{- with .Values.extraEnv }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet: &probe
+              path: /metrics
+              port: metrics
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 30
+          readinessProbe:
+            httpGet: *probe
+            failureThreshold: 2
+            periodSeconds: 5
+            timeoutSeconds: 30
+          startupProbe:
+            httpGet: *probe
+            failureThreshold: 15
+            periodSeconds: 2
+            timeoutSeconds: 2
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

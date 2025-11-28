@@ -1769,9 +1769,8 @@ govukApplications:
 
   - name: mirror
     chartPath: charts/mirror
+    repoName: govuk-mirror
     postSyncWorkflowEnabled: "false"
-    imageValues:
-      - govuk-mirror
     helmValues:
       serviceAccount:
         annotations:

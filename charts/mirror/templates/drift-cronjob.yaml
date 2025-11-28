@@ -29,7 +29,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: scrape
-              image: "{{ .Values.images.GovukMirror.repository }}:{{ .Values.images.GovukMirror.tag }}"
+              image: {{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}
               command:
                 - /bin/govuk-mirror-comparison
               imagePullPolicy: "Always"
