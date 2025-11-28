@@ -5,6 +5,10 @@ Expand the name of the chart.
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "drift.name" -}}
+{{- include "mirror.name" . }}-drift-check
+{{- end }}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
@@ -21,6 +25,10 @@ If release name contains chart name it will be used as a full name.
 {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 {{- end }}
+{{- end }}
+
+{{- define "drift.fullname" -}}
+{{- include "mirror.fullname" . }}-drift-check
 {{- end }}
 
 {{/*
@@ -42,11 +50,25 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
+{{- define "drift.labels" -}}
+helm.sh/chart: {{ include "mirror.chart" . }}
+{{ include "drift.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
 {{/*
 Selector labels
 */}}
 {{- define "mirror.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "mirror.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "drift.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "drift.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
@@ -59,4 +81,8 @@ Create the name of the service account to use
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
+{{- end }}
+
+{{- define "drift.serviceAccountName" -}}
+{{ include "mirror.serviceAccountName" .}} {{/*Drift detection uses the same service account*/}}
 {{- end }}

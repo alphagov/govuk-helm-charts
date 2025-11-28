@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "mirror.labels" . | nindent 4 }}
 spec:
-  schedule: "{{ .Values.schedule }}"
+  schedule: "{{ .Values.mirrorSchedule }}"
   jobTemplate:
     metadata:
       name: "{{ include "mirror.fullname" . }}"

@@ -1,0 +1,53 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: "{{ include "drift.fullname" . }}"
+  labels:
+    {{- include "drift.labels" . | nindent 4 }}
+spec:
+  schedule: "{{ .Values.mirrorSchedule }}"
+  jobTemplate:
+    metadata:
+      name: "{{ include "drift.fullname" . }}"
+      labels:
+        {{- include "drift.labels" . | nindent 8 }}
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          name: "{{ include "drift.fullname" . }}"
+          labels:
+            {{- include "drift.labels" . | nindent 12 }}
+          annotations:
+            cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+        spec:
+          enableServiceLinks: false
+          serviceAccountName: {{ include "drift.serviceAccountName" . }}
+          securityContext:
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+          restartPolicy: Never
+          containers:
+            - name: scrape
+              image: "{{ .Values.images.GovukMirror.repository }}:{{ .Values.images.GovukMirror.tag }}"
+              command:
+                - /bin/govuk-mirror-comparison
+              imagePullPolicy: "Always"
+              workingDir: /data
+              resources:
+                limits:
+                  cpu: 4
+                  memory: 20000Mi
+                requests:
+                  cpu: 2
+                  memory: 15000Mi
+              securityContext:
+                {{- toYaml $.Values.securityContext | nindent 16 }}
+              env:
+                - name: COMPARE_TOP_UNSAMPLED_COUNT
+                  value: '100'
+                - name: COMPARE_REMAINING_SAMPLED_COUNT
+                  value: '100'
+                {{- with .Values.extraEnv }}
+                  {{- (tpl (toYaml .) $) | trim | nindent 16 }}
+                {{- end }}
