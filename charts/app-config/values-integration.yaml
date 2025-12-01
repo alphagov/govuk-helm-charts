@@ -2533,6 +2533,7 @@ govukApplications:
 
   - name: release
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
