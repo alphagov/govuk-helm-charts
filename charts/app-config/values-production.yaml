@@ -3115,7 +3115,7 @@ govukApplications:
           schedule: "0 6 * * *" # 06:00 GMT daily
         - name: rpt-explicit-metrics
           task: "quality:report_quality_metrics[explicit]"
-          schedule: "0 7 * * *" # 07:00 GMT daily
+          schedule: "0 4 * * *" # 04:00 GMT daily
         - name: rpt-binary-metrics
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
