@@ -401,7 +401,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
