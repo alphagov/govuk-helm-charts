@@ -39,6 +39,9 @@ spec:
           imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           securityContext:
             {{- toYaml $.Values.securityContext | nindent 16 }}
+          ports:
+            - name: metrics
+              containerPort: 9090
           env:
             - name: MIRROR_AVAILABILITY_URL
               value: https://www.{{ .Values.externalDomainSuffix }}
