@@ -1479,6 +1479,44 @@ govukApplications:
               name: signon-token-frontend-publishing-api
               key: bearer_token
 
+  - name: fact-check-manager
+    helmValues:
+      arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
+      dbMigrationEnabled: true
+      workers:
+        enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 200Mi
+      redis:
+        enabled: true
+      ingress:
+        enabled: true
+        annotations:
+          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          alb.ingress.kubernetes.io/group.order: "155"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "fact-check-manager.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: fact-check-manager.{{ .Values.k8sExternalDomainSuffix }}
+      nginxProxyReadTimeout: 30s
+      extraEnv:
+        - name: MAINTENANCE_MODE
+          value: "false"
+
   - name: government-frontend
     helmValues:
       arch: arm64
