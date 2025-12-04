@@ -350,6 +350,14 @@ govukApplications:
               key: bearer_token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+        - name: GRAPHQL_RATE_MINISTERS_INDEX
+          value: "0.5"
+        - name: GRAPHQL_RATE_ROLE
+          value: "0.5"
+        - name: GRAPHQL_RATE_TOPICAL_EVENT
+          value: "0.01"
+        - name: GRAPHQL_RATE_WORLD_INDEX
+          value: "0.5"
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
 
