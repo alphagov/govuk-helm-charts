@@ -2,10 +2,10 @@ mirrorSchedule: "43 1 * * *"
 driftSchedule: "0 12 * * *"
 
 # Image configuration - these defaults are overridden by app-config via imageValues
-images:
-  GovukMirror:
-    repository: govuk-mirror
-    tag: release
+appImage:
+  repository: ""  # Dummy value, overridden in ArgoCD config.
+  pullPolicy: Always
+  tag: latest
 
 # Service account configuration
 serviceAccount:
