@@ -1744,18 +1744,6 @@ govukApplications:
           project: mirrorGCS
           suspend: true
 
-  - name: govuk-exporter
-    chartPath: charts/govuk-exporter
-    helmValues:
-      replicaCount: 1
-      extraEnv:
-        - name: MIRROR_FRESHNESS_URL
-          value: https://www.{{ .Values.externalDomainSuffix }}/last-updated.txt
-        - name: MIRROR_AVAILABILITY_URL
-          value: https://www.{{ .Values.externalDomainSuffix }}
-        - name: BACKENDS
-          value: "mirrorS3,mirrorS3Replica,mirrorGCS"
-
   - name: govuk-jobs
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
