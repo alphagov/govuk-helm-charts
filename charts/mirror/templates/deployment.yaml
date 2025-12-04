@@ -1,31 +1,42 @@
+{{- $fullName := include "mirror.fullname" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}
+  name: {{ $fullName }}
   labels:
-    app: {{ .Values.name }}
-    app.kubernetes.io/name: {{ .Values.name }}
+    {{- include "mirror.labels" . | nindent 4 }}
+    app: {{ $fullName }}
     app.kubernetes.io/component: app
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: 2
   selector:
     matchLabels:
-      app: {{ .Values.name }}
+      app: {{ $fullName }}
   template:
     metadata:
       labels:
-        app: {{ .Values.name }}
-        app.kubernetes.io/name: {{ .Values.name }}
+        {{- include "mirror.labels" . | nindent 8 }}
+        app: {{ $fullName }}
+        app.govuk/repository-name: {{ .Values.repoName | default .Release.Name  }}
         app.kubernetes.io/component: app
     spec:
+      {{- if .Values.serviceAccount.enabled }}
+      automountServiceAccountToken: true
+      serviceAccountName: {{ .Values.serviceAccount.name | default $fullName }}
+      {{- else }}
+      automountServiceAccountToken: false
+      {{- end }}
+      enableServiceLinks: false
       securityContext:
         {{- toYaml $.Values.podSecurityContext | nindent 12 }}
       containers:
         - name: app
           image: {{ .Values.appImage.repository }}:{{ .Values.appImage.tag }}
           command: ["/bin/govuk-mirror-resp-status-check"]
-          imagePullPolicy: "Always"
+          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
           securityContext:
             {{- toYaml $.Values.securityContext | nindent 16 }}
           env:
@@ -55,3 +66,12 @@ spec:
             timeoutSeconds: 2
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if eq "arm64" .Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ .Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ .Values.arch }}
+      {{- end }}
