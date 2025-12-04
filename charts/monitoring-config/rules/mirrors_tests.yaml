@@ -6,20 +6,19 @@ evaluation_interval: 1m
 tests:
   - interval: 1m
     input_series:
-      - series: 'govuk_mirror_last_updated_time{backend="backend1"}'
+      - series: 'govuk_mirror_last_updated_time{job="mirror_metrics"}'
         values: '0x21600'
 
     promql_expr_test:
       - expr: |
-          time() - min(govuk_mirror_last_updated_time) by (backend)
+          time() - max(govuk_mirror_last_updated_time{job="mirror_metrics"})
         eval_time: 6h0m
         exp_samples:
-          - labels: '{backend="backend1"}'
-            value: 21600
+          - value: 21600
 
   - interval: 1m
     input_series:
-      - series: 'govuk_mirror_last_updated_time{backend="backend1"}'
+      - series: 'govuk_mirror_last_updated_time{job="mirror_metrics"}'
         values: '0x176400'
 
     alert_rule_test:
@@ -27,7 +26,6 @@ tests:
         alertname: MirrorFreshnessAlert
         exp_alerts:
           - exp_labels:
-              backend: backend1
               severity: warning
             exp_annotations:
               summary: Mirror freshness has exceeded two days

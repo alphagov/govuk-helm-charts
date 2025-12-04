@@ -3,7 +3,7 @@ groups:
     rules:
       - record: global:govuk_mirror_freshness_seconds
         expr: |
-          time() - min(govuk_mirror_last_updated_time) by (backend)
+          time() - max(govuk_mirror_last_updated_time{job="mirror_metrics"})
 
       - alert: MirrorFreshnessAlert
         expr: |
