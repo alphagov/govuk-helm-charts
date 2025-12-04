@@ -36,8 +36,6 @@ The chart includes:
 - **ExternalSecret**: Manages rate limit tokens from AWS Secrets Manager
 - **Resource limits**: Prevents resource exhaustion
 
-The mirror freshness can be monitored via the `last-updated.txt` file created in the S3 bucket.
-
 ### Manual Run
 
 To trigger a manual run outside the schedule:

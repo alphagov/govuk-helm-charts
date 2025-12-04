@@ -1,5 +1,0 @@
-apiVersion: v2
-name: govuk-exporter
-description: A Prometheus exporter for GOV.UK
-type: application
-version: 0.1.0
