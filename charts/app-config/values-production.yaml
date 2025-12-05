@@ -7,17 +7,13 @@ k8sExternalDomainSuffix: eks.production.govuk.digital
 publishingDomainSuffix: publishing.service.gov.uk
 assetsDomain: assets.publishing.service.gov.uk
 dguDomain: data.gov.uk
-
 awsAccountId: "172025368201"
-
 cspReportURI: https://csp-reporter.publishing.service.gov.uk/report
-
 replicaCount: 3
 workers:
   replicaCount: 3
 podDisruptionBudget: &pdb
   maxUnavailable: 2
-
 _alb-ingress-defaults: &alb-ingress-defaults
   alb.ingress.kubernetes.io/scheme: internet-facing
   alb.ingress.kubernetes.io/target-type: ip
@@ -26,33 +22,25 @@ _alb-ingress-defaults: &alb-ingress-defaults
   alb.ingress.kubernetes.io/healthcheck-path: /readyz
   alb.ingress.kubernetes.io/load-balancer-name: "{{ .Release.Name }}"
   alb.ingress.kubernetes.io/load-balancer-attributes: >
-    access_logs.s3.enabled=true,
-    access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-    access_logs.s3.prefix=elb/{{ .Release.Name }}
-  alb.ingress.kubernetes.io/shield-advanced-protection: "true"
+    access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/{{ .Release.Name }}
 
+  alb.ingress.kubernetes.io/shield-advanced-protection: "true"
 _alb-ingress-waf-ruleset-www: &alb-ingress-waf-ruleset-www
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
     arn:aws:wafv2:eu-west-1:172025368201:regional/webacl/cache_public_web_acl/d9033e40-69e8-4bbc-a61a-cd3c50254d04
-
 _alb-ingress-waf-ruleset-backend: &alb-ingress-waf-ruleset-backend
   alb.ingress.kubernetes.io/wafv2-acl-arn: >-
     arn:aws:wafv2:eu-west-1:172025368201:regional/webacl/backend_public_web_acl/b1b08896-5b4d-4a99-9669-b1118c0f945e
-
 _alb-ingress-group-backend: &alb-ingress-group-backend
-  <<: *alb-ingress-waf-ruleset-backend
+  !!merge <<: *alb-ingress-waf-ruleset-backend
   alb.ingress.kubernetes.io/group.name: backend
   alb.ingress.kubernetes.io/load-balancer-name: backend
   alb.ingress.kubernetes.io/load-balancer-attributes: >
-    access_logs.s3.enabled=true,
-    access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-    access_logs.s3.prefix=elb/backend
+    access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/backend
 
 emergency-banner-redis:
   - &emergency-banner-redis redis://whitehall-admin-redis/1
-
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
-
 govukApplications:
   - name: account-api
     helmValues:
@@ -81,9 +69,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "10"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "account-api.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -142,7 +130,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-account-api
               key: oauth_secret
-
   - name: asset-manager
     chartPath: charts/asset-manager
     helmValues:
@@ -168,15 +155,14 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: "20"
           alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
-            access_logs.s3.enabled=true,
-            access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-            access_logs.s3.prefix=elb/assets-origin
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions >
+            access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/assets-origin
+
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "*assets*.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -186,13 +172,13 @@ govukApplications:
               - path: /government/uploads/
               - path: /government/assets/
               - path: /media/
-              - path: /auth/gds  # Viewing draft assets requires user auth.
+              - path: /auth/gds # Viewing draft assets requires user auth.
           - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
             paths:
               - path: /government/uploads/
               - path: /government/assets/
               - path: /media/
-              - path: /auth/gds  # Viewing draft assets requires user auth.
+              - path: /auth/gds # Viewing draft assets requires user auth.
               - path: /robots.txt
       assetManagerNFS: &assets-nfs assets.production.govuk-internal.digital
       nginxConfigMap:
@@ -225,14 +211,12 @@ govukApplications:
           value: warn
         - name: AWS_S3_BUCKET_NAME
           value: govuk-assets-production
-
   - name: argo-services
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
     helmValues:
       nextEnvironment: ""
       enableWebhookIngress: true
-
   - name: authenticating-proxy
     helmValues:
       arch: arm64
@@ -246,9 +230,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "20"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "draft-origin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -279,7 +263,6 @@ govukApplications:
             secretKeyRef:
               name: authenticating-proxy-jwt-auth-secret
               key: JWT_AUTH_SECRET
-
   - name: bouncer
     helmValues:
       arch: arm64
@@ -298,7 +281,7 @@ govukApplications:
         enabled: true
         tls: {}
         annotations:
-          <<: *alb-ingress-waf-ruleset-www
+          !!merge <<: *alb-ingress-waf-ruleset-www
           alb.ingress.kubernetes.io/scheme: internet-facing
           alb.ingress.kubernetes.io/target-type: ip
           alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
@@ -307,7 +290,7 @@ govukApplications:
           alb.ingress.kubernetes.io/shield-advanced-protection: "true"
           external-dns.alpha.kubernetes.io/hostname: bouncer.{{ .Values.k8sExternalDomainSuffix }}
         rules:
-          - http:  # Match all hostnames.
+          - http: # Match all hostnames.
               paths:
                 - path: "/"
                   pathType: Prefix
@@ -328,7 +311,6 @@ govukApplications:
           location /eff/action/worldPayCallback {
             proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
           }
-
   - name: collections
     helmValues:
       arch: arm64
@@ -360,7 +342,6 @@ govukApplications:
           value: "0.5"
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
-
   - name: draft-collections
     repoName: collections
     helmValues:
@@ -388,7 +369,6 @@ govukApplications:
           value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
-
   - name: collections-publisher
     helmValues:
       arch: arm64
@@ -414,9 +394,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "30"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "collections-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -472,7 +452,6 @@ govukApplications:
             secretKeyRef:
               name: collections-publisher-mysql
               key: DATABASE_URL
-
   - name: content-block-manager
     repoName: content-block-manager
     helmValues:
@@ -488,9 +467,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "10"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-block-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -544,7 +523,6 @@ govukApplications:
               key: bearer_token
         - name: E2E_USER_EMAILS
           value: "2nd-line-support@digital.cabinet-office.gov.uk,govuk-publishing-content-modelling-team@digital.cabinet-office.gov.uk"
-
   - name: content-data-admin
     helmValues:
       arch: arm64
@@ -566,13 +544,13 @@ govukApplications:
         enabled: true
         redirect: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "50"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-data.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/actions.{{ .Release.Name }}-redirect: >
+          alb.ingress.kubernetes.io/actions.{{ .Release.Name }}-redirect: |
             {
               "Type":"redirect",
               "RedirectConfig": {
@@ -584,7 +562,7 @@ govukApplications:
                 "StatusCode":"HTTP_301"
               }
             }
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-redirect: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}-redirect: |
             [{"field":"host-header","hostHeaderConfig":{"values":[
                 "content-data-admin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -657,7 +635,6 @@ govukApplications:
           value: *publishing-notify-template
         - name: FIND_CONTENT_QUERY_PAGE_SIZE
           value: "1000"
-
   - name: content-data-api
     helmValues:
       arch: arm64
@@ -673,9 +650,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "60"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-data-api.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -772,7 +749,6 @@ govukApplications:
           value: content_data_api_govuk_importer
         - name: RABBITMQ_QUEUE_DEAD
           value: content_data_api_dead_letter_queue
-
   - name: content-store
     helmValues: &content-store
       arch: arm64
@@ -818,7 +794,6 @@ govukApplications:
               key: DATABASE_URL
         - name: WEB_CONCURRENCY
           value: '4'
-
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
@@ -836,17 +811,16 @@ govukApplications:
       serviceAccount:
         annotations:
           eks.amazonaws.com/role-arn: arn:aws:iam::172025368201:role/db-backup-govuk
-
   - name: draft-content-store
     repoName: content-store
     helmValues:
-      <<: *content-store
+      !!merge <<: *content-store
       rails:
         createKeyBaseSecret: false
         # use the same secret as the live content-store, it will reduce toil
         secretKeyBaseName: content-store-rails-secret-key-base
       sentry:
-        createSecret: false  # Sentry DSNs are per repo.
+        createSecret: false # Sentry DSNs are per repo.
         dsnSecretName: content-store-sentry
       extraEnv:
         - name: SENTRY_ENVIRONMENT
@@ -870,7 +844,6 @@ govukApplications:
             secretKeyRef:
               name: draft-content-store-postgres
               key: DATABASE_URL
-
   - name: content-tagger
     helmValues:
       arch: arm64
@@ -896,9 +869,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "80"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-tagger.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -939,7 +912,6 @@ govukApplications:
             secretKeyRef:
               name: content-tagger-postgres
               key: DATABASE_URL
-
   - name: email-alert-api
     helmValues:
       arch: arm64
@@ -967,9 +939,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "90"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "email-alert-api-public.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -1042,7 +1014,6 @@ govukApplications:
             limit_req zone=email_alert_api_public burst=20 nodelay;
             proxy_pass http://email-alert-api;
           }
-
   - name: email-alert-frontend
     helmValues:
       arch: arm64
@@ -1073,7 +1044,6 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
-
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
@@ -1090,7 +1060,7 @@ govukApplications:
       redis:
         enabled: true
       sentry:
-        createSecret: false  # Sentry DSNs are per repo.
+        createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
       extraEnv:
@@ -1113,7 +1083,6 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
-
   - name: email-alert-service
     helmValues:
       arch: arm64
@@ -1151,11 +1120,9 @@ govukApplications:
             secretKeyRef:
               name: email-alert-service-rabbitmq
               key: RABBITMQ_URL
-
   - name: external-secrets
     chartPath: charts/external-secrets
     postSyncWorkflowEnabled: "false"
-
   - name: feedback
     helmValues:
       arch: arm64
@@ -1205,7 +1172,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
-
   - name: draft-feedback
     repoName: feedback
     helmValues:
@@ -1220,7 +1186,7 @@ govukApplications:
       rails:
         createKeyBaseSecret: false
       sentry:
-        createSecret: false  # Sentry DSNs are per repo.
+        createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
       extraEnv:
@@ -1264,7 +1230,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
-
   - name: finder-frontend
     helmValues:
       arch: arm64
@@ -1292,7 +1257,6 @@ govukApplications:
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
-
   - name: frontend
     helmValues:
       arch: arm64
@@ -1300,7 +1264,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: "16"
@@ -1367,7 +1331,6 @@ govukApplications:
           value: '4'
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
-
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
@@ -1382,7 +1345,7 @@ govukApplications:
       rails:
         createKeyBaseSecret: false
       sentry:
-        createSecret: false  # Sentry DSNs are per repo.
+        createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
       cronTasks:
@@ -1399,7 +1362,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-finder-frontend-email-alert-api
               key: bearer_token
-
   - name: draft-frontend
     repoName: frontend
     helmValues:
@@ -1414,12 +1376,12 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: "15"
           alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "draft-assets*.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -1472,7 +1434,6 @@ govukApplications:
             secretKeyRef:
               name: frontend-os-maps-api
               key: api_key
-
   - name: government-frontend
     helmValues:
       arch: arm64
@@ -1494,7 +1455,6 @@ govukApplications:
               key: bearer_token
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
-
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
@@ -1509,7 +1469,7 @@ govukApplications:
       rails:
         createKeyBaseSecret: false
       sentry:
-        createSecret: false  # Sentry DSNs are per repo.
+        createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
       extraEnv:
@@ -1520,7 +1480,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
-
   - name: govspeak-preview
     helmValues:
       arch: arm64
@@ -1536,15 +1495,14 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "30"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "govspeak-preview.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
           - name: govspeak-preview.{{ .Values.k8sExternalDomainSuffix }}
-
   - name: govuk-chat
     helmValues:
       arch: arm64
@@ -1582,9 +1540,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "95"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "chat.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -1714,7 +1672,6 @@ govukApplications:
                   - type: Pods
                     value: 1
                     periodSeconds: 30
-
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
     helmValues:
@@ -1728,28 +1685,26 @@ govukApplications:
           memory: 2Gi
       cronTasks:
         - name: govuk-e2e-tests
-          schedule: "*/10 7-19 * * 1-5"  # every 10 minutes, between 7:00 - 19:00 UTC, Monday to Friday
+          schedule: "*/10 7-19 * * 1-5" # every 10 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: main
           suspend: true
         - name: govuk-e2e-tests-mirror-s3
-          schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
+          schedule: "*/30 7-19 * * 1-5" # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: mirrorS3
           suspend: true
         - name: govuk-e2e-tests-mirror-s3-replica
-          schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
+          schedule: "*/30 7-19 * * 1-5" # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: mirrorS3Replica
           suspend: true
         - name: govuk-e2e-tests-mirror-gcs
-          schedule: "*/30 7-19 * * 1-5"  # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
+          schedule: "*/30 7-19 * * 1-5" # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           project: mirrorGCS
           suspend: true
-
   - name: govuk-jobs
     chartPath: charts/govuk-jobs
     postSyncWorkflowEnabled: "false"
     imageValues:
       - govuk-dependency-checker
-
   - name: govuk-synthetic-test-app-canary
     helmValues:
       arch: arm64
@@ -1762,11 +1717,10 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "300"
         hosts:
           - name: govuk-synthetic-test-app-canary.eks.production.govuk.digital
-
   - name: mirror
     chartPath: charts/mirror
     repoName: govuk-mirror
@@ -1778,7 +1732,6 @@ govukApplications:
       extraEnv:
         - name: BACKENDS
           value: "mirrorS3,mirrorS3Replica,mirrorGCS"
-
   - name: hmrc-manuals-api
     helmValues:
       arch: arm64
@@ -1793,9 +1746,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "100"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "hmrc-manuals-api.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -1826,7 +1779,6 @@ govukApplications:
           value: "1"
         - name: PUMA_TIMEOUT
           value: "300"
-
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
@@ -1843,9 +1795,9 @@ govukApplications:
         licensifyAdmin:
           ingress:
             annotations:
-              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+              !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
               alb.ingress.kubernetes.io/group.order: "115"
-              alb.ingress.kubernetes.io/conditions.licensify-admin: >
+              alb.ingress.kubernetes.io/conditions.licensify-admin: |
                 [{"field": "host-header", "hostHeaderConfig": { "values": [
                     "licensify-admin.{{ .Values.publishingDomainSuffix }}"
                 ]}}]
@@ -1856,7 +1808,7 @@ govukApplications:
           podDisruptionBudget: *pdb
           ingress:
             annotations:
-              <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+              !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
             hosts:
               - name: licensify.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
@@ -1891,7 +1843,6 @@ govukApplications:
           templateApplicatOnline: 8ca00761-7902-4ec3-89a2-e3aa006d3ed8
           templateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
           templatePeriodic: a3a54578-2695-4953-9787-d7c73aaf08c0
-
   - name: link-checker-api
     helmValues:
       arch: arm64
@@ -1947,7 +1898,6 @@ govukApplications:
             secretKeyRef:
               name: link-checker-api-postgres
               key: DATABASE_URL
-
   - name: local-links-manager
     helmValues:
       arch: arm64
@@ -1963,9 +1913,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "120"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "local-links-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -2073,7 +2023,6 @@ govukApplications:
             proxy_pass
               https://govuk-app-assets-production.s3.eu-west-1.amazonaws.com/data/local-links-manager;
           }
-
   - name: locations-api
     helmValues:
       arch: arm64
@@ -2118,7 +2067,6 @@ govukApplications:
               key: api-secret
         - name: OS_PLACES_API_POSTCODES_PER_SECOND
           value: "3"
-
   - name: manuals-publisher
     helmValues:
       arch: arm64
@@ -2144,9 +2092,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "130"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "manuals-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -2197,7 +2145,6 @@ govukApplications:
               key: MONGODB_URI
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
-
   - name: places-manager
     helmValues:
       arch: arm64
@@ -2213,9 +2160,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "110"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "places-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -2251,7 +2198,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-imminence
               key: oauth_secret
-
   - name: publisher
     helmValues:
       arch: arm64
@@ -2287,9 +2233,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "150"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -2389,7 +2335,6 @@ govukApplications:
           value: &publishing-bootstrap-gtm-id GTM-W573BJPG
         - name: MAINTENANCE_MODE
           value: "false"
-
   - name: publishing-api
     helmValues:
       arch: arm64
@@ -2424,10 +2369,10 @@ govukApplications:
       cronTasks:
         - name: metrics-report-to-prometheus
           task: "metrics:report_to_prometheus"
-          schedule: "22 * * * *"  # every hour, at 22 minutes past the hour
+          schedule: "22 * * * *" # every hour, at 22 minutes past the hour
         - name: search-api-v2-bulk-import
           task: "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"
-          schedule: "0 0 1 11 *"  # arbitrary value (only used as a template but field is required)
+          schedule: "0 0 1 11 *" # arbitrary value (only used as a template but field is required)
           suspend: true
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
@@ -2477,7 +2422,6 @@ govukApplications:
             secretKeyRef:
               name: publishing-api-bigquery
               key: client-secret
-
   - name: publishing-api-read-replica
     repoName: publishing-api
     postSyncWorkflowEnabled: "false"
@@ -2525,7 +2469,6 @@ govukApplications:
           value: production_replica
         - name: DISABLE_QUEUE_PUBLISHER
           value: "true"
-
   - name: release
     helmValues:
       arch: arm64
@@ -2533,9 +2476,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "160"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "release.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -2604,7 +2547,6 @@ govukApplications:
         enabled: true
         create: false
         name: release-assumer
-
   - name: router
     helmValues:
       arch: arm64
@@ -2622,14 +2564,13 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
           alb.ingress.kubernetes.io/load-balancer-name: www-origin
           alb.ingress.kubernetes.io/load-balancer-attributes: >
-            access_logs.s3.enabled=true,
-            access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging,
-            access_logs.s3.prefix=elb/www-origin
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+            access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/www-origin
+
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "www.{{ .Values.externalDomainSuffix }}",
                 "www-origin.{{ .Values.publishingDomainSuffix }}"
@@ -2661,11 +2602,11 @@ govukApplications:
           periodSeconds: 1
           timeoutSeconds: 1
         livenessProbe:
-          <<: *router-probe
+          !!merge <<: *router-probe
           failureThreshold: 3
           periodSeconds: 5
         readinessProbe:
-          <<: *router-probe
+          !!merge <<: *router-probe
           httpGet:
             path: /healthcheck
             port: 9394
@@ -2673,7 +2614,7 @@ govukApplications:
           periodSeconds: 5
       extraEnv:
         - name: GOMAXPROCS
-          value: "4"  # Keep this similar to the CPU limit (in whole cores).
+          value: "4" # Keep this similar to the CPU limit (in whole cores).
         - name: SENTRY_ENVIRONMENT
           value: "production"
         - name: ROUTER_PUBADDR
@@ -2711,7 +2652,6 @@ govukApplications:
             secretKeyRef:
               key: DATABASE_URL
               name: content-store-postgres
-
   - name: draft-router
     repoName: router
     helmValues:
@@ -2719,7 +2659,7 @@ govukApplications:
       rails:
         enabled: false
       sentry:
-        createSecret: false  # Sentry DSNs are per repo.
+        createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
       appResources:
@@ -2735,7 +2675,7 @@ govukApplications:
         name: draft-router-nginx-conf
       extraEnv:
         - name: GOMAXPROCS
-          value: "4"  # Keep this similar to the CPU limit (in whole cores).
+          value: "4" # Keep this similar to the CPU limit (in whole cores).
         - name: ROUTER_PUBADDR
           value: ":3000"
         - name: ROUTER_APIADDR
@@ -2771,7 +2711,6 @@ govukApplications:
             secretKeyRef:
               name: draft-content-store-postgres
               key: DATABASE_URL
-
   - name: search-admin
     helmValues:
       arch: arm64
@@ -2786,9 +2725,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "170"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "search-admin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -2840,7 +2779,6 @@ govukApplications:
             secretKeyRef:
               name: search-admin-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
-
   - name: search-api
     helmValues:
       arch: arm64
@@ -2925,8 +2863,7 @@ govukApplications:
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
           value: govuk-production-sitemaps
         - name: ELASTICSEARCH_URI
-          value:
-            https://vpc-blue-elasticsearch6-domain-2hnib7uydv3tgebhabx74gdelq.eu-west-1.es.amazonaws.com
+          value: https://vpc-blue-elasticsearch6-domain-2hnib7uydv3tgebhabx74gdelq.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
           value: info
         - name: GDS_SSO_OAUTH_ID
@@ -2991,7 +2928,6 @@ govukApplications:
               key: RABBITMQ_URL
         - name: TENSORFLOW_SAGEMAKER_ENDPOINT
           value: govuk-production-search-ltr-endpoint
-
   - name: search-api-v2
     helmValues:
       arch: arm64
@@ -3006,10 +2942,10 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-defaults]
           alb.ingress.kubernetes.io/scheme: "internal"
           alb.ingress.kubernetes.io/group.order: "172"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "search-api.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -3045,7 +2981,7 @@ govukApplications:
           schedule: "0 2 * * *"
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
-          schedule: "09 8-17 * * *"  # 9 minutes past the hour every day from 8am-5pm
+          schedule: "09 8-17 * * *" # 9 minutes past the hour every day from 8am-5pm
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
@@ -3088,7 +3024,6 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
-
   - name: search-api-v2-beta-features
     helmValues:
       arch: arm64
@@ -3150,12 +3085,10 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
-
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
     chartPath: charts/search-index-env-sync
     postSyncWorkflowEnabled: "false"
-
   - name: service-manual-publisher
     helmValues:
       arch: arm64
@@ -3170,9 +3103,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "180"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "service-manual-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -3225,7 +3158,6 @@ govukApplications:
               key: password
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
-
   - name: signon
     helmValues:
       arch: arm64
@@ -3251,11 +3183,10 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-backend]
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-backend]
           # TODO: remove certificate-arn annotation once ambiguous certs are
           # removed from Cert Manager.
-          alb.ingress.kubernetes.io/certificate-arn:
-            arn:aws:acm:eu-west-1:172025368201:certificate/f139e436-181a-40de-aba2-23ec131fa1cf
+          alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-1:172025368201:certificate/f139e436-181a-40de-aba2-23ec131fa1cf
           external-dns.alpha.kubernetes.io/hostname: signon.{{ .Values.k8sExternalDomainSuffix }}
         hosts:
           - name: signon.{{ .Values.publishingDomainSuffix }}
@@ -3329,7 +3260,6 @@ govukApplications:
               key: DEVISE_SECRET_KEY
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
-
   - name: smartanswers
     repoName: smart-answers
     helmValues:
@@ -3360,7 +3290,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
-
   - name: static
     helmValues:
       arch: arm64
@@ -3374,7 +3303,7 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: "30"
@@ -3418,7 +3347,6 @@ govukApplications:
           location = /favicon.ico {
             return 301 https://www.gov.uk/favicon.ico;
           }
-
   - name: draft-static
     repoName: static
     helmValues:
@@ -3456,7 +3384,6 @@ govukApplications:
           value: *emergency-banner-redis
         - name: USE_TMPDIR_PAGE_CACHE
           value: "true"
-
   - name: short-url-manager
     helmValues:
       arch: arm64
@@ -3470,9 +3397,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "190"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "short-url-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -3518,7 +3445,6 @@ govukApplications:
               key: bearer_token
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
-
   - name: specialist-publisher
     helmValues:
       arch: arm64
@@ -3545,9 +3471,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "200"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "specialist-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -3602,7 +3528,6 @@ govukApplications:
           value: *publishing-notify-template
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
-
   - name: support
     helmValues:
       arch: arm64
@@ -3616,9 +3541,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "210"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "support.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -3674,7 +3599,6 @@ govukApplications:
               key: ticket_email
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
-
   - name: support-api
     helmValues:
       arch: arm64
@@ -3753,7 +3677,6 @@ govukApplications:
             secretKeyRef:
               name: support-zendesk
               key: ticket_email
-
   - name: transition
     helmValues:
       arch: arm64
@@ -3767,9 +3690,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "220"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "transition.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -3826,7 +3749,6 @@ govukApplications:
               key: DATABASE_URL
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
-
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
@@ -3856,9 +3778,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "230"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "travel-advice-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
@@ -3909,7 +3831,6 @@ govukApplications:
               key: MONGODB_URI
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
-
   - name: whitehall-admin
     repoName: whitehall
     helmValues:
@@ -3959,9 +3880,9 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-          <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "240"
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: >
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "whitehall-admin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
