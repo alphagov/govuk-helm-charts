@@ -1,0 +1,15 @@
+{{- $fullName := include "exporter.fullname" . }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "exporter.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+spec:
+  jobLabel: app.kubernetes.io/name
+  selector:
+    matchLabels:
+      app: {{ $fullName }}
+  podMetricsEndpoints:
+    - port: metrics
