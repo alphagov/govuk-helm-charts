@@ -811,7 +811,6 @@ govukApplications:
               key: DATABASE_URL
         - name: WEB_CONCURRENCY
           value: '4'
-      appEnabled: false
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
