@@ -56,7 +56,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -144,7 +144,7 @@ govukApplications:
           cpu: 100m
           memory: 800Mi
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -269,6 +269,8 @@ govukApplications:
               key: JWT_AUTH_SECRET
       cronTasks: []
       appEnabled: false
+      workers:
+        enabled: false
   - name: bouncer
     helmValues:
       arch: arm64
@@ -390,7 +392,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -489,7 +491,7 @@ govukApplications:
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 2
@@ -676,7 +678,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
@@ -812,6 +814,8 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
       appEnabled: false
+      workers:
+        enabled: false
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
@@ -874,7 +878,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -947,7 +951,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1.5
@@ -1539,6 +1543,8 @@ govukApplications:
           - name: govspeak-preview.{{ .Values.k8sExternalDomainSuffix }}
       cronTasks: []
       appEnabled: false
+      workers:
+        enabled: false
   - name: govuk-chat
     helmValues:
       arch: arm64
@@ -1760,6 +1766,8 @@ govukApplications:
           - name: govuk-synthetic-test-app-canary.eks.production.govuk.digital
       cronTasks: []
       appEnabled: false
+      workers:
+        enabled: false
   - name: mirror
     chartPath: charts/mirror
     repoName: govuk-mirror
@@ -1820,6 +1828,8 @@ govukApplications:
           value: "300"
       cronTasks: []
       appEnabled: false
+      workers:
+        enabled: false
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
@@ -2071,6 +2081,8 @@ govukApplications:
               https://govuk-app-assets-production.s3.eu-west-1.amazonaws.com/data/local-links-manager;
           }
       appEnabled: false
+      workers:
+        enabled: false
   - name: locations-api
     helmValues:
       arch: arm64
@@ -2128,7 +2140,7 @@ govukApplications:
           memory: 512Mi
       nginxClientMaxBodySize: &max-upload-size 500M
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -2223,7 +2235,7 @@ govukApplications:
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -2263,7 +2275,7 @@ govukApplications:
           memory: 512Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -2407,7 +2419,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
         replicaCount: 3
       redis:
         enabled: true
@@ -2530,6 +2542,8 @@ govukApplications:
           value: "true"
       cronTasks: []
       appEnabled: false
+      workers:
+        enabled: false
   - name: release
     helmValues:
       arch: arm64
@@ -2793,6 +2807,8 @@ govukApplications:
               key: DATABASE_URL
       cronTasks: []
       appEnabled: false
+      workers:
+        enabled: false
   - name: search-admin
     helmValues:
       arch: arm64
@@ -3181,6 +3197,8 @@ govukApplications:
             secretKeyRef:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
+      workers:
+        enabled: false
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
     chartPath: charts/search-index-env-sync
@@ -3266,7 +3284,7 @@ govukApplications:
           memory: 600Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3555,6 +3573,8 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
       appEnabled: false
+      workers:
+        enabled: false
   - name: specialist-publisher
     helmValues:
       arch: arm64
@@ -3568,7 +3588,7 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3664,7 +3684,7 @@ govukApplications:
       uploadAssets:
         path: /app/public/assets/support
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3727,7 +3747,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
         replicaCount: 2
       workerResources:
         limits:
@@ -3819,7 +3839,7 @@ govukApplications:
           - name: transition.{{ .Values.k8sExternalDomainSuffix }}
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -3892,7 +3912,7 @@ govukApplications:
           suspend: true
       nginxClientMaxBodySize: *max-upload-size
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -4002,7 +4022,7 @@ govukApplications:
       dbMigrationEnabled: true
       dbMigrationActiveDeadlineSeconds: 3700 # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
-        enabled: true
+        enabled: false
       redis:
         enabled: true
       nginxClientMaxBodySize: *max-upload-size
