@@ -267,7 +267,7 @@ govukApplications:
               key: JWT_AUTH_SECRET
       cronTasks: []
       workers:
-        enabled: true
+        enabled: false
   - name: bouncer
     helmValues:
       arch: arm64
@@ -805,7 +805,7 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
       workers:
-        enabled: true
+        enabled: false
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
@@ -1528,7 +1528,7 @@ govukApplications:
           - name: govspeak-preview.{{ .Values.k8sExternalDomainSuffix }}
       cronTasks: []
       workers:
-        enabled: true
+        enabled: false
   - name: govuk-chat
     helmValues:
       arch: arm64
@@ -1750,7 +1750,7 @@ govukApplications:
           - name: govuk-synthetic-test-app-canary.eks.production.govuk.digital
       cronTasks: []
       workers:
-        enabled: true
+        enabled: false
   - name: mirror
     chartPath: charts/mirror
     repoName: govuk-mirror
@@ -1811,7 +1811,7 @@ govukApplications:
           value: "300"
       cronTasks: []
       workers:
-        enabled: true
+        enabled: false
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
@@ -2058,7 +2058,7 @@ govukApplications:
               https://govuk-app-assets-production.s3.eu-west-1.amazonaws.com/data/local-links-manager;
           }
       workers:
-        enabled: true
+        enabled: false
   - name: locations-api
     helmValues:
       arch: arm64
@@ -2509,7 +2509,7 @@ govukApplications:
           value: "true"
       cronTasks: []
       workers:
-        enabled: true
+        enabled: false
   - name: release
     helmValues:
       arch: arm64
@@ -2773,7 +2773,7 @@ govukApplications:
               key: DATABASE_URL
       cronTasks: []
       workers:
-        enabled: true
+        enabled: false
   - name: search-admin
     helmValues:
       arch: arm64
@@ -3158,7 +3158,7 @@ govukApplications:
               name: search-api-v2-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
       workers:
-        enabled: true
+        enabled: false
   - name: search-index-env-sync
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
     chartPath: charts/search-index-env-sync
