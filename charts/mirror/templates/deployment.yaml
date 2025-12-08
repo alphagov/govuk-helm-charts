@@ -1,10 +1,10 @@
-{{- $fullName := include "mirror.fullname" . }}
+{{- $fullName := include "exporter.fullname" . }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "mirror.labels" . | nindent 4 }}
+    {{- include "exporter.labels" . | nindent 4 }}
     app: {{ $fullName }}
     app.kubernetes.io/component: app
   annotations:
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "mirror.labels" . | nindent 8 }}
+        {{- include "exporter.labels" . | nindent 8 }}
         app: {{ $fullName }}
         app.govuk/repository-name: {{ .Values.repoName | default .Release.Name  }}
         app.kubernetes.io/component: app
