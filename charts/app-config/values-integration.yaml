@@ -1611,6 +1611,7 @@ govukApplications:
           cpu: 500m
           memory: 1Gi
       dbMigrationEnabled: true
+      dbMigrationCommand: ["rails", "db:migrate", "--trace"]
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
       workers:
