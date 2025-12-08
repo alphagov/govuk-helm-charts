@@ -532,7 +532,7 @@ govukApplications:
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
-              name: authenticating-proxy-jwt-auth-secret
+              name: content-block-manager-jwt-auth-secret
               key: JWT_AUTH_SECRET
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
