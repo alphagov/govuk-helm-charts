@@ -1758,7 +1758,7 @@ govukApplications:
         annotations:
           eks.amazonaws.com/role-arn: arn:aws:iam::172025368201:role/govuk-mirror-sync
       extraEnv:
-        - name: BACKENDS
+        - name: MIRROR_BACKENDS
           value: "mirrorS3,mirrorS3Replica,mirrorGCS"
   - name: hmrc-manuals-api
     helmValues:
