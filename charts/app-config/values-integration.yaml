@@ -652,6 +652,8 @@ govukApplications:
           value: *publishing-notify-template
         - name: FIND_CONTENT_QUERY_PAGE_SIZE
           value: "1000"
+      appEnabled: false
+      cronTasks: []
   - name: content-data-api
     helmValues:
       arch: arm64
@@ -1855,7 +1857,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -1896,6 +1898,8 @@ govukApplications:
             secretKeyRef:
               name: link-checker-api-postgres
               key: DATABASE_URL
+      appEnabled: false
+      cronTasks: []
   - name: local-links-manager
     helmValues:
       arch: arm64
@@ -2585,6 +2589,8 @@ govukApplications:
         enabled: true
         create: false
         name: release-assumer
+      appEnabled: false
+      cronTasks: []
   - name: router
     helmValues:
       arch: arm64
@@ -2780,6 +2786,7 @@ govukApplications:
         - name: reimport-completion-denylist
           task: "completion:import_denylist"
           schedule: "56 4 * * 1" # one hour after the DB is restored from staging
+          suspend: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -2826,6 +2833,7 @@ govukApplications:
             secretKeyRef:
               name: search-admin-google-cloud-discovery-engine-configuration
               key: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
+      appEnabled: false
   - name: search-api
     helmValues:
       arch: arm64
@@ -3205,6 +3213,10 @@ govukApplications:
           value: *publishing-bootstrap-gtm-auth
         - name: GOOGLE_TAG_MANAGER_PREVIEW # Non-prod only
           value: *publishing-bootstrap-gtm-preview
+      appEnabled: false
+      workers:
+        enabled: false
+      cronTasks: []
   - name: signon
     helmValues:
       arch: arm64
