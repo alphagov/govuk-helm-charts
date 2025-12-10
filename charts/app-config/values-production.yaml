@@ -1465,6 +1465,8 @@ govukApplications:
           cpu: 1
           memory: 768Mi
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: PUBLISHING_API_BEARER_TOKEN
@@ -1493,6 +1495,8 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
         - name: PUBLISHING_API_BEARER_TOKEN
