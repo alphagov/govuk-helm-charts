@@ -1490,7 +1490,7 @@ govukApplications:
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: publisher-postgres
+              name: fact-check-manager-postgres
               key: DATABASE_URL
   - name: government-frontend
     helmValues:
