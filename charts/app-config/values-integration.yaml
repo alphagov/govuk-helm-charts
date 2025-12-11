@@ -1487,6 +1487,11 @@ govukApplications:
       extraEnv:
         - name: MAINTENANCE_MODE
           value: "false"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: publisher-postgres
+              key: DATABASE_URL
   - name: government-frontend
     helmValues:
       arch: arm64
