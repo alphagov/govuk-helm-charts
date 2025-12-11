@@ -485,7 +485,7 @@ govukApplications:
       dbMigrationEnabled: true
       dbMigrationCommand: ["rails", "db:prepare"]
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 2
