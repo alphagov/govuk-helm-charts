@@ -2488,7 +2488,7 @@ govukApplications:
         hosts:
           - name: release.{{ .Values.k8sExternalDomainSuffix }}
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 250m
