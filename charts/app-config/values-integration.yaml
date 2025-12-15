@@ -1460,7 +1460,7 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 512Mi
-      dbMigrationEnabled: false
+      dbMigrationEnabled: true
       workers:
         enabled: true
       workerResources:
