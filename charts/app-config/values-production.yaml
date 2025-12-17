@@ -1345,6 +1345,16 @@ govukApplications:
           value: "0.01"
         - name: GRAPHQL_RATE_NEWS_ARTICLE
           value: "0.5"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_GUIDE
+          value: "0.01"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_HOMEPAGE
+          value: "0.01"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_SERVICE_STANDARD
+          value: "0.01"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_SERVICE_TOOLKIT
+          value: "0.01"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_TOPIC
+          value: "0.01"
         - name: GRAPHQL_RATE_TOPICAL_EVENT_ABOUT_PAGE
           value: "0.5"
         - name: OS_MAPS_API_KEY
