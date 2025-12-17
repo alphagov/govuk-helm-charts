@@ -1388,6 +1388,14 @@ govukApplications:
           value: "0.5"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_TOPIC
           value: "0.5"
+        - name: GRAPHQL_RATE_SIMPLE_SMART_ANSWER
+          value: "0.01"
+        - name: GRAPHQL_RATE_SPECIALIST_DOCUMENT
+          value: "0.01"
+        - name: GRAPHQL_RATE_SPEECH
+          value: "0.01"
+        - name: GRAPHQL_RATE_STATISTICAL_DATA_SET
+          value: "0.01"
         - name: GRAPHQL_RATE_TOPICAL_EVENT_ABOUT_PAGE
           value: "0.5"
         - name: GRAPHQL_RATE_TRANSACTION
