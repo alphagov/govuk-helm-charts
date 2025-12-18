@@ -28,6 +28,11 @@ default_db_owner () {
   echo "${1%_production}" | sed -E 's/^(draft[_-])?(.*)/\2/' | tr - _
 }
 
+# Write a pointer file for the specified file
+write_pointer () {
+  echo "${1}" | s5cmd pipe "${BUCKET}/${DB_HOST}/latest.txt"
+}
+
 : "${GOVUK_ENVIRONMENT:?required}"
 : "${DB_USER:=aws_db_admin}"
 : "${DB_PASSWORD:=}"
