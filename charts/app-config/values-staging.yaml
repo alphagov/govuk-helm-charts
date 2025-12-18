@@ -1364,6 +1364,14 @@ govukApplications:
           value: "0.5"
         - name: GRAPHQL_RATE_CASE_STUDY
           value: "0.5"
+        - name: GRAPHQL_RATE_FIELDS_OF_OPERATION
+          value: "0.01"
+        - name: GRAPHQL_RATE_GUIDE
+          value: "0.01"
+        - name: GRAPHQL_RATE_HELP_PAGE
+          value: "0.01"
+        - name: GRAPHQL_RATE_HOMEPAGE
+          value: "0.01"
         - name: GRAPHQL_RATE_NEWS_ARTICLE
           value: "0.5"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_GUIDE
