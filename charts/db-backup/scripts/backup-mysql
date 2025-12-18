@@ -9,7 +9,8 @@ backup () {
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
   set -o pipefail
   mysqldump --single-transaction "$DB_DATABASE" \
-    | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path"
+    | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path" \
+    && write_pointer "${s3_path}"
   set +o pipefail
 }
 
