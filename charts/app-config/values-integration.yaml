@@ -575,7 +575,7 @@ govukApplications:
           - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2199,7 +2199,7 @@ govukApplications:
       nginxProxyReadTimeout: 60s
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -2801,7 +2801,7 @@ govukApplications:
       redis:
         enabled: true
       workers:
-        enabled: false
+        enabled: true
       cronTasks:
         # Re-import completion denylist to Discovery Engine so it doesn't drift from local DB
         - name: reimport-completion-denylist
@@ -3539,6 +3539,8 @@ govukApplications:
           value: *publishing-bootstrap-gtm-auth
         - name: GOOGLE_TAG_MANAGER_PREVIEW # Non-prod only
           value: *publishing-bootstrap-gtm-preview
+      workers:
+        enabled: true
   - name: specialist-publisher
     helmValues:
       arch: arm64
@@ -3650,7 +3652,7 @@ govukApplications:
       uploadAssets:
         path: /app/public/assets/support
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3801,7 +3803,7 @@ govukApplications:
           - name: transition.{{ .Values.k8sExternalDomainSuffix }}
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
