@@ -687,7 +687,7 @@ govukApplications:
           cpu: 10m
           memory: 650Mi
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
