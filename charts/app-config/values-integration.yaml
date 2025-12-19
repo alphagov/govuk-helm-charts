@@ -3031,7 +3031,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         replicaCount: 3
         types:
           - command: ['bin/rake', 'document_sync_worker:run']
