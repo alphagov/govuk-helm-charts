@@ -1357,13 +1357,13 @@ govukApplications:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
         - name: GRAPHQL_RATE_ANSWER
-          value: "0.01"
+          value: "0.1"
         - name: GRAPHQL_RATE_CALENDAR
-          value: "0.01"
+          value: "0.1"
         - name: GRAPHQL_RATE_CALL_FOR_EVIDENCE
-          value: "0.01"
+          value: "0.1"
         - name: GRAPHQL_RATE_CASE_STUDY
-          value: "0.01"
+          value: "0.1"
         - name: GRAPHQL_RATE_NEWS_ARTICLE
           value: "0.5"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_GUIDE
