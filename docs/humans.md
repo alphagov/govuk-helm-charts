@@ -4,7 +4,7 @@ Sometimes we want to publicly celebrate someone who's leaving GOV.UK. The conven
 
 We should be judicious about who we choose to celebrate this way, so it remains something special. This should be when someone has been working on the programme for over 5 years, or has had an exceptional (positive) impact.
 
-Anyone can write these words, but we should try to use a consistent style. Look back through the [history](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/humans.txt) and [earlier history on static](https://github.com/alphagov/static/blob/32b5743557ecc83e84908b55aab8027f2d9bf051/public/humans.txt) of `humans.txt` to see what others have written before you, and then compose your own text.
+Anyone can write these words, but we should try to use a consistent style. Look back through the [history](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/humans.txt) of `humans.txt` to see what others have written before you, and then compose your own text.
 
 ## How to update the page
 
