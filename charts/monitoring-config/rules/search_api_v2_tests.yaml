@@ -4,6 +4,18 @@ rule_files:
   - search_api_v2.yaml
 
 tests:
+  # Tests for search_api_v2:vertex_search_response_times:rate5m
+  # - interval: 1m
+    # input_series:
+    #   - series: 'search_api_v2_vertex_search_request_duration_bucket[5m]{le="0.5"}'
+    #     values:
+    #   - series: 'search_api_v2_vertex_search_request_duration_bucket[5m]{le="0.9"}'
+    #     values:
+    #   - series: 'search_api_v2_vertex_search_request_duration_bucket[5m]{le="0.99"}'
+    #     values:
+
+    # promql_expr_test:
+
   # Tests for search_api_v2:search_requests:rate5m
   - interval: 1m
     input_series:
