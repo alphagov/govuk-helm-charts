@@ -1382,6 +1382,8 @@ govukApplications:
           value: "0.5"
         - name: GRAPHQL_RATE_TOPICAL_EVENT_ABOUT_PAGE
           value: "0.5"
+        - name: GRAPHQL_RATE_TRANSACTION
+          value: "0.01"
         - name: OS_MAPS_API_KEY
           valueFrom:
             secretKeyRef:
