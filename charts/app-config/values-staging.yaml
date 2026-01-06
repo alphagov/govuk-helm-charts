@@ -804,7 +804,6 @@ govukApplications:
           value: '4'
   - name: db-backup
     chartPath: charts/db-backup
-    targetRevision: samsimpson1/db-backup-pointer
     postSyncWorkflowEnabled: "false"
     helmValues:
       suspendAllCronJobs: false
