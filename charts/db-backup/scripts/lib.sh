@@ -30,7 +30,30 @@ default_db_owner () {
 
 # Write a pointer file for the specified file
 write_pointer () {
-  echo "${1}" | s5cmd pipe "${BUCKET}/${DB_HOST}/latest.txt"
+  echo -n "${1}" | s5cmd pipe "${BUCKET}/${DB_HOST}/latest.txt"
+}
+
+# Determine backup object URI for restores
+object_uri () {
+  local file_name
+
+  # if FILENAME is not set
+  if [ -z "${FILENAME+x}" ]; then
+    local latest_pointer
+    if latest_pointer=$(s5cmd cat "${BUCKET}/${DB_HOST}/latest.txt" | tr -d '\n'); then
+      echo "Latest successful backup: ${latest_pointer}" >&2
+      file_name=$(basename "$latest_pointer")
+    else
+      # return latest dump if getting the pointer file fails
+      echo "Failed to get latest pointer file: ${latest_pointer}" >&2
+      file_name="$(list | tail -1)"
+    fi
+  else
+    echo "FILENAME specified: ${FILENAME}" >&2
+    file_name="${FILENAME}"
+  fi
+
+  echo -n "${BUCKET}/${DB_HOST}/${file_name}"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"
