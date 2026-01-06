@@ -1536,6 +1536,16 @@ govukApplications:
             secretKeyRef:
               name: fact-check-manager-postgres
               key: DATABASE_URL
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-fact-check-manager
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-fact-check-manager
+              key: oauth_secret
   - name: government-frontend
     helmValues:
       arch: arm64
