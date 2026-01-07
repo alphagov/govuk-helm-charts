@@ -4,6 +4,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.repository }}-${{ github.ref_name }}
   cancel-in-progress: false
 
+permissions:
+  contents: read
+
 jobs:
   render-charts:
     runs-on: ubuntu-latest
@@ -85,6 +88,8 @@ jobs:
           SHELLCHECK_OPTS: -xP SCRIPTDIR
 
   yamllint:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8   # v6.0.1

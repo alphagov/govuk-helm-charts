@@ -5,6 +5,10 @@ on:
       - charts/db-backup/scripts/*.sql
       - charts/db-backup/.sqlfluff
       - .github/workflows/sqlfluff.yml
+
+permissions:
+  contents: read
+
 jobs:
   sqlfluff:
     runs-on: ubuntu-latest
