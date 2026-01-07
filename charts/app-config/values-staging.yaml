@@ -2893,7 +2893,7 @@ govukApplications:
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
           value: govuk-staging-sitemaps
         - name: ELASTICSEARCH_URI
-          value: https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com
+          value: https://vpc-green-elasticsearch6-domain-42a562y7oibo5y7raa6rhkcb5m.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
           value: info
         - name: GDS_SSO_OAUTH_ID
