@@ -1374,8 +1374,6 @@ govukApplications:
           value: "0.1"
         - name: GRAPHQL_RATE_FATALITY_NOTICE
           value: "0.1"
-        - name: GRAPHQL_RATE_FIELD_OF_OPERATION
-          value: "0.1"
         - name: GRAPHQL_RATE_FIELDS_OF_OPERATION
           value: "0.5"
         - name: GRAPHQL_RATE_GUIDE
