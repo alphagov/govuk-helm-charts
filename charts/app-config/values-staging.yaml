@@ -137,6 +137,7 @@ govukApplications:
             secretKeyRef:
               name: signon-app-account-api
               key: oauth_secret
+      cronTasks: []
   - name: asset-manager
     chartPath: charts/asset-manager
     helmValues:
@@ -219,6 +220,7 @@ govukApplications:
           value: warn
         - name: AWS_S3_BUCKET_NAME
           value: govuk-assets-staging
+      cronTasks: []
   - name: argo-services
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
@@ -271,6 +273,7 @@ govukApplications:
             secretKeyRef:
               name: authenticating-proxy-jwt-auth-secret
               key: JWT_AUTH_SECRET
+      cronTasks: []
   - name: bouncer
     helmValues:
       arch: arm64
@@ -319,6 +322,7 @@ govukApplications:
           location /eff/action/worldPayCallback {
             proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
           }
+      cronTasks: []
   - name: collections
     helmValues:
       arch: arm64
@@ -349,6 +353,7 @@ govukApplications:
           value: "0.5"
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+      cronTasks: []
   - name: draft-collections
     repoName: collections
     helmValues:
@@ -376,6 +381,7 @@ govukApplications:
           value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
+      cronTasks: []
   - name: collections-publisher
     helmValues:
       arch: arm64
@@ -459,6 +465,7 @@ govukApplications:
             secretKeyRef:
               name: collections-publisher-mysql
               key: DATABASE_URL
+      cronTasks: []
   - name: content-block-manager
     repoName: content-block-manager
     helmValues:
@@ -530,6 +537,7 @@ govukApplications:
               key: bearer_token
         - name: E2E_USER_EMAILS
           value: "2nd-line-support@digital.cabinet-office.gov.uk,govuk-publishing-content-modelling-team@digital.cabinet-office.gov.uk"
+      cronTasks: []
   - name: content-data-admin
     helmValues:
       arch: arm64
@@ -691,6 +699,7 @@ govukApplications:
         - name: etl
           task: "etl:main"
           schedule: "15 11 * * *"
+          suspend: true
       extraEnv:
         - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
           valueFrom:
@@ -775,9 +784,11 @@ govukApplications:
         - name: report-delays
           task: "publishing_delay_report:report_delays"
           schedule: "15 2 * * *"
+          suspend: true
         - name: cleanup-intents
           task: "housekeeping:cleanup_publish_intents"
           schedule: "38 2 * * *"
+          suspend: true
       uploadAssets:
         enabled: false
       extraEnv:
@@ -889,9 +900,11 @@ govukApplications:
         - name: taxonomy-health-checks
           task: "taxonomy:health_checks"
           schedule: "49 * * * *"
+          suspend: true
         - name: taxonomy-metrics
           task: "metrics:taxonomy:record_all"
           schedule: "14 * * * *"
+          suspend: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -1022,6 +1035,7 @@ govukApplications:
             limit_req zone=email_alert_api_public burst=20 nodelay;
             proxy_pass http://email-alert-api;
           }
+      cronTasks: []
   - name: email-alert-frontend
     helmValues:
       arch: arm64
@@ -1052,6 +1066,7 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+      cronTasks: []
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
@@ -1091,6 +1106,7 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+      cronTasks: []
   - name: email-alert-service
     helmValues:
       appEnabled: false
@@ -1128,6 +1144,7 @@ govukApplications:
             secretKeyRef:
               name: email-alert-service-rabbitmq
               key: RABBITMQ_URL
+      cronTasks: []
   - name: external-secrets
     chartPath: charts/external-secrets
     postSyncWorkflowEnabled: "false"
@@ -1180,6 +1197,7 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+      cronTasks: []
   - name: draft-feedback
     repoName: feedback
     helmValues:
@@ -1238,6 +1256,7 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+      cronTasks: []
   - name: finder-frontend
     helmValues:
       arch: arm64
@@ -1252,6 +1271,7 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+          suspend: true
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1285,6 +1305,7 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+          suspend: true
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1419,6 +1440,7 @@ govukApplications:
           value: '4'
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+      cronTasks: []
   - name: draft-frontend
     repoName: frontend
     helmValues:
@@ -1492,6 +1514,7 @@ govukApplications:
             secretKeyRef:
               name: frontend-os-maps-api
               key: api_key
+      cronTasks: []
   - name: government-frontend
     helmValues:
       arch: arm64
@@ -1514,6 +1537,7 @@ govukApplications:
               key: bearer_token
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+      cronTasks: []
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
@@ -1541,6 +1565,7 @@ govukApplications:
             secretKeyRef:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
+      cronTasks: []
   - name: govspeak-preview
     helmValues:
       arch: arm64
@@ -1564,6 +1589,7 @@ govukApplications:
             ]}}]
         hosts:
           - name: govspeak-preview.{{ .Values.k8sExternalDomainSuffix }}
+      cronTasks: []
   - name: govuk-chat
     helmValues:
       arch: arm64
@@ -1723,6 +1749,7 @@ govukApplications:
                   - type: Pods
                     value: 1
                     periodSeconds: 30
+      cronTasks: []
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
     helmValues:
@@ -1767,6 +1794,7 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "300"
         hosts:
           - name: govuk-synthetic-test-app-canary.eks.staging.govuk.digital
+      cronTasks: []
   - name: mirror
     chartPath: charts/mirror
     repoName: govuk-mirror
@@ -1825,6 +1853,7 @@ govukApplications:
           value: "1"
         - name: PUMA_TIMEOUT
           value: "300"
+      cronTasks: []
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
@@ -1888,6 +1917,7 @@ govukApplications:
           templateApplicatOnline: 8ca00761-7902-4ec3-89a2-e3aa006d3ed8
           templateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
           templatePeriodic: a3a54578-2695-4953-9787-d7c73aaf08c0
+      cronTasks: []
   - name: link-checker-api
     helmValues:
       arch: arm64
@@ -1970,18 +2000,23 @@ govukApplications:
         - name: import-interact
           task: "import:service_interactions:import_all"
           schedule: "0 1 * * *"
+          suspend: true
         - name: check-links
           task: "check-links"
           schedule: "0 2 * * *"
+          suspend: true
         - name: export-links
           task: "export:links:s3"
           schedule: "0 3 * * *"
+          suspend: true
         - name: import-ga
           task: "import:google_analytics"
           schedule: "0 5 * * *"
+          suspend: true
         - name: export-ga-bad-links
           task: "export:google_analytics:bad_links"
           schedule: "0 6 * * *"
+          suspend: true
       dbMigrationEnabled: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
@@ -2112,6 +2147,7 @@ govukApplications:
               key: api-secret
         - name: OS_PLACES_API_POSTCODES_PER_SECOND
           value: "1"
+      cronTasks: []
   - name: manuals-publisher
     helmValues:
       arch: arm64
@@ -2188,6 +2224,7 @@ govukApplications:
             secretKeyRef:
               name: manuals-publisher-docdb
               key: MONGODB_URI
+      cronTasks: []
   - name: places-manager
     helmValues:
       arch: arm64
@@ -2241,6 +2278,7 @@ govukApplications:
             secretKeyRef:
               name: signon-app-imminence
               key: oauth_secret
+      cronTasks: []
   - name: publisher
     helmValues:
       arch: arm64
@@ -2267,15 +2305,19 @@ govukApplications:
         - name: mail-fetcher
           command: "script/mail_fetcher"
           schedule: "*/5 * * * *"
+          suspend: true
         - name: reports-generate
           task: "reports:generate"
           schedule: "0 * * * *"
+          suspend: true
         - name: reschedule-pubs-after-db-restore # non-prod only
           task: "editions:requeue_scheduled_for_publishing"
           schedule: "47 7 * * 1-5"
+          suspend: true
         - name: publish-missed-scheduled-editions
           task: "editions:publish_missed_scheduled_editions"
           schedule: "23 5 * * *"
+          suspend: true
       ingress:
         enabled: true
         annotations:
@@ -2415,11 +2457,13 @@ govukApplications:
         - name: metrics-report-to-prometheus
           task: "metrics:report_to_prometheus"
           schedule: "22 * * * *" # every hour, at 22 minutes past the hour
+          suspend: true
         # In non-production envs, run Search API v2 bulk import every week to bring it to parity
         # with Publishing API state (which gets refreshed from production DB every night).
         - name: search-api-v2-bulk-import
           task: "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"
           schedule: "0 8 * * 0" # every Sunday at 8am
+          suspend: true
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -2515,6 +2559,7 @@ govukApplications:
           value: production_replica
         - name: DISABLE_QUEUE_PUBLISHER
           value: "true"
+      cronTasks: []
   - name: release
     helmValues:
       arch: arm64
@@ -2708,6 +2753,7 @@ govukApplications:
         enabled: true
         create: false
         name: router-routes-load
+      cronTasks: []
   - name: draft-router
     repoName: router
     helmValues:
@@ -2767,6 +2813,7 @@ govukApplications:
             secretKeyRef:
               name: draft-content-store-postgres
               key: DATABASE_URL
+      cronTasks: []
   - name: search-admin
     helmValues:
       arch: arm64
@@ -2859,12 +2906,14 @@ govukApplications:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
+          suspend: true
         - name: load-page-traffic
           command: "./bin/load_page_traffic.sh"
           schedule: "0 22 * * *"
           env:
             - name: AWS_SEARCH_ANALYTICS_BUCKET
               value: govuk-search-analytics-staging
+          suspend: true
         - name: update-detailed-index-popularity
           task: "search:update_popularity"
           schedule: "15 22 * * *"
@@ -2873,6 +2922,7 @@ govukApplications:
               value: detailed
             - name: PROCESS_ALL_DATA
               value: "true"
+          suspend: true
         - name: update-government-index-popularity
           task: "search:update_popularity"
           schedule: "35 22 * * *"
@@ -2881,12 +2931,14 @@ govukApplications:
               value: government
             - name: PROCESS_ALL_DATA
               value: "true"
+          suspend: true
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
           schedule: "35 00 * * *"
           env:
             - name: SEARCH_INDEX
               value: govuk
+          suspend: true
       workers:
         enabled: true
         types:
@@ -3020,12 +3072,15 @@ govukApplications:
         - name: user-events-import-yesterdays-events
           task: "user_events:import_yesterdays_events"
           schedule: "30 12 * * *"
+          suspend: true
         - name: user-events-import-intraday-events
           task: "user_events:import_intraday_events"
           schedule: "45 04,10,16,22 * * *"
+          suspend: true
         - name: user-events-purge
           task: "user_events:purge_final_week_of_retention_period"
           schedule: "0 2 * * *"
+          suspend: true
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
           schedule: "09 9 * * *" # 09:09am daily
@@ -3088,18 +3143,23 @@ govukApplications:
         - name: rpt-clickstream-metrics
           task: "quality:report_quality_metrics[clickstream]"
           schedule: "0 6 * * *" # 06:00 GMT daily
+          suspend: true
         - name: rpt-explicit-metrics
           task: "quality:report_quality_metrics[explicit]"
           schedule: "0 4 * * *" # 04:00 GMT daily
+          suspend: true
         - name: rpt-binary-metrics
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
+          suspend: true
         - name: rpt-binary-metric-wknd
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
+          suspend: true
         - name: setup-sample-query-sets
           task: "quality:setup_sample_query_sets"
           schedule: "0 2 1 * *" # 02:00 first day of the month
+          suspend: true
       extraEnv:
         - name: GOOGLE_CLOUD_CREDENTIALS
           valueFrom:
@@ -3237,18 +3297,23 @@ govukApplications:
         - name: delete-expired-oauth-grants
           task: "oauth_access_grants:delete_expired"
           schedule: "53 12 * * 0"
+          suspend: true
         - name: delete-logs-older-than-two-years
           task: "event_log:delete_logs_older_than_two_years"
           schedule: "18 1 * * *"
+          suspend: true
         - name: sync-app-secrets-to-k8s
           task: "kubernetes:sync_app_secrets"
           schedule: "11 1 * * *"
+          suspend: true
         - name: auto-rotate-internal-tokens
           task: "access_tokens:renew_expiring_internal_tokens"
           schedule: "0 1 * * *"
+          suspend: true
         - name: sync-token-secrets-to-k8s
           task: "kubernetes:sync_token_secrets"
           schedule: "12 1 * * *"
+          suspend: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -3323,6 +3388,7 @@ govukApplications:
             secretKeyRef:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
+      cronTasks: []
   - name: static
     helmValues:
       arch: arm64
@@ -3385,6 +3451,7 @@ govukApplications:
           location = /favicon.ico {
             return 301 https://www.staging.publishing.service.gov.uk/favicon.ico;
           }
+      cronTasks: []
   - name: draft-static
     repoName: static
     helmValues:
@@ -3426,6 +3493,7 @@ govukApplications:
           value: *emergency-banner-redis
         - name: USE_TMPDIR_PAGE_CACHE
           value: "true"
+      cronTasks: []
   - name: short-url-manager
     helmValues:
       arch: arm64
@@ -3451,6 +3519,7 @@ govukApplications:
         - name: organisations-import
           task: "organisations:import"
           schedule: "0 4 * * *"
+          suspend: true
       redis:
         enabled: true
       extraEnv:
@@ -3566,6 +3635,7 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
+      cronTasks: []
   - name: support
     helmValues:
       arch: arm64
@@ -3635,6 +3705,7 @@ govukApplications:
             secretKeyRef:
               name: support-zendesk
               key: ticket_email
+      cronTasks: []
   - name: support-api
     helmValues:
       arch: arm64
@@ -3663,15 +3734,19 @@ govukApplications:
         - name: feedback-deduplication-nightly
           task: "anonymous_feedback_deduplication:nightly"
           schedule: "10 0 * * *"
+          suspend: true
         - name: import-organisations
           task: "api_sync:import_organisations"
           schedule: "20 0 * * *"
+          suspend: true
         - name: service-feedback-aggregation
           task: "service_feedback_aggregation:daily"
           schedule: "30 0 * * *"
+          suspend: true
         - name: feedback-deduplication-recent
           task: "anonymous_feedback_deduplication:recent"
           schedule: "*/5 * * * *"
+          suspend: true
       extraEnv:
         - name: AWS_S3_BUCKET_NAME
           value: govuk-staging-support-api-csvs
@@ -3754,21 +3829,27 @@ govukApplications:
         - name: import-all-organisations
           task: "import:all:organisations"
           schedule: "00 09-19 * * 1-5"
+          suspend: true
         - name: import-dns
           task: "import:dns_details"
           schedule: "24 07-19 * * 1-5"
+          suspend: true
         - name: import-hits-from-cdn-logs
           task: "import:all:hits[govuk-staging-transition-fastly-logs]"
           schedule: "9 3 * * *"
+          suspend: true
         - name: clear-expired-sessions
           task: "clear_expired_sessions"
           schedule: "18 3 * * *"
+          suspend: true
         - name: clear-old-mappings
           task: "clear_old_mappings_batches"
           schedule: "8 3 * * *"
+          suspend: true
         - name: refresh-materialized-hits
           task: "import:hits:refresh_materialized"
           schedule: "4 0,12 * * *"
+          suspend: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -3801,6 +3882,7 @@ govukApplications:
         - name: publish-scheduled-editions
           task: "publish_scheduled_editions"
           schedule: "29 5 * * *"
+          suspend: true
       nginxClientMaxBodySize: *max-upload-size
       workers:
         enabled: true
@@ -3891,12 +3973,15 @@ govukApplications:
         - name: send-notifications
           task: "publisher_notifications:send"
           schedule: "14 1 * * *"
+          suspend: true
         - name: send-review-reminders
           task: "send_review_reminders"
           schedule: "30 10 * * *"
+          suspend: true
         - name: taxonomy-rebuild
           task: "taxonomy:rebuild_cache"
           schedule: "*/10 7-20 * * *"
+          suspend: true
       dbMigrationEnabled: true
       dbMigrationActiveDeadlineSeconds: 3700 # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
