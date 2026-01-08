@@ -323,8 +323,6 @@ govukApplications:
             proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
           }
       cronTasks: []
-      workers:
-        enabled: true
   - name: collections
     helmValues:
       arch: arm64
@@ -356,8 +354,6 @@ govukApplications:
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
       cronTasks: []
-      workers:
-        enabled: true
   - name: draft-collections
     repoName: collections
     helmValues:
@@ -386,8 +382,6 @@ govukApplications:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
       cronTasks: []
-      workers:
-        enabled: true
   - name: collections-publisher
     helmValues:
       arch: arm64
@@ -1068,8 +1062,6 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
       cronTasks: []
-      workers:
-        enabled: true
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
@@ -1110,8 +1102,6 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
       cronTasks: []
-      workers:
-        enabled: true
   - name: email-alert-service
     helmValues:
       appEnabled: false
@@ -1203,8 +1193,6 @@ govukApplications:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
       cronTasks: []
-      workers:
-        enabled: true
   - name: draft-feedback
     repoName: feedback
     helmValues:
@@ -1264,8 +1252,6 @@ govukApplications:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
       cronTasks: []
-      workers:
-        enabled: true
   - name: finder-frontend
     helmValues:
       arch: arm64
@@ -1292,8 +1278,6 @@ govukApplications:
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: '4'
-      workers:
-        enabled: true
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
@@ -1325,8 +1309,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-finder-frontend-email-alert-api
               key: bearer_token
-      workers:
-        enabled: true
   - name: frontend
     helmValues:
       arch: arm64
@@ -1452,8 +1434,6 @@ govukApplications:
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
       cronTasks: []
-      workers:
-        enabled: true
   - name: draft-frontend
     repoName: frontend
     helmValues:
@@ -1528,8 +1508,6 @@ govukApplications:
               name: frontend-os-maps-api
               key: api_key
       cronTasks: []
-      workers:
-        enabled: true
   - name: government-frontend
     helmValues:
       arch: arm64
@@ -1553,8 +1531,6 @@ govukApplications:
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
       cronTasks: []
-      workers:
-        enabled: true
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
@@ -1583,8 +1559,6 @@ govukApplications:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
       cronTasks: []
-      workers:
-        enabled: true
   - name: govspeak-preview
     helmValues:
       arch: arm64
@@ -3363,8 +3337,6 @@ govukApplications:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
       cronTasks: []
-      workers:
-        enabled: true
   - name: static
     helmValues:
       arch: arm64
@@ -3428,8 +3400,6 @@ govukApplications:
             return 301 https://www.staging.publishing.service.gov.uk/favicon.ico;
           }
       cronTasks: []
-      workers:
-        enabled: true
   - name: draft-static
     repoName: static
     helmValues:
@@ -3472,8 +3442,6 @@ govukApplications:
         - name: USE_TMPDIR_PAGE_CACHE
           value: "true"
       cronTasks: []
-      workers:
-        enabled: true
   - name: short-url-manager
     helmValues:
       arch: arm64
