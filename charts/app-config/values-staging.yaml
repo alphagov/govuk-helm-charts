@@ -324,7 +324,7 @@ govukApplications:
           }
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: collections
     helmValues:
       arch: arm64
@@ -357,7 +357,7 @@ govukApplications:
           value: "http://publishing-api-read-replica"
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: draft-collections
     repoName: collections
     helmValues:
@@ -387,7 +387,7 @@ govukApplications:
           value: draft-
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: collections-publisher
     helmValues:
       arch: arm64
@@ -1069,7 +1069,7 @@ govukApplications:
           value: *emergency-banner-redis
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
@@ -1111,7 +1111,7 @@ govukApplications:
           value: *emergency-banner-redis
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: email-alert-service
     helmValues:
       appEnabled: false
@@ -1122,7 +1122,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
@@ -1204,7 +1204,7 @@ govukApplications:
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: draft-feedback
     repoName: feedback
     helmValues:
@@ -1265,7 +1265,7 @@ govukApplications:
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: finder-frontend
     helmValues:
       arch: arm64
@@ -1280,7 +1280,6 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
-          suspend: true
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1294,7 +1293,7 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
       workers:
-        enabled: false
+        enabled: true
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
@@ -1316,7 +1315,6 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
-          suspend: true
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1328,7 +1326,7 @@ govukApplications:
               name: signon-token-finder-frontend-email-alert-api
               key: bearer_token
       workers:
-        enabled: false
+        enabled: true
   - name: frontend
     helmValues:
       arch: arm64
@@ -1455,7 +1453,7 @@ govukApplications:
           value: "http://publishing-api-read-replica"
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: draft-frontend
     repoName: frontend
     helmValues:
@@ -1531,7 +1529,7 @@ govukApplications:
               key: api_key
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: government-frontend
     helmValues:
       arch: arm64
@@ -1556,7 +1554,7 @@ govukApplications:
           value: "http://publishing-api-read-replica"
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
@@ -1586,7 +1584,7 @@ govukApplications:
               key: bearer_token
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: govspeak-preview
     helmValues:
       arch: arm64
@@ -1625,7 +1623,7 @@ govukApplications:
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
@@ -1800,7 +1798,7 @@ govukApplications:
           suspend: true
           project: mirrorGCS
       workers:
-        enabled: false
+        enabled: true
   - name: govuk-synthetic-test-app-canary
     helmValues:
       arch: arm64
@@ -1942,7 +1940,7 @@ govukApplications:
           templatePeriodic: a3a54578-2695-4953-9787-d7c73aaf08c0
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: link-checker-api
     helmValues:
       arch: arm64
@@ -2137,7 +2135,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1.5
@@ -2769,7 +2767,7 @@ govukApplications:
         name: router-routes-load
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: draft-router
     repoName: router
     helmValues:
@@ -2922,14 +2920,12 @@ govukApplications:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
-          suspend: true
         - name: load-page-traffic
           command: "./bin/load_page_traffic.sh"
           schedule: "0 22 * * *"
           env:
             - name: AWS_SEARCH_ANALYTICS_BUCKET
               value: govuk-search-analytics-staging
-          suspend: true
         - name: update-detailed-index-popularity
           task: "search:update_popularity"
           schedule: "15 22 * * *"
@@ -2938,7 +2934,6 @@ govukApplications:
               value: detailed
             - name: PROCESS_ALL_DATA
               value: "true"
-          suspend: true
         - name: update-government-index-popularity
           task: "search:update_popularity"
           schedule: "35 22 * * *"
@@ -2947,16 +2942,14 @@ govukApplications:
               value: government
             - name: PROCESS_ALL_DATA
               value: "true"
-          suspend: true
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
           schedule: "35 00 * * *"
           env:
             - name: SEARCH_INDEX
               value: govuk
-          suspend: true
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
@@ -3070,7 +3063,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         replicaCount: 3
         types:
           - command: ['bin/rake', 'document_sync_worker:run']
@@ -3088,19 +3081,15 @@ govukApplications:
         - name: user-events-import-yesterdays-events
           task: "user_events:import_yesterdays_events"
           schedule: "30 12 * * *"
-          suspend: true
         - name: user-events-import-intraday-events
           task: "user_events:import_intraday_events"
           schedule: "45 04,10,16,22 * * *"
-          suspend: true
         - name: user-events-purge
           task: "user_events:purge_final_week_of_retention_period"
           schedule: "0 2 * * *"
-          suspend: true
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
           schedule: "09 9 * * *" # 09:09am daily
-          suspend: true # Too noisy for staging to run on schedule, but can be run manually.
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
@@ -3396,7 +3385,7 @@ govukApplications:
               key: bearer_token
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: static
     helmValues:
       arch: arm64
@@ -3461,7 +3450,7 @@ govukApplications:
           }
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: draft-static
     repoName: static
     helmValues:
@@ -3505,7 +3494,7 @@ govukApplications:
           value: "true"
       cronTasks: []
       workers:
-        enabled: false
+        enabled: true
   - name: short-url-manager
     helmValues:
       arch: arm64
