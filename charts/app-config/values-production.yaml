@@ -3783,11 +3783,16 @@ govukApplications:
             secretKeyRef:
               name: support-zendesk
               key: ticket_email
-        - name: ZENDESK_OAUTH_ACCESS_TOKEN
+        - name: ZENDESK_API_USER_EMAIL
           valueFrom:
             secretKeyRef:
               name: support-api-zendesk
-              key: ZENDESK_OAUTH_ACCESS_TOKEN
+              key: ZENDESK_API_USER_EMAIL
+        - name: ZENDESK_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: support-api-zendesk
+              key: ZENDESK_API_TOKEN
   - name: transition
     helmValues:
       arch: arm64
