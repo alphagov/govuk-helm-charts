@@ -6,7 +6,7 @@ metadata:
     {{- include "external-secrets.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      Zendesk Oauth access token for Support API
+      Zendesk API access token for Support API
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
