@@ -692,6 +692,7 @@ govukApplications:
         - name: etl
           task: "etl:main"
           schedule: "40 9 * * *"
+          suspend: true
       extraEnv:
         - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
           valueFrom:
@@ -777,9 +778,11 @@ govukApplications:
         - name: report-delays
           task: "publishing_delay_report:report_delays"
           schedule: "15 2 * * *"
+          suspend: true
         - name: cleanup-intents
           task: "housekeeping:cleanup_publish_intents"
           schedule: "38 2 * * *"
+          suspend: true
       uploadAssets:
         enabled: false
       extraEnv:
@@ -893,9 +896,11 @@ govukApplications:
         - name: taxonomy-health-checks
           task: "taxonomy:health_checks"
           schedule: "49 * * * *"
+          suspend: true
         - name: taxonomy-metrics
           task: "metrics:taxonomy:record_all"
           schedule: "14 * * * *"
+          suspend: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -1263,6 +1268,7 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+          suspend: true
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1421,6 +1427,7 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+          suspend: true
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -2012,18 +2019,23 @@ govukApplications:
         - name: import-interact
           task: "import:service_interactions:import_all"
           schedule: "0 1 * * *"
+          suspend: true
         - name: check-links
           task: "check-links"
           schedule: "0 2 * * *"
+          suspend: true
         - name: export-links
           task: "export:links:s3"
           schedule: "0 3 * * *"
+          suspend: true
         - name: import-ga
           task: "import:google_analytics"
           schedule: "0 5 * * *"
+          suspend: true
         - name: export-ga-bad-links
           task: "export:google_analytics:bad_links"
           schedule: "0 6 * * *"
+          suspend: true
       dbMigrationEnabled: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
@@ -2316,12 +2328,15 @@ govukApplications:
         - name: reports-generate
           task: "reports:generate"
           schedule: "0 * * * *"
+          suspend: true
         - name: mail-fetcher
           command: "script/mail_fetcher"
           schedule: "*/5 * * * *"
+          suspend: true
         - name: publish-missed-scheduled-editions
           task: "editions:publish_missed_scheduled_editions"
           schedule: "11 1 * * *"
+          suspend: true
       ingress:
         enabled: true
         annotations:
@@ -2462,9 +2477,11 @@ govukApplications:
         - name: metrics-report-to-prometheus
           task: "metrics:report_to_prometheus"
           schedule: "22 * * * *" # every hour, at 22 minutes past the hour
+          suspend: true
         - name: search-api-v2-bulk-import
           task: "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"
           schedule: "0 0 1 11 *" # arbitrary value (only used as a template but field is required)
+          suspend: true
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -2764,6 +2781,7 @@ govukApplications:
             readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
+      cronTasks: []
   - name: draft-router
     repoName: router
     helmValues:
@@ -2944,12 +2962,14 @@ govukApplications:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
+          suspend: true
         - name: load-page-traffic
           command: "./bin/load_page_traffic.sh"
           schedule: "0 22 * * *"
           env:
             - name: AWS_SEARCH_ANALYTICS_BUCKET
               value: govuk-search-analytics-production
+          suspend: true
         - name: update-detailed-index-popularity
           task: "search:update_popularity"
           schedule: "15 22 * * *"
@@ -2958,6 +2978,7 @@ govukApplications:
               value: detailed
             - name: PROCESS_ALL_DATA
               value: "true"
+          suspend: true
         - name: update-government-index-popularity
           task: "search:update_popularity"
           schedule: "35 22 * * *"
@@ -2966,12 +2987,14 @@ govukApplications:
               value: government
             - name: PROCESS_ALL_DATA
               value: "true"
+          suspend: true
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
           schedule: "35 00 * * *"
           env:
             - name: SEARCH_INDEX
               value: govuk
+          suspend: true
       extraEnv:
         - name: AWS_S3_RELEVANCY_BUCKET_NAME
           value: govuk-production-search-relevancy
@@ -3088,15 +3111,19 @@ govukApplications:
         - name: user-events-import-yesterdays-events
           task: "user_events:import_yesterdays_events"
           schedule: "30 12 * * *"
+          suspend: true
         - name: user-events-import-intraday-events
           task: "user_events:import_intraday_events"
           schedule: "45 04,10,16,22 * * *"
+          suspend: true
         - name: user-events-purge
           task: "user_events:purge_final_week_of_retention_period"
           schedule: "0 2 * * *"
+          suspend: true
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
           schedule: "09 8-17 * * *" # 9 minutes past the hour every day from 8am-5pm
+          suspend: true
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
@@ -3162,18 +3189,23 @@ govukApplications:
         - name: rpt-clickstream-metrics
           task: "quality:report_quality_metrics[clickstream]"
           schedule: "0 6 * * *" # 06:00 GMT daily
+          suspend: true
         - name: rpt-explicit-metrics
           task: "quality:report_quality_metrics[explicit]"
           schedule: "0 4 * * *" # 04:00 GMT daily
+          suspend: true
         - name: rpt-binary-metrics
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
+          suspend: true
         - name: rpt-binary-metric-wknd
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
+          suspend: true
         - name: setup-sample-query-sets
           task: "quality:setup_sample_query_sets"
           schedule: "0 2 1 * *" # 02:00 first day of the month
+          suspend: true
       extraEnv:
         - name: GOOGLE_CLOUD_CREDENTIALS
           valueFrom:
@@ -3315,27 +3347,35 @@ govukApplications:
         - name: delete-expired-oauth-grants
           task: "oauth_access_grants:delete_expired"
           schedule: "22 12 * * 0"
+          suspend: true
         - name: delete-logs-older-than-two-years
           task: "event_log:delete_logs_older_than_two_years"
           schedule: "17 1 * * *"
+          suspend: true
         - name: fetch-whitehall-organisations
           task: "organisations:fetch"
           schedule: "11 3 * * *"
+          suspend: true
         - name: send-suspension-reminders
           task: "users:send_suspension_reminders"
           schedule: "57 6 * * *"
+          suspend: true
         - name: suspend-inactive-users
           task: "users:suspend_inactive"
           schedule: "27 4 * * *"
+          suspend: true
         - name: sync-app-secrets-to-k8s
           task: "kubernetes:sync_app_secrets"
           schedule: "8 1 * * *"
+          suspend: true
         - name: auto-rotate-internal-tokens
           task: "access_tokens:renew_expiring_internal_tokens"
           schedule: "0 1 * * *"
+          suspend: true
         - name: sync-token-secrets-to-k8s
           task: "kubernetes:sync_token_secrets"
           schedule: "9 1 * * *"
+          suspend: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -3529,6 +3569,7 @@ govukApplications:
         - name: organisations-import
           task: "organisations:import"
           schedule: "0 4 * * *"
+          suspend: true
       redis:
         enabled: true
       extraEnv:
@@ -3752,15 +3793,19 @@ govukApplications:
         - name: feedback-deduplication-nightly
           task: "anonymous_feedback_deduplication:nightly"
           schedule: "10 0 * * *"
+          suspend: true
         - name: import-organisations
           task: "api_sync:import_organisations"
           schedule: "20 0 * * *"
+          suspend: true
         - name: service-feedback-aggregation
           task: "service_feedback_aggregation:daily"
           schedule: "30 0 * * *"
+          suspend: true
         - name: feedback-deduplication-recent
           task: "anonymous_feedback_deduplication:recent"
           schedule: "*/5 * * * *"
+          suspend: true
       extraEnv:
         - name: AWS_S3_BUCKET_NAME
           value: govuk-production-support-api-csvs
@@ -3848,21 +3893,27 @@ govukApplications:
         - name: import-all-organisations
           task: "import:all:organisations"
           schedule: "00 09-19 * * 1-5"
+          suspend: true
         - name: import-dns
           task: "import:dns_details"
           schedule: "4 07-19 * * 1-5"
+          suspend: true
         - name: import-hits-from-cdn-logs
           task: "import:all:hits[govuk-production-transition-fastly-logs]"
           schedule: "39 3 * * *"
+          suspend: true
         - name: clear-expired-sessions
           task: "clear_expired_sessions"
           schedule: "29 3 * * *"
+          suspend: true
         - name: clear-old-mappings
           task: "clear_old_mappings_batches"
           schedule: "31 3 * * *"
+          suspend: true
         - name: refresh-materialized-hits
           task: "import:hits:refresh_materialized"
           schedule: "28 0,12 * * *"
+          suspend: true
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -3897,6 +3948,7 @@ govukApplications:
         - name: publish-scheduled-editions
           task: "publish_scheduled_editions"
           schedule: "29 5 * * *"
+          suspend: true
       nginxClientMaxBodySize: *max-upload-size
       workers:
         enabled: true
@@ -3996,12 +4048,15 @@ govukApplications:
         - name: send-notifications
           task: "publisher_notifications:send"
           schedule: "33 1 * * *"
+          suspend: true
         - name: send-review-reminders
           task: "send_review_reminders"
           schedule: "30 10 * * *"
+          suspend: true
         - name: taxonomy-rebuild
           task: "taxonomy:rebuild_cache"
           schedule: "*/10 7-20 * * *"
+          suspend: true
       dbMigrationEnabled: true
       dbMigrationActiveDeadlineSeconds: 3700 # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
