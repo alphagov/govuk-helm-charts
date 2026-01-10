@@ -2746,7 +2746,24 @@ govukApplications:
             secretKeyRef:
               key: DATABASE_URL
               name: content-store-postgres
-      cronTasks: []
+        - name: ROUTER_ROUTES_FILE
+          value: /tmp/routes.jsonl
+      serviceAccount:
+        enabled: true
+        create: false
+        name: router-routes-load
+      initContainers:
+        - name: fetch-routes
+          image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v6
+          command: ["sh", "-c", "HOME=/tmp aws s3 cp s3://govuk-router-routes-production/routes.jsonl /tmp/routes.jsonl"]
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
   - name: draft-router
     repoName: router
     helmValues:
