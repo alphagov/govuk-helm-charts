@@ -19,7 +19,7 @@ spec:
               type: RuntimeDefault
           containers:
             - name: renovate
-              image: renovate/renovate:42.76.4
+              image: renovate/renovate:42.76.5
               env:
                 - name: RENOVATE_PLATFORM
                   value: github
