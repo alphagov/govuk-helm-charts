@@ -2678,6 +2678,7 @@ govukApplications:
         name: release-assumer
   - name: router
     helmValues:
+      replicaCount: 12
       arch: arm64
       rails:
         enabled: false
