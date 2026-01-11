@@ -1947,10 +1947,10 @@ govukApplications:
       workerResources:
         limits:
           cpu: 1
-          memory: 4Gi
+          memory: 8Gi
         requests:
           cpu: 10m
-          memory: 4Gi
+          memory: 8Gi
       redis:
         enabled: true
       extraEnv:
