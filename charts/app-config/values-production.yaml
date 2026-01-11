@@ -818,7 +818,6 @@ govukApplications:
           value: '4'
       workers:
         enabled: false
-      appEnabled: false
   - name: db-backup
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
@@ -2561,7 +2560,6 @@ govukApplications:
             secretKeyRef:
               name: publishing-api-bigquery
               key: client-secret
-      appEnabled: false
   - name: publishing-api-read-replica
     repoName: publishing-api
     postSyncWorkflowEnabled: "false"
