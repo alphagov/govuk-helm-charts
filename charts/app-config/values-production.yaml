@@ -317,7 +317,6 @@ govukApplications:
             proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
           }
       cronTasks: []
-      appEnabled: false
   - name: collections
     helmValues:
       arch: arm64
@@ -350,7 +349,6 @@ govukApplications:
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
       cronTasks: []
-      appEnabled: false
   - name: draft-collections
     repoName: collections
     helmValues:
@@ -379,7 +377,6 @@ govukApplications:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
       cronTasks: []
-      appEnabled: false
   - name: collections-publisher
     helmValues:
       arch: arm64
@@ -1061,7 +1058,6 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
       cronTasks: []
-      appEnabled: false
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
@@ -1102,7 +1098,6 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
       cronTasks: []
-      appEnabled: false
   - name: email-alert-service
     helmValues:
       arch: arm64
@@ -1194,7 +1189,6 @@ govukApplications:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
       cronTasks: []
-      appEnabled: false
   - name: draft-feedback
     repoName: feedback
     helmValues:
@@ -1254,7 +1248,6 @@ govukApplications:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
       cronTasks: []
-      appEnabled: false
   - name: finder-frontend
     helmValues:
       arch: arm64
@@ -1408,7 +1401,6 @@ govukApplications:
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
       cronTasks: []
-      appEnabled: false
   - name: draft-finder-frontend
     repoName: finder-frontend
     helmValues:
@@ -1441,7 +1433,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-finder-frontend-email-alert-api
               key: bearer_token
-      appEnabled: false
   - name: draft-frontend
     repoName: frontend
     helmValues:
@@ -1515,7 +1506,6 @@ govukApplications:
               name: frontend-os-maps-api
               key: api_key
       cronTasks: []
-      appEnabled: false
   - name: government-frontend
     helmValues:
       arch: arm64
@@ -1540,7 +1530,6 @@ govukApplications:
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
       cronTasks: []
-      appEnabled: false
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
@@ -1569,7 +1558,6 @@ govukApplications:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
       cronTasks: []
-      appEnabled: false
   - name: govspeak-preview
     helmValues:
       arch: arm64
@@ -1766,7 +1754,6 @@ govukApplications:
                     value: 1
                     periodSeconds: 30
       cronTasks: []
-      appEnabled: false
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
     helmValues:
@@ -1945,7 +1932,6 @@ govukApplications:
           templateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
           templatePeriodic: a3a54578-2695-4953-9787-d7c73aaf08c0
       cronTasks: []
-      appEnabled: false
   - name: link-checker-api
     helmValues:
       arch: arm64
@@ -2173,7 +2159,6 @@ govukApplications:
         - name: OS_PLACES_API_POSTCODES_PER_SECOND
           value: "3"
       cronTasks: []
-      appEnabled: false
   - name: manuals-publisher
     helmValues:
       arch: arm64
@@ -3436,7 +3421,6 @@ govukApplications:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
       cronTasks: []
-      appEnabled: false
   - name: static
     helmValues:
       arch: arm64
@@ -3533,7 +3517,6 @@ govukApplications:
         - name: USE_TMPDIR_PAGE_CACHE
           value: "true"
       cronTasks: []
-      appEnabled: false
   - name: short-url-manager
     helmValues:
       arch: arm64
