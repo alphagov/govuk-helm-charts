@@ -1108,7 +1108,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
@@ -1263,7 +1263,6 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
-          suspend: true
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1422,7 +1421,6 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
-          suspend: true
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1598,7 +1596,7 @@ govukApplications:
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
@@ -2128,7 +2126,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1.5
@@ -2915,7 +2913,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         replicaCount: 2
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
@@ -2948,14 +2946,12 @@ govukApplications:
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
-          suspend: true
         - name: load-page-traffic
           command: "./bin/load_page_traffic.sh"
           schedule: "0 22 * * *"
           env:
             - name: AWS_SEARCH_ANALYTICS_BUCKET
               value: govuk-search-analytics-production
-          suspend: true
         - name: update-detailed-index-popularity
           task: "search:update_popularity"
           schedule: "15 22 * * *"
@@ -2964,7 +2960,6 @@ govukApplications:
               value: detailed
             - name: PROCESS_ALL_DATA
               value: "true"
-          suspend: true
         - name: update-government-index-popularity
           task: "search:update_popularity"
           schedule: "35 22 * * *"
@@ -2973,14 +2968,12 @@ govukApplications:
               value: government
             - name: PROCESS_ALL_DATA
               value: "true"
-          suspend: true
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
           schedule: "35 00 * * *"
           env:
             - name: SEARCH_INDEX
               value: govuk
-          suspend: true
       extraEnv:
         - name: AWS_S3_RELEVANCY_BUCKET_NAME
           value: govuk-production-search-relevancy
@@ -3079,7 +3072,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ['bin/rake', 'document_sync_worker:run']
             name: document-sync-worker
@@ -3097,19 +3090,15 @@ govukApplications:
         - name: user-events-import-yesterdays-events
           task: "user_events:import_yesterdays_events"
           schedule: "30 12 * * *"
-          suspend: true
         - name: user-events-import-intraday-events
           task: "user_events:import_intraday_events"
           schedule: "45 04,10,16,22 * * *"
-          suspend: true
         - name: user-events-purge
           task: "user_events:purge_final_week_of_retention_period"
           schedule: "0 2 * * *"
-          suspend: true
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
           schedule: "09 8-17 * * *" # 9 minutes past the hour every day from 8am-5pm
-          suspend: true
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
