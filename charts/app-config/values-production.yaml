@@ -131,7 +131,6 @@ govukApplications:
               name: signon-app-account-api
               key: oauth_secret
       cronTasks: []
-      appEnabled: false
   - name: asset-manager
     chartPath: charts/asset-manager
     helmValues:
@@ -214,7 +213,6 @@ govukApplications:
         - name: AWS_S3_BUCKET_NAME
           value: govuk-assets-production
       cronTasks: []
-      appEnabled: false
   - name: argo-services
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
@@ -270,7 +268,6 @@ govukApplications:
       cronTasks: []
       workers:
         enabled: false
-      appEnabled: false
   - name: bouncer
     helmValues:
       arch: arm64
@@ -467,7 +464,6 @@ govukApplications:
               name: collections-publisher-mysql
               key: DATABASE_URL
       cronTasks: []
-      appEnabled: false
   - name: content-block-manager
     repoName: content-block-manager
     helmValues:
@@ -540,7 +536,6 @@ govukApplications:
         - name: E2E_USER_EMAILS
           value: "2nd-line-support@digital.cabinet-office.gov.uk,govuk-publishing-content-modelling-team@digital.cabinet-office.gov.uk"
       cronTasks: []
-      appEnabled: false
   - name: content-data-admin
     helmValues:
       arch: arm64
@@ -768,7 +763,6 @@ govukApplications:
           value: content_data_api_govuk_importer
         - name: RABBITMQ_QUEUE_DEAD
           value: content_data_api_dead_letter_queue
-      appEnabled: false
   - name: content-store
     helmValues: &content-store
       arch: arm64
@@ -938,7 +932,6 @@ govukApplications:
             secretKeyRef:
               name: content-tagger-postgres
               key: DATABASE_URL
-      appEnabled: false
   - name: email-alert-api
     helmValues:
       arch: arm64
@@ -1042,7 +1035,6 @@ govukApplications:
             proxy_pass http://email-alert-api;
           }
       cronTasks: []
-      appEnabled: false
   - name: email-alert-frontend
     helmValues:
       arch: arm64
@@ -1609,7 +1601,6 @@ govukApplications:
       cronTasks: []
       workers:
         enabled: false
-      appEnabled: false
   - name: govuk-chat
     helmValues:
       arch: arm64
@@ -1833,7 +1824,6 @@ govukApplications:
       cronTasks: []
       workers:
         enabled: false
-      appEnabled: false
   - name: mirror
     chartPath: charts/mirror
     repoName: govuk-mirror
@@ -1895,7 +1885,6 @@ govukApplications:
       cronTasks: []
       workers:
         enabled: false
-      appEnabled: false
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
@@ -2149,7 +2138,6 @@ govukApplications:
           }
       workers:
         enabled: false
-      appEnabled: false
   - name: locations-api
     helmValues:
       arch: arm64
@@ -2275,7 +2263,6 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
       cronTasks: []
-      appEnabled: false
   - name: places-manager
     helmValues:
       arch: arm64
@@ -2330,7 +2317,6 @@ govukApplications:
               name: signon-app-imminence
               key: oauth_secret
       cronTasks: []
-      appEnabled: false
   - name: publisher
     helmValues:
       arch: arm64
@@ -2471,7 +2457,6 @@ govukApplications:
           value: &publishing-bootstrap-gtm-id GTM-W573BJPG
         - name: MAINTENANCE_MODE
           value: "false"
-      appEnabled: false
   - name: publishing-api
     helmValues:
       arch: arm64
@@ -2610,7 +2595,6 @@ govukApplications:
       cronTasks: []
       workers:
         enabled: false
-      appEnabled: false
   - name: release
     helmValues:
       arch: arm64
@@ -2876,7 +2860,6 @@ govukApplications:
       cronTasks: []
       workers:
         enabled: false
-      appEnabled: false
   - name: search-admin
     helmValues:
       arch: arm64
@@ -3450,7 +3433,6 @@ govukApplications:
               key: DEVISE_SECRET_KEY
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
-      appEnabled: false
   - name: smartanswers
     repoName: smart-answers
     helmValues:
@@ -3644,7 +3626,6 @@ govukApplications:
           value: *publishing-bootstrap-gtm-id
       workers:
         enabled: false
-      appEnabled: false
   - name: specialist-publisher
     helmValues:
       arch: arm64
@@ -3729,7 +3710,6 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
       cronTasks: []
-      appEnabled: false
   - name: support
     helmValues:
       arch: arm64
@@ -3802,7 +3782,6 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
       cronTasks: []
-      appEnabled: false
   - name: support-api
     helmValues:
       arch: arm64
@@ -3895,7 +3874,6 @@ govukApplications:
             secretKeyRef:
               name: support-api-zendesk
               key: ZENDESK_API_TOKEN
-      appEnabled: false
   - name: transition
     helmValues:
       arch: arm64
@@ -3974,7 +3952,6 @@ govukApplications:
               key: DATABASE_URL
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
-      appEnabled: false
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
@@ -4058,7 +4035,6 @@ govukApplications:
               key: MONGODB_URI
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-design-system-gtm-id
-      appEnabled: false
   - name: whitehall-admin
     repoName: whitehall
     helmValues:
@@ -4198,4 +4174,3 @@ govukApplications:
       appExtraVolumeMounts:
         - name: asset-uploads-efs
           mountPath: *whitehall-uploads-path
-      appEnabled: false
