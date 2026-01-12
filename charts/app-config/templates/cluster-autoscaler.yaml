@@ -42,7 +42,7 @@ spec:
               matchLabels:
                 app.kubernetes.io/name: aws-cluster-autoscaler
             podMetricsEndpoints:
-              - portNumber: "8085"
+              - portNumber: 8085
                 path: "/metrics"
         replicaCount: {{ .Values.replicaCount }}
   destination:
