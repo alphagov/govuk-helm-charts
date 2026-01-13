@@ -12,10 +12,10 @@ toolbox:
     tag: "v13"
 
 externalSecrets:
-  refreshInterval: 1h # Be kind to etcd and don't set this too short.
+  refreshInterval: 1h  # Be kind to etcd and don't set this too short.
   deletionPolicy: Delete
 
-arch: arm64
+arch: amd64
 
 extraEnv:
   - name: GOGC
@@ -64,10 +64,10 @@ serviceAccount:
   create: true
   name: db-backup
   annotations:
-    eks.amazonaws.com/role-arn: "" # Overridden in ../app-config (Argo CD).
+    eks.amazonaws.com/role-arn: ""  # Overridden in ../app-config (Argo CD).
 
 # govukEnvironment determines which set of jobs to use from `cronjobs` below.
-govukEnvironment: staging # Overridden in ../app-config (Argo CD).
+govukEnvironment: staging  # Overridden in ../app-config (Argo CD).
 
 # cronjobs defines a set of k8s CronJobs that should exist in each environment
 # (production, staging, integration). Each CronJob consists of one or more
@@ -81,7 +81,7 @@ govukEnvironment: staging # Overridden in ../app-config (Argo CD).
 cronjobs:
   production:
     account-api-postgres:
-      schedule: "12 16 * * *"
+      schedule: "37 23 * * *"
       db: account-api_production
       # TODO: add an automatic test restore to somewhere in production (because
       # unlike the other DBs, we don't copy prod account-api data to staging).
@@ -89,43 +89,43 @@ cronjobs:
         - op: backup
 
     authenticating-proxy-postgres:
-      schedule: "2 16 * * *"
+      schedule: "23 23 * * *"
       db: authenticating_proxy_production
       operations:
         - op: backup
 
     chat-postgres:
-      schedule: "10 16 * * *"
+      schedule: "47 23 * * *"
       db: govuk_chat_production
       operations:
         - op: backup
 
     ckan-postgres:
-      schedule: "15 18 * * *"
+      schedule: "43 4 * * *"
       db: ckan_production
       operations:
         - op: backup
 
     content-block-manager-postgres:
-      schedule: "0 16 * * *"
+      schedule: "43 0 * * *"
       db: content_block_manager_production
       operations:
         - op: backup
 
     collections-publisher-mysql:
-      schedule: "58 15 * * *"
+      schedule: "21 23 * * *"
       db: collections_publisher_production
       operations:
         - op: backup
 
     content-data-admin-postgres:
-      schedule: "56 15 * * *"
+      schedule: "4 23 * * *"
       db: content_data_admin_production
       operations:
         - op: backup
 
     content-data-api-postgresql-primary:
-      schedule: "15 17 * * *"
+      schedule: "35 23 * * *"
       host: blue-content-data-api-postgresql-primary-postgres
       db: content_performance_manager_production
       dbms: postgres
@@ -134,81 +134,80 @@ cronjobs:
 
     content-store-postgres:
       <<: *s5cmd-ram-workaround
-      schedule: "20 16 * * *" # Keep this before publishing-api.
+      schedule: "06 21 * * *"  # Keep this before publishing-api.
       db: content_store_production
       operations:
         - op: backup
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
-      schedule: "50 18 * * *" # Keep this before publishing-api.
+      schedule: "16 21 * * *"  # Keep this before publishing-api.
       db: draft_content_store_production
       operations:
         - op: backup
 
     content-tagger-postgres:
-      schedule: "4 16 * * *"
+      schedule: "31 23 * * *"
       db: content_tagger_production
       operations:
         - op: backup
 
     email-alert-api-postgres:
-      schedule: "25 16 * * *"
+      schedule: "54 23 * * *"
       db: email-alert-api_production
       operations:
         - op: backup
 
     imminence-postgres:
-      schedule: "14 16 * * *"
+      schedule: "18 23 * * *"
       db: imminence_production
       operations:
         - op: backup
 
     link-checker-api-postgres:
-      schedule: "16 16 * * *"
+      schedule: "43 23 * * *"
       db: link_checker_api_production
       operations:
         - op: backup
 
     local-links-manager-postgres:
-      schedule: "8 16 * * *"
+      schedule: "8 23 * * *"
       db: local-links-manager_production
       operations:
         - op: backup
 
     locations-api-postgres:
-      schedule: "50 16 * * *"
+      schedule: "32 23 * * *"
       db: locations_api_production
       operations:
         - op: backup
 
-    # Make sure Publishing API is last in the list of backups
     publishing-api-postgres:
       <<: *s5cmd-ram-workaround
-      schedule: "00 19 * * *"
+      schedule: "36 21 * * *"
       db: publishing_api_production
       operations:
         - op: backup
 
     release-mysql:
-      schedule: "10 16 * * *"
+      schedule: "11 23 * * *"
       db: release_production
       operations:
         - op: backup
 
     search-admin-mysql:
-      schedule: "54 15 * * *"
+      schedule: "56 23 * * *"
       db: search_admin_production
       operations:
         - op: backup
 
     publisher-postgres:
-      schedule: "15 16 * * *"
+      schedule: "41 23 * * *"
       db: publisher_production
       operations:
         - op: backup
 
     service-manual-publisher-postgres:
-      schedule: "6 16 * * *"
+      schedule: "49 23 * * *"
       db: service-manual-publisher_production
       operations:
         - op: backup
@@ -229,19 +228,19 @@ cronjobs:
           db: govuk_assets_production
 
     signon-mysql:
-      schedule: "18 16 * * *"
+      schedule: "3 23 * * *"
       db: signon_production
       operations:
         - op: backup
 
     support-api-postgres:
-      schedule: "20 16 * * *"
+      schedule: "38 23 * * *"
       db: support_contacts_production
       operations:
         - op: backup
 
     transition-postgresql-primary:
-      schedule: "17 16 * * *"
+      schedule: "24 3 * * *"
       db: transition_production
       dbms: postgres
       operations:
@@ -249,10 +248,11 @@ cronjobs:
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
-      schedule: "30 16 * * *"
+      schedule: "28 0 * * *"
       db: whitehall_production
       operations:
         - op: backup
+
 
   staging:
     authenticating-proxy-postgres:
@@ -400,7 +400,7 @@ cronjobs:
         - op: backup
 
     release-mysql:
-      schedule: "11 1 * * 1" # Daily would be overkill.
+      schedule: "11 1 * * 1"  # Daily would be overkill.
       db: release_production
       operations:
         - op: restore
@@ -498,6 +498,7 @@ cronjobs:
         - op: transform
           script: whitehall.sql
         - op: backup
+
 
   integration:
     account-api-postgres:
