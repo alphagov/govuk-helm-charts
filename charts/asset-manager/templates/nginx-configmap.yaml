@@ -240,7 +240,7 @@ data:
         }
         # Favicon now that static isn't serving it
         location = /favicon.ico {
-          return 301 https://www.integration.publishing.service.gov.uk/favicon.ico;
+          return 301 https://www.{{ .Values.externalDomainSuffix }}/favicon.ico;
         }
       }
     }
