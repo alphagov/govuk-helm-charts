@@ -2,6 +2,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: renovate
+  labels:
+    {{- include "renovate.labels" $ | nindent 4 }}
 spec:
   schedule: "@hourly"
   concurrencyPolicy: Forbid
@@ -17,7 +19,7 @@ spec:
             runAsNonRoot: true
             seccompProfile:
               type: RuntimeDefault
-          serviceAccountName: renovate-irsa
+          serviceAccountName: {{ include "renovate.serviceAccountName" $ }}
           containers:
             - name: renovate
               image: renovate/renovate:42.80.2

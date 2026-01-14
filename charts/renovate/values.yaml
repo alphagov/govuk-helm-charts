@@ -1,0 +1,5 @@
+serviceAccount:
+  create: true
+  name: renovate-irsa
+  annotations:
+    eks.amazonaws.com/role-arn: ""  # Overridden in ../app-config (Argo CD).
