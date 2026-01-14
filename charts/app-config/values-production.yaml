@@ -2931,14 +2931,6 @@ govukApplications:
           env:
             - name: AWS_SEARCH_ANALYTICS_BUCKET
               value: govuk-search-analytics-production
-        - name: update-detailed-index-popularity
-          task: "search:update_popularity"
-          schedule: "15 22 * * *"
-          env:
-            - name: SEARCH_INDEX
-              value: detailed
-            - name: PROCESS_ALL_DATA
-              value: "true"
         - name: update-government-index-popularity
           task: "search:update_popularity"
           schedule: "35 22 * * *"
