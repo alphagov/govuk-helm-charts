@@ -14,7 +14,8 @@ backup () {
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
   set -o pipefail
   PGDATABASE=$DB_DATABASE \
-    pg_dump -Fc -Z1 | progress | s5cmd pipe "$BUCKET/$s3_path"
+    pg_dump -Fc -Z1 | progress | s5cmd pipe "$BUCKET/$s3_path" \
+    && write_pointer "${s3_path}"
   set +o pipefail
 }
 
@@ -53,11 +54,11 @@ EOF
 }
 
 restore () {
-  : "${FILENAME:=$(list | tail -1)}"  # Use latest dump if not specified.
   if [[ "$GOVUK_ENVIRONMENT" = *"prod"* ]]; then
     : "${REALLY_RESTORE_ONTO_PRODUCTION?}"
   fi
-  local s3_url="$BUCKET/$DB_HOST/$FILENAME"
+  local s3_url
+  s3_url="$(object_uri)"
   dump_is_readable "$s3_url"
 
   dropdb -ef --if-exists "$DB_DATABASE-restore"

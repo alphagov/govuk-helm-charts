@@ -15,11 +15,11 @@ rules:
   default: false
   # Custom external metric for the Chat-AI sidekiq backlog
   external:
-    - seriesQuery: 'sidekiq_queue_backlog{job=~"govuk-chat-worker"}'
+    - seriesQuery: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="answer"}'
       resources:
         overrides:
           namespace:
             resource: namespace
       name:
         as: ai_sidekiq_queue_backlog
-      metricsQuery: 'max(sidekiq_queue_backlog{job=~"govuk-chat-worker"})'
+      metricsQuery: 'max by(job, queue) (sidekiq_queue_backlog{job="govuk-chat-worker", queue="answer"})'

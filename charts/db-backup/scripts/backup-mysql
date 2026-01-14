@@ -9,7 +9,8 @@ backup () {
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
   set -o pipefail
   mysqldump --single-transaction "$DB_DATABASE" \
-    | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path"
+    | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path" \
+    && write_pointer "${s3_path}"
   set +o pipefail
 }
 
@@ -24,11 +25,11 @@ dump_is_readable () {
 }
 
 restore () {
-  : "${FILENAME:=$(list | tail -1)}"  # Use latest dump if not specified.
   if [[ "$GOVUK_ENVIRONMENT" = *"prod"* ]]; then
     : "${REALLY_RESTORE_ONTO_PRODUCTION?}"
   fi
-  local s3_url="$BUCKET/$DB_HOST/$FILENAME"
+  local s3_url
+  s3_url="$(object_uri)"
   dump_is_readable "$s3_url"
   mysqladmin drop -f "$DB_DATABASE" || true
   mysqladmin create "$DB_DATABASE"

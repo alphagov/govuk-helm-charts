@@ -368,48 +368,68 @@ tests:
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
 
-# SidekiqQueueLength and SidekiqJobAge alert tests
+# SidekiqAnswerQueueLength, SidekiqAnswerJobAge and SidekiqDefaultJobAge alert tests
   - interval: 1m
     input_series:
-      # Alert sustained breach tests (baseline) SidekiqQueueLength and SidekiqJobAge
-      - series: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="default"}'
-        values: '0 30 60 60 60 60 60'
+      # Alert sustained breach tests (baseline) SidekiqAnswerQueueLength,
+      # SidekiqAnswerJobAge and SidekiqDefaultJobAge
       - series: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="answer"}'
-        values: '0 10 40 40 40 40 40'
+        values: '0 30 60 60 60 60 60'
       - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="default"}'
-        values: '0 300 1200 1200 1200 1200 1200'
+        values: '0 5000 24000 24000 24000 24000 24000'
       - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="answer"}'
-        values: '0 100 800 800 800 800 800'
+        values: '0 300 1200 1200 1200 1200 1200'
     alert_rule_test:
       - eval_time: 1m
-        alertname: SidekiqQueueLength
+        alertname: SidekiqAnswerQueueLength
         exp_alerts: []
       - eval_time: 2m
-        alertname: SidekiqQueueLength
+        alertname: SidekiqAnswerQueueLength
         exp_alerts: []
       - eval_time: 7m
-        alertname: SidekiqQueueLength
+        alertname: SidekiqAnswerQueueLength
         exp_alerts:
           - exp_labels:
               severity: critical
               destination: slack-chat-notifications
               job: govuk-chat-worker
-              queue: default
+              queue: answer
             exp_annotations:
-              summary: Sidekiq Queue Length High
+              summary: Sidekiq Answer Queue Length High
               description: >-
-                The Sidekiq queue length has been over 50 items for more than 5 minutes.
+                The Sidekiq answer queue length has been over 50 items for more than 5 minutes.
                 Autoscaling should have taken place, so check if the maximum number of
                 worker pods are running.
               runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
       - eval_time: 1m
-        alertname: SidekiqJobAge
+        alertname: SidekiqAnswerJobAge
         exp_alerts: []
       - eval_time: 2m
-        alertname: SidekiqJobAge
+        alertname: SidekiqAnswerJobAge
         exp_alerts: []
       - eval_time: 7m
-        alertname: SidekiqJobAge
+        alertname: SidekiqAnswerJobAge
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              destination: slack-chat-notifications
+              job: govuk-chat-worker
+              queue: answer
+            exp_annotations:
+              summary: Sidekiq Answer Queue Items Over 15 Minutes Old
+              description: >-
+                Some Sidekiq items in the answer queue are over 15 minutes old. Check to see
+                if some items have got stuck or if there is a problem processing items
+                causing the delay.
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+      - eval_time: 1m
+        alertname: SidekiqDefaultJobAge
+        exp_alerts: []
+      - eval_time: 2m
+        alertname: SidekiqDefaultJobAge
+        exp_alerts: []
+      - eval_time: 7m
+        alertname: SidekiqDefaultJobAge
         exp_alerts:
           - exp_labels:
               severity: critical
@@ -417,91 +437,65 @@ tests:
               job: govuk-chat-worker
               queue: default
             exp_annotations:
-              summary: Sidekiq Queue Items Over 15 Minutes Old
+              summary: Sidekiq Default Queue Items Over Six Hours Old
               description: >-
-                Some Sidekiq items in the queue are over 15 minutes old. Check to see
+                Some Sidekiq items in the default queue are over six hours old. Check to see
                 if some items have got stuck or if there is a problem processing items
                 causing the delay.
               runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
 
   - interval: 1m
     input_series:
-      # No alert transient spike (not sustained 5m) SidekiqQueueLength
-      - series: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="default"}'
+      # No alert transient spike (not sustained 5m) SidekiqAnswerQueueLength
+      - series: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="answer"}'
         values: '0 0 60 60 60 40 40'
     alert_rule_test:
       - eval_time: 4m
-        alertname: SidekiqQueueLength
+        alertname: SidekiqAnswerQueueLength
         exp_alerts: []
       - eval_time: 6m
-        alertname: SidekiqQueueLength
+        alertname: SidekiqAnswerQueueLength
         exp_alerts: []
 
   - interval: 1m
     input_series:
-      # No alert transient spike (not sustained 5m) SidekiqJobAge
-      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="default"}'
+      # No alert transient spike (not sustained 5m) SidekiqAnswerJobAge
+      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="answer"}'
         values: '0 0 950 950 950 800 800'
     alert_rule_test:
       - eval_time: 4m
-        alertname: SidekiqJobAge
+        alertname: SidekiqAnswerJobAge
         exp_alerts: []
       - eval_time: 6m
-        alertname: SidekiqJobAge
+        alertname: SidekiqAnswerJobAge
         exp_alerts: []
 
   - interval: 1m
     input_series:
-      # Alert both queues over backlog threshold sustained => two alerts at 5m SidekiqQueueLength
+      # No alert transient spike (not sustained 5m) SidekiqDefaultQueueAge
+      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="default"}'
+        values: '0 0 22000 22000 22000 18000 18000'
+    alert_rule_test:
+      - eval_time: 4m
+        alertname: SidekiqDefaultQueueAge
+        exp_alerts: []
+      - eval_time: 6m
+        alertname: SidekiqDefaultQueueAge
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Only alert for the answer queue when over backlog threshold sustained
       - series: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="default"}'
         values: '60 60 60 60 60 60 60'
       - series: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="answer"}'
-        values: '55 55 55 55 55 55 55'
+        values: '60 60 60 60 60 60 0'
     alert_rule_test:
       - eval_time: 4m
-        alertname: SidekiqQueueLength
+        alertname: SidekiqAnswerQueueLength
         exp_alerts: []
       - eval_time: 5m
-        alertname: SidekiqQueueLength
-        exp_alerts:
-          - exp_labels:
-              severity: critical
-              destination: slack-chat-notifications
-              job: govuk-chat-worker
-              queue: default
-            exp_annotations:
-              summary: Sidekiq Queue Length High
-              description: >-
-                The Sidekiq queue length has been over 50 items for more than 5 minutes.
-                Autoscaling should have taken place, so check if the maximum number of
-                worker pods are running.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
-          - exp_labels:
-              severity: critical
-              destination: slack-chat-notifications
-              job: govuk-chat-worker
-              queue: answer
-            exp_annotations:
-              summary: Sidekiq Queue Length High
-              description: >-
-                The Sidekiq queue length has been over 50 items for more than 5 minutes.
-                Autoscaling should have taken place, so check if the maximum number of
-                worker pods are running.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
-
-  - interval: 1m
-    input_series:
-      # Alert one queue exactly at threshold (900) -> no alert; other >900 sustained -> one alert SidekiqJobAge
-      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="default"}'
-        values: '900 900 900 900 900 900 900'
-      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="answer"}'
-        values: '910 910 910 910 910 910 910'
-    alert_rule_test:
-      - eval_time: 4m
-        alertname: SidekiqJobAge
-        exp_alerts: []
-      - eval_time: 5m
-        alertname: SidekiqJobAge
+        alertname: SidekiqAnswerQueueLength
         exp_alerts:
           - exp_labels:
               severity: critical
@@ -509,85 +503,74 @@ tests:
               job: govuk-chat-worker
               queue: answer
             exp_annotations:
-              summary: Sidekiq Queue Items Over 15 Minutes Old
+              summary: Sidekiq Answer Queue Length High
               description: >-
-                Some Sidekiq items in the queue are over 15 minutes old. Check to see
-                if some items have got stuck or if there is a problem processing items
-                causing the delay.
+                The Sidekiq answer queue length has been over 50 items for more than 5 minutes.
+                Autoscaling should have taken place, so check if the maximum number of
+                worker pods are running.
               runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
-
-  - interval: 1m
-    input_series:
-      # Alert both queues > 900 sustained -> two alerts SidekiqJobAge
-      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="default"}'
-        values: '950 950 950 950 950 950 950'
-      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="high"}'
-        values: '1000 1000 1000 1000 1000 1000 1000'
-    alert_rule_test:
-      - eval_time: 4m
-        alertname: SidekiqJobAge
+      - eval_time: 7m
+        alertname: SidekiqAnswerQueueLength
         exp_alerts: []
-      - eval_time: 5m
-        alertname: SidekiqJobAge
-        exp_alerts:
-          - exp_labels:
-              severity: critical
-              destination: slack-chat-notifications
-              job: govuk-chat-worker
-              queue: default
-            exp_annotations:
-              summary: Sidekiq Queue Items Over 15 Minutes Old
-              description: >-
-                Some Sidekiq items in the queue are over 15 minutes old. Check to see
-                if some items have got stuck or if there is a problem processing items
-                causing the delay.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
-          - exp_labels:
-              severity: critical
-              destination: slack-chat-notifications
-              job: govuk-chat-worker
-              queue: high
-            exp_annotations:
-              summary: Sidekiq Queue Items Over 15 Minutes Old
-              description: >-
-                Some Sidekiq items in the queue are over 15 minutes old. Check to see
-                if some items have got stuck or if there is a problem processing items
-                causing the delay.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
 
   - interval: 1m
     input_series:
-      # Resolution after recovery SidekiqQueueLength
-      - series: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="default"}'
+      # Resolution after recovery SidekiqAnswerQueueLength
+      - series: 'sidekiq_queue_backlog{job="govuk-chat-worker", queue="answer"}'
         values: '60 60 60 60 60 60 30'
     alert_rule_test:
       - eval_time: 5m
-        alertname: SidekiqQueueLength
+        alertname: SidekiqAnswerQueueLength
         exp_alerts:
           - exp_labels:
               severity: critical
               destination: slack-chat-notifications
               job: govuk-chat-worker
-              queue: default
+              queue: answer
             exp_annotations:
-              summary: Sidekiq Queue Length High
+              summary: Sidekiq Answer Queue Length High
               description: >-
-                The Sidekiq queue length has been over 50 items for more than 5 minutes.
+                The Sidekiq answer queue length has been over 50 items for more than 5 minutes.
                 Autoscaling should have taken place, so check if the maximum number of worker
                 pods are running.
               runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
       - eval_time: 6m
-        alertname: SidekiqQueueLength
+        alertname: SidekiqAnswerQueueLength
         exp_alerts: []
 
   - interval: 1m
     input_series:
-      # Resolution after recovery SidekiqJobAge
-      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="default"}'
+      # Resolution after recovery SidekiqAnswerJobAge
+      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="answer"}'
         values: '950 950 950 950 950 950 800'
     alert_rule_test:
       - eval_time: 5m
-        alertname: SidekiqJobAge
+        alertname: SidekiqAnswerJobAge
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              destination: slack-chat-notifications
+              job: govuk-chat-worker
+              queue: answer
+            exp_annotations:
+              summary: Sidekiq Answer Queue Items Over 15 Minutes Old
+              description: >-
+                Some Sidekiq items in the answer queue are over 15 minutes old. Check to see
+                if some items have got stuck or if there is a problem processing items
+                causing the delay.
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+      - eval_time: 6m
+        alertname: SidekiqAnswerJobAge
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Resolution after recovery SidekiqDefaultJobAge
+      - series: 'sidekiq_queue_latency_seconds{job="govuk-chat-worker", queue="default"}'
+        values: '22000 22000 22000 22000 22000 22000 21000'
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: SidekiqDefaultJobAge
         exp_alerts:
           - exp_labels:
               severity: critical
@@ -595,12 +578,12 @@ tests:
               job: govuk-chat-worker
               queue: default
             exp_annotations:
-              summary: Sidekiq Queue Items Over 15 Minutes Old
+              summary: Sidekiq Default Queue Items Over Six Hours Old
               description: >-
-                Some Sidekiq items in the queue are over 15 minutes old. Check to see
+                Some Sidekiq items in the default queue are over six hours old. Check to see
                 if some items have got stuck or if there is a problem processing items
                 causing the delay.
               runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
       - eval_time: 6m
-        alertname: SidekiqJobAge
+        alertname: SidekiqDefaultJobAge
         exp_alerts: []

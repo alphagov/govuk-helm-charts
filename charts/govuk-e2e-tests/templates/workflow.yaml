@@ -40,6 +40,7 @@ spec:
           - --workers=4
           - --project=main
           - --grep-invert=@not-{{ .Values.govukEnvironment }}
+          - --grep-invert=@app-service-manual-publisher
           - "--grep={{ `{{ inputs.parameters.grep }}` }}"
         volumeMounts:
           - name: tmp

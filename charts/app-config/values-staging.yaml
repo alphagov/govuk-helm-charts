@@ -137,6 +137,7 @@ govukApplications:
             secretKeyRef:
               name: signon-app-account-api
               key: oauth_secret
+      cronTasks: []
   - name: asset-manager
     chartPath: charts/asset-manager
     helmValues:
@@ -177,17 +178,10 @@ govukApplications:
         hosts:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             paths:
-              - path: /government/uploads/
-              - path: /government/assets/
-              - path: /media/
-              - path: /auth/gds # Viewing draft assets requires user auth.
+              - path: /
           - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
             paths:
-              - path: /government/uploads/
-              - path: /government/assets/
-              - path: /media/
-              - path: /auth/gds # Viewing draft assets requires user auth.
-              - path: /robots.txt
+              - path: /
       assetManagerNFS: &assets-nfs assets.staging.govuk-internal.digital
       nginxConfigMap:
         create: false
@@ -219,6 +213,7 @@ govukApplications:
           value: warn
         - name: AWS_S3_BUCKET_NAME
           value: govuk-assets-staging
+      cronTasks: []
   - name: argo-services
     chartPath: charts/argo-services
     postSyncWorkflowEnabled: "false"
@@ -271,6 +266,7 @@ govukApplications:
             secretKeyRef:
               name: authenticating-proxy-jwt-auth-secret
               key: JWT_AUTH_SECRET
+      cronTasks: []
   - name: bouncer
     helmValues:
       arch: arm64
@@ -319,6 +315,7 @@ govukApplications:
           location /eff/action/worldPayCallback {
             proxy_pass https://www.gov.uk/apply-for-a-licence/payment/worldpayCallback;
           }
+      cronTasks: []
   - name: collections
     helmValues:
       arch: arm64
@@ -340,15 +337,16 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
         - name: GRAPHQL_RATE_MINISTERS_INDEX
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_ROLE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_TOPICAL_EVENT
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_WORLD_INDEX
-          value: "0.5"
+          value: "0"
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+      cronTasks: []
   - name: draft-collections
     repoName: collections
     helmValues:
@@ -376,6 +374,7 @@ govukApplications:
           value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
+      cronTasks: []
   - name: collections-publisher
     helmValues:
       arch: arm64
@@ -459,6 +458,7 @@ govukApplications:
             secretKeyRef:
               name: collections-publisher-mysql
               key: DATABASE_URL
+      cronTasks: []
   - name: content-block-manager
     repoName: content-block-manager
     helmValues:
@@ -530,6 +530,7 @@ govukApplications:
               key: bearer_token
         - name: E2E_USER_EMAILS
           value: "2nd-line-support@digital.cabinet-office.gov.uk,govuk-publishing-content-modelling-team@digital.cabinet-office.gov.uk"
+      cronTasks: []
   - name: content-data-admin
     helmValues:
       arch: arm64
@@ -1022,6 +1023,7 @@ govukApplications:
             limit_req zone=email_alert_api_public burst=20 nodelay;
             proxy_pass http://email-alert-api;
           }
+      cronTasks: []
   - name: email-alert-frontend
     helmValues:
       arch: arm64
@@ -1052,6 +1054,7 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+      cronTasks: []
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
     helmValues:
@@ -1091,6 +1094,7 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+      cronTasks: []
   - name: email-alert-service
     helmValues:
       appEnabled: false
@@ -1128,6 +1132,7 @@ govukApplications:
             secretKeyRef:
               name: email-alert-service-rabbitmq
               key: RABBITMQ_URL
+      cronTasks: []
   - name: external-secrets
     chartPath: charts/external-secrets
     postSyncWorkflowEnabled: "false"
@@ -1180,6 +1185,7 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+      cronTasks: []
   - name: draft-feedback
     repoName: feedback
     helmValues:
@@ -1238,6 +1244,7 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+      cronTasks: []
   - name: finder-frontend
     helmValues:
       arch: arm64
@@ -1356,10 +1363,60 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
+        - name: GRAPHQL_RATE_ANSWER
+          value: "0"
+        - name: GRAPHQL_RATE_CALENDAR
+          value: "0"
+        - name: GRAPHQL_RATE_CALL_FOR_EVIDENCE
+          value: "0"
+        - name: GRAPHQL_RATE_CASE_STUDY
+          value: "0"
+        - name: GRAPHQL_RATE_CORPORATE_INFORMATION_PAGE
+          value: "0.5"
+        - name: GRAPHQL_RATE_DOCUMENT_COLLECTION
+          value: "0.5"
+        - name: GRAPHQL_RATE_FATALITY_NOTICE
+          value: "0.5"
+        - name: GRAPHQL_RATE_FIELDS_OF_OPERATION
+          value: "0"
+        - name: GRAPHQL_RATE_GUIDE
+          value: "0"
+        - name: GRAPHQL_RATE_HELP_PAGE
+          value: "0"
+        - name: GRAPHQL_RATE_HOMEPAGE
+          value: "0"
+        - name: GRAPHQL_RATE_LANDING_PAGE
+          value: "0.5"
+        - name: GRAPHQL_RATE_LOCAL_TRANSACTION
+          value: "0.5"
         - name: GRAPHQL_RATE_NEWS_ARTICLE
           value: "0.5"
-        - name: GRAPHQL_RATE_TOPICAL_EVENT_ABOUT_PAGE
+        - name: GRAPHQL_RATE_PLACE
           value: "0.5"
+        - name: GRAPHQL_RATE_PUBLICATION
+          value: "0"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_GUIDE
+          value: "0"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_HOMEPAGE
+          value: "0"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_SERVICE_STANDARD
+          value: "0"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_SERVICE_TOOLKIT
+          value: "0"
+        - name: GRAPHQL_RATE_SERVICE_MANUAL_TOPIC
+          value: "0"
+        - name: GRAPHQL_RATE_SIMPLE_SMART_ANSWER
+          value: "0"
+        - name: GRAPHQL_RATE_SPECIALIST_DOCUMENT
+          value: "0"
+        - name: GRAPHQL_RATE_SPEECH
+          value: "0"
+        - name: GRAPHQL_RATE_STATISTICAL_DATA_SET
+          value: "0"
+        - name: GRAPHQL_RATE_TOPICAL_EVENT_ABOUT_PAGE
+          value: "0"
+        - name: GRAPHQL_RATE_TRANSACTION
+          value: "0"
         - name: OS_MAPS_API_KEY
           valueFrom:
             secretKeyRef:
@@ -1369,6 +1426,7 @@ govukApplications:
           value: '4'
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+      cronTasks: []
   - name: draft-frontend
     repoName: frontend
     helmValues:
@@ -1442,6 +1500,7 @@ govukApplications:
             secretKeyRef:
               name: frontend-os-maps-api
               key: api_key
+      cronTasks: []
   - name: government-frontend
     helmValues:
       arch: arm64
@@ -1453,6 +1512,8 @@ govukApplications:
           cpu: 1
           memory: 768Mi
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
         - name: PUBLISHING_API_BEARER_TOKEN
@@ -1462,6 +1523,7 @@ govukApplications:
               key: bearer_token
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+      cronTasks: []
   - name: draft-government-frontend
     repoName: government-frontend
     helmValues:
@@ -1480,6 +1542,8 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
+        - name: EMERGENCY_BANNER_REDIS_URL
+          value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
         - name: PUBLISHING_API_BEARER_TOKEN
@@ -1487,6 +1551,7 @@ govukApplications:
             secretKeyRef:
               name: signon-token-government-frontend-publishing-api
               key: bearer_token
+      cronTasks: []
   - name: govspeak-preview
     helmValues:
       arch: arm64
@@ -1510,6 +1575,7 @@ govukApplications:
             ]}}]
         hosts:
           - name: govspeak-preview.{{ .Values.k8sExternalDomainSuffix }}
+      cronTasks: []
   - name: govuk-chat
     helmValues:
       arch: arm64
@@ -1669,6 +1735,7 @@ govukApplications:
                   - type: Pods
                     value: 1
                     periodSeconds: 30
+      cronTasks: []
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
     helmValues:
@@ -1697,6 +1764,8 @@ govukApplications:
           schedule: "*/30 7-19 * * 1-5" # every 30 minutes, between 7:00 - 19:00 UTC, Monday to Friday
           suspend: true
           project: mirrorGCS
+      workers:
+        enabled: true
   - name: govuk-synthetic-test-app-canary
     helmValues:
       arch: arm64
@@ -1713,6 +1782,7 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "300"
         hosts:
           - name: govuk-synthetic-test-app-canary.eks.staging.govuk.digital
+      cronTasks: []
   - name: mirror
     chartPath: charts/mirror
     repoName: govuk-mirror
@@ -1771,6 +1841,7 @@ govukApplications:
           value: "1"
         - name: PUMA_TIMEOUT
           value: "300"
+      cronTasks: []
   - name: licensify
     chartPath: charts/licensify
     namespace: licensify
@@ -1834,6 +1905,9 @@ govukApplications:
           templateApplicatOnline: 8ca00761-7902-4ec3-89a2-e3aa006d3ed8
           templateAuthority: 96af61a3-ffdc-419c-a814-9ce01a78a87f
           templatePeriodic: a3a54578-2695-4953-9787-d7c73aaf08c0
+      cronTasks: []
+      workers:
+        enabled: true
   - name: link-checker-api
     helmValues:
       arch: arm64
@@ -2058,6 +2132,7 @@ govukApplications:
               key: api-secret
         - name: OS_PLACES_API_POSTCODES_PER_SECOND
           value: "1"
+      cronTasks: []
   - name: manuals-publisher
     helmValues:
       arch: arm64
@@ -2134,6 +2209,7 @@ govukApplications:
             secretKeyRef:
               name: manuals-publisher-docdb
               key: MONGODB_URI
+      cronTasks: []
   - name: places-manager
     helmValues:
       arch: arm64
@@ -2187,6 +2263,7 @@ govukApplications:
             secretKeyRef:
               name: signon-app-imminence
               key: oauth_secret
+      cronTasks: []
   - name: publisher
     helmValues:
       arch: arm64
@@ -2461,6 +2538,7 @@ govukApplications:
           value: production_replica
         - name: DISABLE_QUEUE_PUBLISHER
           value: "true"
+      cronTasks: []
   - name: release
     helmValues:
       arch: arm64
@@ -2484,7 +2562,7 @@ govukApplications:
         hosts:
           - name: release.{{ .Values.k8sExternalDomainSuffix }}
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 250m
@@ -2695,6 +2773,7 @@ govukApplications:
             secretKeyRef:
               name: draft-content-store-postgres
               key: DATABASE_URL
+      cronTasks: []
   - name: search-admin
     helmValues:
       arch: arm64
@@ -2839,7 +2918,7 @@ govukApplications:
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
           value: govuk-staging-sitemaps
         - name: ELASTICSEARCH_URI
-          value: https://vpc-blue-elasticsearch6-domain-uibh77cu2kiudtl76uhseobfzq.eu-west-1.es.amazonaws.com
+          value: https://vpc-green-elasticsearch6-domain-42a562y7oibo5y7raa6rhkcb5m.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
           value: info
         - name: GDS_SSO_OAUTH_ID
@@ -2957,7 +3036,6 @@ govukApplications:
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
           schedule: "09 9 * * *" # 09:09am daily
-          suspend: true # Too noisy for staging to run on schedule, but can be run manually.
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
@@ -3251,109 +3329,7 @@ govukApplications:
             secretKeyRef:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
-  - name: static
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1Gi
-        requests:
-          cpu: 10m
-          memory: 320Mi
-      ingress:
-        enabled: true
-        annotations:
-          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
-          alb.ingress.kubernetes.io/load-balancer-name: assets-origin
-          alb.ingress.kubernetes.io/group.name: assets-origin
-          alb.ingress.kubernetes.io/group.order: "30"
-          alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
-          alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
-        hosts:
-          - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
-            path: /
-      kubernetesProbeEndpoints:
-        startupProbe: "/healthcheck/ready"
-      extraEnv:
-        # These GA/GTM values are not secrets (not even the the gtm_auth one).
-        # https://github.com/alphagov/govuk-puppet/pull/8041
-        - name: RAILS_SERVE_STATIC_FILES
-          value: "true"
-        - name: GA_UNIVERSAL_ID
-          value: &ga-universal-id UA-26179049-20
-        - name: GOOGLE_TAG_MANAGER_ID
-          value: &static-gtm-id GTM-MG7HG5W
-        - name: GOOGLE_TAG_MANAGER_AUTH # Non-prod only.
-          value: &static-gtm-auth oJWs562CxSIjZKn_GlB5Bw
-        - name: GOOGLE_TAG_MANAGER_PREVIEW # Non-prod only.
-          value: &static-gtm-preview env-5
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-static-publishing-api
-              key: bearer_token
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: USE_TMPDIR_PAGE_CACHE
-          value: "true"
-      nginxConfigMap:
-        extraServerConf: |
-          # 1stline use this URL in their zendesk template
-          location = /static/gov.uk_logotype_crown.png {
-            absolute_redirect off;
-            return 301 /media/5c810ef4ed915d43e50ce260/gov.uk_logotype_crown.png;
-          }
-          # Google site verification
-          location = /googlec908b3bc32386239.html {
-            return 200 'google-site-verification: googlec908b3bc32386239.html';
-          }
-          # Favicon now that static isn't serving it
-          location = /favicon.ico {
-            return 301 https://www.staging.publishing.service.gov.uk/favicon.ico;
-          }
-  - name: draft-static
-    repoName: static
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1Gi
-        requests:
-          cpu: 10m
-          memory: 320Mi
-      rails:
-        createKeyBaseSecret: false
-      sentry:
-        createSecret: false
-      uploadAssets:
-        enabled: false
-      kubernetesProbeEndpoints:
-        startupProbe: "/healthcheck/ready"
-      extraEnv:
-        - name: DRAFT_ENVIRONMENT
-          value: "1"
-        - name: PLEK_HOSTNAME_PREFIX
-          value: draft-
-        - name: GA_UNIVERSAL_ID
-          value: *ga-universal-id
-        - name: GOOGLE_TAG_MANAGER_ID
-          value: *static-gtm-id
-        - name: GOOGLE_TAG_MANAGER_AUTH # Non-prod only.
-          value: *static-gtm-auth
-        - name: GOOGLE_TAG_MANAGER_PREVIEW # Non-prod only.
-          value: *static-gtm-preview
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-static-publishing-api
-              key: bearer_token
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: USE_TMPDIR_PAGE_CACHE
-          value: "true"
+      cronTasks: []
   - name: short-url-manager
     helmValues:
       arch: arm64
@@ -3413,6 +3389,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-short-url-manager-publishing-api
               key: bearer_token
+      workers:
+        enabled: true
   - name: specialist-publisher
     helmValues:
       arch: arm64
@@ -3494,6 +3472,7 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
+      cronTasks: []
   - name: support
     helmValues:
       arch: arm64
@@ -3563,6 +3542,7 @@ govukApplications:
             secretKeyRef:
               name: support-zendesk
               key: ticket_email
+      cronTasks: []
   - name: support-api
     helmValues:
       arch: arm64
@@ -3640,6 +3620,16 @@ govukApplications:
             secretKeyRef:
               name: support-zendesk
               key: ticket_email
+        - name: ZENDESK_API_USER_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: support-api-zendesk
+              key: ZENDESK_API_USER_EMAIL
+        - name: ZENDESK_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: support-api-zendesk
+              key: ZENDESK_API_TOKEN
   - name: transition
     helmValues:
       arch: arm64

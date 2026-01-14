@@ -2,6 +2,10 @@ name: Lint GitHub Actions
 on:
   push:
     paths: ['.github/**']
+
+permissions:
+  contents: read
+
 jobs:
   actionlint:
     runs-on: ubuntu-latest
