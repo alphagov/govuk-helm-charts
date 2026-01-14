@@ -2640,15 +2640,6 @@ govukApplications:
         enabled: true
         create: false
         name: release-assumer
-  - name: renovate
-    chartPath: charts/renovate
-    postSyncWorkflowEnabled: "false"
-    helmValues:
-      arch: arm64
-      # https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/renovate-irsa.tf
-      serviceAccount:
-        annotations:
-          eks.amazonaws.com/role-arn: arn:aws:iam::172025368201:role/renovate-irsa-govuk
   - name: router
     helmValues:
       arch: arm64
