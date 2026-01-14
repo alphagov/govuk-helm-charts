@@ -4,6 +4,25 @@ rule_files:
   - search_api_v2.yaml
 
 tests:
+  # Tests for search_api_v2:vertex_search_response_times_p90:rate5m
+  - interval: 1m
+    input_series:
+      # Bucket 0.5: 0 requests
+      - series: 'search_api_v2_vertex_search_request_duration_bucket{le="0.5"}'
+        values: '0x10'
+      # Bucket 1.0: 90% of total requests (18 req/min * 5 min = 90 total requests.)
+      - series: 'search_api_v2_vertex_search_request_duration_bucket{le="1"}'
+        values: '0+18x10'
+      # Bucket +Inf: 100% of total requests (20 req/min * 5 min = 100 total requests.)
+      - series: 'search_api_v2_vertex_search_request_duration_bucket{le="+Inf"}'
+        values: '0+20x10'
+    promql_expr_test:
+      - expr: search_api_v2:vertex_search_response_times_p90:rate5m
+        eval_time: 5m
+        exp_samples:
+          - value: 1
+            labels: 'search_api_v2:vertex_search_response_times_p90:rate5m'
+
   # Tests for search_api_v2:search_requests:rate5m
   - interval: 1m
     input_series:
@@ -93,6 +112,30 @@ tests:
         exp_samples:
           - labels: 'search_api_v2:autocomplete_successful_requests:ratio_rate5m{}'
             value: 0.85
+
+  # Tests for HighVertexP90Latency alert
+  - interval: 1m
+    input_series:
+      - series: 'search_api_v2:vertex_search_response_times_p90:rate5m'
+        values: '2.5x10'
+    alert_rule_test:
+      - eval_time: 4m
+        alertname: HighVertexP90Latency
+        exp_alerts: []
+      - eval_time: 5m
+        alertname: HighVertexP90Latency
+        exp_alerts:
+          - exp_labels:
+              alertname: HighVertexP90Latency
+              severity: critical
+              destination: slack-search-team
+            exp_annotations:
+              summary: "High Vertex Search Latency (90th percentile)"
+              grafana_path: >-
+                d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+              description: "Google Vertex search request duration has exceeded 2 seconds for more than 5 minutes."
 
   # Tests for SearchDegradedAcute alert
   - interval: 1m

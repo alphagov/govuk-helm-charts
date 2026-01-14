@@ -2,6 +2,14 @@ groups:
   - name: SearchApiV2AcuteMetrics
     interval: 1m
     rules:
+      - record: search_api_v2:vertex_search_response_times_p90:rate5m
+        expr: |
+          histogram_quantile(0.9, sum by(le) (
+            rate(
+              search_api_v2_vertex_search_request_duration_bucket[5m]
+            )
+          )
+          )
       - record: search_api_v2:search_requests:rate5m
         expr: |
           sum by (status) (
@@ -38,6 +46,20 @@ groups:
             /
             sum (search_api_v2:autocomplete_requests:rate5m) > 0
           ) or vector(1)
+      - alert: HighVertexP90Latency
+        expr: search_api_v2:vertex_search_response_times_p90:rate5m > 2
+        for: 5m
+        labels:
+          severity: critical
+          destination: slack-search-team
+        annotations:
+          summary: "High Vertex Search Latency (90th percentile)"
+          grafana_path: >-
+            d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+          description: >-
+            Google Vertex search request duration has exceeded 2 seconds for more than 5 minutes.
       - alert: SearchDegradedAcute
         expr: search_api_v2:search_successful_requests:ratio_rate5m < 0.99
         for: 10m
