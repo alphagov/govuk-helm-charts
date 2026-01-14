@@ -1,0 +1,5 @@
+serviceAccount:
+  create: true
+  name: renovate-irsa
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::172025368201:role/renovate-irsa-govuk
