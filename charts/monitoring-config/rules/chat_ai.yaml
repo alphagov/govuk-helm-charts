@@ -207,3 +207,22 @@ groups:
             causing the delay.
           runbook_url: >-
             https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+
+      - alert: ElevatedAnswerErrorStatuses
+        expr: >-
+          sum(
+            rate(
+              govuk_chat_answer_count{
+                status=~"error_.*"
+              }[20m]
+            )
+          ) >= (3 / 1200)
+        labels:
+          severity: critical
+          destination: slack-chat-notifications
+        annotations:
+          summary: High rate of error statuses from Chat AI answers
+          description: >-
+            Three or more answers generated in the last 20 minutes have an error status.
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html

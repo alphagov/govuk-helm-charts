@@ -587,3 +587,43 @@ tests:
       - eval_time: 6m
         alertname: SidekiqDefaultJobAge
         exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # No alert: no govuk_chat_answer_count data
+    alert_rule_test:
+      - alertname: ElevatedAnswerErrorStatuses
+        eval_time: 2m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # No alert: total answers with error status > 3
+      - series: 'govuk_chat_answer_count{status="error_answer_service_error"}'
+        values: '1 2'
+    alert_rule_test:
+      - alertname: ElevatedAnswerErrorStatuses
+        eval_time: 2m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert: aggregate total answers with error status >= 3 in 20 minutes
+      - series: 'govuk_chat_answer_count{status="error_answer_guardrails"}'
+        values: '0 1 2'
+      - series: 'govuk_chat_answer_count{status="error_answer_service_error"}'
+        values: '0 1 1'
+    alert_rule_test:
+      - alertname: ElevatedAnswerErrorStatuses
+        eval_time: 3m
+        exp_alerts:
+          - exp_labels:
+              alertname: ElevatedAnswerErrorStatuses
+              severity: critical
+              destination: slack-chat-notifications
+            exp_annotations:
+              summary: High rate of error statuses from Chat AI answers
+              description: >-
+                Three or more answers generated in the last 20 minutes have an error status.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
