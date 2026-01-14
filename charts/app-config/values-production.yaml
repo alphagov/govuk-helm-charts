@@ -170,10 +170,17 @@ govukApplications:
         hosts:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             paths:
-              - path: /
+              - path: /government/uploads/
+              - path: /government/assets/
+              - path: /media/
+              - path: /auth/gds # Viewing draft assets requires user auth.
           - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
             paths:
-              - path: /
+              - path: /government/uploads/
+              - path: /government/assets/
+              - path: /media/
+              - path: /auth/gds # Viewing draft assets requires user auth.
+              - path: /robots.txt
       assetManagerNFS: &assets-nfs assets.production.govuk-internal.digital
       nginxConfigMap:
         create: false
