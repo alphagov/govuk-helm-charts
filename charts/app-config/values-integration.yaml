@@ -2881,14 +2881,6 @@ govukApplications:
             requests:
               cpu: 0.1
               memory: 800Mi
-        - name: update-detailed-index-popularity
-          task: "search:update_popularity"
-          schedule: "15 22 * * *"
-          env:
-            - name: SEARCH_INDEX
-              value: detailed
-            - name: PROCESS_ALL_DATA
-              value: "true"
         - name: update-government-index-popularity
           task: "search:update_popularity"
           schedule: "35 22 * * *"
