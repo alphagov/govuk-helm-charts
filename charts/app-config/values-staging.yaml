@@ -2695,8 +2695,6 @@ govukApplications:
           value: "http://government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://smartanswers"
-        - name: BACKEND_URL_static
-          value: "http://static"
         - name: BACKEND_URL_account-api
           value: "http://account-api"
         - name: BACKEND_URL_feedback
@@ -2756,8 +2754,6 @@ govukApplications:
           value: "http://draft-government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://draft-smartanswers"
-        - name: BACKEND_URL_static
-          value: "http://draft-static"
         - name: BACKEND_URL_account-api
           value: "http://account-api"
         - name: BACKEND_URL_feedback
