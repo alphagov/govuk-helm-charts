@@ -2921,9 +2921,6 @@ govukApplications:
         - name: load-page-traffic
           command: "./bin/load_page_traffic.sh"
           schedule: "0 22 * * *"
-          env:
-            - name: AWS_SEARCH_ANALYTICS_BUCKET
-              value: govuk-search-analytics-production
         - name: update-detailed-index-popularity
           task: "search:update_popularity"
           schedule: "15 22 * * *"
