@@ -2871,9 +2871,6 @@ govukApplications:
         - name: load-page-traffic
           command: "./bin/load_page_traffic.sh"
           schedule: "0 22 * * *"
-          env:
-            - name: AWS_SEARCH_ANALYTICS_BUCKET
-              value: govuk-search-analytics-integration
           resources:
             limits:
               cpu: 1
