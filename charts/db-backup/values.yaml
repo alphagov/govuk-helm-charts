@@ -309,7 +309,7 @@ cronjobs:
 
     content-data-api-postgresql-primary:
       schedule: "35 1 * * 6"
-      host: blue-content-data-api-postgresql-primary-postgres
+      host: content-data-api-postgres
       db: content_performance_manager_production
       dbms: postgres
       operations:
@@ -359,6 +359,7 @@ cronjobs:
     imminence-postgres:
       schedule: "18 1 * * 1-5"
       db: imminence_production
+      host: places-manager-postgres
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
