@@ -1372,11 +1372,11 @@ govukApplications:
         - name: GRAPHQL_RATE_CASE_STUDY
           value: "0"
         - name: GRAPHQL_RATE_CORPORATE_INFORMATION_PAGE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_DOCUMENT_COLLECTION
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_FATALITY_NOTICE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_FIELDS_OF_OPERATION
           value: "0"
         - name: GRAPHQL_RATE_GUIDE
