@@ -1417,7 +1417,7 @@ govukApplications:
       nginxConfigMap:
         extraServerConf: |
           location /government/uploads/(?<item_path>.+) {
-            return 301 https://assets.{{ .Values.publishingDomainSuffix }}/government/upload/$item_path;
+            return 301 https://assets.integration.publishing.service.gov.uk/government/upload/$item_path;
           }
   - name: draft-frontend
     repoName: frontend
@@ -1501,7 +1501,7 @@ govukApplications:
       nginxConfigMap:
         extraServerConf: |
           location /government/uploads/(?<item_path>.+) {
-            return 301 https://draft-assets.{{ .Values.publishingDomainSuffix }}/government/upload/$item_path;
+            return 301 https://draft-assets.integration.publishing.service.gov.uk/government/upload/$item_path;
           }
   - name: fact-check-manager
     helmValues:
