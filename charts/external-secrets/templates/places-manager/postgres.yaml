@@ -1,0 +1,28 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: places-manager-postgres
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Credentials for places-manager's Postgres DB hosted in RDS.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: places-manager-postgres
+    template:
+      data:
+        # places-manager was previously called imminence, the RDS instance has been renamed, but the database within it has
+        # not, so for now it's sill imminence_production
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/postgis-conn-string.tpl" | trim }}/imminence_production'
+  dataFrom:
+    - extract:
+        key: govuk/places-manager/postgres
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
