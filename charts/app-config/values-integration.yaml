@@ -1414,6 +1414,15 @@ govukApplications:
               key: api_key
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+      nginxConfigMap:
+        extraServerConf: |
+          server {
+            server_name ~^www.{{ .Values.k8sExternalDomainSuffix }}
+
+            location /government/uploads/(?<item_path>.+) {
+              return 301 https://assets.{{ .Values.publishingDomainSuffix }}/government/upload/$item_path;
+            }
+          }
   - name: draft-frontend
     repoName: frontend
     helmValues:
@@ -1493,6 +1502,15 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-publishing-api
               key: bearer_token
+      nginxConfigMap:
+        extraServerConf: |
+          server {
+            server_name ~^draft-www.{{ .Values.k8sExternalDomainSuffix }}
+
+            location /government/uploads/(?<item_path>.+) {
+              return 301 https://draft-assets.{{ .Values.publishingDomainSuffix }}/government/upload/$item_path;
+            }
+          }
   - name: fact-check-manager
     helmValues:
       arch: arm64
