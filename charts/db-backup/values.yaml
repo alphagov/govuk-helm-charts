@@ -157,6 +157,12 @@ cronjobs:
       operations:
         - op: backup
 
+    imminence-postgres:
+      schedule: "18 23 * * *"
+      db: imminence_production
+      operations:
+        - op: backup
+
     link-checker-api-postgres:
       schedule: "43 23 * * *"
       db: link_checker_api_production
@@ -172,12 +178,6 @@ cronjobs:
     locations-api-postgres:
       schedule: "32 23 * * *"
       db: locations_api_production
-      operations:
-        - op: backup
-
-    places-manager-postgres:
-      schedule: "18 23 * * *"
-      db: imminence_production
       operations:
         - op: backup
 
@@ -356,6 +356,15 @@ cronjobs:
           script: email-alert-api.sql
         - op: backup
 
+    imminence-postgres:
+      schedule: "18 1 * * 1-5"
+      db: imminence_production
+      host: places-manager-postgres
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
+
     link-checker-api-postgres:
       schedule: "43 1 * * 1-5"
       db: link_checker_api_production
@@ -375,14 +384,6 @@ cronjobs:
     locations-api-postgres:
       schedule: "32 1 * * 1-5"
       db: locations_api_production
-      operations:
-        - op: restore
-          bucket: s3://govuk-production-database-backups
-        - op: backup
-
-    places-manager-postgres:
-      schedule: "18 1 * * 1-5"
-      db: imminence_production
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -612,6 +613,14 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
         - op: backup
 
+    imminence-postgres:
+      schedule: "18 3 * * 1"
+      db: imminence_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+        - op: backup
+
     link-checker-api-postgres:
       schedule: "43 3 * * 1"
       db: link_checker_api_production
@@ -631,14 +640,6 @@ cronjobs:
     locations-api-postgres:
       schedule: "32 3 * * 1"
       db: locations_api_production
-      operations:
-        - op: restore
-          bucket: s3://govuk-staging-database-backups
-        - op: backup
-
-    places-manager-postgres:
-      schedule: "18 3 * * 1"
-      db: imminence_production
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
