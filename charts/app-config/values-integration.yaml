@@ -1416,7 +1416,7 @@ govukApplications:
           value: "http://publishing-api-read-replica"
       nginxConfigMap:
         extraServerConf: |
-          location /government/uploads/(?<item_path>.+) {
+          location ~ /government/uploads/(?<item_path>.+) {
             return 301 https://assets.integration.publishing.service.gov.uk/government/upload/$item_path;
           }
   - name: draft-frontend
@@ -1500,7 +1500,7 @@ govukApplications:
               key: bearer_token
       nginxConfigMap:
         extraServerConf: |
-          location /government/uploads/(?<item_path>.+) {
+          location ~ /government/uploads/(?<item_path>.+) {
             return 301 https://draft-assets.integration.publishing.service.gov.uk/government/upload/$item_path;
           }
   - name: fact-check-manager
