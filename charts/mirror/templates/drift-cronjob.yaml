@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "drift.labels" . | nindent 4 }}
 spec:
-  schedule: "{{ .Values.mirrorSchedule }}"
+  schedule: "{{ .Values.driftSchedule }}"
   jobTemplate:
     metadata:
       name: "{{ include "drift.fullname" . }}"
