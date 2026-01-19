@@ -1376,13 +1376,13 @@ govukApplications:
         - name: GRAPHQL_RATE_HOMEPAGE
           value: "0"
         - name: GRAPHQL_RATE_LANDING_PAGE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_LOCAL_TRANSACTION
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_NEWS_ARTICLE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_PLACE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_PUBLICATION
           value: "0"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_GUIDE
