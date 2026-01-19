@@ -1416,12 +1416,8 @@ govukApplications:
           value: "http://publishing-api-read-replica"
       nginxConfigMap:
         extraServerConf: |
-          server {
-            server_name ~^www.{{ .Values.k8sExternalDomainSuffix }}
-
-            location /government/uploads/(?<item_path>.+) {
-              return 301 https://assets.{{ .Values.publishingDomainSuffix }}/government/upload/$item_path;
-            }
+          location /government/uploads/(?<item_path>.+) {
+            return 301 https://assets.{{ .Values.publishingDomainSuffix }}/government/upload/$item_path;
           }
   - name: draft-frontend
     repoName: frontend
@@ -1504,12 +1500,8 @@ govukApplications:
               key: bearer_token
       nginxConfigMap:
         extraServerConf: |
-          server {
-            server_name ~^draft-www.{{ .Values.k8sExternalDomainSuffix }}
-
-            location /government/uploads/(?<item_path>.+) {
-              return 301 https://draft-assets.{{ .Values.publishingDomainSuffix }}/government/upload/$item_path;
-            }
+          location /government/uploads/(?<item_path>.+) {
+            return 301 https://draft-assets.{{ .Values.publishingDomainSuffix }}/government/upload/$item_path;
           }
   - name: fact-check-manager
     helmValues:
