@@ -2250,7 +2250,7 @@ govukApplications:
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: places-manager-postgres
+              name: imminence-postgres
               key: DATABASE_URL
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
