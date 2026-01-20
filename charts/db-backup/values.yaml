@@ -160,6 +160,7 @@ cronjobs:
     imminence-postgres:
       schedule: "18 23 * * *"
       db: imminence_production
+      host: places-manager-postgres
       operations:
         - op: backup
 
@@ -616,6 +617,7 @@ cronjobs:
     imminence-postgres:
       schedule: "18 3 * * 1"
       db: imminence_production
+      host: places-manager-postgres
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
