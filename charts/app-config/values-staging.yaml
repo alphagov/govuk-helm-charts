@@ -1426,6 +1426,11 @@ govukApplications:
           value: '4'
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
+      nginxConfigMap:
+        extraServerConf: |
+          location ~ /government/uploads/(?<item_path>.+) {
+            return 301 https://assets.staging.publishing.service.gov.uk/government/uploads/$item_path;
+          }
       cronTasks: []
   - name: draft-frontend
     repoName: frontend
@@ -1500,6 +1505,11 @@ govukApplications:
             secretKeyRef:
               name: frontend-os-maps-api
               key: api_key
+      nginxConfigMap:
+        extraServerConf: |
+          location ~ /government/uploads/(?<item_path>.+) {
+            return 301 https://draft-assets.staging.publishing.service.gov.uk/government/uploads/$item_path;
+          }
       cronTasks: []
   - name: government-frontend
     helmValues:
