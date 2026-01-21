@@ -124,11 +124,9 @@ cronjobs:
       operations:
         - op: backup
 
-    content-data-api-postgresql-primary:
+    content-data-api-postgres:
       schedule: "35 23 * * *"
-      host: blue-content-data-api-postgresql-primary-postgres
       db: content_performance_manager_production
-      dbms: postgres
       operations:
         - op: backup
 
@@ -157,10 +155,9 @@ cronjobs:
       operations:
         - op: backup
 
-    imminence-postgres:
+    places-manager-postgres:
       schedule: "18 23 * * *"
       db: imminence_production
-      host: places-manager-postgres
       operations:
         - op: backup
 
@@ -240,10 +237,9 @@ cronjobs:
       operations:
         - op: backup
 
-    transition-postgresql-primary:
+    transition-postgres:
       schedule: "24 3 * * *"
       db: transition_production
-      dbms: postgres
       operations:
         - op: backup
 
@@ -291,7 +287,6 @@ cronjobs:
     content-block-manager-postgres:
       schedule: "43 2 * * 1-5"
       db: content_block_manager_production
-      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -308,11 +303,9 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    content-data-api-postgresql-primary:
+    content-data-api-postgres:
       schedule: "35 1 * * 6"
-      host: content-data-api-postgres
       db: content_performance_manager_production
-      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -357,10 +350,9 @@ cronjobs:
           script: email-alert-api.sql
         - op: backup
 
-    imminence-postgres:
+    places-manager-postgres:
       schedule: "18 1 * * 1-5"
       db: imminence_production
-      host: places-manager-postgres
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -481,10 +473,9 @@ cronjobs:
           bucket: s3://govuk-production-database-backups
         - op: backup
 
-    transition-postgresql-primary:
+    transition-postgres:
       schedule: "24 1 * * 1-5"
       db: transition_production
-      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -546,7 +537,6 @@ cronjobs:
     content-block-manager-postgres:
       schedule: "43 2 * * 1"
       db: content_block_manager_production
-      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -563,12 +553,10 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
         - op: backup
 
-    content-data-api-postgresql-primary:
+    content-data-api-postgres:
       suspend: true
       schedule: "35 6 * * 6"
-      host: blue-content-data-api-postgresql-primary-postgres
       db: content_performance_manager_production
-      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -614,10 +602,9 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
         - op: backup
 
-    imminence-postgres:
+    places-manager-postgres:
       schedule: "18 3 * * 1"
       db: imminence_production
-      host: places-manager-postgres
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
@@ -730,6 +717,7 @@ cronjobs:
       suspend: true
       schedule: "0 0 * * 1"
       host: signon-mysql
+      dbms: mysql
       db: signon_production
       operations:
         - op: restore
@@ -743,10 +731,9 @@ cronjobs:
           bucket: s3://govuk-staging-database-backups
         - op: backup
 
-    transition-postgresql-primary:
+    transition-postgres:
       schedule: "24 3 * * 1"
       db: transition_production
-      dbms: postgres
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
