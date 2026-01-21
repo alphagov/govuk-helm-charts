@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu
+set -euo pipefail
 
 source_dir=$(dirname "${BASH_SOURCE[0]}")
 . "$source_dir/lib.sh"
