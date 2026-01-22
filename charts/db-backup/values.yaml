@@ -554,7 +554,6 @@ cronjobs:
         - op: backup
 
     content-data-api-postgres:
-      suspend: true
       schedule: "35 6 * * 6"
       db: content_performance_manager_production
       operations:
