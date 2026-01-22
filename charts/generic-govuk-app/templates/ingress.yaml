@@ -10,6 +10,7 @@ metadata:
     app: {{ $fullName }}
     app.kubernetes.io/name: {{ $fullName }}
     app.kubernetes.io/component: app
+    some-other-label: something
   annotations:
     {{- (tpl (toYaml .Values.ingress.annotations) .) | trim | nindent 4 }}
 spec:
