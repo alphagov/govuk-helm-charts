@@ -20,7 +20,7 @@ spec:
           serviceAccountName: {{ $.Values.serviceAccount.name }}
           containers:
             - name: renovate
-              image: renovate/renovate:42.90.0
+              image: renovate/renovate:42.92.1
               env:
                 - name: RENOVATE_PLATFORM
                   value: github
