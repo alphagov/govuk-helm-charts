@@ -1,0 +1,9 @@
+apiVersion: v2
+name: govuk-reports
+description: A Helm chart for deploying ArgoCD Application for GOV.UK Reports
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+maintainers:
+  - name: GOV.UK Platform Team
+    email: govuk-platform-team@digital.cabinet-office.gov.uk

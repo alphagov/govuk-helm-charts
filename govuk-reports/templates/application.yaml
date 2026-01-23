@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.argocd.application.name }}
+  namespace: {{ .Values.argocd.application.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "govuk-reports.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  project: {{ .Values.argocd.application.project }}
+  source:
+    repoURL: {{ .Values.argocd.source.repoURL }}
+    targetRevision: {{ .Values.argocd.source.targetRevision }}
+    path: {{ .Values.argocd.source.path }}
+  destination:
+    server: {{ .Values.argocd.destination.server }}
+    namespace: {{ .Values.argocd.destination.namespace }}
+  syncPolicy:
+    {{- if .Values.argocd.syncPolicy.automated }}
+    automated:
+      prune: {{ .Values.argocd.syncPolicy.automated.prune }}
+      selfHeal: {{ .Values.argocd.syncPolicy.automated.selfHeal }}
+    {{- end }}
+    {{- if .Values.argocd.syncPolicy.syncOptions }}
+    syncOptions:
+      {{- range .Values.argocd.syncPolicy.syncOptions }}
+      - {{ . }}
+      {{- end }}
+    {{- end }}
