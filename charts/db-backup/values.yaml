@@ -185,6 +185,9 @@ cronjobs:
       db: publishing_api_production
       operations:
         - op: backup
+      extraEnv:
+        - name: DB_OWNER
+          value: publishing-api-owner-role
 
     release-mysql:
       schedule: "11 23 * * *"
@@ -392,6 +395,9 @@ cronjobs:
         - op: transform
           script: publishing-api.sql
         - op: backup
+      extraEnv:
+        - name: DB_OWNER
+          value: publishing-api-owner-role
 
     release-mysql:
       schedule: "11 1 * * 1"  # Daily would be overkill.
@@ -641,6 +647,9 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
+      extraEnv:
+        - name: DB_OWNER
+          value: publishing-api-owner-role
 
     release-mysql:
       schedule: "11 3 * * 1"
