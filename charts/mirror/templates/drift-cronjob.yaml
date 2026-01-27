@@ -48,6 +48,10 @@ spec:
                   value: '100'
                 - name: COMPARE_REMAINING_SAMPLED_COUNT
                   value: '100'
+                - name: SLACK_WEBHOOK
+                  valueFrom:
+                    secretKeyRef:
+                      key: mirror-drift-detection-slack-webhook
                 {{- with .Values.extraEnv }}
                   {{- (tpl (toYaml .) $) | trim | nindent 16 }}
                 {{- end }}
