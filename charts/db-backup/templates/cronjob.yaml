@@ -30,7 +30,7 @@ spec:
         {{- include "db-backup.selectorLabels" $ | nindent 8 }}
         app.kubernetes.io/component: {{ $jobName }}
     spec:
-      activeDeadlineSeconds: 43200  # 12 hours
+      activeDeadlineSeconds: {{ $job.maxJobRuntimeSeconds | default 43200 }} # 43200 seconds is 12 hours
       backoffLimit: 0
       template:
         metadata:
