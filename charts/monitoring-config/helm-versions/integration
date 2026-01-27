@@ -2,4 +2,4 @@
 https://prometheus-community.github.io/helm-charts prometheus-adapter: "5.2.0"
 https://prometheus-community.github.io/helm-charts prometheus-fastly-exporter: "0.10.0"
 https://prometheus-community.github.io/helm-charts prometheus-pushgateway: "3.6.0"
-https://grafana.github.io/helm-charts tempo-distributed: "1.61.0" 
+https://grafana.github.io/helm-charts tempo-distributed: "1.61.1" 
