@@ -311,8 +311,8 @@ cronjobs:
       db: content_performance_manager_production
       maxJobRuntimeSeconds: 86400 # 24 hours
       operations:
-        - op: restore
-          bucket: s3://govuk-production-database-backups
+        # - op: restore
+        #   bucket: s3://govuk-production-database-backups
         - op: backup
 
     content-store-postgres:
