@@ -72,7 +72,7 @@ restore () {
   else
     rename_db "$DB_DATABASE-restore" "$DB_DATABASE"
   fi
-  psql -c "ALTER DATABASE \"$DB_DATABASE\" OWNER TO \"$DB_OWNER\";" || true
+  psql -c "ALTER DATABASE \"$DB_DATABASE\" OWNER TO \"$DB_OWNER\";"
 
   dropdb -ef --if-exists "$DB_DATABASE-old"
 }
