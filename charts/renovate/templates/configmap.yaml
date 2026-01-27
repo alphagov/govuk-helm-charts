@@ -7,6 +7,9 @@ data:
     {
       "repositories": [
         "alphagov/govuk-helm-charts",
-        "alphagov/govuk-infrastructure"
+        "alphagov/govuk-infrastructure",
+        "alphagov/govuk-fastly",
+        "alphagov/govuk-fastly-secrets",
+        "alphagov/terraform-govuk-infrastructure-sensitive"
       ]
     }
