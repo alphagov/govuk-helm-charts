@@ -262,6 +262,9 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
+      extraEnv:
+        - name: DB_OWNER
+          value: authenticating-proxy
 
     chat-postgres:
       schedule: "47 1 * * 1-5"
@@ -353,6 +356,9 @@ cronjobs:
         - op: transform
           script: email-alert-api.sql
         - op: backup
+      extraEnv:
+        - name: DB_OWNER
+          value: email-alert-api
 
     places-manager-postgres:
       schedule: "18 1 * * 1-5"
@@ -515,6 +521,9 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
+      extraEnv:
+        - name: DB_OWNER
+          value: authenticating-proxy
 
     chat-postgres:
       schedule: "47 3 * * 1"
@@ -608,6 +617,9 @@ cronjobs:
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
+      extraEnv:
+        - name: DB_OWNER
+          value: email-alert-api
 
     places-manager-postgres:
       schedule: "18 3 * * 1"
