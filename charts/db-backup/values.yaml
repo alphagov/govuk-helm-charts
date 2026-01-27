@@ -306,6 +306,7 @@ cronjobs:
     content-data-api-postgres:
       schedule: "35 1 * * 6"
       db: content_performance_manager_production
+      maxJobRuntimeSeconds: 86400 # 24 hours
       operations:
         - op: restore
           bucket: s3://govuk-production-database-backups
@@ -554,8 +555,9 @@ cronjobs:
         - op: backup
 
     content-data-api-postgres:
-      schedule: "35 6 * * 6"
+      schedule: "37 1 * * 0"
       db: content_performance_manager_production
+      maxJobRuntimeSeconds: 86400 # 24 hours
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
