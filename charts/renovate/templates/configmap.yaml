@@ -10,6 +10,8 @@ data:
         "alphagov/govuk-infrastructure",
         "alphagov/govuk-fastly",
         "alphagov/govuk-fastly-secrets",
+        "alphagov/govuk-dns-tf",
+        "alphagov/govuk-user-reviewer",
         "alphagov/terraform-govuk-infrastructure-sensitive"
       ]
     }
