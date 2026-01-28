@@ -2617,6 +2617,8 @@ govukApplications:
         enabled: false
       uploadAssets:
         enabled: false
+      podTerminationGracePeriodSes: 30
+      containerPreStopSleepSecs: 20
       appResources:
         limits:
           cpu: 4
@@ -2638,6 +2640,7 @@ govukApplications:
                 "www.{{ .Values.externalDomainSuffix }}",
                 "www-origin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
+          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: www-origin.{{ .Values.k8sExternalDomainSuffix }}
       nginxConfigMap:
