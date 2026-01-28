@@ -51,7 +51,8 @@ spec:
                 - name: SLACK_WEBHOOK
                   valueFrom:
                     secretKeyRef:
-                      key: mirror-drift-detection-slack-webhook
+                      name: mirror-drift-detection-slack-webhook
+                      key: SLACK_WEBHOOK
                 {{- with .Values.extraEnv }}
                   {{- (tpl (toYaml .) $) | trim | nindent 16 }}
                 {{- end }}
