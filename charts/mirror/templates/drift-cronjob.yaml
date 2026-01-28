@@ -48,6 +48,8 @@ spec:
                   value: '100'
                 - name: COMPARE_REMAINING_SAMPLED_COUNT
                   value: '100'
+                - name: SITE
+                  value: 'https://{{ .Values.externalDomainSuffix }}'
                 - name: SLACK_WEBHOOK
                   valueFrom:
                     secretKeyRef:
