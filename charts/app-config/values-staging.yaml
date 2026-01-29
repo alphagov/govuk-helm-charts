@@ -52,8 +52,6 @@ govukApplications:
   - name: account-api
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 10
-      containerPreStopSleepSecs: 5
       uploadAssets:
         enabled: false
       appResources:
@@ -84,7 +82,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "account-api.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
         hosts:
           - name: account-api.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
@@ -145,8 +142,6 @@ govukApplications:
     chartPath: charts/asset-manager
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 30
-      containerPreStopSleepSecs: 25
       appResources:
         limits:
           cpu: 2
@@ -180,7 +175,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "*assets*.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=20
         hosts:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             paths:
@@ -229,8 +223,6 @@ govukApplications:
   - name: authenticating-proxy
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 15
-      containerPreStopSleepSecs: 10
       appResources:
         limits:
           cpu: 1
@@ -247,7 +239,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "draft-origin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=5
         hosts:
           - name: draft-origin.{{ .Values.k8sExternalDomainSuffix }}
       uploadAssets:
@@ -279,8 +270,6 @@ govukApplications:
   - name: bouncer
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 10
-      containerPreStopSleepSecs: 5
       appResources:
         limits:
           cpu: 1
@@ -303,7 +292,6 @@ govukApplications:
           alb.ingress.kubernetes.io/healthcheck-path: /readyz
           alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
           alb.ingress.kubernetes.io/shield-advanced-protection: "true"
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
           external-dns.alpha.kubernetes.io/hostname: bouncer.{{ .Values.k8sExternalDomainSuffix }}
         rules:
           - http: # Match all hostnames.
@@ -390,8 +378,6 @@ govukApplications:
   - name: collections-publisher
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 10
-      containerPreStopSleepSecs: 5
       appResources:
         limits:
           cpu: 1
@@ -420,7 +406,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "collections-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
         hosts:
           - name: collections-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
@@ -478,8 +463,6 @@ govukApplications:
     repoName: content-block-manager
     helmValues:
       repoName: content-block-manager
-      podTerminationGracePeriodSecs: 10
-      containerPreStopSleepSecs: 5
       arch: arm64
       appResources:
         limits:
@@ -497,7 +480,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-block-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
         hosts:
           - name: content-block-manager.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
@@ -552,8 +534,6 @@ govukApplications:
   - name: content-data-admin
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 80
-      containerPreStopSleepSecs: 70
       appResources:
         limits:
           cpu: 1
@@ -594,7 +574,6 @@ govukApplications:
             [{"field":"host-header","hostHeaderConfig":{"values":[
                 "content-data-admin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=60
         hosts:
           - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
@@ -669,8 +648,6 @@ govukApplications:
   - name: content-data-api
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 80
-      containerPreStopSleepSecs: 70
       appResources:
         limits:
           cpu: 1
@@ -689,7 +666,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-data-api.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=60
         hosts:
           - name: content-data-api.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
@@ -880,8 +856,6 @@ govukApplications:
   - name: content-tagger
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 10
-      containerPreStopSleepSecs: 5
       appResources:
         limits:
           cpu: 1
@@ -910,7 +884,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "content-tagger.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
         hosts:
           - name: content-tagger.{{ .Values.k8sExternalDomainSuffix }}
       cronTasks:
@@ -951,8 +924,6 @@ govukApplications:
   - name: email-alert-api
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 40
-      containerPreStopSleepSecs: 35
       appResources:
         limits:
           cpu: 2
@@ -983,7 +954,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "email-alert-api-public.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=30
         rules:
           - host: email-alert-api.eks.staging.govuk.digital
             http:
@@ -1335,8 +1305,6 @@ govukApplications:
   - name: frontend
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 20
-      containerPreStopSleepSecs: 15
       uploadFrontendErrorPagesEnabled: true
       ingress:
         enabled: true
@@ -1348,7 +1316,6 @@ govukApplications:
           alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin
           alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /media/*/*/preview
@@ -1469,8 +1436,6 @@ govukApplications:
     repoName: frontend
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 5
-      containerPreStopSleepSecs: 3
       appResources:
         limits:
           cpu: 1
@@ -1491,7 +1456,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "draft-assets*.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
         hosts:
           - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
             path: /media/*/*/preview
@@ -1625,8 +1589,6 @@ govukApplications:
   - name: govuk-chat
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 10
-      containerPreStopSleepSecs: 5
       appResources:
         limits:
           cpu: 1
@@ -1662,7 +1624,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "chat.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
         hosts:
           - name: chat.{{ .Values.k8sExternalDomainSuffix }}
       uploadAssets:
@@ -1846,8 +1807,6 @@ govukApplications:
   - name: hmrc-manuals-api
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 35
-      containerPreStopSleepSecs: 30
       appResources:
         limits:
           cpu: 1.5
@@ -1865,7 +1824,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "hmrc-manuals-api.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=25
         hosts:
           - name: hmrc-manuals-api.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 300s
@@ -2018,8 +1976,6 @@ govukApplications:
   - name: local-links-manager
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 20
-      containerPreStopSleepSecs: 15
       appResources:
         limits:
           cpu: 1
@@ -2038,7 +1994,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "local-links-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: local-links-manager.{{ .Values.k8sExternalDomainSuffix }}
       cronTasks:
@@ -2191,8 +2146,6 @@ govukApplications:
   - name: manuals-publisher
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 20
-      containerPreStopSleepSecs: 15
       appResources:
         limits:
           cpu: 1
@@ -2221,7 +2174,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "manuals-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: manuals-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
@@ -2271,8 +2223,6 @@ govukApplications:
   - name: places-manager
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 20
-      containerPreStopSleepSecs: 15
       appResources:
         limits:
           cpu: 1
@@ -2289,7 +2239,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "places-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: places-manager.{{ .Values.k8sExternalDomainSuffix }}
       nginxClientMaxBodySize: *max-upload-size
@@ -2328,8 +2277,6 @@ govukApplications:
   - name: publisher
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 15
-      containerPreStopSleepSecs: 10
       appResources:
         limits:
           cpu: 1
@@ -2371,7 +2318,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=5
         hosts:
           - name: publisher.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
@@ -2606,8 +2552,6 @@ govukApplications:
   - name: release
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 15
-      containerPreStopSleepSecs: 10
       appResources:
         limits:
           cpu: 1
@@ -2625,7 +2569,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "release.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=5
         hosts:
           - name: release.{{ .Values.k8sExternalDomainSuffix }}
       workers:
@@ -2679,8 +2622,6 @@ govukApplications:
   - name: router
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 20
-      containerPreStopSleepSecs: 15
       rails:
         enabled: false
       uploadAssets:
@@ -2706,7 +2647,6 @@ govukApplications:
                 "www.{{ .Values.externalDomainSuffix }}",
                 "www-origin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: www-origin.{{ .Values.k8sExternalDomainSuffix }}
       nginxConfigMap:
@@ -2843,8 +2783,6 @@ govukApplications:
   - name: search-admin
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 5
-      containerPreStopSleepSecs: 3
       appResources:
         limits:
           cpu: 1
@@ -2862,7 +2800,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "search-admin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
         hosts:
           - name: search-admin.{{ .Values.k8sExternalDomainSuffix }}
       redis:
@@ -3052,8 +2989,6 @@ govukApplications:
   - name: search-api-v2
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 20
-      containerPreStopSleepSecs: 15
       appResources:
         limits:
           cpu: 2
@@ -3072,7 +3007,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "search-api.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: search-api.{{ .Values.k8sExternalDomainSuffix }}
       uploadAssets:
@@ -3208,8 +3142,6 @@ govukApplications:
   - name: service-manual-publisher
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 5
-      containerPreStopSleepSecs: 3
       appResources:
         limits:
           cpu: 1
@@ -3227,7 +3159,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "service-manual-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
         hosts:
           - name: service-manual-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
@@ -3278,8 +3209,6 @@ govukApplications:
   - name: signon
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 10
-      containerPreStopSleepSecs: 5
       appResources:
         limits:
           cpu: 2
@@ -3306,7 +3235,6 @@ govukApplications:
           # TODO: remove certificate-arn annotation once ambiguous certs are
           # removed from Cert Manager.
           alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-1:696911096973:certificate/ea990af0-b7b7-4ce0-8145-56d639d54cde
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
           external-dns.alpha.kubernetes.io/hostname: signon.{{ .Values.k8sExternalDomainSuffix }}
         hosts:
           - name: signon.{{ .Values.publishingDomainSuffix }}
@@ -3408,8 +3336,6 @@ govukApplications:
   - name: short-url-manager
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 5
-      containerPreStopSleepSecs: 3
       appResources:
         limits:
           cpu: 1
@@ -3426,7 +3352,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "short-url-manager.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
         hosts:
           - name: short-url-manager.{{ .Values.k8sExternalDomainSuffix }}
       cronTasks:
@@ -3472,8 +3397,6 @@ govukApplications:
   - name: specialist-publisher
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 15
-      containerPreStopSleepSecs: 10
       appResources:
         limits:
           cpu: 1
@@ -3503,7 +3426,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "specialist-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=5
         hosts:
           - name: specialist-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
@@ -3557,8 +3479,6 @@ govukApplications:
   - name: support
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 50
-      containerPreStopSleepSecs: 40
       appResources:
         limits:
           cpu: 1
@@ -3575,7 +3495,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "support.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=30
         hosts:
           - name: support.{{ .Values.k8sExternalDomainSuffix }}
       uploadAssets:
@@ -3717,8 +3636,6 @@ govukApplications:
   - name: transition
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 10
-      containerPreStopSleepSecs: 5
       appResources:
         limits:
           cpu: 1
@@ -3735,7 +3652,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "transition.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
         hosts:
           - name: transition.{{ .Values.k8sExternalDomainSuffix }}
       dbMigrationEnabled: true
@@ -3790,8 +3706,6 @@ govukApplications:
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
-      podTerminationGracePeriodSecs: 25
-      containerPreStopSleepSecs: 20
       appResources:
         limits:
           cpu: 1
@@ -3824,7 +3738,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "travel-advice-publisher.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=15
         hosts:
           - name: travel-advice-publisher.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:
@@ -3874,8 +3787,6 @@ govukApplications:
     repoName: whitehall
     helmValues:
       repoName: whitehall
-      podTerminationGracePeriodSecs: 50
-      containerPreStopSleepSecs: 40
       arch: arm64
       appResources:
         limits:
@@ -3927,7 +3838,6 @@ govukApplications:
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "whitehall-admin.{{ .Values.publishingDomainSuffix }}"
             ]}}]
-          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=30
         hosts:
           - name: whitehall-admin.{{ .Values.k8sExternalDomainSuffix }}
       extraEnv:

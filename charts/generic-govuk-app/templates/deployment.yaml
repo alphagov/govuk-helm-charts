@@ -25,7 +25,6 @@ spec:
         app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/component: app
     spec:
-      terminationGracePeriodSeconds: {{ .Values.podTerminationGracePeriodSecs | default 30 }}
       {{- if .Values.serviceAccount.enabled }}
       automountServiceAccountToken: true
       serviceAccountName: {{ .Values.serviceAccount.name | default $fullName }}
@@ -139,8 +138,8 @@ spec:
             {{- end }}
           lifecycle:
             preStop:
-              sleep:
-                seconds: {{ .Values.containerPreStopSleepSecs | default 60 }}
+              exec:
+                command: ["sleep", "60"] # To allow time for ALB to deregister pod before termination
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
@@ -181,8 +180,8 @@ spec:
             {{- end }}
           lifecycle:
             preStop:
-              sleep:
-                seconds: {{ .Values.containerPreStopSleepSecs | default 60 }}
+              exec:
+                command: ["sleep", "60"] # To allow time for ALB to deregister pod before termination
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
