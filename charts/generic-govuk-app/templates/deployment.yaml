@@ -25,6 +25,7 @@ spec:
         app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/component: app
     spec:
+      terminationGracePeriodSeconds: {{ .Values.podTerminationGracePeriodSecs | default 30 }}
       {{- if .Values.serviceAccount.enabled }}
       automountServiceAccountToken: true
       serviceAccountName: {{ .Values.serviceAccount.name | default $fullName }}
@@ -136,6 +137,10 @@ spec:
             {{- with .Values.appExtraVolumeMounts }}
               {{- . | toYaml | trim | nindent 12 }}
             {{- end }}
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: {{ .Values.containerPreStopSleepSecs | default 25 }}
         - name: nginx
           image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
           imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
@@ -174,6 +179,10 @@ spec:
             {{- with .Values.nginxExtraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: {{ .Values.containerPreStopSleepSecs | default 25 }}
       {{- if eq "arm64" .Values.arch }}
       tolerations:
         - key: arch
