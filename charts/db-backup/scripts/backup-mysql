@@ -54,5 +54,10 @@ subcommand=${1:-}
 
 write_config
 [[ "${VERBOSE:-0}" -ge 1 ]] && set -x
+
+send_prometheus_metric "mysql" "${subcommand}" "started"
+trap 'send_prometheus_terminal_metric mysql "$subcommand"' EXIT
+
 $subcommand "$@"
+
 echo "done"

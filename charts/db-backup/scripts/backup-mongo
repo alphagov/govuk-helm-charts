@@ -39,5 +39,9 @@ transform () {
 subcommand=${1:-}
 [[ $(type -t "$subcommand") == function ]] || usage
 
+send_prometheus_metric "mongo" "${subcommand}" "started"
+trap 'send_prometheus_terminal_metric mongo "$subcommand"' EXIT
+
 $subcommand "$@"
+
 echo "done"

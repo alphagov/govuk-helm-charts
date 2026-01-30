@@ -2,6 +2,8 @@
 export LC_ALL=C.UTF-8  # Prevent i18n from affecting command outputs (e.g. `type`).
 export HOME=${TMPDIR:-/tmp}  # For the mysql* tools.
 
+export DB_BACKUP_JOB_START_TIME
+
 usage () {
   self=$(basename "$0")
   cat >&2 <<EOF
@@ -54,6 +56,58 @@ object_uri () {
   fi
 
   echo -n "${BUCKET}/${DB_HOST}/${file_name}"
+}
+
+send_prometheus_terminal_metric () {
+  local EXIT_CODE=$?
+  local STATE
+
+  if [ $EXIT_CODE -eq 0 ]; then
+    STATE="succeeded"
+  else
+    STATE="failed"
+  fi
+
+  send_prometheus_metric "$@" "$STATE"
+}
+
+send_prometheus_metric () {
+  # Send metrics to the prometheus pushgateway.
+  # If the state is succeeded or failed, also send the duration if the started state was sent earlier
+  #
+  # Args:
+  #   $1 - database engine (postgres, mysql, mongodb)
+  #   $2 - operation (backup, transform, restore)
+  #   $3 - state (started, succeeded, failed)
+
+  local ENGINE="$1"
+  local OPERATION="$2"
+  local STATE="$3"
+
+  local TIMESTAMP
+  TIMESTAMP=$(date +%s)
+
+  local PAYLOAD
+  local DURATION_PAYLOAD=""
+
+  PAYLOAD=$(cat <<EOF
+# TYPE db_backup_job_status_timestamp_seconds gauge
+db_backup_job_status_timestamp_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION" state="$STATE"} $TIMESTAMP
+EOF
+  )
+
+  if [ "$STATE" == "started" ]; then
+    DB_BACKUP_JOB_START_TIME="$TIMESTAMP"
+  elif [ -n "$DB_BACKUP_JOB_START_TIME" ] && { [ "$STATE" == "succeeded" ] || [ "$STATE" == "failed" ]; }; then
+    DURATION=$((TIMESTAMP - DB_BACKUP_JOB_START_TIME))
+    DURATION_PAYLOAD=$(cat <<EOF
+# TYPE db_backup_job_duration_seconds gauge
+db_backup_job_duration_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION" state="$STATE"} $DURATION
+EOF
+    )
+  fi
+
+  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/job/db-backup/instance/${HOSTNAME}"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"

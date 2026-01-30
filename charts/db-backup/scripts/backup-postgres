@@ -81,5 +81,10 @@ subcommand=${1:-}
 [[ $(type -t "$subcommand") == function ]] || usage
 
 [[ "${VERBOSE:-0}" -ge 1 ]] && set -x
+
+send_prometheus_metric "postgres" "${subcommand}" "started"
+trap 'send_prometheus_terminal_metric postgres "$subcommand"' EXIT
+
 $subcommand "$@"
+
 echo "done"
