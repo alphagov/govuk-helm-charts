@@ -1035,7 +1035,7 @@ govukApplications:
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: cb633abc-6ae6-4843-ae6f-82ca500b6de2
         - name: GOVUK_NOTIFY_RECIPIENTS
-          value: "*"
+          value: '*'
         - name: WEB_CONCURRENCY
           value: "10"
       nginxConfigMap:
