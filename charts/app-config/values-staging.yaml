@@ -3012,21 +3012,6 @@ govukApplications:
             secretKeyRef:
               name: search-api-google-analytics
               key: client-email
-        - name: GOOGLE_EXPORT_ACCOUNT_ID
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: export-account-id
-        - name: GOOGLE_EXPORT_CUSTOM_DATA_SOURCE_ID
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: export-custom-data-source-id
-        - name: GOOGLE_EXPORT_WEB_PROPERTY_ID
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: export-web-property-id
         - name: GOOGLE_PRIVATE_KEY
           valueFrom:
             secretKeyRef:
