@@ -63,6 +63,11 @@ jobs:
         with:
           name: rendered-charts
           path: .
+      - name: DEBUG
+        run: |
+          ls -la rendered-charts
+          ls -la rendered-charts/production/
+          ls -la rendered-charts/production/mirror/templates/
       - name: kubeconform
         uses: docker://ghcr.io/yannh/kubeconform:latest-alpine
         with:
