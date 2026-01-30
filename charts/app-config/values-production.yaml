@@ -165,12 +165,10 @@ govukApplications:
           alb.ingress.kubernetes.io/load-balancer-name: assets-origin
           alb.ingress.kubernetes.io/group.name: assets-origin
           alb.ingress.kubernetes.io/group.order: "20"
-          alb.ingress.kubernetes.io/load-balancer-attributes:
-            &assets-lb-attributes >
+          alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
             access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/assets-origin
 
-          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}:
-            &assets-lb-conditions |
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "*assets*.{{ .Values.publishingDomainSuffix }}"
             ]}}]
