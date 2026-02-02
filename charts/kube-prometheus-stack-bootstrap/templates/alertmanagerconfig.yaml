@@ -183,6 +183,12 @@ spec:
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
+  - name: 'slack-graphql-notifications'
+    slackConfigs:
+    - channel: '#govuk-publishing-platform-system-alerts'
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
   inhibitRules:
   - sourceMatch:
       - name: 'severity'
