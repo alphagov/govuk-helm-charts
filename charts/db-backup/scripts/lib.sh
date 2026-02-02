@@ -109,6 +109,9 @@ EOF
     )
   fi
 
+  echo "Sending job metrics to prometheus pushgateway with job db-backup and instance ${HOSTNAME}:"
+  echo "$PAYLOAD"
+  echo "$DURATION_PAYLOAD"
   echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/job/db-backup/instance/${HOSTNAME}"
 }
 
