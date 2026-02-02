@@ -114,10 +114,37 @@ EOF
     )
   fi
 
-  echo "Sending job metrics to prometheus pushgateway with job db-backup and instance ${HOSTNAME}:"
+  echo "Sending timing job metrics to prometheus pushgateway"
   echo "$PAYLOAD"
   echo "$DURATION_PAYLOAD"
   echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/${COMMON_GROUPING_KEY}/state/${STATE}"
+
+  local METRIC_STATE_VALUE
+  case "$STATE" in
+    failed)
+      METRIC_STATE_VALUE=0
+      ;;
+    running)
+      METRIC_STATE_VALUE=1
+      ;;
+    succeeded)
+      METRIC_STATE_VALUE=2
+      ;;
+    *)
+      METRIC_STATE_VALUE=-1
+      ;;
+  esac
+
+  PAYLOAD=$(cat <<EOF
+# TYPE db_backup_job_state
+db_backup_job_state{${COMMON_METRIC_LABELS}} $METRIC_STATE_VALUE
+EOF
+  )
+
+  # This has to be a separate push since we don't want to include state in the grouping key
+  echo "Sending state metric to prometheus pushgateway"
+  echo "$PAYLOAD"
+  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/${COMMON_GROUPING_KEY}"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"
