@@ -144,7 +144,7 @@ EOF
   # This has to be a separate push since we don't want to include state in the grouping key
   echo "Sending state metric to prometheus pushgateway"
   echo "$PAYLOAD"
-  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/${COMMON_GROUPING_KEY}"
+  echo "$PAYLOAD" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/${COMMON_GROUPING_KEY}"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"
