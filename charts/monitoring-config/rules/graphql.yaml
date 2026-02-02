@@ -24,3 +24,26 @@ groups:
             d/aeh00wtwwg8owc/graphql-stats?orgId=1&from=now-1h&to=now&timezone=browser
           runbook_url: >-
             https://docs.publishing.service.gov.uk/manual/graphql.html
+
+      - alert: HighQueryFailureRate
+        expr: >-
+          sum(rate(http_requests_total{
+            job="publishing-api-read-replica", controller="graphql", status="200"
+          }[2m]))
+          /
+          sum(rate(http_requests_total{
+            job="publishing-api-read-replica", controller="graphql"
+          }[2m]))
+          < 0.995
+        for: 4m
+        labels:
+          severity: warning
+          destination: slack-graphql-notifications
+        annotations:
+          summary: Elevated GraphQL error rate
+          description: >-
+            The rate of 200 responses from GraphQL endpoints in the Publishing API read replica has dropped below 99.5% for 4 minutes.
+          grafana_path: >-
+            d/app-requests/app3a-request-rates-browser?var-namespace=apps&var-app=publishing-api-read-replica&var-error_status=$__all
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/graphql.html
