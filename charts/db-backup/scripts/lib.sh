@@ -99,7 +99,7 @@ send_prometheus_metric () {
 
   PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_status_timestamp_seconds gauge
-db_backup_job_status_timestamp_seconds{${COMMON_METRIC_LABELS}, state='${STATE}'} $TIMESTAMP
+db_backup_job_status_timestamp_seconds{${COMMON_METRIC_LABELS}, state="${STATE}"} $TIMESTAMP
 EOF
   )
 
