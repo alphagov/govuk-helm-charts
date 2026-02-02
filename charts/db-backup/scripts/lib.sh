@@ -92,9 +92,14 @@ send_prometheus_metric () {
   local PAYLOAD
   local DURATION_PAYLOAD=""
 
+  # We are not including instance in the grouping key since we don't mind if the instance label is overwritten on the next run by the hostname of the
+  # newer instance
+  COMMON_GROUPING_KEY="job/db-backup/database_engine/${ENGINE}/database_instance/${DB_HOST}/database_db_name/${DB_DATABASE}/operation/${OPERATION}"
+  COMMON_METRIC_LABELS="instance='${HOSTNAME}', database_engine='${ENGINE}', database_instance='${DB_HOST}', database_db_name='${DB_DATABASE}', operation='${OPERATION}'"
+
   PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_status_timestamp_seconds gauge
-db_backup_job_status_timestamp_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION", state="$STATE"} $TIMESTAMP
+db_backup_job_status_timestamp_seconds{${COMMON_METRIC_LABELS}, state='${STATE}'} $TIMESTAMP
 EOF
   )
 
@@ -104,7 +109,7 @@ EOF
     DURATION=$((TIMESTAMP - DB_BACKUP_JOB_START_TIME))
     DURATION_PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_duration_seconds gauge
-db_backup_job_duration_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION", state="$STATE"} $DURATION
+db_backup_job_duration_seconds{${COMMON_METRIC_LABELS}, state='${STATE}'} $DURATION
 EOF
     )
   fi
@@ -112,7 +117,7 @@ EOF
   echo "Sending job metrics to prometheus pushgateway with job db-backup and instance ${HOSTNAME}:"
   echo "$PAYLOAD"
   echo "$DURATION_PAYLOAD"
-  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/job/db-backup/instance/${HOSTNAME}"
+  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/${COMMON_GROUPING_KEY}/state/${STATE}"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"
