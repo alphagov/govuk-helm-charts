@@ -60,6 +60,7 @@ object_uri () {
 
 send_prometheus_terminal_metric () {
   local EXIT_CODE=$?
+  set +x # Can't set this on the line above since we need to capture script exit status with $?
   local STATE
 
   if [ $EXIT_CODE -eq 0 ]; then
@@ -79,6 +80,7 @@ send_prometheus_metric () {
   #   $1 - database engine (postgres, mysql, mongodb)
   #   $2 - operation (backup, transform, restore)
   #   $3 - state (started, succeeded, failed)
+  set +x
 
   local ENGINE="$1"
   local OPERATION="$2"
@@ -92,7 +94,7 @@ send_prometheus_metric () {
 
   PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_status_timestamp_seconds gauge
-db_backup_job_status_timestamp_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION" state="$STATE"} $TIMESTAMP
+db_backup_job_status_timestamp_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION", state="$STATE"} $TIMESTAMP
 EOF
   )
 
@@ -102,12 +104,15 @@ EOF
     DURATION=$((TIMESTAMP - DB_BACKUP_JOB_START_TIME))
     DURATION_PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_duration_seconds gauge
-db_backup_job_duration_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION" state="$STATE"} $DURATION
+db_backup_job_duration_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION", state="$STATE"} $DURATION
 EOF
     )
   fi
 
-  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/job/db-backup/instance/${HOSTNAME}"
+  echo "Sending job metrics to prometheus pushgateway with job db-backup and instance ${HOSTNAME}:"
+  echo "$PAYLOAD"
+  echo "$DURATION_PAYLOAD"
+  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/job/db-backup/instance/${HOSTNAME}"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"
