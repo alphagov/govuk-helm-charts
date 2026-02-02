@@ -81,6 +81,11 @@ spec:
                   value: {{ .db | default $job.db }}
                 - name: BUCKET
                   value: {{ .bucket }}
+                - name: PROMETHEUS_PUSHGATEWAY_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: govuk-apps-env
+                      key: PROMETHEUS_PUSHGATEWAY_URL
                 {{- if eq $dbms "mongo" }}
                 - name: DB_MONGO_CONNECTION_STRING
                   valueFrom:
