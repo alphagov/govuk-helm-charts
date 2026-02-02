@@ -60,6 +60,7 @@ object_uri () {
 
 send_prometheus_terminal_metric () {
   local EXIT_CODE=$?
+  set +x # Can't set this on the line above since we need to capture script exit status with $?
   local STATE
 
   if [ $EXIT_CODE -eq 0 ]; then
@@ -79,6 +80,7 @@ send_prometheus_metric () {
   #   $1 - database engine (postgres, mysql, mongodb)
   #   $2 - operation (backup, transform, restore)
   #   $3 - state (started, succeeded, failed)
+  set +x
 
   local ENGINE="$1"
   local OPERATION="$2"
@@ -107,7 +109,7 @@ EOF
     )
   fi
 
-  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/job/db-backup/instance/${HOSTNAME}"
+  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/job/db-backup/instance/${HOSTNAME}"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"

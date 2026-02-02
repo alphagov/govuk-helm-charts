@@ -53,9 +53,11 @@ subcommand=${1:-}
 [[ $(type -t "$subcommand") == function ]] || usage
 
 write_config
-[[ "${VERBOSE:-0}" -ge 1 ]] && set -x
 
 send_prometheus_metric "mysql" "${subcommand}" "started"
+
+[[ "${VERBOSE:-0}" -ge 1 ]] && set -x
+
 trap 'send_prometheus_terminal_metric mysql "$subcommand"' EXIT
 
 $subcommand "$@"
