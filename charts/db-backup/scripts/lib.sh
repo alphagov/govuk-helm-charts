@@ -95,7 +95,7 @@ send_prometheus_metric () {
   # We are not including instance in the grouping key since we don't mind if the instance label is overwritten on the next run by the hostname of the
   # newer instance
   COMMON_GROUPING_KEY="job/db-backup/database_engine/${ENGINE}/database_instance/${DB_HOST}/database_db_name/${DB_DATABASE}/operation/${OPERATION}"
-  COMMON_METRIC_LABELS="instance='${HOSTNAME}', database_engine='${ENGINE}', database_instance='${DB_HOST}', database_db_name='${DB_DATABASE}', operation='${OPERATION}'"
+  COMMON_METRIC_LABELS="instance=\"${HOSTNAME}\", database_engine=\"${ENGINE}\", database_instance=\"${DB_HOST}\", database_db_name=\"${DB_DATABASE}\", operation=\"${OPERATION}\""
 
   PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_status_timestamp_seconds gauge
@@ -109,7 +109,7 @@ EOF
     DURATION=$((TIMESTAMP - DB_BACKUP_JOB_START_TIME))
     DURATION_PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_duration_seconds gauge
-db_backup_job_duration_seconds{${COMMON_METRIC_LABELS}, state='${STATE}'} $DURATION
+db_backup_job_duration_seconds{${COMMON_METRIC_LABELS}, state="${STATE}"} $DURATION
 EOF
     )
   fi
@@ -124,7 +124,7 @@ EOF
     failed)
       METRIC_STATE_VALUE=0
       ;;
-    running)
+    started)
       METRIC_STATE_VALUE=1
       ;;
     succeeded)
