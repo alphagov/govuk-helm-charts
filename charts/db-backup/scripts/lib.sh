@@ -94,7 +94,7 @@ send_prometheus_metric () {
 
   PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_status_timestamp_seconds gauge
-db_backup_job_status_timestamp_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION" state="$STATE"} $TIMESTAMP
+db_backup_job_status_timestamp_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION", state="$STATE"} $TIMESTAMP
 EOF
   )
 
@@ -104,7 +104,7 @@ EOF
     DURATION=$((TIMESTAMP - DB_BACKUP_JOB_START_TIME))
     DURATION_PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_duration_seconds gauge
-db_backup_job_duration_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION" state="$STATE"} $DURATION
+db_backup_job_duration_seconds{database_instance="$DB_HOST", database_db_name="$DB_DATABASE", database_engine="$ENGINE", operation="$OPERATION", state="$STATE"} $DURATION
 EOF
     )
   fi
