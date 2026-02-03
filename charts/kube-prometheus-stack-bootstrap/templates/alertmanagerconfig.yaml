@@ -113,6 +113,14 @@ spec:
       repeatInterval: 1d
       groupWait: 5m
       groupInterval: 30m
+    - matchers:
+        - name: destination
+          value: slack-graphql-notifications
+          matchType: =
+      receiver: 'slack-graphql-notifications'
+      repeatInterval: 1h
+      groupWait: 5m
+      groupInterval: 30m
   receivers:
   - name: 'null'
   - name: 'pagerduty'
