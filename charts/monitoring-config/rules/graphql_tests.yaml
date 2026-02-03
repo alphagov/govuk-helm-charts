@@ -1,0 +1,117 @@
+rule_files:
+  - graphql.yaml
+
+evaluation_interval: 1m
+
+tests:
+# LongRequestDuration alert tests
+  - interval: 1m
+    input_series:
+      # No alert for LongRequestDuration
+      - series: >-
+          http_request_duration_seconds_sum{
+          job="publishing-api-read-replica",
+          controller="graphql"
+          }
+        values: '50+1x15'
+      - series: >-
+          http_request_duration_seconds_count{
+          job="publishing-api-read-replica",
+          controller="graphql"
+          }
+        values: '20000+1000x15'
+    alert_rule_test:
+      - alertname: LongRequestDuration
+        eval_time: 15m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for LongRequestDuration
+      - series: >-
+          http_request_duration_seconds_sum{
+          job="publishing-api-read-replica",
+          controller="graphql"
+          }
+        values: '0+10x15'
+      - series: >-
+          http_request_duration_seconds_count{
+          job="publishing-api-read-replica",
+          controller="graphql"
+          }
+        values: '0+1x15'
+    alert_rule_test:
+      - alertname: LongRequestDuration
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              alertname: LongRequestDuration
+              severity: warning
+              destination: slack-graphql-notifications
+            exp_annotations:
+              summary: Elevated GraphQL request duration
+              description: >-
+                75th percentile request duration to GraphQL endpoints in the Publishing API read replica has been above 75ms for 5 minutes.
+              grafana_path: >-
+                d/aeh00wtwwg8owc/graphql-stats?orgId=1&from=now-1h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/graphql.html
+
+# HighQueryFailureRate alert tests
+  - interval: 1m
+    input_series:
+      # No alert for HighQueryFailureRate
+      - series: >-
+          http_requests_total{
+          job="publishing-api-read-replica",
+          controller="graphql",
+          action="live_content",
+          status="200"
+          }
+        values: '100x5'
+      - series: >-
+          http_requests_total{
+          job="publishing-api-read-replica",
+          controller="graphql",
+          action="live_content",
+          status="500"
+          }
+        values: '2x5'
+    alert_rule_test:
+      - alertname: HighQueryFailureRate
+        eval_time: 5m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # Alert for HighQueryFailureRate
+      - series: >-
+          http_requests_total{
+          job="publishing-api-read-replica",
+          controller="graphql",
+          status="200"
+          }
+        values: '100x5'
+      - series: >-
+          http_requests_total{
+          job="publishing-api-read-replica",
+          controller="graphql",
+          status="500"
+          }
+        values: '0+20x5'
+    alert_rule_test:
+      - alertname: HighQueryFailureRate
+        eval_time: 5m
+        exp_alerts:
+          - exp_labels:
+              alertname: HighQueryFailureRate
+              severity: warning
+              destination: slack-graphql-notifications
+            exp_annotations:
+              summary: Elevated GraphQL error rate
+              description: >-
+                The rate of 200 responses from GraphQL endpoints in the Publishing API read replica has dropped below 99.5% for 4 minutes.
+              grafana_path: >-
+                d/app-requests/app3a-request-rates-browser?var-namespace=apps&var-app=publishing-api-read-replica&var-error_status=$__all
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/graphql.html
