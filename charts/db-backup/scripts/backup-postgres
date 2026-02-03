@@ -12,9 +12,13 @@ export PGDATABASE=postgres
 backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
+  local s3_url="$BUCKET/$s3_path"
+
+  get_object_size "$s3_url"
+
   set -o pipefail
   PGDATABASE=$DB_DATABASE \
-    pg_dump -Fc -Z1 | progress | s5cmd pipe "$BUCKET/$s3_path" \
+    pg_dump -Fc -Z1 | progress | s5cmd pipe "$s3_url" \
     && write_pointer "${s3_path}"
   set +o pipefail
 }
@@ -60,6 +64,8 @@ restore () {
   local s3_url
   s3_url="$(object_uri)"
   dump_is_readable "$s3_url"
+
+  get_object_size "$s3_url"
 
   dropdb -ef --if-exists "$DB_DATABASE-restore"
   createdb -eT template0 "$DB_DATABASE-restore"

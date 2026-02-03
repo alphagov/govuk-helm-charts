@@ -9,9 +9,13 @@ db_url="${DB_MONGO_CONNECTION_STRING%/}/$DB_DATABASE"
 backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
+  local s3_url="$BUCKET/$s3_path"
+
+  get_object_size "$s3_url"
+
   set -o pipefail
   mongodump "$db_url" --archive \
-    | progress | gzip -1 | s5cmd pipe "$BUCKET/$s3_path" \
+    | progress | gzip -1 | s5cmd pipe "$s3_url" \
     && write_pointer "${s3_path}"
   set +o pipefail
 }
@@ -27,6 +31,8 @@ restore () {
   local s3_url
   s3_url="$(object_uri)"
   dump_is_readable "$s3_url"
+
+  get_object_size "$s3_url"
 
   s5cmd cat -c 1 "$s3_url" | gzip -d | mongorestore "$db_url" --archive --drop -j 1
 }
