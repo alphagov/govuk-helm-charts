@@ -1,0 +1,10 @@
+apiVersion: v2
+name: release-app-poc
+description: A proof-of-concept chart to test the govuk-application-template library pattern
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: govuk-application-template
+    version: "1.0.0"
+    repository: "file://../govuk-application-template"
