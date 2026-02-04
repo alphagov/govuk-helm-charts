@@ -3,7 +3,7 @@ export LC_ALL=C.UTF-8  # Prevent i18n from affecting command outputs (e.g. `type
 export HOME=${TMPDIR:-/tmp}  # For the mysql* tools.
 
 export DB_BACKUP_JOB_START_TIME
-export DB_BACKUP_JOB_FILE_SIZE
+export DB_BACKUP_JOB_FILE_SIZE=""
 
 usage () {
   self=$(basename "$0")
@@ -126,7 +126,7 @@ EOF
 
   if [ "$STATE" == "started" ]; then
     DB_BACKUP_JOB_START_TIME="$TIMESTAMP"
-  elif [ -n "$DB_BACKUP_JOB_START_TIME" ] && { [ "$STATE" == "succeeded" ] || [ "$STATE" == "failed" ]; }; then
+  elif [ -n "${DB_BACKUP_JOB_START_TIME:-}" ] && { [ "$STATE" == "succeeded" ] || [ "$STATE" == "failed" ]; }; then
     DURATION=$((TIMESTAMP - DB_BACKUP_JOB_START_TIME))
     DURATION_PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_duration_seconds gauge
@@ -163,7 +163,7 @@ EOF
   )
 
   local SIZE_PAYLOAD=""
-  if [ -n "$DB_BACKUP_JOB_FILE_SIZE" ]; then
+  if [ -n "${DB_BACKUP_JOB_FILE_SIZE:-}" ]; then
     SIZE_PAYLOAD=$(cat <<EOF
 # TYPE db_backup_job_file_size_bytes gauge
 db_backup_job_file_size_bytes{${COMMON_METRIC_LABELS}} $DB_BACKUP_JOB_FILE_SIZE
