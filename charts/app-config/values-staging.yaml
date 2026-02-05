@@ -828,7 +828,6 @@ govukApplications:
         - name: WEB_CONCURRENCY
           value: '4'
   - name: db-backup
-    targetRevision: fix-unbound-variable
     chartPath: charts/db-backup
     postSyncWorkflowEnabled: "false"
     helmValues:
