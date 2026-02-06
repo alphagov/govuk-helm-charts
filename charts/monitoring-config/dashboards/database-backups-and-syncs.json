@@ -331,6 +331,18 @@
                 "value": 254
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "database_instance 1"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 214
+              }
+            ]
           }
         ]
       },
@@ -347,7 +359,7 @@
         "sortBy": [
           {
             "desc": false,
-            "displayName": "Instance"
+            "displayName": "Database"
           }
         ]
       },
@@ -495,21 +507,47 @@
           }
         },
         {
-          "id": "merge",
-          "options": {}
+          "id": "joinByField",
+          "options": {
+            "byField": "database_db_name",
+            "mode": "outerTabular"
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": ".*[^2-9]$"
+            }
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "database_instance( 1)?",
+            "renamePattern": "Instance"
+          }
         },
         {
           "id": "organize",
           "options": {
-            "excludeByName": {},
+            "excludeByName": {
+              "database_instance": false
+            },
             "includeByName": {},
             "indexByName": {
-              "Value": 2,
-              "database_db_name": 1,
-              "database_instance": 0
+              "Instance": 0,
+              "Value #BackupDuration": 4,
+              "Value #BackupSize": 3,
+              "Value #BackupState": 2,
+              "Value #Restore Duration": 9,
+              "Value #RestoreSize": 8,
+              "Value #RestoreState": 7,
+              "Value #TransformDuration": 6,
+              "Value #TransformState": 5,
+              "database_db_name": 1
             },
             "renameByName": {
-              "Value": "Status",
               "Value #BackupDuration": "B. Duration",
               "Value #BackupSize": "B. Size",
               "Value #BackupState": "Backup",
@@ -929,9 +967,7 @@
     "list": [
       {
         "current": {
-          "text": [
-            "All"
-          ],
+          "text": "All",
           "value": [
             "$__all"
           ]
@@ -983,5 +1019,5 @@
   "timezone": "browser",
   "title": "Database Backups & Syncs",
   "uid": "jfc4fnp",
-  "version": 30
+  "version": 31
 }
