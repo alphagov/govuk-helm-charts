@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 1304,
   "links": [],
   "panels": [
     {
@@ -372,6 +372,50 @@
           },
           "editorMode": "builder",
           "exemplar": false,
+          "expr": "db_backup_job_state{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "BackupState"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "BackupSize"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "BackupDuration"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
           "expr": "db_backup_job_state{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}",
           "format": "table",
           "hide": false,
@@ -439,50 +483,6 @@
           "legendFormat": "__auto",
           "range": false,
           "refId": "TransformDuration"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "builder",
-          "exemplar": false,
-          "expr": "db_backup_job_state{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "BackupState"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "builder",
-          "exemplar": false,
-          "expr": "db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "BackupSize"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "builder",
-          "exemplar": false,
-          "expr": "db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "BackupDuration"
         }
       ],
       "title": "Most Recent Backup, Transform, Restore State, Duration, and File size",
@@ -706,7 +706,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 70
+        "y": 21
       },
       "id": 5,
       "panels": [],
@@ -777,7 +777,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 71
+        "y": 22
       },
       "id": 10,
       "maxPerRow": 3,
@@ -857,7 +857,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 143
+        "y": 31
       },
       "id": 11,
       "panels": [],
@@ -924,7 +924,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 144
+        "y": 32
       },
       "id": 12,
       "maxPerRow": 2,
