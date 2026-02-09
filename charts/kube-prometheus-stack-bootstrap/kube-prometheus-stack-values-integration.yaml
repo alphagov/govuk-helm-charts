@@ -17,6 +17,8 @@
       "token_url": "https://dex.eks.integration.govuk.digital/token"
     "server":
       "domain": "grafana.eks.integration.govuk.digital"
+    "feature_toggles":
+      "enable": "sqlExpressions"
   "ingress":
     "hosts":
       - "grafana.eks.integration.govuk.digital"
