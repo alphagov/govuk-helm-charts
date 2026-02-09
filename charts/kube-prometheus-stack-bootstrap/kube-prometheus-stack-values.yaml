@@ -107,6 +107,8 @@
     "date_formats":
       "interval_day": "YYYY-MM-DD"
       "interval_hour": "YYYY-MM-DD HH:mm"
+    "feature_toggles":
+      "enable": "sqlExpressions"
     "server":
       "root_url": "https://%(domain)s"
   "ingress":
