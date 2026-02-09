@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1304,
+  "id": 0,
   "links": [],
   "panels": [
     {
@@ -39,7 +39,7 @@
               "mode": "gradient",
               "type": "color-background"
             },
-            "filterable": true,
+            "filterable": false,
             "footer": {
               "reducers": []
             },
@@ -70,10 +70,32 @@
             },
             {
               "options": {
+                "pattern": "(.*)-(mysql|postgres)",
+                "result": {
+                  "color": "transparent",
+                  "index": 3,
+                  "text": "$1"
+                }
+              },
+              "type": "regex"
+            },
+            {
+              "options": {
+                "pattern": "(.*)_production",
+                "result": {
+                  "color": "transparent",
+                  "index": 4,
+                  "text": "$1"
+                }
+              },
+              "type": "regex"
+            },
+            {
+              "options": {
                 "pattern": ".*",
                 "result": {
                   "color": "transparent",
-                  "index": 3
+                  "index": 5
                 }
               },
               "type": "regex"
@@ -83,8 +105,8 @@
                 "match": "null+nan",
                 "result": {
                   "color": "dark-green",
-                  "index": 4,
-                  "text": "N/A"
+                  "index": 6,
+                  "text": "-"
                 }
               },
               "type": "special"
@@ -166,157 +188,13 @@
           },
           {
             "matcher": {
-              "id": "byName",
-              "options": "Instance"
+              "id": "byRegexp",
+              "options": "/^(Restore|Transform|Backup)$/"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 237
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Restore"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 91
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Restore Size"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 121
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Restore Duration"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 149
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Transform"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 106
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Transform Duration"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 168
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Backup"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 91
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Backup Duration"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 146
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "R. Size"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 92
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "R. Duration"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 111
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "T. Duration"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 131
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "B. Size"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 91
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "B. Duration"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 112
+                "id": "custom.align",
+                "value": "center"
               }
             ]
           },
@@ -328,26 +206,146 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 254
+                "value": 232
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "database_instance 1"
+              "options": "Restore"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 214
+                "value": 89
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "R.Duration"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 92
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "R.Size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 96
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Transform"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 94
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "T.Duration"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 87
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Backup"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 94
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "B.Duration"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 97
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "B.Size"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 72
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Instance"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 181
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pod"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 456
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "service"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 500
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 13,
+        "h": 11,
         "w": 24,
         "x": 0,
         "y": 0
@@ -355,13 +353,9 @@
       "id": 9,
       "options": {
         "cellHeight": "sm",
+        "frameIndex": 0,
         "showHeader": true,
-        "sortBy": [
-          {
-            "desc": false,
-            "displayName": "Database"
-          }
-        ]
+        "sortBy": []
       },
       "pluginVersion": "12.3.1",
       "targets": [
@@ -370,10 +364,11 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "db_backup_job_state{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
+          "expr": "max without (instance) (\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=~\"restore|transform\", database_instance=~\"$db_instance\"}[$__interval])\n)",
           "format": "table",
+          "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -384,11 +379,11 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
+          "expr": "max without (instance) (\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=~\"restore|transform\", database_instance=~\"$db_instance\"}[$__interval])\n)",
           "format": "table",
-          "hide": false,
+          "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -399,11 +394,11 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}",
+          "expr": "max without (instance) (\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=~\"restore|transform\", database_instance=~\"$db_instance\"}[$__interval])\n)",
           "format": "table",
-          "hide": false,
+          "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -414,11 +409,11 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "db_backup_job_state{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}",
+          "expr": "max without (instance) (\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=~\"transform|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
           "format": "table",
-          "hide": false,
+          "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -429,11 +424,11 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}",
+          "expr": "max without (instance) (\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=~\"transform|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
           "format": "table",
-          "hide": false,
+          "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -444,26 +439,26 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}",
+          "expr": "max without (instance) (\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=~\"transform|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
           "format": "table",
-          "hide": false,
+          "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "Restore Duration"
+          "refId": "RestoreDuration"
         },
         {
           "datasource": {
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "db_backup_job_state{database_engine=~\"$db_engine\", operation=\"transform\", database_instance=~\"$db_instance\"}",
+          "expr": "max without(instance) (\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=\"transform\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=~\"restore|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
           "format": "table",
-          "hide": false,
+          "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
@@ -474,94 +469,237 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "exemplar": false,
-          "expr": "db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"transform\", database_instance=~\"$db_instance\"}",
+          "expr": "max without(instance) (\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"transform\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=~\"restore|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
           "format": "table",
-          "hide": false,
+          "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
           "refId": "TransformDuration"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "-- In every environment, and every combination of selected database instances within an environment\n-- there are a different sets of metrics that do or don't exist, if they don't exist it causes\n-- grafana to return an empty series which has no labels, and in the SQL expression engine\n-- also has no table. So The PromQL queries get the correct operation, OR both of the others\n-- so in the WITH clause here we filter each series to remove the operations we don't want\n\n-- Additionally since we have no guarantee of any single series existing we need to separately\n-- generate (using the UNION statements below) the distinct list of instances and database names\n-- which exists across all possible metric series. The backup scripts ALWAYS send a state\n-- metric first so we can just query those series. This allows us to use that as the primary\n-- table we join against, thus guaranteeing there is always an instance and database name to\n-- join against\nWITH\n  rState AS (SELECT * FROM RestoreState  WHERE RestoreState.operation=\"restore\"),\n  tState AS (SELECT * FROM TransformState  WHERE TransformState.operation=\"transform\"),\n  bState AS (SELECT * FROM BackupState  WHERE BackupState.operation=\"backup\"),\n  rDuration AS (SELECT * FROM RestoreDuration  WHERE RestoreDuration.operation=\"restore\"),\n  tDuration AS (SELECT * FROM TransformDuration  WHERE TransformDuration.operation=\"transform\"),\n  bDuration AS (SELECT * FROM BackupDuration  WHERE BackupDuration.operation=\"backup\"),\n  rSize AS (SELECT * FROM RestoreSize  WHERE RestoreSize.operation=\"restore\"),\n  bSize AS (SELECT * FROM BackupSize  WHERE BackupSize.operation=\"backup\"),\n  dbs AS (\n    SELECT DISTINCT database_instance, database_db_name FROM rState\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM tState\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM bState\n  )\nSELECT\n  COALESCE(bState.database_instance, tState.database_instance, rState.database_instance) AS Instance,\n  COALESCE(bState.database_db_name, tState.database_db_name, rState.database_db_name) AS \"Database\",\n  rState.__value__ AS Restore,\n  rDuration.__value__ AS \"R.Duration\",\n  rSize.__value__ AS \"R.Size\",\n  tState.__value__ AS Transform,\n  tDuration.__value__ AS \"T.Duration\",\n  bState.__value__ AS Backup,\n  bDuration.__value__ AS \"B.Duration\",\n  bSize.__value__ AS \"B.Size\"\nFROM dbs\n\nFULL OUTER JOIN rState\n  ON dbs.database_instance = rState.database_instance\n  AND dbs.database_db_name = rState.database_db_name\nFULL OUTER JOIN rDuration\n  ON dbs.database_instance = rDuration.database_instance\n  AND dbs.database_db_name = rDuration.database_db_name\nFULL OUTER JOIN rSize\n  ON dbs.database_instance = rSize.database_instance\n  AND dbs.database_db_name = rSize.database_db_name\n\nFULL OUTER JOIN tState\n  ON dbs.database_instance = tState.database_instance\n  AND dbs.database_db_name = tState.database_db_name\nFULL OUTER JOIN tDuration\n  ON dbs.database_instance = tDuration.database_instance\n  AND dbs.database_db_name = tDuration.database_db_name\n\nFULL OUTER JOIN bState\n ON dbs.database_instance = bState.database_instance\n AND dbs.database_db_name = bState.database_db_name\nFULL OUTER JOIN bDuration\n  ON dbs.database_instance = bDuration.database_instance\n  AND dbs.database_db_name = bDuration.database_db_name\nFULL OUTER JOIN bSize\n  ON dbs.database_instance = bSize.database_instance\n  AND dbs.database_db_name = bSize.database_db_name\n\nORDER BY Instance, \"Database\"",
+          "hide": false,
+          "refId": "A",
+          "type": "sql"
         }
       ],
       "title": "Most Recent Backup, Transform, Restore State, Duration, and File size",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": [
-                "database_db_name",
-                "database_instance",
-                "Value #RestoreState",
-                "Value #RestoreSize",
-                "Value #Restore Duration",
-                "Value #TransformState",
-                "Value #TransformDuration",
-                "Value #BackupState",
-                "Value #BackupSize",
-                "Value #BackupDuration"
-              ]
-            }
-          }
-        },
-        {
-          "id": "joinByField",
-          "options": {
-            "byField": "database_db_name",
-            "mode": "outerTabular"
-          }
-        },
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "pattern": ".*[^2-9]$"
-            }
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "database_instance( 1)?",
-            "renamePattern": "Instance"
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "database_instance": false
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "transparent",
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "applyToRow": true,
+              "mode": "gradient",
+              "type": "color-background"
             },
-            "includeByName": {},
-            "indexByName": {
-              "Instance": 0,
-              "Value #BackupDuration": 4,
-              "Value #BackupSize": 3,
-              "Value #BackupState": 2,
-              "Value #Restore Duration": 9,
-              "Value #RestoreSize": 8,
-              "Value #RestoreState": 7,
-              "Value #TransformDuration": 6,
-              "Value #TransformState": 5,
-              "database_db_name": 1
+            "filterable": false,
+            "footer": {
+              "reducers": []
             },
-            "renameByName": {
-              "Value #BackupDuration": "B. Duration",
-              "Value #BackupSize": "B. Size",
-              "Value #BackupState": "Backup",
-              "Value #Restore Duration": "R. Duration",
-              "Value #RestoreSize": "R. Size",
-              "Value #RestoreState": "Restore",
-              "Value #TransformDuration": "T. Duration",
-              "Value #TransformState": "Transform",
-              "database_db_name": "Database",
-              "database_instance": "Instance"
+            "inspect": false,
+            "styleField": "Value",
+            "tooltip": {
+              "field": "Status",
+              "placement": "auto"
             }
+          },
+          "mappings": [
+            {
+              "options": {
+                "pattern": "(.*)-(mysql|postgres)",
+                "result": {
+                  "color": "transparent",
+                  "index": 0,
+                  "text": "$1"
+                }
+              },
+              "type": "regex"
+            },
+            {
+              "options": {
+                "pattern": "(.*)_production",
+                "result": {
+                  "color": "transparent",
+                  "index": 1,
+                  "text": "$1"
+                }
+              },
+              "type": "regex"
+            },
+            {
+              "options": {
+                "pattern": ".*",
+                "result": {
+                  "color": "transparent",
+                  "index": 2
+                }
+              },
+              "type": "regex"
+            },
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "dark-green",
+                  "index": 3,
+                  "text": "-"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": -1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 604800
+              },
+              {
+                "color": "dark-red",
+                "value": 691200
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byType",
+              "options": "number"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Instance"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 182
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Database"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 230
+              }
+            ]
           }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 13,
+      "options": {
+        "cellHeight": "sm",
+        "frameIndex": 144,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max without(instance) (\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=\"backup\"}[$__interval])\n  or\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=~\"restore|transform\"}[$__interval])\n)",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "Backup"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max without(instance) (\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=\"transform\"}[$__interval])\n  or\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=~\"restore|backup\"}[$__interval])\n)",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "Transform"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "max without(instance) (\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=\"restore\"}[$__interval])\n  or\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=~\"transform|backup\"}[$__interval])\n)",
+          "format": "table",
+          "hide": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "Restore"
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "-- In every environment, and every combination of selected database instances within an environment\n-- there are a different sets of metrics that do or don't exist, if they don't exist it causes\n-- grafana to return an empty series which has no labels, and in the SQL expression engine\n-- also has no table. So The PromQL queries get the correct operation, OR both of the others\n-- so in the WITH clause here we filter each series to remove the operations we don't want\n\n-- Additionally since we have no guarantee of any single series existing we need to separately\n-- generate (using the UNION statements below) the distinct list of instances and database names\n-- which exists across all possible metric series. The backup scripts ALWAYS send a state\n-- metric first so we can just query those series. This allows us to use that as the primary\n-- table we join against, thus guaranteeing there is always an instance and database name to\n-- join against\nWITH\n  r AS (SELECT * FROM Restore WHERE Restore.operation=\"restore\"),\n  t AS (SELECT * FROM Transform WHERE Transform.operation=\"transform\"),\n  b AS (SELECT * FROM Backup WHERE Backup.operation=\"backup\"),\n  dbs AS (\n    SELECT DISTINCT database_instance, database_db_name FROM r\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM t\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM b\n  )\n\nSELECT\n  COALESCE(b.database_instance, t.database_instance, r.database_instance) AS Instance,\n  COALESCE(b.database_db_name, t.database_db_name, r.database_db_name) AS \"Database\",\n  UNIX_TIMESTAMP() - r.__value__ AS Restore,\n  UNIX_TIMESTAMP() - t.__value__ AS Transform,\n  UNIX_TIMESTAMP() - b.__value__ AS Backup\nFROM dbs\n\nFULL OUTER JOIN b\n  ON dbs.database_instance = b.database_instance\n  and dbs.database_db_name = b.database_db_name\n\nFULL OUTER JOIN t\n  ON dbs.database_instance = t.database_instance\n  and dbs.database_db_name = t.database_db_name\n\nFULL OUTER JOIN r\n  ON dbs.database_instance = r.database_instance\n  AND dbs.database_db_name = r.database_db_name\n\nORDER BY Instance, \"Database\"",
+          "hide": false,
+          "refId": "A",
+          "type": "sql"
         }
       ],
+      "title": "Time since last Restore/Transform/Backup",
       "type": "table"
     },
     {
@@ -570,7 +708,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 22
       },
       "id": 8,
       "panels": [],
@@ -641,7 +779,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 23
       },
       "id": 6,
       "maxPerRow": 3,
@@ -706,7 +844,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 86
       },
       "id": 5,
       "panels": [],
@@ -777,7 +915,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 87
       },
       "id": 10,
       "maxPerRow": 3,
@@ -857,7 +995,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 96
       },
       "id": 11,
       "panels": [],
@@ -924,7 +1062,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 97
       },
       "id": 12,
       "maxPerRow": 2,
@@ -1012,12 +1150,12 @@
     ]
   },
   "time": {
-    "from": "now-2d",
+    "from": "now-14d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Database Backups & Syncs",
   "uid": "jfc4fnp",
-  "version": 31
+  "version": 32
 }
