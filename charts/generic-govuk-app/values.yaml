@@ -27,7 +27,7 @@ redis:
   enabled: false
   image:
     repository: redis
-    tag: "8.4"
+    tag: "8.6"
     pullPolicy: Always
   storageClassName: ebs-gp3
   storage: 10Gi
