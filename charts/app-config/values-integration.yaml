@@ -4142,6 +4142,10 @@ govukApplications:
          annotations:
           !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "300"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "govuk-ai-accelerator-app.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
         hosts:
           - name: govuk-ai-accelerator-app.eks.integration.govuk.digital
       nginxConfigMap:
