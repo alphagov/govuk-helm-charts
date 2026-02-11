@@ -4139,7 +4139,6 @@ govukApplications:
       ingress:
         enabled: true
         annotations:
-         annotations:
           !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
           alb.ingress.kubernetes.io/group.order: "300"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
@@ -4149,7 +4148,7 @@ govukApplications:
         hosts:
           - name: govuk-ai-accelerator-app.eks.integration.govuk.digital
       nginxConfigMap:
-        extraServerConf: 
+        extraServerConf:
           auth_basic "Enter the GOV.UK username/password (not your personal username/password)";
           auth_basic_user_file /etc/nginx/htpasswd/htpasswd;
       nginxExtraVolumeMounts:
@@ -4159,4 +4158,3 @@ govukApplications:
         - name: router-nginx-htpasswd
           secret:
             secretName: router-nginx-htpasswd
-
