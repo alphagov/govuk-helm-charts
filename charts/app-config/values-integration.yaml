@@ -4117,3 +4117,31 @@ govukApplications:
       appExtraVolumeMounts:
         - name: asset-uploads-efs
           mountPath: *whitehall-uploads-path
+  - name: govuk-ai-accelerator-app
+    repoName: govuk-ai-accelerator
+    helmValues:
+      rails:
+        enabled: false
+      sentry:
+        enabled: false
+      uploadAssets:
+        enabled: false
+      arch: arm64
+      appResources:
+        limits:
+          cpu: 4
+          memory: 5Gi
+        requests:
+          cpu: 10m
+          memory: 1.5Gi
+      nginxClientMaxBodySize: &max-upload-size 500M
+      nginxDenyCrawlers: true
+      ingress:
+        enabled: true
+        annotations:
+         annotations:
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "300"
+        hosts:
+          - name: govuk-ai-accelerator-app.eks.integration.govuk.digital
+
