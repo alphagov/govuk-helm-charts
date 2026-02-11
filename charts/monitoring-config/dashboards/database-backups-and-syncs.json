@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 3098,
   "links": [],
   "panels": [
     {
@@ -357,7 +357,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
@@ -366,13 +366,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max without (instance) (\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=~\"restore|transform\", database_instance=~\"$db_instance\"}[$__interval])\n)",
+          "expr": "db_backup_job_state{database_engine=~\"$db_engine\", operation=~\"restore|transform|backup\", database_instance=~\"$db_instance\"}",
           "format": "table",
           "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "BackupState"
+          "refId": "State"
         },
         {
           "datasource": {
@@ -381,13 +381,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max without (instance) (\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=~\"restore|transform\", database_instance=~\"$db_instance\"}[$__interval])\n)",
+          "expr": "db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=~\"restore|transform|backup\", database_instance=~\"$db_instance\"}\n",
           "format": "table",
           "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "BackupSize"
+          "refId": "Size"
         },
         {
           "datasource": {
@@ -396,88 +396,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max without (instance) (\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"backup\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=~\"restore|transform\", database_instance=~\"$db_instance\"}[$__interval])\n)",
+          "expr": "db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=~\"restore|transform|backup\", database_instance=~\"$db_instance\"}",
           "format": "table",
           "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "BackupDuration"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max without (instance) (\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=~\"transform|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
-          "format": "table",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "RestoreState"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max without (instance) (\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=~\"transform|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
-          "format": "table",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "RestoreSize"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max without (instance) (\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"restore\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_file_size_bytes{database_engine=~\"$db_engine\", operation=~\"transform|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
-          "format": "table",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "RestoreDuration"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max without(instance) (\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=\"transform\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_state{database_engine=~\"$db_engine\", operation=~\"restore|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
-          "format": "table",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "TransformState"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max without(instance) (\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=\"transform\", database_instance=~\"$db_instance\"}[$__interval])\n  or\n  last_over_time(db_backup_job_duration_seconds{database_engine=~\"$db_engine\", operation=~\"restore|backup\", database_instance=~\"$db_instance\"}[$__interval])\n)",
-          "format": "table",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "TransformDuration"
+          "refId": "Duration"
         },
         {
           "datasource": {
@@ -485,7 +410,7 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "-- In every environment, and every combination of selected database instances within an environment\n-- there are a different sets of metrics that do or don't exist, if they don't exist it causes\n-- grafana to return an empty series which has no labels, and in the SQL expression engine\n-- also has no table. So The PromQL queries get the correct operation, OR both of the others\n-- so in the WITH clause here we filter each series to remove the operations we don't want\n\n-- Additionally since we have no guarantee of any single series existing we need to separately\n-- generate (using the UNION statements below) the distinct list of instances and database names\n-- which exists across all possible metric series. The backup scripts ALWAYS send a state\n-- metric first so we can just query those series. This allows us to use that as the primary\n-- table we join against, thus guaranteeing there is always an instance and database name to\n-- join against\nWITH\n  rState AS (SELECT * FROM RestoreState  WHERE RestoreState.operation=\"restore\"),\n  tState AS (SELECT * FROM TransformState  WHERE TransformState.operation=\"transform\"),\n  bState AS (SELECT * FROM BackupState  WHERE BackupState.operation=\"backup\"),\n  rDuration AS (SELECT * FROM RestoreDuration  WHERE RestoreDuration.operation=\"restore\"),\n  tDuration AS (SELECT * FROM TransformDuration  WHERE TransformDuration.operation=\"transform\"),\n  bDuration AS (SELECT * FROM BackupDuration  WHERE BackupDuration.operation=\"backup\"),\n  rSize AS (SELECT * FROM RestoreSize  WHERE RestoreSize.operation=\"restore\"),\n  bSize AS (SELECT * FROM BackupSize  WHERE BackupSize.operation=\"backup\"),\n  dbs AS (\n    SELECT DISTINCT database_instance, database_db_name FROM rState\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM tState\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM bState\n  )\nSELECT\n  COALESCE(bState.database_instance, tState.database_instance, rState.database_instance) AS Instance,\n  COALESCE(bState.database_db_name, tState.database_db_name, rState.database_db_name) AS \"Database\",\n  rState.__value__ AS Restore,\n  rDuration.__value__ AS \"R.Duration\",\n  rSize.__value__ AS \"R.Size\",\n  tState.__value__ AS Transform,\n  tDuration.__value__ AS \"T.Duration\",\n  bState.__value__ AS Backup,\n  bDuration.__value__ AS \"B.Duration\",\n  bSize.__value__ AS \"B.Size\"\nFROM dbs\n\nFULL OUTER JOIN rState\n  ON dbs.database_instance = rState.database_instance\n  AND dbs.database_db_name = rState.database_db_name\nFULL OUTER JOIN rDuration\n  ON dbs.database_instance = rDuration.database_instance\n  AND dbs.database_db_name = rDuration.database_db_name\nFULL OUTER JOIN rSize\n  ON dbs.database_instance = rSize.database_instance\n  AND dbs.database_db_name = rSize.database_db_name\n\nFULL OUTER JOIN tState\n  ON dbs.database_instance = tState.database_instance\n  AND dbs.database_db_name = tState.database_db_name\nFULL OUTER JOIN tDuration\n  ON dbs.database_instance = tDuration.database_instance\n  AND dbs.database_db_name = tDuration.database_db_name\n\nFULL OUTER JOIN bState\n ON dbs.database_instance = bState.database_instance\n AND dbs.database_db_name = bState.database_db_name\nFULL OUTER JOIN bDuration\n  ON dbs.database_instance = bDuration.database_instance\n  AND dbs.database_db_name = bDuration.database_db_name\nFULL OUTER JOIN bSize\n  ON dbs.database_instance = bSize.database_instance\n  AND dbs.database_db_name = bSize.database_db_name\n\nORDER BY Instance, \"Database\"",
+          "expression": "-- In every environment, and every combination of selected database instances within an environment\n-- there are a different sets of metrics that do or don't exist, if they don't exist it causes\n-- grafana to return an empty series which has no labels, and in the SQL expression engine\n-- also has no table. So The PromQL queries get the correct operation, OR both of the others\n-- so in the WITH clause here we filter each series to remove the operations we don't want\n\n-- Additionally since we have no guarantee of any single series existing we need to separately\n-- generate (using the UNION statements below) the distinct list of instances and database names\n-- which exists across all possible metric series. The backup scripts ALWAYS send a state\n-- metric first so we can just query those series. This allows us to use that as the primary\n-- table we join against, thus guaranteeing there is always an instance and database name to\n-- join against\nWITH\n  rState AS (SELECT * FROM State WHERE State.operation=\"restore\"),\n  tState AS (SELECT * FROM State WHERE State.operation=\"transform\"),\n  bState AS (SELECT * FROM State WHERE State.operation=\"backup\"),\n  rDuration AS (SELECT * FROM Duration WHERE Duration.operation=\"restore\"),\n  tDuration AS (SELECT * FROM Duration WHERE Duration.operation=\"transform\"),\n  bDuration AS (SELECT * FROM Duration WHERE Duration.operation=\"backup\"),\n  rSize AS (SELECT * FROM Size WHERE Size.operation=\"restore\"),\n  bSize AS (SELECT * FROM Size WHERE Size.operation=\"backup\"),\n  dbs AS (\n    SELECT DISTINCT database_instance, database_db_name FROM State\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM Size\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM Duration\n  )\nSELECT\n  dbs.database_instance AS Instance,\n  dbs.database_db_name AS \"Database\",\n  rState.__value__ AS Restore,\n  rDuration.__value__ AS \"R.Duration\",\n  rSize.__value__ AS \"R.Size\",\n  tState.__value__ AS Transform,\n  tDuration.__value__ AS \"T.Duration\",\n  bState.__value__ AS Backup,\n  bDuration.__value__ AS \"B.Duration\",\n  bSize.__value__ AS \"B.Size\"\nFROM dbs\n\nFULL OUTER JOIN rState\n  ON dbs.database_instance = rState.database_instance\n  AND dbs.database_db_name = rState.database_db_name\nFULL OUTER JOIN rDuration\n  ON dbs.database_instance = rDuration.database_instance\n  AND dbs.database_db_name = rDuration.database_db_name\nFULL OUTER JOIN rSize\n  ON dbs.database_instance = rSize.database_instance\n  AND dbs.database_db_name = rSize.database_db_name\n\nFULL OUTER JOIN tState\n  ON dbs.database_instance = tState.database_instance\n  AND dbs.database_db_name = tState.database_db_name\nFULL OUTER JOIN tDuration\n  ON dbs.database_instance = tDuration.database_instance\n  AND dbs.database_db_name = tDuration.database_db_name\n\nFULL OUTER JOIN bState\n ON dbs.database_instance = bState.database_instance\n AND dbs.database_db_name = bState.database_db_name\nFULL OUTER JOIN bDuration\n  ON dbs.database_instance = bDuration.database_instance\n  AND dbs.database_db_name = bDuration.database_db_name\nFULL OUTER JOIN bSize\n  ON dbs.database_instance = bSize.database_instance\n  AND dbs.database_db_name = bSize.database_db_name\n\nORDER BY Instance, \"Database\"",
           "hide": false,
           "refId": "A",
           "type": "sql"
@@ -640,7 +565,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.3.2",
       "targets": [
         {
           "datasource": {
@@ -649,43 +574,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max without(instance) (\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=\"backup\"}[$__interval])\n  or\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=~\"restore|transform\"}[$__interval])\n)",
+          "expr": "db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=~\"restore|transform|backup\"}",
           "format": "table",
           "hide": true,
           "instant": true,
           "legendFormat": "__auto",
           "range": false,
-          "refId": "Backup"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max without(instance) (\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=\"transform\"}[$__interval])\n  or\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=~\"restore|backup\"}[$__interval])\n)",
-          "format": "table",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "Transform"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "max without(instance) (\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=\"restore\"}[$__interval])\n  or\n  last_over_time(db_backup_job_status_timestamp_seconds{database_engine=~\"$db_engine\", database_instance=~\"$db_instance\", state=\"succeeded\", operation=~\"transform|backup\"}[$__interval])\n)",
-          "format": "table",
-          "hide": true,
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "Restore"
+          "refId": "StatusTimestamp"
         },
         {
           "datasource": {
@@ -693,7 +588,7 @@
             "type": "__expr__",
             "uid": "__expr__"
           },
-          "expression": "-- In every environment, and every combination of selected database instances within an environment\n-- there are a different sets of metrics that do or don't exist, if they don't exist it causes\n-- grafana to return an empty series which has no labels, and in the SQL expression engine\n-- also has no table. So The PromQL queries get the correct operation, OR both of the others\n-- so in the WITH clause here we filter each series to remove the operations we don't want\n\n-- Additionally since we have no guarantee of any single series existing we need to separately\n-- generate (using the UNION statements below) the distinct list of instances and database names\n-- which exists across all possible metric series. The backup scripts ALWAYS send a state\n-- metric first so we can just query those series. This allows us to use that as the primary\n-- table we join against, thus guaranteeing there is always an instance and database name to\n-- join against\nWITH\n  r AS (SELECT * FROM Restore WHERE Restore.operation=\"restore\"),\n  t AS (SELECT * FROM Transform WHERE Transform.operation=\"transform\"),\n  b AS (SELECT * FROM Backup WHERE Backup.operation=\"backup\"),\n  dbs AS (\n    SELECT DISTINCT database_instance, database_db_name FROM r\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM t\n    UNION\n    SELECT DISTINCT database_instance, database_db_name FROM b\n  )\n\nSELECT\n  COALESCE(b.database_instance, t.database_instance, r.database_instance) AS Instance,\n  COALESCE(b.database_db_name, t.database_db_name, r.database_db_name) AS \"Database\",\n  UNIX_TIMESTAMP() - r.__value__ AS Restore,\n  UNIX_TIMESTAMP() - t.__value__ AS Transform,\n  UNIX_TIMESTAMP() - b.__value__ AS Backup\nFROM dbs\n\nFULL OUTER JOIN b\n  ON dbs.database_instance = b.database_instance\n  and dbs.database_db_name = b.database_db_name\n\nFULL OUTER JOIN t\n  ON dbs.database_instance = t.database_instance\n  and dbs.database_db_name = t.database_db_name\n\nFULL OUTER JOIN r\n  ON dbs.database_instance = r.database_instance\n  AND dbs.database_db_name = r.database_db_name\n\nORDER BY Instance, \"Database\"",
+          "expression": "-- In every environment, and every combination of selected database instances within an environment\n-- there are a different sets of metrics that do or don't exist, if they don't exist it causes\n-- grafana to return an empty series which has no labels, and in the SQL expression engine\n-- also has no table. So The PromQL queries get the correct operation, OR both of the others\n-- so in the WITH clause here we filter each series to remove the operations we don't want\n\n-- Additionally since we have no guarantee of any single series existing we need to separately\n-- generate (using the UNION statements below) the distinct list of instances and database names\n-- which exists across all possible metric series. The backup scripts ALWAYS send a state\n-- metric first so we can just query those series. This allows us to use that as the primary\n-- table we join against, thus guaranteeing there is always an instance and database name to\n-- join against\nWITH\n  r AS (SELECT * FROM StatusTimestamp WHERE StatusTimestamp.operation=\"restore\"),\n  t AS (SELECT * FROM StatusTimestamp WHERE StatusTimestamp.operation=\"transform\"),\n  b AS (SELECT * FROM StatusTimestamp WHERE StatusTimestamp.operation=\"backup\"),\n  dbs AS (SELECT DISTINCT database_instance, database_db_name FROM StatusTimestamp)\n\nSELECT\n  dbs.database_instance AS Instance,\n  dbs.database_db_name AS \"Database\",\n  UNIX_TIMESTAMP() - r.__value__ AS Restore,\n  UNIX_TIMESTAMP() - t.__value__ AS Transform,\n  UNIX_TIMESTAMP() - b.__value__ AS Backup\nFROM dbs\n\nFULL OUTER JOIN b\n  ON dbs.database_instance = b.database_instance\n  and dbs.database_db_name = b.database_db_name\n\nFULL OUTER JOIN t\n  ON dbs.database_instance = t.database_instance\n  and dbs.database_db_name = t.database_db_name\n\nFULL OUTER JOIN r\n  ON dbs.database_instance = r.database_instance\n  AND dbs.database_db_name = r.database_db_name\n\nORDER BY Instance, \"Database\"",
           "hide": false,
           "refId": "A",
           "type": "sql"
@@ -800,7 +695,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.3.2",
       "repeat": "db_instance",
       "repeatDirection": "h",
       "targets": [
@@ -936,7 +831,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.3.2",
       "repeat": "db_instance",
       "repeatDirection": "h",
       "targets": [
@@ -1082,7 +977,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.1",
+      "pluginVersion": "12.3.2",
       "repeat": "db_instance",
       "repeatDirection": "h",
       "targets": [
