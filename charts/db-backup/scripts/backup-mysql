@@ -22,8 +22,23 @@ transform () {
 }
 
 dump_is_readable () {
-  s5cmd cat -c 1 -p 1 "$1" | gzip -d | head -n5 \
-    | tee /dev/fd/2 | grep 'MySQL dump' >/dev/null 2>&1
+  # We expect the piped series to fail with error code 141 sometimes,
+  # this is because we cut off the stdout of s5cmd when it's only cat-ted
+  # part of the file, so it gets a SIGPIPE, which bubbbles up through the pipefail
+  #
+  # So we should check every return code in the PIPESTATUS array (an array of the
+  # return codes of every command in the pipe) and ignore any that were 141 SIGPIPE
+  if ! s5cmd cat -c 1 -p 1 "$1" | gzip -d | head -n5 \
+      | tee /dev/fd/2 | grep 'MySQL dump' >/dev/null 2>&1; then
+
+    for EXIT_CODE in "${PIPESTATUS[@]}"; do
+      if [[ "$EXIT_CODE" -ne 0 ]] && [[ "$EXIT_CODE" -ne 141 ]]; then
+        # We got an exit code from a command which wasn't SIGPIPE
+        # so return it as a failure exit code
+        return "$EXIT_CODE"
+      fi
+    done
+  fi
 }
 
 restore () {
