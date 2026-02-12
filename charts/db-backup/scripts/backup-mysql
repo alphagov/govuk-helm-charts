@@ -9,11 +9,9 @@ backup () {
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
   local s3_url="$BUCKET/$s3_path"
 
-  set -o pipefail
   mysqldump --single-transaction "$DB_DATABASE" \
     | progress | gzip -1 | s5cmd pipe "$s3_url" \
     && write_pointer "${s3_path}"
-  set +o pipefail
 
   get_object_size "$s3_url"
 }
