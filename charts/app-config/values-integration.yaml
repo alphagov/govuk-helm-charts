@@ -4138,7 +4138,7 @@ govukApplications:
               "govuk-ai-accelerator-app.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
-          - name: govuk-ai-accelerator-app.eks.integration.govuk.digital
+          - name: govuk-ai-accelerator-app.{{ .Values.k8sExternalDomainSuffix }}
       nginxConfigMap:
         extraServerConf:
           auth_basic "Enter the GOV.UK username/password (not your personal username/password)";
