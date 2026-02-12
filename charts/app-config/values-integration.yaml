@@ -4150,3 +4150,7 @@ govukApplications:
         - name: router-nginx-htpasswd
           secret:
             secretName: router-nginx-htpasswd
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
+        livenessProbe: "/healthcheck/ready"
+        readinessProbe: "/healthcheck/ready"
