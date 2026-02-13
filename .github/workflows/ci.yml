@@ -112,4 +112,4 @@ jobs:
       - name: Run promtool tests
         uses: ./.github/actions/promtool
         with:
-          args: test rules charts/monitoring-config/rules/*_tests.yaml
+          args: test rules $(find charts/monitoring-config/rules -name '*_tests.yaml')
