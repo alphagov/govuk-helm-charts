@@ -397,7 +397,7 @@ tests:
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "Top 3 recall for binary query set has dropped below 80%."
-      - eval_time: 27h
+      - eval_time: 26h
         alertname: SearchQualityDegradedBinaryRecall
         exp_alerts:
           - exp_labels:
@@ -426,7 +426,7 @@ tests:
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "Top 3 recall for binary query set has dropped below 80%."
-      - eval_time: 28h
+      - eval_time: 27h
         alertname: SearchQualityDegradedBinaryRecall
         exp_alerts: []
 
@@ -484,7 +484,7 @@ tests:
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "Top 10 NDCG for clickstream query set has dropped below 75%."
-      - eval_time: 27h
+      - eval_time: 26h
         alertname: SearchQualityDegradedClickstreamNDCG
         exp_alerts:
           - exp_labels:
@@ -513,6 +513,6 @@ tests:
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "Top 10 NDCG for clickstream query set has dropped below 75%."
-      - eval_time: 28h
+      - eval_time: 27h
         alertname: SearchQualityDegradedClickstreamNDCG
         exp_alerts: []

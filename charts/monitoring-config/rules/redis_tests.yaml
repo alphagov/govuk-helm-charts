@@ -9,7 +9,7 @@ tests:
       - series: 'kubelet_volume_stats_available_bytes{persistentvolumeclaim="test-redis"}'
         values: '3221225472'  # 3GB remaining
       - series: 'global:redis:memory_usage_percentage{pod="test-app-redis-abc213"}'
-        values: '25'  # 25% of memory limit used
+        values: '25x5'  # 25% of memory limit used
     alert_rule_test:
       - eval_time: 5m
         alertname: RedisDiskSpaceLow
@@ -22,7 +22,7 @@ tests:
   - interval: 1m
     input_series:
       - series: 'global:redis:memory_usage_percentage{pod="test-app-redis-abc213"}'
-        values: '95'  # 95% of memory limit used
+        values: '95x5'  # 95% of memory limit used
     alert_rule_test:
       - eval_time: 5m
         alertname: RedisMemoryUsageHigh
@@ -40,7 +40,7 @@ tests:
   - interval: 1m
     input_series:
       - series: 'kubelet_volume_stats_available_bytes{persistentvolumeclaim="test-redis"}'
-        values: '1610612736'  # 1.5GB remaining
+        values: '1610612736x5'  # 1.5GB remaining
     alert_rule_test:
       - eval_time: 5m
         alertname: RedisDiskSpaceLow
@@ -58,7 +58,7 @@ tests:
   - interval: 1m
     input_series:
       - series: 'kubelet_volume_stats_available_bytes{persistentvolumeclaim="test-redis"}'
-        values: '322122547'  # 300MB remaining
+        values: '322122547x5'  # 300MB remaining
     alert_rule_test:
       - eval_time: 5m
         alertname: RedisDiskSpaceCritical
