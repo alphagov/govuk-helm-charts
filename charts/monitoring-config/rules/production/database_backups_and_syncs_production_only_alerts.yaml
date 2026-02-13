@@ -1,0 +1,67 @@
+groups:
+  - name: Database Backups & Syncs - Production Only
+    rules:
+      - alert: Database backup taking a long time - Quicker Databases
+        for: 1h
+        expr: >-
+          db_backup_job_state{operation="backup", database_instance!~"content-data-api-postgres|publishing-api-postgres"} == 1
+        labels:
+          severity: warning
+          destination: slack-platform-engineering
+        annotations:
+          summary: "Database {{ $labels.operation }} is taking a long time for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
+          # yamllint disable rule:line-length
+          description: >-
+            The {{ $labels.database_db_name }} database in the {{ $labels.database_instance }} instance has been running its {{ $labels.operation }}
+            for a long time.
+
+            You can see a snapshot of the overall status on the Grafana Dashboard:
+            https://grafana.eks.{{ .ExternalLabels.environment }}.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+            You can see the logs for this job in this Logit search for the pod name:
+            <https://kibana.logit.io/s/{{ if eq .ExternalLabels.environment "integration" }}42f4d2d5-e9ce-451f-8ffc-cdb25bd624f8{{ else if eq .ExternalLabels.environment "staging" }}b8a10798-a30e-4611-9393-8843d2339dd2{{ else  if eq .ExternalLabels.environment "production" }}13d1a0b1-f54f-407b-a4e5-f53ba653fac3{{ else }}12345678-abcd-1234-abcd-123456789abc{{ end }}/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:{{ $labels.instance }}),type:phrase),query:(match_phrase:(kubernetes.pod.name:{{ $labels.instance }})))),query:(language:kuery,query:''))|{{ $labels.instance }}>
+          # yamllint enable rule:line-length
+          runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+
+      - alert: Database backup taking a long time - Slower Databases
+        for: 4h
+        expr: >-
+          db_backup_job_state{database_instance=~"content-data-api-postgres|publishing-api-postgres"} == 1
+        labels:
+          severity: warning
+          destination: slack-platform-engineering
+        annotations:
+          summary: "Database {{ $labels.operation }} is taking a long time for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
+          # yamllint disable rule:line-length
+          description: >-
+            The {{ $labels.database_db_name }} database in the {{ $labels.database_instance }} instance has been running its {{ $labels.operation }}
+            for a long time.
+
+            You can see a snapshot of the overall status on the Grafana Dashboard:
+            https://grafana.eks.{{ .ExternalLabels.environment }}.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+            You can see the logs for this job in this Logit search for the pod name:
+            <https://kibana.logit.io/s/{{ if eq .ExternalLabels.environment "integration" }}42f4d2d5-e9ce-451f-8ffc-cdb25bd624f8{{ else if eq .ExternalLabels.environment "staging" }}b8a10798-a30e-4611-9393-8843d2339dd2{{ else  if eq .ExternalLabels.environment "production" }}13d1a0b1-f54f-407b-a4e5-f53ba653fac3{{ else }}12345678-abcd-1234-abcd-123456789abc{{ end }}/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:{{ $labels.instance }}),type:phrase),query:(match_phrase:(kubernetes.pod.name:{{ $labels.instance }})))),query:(language:kuery,query:''))|{{ $labels.instance }}>
+          # yamllint enable rule:line-length
+          runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+
+      - alert: Database backup not completed
+        expr: >-
+          db_backup_job_status_timestamp_seconds{operation="backup", state="succeeded"} < time() - 90000
+        labels:
+          severity: warning
+          destination: slack-platform-engineering
+        annotations:
+          summary: "Database {{ $labels.operation }} for {{ $labels.database_instance }}.{{ $labels.database_db_name }} did not succeed in the last 25 hours"
+          # yamllint disable rule:line-length
+          description: >-
+            The {{ $labels.database_db_name }} database in the {{ $labels.database_instance }} instance did not successfully perform a backup in the last
+            25 hours.
+
+            You can see a snapshot of the overall status on the Grafana Dashboard:
+            https://grafana.eks.{{ .ExternalLabels.environment }}.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+            You can see the logs for this job in this Logit search for the pod name:
+            <https://kibana.logit.io/s/{{ if eq .ExternalLabels.environment "integration" }}42f4d2d5-e9ce-451f-8ffc-cdb25bd624f8{{ else if eq .ExternalLabels.environment "staging" }}b8a10798-a30e-4611-9393-8843d2339dd2{{ else  if eq .ExternalLabels.environment "production" }}13d1a0b1-f54f-407b-a4e5-f53ba653fac3{{ else }}12345678-abcd-1234-abcd-123456789abc{{ end }}/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:{{ $labels.instance }}),type:phrase),query:(match_phrase:(kubernetes.pod.name:{{ $labels.instance }})))),query:(language:kuery,query:''))|{{ $labels.instance }}>
+          # yamllint enable rule:line-length
+          runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
