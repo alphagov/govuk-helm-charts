@@ -78,7 +78,7 @@ tests:
           - exp_labels:
               alertname: Database backup and sync operation failed
               severity: warning
-              destination: generic-slack-platform-engineering
+              destination: slack-platform-engineering
               database_engine: postgres
               database_instance: publishing-api-postgres
               database_db_name: publishing-api_production

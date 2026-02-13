@@ -6,7 +6,7 @@ groups:
           db_backup_job_state == 0
         labels:
           severity: warning
-          destination: generic-slack-platform-engineering
+          destination: slack-platform-engineering
         annotations:
           summary: "Database {{ $labels.operation }} failed for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
           # yamllint disable rule:line-length
