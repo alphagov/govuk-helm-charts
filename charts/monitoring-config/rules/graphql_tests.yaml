@@ -7,7 +7,7 @@ tests:
 # LongRequestDuration alert tests
   - interval: 1m
     input_series:
-      # No alert for LongRequestDuration
+      # No alert for LongRequestDuration (mean = 1ms)
       - series: >-
           http_request_duration_seconds_sum{
           job="publishing-api-read-replica",
@@ -27,19 +27,19 @@ tests:
 
   - interval: 1m
     input_series:
-      # Alert for LongRequestDuration
+      # Alert for LongRequestDuration (mean = 500ms)
       - series: >-
           http_request_duration_seconds_sum{
           job="publishing-api-read-replica",
           controller="graphql"
           }
-        values: '0+10x15'
+        values: '0+5x15'
       - series: >-
           http_request_duration_seconds_count{
           job="publishing-api-read-replica",
           controller="graphql"
           }
-        values: '0+1x15'
+        values: '0+10x15'
     alert_rule_test:
       - alertname: LongRequestDuration
         eval_time: 15m
@@ -51,7 +51,7 @@ tests:
             exp_annotations:
               summary: Elevated GraphQL request duration
               description: >-
-                75th percentile request duration to GraphQL endpoints in the Publishing API read replica has been above 75ms for 5 minutes.
+                75th percentile request duration to GraphQL endpoints in the Publishing API read replica has been above 350ms for 5 minutes.
               grafana_path: >-
                 d/aeh00wtwwg8owc/graphql-stats?orgId=1&from=now-1h&to=now&timezone=browser
               runbook_url: >-

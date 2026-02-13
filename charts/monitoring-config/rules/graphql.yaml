@@ -11,7 +11,7 @@ groups:
             sum(rate(http_request_duration_seconds_count{
               job="publishing-api-read-replica", controller="graphql"
             }[5m]))
-          ) > 0.075
+          ) > 0.350
         for: 5m
         labels:
           severity: warning
@@ -19,7 +19,7 @@ groups:
         annotations:
           summary: Elevated GraphQL request duration
           description: >-
-            75th percentile request duration to GraphQL endpoints in the Publishing API read replica has been above 75ms for 5 minutes.
+            75th percentile request duration to GraphQL endpoints in the Publishing API read replica has been above 350ms for 5 minutes.
           grafana_path: >-
             d/aeh00wtwwg8owc/graphql-stats?orgId=1&from=now-1h&to=now&timezone=browser
           runbook_url: >-
