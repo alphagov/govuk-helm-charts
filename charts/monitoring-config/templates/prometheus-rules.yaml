@@ -13,3 +13,9 @@ spec:
   {{- $.Files.Get $path | replace "groups:\n" "" | nindent 2  }}
 {{ end }}
 {{ end }}
+{{- range $path, $_ := .Files.Glob (printf "rules/%s/**.yaml" $.Values.govukEnvironment) }}
+{{- if not (hasSuffix "_tests.yaml" $path) }}
+  # {{ $path }}
+  {{- $.Files.Get $path | replace "groups:\n" "" | nindent 2  }}
+{{ end }}
+{{ end }}
