@@ -3009,26 +3009,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-search-api
               key: oauth_secret
-        - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: govuk-view-id
-        - name: GOOGLE_ACCOUNT_TYPE
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: account-type
-        - name: GOOGLE_CLIENT_EMAIL
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: client-email
-        - name: GOOGLE_PRIVATE_KEY
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: private-key
         - name: GOOGLE_BIGQUERY_CREDENTIALS
           valueFrom:
             secretKeyRef:
