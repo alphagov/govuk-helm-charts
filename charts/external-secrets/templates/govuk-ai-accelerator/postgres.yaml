@@ -17,7 +17,7 @@ spec:
     name: govuk-ai-accelerator-postgres
     template:
       data:
-        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/govuk-ai-accelerator'
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/govuk_ai_accelerator'
   dataFrom:
     - extract:
         key: govuk/govuk-ai-accelerator/postgres
