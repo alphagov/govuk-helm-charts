@@ -26,7 +26,7 @@ groups:
       - alert: Database backup taking a long time - Slower Databases
         for: 4h
         expr: >-
-          db_backup_job_state{database_instance=~"content-data-api-postgres|publishing-api-postgres"} == 1
+          db_backup_job_state{operation="backup", database_instance=~"content-data-api-postgres|publishing-api-postgres"} == 1
         labels:
           severity: warning
           destination: slack-platform-engineering

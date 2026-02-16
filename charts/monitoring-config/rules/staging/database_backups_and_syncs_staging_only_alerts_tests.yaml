@@ -1,0 +1,560 @@
+rule_files:
+  - database_backups_and_syncs_staging_only_alerts.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - name: Database backup taking a long time - Quicker Databases - No alert when backup completes quick enough
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="release-postgres",
+          database_db_name="release_production",
+          operation="backup"
+          }
+        values: '2x5 1x30 2x25'
+    alert_rule_test:
+      - alertname: Database backup taking a long time - Quicker Databases
+        eval_time: 60m
+        exp_alerts: []
+
+  - name: Database backup taking a long time - Quicker Databases - Alert when backup has been running for too long
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="mysql",
+          database_instance="release-mysql",
+          database_db_name="release_production",
+          operation="backup",
+          instance="db-backup-release-mysql-12345678-a1b2c"
+          }
+        values: '2x5 1x65'
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="publishing-api-postgres",
+          database_db_name="publishing-api_production",
+          operation="backup",
+          instance="db-backup-publishing-api-postgres-12345678-a1b2c"
+          }
+        values: '2x5 1x65'
+    alert_rule_test:
+      - alertname: Database backup taking a long time - Quicker Databases
+        eval_time: 66m
+        exp_alerts:
+          - exp_labels:
+              alertname: Database backup taking a long time - Quicker Databases
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: mysql
+              database_instance: release-mysql
+              database_db_name: release_production
+              instance: db-backup-release-mysql-12345678-a1b2c
+              operation: backup
+            exp_annotations:
+              summary: Database backup is taking a long time for release-mysql.release_production
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The release_production database in the release-mysql instance has been running its backup
+                for a long time.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-release-mysql-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-release-mysql-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-release-mysql-12345678-a1b2c>
+
+  - name: Database backup taking a long time - Slower Databases - No alert when backup completes quick enough
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="publishing-api-postgres",
+          database_db_name="publishing-api_production",
+          operation="backup"
+          }
+        values: '2x5 1x180 2x100'
+    alert_rule_test:
+      - alertname: Database backup taking a long time - Slower Databases
+        eval_time: 4h10m
+        exp_alerts: []
+
+  - name: Database backup taking a long time - Slower Databases - Alert when backup has been running for too long
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="mysql",
+          database_instance="release-mysql",
+          database_db_name="release_production",
+          operation="backup",
+          instance="db-backup-release-mysql-12345678-a1b2c"
+          }
+        values: '2x5 1x30 2x250'
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="publishing-api-postgres",
+          database_db_name="publishing-api_production",
+          operation="backup",
+          instance="db-backup-publishing-api-postgres-12345678-a1b2c"
+          }
+        values: '2x5 1x280'
+    alert_rule_test:
+      - alertname: Database backup taking a long time - Slower Databases
+        eval_time: 4h10m
+        exp_alerts:
+          - exp_labels:
+              alertname: Database backup taking a long time - Slower Databases
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: postgres
+              database_instance: publishing-api-postgres
+              database_db_name: publishing-api_production
+              instance: db-backup-publishing-api-postgres-12345678-a1b2c
+              operation: backup
+            exp_annotations:
+              summary: Database backup is taking a long time for publishing-api-postgres.publishing-api_production
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The publishing-api_production database in the publishing-api-postgres instance has been running its backup
+                for a long time.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-publishing-api-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-publishing-api-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-publishing-api-postgres-12345678-a1b2c>
+
+  - name: Database restore taking a long time - Quicker Databases - No alert when restore completes quick enough
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="release-postgres",
+          database_db_name="release_production",
+          operation="restore"
+          }
+        values: '2x5 1x30 2x25'
+    alert_rule_test:
+      - alertname: Database restore taking a long time - Quicker Databases
+        eval_time: 60m
+        exp_alerts: []
+
+  - name: Database restore taking a long time - Quicker Databases - Alert when restore has been running for too long
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="mysql",
+          database_instance="release-mysql",
+          database_db_name="release_production",
+          operation="restore",
+          instance="db-backup-release-mysql-12345678-a1b2c"
+          }
+        values: '2x5 1x65'
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="publishing-api-postgres",
+          database_db_name="publishing-api_production",
+          operation="restore",
+          instance="db-backup-publishing-api-postgres-12345678-a1b2c"
+          }
+        values: '2x5 1x65'
+    alert_rule_test:
+      - alertname: Database restore taking a long time - Quicker Databases
+        eval_time: 66m
+        exp_alerts:
+          - exp_labels:
+              alertname: Database restore taking a long time - Quicker Databases
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: mysql
+              database_instance: release-mysql
+              database_db_name: release_production
+              instance: db-backup-release-mysql-12345678-a1b2c
+              operation: restore
+            exp_annotations:
+              summary: Database restore is taking a long time for release-mysql.release_production
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The release_production database in the release-mysql instance has been running its restore
+                for a long time.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-release-mysql-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-release-mysql-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-release-mysql-12345678-a1b2c>
+
+  - name: Database restore taking a long time - Slower Databases - No alert when restore completes quick enough
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="publishing-api-postgres",
+          database_db_name="publishing-api_production",
+          operation="restore"
+          }
+        values: '2x5 1x180 2x100'
+    alert_rule_test:
+      - alertname: Database restore taking a long time - Slower Databases
+        eval_time: 4h10m
+        exp_alerts: []
+
+  - name: Database restore taking a long time - Slower Databases - Alert when restore has been running for too long
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="mysql",
+          database_instance="release-mysql",
+          database_db_name="release_production",
+          operation="restore",
+          instance="db-backup-release-mysql-12345678-a1b2c"
+          }
+        values: '2x5 1x30 2x250'
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="publishing-api-postgres",
+          database_db_name="publishing-api_production",
+          operation="restore",
+          instance="db-backup-publishing-api-postgres-12345678-a1b2c"
+          }
+        values: '2x5 1x280'
+    alert_rule_test:
+      - alertname: Database restore taking a long time - Slower Databases
+        eval_time: 4h10m
+        exp_alerts:
+          - exp_labels:
+              alertname: Database restore taking a long time - Slower Databases
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: postgres
+              database_instance: publishing-api-postgres
+              database_db_name: publishing-api_production
+              instance: db-backup-publishing-api-postgres-12345678-a1b2c
+              operation: restore
+            exp_annotations:
+              summary: Database restore is taking a long time for publishing-api-postgres.publishing-api_production
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The publishing-api_production database in the publishing-api-postgres instance has been running its restore
+                for a long time.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-publishing-api-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-publishing-api-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-publishing-api-postgres-12345678-a1b2c>
+
+  - name: Database restore taking a long time - Slowest Databases - No alert when restore completes quick enough
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="content-data-api-postgres",
+          database_db_name="content-data-api_production",
+          operation="restore"
+          }
+        values: '2x5 1x660 2x200'
+    alert_rule_test:
+      - alertname: Database restore taking a long time - Slowest Databases
+        eval_time: 13h30m
+        exp_alerts: []
+
+  - name: Database restore taking a long time - Slowest Databases - Alert when restore has been running for too long
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="content-data-api-postgres",
+          database_db_name="content-data-api_production",
+          instance="db-backup-content-data-api-postgres-12345678-a1b2c",
+          operation="restore"
+          }
+        values: '2x5 1x860'
+    alert_rule_test:
+      - alertname: Database restore taking a long time - Slowest Databases
+        eval_time: 13h30m
+        exp_alerts:
+          - exp_labels:
+              alertname: Database restore taking a long time - Slowest Databases
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: postgres
+              database_instance: content-data-api-postgres
+              database_db_name: content-data-api_production
+              instance: db-backup-content-data-api-postgres-12345678-a1b2c
+              operation: restore
+            exp_annotations:
+              summary: Database restore is taking a long time for content-data-api-postgres.content-data-api_production
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The content-data-api_production database in the content-data-api-postgres instance has been running its restore
+                for a long time.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-content-data-api-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-content-data-api-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-content-data-api-postgres-12345678-a1b2c>
+
+  - name: Database transform taking a long time - No alert when transform completes quick enough
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="release-postgres",
+          database_db_name="release_production",
+          operation="transform"
+          }
+        values: '2x5 1x30 2x25'
+    alert_rule_test:
+      - alertname: Database transform taking a long time
+        eval_time: 60m
+        exp_alerts: []
+
+  - name: Database transform taking a long time - Alert when transform has been running for too long
+    interval: 1m
+    external_labels:
+      environment: test
+    input_series:
+      - series: >-
+          db_backup_job_state{
+          database_engine="postgres",
+          database_instance="publishing-api-postgres",
+          database_db_name="publishing-api_production",
+          operation="transform",
+          instance="db-backup-publishing-api-postgres-12345678-a1b2c"
+          }
+        values: '2x5 1x65'
+    alert_rule_test:
+      - alertname: Database transform taking a long time
+        eval_time: 60m
+        exp_alerts:
+          - exp_labels:
+              alertname: Database transform taking a long time
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: postgres
+              database_instance: publishing-api-postgres
+              database_db_name: publishing-api_production
+              instance: db-backup-publishing-api-postgres-12345678-a1b2c
+              operation: transform
+            exp_annotations:
+              summary: Database transform is taking a long time for publishing-api-postgres.publishing-api_production
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The publishing-api_production database in the publishing-api-postgres instance has been running its transform
+                for a long time.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-publishing-api-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-publishing-api-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-publishing-api-postgres-12345678-a1b2c>
+
+  - name: Database backup not completed - Weekly backups
+    interval: 1m
+    external_labels:
+      environment: test
+    start_timestamp: 1753606800  # 27/07/2025 10:00 UTC
+    input_series:
+      - series: >-
+          db_backup_job_status_timestamp_seconds{
+          database_engine="mysql",
+          database_instance="release-mysql",
+          database_db_name="release_production",
+          operation="backup",
+          state="succeeded",
+          instance="db-backup-release-mysql-12345678-a1b2c"
+          }
+        values: '1753599600x5'  # 27/07/2025 08:00 UTC (2 hours before the evaluation time)
+      - series: >-
+          db_backup_job_status_timestamp_seconds{
+          database_engine="postgres",
+          database_instance="content-data-api-postgres",
+          database_db_name="content-data-api_production",
+          operation="backup",
+          state="succeeded",
+          instance="db-backup-content-data-api-postgres-12345678-a1b2c"
+          }
+        values: '1752912000x5'  # 19/07/2025 08:00 UTC (1 week 1 day and 1 hours before the evaluation time)
+    alert_rule_test:
+      - alertname: Database backup/restore not completed - Weekly backups
+        eval_time: 1m
+        exp_alerts:
+          - exp_labels:
+              alertname: Database backup/restore not completed - Weekly backups
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: postgres
+              database_instance: content-data-api-postgres
+              database_db_name: content-data-api_production
+              instance: db-backup-content-data-api-postgres-12345678-a1b2c
+              operation: backup
+              state: succeeded
+            exp_annotations:
+              summary: Database backup for content-data-api-postgres.content-data-api_production did not succeed in the last week
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The content-data-api_production database in the content-data-api-postgres instance did not successfully perform a backup in the last
+                1 week and 12 hours.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-content-data-api-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-content-data-api-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-content-data-api-postgres-12345678-a1b2c>
+
+  - name: Database backup not completed - Weekday backups
+    interval: 1m
+    external_labels:
+      environment: test
+    start_timestamp: 1753606800  # Sunday 27/07/2025 09:00 UTC
+    input_series:
+      - series: >-
+          db_backup_job_status_timestamp_seconds{
+          database_engine="postgres",
+          database_instance="transition-postgres",
+          database_db_name="transition_production",
+          operation="backup",
+          state="succeeded",
+          instance="db-backup-transition-postgres-12345678-a1b2c"
+          }
+        values: '1753430400x1500 1753693200x4260'  # Fri 25/07/2025 for 1 day and 1 hour, then 28/07/2025 10:00 UTC for 2 days 23 hours
+      - series: >-
+          db_backup_job_status_timestamp_seconds{
+          database_engine="postgres",
+          database_instance="signon-postgres",
+          database_db_name="signon_production",
+          operation="backup",
+          state="succeeded",
+          instance="db-backup-signon-postgres-12345678-a1b2c"
+          }
+        values: '1753430400x5760'  # 19/07/2025 08:00 UTC (1 week 1 day and 1 hours before the evaluation time) for 4 days
+    alert_rule_test:
+      - alertname: Database backup/restore not completed - Weekday backups
+        eval_time: 1m  # No alert on Sunday
+        exp_alerts: []
+      - alertname: Database backup/restore not completed - Weekday backups
+        eval_time: 1d1m
+        exp_alerts: []  # No alert on Monday
+      - alertname: Database backup/restore not completed - Weekday backups
+        eval_time: 2d1h  # Alert expected on Tuesday
+        exp_alerts:
+          - exp_labels:
+              alertname: Database backup/restore not completed - Weekday backups
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: postgres
+              database_instance: signon-postgres
+              database_db_name: signon_production
+              instance: db-backup-signon-postgres-12345678-a1b2c
+              operation: backup
+              state: succeeded
+            exp_annotations:
+              summary: Database backup for signon-postgres.signon_production did not succeed in the last 25 hours
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The signon_production database in the signon-postgres instance did not successfully perform a weekday backup in the last
+                25 hours.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-signon-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-signon-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-signon-postgres-12345678-a1b2c>
+
+  - name: Database backup not completed - Sunday to Thursday backups
+    interval: 1m
+    external_labels:
+      environment: test
+    start_timestamp: 1753520400  # Saturday 26/07/2025 09:00 UTC
+    input_series:
+      - series: >-
+          db_backup_job_status_timestamp_seconds{
+          database_engine="postgres",
+          database_instance="content-store-postgres",
+          database_db_name="content-store_production",
+          operation="backup",
+          state="succeeded",
+          instance="db-backup-content-store-postgres-12345678-a1b2c"
+          }
+        values: '1753344000x1380 1753603200x1440 1753689600x2940'  # Thu 24/07/2025 for 23 hours, then 27/07/2025 08:00 UTC for 1 day, then 28/07/2025 08:00 UTC for 2 days 1 hours
+      - series: >-
+          db_backup_job_status_timestamp_seconds{
+          database_engine="postgres",
+          database_instance="draft-content-store-postgres",
+          database_db_name="draft-content-store_production",
+          operation="backup",
+          state="succeeded",
+          instance="db-backup-draft-content-store-postgres-12345678-a1b2c"
+          }
+        values: '1753344000x5760'  # Thu 24/07/2025 08:00 UTC for 4 days
+    alert_rule_test:
+      - alertname: Database backup/restore not completed - Sunday to Thursday backups
+        eval_time: 1m  # No alert on Saturday
+        exp_alerts: []
+      - alertname: Database backup/restore not completed - Sunday to Thursday backups
+        eval_time: 1d1m
+        exp_alerts: []  # No alert on Sunday
+      - alertname: Database backup/restore not completed - Sunday to Thursday backups
+        eval_time: 2d1h  # Alert expected on Monday
+        exp_alerts:
+          - exp_labels:
+              alertname: Database backup/restore not completed - Sunday to Thursday backups
+              severity: warning
+              destination: slack-platform-engineering
+              database_engine: postgres
+              database_instance: draft-content-store-postgres
+              database_db_name: draft-content-store_production
+              instance: db-backup-draft-content-store-postgres-12345678-a1b2c
+              operation: backup
+              state: succeeded
+            exp_annotations:
+              summary: Database backup for draft-content-store-postgres.draft-content-store_production did not succeed in the last 25 hours
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The draft-content-store_production database in the draft-content-store-postgres instance did not successfully perform a Sunday to Thursday backup in the last
+                25 hours.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-draft-content-store-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-draft-content-store-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-draft-content-store-postgres-12345678-a1b2c>
