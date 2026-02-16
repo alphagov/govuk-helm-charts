@@ -20,7 +20,7 @@ spec:
         DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/govuk_ai_accelerator'
   dataFrom:
     - extract:
-        key: govuk/govuk-ai-accelerator/postgres
+        key: govuk/ai-accelerator/postgres
         conversionStrategy: Default
         decodingStrategy: None
         metadataPolicy: None
