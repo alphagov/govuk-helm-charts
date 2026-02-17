@@ -52,7 +52,7 @@ tests:
           - exp_labels:
               alertname: Database backup taking a long time - Quicker Databases
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: mysql
               database_instance: release-mysql
               database_db_name: release_production
@@ -119,7 +119,7 @@ tests:
           - exp_labels:
               alertname: Database backup taking a long time - Slower Databases
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: postgres
               database_instance: publishing-api-postgres
               database_db_name: publishing-api_production
@@ -186,7 +186,7 @@ tests:
           - exp_labels:
               alertname: Database restore taking a long time - Quicker Databases
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: mysql
               database_instance: release-mysql
               database_db_name: release_production
@@ -253,7 +253,7 @@ tests:
           - exp_labels:
               alertname: Database restore taking a long time - Slower Databases
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: postgres
               database_instance: publishing-api-postgres
               database_db_name: publishing-api_production
@@ -311,7 +311,7 @@ tests:
           - exp_labels:
               alertname: Database restore taking a long time - Slowest Databases
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: postgres
               database_instance: content-data-api-postgres
               database_db_name: content-data-api_production
@@ -369,7 +369,7 @@ tests:
           - exp_labels:
               alertname: Database transform taking a long time
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: postgres
               database_instance: publishing-api-postgres
               database_db_name: publishing-api_production
@@ -421,7 +421,7 @@ tests:
           - exp_labels:
               alertname: Database backup/restore not completed - Weekly backups
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: mysql
               database_instance: signon-mysql
               database_db_name: signon_production

@@ -52,7 +52,7 @@ tests:
           - exp_labels:
               alertname: Database backup taking a long time - Quicker Databases
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: mysql
               database_instance: release-mysql
               database_db_name: release_production
@@ -119,7 +119,7 @@ tests:
           - exp_labels:
               alertname: Database backup taking a long time - Slower Databases
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: postgres
               database_instance: publishing-api-postgres
               database_db_name: publishing-api_production
@@ -171,7 +171,7 @@ tests:
           - exp_labels:
               alertname: Database backup not completed
               severity: warning
-              destination: slack-platform-engineering
+              destination: slack-platform-engineering-database-syncs
               database_engine: postgres
               database_instance: publishing-api-postgres
               database_db_name: publishing-api_production

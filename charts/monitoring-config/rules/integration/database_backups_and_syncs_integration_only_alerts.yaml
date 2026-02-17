@@ -7,7 +7,7 @@ groups:
           db_backup_job_state{operation="backup", database_instance!~"content-data-api-postgres|publishing-api-postgres"} == 1
         labels:
           severity: warning
-          destination: slack-platform-engineering
+          destination: slack-platform-engineering-database-syncs
         annotations:
           summary: "Database {{ $labels.operation }} is taking a long time for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
           # yamllint disable rule:line-length
@@ -29,7 +29,7 @@ groups:
           db_backup_job_state{operation="backup", database_instance=~"content-data-api-postgres|publishing-api-postgres"} == 1
         labels:
           severity: warning
-          destination: slack-platform-engineering
+          destination: slack-platform-engineering-database-syncs
         annotations:
           summary: "Database {{ $labels.operation }} is taking a long time for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
           # yamllint disable rule:line-length
@@ -51,7 +51,7 @@ groups:
           db_backup_job_state{operation="restore", database_instance!~"ckan-postgres|content-data-api-postgres|publishing-api-postgres"} == 1
         labels:
           severity: warning
-          destination: slack-platform-engineering
+          destination: slack-platform-engineering-database-syncs
         annotations:
           summary: "Database {{ $labels.operation }} is taking a long time for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
           # yamllint disable rule:line-length
@@ -73,7 +73,7 @@ groups:
           db_backup_job_state{operation="restore", database_instance=~"ckan-postgres|publishing-api-postgres"} == 1
         labels:
           severity: warning
-          destination: slack-platform-engineering
+          destination: slack-platform-engineering-database-syncs
         annotations:
           summary: "Database {{ $labels.operation }} is taking a long time for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
           # yamllint disable rule:line-length
@@ -95,7 +95,7 @@ groups:
           db_backup_job_state{operation="restore", database_instance=~"content-data-api-postgres"} == 1
         labels:
           severity: warning
-          destination: slack-platform-engineering
+          destination: slack-platform-engineering-database-syncs
         annotations:
           summary: "Database {{ $labels.operation }} is taking a long time for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
           # yamllint disable rule:line-length
@@ -117,7 +117,7 @@ groups:
           db_backup_job_state{operation="transform"} == 1
         labels:
           severity: warning
-          destination: slack-platform-engineering
+          destination: slack-platform-engineering-database-syncs
         annotations:
           summary: "Database {{ $labels.operation }} is taking a long time for {{ $labels.database_instance }}.{{ $labels.database_db_name }}"
           # yamllint disable rule:line-length
@@ -141,7 +141,7 @@ groups:
           } < time() - 648000  # 1 week + 12 hours
         labels:
           severity: warning
-          destination: slack-platform-engineering
+          destination: slack-platform-engineering-database-syncs
         annotations:
           summary: "Database {{ $labels.operation }} for {{ $labels.database_instance }}.{{ $labels.database_db_name }} did not succeed in the last week"
           # yamllint disable rule:line-length
@@ -165,7 +165,7 @@ groups:
           } < time() - 90000  # 25 hours ago
         labels:
           severity: warning
-          destination: slack-platform-engineering
+          destination: slack-platform-engineering-database-syncs
         annotations:
           summary: "Database {{ $labels.operation }} for {{ $labels.database_instance }}.{{ $labels.database_db_name }} did not succeed in the last 25 hours"
           # yamllint disable rule:line-length
