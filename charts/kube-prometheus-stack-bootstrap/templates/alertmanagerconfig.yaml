@@ -51,6 +51,15 @@ spec:
       groupBy: [alertname, app_name]
     - matchers:
       - name: destination
+        value: slack-platform-engineering-database-syncs
+        matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 1d1h
+      groupWait: 1m
+      groupInterval: 30m
+      groupBy: [alertname, database_instance]
+    - matchers:
+      - name: destination
         value: slack-platform-engineering
         matchType: =
       receiver: 'generic-slack-platform-engineering'
