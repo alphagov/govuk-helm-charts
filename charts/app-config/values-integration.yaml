@@ -4154,3 +4154,9 @@ govukApplications:
         startupProbe: "/healthcheck/ready"
         livenessProbe: "/healthcheck/ready"
         readinessProbe: "/healthcheck/ready"
+      extraEnv:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-ai-accelerator-postgres
+              key: DATABASE_URL
