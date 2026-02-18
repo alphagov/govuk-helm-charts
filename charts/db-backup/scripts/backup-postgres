@@ -51,23 +51,57 @@ db_exists () {
 }
 
 rename_db () {
-  psql -1v ON_ERROR_STOP=1 <<EOF
+  psql -v ON_ERROR_STOP=1 <<EOF
+BEGIN;
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity
 WHERE pid <> pg_backend_pid() AND usename <> 'rdsadmin' AND datname = '$1';
 ALTER DATABASE "$1" OWNER TO session_user;
 ALTER DATABASE "$1" RENAME TO "$2";
+COMMIT;
 EOF
 }
 
 swap_dbs () {
-  psql -1v ON_ERROR_STOP=1 <<EOF
-SELECT pg_terminate_backend(pid) FROM pg_stat_activity
-WHERE pid <> pg_backend_pid() AND usename <> 'rdsadmin'
-  AND datname IN ('$1', '$2');
-ALTER DATABASE "$2" OWNER TO session_user;
-ALTER DATABASE "$2" RENAME TO "$3";
-ALTER DATABASE "$1" RENAME TO "$2";
+  local RETRY_COUNT=0
+  local MAX_RETRIES=10
+  local SLEEP_SECONDS_BETWEEN_RETRIES=5
+  local TERMINATION_TIMEOUT_MILLISECONDS=10000
+
+  # We will do the session termination between each command to give maximum chance all clients are not
+  # connected
+  QUERY=$(cat <<EOF
+  BEGIN;
+
+  ALTER DATABASE "$2" OWNER TO session_user;
+
+  SELECT pg_terminate_backend(pid, $TERMINATION_TIMEOUT_MILLISECONDS) FROM pg_stat_activity
+  WHERE pid <> pg_backend_pid() AND usename <> 'rdsadmin'
+    AND datname = '$2';
+
+  ALTER DATABASE "$2" RENAME TO "$3";
+
+  SELECT pg_terminate_backend(pid, $TERMINATION_TIMEOUT_MILLISECONDS) FROM pg_stat_activity
+  WHERE pid <> pg_backend_pid() AND usename <> 'rdsadmin'
+    AND datname = '$1';
+
+  ALTER DATABASE "$1" RENAME TO "$2";
+  COMMIT;
 EOF
+  )
+
+  while [ "$RETRY_COUNT" -lt "$MAX_RETRIES" ]; do
+    if psql --set ON_ERROR_STOP=1 <<<"$QUERY"; then
+      echo "Database swap successful" >&2
+      return 0
+    fi
+
+    RETRY_COUNT=$((RETRY_COUNT + 1))
+    echo "Database swap failed, sleeping for $SLEEP_SECONDS_BETWEEN_RETRIES seconds before trying again" >&2
+    sleep "$SLEEP_SECONDS_BETWEEN_RETRIES"
+  done
+
+  echo "Terminal Error: Database swap failed after $MAX_RETRIES retries!" >&2
+  return 1
 }
 
 restore () {
