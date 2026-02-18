@@ -22,7 +22,7 @@ groups:
             The rate of http 5xx return codes is above 10% of total requests
             for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#high5xxrate
 
       - alert: LongRequestDuration
         expr: >-
@@ -45,7 +45,7 @@ groups:
           description: >-
             75th percentile HTTP request duration over 1 second for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#longrequestduration
 
       - alert: HighPodCPUFE
         expr: >-
@@ -63,7 +63,7 @@ groups:
           description: >-
             The FE Pod CPU usage is above 80% for a container for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
       - alert: HighPodCPUWorker
         expr: >-
@@ -81,7 +81,7 @@ groups:
           description: >-
             The Worker Pod CPU usage is above 80% for a container for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
       - alert: HighPodMemoryFE
         expr: >-
@@ -101,7 +101,7 @@ groups:
           description: >-
             The FE Pod Memory usage is above 80% for a container for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
       - alert: HighPodMemoryWorker
         expr: >-
@@ -121,7 +121,7 @@ groups:
           description: >-
             The Worker Pod Memory usage is above 80% for a container for more than 5 minutes.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
       - alert: NearTokensRateLimit
         expr: >-
@@ -168,7 +168,7 @@ groups:
             Autoscaling should have taken place, so check if the maximum number of
             worker pods are running.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqanswerqueuelength
 
       - alert: SidekiqAnswerJobAge
         expr: >-
@@ -187,7 +187,7 @@ groups:
             if some items have got stuck or if there is a problem processing items
             causing the delay.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqanswerjobage
 
       - alert: SidekiqDefaultJobAge
         expr: >-
@@ -206,7 +206,7 @@ groups:
             if some items have got stuck or if there is a problem processing items
             causing the delay.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqdefaultjobage
 
       - alert: ElevatedAnswerErrorStatuses
         expr: >-
@@ -225,4 +225,4 @@ groups:
           description: >-
             Three or more answers generated in the last 20 minutes have an error status.
           runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#elevatedanswererrorstatuses

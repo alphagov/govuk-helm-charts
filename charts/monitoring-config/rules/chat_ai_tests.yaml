@@ -73,7 +73,7 @@ tests:
                 The rate of http 5xx return codes is above 10% of total requests
                 for more than 5 minutes.
               runbook_url: >-
-                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#high5xxrate
 
 # LongRequestDuration alert tests
   - interval: 1m
@@ -120,7 +120,7 @@ tests:
               description: >-
                 75th percentile HTTP request duration over 1 second for more than 5 minutes.
               runbook_url: >-
-                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#longrequestduration
 
 # HighPodCPUFE alert tests
   - interval: 1m
@@ -160,7 +160,7 @@ tests:
               description: >-
                 The FE Pod CPU usage is above 80% for a container for more than 5 minutes.
               runbook_url: >-
-                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
 # HighPodCPUWorker alert tests
   - interval: 1m
@@ -200,7 +200,7 @@ tests:
               description: >-
                 The Worker Pod CPU usage is above 80% for a container for more than 5 minutes.
               runbook_url: >-
-                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
 # HighPodMemoryFE alert tests
   - interval: 1m
@@ -244,7 +244,7 @@ tests:
               description: >-
                 The FE Pod Memory usage is above 80% for a container for more than 5 minutes.
               runbook_url: >-
-                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
   - interval: 1m
     input_series:
@@ -288,7 +288,7 @@ tests:
               description: >-
                 The Worker Pod Memory usage is above 80% for a container for more than 5 minutes.
               runbook_url: >-
-                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
 # NearTokensRateLimit alert tests
   - interval: 1m
@@ -400,7 +400,7 @@ tests:
                 The Sidekiq answer queue length has been over 50 items for more than 5 minutes.
                 Autoscaling should have taken place, so check if the maximum number of
                 worker pods are running.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqanswerqueuelength
       - eval_time: 1m
         alertname: SidekiqAnswerJobAge
         exp_alerts: []
@@ -421,7 +421,7 @@ tests:
                 Some Sidekiq items in the answer queue are over 15 minutes old. Check to see
                 if some items have got stuck or if there is a problem processing items
                 causing the delay.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqanswerjobage
       - eval_time: 1m
         alertname: SidekiqDefaultJobAge
         exp_alerts: []
@@ -442,7 +442,7 @@ tests:
                 Some Sidekiq items in the default queue are over six hours old. Check to see
                 if some items have got stuck or if there is a problem processing items
                 causing the delay.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqdefaultjobage
 
   - interval: 1m
     input_series:
@@ -508,7 +508,7 @@ tests:
                 The Sidekiq answer queue length has been over 50 items for more than 5 minutes.
                 Autoscaling should have taken place, so check if the maximum number of
                 worker pods are running.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqanswerqueuelength
       - eval_time: 7m
         alertname: SidekiqAnswerQueueLength
         exp_alerts: []
@@ -533,7 +533,7 @@ tests:
                 The Sidekiq answer queue length has been over 50 items for more than 5 minutes.
                 Autoscaling should have taken place, so check if the maximum number of worker
                 pods are running.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqanswerqueuelength
       - eval_time: 6m
         alertname: SidekiqAnswerQueueLength
         exp_alerts: []
@@ -558,7 +558,7 @@ tests:
                 Some Sidekiq items in the answer queue are over 15 minutes old. Check to see
                 if some items have got stuck or if there is a problem processing items
                 causing the delay.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqanswerjobage
       - eval_time: 6m
         alertname: SidekiqAnswerJobAge
         exp_alerts: []
@@ -583,7 +583,7 @@ tests:
                 Some Sidekiq items in the default queue are over six hours old. Check to see
                 if some items have got stuck or if there is a problem processing items
                 causing the delay.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#sidekiqdefaultjobage
       - eval_time: 6m
         alertname: SidekiqDefaultJobAge
         exp_alerts: []
@@ -626,4 +626,4 @@ tests:
               description: >-
                 Three or more answers generated in the last 20 minutes have an error status.
               runbook_url: >-
-                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
+                https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#elevatedanswererrorstatuses
