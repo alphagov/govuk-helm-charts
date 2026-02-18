@@ -3,6 +3,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: "{{ include "drift.fullname" . }}"
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
   labels:
     {{- include "drift.labels" . | nindent 4 }}
 spec:

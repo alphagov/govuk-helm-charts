@@ -2,6 +2,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: renovate
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
 spec:
   schedule: "@hourly"
   concurrencyPolicy: Forbid

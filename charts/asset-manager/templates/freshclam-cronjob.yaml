@@ -3,6 +3,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ $fullName }}-freshclam
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
   labels:
     {{- include "asset-manager.labels" . | nindent 4 }}
     app: {{ $fullName }}-freshclam

@@ -13,6 +13,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ $jobFullName }}
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
   labels:
     {{- include "db-backup.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $jobName }}

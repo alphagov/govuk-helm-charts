@@ -4,6 +4,7 @@ metadata:
   name: govuk-synthetic-test-app-cronjob
   namespace: apps
   annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
     kubernetes.io/description: >
       This cronjob runs synthetic tests against GOV.UK cluster using a Ginkgo test framework.
 
