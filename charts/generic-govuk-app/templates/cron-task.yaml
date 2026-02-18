@@ -5,6 +5,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: "{{ $fullName }}-{{ .name }}"
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
   labels:
     {{- include "generic-govuk-app.labels" $ | nindent 4 }}
     app: "{{ $fullName }}-{{ .name }}"
