@@ -4112,6 +4112,10 @@ govukApplications:
   - name: govuk-ai-accelerator-app
     repoName: govuk-ai-accelerator
     helmValues:
+      serviceAccount:
+        enabled: true
+        create: false
+        name: govuk-ai-accelerator-app
       rails:
         enabled: false
       sentry:
