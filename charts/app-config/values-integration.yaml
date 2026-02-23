@@ -4114,7 +4114,7 @@ govukApplications:
     helmValues:
       serviceAccount:
         enabled: true
-        create: false
+        create: true
         name: govuk-ai-accelerator-app
       rails:
         enabled: false
