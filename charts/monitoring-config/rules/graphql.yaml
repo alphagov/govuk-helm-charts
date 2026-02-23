@@ -1,17 +1,27 @@
 groups:
   - name: GraphqlAlerts
     rules:
-      - alert: LongRequestDuration
+      - record: graphql:request_duration_seconds:mean_rate5m
+        expr: |
+          sum by (schema_name) (
+            rate(http_request_duration_seconds_sum{
+              job="publishing-api-read-replica",
+              controller="graphql"
+            }[5m])
+          )
+          /
+          sum by (schema_name) (
+            rate(http_request_duration_seconds_count{
+              job="publishing-api-read-replica",
+              controller="graphql"
+            }[5m])
+          )
+      - alert: LongRequestDurationFastSchemas
         expr: >-
           quantile(0.75,
-            sum(rate(http_request_duration_seconds_sum{
-              job="publishing-api-read-replica", controller="graphql"
-            }[5m]))
-            /
-            sum(rate(http_request_duration_seconds_count{
-              job="publishing-api-read-replica", controller="graphql"
-            }[5m]))
-          ) > 0.350
+            graphql:request_duration_seconds:mean_rate5m{
+              schema_name!~"field_of_operation|ministers_index|travel_advice_index",
+            }) > 0.075
         for: 5m
         labels:
           severity: warning
@@ -19,7 +29,64 @@ groups:
         annotations:
           summary: Elevated GraphQL request duration
           description: >-
-            75th percentile request duration to GraphQL endpoints in the Publishing API read replica has been above 350ms for 5 minutes.
+            75th percentile request duration to GraphQL endpoints in the Publishing API read replica for known fast schemas has been above 75ms for 5 minutes.
+          grafana_path: >-
+            d/aeh00wtwwg8owc/graphql-stats?orgId=1&from=now-1h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/graphql.html
+
+      - alert: LongRequestDurationSlowSchemas
+        expr: >-
+          quantile(0.75,
+            graphql:request_duration_seconds:mean_rate5m{
+              schema_name=~"field_of_operation|ministers_index|travel_advice_index",
+            }) > 0.350
+        for: 5m
+        labels:
+          severity: warning
+          destination: slack-graphql-notifications
+        annotations:
+          summary: Elevated GraphQL request duration
+          description: >-
+            75th percentile request duration to GraphQL endpoints in the Publishing API read replica for known slow schemas has been above 350ms for 5 minutes.
+          grafana_path: >-
+            d/aeh00wtwwg8owc/graphql-stats?orgId=1&from=now-1h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/graphql.html
+
+      - alert: LongRequestDurationFastSchemas
+        expr: >-
+          quantile(0.95,
+            graphql:request_duration_seconds:mean_rate5m{
+              schema_name!~"field_of_operation|ministers_index|travel_advice_index",
+            }) > 0.075
+        for: 10m
+        labels:
+          severity: critical
+          destination: slack-graphql-notifications
+        annotations:
+          summary: Elevated GraphQL request duration
+          description: >-
+            95th percentile request duration to GraphQL endpoints in the Publishing API read replica for known fast schemas has been above 75ms for 10 minutes.
+          grafana_path: >-
+            d/aeh00wtwwg8owc/graphql-stats?orgId=1&from=now-1h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/graphql.html
+
+      - alert: LongRequestDurationSlowSchemas
+        expr: >-
+          quantile(0.95,
+            graphql:request_duration_seconds:mean_rate5m{
+              schema_name=~"field_of_operation|ministers_index|travel_advice_index",
+            }) > 0.350
+        for: 10m
+        labels:
+          severity: critical
+          destination: slack-graphql-notifications
+        annotations:
+          summary: Elevated GraphQL request duration
+          description: >-
+            95th percentile request duration to GraphQL endpoints in the Publishing API read replica for known slow schemas has been above 350ms for 10 minutes.
           grafana_path: >-
             d/aeh00wtwwg8owc/graphql-stats?orgId=1&from=now-1h&to=now&timezone=browser
           runbook_url: >-
