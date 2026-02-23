@@ -69,7 +69,7 @@ swap_dbs () {
 
   local INCOMING_DB_NAME="$1"
   local DB_NAME="$2"
-  local OUTGOING_DB_NAME="$2"
+  local OUTGOING_DB_NAME="$3"
 
   # We will do the session termination between each command to give maximum chance all clients are not
   # connected
