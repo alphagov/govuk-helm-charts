@@ -94,14 +94,14 @@ EOF
   )
 
   echo "Disabling new connections to $DB_NAME" >&2
-  psql --command "ALTER DATABASE \"$DB_NAME\" WITH OPTION ALLOW_CONNECTIONS false;"
+  psql --command "ALTER DATABASE \"$DB_NAME\" WITH ALLOW_CONNECTIONS false;"
 
   while [ "$RETRY_COUNT" -lt "$MAX_RETRIES" ]; do
     if psql --set ON_ERROR_STOP=1 <<<"$QUERY"; then
       echo "Database swap successful" >&2
 
       echo "Enabling new connections to $OUTGOING_DB_NAME"
-      psql --command "ALTER DATABASE \"$OUTGOING_DB_NAME\" WITH OPTION ALLOW_CONNECTIONS true;"
+      psql --command "ALTER DATABASE \"$OUTGOING_DB_NAME\" WITH ALLOW_CONNECTIONS true;"
 
       return 0
     fi
@@ -114,7 +114,7 @@ EOF
   echo "Terminal Error: Database swap failed after $MAX_RETRIES retries!" >&2
 
   echo "Re-enabling new connections to $DB_NAME" >&2
-  psql --command "ALTER DATABASE \"$DB_NAME\" WITH OPTION ALLOW_CONNECTIONS true;"
+  psql --command "ALTER DATABASE \"$DB_NAME\" WITH ALLOW_CONNECTIONS true;"
 
   return 1
 }
