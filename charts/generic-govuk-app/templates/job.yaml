@@ -1,0 +1,109 @@
+{{- $fullName := include "generic-govuk-app.fullname" . }}
+{{- range .Values.jobs }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ $fullName }}-{{ .name }}"
+  labels:
+    {{- include "generic-govuk-app.labels" $ | nindent 4 }}
+    app: "{{ $fullName }}-{{ .name }}"
+    app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
+    app.kubernetes.io/component: "{{ .name }}"
+spec:
+  backoffLimit: {{ .backoffLimit | default 0 }}
+  template:
+    metadata:
+      name: "{{ $fullName }}-{{ .name }}"
+      labels:
+        {{- include "generic-govuk-app.labels" $ | nindent 8 }}
+        app: "{{ $fullName }}-{{ .name }}"
+        app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
+        app.kubernetes.io/component: "{{ .name }}"
+    spec:
+      {{- if $.Values.serviceAccount.enabled }}
+      automountServiceAccountToken: true
+      serviceAccountName: {{ $.Values.serviceAccount.name | default $fullName }}
+      {{- else }}
+      automountServiceAccountToken: false
+      {{- end }}
+      enableServiceLinks: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: {{ $.Values.securityContext.runAsGroup }}
+        runAsNonRoot: {{ $.Values.securityContext.runAsNonRoot }}
+        runAsUser: {{ $.Values.securityContext.runAsUser }}
+        runAsGroup: {{ $.Values.securityContext.runAsGroup }}
+      restartPolicy: Never
+      volumes:
+        - name: app-tmp
+          emptyDir: {}
+        {{- with $.Values.extraVolumes }}
+          {{- . | toYaml | trim | nindent 12 }}
+        {{- end }}
+      containers:
+        - name: {{ .name }}
+          image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+          imagePullPolicy: {{ $.Values.appImage.pullPolicy | default "Always" }}
+          command: ["{{ .command }}"]
+          args:
+          {{- with .args }}
+            {{- . | toYaml | trim | nindent 14 }}
+          {{- end }}
+          envFrom:
+            - configMapRef:
+                name: govuk-apps-env
+          env:
+            {{- if $.Values.rails.enabled }}
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.rails.secretKeyBaseName | default (printf "%s-rails-secret-key-base" $.Values.repoName) }}
+                  key: secret-key-base
+            {{- end }}
+            {{- if $.Values.sentry.enabled }}
+            - name: SENTRY_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.sentry.dsnSecretName | default (printf "%s-sentry" $.Values.repoName) }}
+                  key: dsn
+            - name: SENTRY_RELEASE
+              value: "{{ $.Values.appImage.tag }}"
+            {{- end }}
+            {{- if $.Values.redis.enabled }}
+            - name: REDIS_URL
+              value: {{ $.Values.redis.redisUrlOverride.app | default (printf "redis://%s-redis" $fullName) }}
+            {{- end }}
+            {{- with $.Values.extraEnv }}
+              {{- . | toYaml | trim | nindent 16 }}
+            {{- end }}
+            {{- with .env }}
+              {{- . | toYaml | trim | nindent 16 }}
+            {{- end }}
+          {{- with .resources | default $.Values.appResources }}
+          resources:
+            {{- . | toYaml | trim | nindent 16 }}
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: app-tmp
+              mountPath: /tmp
+            {{- with $.Values.appExtraVolumeMounts }}
+              {{- . | toYaml | trim | nindent 16 }}
+            {{- end }}
+      {{- if eq "arm64" $.Values.arch }}
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: {{ $.Values.arch }}
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: {{ $.Values.arch }}
+      {{- end }}
+{{- end }}
+
