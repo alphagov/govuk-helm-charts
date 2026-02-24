@@ -4116,6 +4116,8 @@ govukApplications:
         enabled: true
         create: true
         name: govuk-ai-accelerator-app
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/govuk-ai-accelerator-app-govuk
       rails:
         enabled: false
       sentry:
