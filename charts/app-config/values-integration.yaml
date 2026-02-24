@@ -1594,6 +1594,11 @@ govukApplications:
             secretKeyRef:
               name: signon-app-fact-check-manager
               key: oauth_secret
+        - name: PUBLISHER_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-fact-check-manager-publisher
+              key: bearer_token
   - name: government-frontend
     helmValues:
       arch: arm64
