@@ -137,6 +137,8 @@ spec:
                   # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
+                - name: appRepo
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
                 - name: text
                   value: "Service: {{"{{workflow.parameters.application}}"}}\nEnvironment: {{ .Values.govukEnvironment }}\nStage: Post-deploy\n\nImage: {{"{{workflow.parameters.imageTag}}"}}\nRepo: https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\nHelm chart: https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/image-tags/{{ .Values.govukEnvironment }}/{{"{{workflow.parameters.application}}"}}\nWhat's next: https://docs.publishing.service.gov.uk/manual/deployments.html#troubleshooting"
                 - name: blocks
