@@ -7,6 +7,9 @@ spec:
   arguments:
     parameters:
       - name: slackChannel
+      - name: appRepo
+        description: "Name of the application repository. Used to fetch alerts channel name from developer docs."
+        default: ""
       - name: text
       - name: blocks
         description: "Provide advanced formatting for a message using Slack's Block Kit"
@@ -16,27 +19,25 @@ spec:
       inputs:
         parameters:
         - name: slackChannel
+        - name: appRepo
         - name: text
         - name: blocks
-      container:
-        image: quay.io/curl/curl
-        command:
-          - "curl"
-          - "--json"
-          # The double template tags {{"{{}}"}} is because Helm and Argo
-          # use the same templating syntax.
-          - >-
-              {
-                "channel": "#{{"{{inputs.parameters.slackChannel}}"}}",
-                "username": "Argo Workflows",
-                "text": "{{"{{inputs.parameters.text}}"}}",
-                {{`{{= inputs.parameters.blocks != "" ? "\"blocks\": " + inputs.parameters.blocks + "," : "" }}`}}
-                "icon_emoji": ":argo:"
-              }
-          - "$(SLACK_WEBHOOK_ENDPOINT)"
+      script:
+        image: 172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image:v29
+        command: ["/bin/bash"]
+        source: |
+          {{- .Files.Get "scripts/send-slack.sh" | nindent 10 }}
         env:
           - name: SLACK_WEBHOOK_ENDPOINT
             valueFrom:
               secretKeyRef:
                 name: slack-webhook-url
                 key: url
+          - name: SLACK_MESSAGE_TEXT
+            value: "{{"{{inputs.parameters.text}}"}}"
+          - name: SLACK_MESSAGE_BLOCKS
+            value: "{{"{{inputs.parameters.blocks}}"}}"
+          - name: SLACK_CHANNEL
+            value: "{{"{{inputs.parameters.slackChannel}}"}}"
+          - name: SLACK_APP_REPO
+            value: "{{"{{inputs.parameters.appRepo}}"}}"
