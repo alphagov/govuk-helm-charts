@@ -86,6 +86,12 @@ spec:
                           "type": "section",
                           "text": {
                             "type": "mrkdwn",
+                            "text": "🚀💥 DB migrations for *{{ $fullName }}* failed in *{{ .Values.govukEnvironment }}*"
+                        },
+                        {
+                          "type": "section",
+                          "text": {
+                            "type": "mrkdwn",
                             "text": "*Service:* {{ $fullName }}\n*Environment:* {{ .Values.govukEnvironment }}\n*Image Tag:* {{ .Values.appImage.tag }}\n*Repo:* <https://github.com/alphagov/{{ .Values.repoName }}|{{ .Values.repoName }}>"
                           }
                         },
