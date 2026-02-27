@@ -62,51 +62,44 @@ spec:
               if [ "$failed" != "0" ] && [ "$failed" != "null" ]; then
                 echo "DB migration job failed. Sending Slack notification"
 
-                # Send Slack notification using Block Kit
-                curl -X POST \
-                  -H "Content-Type: application/json" \
-                  --data @- \
-                  "$SLACK_WEBHOOK_URL" <<EOF
-              {
-                "channel": "govuk-deploy-alerts",
-                "username": "DB Migrations Failed",
-                "icon_emoji": ":argo:",
-                "text": "DB Migration Failed for {{ $fullName }}",
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "*Service:* {{ $fullName }}\n*Environment:* {{ .Values.govukEnvironment }}\n*Image Tag:* {{ .Values.appImage.tag }}\n*Repo:* <https://github.com/alphagov/{{ .Values.repoName }}|{{ .Values.repoName }}>"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "*What's next:*\n• <https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/applications/{{ $fullName }}|View application in ArgoCD>\n• <https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/applications/{{ $fullName }}?node=batch%2FJob%2Fapps%2F{{ $fullName }}-dbmigrate&orphaned=false&resource=&tab=logs|View logs in ArgoCD>"
-                    }
-                  }
-                ]
-              }
+                cat <<EOF | kubectl create -f -
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: {{ $fullName }}-dbmigrate-notify-
+                namespace: {{ .Release.Namespace }}
+              spec:
+                workflowTemplateRef:
+                  name: notify-slack
+                arguments:
+                  parameters:
+                  - name: slackChannel
+                    value: "govuk-deploy-alerts"
+                  - name: appRepo
+                    value: "{{ .Values.repoName }}"
+                  - name: text
+                    value: "DB Migration Failed for {{ $fullName }}"
+                  - name: blocks
+                    value: |
+                      [
+                        {
+                          "type": "section",
+                          "text": {
+                            "type": "mrkdwn",
+                            "text": "*Service:* {{ $fullName }}\n*Environment:* {{ .Values.govukEnvironment }}\n*Image Tag:* {{ .Values.appImage.tag }}\n*Repo:* <https://github.com/alphagov/{{ .Values.repoName }}|{{ .Values.repoName }}>"
+                          }
+                        },
+                        {
+                          "type": "section",
+                          "text": {
+                            "type": "mrkdwn",
+                            "text": "*What's next:*\n• <https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/applications/{{ $fullName }}|View application in ArgoCD>\n• <https://argo.eks.{{ .Values.govukEnvironment }}.govuk.digital/applications/{{ $fullName }}?node=batch%2FJob%2Fapps%2F{{ $fullName }}-dbmigrate&orphaned=false&resource=&tab=logs|View logs in ArgoCD>"
+                          }
+                        }
+                      ]
               EOF
-
-                if [ $? -eq 0 ]; then
-                  echo "Slack notification sent successfully"
-                else
-                  echo "Failed to send Slack notification"
-                  exit 1
-                fi
-              else
-                echo "DB migration job succeeded, not sending notification"
               fi
           imagePullPolicy: Always
-          env:
-            - name: SLACK_WEBHOOK_URL
-              valueFrom:
-                secretKeyRef:
-                  name: slack-webhook-url
-                  key: url
           {{- with .Values.jobResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
