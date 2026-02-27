@@ -76,8 +76,6 @@ swap_dbs () {
   QUERY=$(cat <<EOF
   BEGIN;
 
-  ALTER DATABASE "$DB_NAME" OWNER TO session_user;
-
   SELECT pg_terminate_backend(pid, $TERMINATION_TIMEOUT_MILLISECONDS) FROM pg_stat_activity
   WHERE pid <> pg_backend_pid() AND usename <> 'rdsadmin'
     AND datname = '$DB_NAME';
@@ -94,6 +92,8 @@ EOF
   )
 
   echo "Disabling new connections to $DB_NAME" >&2
+  psql --command "ALTER DATABASE \"$DB_NAME\" OWNER TO session_user;"
+
   psql --command "ALTER DATABASE \"$DB_NAME\" WITH ALLOW_CONNECTIONS false;"
 
   while [ "$RETRY_COUNT" -lt "$MAX_RETRIES" ]; do
