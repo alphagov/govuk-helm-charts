@@ -14,7 +14,7 @@ govukEnvironment: staging
 
 cronjobs:
   production:
-    blue-es6-snapshot:  # This would be too long as blue-elasticsearch6-domain-snapshot
+    green-es6-snapshot:  # This would be too long as green-elasticsearch6-domain-snapshot
       schedule: "21 1 * * *"
       args: [create_and_clean_up]
       extraEnv:
@@ -38,7 +38,7 @@ cronjobs:
               key: password
 
   staging:
-    blue-es6-cp-prod:  # This would be too long as blue-elasticsearch6-domain-cp-prod
+    green-es6-cp-prod:  # This would be too long as green-elasticsearch6-domain-cp-prod
       schedule: "00 3 * * *"
       args: [restore_latest]
       extraEnv:
@@ -46,7 +46,7 @@ cronjobs:
           value: govuk-production
         - name: SUBDOMAIN
           value: elasticsearch6
-    blue-es6-snapshot:  # This would be too long as blue-elasticsearch6-domain-snapshot
+    green-es6-snapshot:  # This would be too long as green-elasticsearch6-domain-snapshot
       schedule: "37 2 * * *"
       args: [create_and_clean_up]
       extraEnv:
@@ -72,7 +72,7 @@ cronjobs:
               key: password
 
   integration:
-    blue-es6-cp-stag:  # This would be too long as blue-elasticsearch6-domain-cp-stag
+    green-es6-cp-stag:  # This would be too long as green-elasticsearch6-domain-cp-stag
       schedule: "17 6 * * *"
       args: [restore_latest]
       extraEnv:

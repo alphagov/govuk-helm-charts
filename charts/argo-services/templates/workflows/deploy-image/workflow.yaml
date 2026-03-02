@@ -63,6 +63,8 @@ spec:
                   # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
                   # send to team slack channel.
                   value: "govuk-deploy-alerts"
+                - name: appRepo
+                  value: "{{"{{workflow.parameters.repoName}}"}}"
                 - name: text
                   value: "🚀❌ {{"{{workflow.parameters.repoName}}"}} deployment failed to {{"{{workflow.parameters.environment}}"}}\n\nStatus: Image deployment failed - service may be unavailable\nImage: {{"{{workflow.parameters.imageTag}}"}} (failed to deploy)\nRepo: https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\n\n💡 *Next Steps:*\n• Check if previous version is still running\n• View workflow logs for deployment errors\n• May need immediate rollback if service is down\n• Click 'View workflow' button below for details"
                 - name: blocks

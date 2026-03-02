@@ -51,6 +51,15 @@ spec:
       groupBy: [alertname, app_name]
     - matchers:
       - name: destination
+        value: slack-platform-engineering-database-syncs
+        matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 1d1h
+      groupWait: 1m
+      groupInterval: 30m
+      groupBy: [alertname, database_instance]
+    - matchers:
+      - name: destination
         value: slack-platform-engineering
         matchType: =
       receiver: 'generic-slack-platform-engineering'
@@ -111,6 +120,14 @@ spec:
           matchType: =
       receiver: 'slack-whitehall-notifications'
       repeatInterval: 1d
+      groupWait: 5m
+      groupInterval: 30m
+    - matchers:
+        - name: destination
+          value: slack-graphql-notifications
+          matchType: =
+      receiver: 'slack-graphql-notifications'
+      repeatInterval: 1h
       groupWait: 5m
       groupInterval: 30m
   receivers:
@@ -180,6 +197,12 @@ spec:
   - name: 'slack-whitehall-notifications'
     slackConfigs:
     - channel: '#govuk-whitehall-experience-tech'
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
+  - name: 'slack-graphql-notifications'
+    slackConfigs:
+    - channel: '#govuk-publishing-platform-system-alerts'
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}

@@ -18,6 +18,8 @@ spec:
     matchLabels:
       app: {{ $fullName }}-redis
       app.kubernetes.io/component: redis
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:

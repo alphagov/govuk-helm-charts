@@ -11,6 +11,7 @@ metadata:
     {{- include "search-index-env-sync.labels" $ | nindent 4 }}
     app.kubernetes.io/component: {{ $jobName }}
   annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
     kubernetes.io/description: >
       The {{ $fullName }}-* jobs copy Elasticsearch indices between environments
       via Elasticsearch snapshots, so that the website search feature works in

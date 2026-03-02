@@ -16,6 +16,8 @@ spec:
         reloader:
           readOnlyRootFilesystem: true
           reloadStrategy: annotations
+          podMonitor:
+            enabled: true
           deployment:
             containerSecurityContext:
               capabilities:

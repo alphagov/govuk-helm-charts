@@ -1,12 +1,12 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: imminence-postgres
+  name: support-api-zendesk
   labels:
     {{- include "external-secrets.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/description: >
-      Credentials for Imminence's Postgres DB hosted in RDS.
+      Zendesk API access token for Support API
 spec:
   refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
   secretStoreRef:
@@ -14,13 +14,10 @@ spec:
     kind: ClusterSecretStore
   target:
     deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
-    name: imminence-postgres
-    template:
-      data:
-        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/postgis-conn-string.tpl" | trim }}/imminence_production'
+    name: support-api-zendesk
   dataFrom:
     - extract:
-        key: govuk/imminence/postgres
+        key: govuk/support-api/zendesk
         conversionStrategy: Default
         decodingStrategy: None
         metadataPolicy: None

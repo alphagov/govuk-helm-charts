@@ -30,3 +30,37 @@ tests:
             exp_annotations:
               summary: Mirror freshness has exceeded two days
               description: The mirror hasn't been updated in more than two days
+
+  - name: MirrorCrawlErrorThresholdExceeded - Alert when error rate exceeds 10%
+    interval: 1m
+    input_series:
+      # Scenario: Constant crawling rate of 100 pages/minute for 2 hours (120 mins)
+      # Syntax: start_value + increment x count
+      # 0 to 120m: 0, 100, 200...
+      - series: 'govuk_mirror_crawled_pages_total'
+        values: '0+100x120'
+
+      # Scenario: Error rates changing over time
+      - series: 'govuk_mirror_crawler_errors_total'
+        values:
+          # 0m-60m: 5 errors/min (5% rate). Ends at value 300.
+          # 60m-120m: 12 errors/min (12% rate). Starts at 300, adds 12/min.
+          '0+5x60 300+12x60'
+
+    alert_rule_test:
+      # Check at the 1 hour mark (End of the "Good" phase)
+      # Result: 5% error rate -> Should NOT fire
+      - eval_time: 1h
+        alertname: MirrorCrawlErrorThresholdExceeded
+        exp_alerts: []
+
+      # Check at the 2 hour mark (End of the "Bad" phase)
+      # Result: 12% error rate -> Should FIRE
+      - eval_time: 2h
+        alertname: MirrorCrawlErrorThresholdExceeded
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+            exp_annotations:
+              summary: Mirror crawl error threshold exceeded 10%
+              description: The mirror has encountered a crawl error rate exceeding 10% over the past hour

@@ -1,5 +1,5 @@
 mirrorSchedule: "43 1 * * *"
-driftSchedule: "0 12 * * *"
+driftSchedule: "0 12 * * 1,3,5"
 
 # Image configuration - these defaults are overridden by app-config via imageValues
 appImage:

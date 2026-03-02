@@ -3,6 +3,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: "{{ include "mirror.fullname" . }}"
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
   labels:
     {{- include "mirror.labels" . | nindent 4 }}
 spec:

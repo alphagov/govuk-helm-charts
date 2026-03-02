@@ -2,6 +2,9 @@
 export LC_ALL=C.UTF-8  # Prevent i18n from affecting command outputs (e.g. `type`).
 export HOME=${TMPDIR:-/tmp}  # For the mysql* tools.
 
+export DB_BACKUP_JOB_START_TIME
+export DB_BACKUP_JOB_FILE_SIZE=""
+
 usage () {
   self=$(basename "$0")
   cat >&2 <<EOF
@@ -30,7 +33,149 @@ default_db_owner () {
 
 # Write a pointer file for the specified file
 write_pointer () {
-  echo "${1}" | s5cmd pipe "${BUCKET}/${DB_HOST}/latest.txt"
+  echo -n "${1}" | s5cmd pipe "${BUCKET}/${DB_HOST}/latest.txt"
+}
+
+get_object_size () {
+  # Stores the size in bytes of an object in S3 into the DB_BACKUP_JOB_FILE_SIZE variable
+  #
+  # Args:
+  #   $1: Full URI of the S3 Object
+  local S3_URI=$1
+  local FILE_SIZE
+
+  if ! FILE_SIZE=$(s5cmd head "$S3_URI" | jq -r '.size'); then
+    # We don't want to die just because we couldn't read the filesize, it's just for metrics and not critial
+    echo "Failed to read the filesize of $S3_URI" >&2
+    return 0
+  fi
+
+  DB_BACKUP_JOB_FILE_SIZE="$FILE_SIZE"
+  echo "Backup file size is $DB_BACKUP_JOB_FILE_SIZE" >&2
+}
+
+# Determine backup object URI for restores
+object_uri () {
+  local file_name
+
+  # if FILENAME is not set
+  if [ -z "${FILENAME+x}" ]; then
+    local latest_pointer
+    if latest_pointer=$(s5cmd cat "${BUCKET}/${DB_HOST}/latest.txt" | tr -d '\n'); then
+      echo "Latest successful backup: ${latest_pointer}" >&2
+      file_name=$(basename "$latest_pointer")
+    else
+      # return latest dump if getting the pointer file fails
+      echo "Failed to get latest pointer file: ${latest_pointer}" >&2
+      file_name="$(list | tail -1)"
+    fi
+  else
+    echo "FILENAME specified: ${FILENAME}" >&2
+    file_name="${FILENAME}"
+  fi
+
+  echo -n "${BUCKET}/${DB_HOST}/${file_name}"
+}
+
+send_prometheus_terminal_metric () {
+  local EXIT_CODE=$?
+  set +x # Can't set this on the line above since we need to capture script exit status with $?
+  local STATE
+
+  if [ $EXIT_CODE -eq 0 ]; then
+    STATE="succeeded"
+  else
+    STATE="failed"
+  fi
+
+  send_prometheus_metric "$@" "$STATE"
+}
+
+send_prometheus_metric () {
+  # Send metrics to the prometheus pushgateway.
+  # If the state is succeeded or failed, also send the duration if the started state was sent earlier
+  # Additionally, if the backup job size was retrieved using get_object_size earlier then the file size metric
+  # will also be sent
+  #
+  # Args:
+  #   $1 - database engine (postgres, mysql, mongodb)
+  #   $2 - operation (backup, transform, restore)
+  #   $3 - state (started, succeeded, failed)
+  set +x
+
+  local ENGINE="$1"
+  local OPERATION="$2"
+  local STATE="$3"
+
+  local TIMESTAMP
+  TIMESTAMP=$(date +%s)
+
+  local PAYLOAD
+  local DURATION_PAYLOAD=""
+
+  # We are not including instance in the grouping key since we don't mind if the instance label is overwritten on the next run by the hostname of the
+  # newer instance
+  COMMON_GROUPING_KEY="job/db-backup/database_engine/${ENGINE}/database_instance/${DB_HOST}/database_db_name/${DB_DATABASE}/operation/${OPERATION}"
+  COMMON_METRIC_LABELS="instance=\"${HOSTNAME}\", database_engine=\"${ENGINE}\", database_instance=\"${DB_HOST}\", database_db_name=\"${DB_DATABASE}\", operation=\"${OPERATION}\""
+
+  PAYLOAD=$(cat <<EOF
+# TYPE db_backup_job_status_timestamp_seconds gauge
+db_backup_job_status_timestamp_seconds{${COMMON_METRIC_LABELS}, state="${STATE}"} $TIMESTAMP
+EOF
+  )
+
+  if [ "$STATE" == "started" ]; then
+    DB_BACKUP_JOB_START_TIME="$TIMESTAMP"
+  elif [ -n "${DB_BACKUP_JOB_START_TIME:-}" ] && { [ "$STATE" == "succeeded" ] || [ "$STATE" == "failed" ]; }; then
+    DURATION=$((TIMESTAMP - DB_BACKUP_JOB_START_TIME))
+    DURATION_PAYLOAD=$(cat <<EOF
+# TYPE db_backup_job_duration_seconds gauge
+db_backup_job_duration_seconds{${COMMON_METRIC_LABELS}, state="${STATE}"} $DURATION
+EOF
+    )
+  fi
+
+  echo "Sending timing job metrics to prometheus pushgateway"
+  echo "$PAYLOAD"
+  echo "$DURATION_PAYLOAD"
+  echo -e "$PAYLOAD\n$DURATION_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/${COMMON_GROUPING_KEY}/state/${STATE}"
+
+  local METRIC_STATE_VALUE
+  case "$STATE" in
+    failed)
+      METRIC_STATE_VALUE=0
+      ;;
+    started)
+      METRIC_STATE_VALUE=1
+      ;;
+    succeeded)
+      METRIC_STATE_VALUE=2
+      ;;
+    *)
+      METRIC_STATE_VALUE=-1
+      ;;
+  esac
+
+  PAYLOAD=$(cat <<EOF
+# TYPE db_backup_job_state
+db_backup_job_state{${COMMON_METRIC_LABELS}} $METRIC_STATE_VALUE
+EOF
+  )
+
+  local SIZE_PAYLOAD=""
+  if [ -n "${DB_BACKUP_JOB_FILE_SIZE:-}" ]; then
+    SIZE_PAYLOAD=$(cat <<EOF
+# TYPE db_backup_job_file_size_bytes gauge
+db_backup_job_file_size_bytes{${COMMON_METRIC_LABELS}} $DB_BACKUP_JOB_FILE_SIZE
+EOF
+    )
+  fi
+
+  # This has to be a separate push since we don't want to include state in the grouping key
+  echo "Sending state and size metrics to prometheus pushgateway"
+  echo "$PAYLOAD"
+  echo "$SIZE_PAYLOAD"
+  echo -e "$PAYLOAD\n$SIZE_PAYLOAD\n" | curl --silent --data-binary @- "${PROMETHEUS_PUSHGATEWAY_URL}/metrics/${COMMON_GROUPING_KEY}"
 }
 
 : "${GOVUK_ENVIRONMENT:?required}"

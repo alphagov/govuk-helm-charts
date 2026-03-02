@@ -2,6 +2,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: renovate
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
 spec:
   schedule: "@hourly"
   concurrencyPolicy: Forbid
@@ -17,9 +19,10 @@ spec:
             runAsNonRoot: true
             seccompProfile:
               type: RuntimeDefault
+          serviceAccountName: {{ $.Values.serviceAccount.name }}
           containers:
             - name: renovate
-              image: renovate/renovate:42.64.0
+              image: renovate/renovate:43.46.6
               env:
                 - name: RENOVATE_PLATFORM
                   value: github

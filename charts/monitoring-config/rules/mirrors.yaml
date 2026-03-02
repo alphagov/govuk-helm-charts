@@ -14,3 +14,16 @@ groups:
           summary: Mirror freshness has exceeded two days
           description: >-
             The mirror hasn't been updated in more than two days
+
+      - alert: MirrorCrawlErrorThresholdExceeded
+        expr: |
+          (
+            rate(govuk_mirror_crawler_errors_total[1h]) / rate(govuk_mirror_crawled_pages_total[1h])
+          ) * 100 > 10
+          and rate(govuk_mirror_crawled_pages_total[1h]) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: Mirror crawl error threshold exceeded 10%
+          description: >-
+            The mirror has encountered a crawl error rate exceeding 10% over the past hour

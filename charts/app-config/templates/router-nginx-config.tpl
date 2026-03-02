@@ -40,15 +40,17 @@ http {
     ''      $http_host;
   }
 
-  # This map creates a $sts_default variable for later use.
-  # If this header is already set by upstream, then $sts_default will
-  # be an empty string, which will later lead to:
-  #    add_header Strict-Transport-Security ''
-  # which will be ignored according to http://serverfault.com/a/598106
-  # If the header is not set by upstream, then $sts_default will be set
-  # and later uses in add_header will be effective.
-  map $upstream_http_strict_transport_security $sts_default {
-    '' "max-age=31536000; preload";
+  # Default values for response headers. These values are used when the
+  # header is not already set on the incoming response.
+  # https://serverfault.com/a/598106
+  map $upstream_http_strict_transport_security $strict_transport_security {
+    "" "max-age=31536000; preload";
+  }
+  map $upstream_http_permissions_policy $permissions_policy {
+    "" "interest-cohort=()";
+  }
+  map $upstream_http_x_content_type_options $x_content_type_options {
+    "" "nosniff";
   }
 
   log_format json_event escape=json '{'
@@ -86,7 +88,12 @@ http {
     access_log /dev/stdout json_event;
     error_log /dev/stderr;
 
-    add_header Strict-Transport-Security $sts_default;
+    # Where the response header is already set on the incoming response,
+    # these are no-ops. https://serverfault.com/a/598106
+    add_header Strict-Transport-Security $strict_transport_security;
+    add_header Permissions-Policy $permissions_policy;
+    add_header X-Content-Type-Options $x_content_type_options always;
+
     proxy_set_header GOVUK-Request-Id $govuk_request_id;
 
     # Hide some internal headers
@@ -95,9 +102,6 @@ http {
     {{- if (or (ne .Values.govukEnvironment "production") (eq .Stack "draft")) }}
     add_header X-Robots-Tag "noindex";
     {{- end }}
-
-    add_header Permissions-Policy interest-cohort=();
-    add_header X-Content-Type-Options "nosniff" always;
 
     {{- if ne .Stack "draft" }}
     {{- if not (has $.Values.govukEnvironment (list "staging" "production")) }}

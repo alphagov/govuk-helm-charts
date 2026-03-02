@@ -4,6 +4,8 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: "dependabot-metrics"
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
   labels:
     app: "dependabot-metrics"
     app.kubernetes.io/component: "dependabot-metrics"
