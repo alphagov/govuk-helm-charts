@@ -134,8 +134,6 @@ spec:
             arguments:
               parameters:
                 - name: slackChannel
-                  # NOTE: Change to {{"{{workflow.parameters.slackChannel}}"}} to
-                  # send to team slack channel.
                   value: "govuk-deploy-alerts"
                 - name: appRepo
                   value: "{{"{{workflow.parameters.repoName}}"}}"
@@ -143,20 +141,28 @@ spec:
                   value: "Service: {{"{{workflow.parameters.application}}"}}\nEnvironment: {{ .Values.govukEnvironment }}\nStage: Post-deploy\n\nImage: {{"{{workflow.parameters.imageTag}}"}}\nRepo: https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}\nHelm chart: https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/image-tags/{{ .Values.govukEnvironment }}/{{"{{workflow.parameters.application}}"}}\nWhat's next: https://docs.publishing.service.gov.uk/manual/deployments.html#troubleshooting"
                 - name: blocks
                   value: |
-                    [{
-                      "type": "section",
-                      "text": {
-                          "type": "mrkdwn",
-                          "text": "*Service:* {{"{{workflow.parameters.application}}"}}\n*Environment:* {{ .Values.govukEnvironment }}\n*Stage:* Post-deploy\n\n*Image:* {{"{{workflow.parameters.imageTag}}"}}\n*Repo:* <https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}|{{"{{workflow.parameters.repoName}}"}}>>\n*Helm chart:* <https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/image-tags/{{ .Values.govukEnvironment }}/{{"{{workflow.parameters.application}}"}}|Chart values>\n*What's next:* <https://docs.publishing.service.gov.uk/manual/deployments.html#troubleshooting|Troubleshooting Guide>"
-                      },
-                      "accessory": {
-                        "type": "button",
+                    [
+                      {
+                        "type": "section",
                         "text": {
-                            "type": "plain_text",
-                            "text": "View workflow",
-                            "emoji": true
+                          "type": "mrkdwn",
+                          "text": "🚀💥 Deployment failed"
+                      },
+                      {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "*Service:* {{"{{workflow.parameters.application}}"}}\n*Environment:* {{ .Values.govukEnvironment }}\n*Stage:* Post-deploy\n\n*Image:* {{"{{workflow.parameters.imageTag}}"}}\n*Repo:* <https://github.com/alphagov/{{"{{workflow.parameters.repoName}}"}}|{{"{{workflow.parameters.repoName}}"}}>\n*Helm chart:* <https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/image-tags/{{ .Values.govukEnvironment }}/{{"{{workflow.parameters.application}}"}}|Chart values>\n*What's next:* <https://docs.publishing.service.gov.uk/manual/deployments.html#troubleshooting|Troubleshooting Guide>"
                         },
-                        "url": "https://argo-workflows.eks.{{ .Values.govukEnvironment }}.govuk.digital/workflows/apps/{{"{{ workflow.name }}"}}",
-                        "action_id": "view-workflow"
+                        "accessory": {
+                          "type": "button",
+                          "text": {
+                              "type": "plain_text",
+                              "text": "View workflow",
+                              "emoji": true
+                          },
+                          "url": "https://argo-workflows.eks.{{ .Values.govukEnvironment }}.govuk.digital/workflows/apps/{{"{{ workflow.name }}"}}",
+                          "action_id": "view-workflow"
+                        }
                       }
-                    }]
+                    ]
