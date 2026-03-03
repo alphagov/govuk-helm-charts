@@ -2607,6 +2607,15 @@ govukApplications:
       cronTasks: []
   - name: release
     helmValues:
+      jobs:
+        - name: one-off-job
+          command: ["echo", "hello world"]
+        - name: another-one-off-job
+          command: "/bin/bash"
+          args:
+            - "-c"
+            - "echo"
+            - "hello world"
       arch: arm64
       podTerminationGracePeriodSecs: 15
       containerPreStopSleepSecs: 10
