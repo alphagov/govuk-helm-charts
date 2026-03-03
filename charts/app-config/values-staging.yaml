@@ -2608,9 +2608,11 @@ govukApplications:
   - name: release
     helmValues:
       jobs:
-        - name: one-off-job
-          command: ["echo", "hello world"]
-        - name: another-one-off-job
+        - name: one-off-job-03-03-26
+          command: ["rake"]
+          args:
+            - "--version"
+        - name: another-one-off-job-03-03-26
           command: "/bin/bash"
           args:
             - "-c"
