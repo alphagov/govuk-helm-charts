@@ -1215,6 +1215,8 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
+        - name: PLEK_SERVICE_PUBLISHING_API_URI
+          value: "http://publishing-api-read-replica"
       cronTasks: []
   - name: draft-feedback
     repoName: feedback
@@ -2605,6 +2607,17 @@ govukApplications:
       cronTasks: []
   - name: release
     helmValues:
+      jobs:
+        - name: one-off-job-03-03-26
+          command: "rake"
+          args:
+            - "--version"
+        - name: another-one-off-job-03-03-26
+          command: "/bin/bash"
+          args:
+            - "-c"
+            - "echo"
+            - "hello world"
       arch: arm64
       podTerminationGracePeriodSecs: 15
       containerPreStopSleepSecs: 10

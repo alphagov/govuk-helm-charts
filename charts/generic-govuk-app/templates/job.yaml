@@ -4,21 +4,21 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{ $fullName }}-{{ .name }}"
+  name: "{{ .name }}"
   labels:
     {{- include "generic-govuk-app.labels" $ | nindent 4 }}
-    app: "{{ $fullName }}-{{ .name }}"
-    app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
+    app: "{{ .name }}"
+    app.kubernetes.io/name: "{{ .name }}"
     app.kubernetes.io/component: "{{ .name }}"
 spec:
   backoffLimit: {{ .backoffLimit | default 0 }}
   template:
     metadata:
-      name: "{{ $fullName }}-{{ .name }}"
+      name: "{{ .name }}"
       labels:
         {{- include "generic-govuk-app.labels" $ | nindent 8 }}
-        app: "{{ $fullName }}-{{ .name }}"
-        app.kubernetes.io/name: "{{ $fullName }}-{{ .name }}"
+        app: "{{ .name }}"
+        app.kubernetes.io/name: "{{ .name }}"
         app.kubernetes.io/component: "{{ .name }}"
     spec:
       {{- if $.Values.serviceAccount.enabled }}
@@ -55,21 +55,24 @@ spec:
             - configMapRef:
                 name: govuk-apps-env
           env:
-            {{- if $.Values.rails.enabled }}
-            - name: SECRET_KEY_BASE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $.Values.rails.secretKeyBaseName | default (printf "%s-rails-secret-key-base" $.Values.repoName) }}
-                  key: secret-key-base
-            {{- end }}
-            {{- if $.Values.sentry.enabled }}
-            - name: SENTRY_DSN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $.Values.sentry.dsnSecretName | default (printf "%s-sentry" $.Values.repoName) }}
-                  key: dsn
-            - name: SENTRY_RELEASE
-              value: "{{ $.Values.appImage.tag }}"
+            {{- with $.Values.jobEnv}}
+              {{- . | toYaml | trim | nindent 16 }}
+              {{- if $.Values.rails.enabled }}
+              - name: SECRET_KEY_BASE
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $.Values.rails.secretKeyBaseName | default (printf "%s-rails-secret-key-base" $.Values.repoName) }}
+                    key: secret-key-base
+              {{- end }}
+              {{- if $.Values.sentry.enabled }}
+              - name: SENTRY_DSN
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ $.Values.sentry.dsnSecretName | default (printf "%s-sentry" $.Values.repoName) }}
+                    key: dsn
+              - name: SENTRY_RELEASE
+                value: "{{ $.Values.appImage.tag }}"
+              {{- end }}
             {{- end }}
             {{- if $.Values.redis.enabled }}
             - name: REDIS_URL
@@ -96,14 +99,5 @@ spec:
             {{- with $.Values.appExtraVolumeMounts }}
               {{- . | toYaml | trim | nindent 16 }}
             {{- end }}
-      {{- if eq "arm64" $.Values.arch }}
-      tolerations:
-        - key: arch
-          operator: Equal
-          value: {{ $.Values.arch }}
-          effect: NoSchedule
-      nodeSelector:
-        kubernetes.io/arch: {{ $.Values.arch }}
-      {{- end }}
 {{- end }}
 
