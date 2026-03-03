@@ -1,4 +1,4 @@
 image:
   repository: cr.fluentbit.io/fluent/fluent-bit
-  tag: "4.1.1"
+  tag: "4.2.3"
   pullPolicy: IfNotPresent
