@@ -2609,7 +2609,7 @@ govukApplications:
     helmValues:
       jobs:
         - name: one-off-job-03-03-26
-          command: ["rake"]
+          command: "rake"
           args:
             - "--version"
         - name: another-one-off-job-03-03-26
