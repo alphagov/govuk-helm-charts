@@ -1,0 +1,44 @@
+groups:
+  - name: SearchApiElasticsearchAlerts
+    rules:
+      - alert: SearchApiElasticsearchClusterRed
+        expr: search_api_elasticsearch_status == 2
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: Elasticsearch cluster status is RED
+          description: >-
+            The Elasticsearch cluster used by Search API is in RED state.
+            Some primary shards are unavailable and search indexing may fail.
+      - alert: SearchApiElasticsearchClusterYellow
+        expr: search_api_elasticsearch_status == 1
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: Elasticsearch cluster status is YELLOW
+          description: >-
+            The Elasticsearch cluster used by Search API is in YELLOW state.
+            Replica shards are not allocated. The cluster is still functional
+            but resilience is reduced.
+      - alert: SearchApiElasticsearchDiskSpaceLow
+        expr: search_api_elasticsearch_disk_free_ratio < 0.20
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: Elasticsearch disk space low
+          description: >-
+            Elasticsearch node {{ $labels.node }} has less than 20% disk space
+            remaining. Consider increasing storage capacity.
+      - alert: SearchApiElasticsearchDiskSpaceCritical
+        expr: search_api_elasticsearch_disk_free_ratio < 0.10
+        for: 10m
+        labels:
+          severity: page
+        annotations:
+          summary: Elasticsearch disk space critical
+          description: >-
+            Elasticsearch node {{ $labels.node }} has less than 10% disk space
+            remaining.
