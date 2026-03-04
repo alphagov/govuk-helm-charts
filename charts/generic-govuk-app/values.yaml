@@ -50,8 +50,6 @@ dbMigrationEnabled: false
 dbMigrationCommand: ["rails", "db:migrate"]
 dbMigrationActiveDeadlineSeconds: 900 # default deadline for migrations
 
-jobs: []
-
 # cronTasks is a list of {name, command, schedule} and/or {name, task,
 # schedule}, which represent CronJobs to run either an arbitrary command or a
 # Rake task. An optional `suspend` field is passed through to the CronJob spec
