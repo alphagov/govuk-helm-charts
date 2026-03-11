@@ -1,0 +1,91 @@
+rule_files:
+  - search_api_alerts.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: "search_api_elasticsearch_status"
+        values: "0x40"
+    alert_rule_test:
+      - alertname: SearchApiElasticsearchClusterRed
+        eval_time: 5m
+        exp_alerts: []
+      - alertname: SearchApiElasticsearchClusterYellow
+        eval_time: 30m
+        exp_alerts: []
+  - interval: 1m
+    input_series:
+      - series: "search_api_elasticsearch_status"
+        values: "2x40"
+    alert_rule_test:
+      - alertname: SearchApiElasticsearchClusterRed
+        eval_time: 5m
+        exp_alerts:
+          - exp_labels:
+              severity: page
+            exp_annotations:
+              summary: Elasticsearch cluster status is RED
+              description: >-
+                The Elasticsearch cluster used by Search API is in RED state.
+                Some primary shards are unavailable and search indexing may fail.
+  - interval: 1m
+    input_series:
+      - series: "search_api_elasticsearch_status"
+        values: "1x40"
+    alert_rule_test:
+      - alertname: SearchApiElasticsearchClusterYellow
+        eval_time: 30m
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+            exp_annotations:
+              summary: Elasticsearch cluster status is YELLOW
+              description: >-
+                The Elasticsearch cluster used by Search API is in YELLOW state.
+                Replica shards are not allocated. The cluster is still functional
+                but resilience is reduced.
+  - interval: 1m
+    input_series:
+      - series: 'search_api_elasticsearch_disk_free_ratio{node="node1"}'
+        values: "0.5x20"
+    alert_rule_test:
+      - alertname: SearchApiElasticsearchDiskSpaceLow
+        eval_time: 15m
+        exp_alerts: []
+      - alertname: SearchApiElasticsearchDiskSpaceCritical
+        eval_time: 10m
+        exp_alerts: []
+  - interval: 1m
+    input_series:
+      - series: 'search_api_elasticsearch_disk_free_ratio{node="node1"}'
+        values: "0.15x20"
+    alert_rule_test:
+      - alertname: SearchApiElasticsearchDiskSpaceLow
+        eval_time: 15m
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              node: node1
+            exp_annotations:
+              summary: Elasticsearch disk space low
+              description: >-
+                Elasticsearch node node1 has less than 20% disk space
+                remaining. Consider increasing storage capacity.
+  - interval: 1m
+    input_series:
+      - series: 'search_api_elasticsearch_disk_free_ratio{node="node1"}'
+        values: "0.05x20"
+    alert_rule_test:
+      - alertname: SearchApiElasticsearchDiskSpaceCritical
+        eval_time: 10m
+        exp_alerts:
+          - exp_labels:
+              severity: page
+              node: node1
+            exp_annotations:
+              summary: Elasticsearch disk space critical
+              description: >-
+                Elasticsearch node node1 has less than 10% disk space
+                remaining.
