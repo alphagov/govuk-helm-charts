@@ -1,0 +1,62 @@
+rule_files:
+  - datagovuk_traffic.yaml
+
+evaluation_interval: 1m
+
+tests:
+  ##
+  # Test 1: No alert when k6 request rate is below the 80% threshold (10 req/s)
+  ##
+  - name: No alert when k6 traffic is below 80% of load-tested capacity
+    interval: 1m
+    external_labels:
+      environment: staging
+    input_series:
+      - series: 'k6_http_reqs_total{job="k6"}'
+        values: '0+600x30'  # 600 counter increment per minute = 10 req/s — below 44.6 threshold
+
+    alert_rule_test:
+      - alertname: DataGovUkHighTrafficRate
+        eval_time: 30m
+        exp_alerts: []
+
+  ##
+  # Test 2: Alert fires when k6 generates sustained traffic above 80% threshold (50 req/s)
+  #
+  # With rate([2m]) and a constant 3000/min (50 req/s) increment:
+  #   - Condition first becomes TRUE at t=2m (full 2-minute window populated)
+  #   - With for: 5m the alert FIRES at t=7m
+  ##
+  - name: Alert fires when k6 traffic exceeds 80% of load-tested capacity for 5+ minutes
+    interval: 1m
+    external_labels:
+      environment: staging
+    input_series:
+      - series: 'k6_http_reqs_total{job="k6"}'
+        values: '0+3000x30'  # 3000 counter increment per minute = 50 req/s — exceeds 44.6 threshold
+
+    alert_rule_test:
+      - alertname: DataGovUkHighTrafficRate
+        eval_time: 6m
+        exp_alerts: []  # Condition true since t=2m but only 4 minutes pending — not fired yet
+
+      - alertname: DataGovUkHighTrafficRate
+        eval_time: 7m
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: slack-datagovuk-technical
+            exp_annotations:
+              summary: >-
+                data.gov.uk request rate exceeds 80% of load-tested capacity
+                on staging
+              description: >-
+                The request rate to data.gov.uk on staging has exceeded
+                80% of the peak capacity established by load testing (55.8 req/s at 100 virtual users).
+
+                Current rate: 50 req/s
+                Threshold (80% of 55.8 req/s): 44.6 req/s
+
+                If this is a live load test, this confirms the alerting threshold is correctly configured.
+                If this is unexpected traffic, consider scaling the find and CKAN pods.
+              runbook_url: https://docs.publishing.service.gov.uk/manual/data-gov-uk.html

@@ -1,0 +1,29 @@
+groups:
+  - name: DataGovUkTrafficAlerts
+    rules:
+      - alert: DataGovUkHighTrafficRate
+        # Staging-only alert: fires when the k6 load test generates a request rate
+        # that exceeds 80% of the peak capacity established by load testing.
+        # k6 pushes metrics to Prometheus via remote write (experimental-prometheus-rw).
+        # k6_http_reqs_total is the total HTTP request counter emitted by the k6 pod.
+        # At 100 VUs the load test sustains ~55.8 req/s; 80% = 44.6 req/s.
+        expr: |
+          sum(rate(k6_http_reqs_total[2m])) > 44.6
+        for: 5m
+        labels:
+          severity: warning
+          destination: slack-datagovuk-technical
+        annotations:
+          summary: >-
+            data.gov.uk request rate exceeds 80% of load-tested capacity
+            on {{ .ExternalLabels.environment }}
+          description: >-
+            The request rate to data.gov.uk on {{ .ExternalLabels.environment }} has exceeded
+            80% of the peak capacity established by load testing (55.8 req/s at 100 virtual users).
+
+            Current rate: {{ $value | humanize }} req/s
+            Threshold (80% of 55.8 req/s): 44.6 req/s
+
+            If this is a live load test, this confirms the alerting threshold is correctly configured.
+            If this is unexpected traffic, consider scaling the find and CKAN pods.
+          runbook_url: https://docs.publishing.service.gov.uk/manual/data-gov-uk.html
