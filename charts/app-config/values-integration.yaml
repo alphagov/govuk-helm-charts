@@ -1010,6 +1010,8 @@ govukApplications:
           value: email-alert-api-integration@digital.cabinet-office.gov.uk
         - name: BULK_MIGRATE_CONFIRMATION_EMAIL_ACCOUNT
           value: email-alert-api-integration@digital.cabinet-office.gov.uk
+        - name: AWS_S3_ASSET_BUCKET_NAME
+          value: "govuk-app-assets-integration"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
