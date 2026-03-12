@@ -253,7 +253,7 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "itc1 / 3000",
+          "expression": "itc1 / 6000",
           "id": "",
           "label": "eu-west-1",
           "logGroups": [],
@@ -302,7 +302,7 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "itc2 / 3000",
+          "expression": "itc2 / 6000",
           "id": "",
           "label": "eu-west-2",
           "logGroups": [],
