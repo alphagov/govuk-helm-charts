@@ -231,7 +231,7 @@
           },
           "expression": "",
           "hide": true,
-          "id": "itc",
+          "id": "itc1",
           "label": "",
           "logGroups": [],
           "matchExact": true,
@@ -243,7 +243,7 @@
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "default",
+          "region": "eu-west-1",
           "sqlExpression": "",
           "statistic": "Sum"
         },
@@ -253,10 +253,9 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "itc / 3000",
-          "hide": false,
+          "expression": "itc1 / 12000",
           "id": "",
-          "label": "PercentageTokensUsed",
+          "label": "eu-west-1",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 1,
@@ -267,7 +266,56 @@
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "B",
-          "region": "default",
+          "region": "eu-west-1",
+          "sqlExpression": "",
+          "statistic": "Average"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "amazon.titan-embed-text-v2:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "itc2",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "1m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "D",
+          "region": "eu-west-2",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "itc2 / 12000",
+          "id": "",
+          "label": "eu-west-2",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "C",
+          "region": "eu-west-2",
           "sqlExpression": "",
           "statistic": "Average"
         }
@@ -743,7 +791,7 @@
           },
           "expression": "",
           "id": "",
-          "label": "",
+          "label": "eu-west-1",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -754,7 +802,32 @@
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "default",
+          "region": "eu-west-1",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "amazon.titan-embed-text-v2:0"
+          },
+          "expression": "",
+          "id": "",
+          "label": "eu-west-2",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "1m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "eu-west-2",
           "sqlExpression": "",
           "statistic": "Sum"
         }
@@ -1227,7 +1300,7 @@
           },
           "expression": "",
           "id": "",
-          "label": "titan-embed-text-v2",
+          "label": "eu-west-1 titan-embed-text-v2",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
@@ -1238,7 +1311,32 @@
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "default",
+          "region": "eu-west-1",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "amazon.titan-embed-text-v2:0"
+          },
+          "expression": "",
+          "id": "",
+          "label": "eu-west-2 titan-embed-text-v2",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "1m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "eu-west-2",
           "sqlExpression": "",
           "statistic": "Sum"
         }
@@ -5031,5 +5129,5 @@
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 23
+  "version": 24
 }
