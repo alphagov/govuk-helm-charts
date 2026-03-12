@@ -1648,6 +1648,9 @@ govukApplications:
             name: default-worker
           - command: ['rake', 'message_queue:published_documents_consumer']
             name: published-documents-consumer
+            env:
+              - name: TITAN_AWS_REGION
+                value: "eu-west-2"
       workerResources:
         limits:
           cpu: 2
