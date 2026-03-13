@@ -958,6 +958,10 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 1.5Gi
+      cronTasks:
+        - name: email-subscribers-list
+          task: "email_subscribers_list"
+          schedule: "45 16 13 * *"
       dbMigrationEnabled: true
       uploadAssets:
         enabled: false
