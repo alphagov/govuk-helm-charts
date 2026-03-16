@@ -745,11 +745,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 150000
+                "value": 600000
               },
               {
                 "color": "red",
-                "value": 300000
+                "value": 1200000
               }
             ]
           },
@@ -5129,5 +5129,5 @@
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 24
+  "version": 25
 }
