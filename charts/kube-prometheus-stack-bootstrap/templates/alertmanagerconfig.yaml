@@ -130,6 +130,14 @@ spec:
       repeatInterval: 1h
       groupWait: 5m
       groupInterval: 30m
+    - matchers:
+      - name: destination
+        value: slack-datagovuk-technical
+        matchType: =
+      receiver: 'slack-datagovuk-technical'
+      repeatInterval: 1d
+      groupWait: 5m
+      groupInterval: 30m
   receivers:
   - name: 'null'
   - name: 'pagerduty'
@@ -203,6 +211,12 @@ spec:
   - name: 'slack-graphql-notifications'
     slackConfigs:
     - channel: '#govuk-publishing-platform-system-alerts'
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
+  - name: 'slack-datagovuk-technical'
+    slackConfigs:
+    - channel: '#datagovuk-technical'
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
