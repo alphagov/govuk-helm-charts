@@ -1673,6 +1673,11 @@ govukApplications:
       uploadAssets:
         s3Directory: chat
         path: /app/public/assets/chat
+      cronTasks:
+        - name: delete-old-questions
+          task: "data_retention:delete_old_questions"
+          schedule: "0 9 * * *"
+          timeZone: "Europe/London"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
@@ -1789,7 +1794,6 @@ govukApplications:
                   - type: Pods
                     value: 1
                     periodSeconds: 30
-      cronTasks: []
   - name: govuk-e2e-tests
     chartPath: charts/govuk-e2e-tests
     helmValues:

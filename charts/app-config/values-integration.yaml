@@ -1738,6 +1738,10 @@ govukApplications:
           task: "bigquery:export"
           schedule: "0 10 * * 4"
           timeZone: "Europe/London"
+        - name: delete-old-questions
+          task: "data_retention:delete_old_questions"
+          schedule: "0 9 * * *"
+          timeZone: "Europe/London"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
