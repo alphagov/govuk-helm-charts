@@ -1,5 +1,5 @@
 groups:
-  - name: DataGovUkTrafficAlerts
+  - name: DataGovUkTrafficAlerts-Staging
     rules:
       - alert: DataGovUkHighTrafficRate
         # Staging-only alert: fires when the k6 load test generates a request rate
