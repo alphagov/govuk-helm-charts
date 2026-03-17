@@ -1611,6 +1611,7 @@ govukApplications:
   - name: government-frontend
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
@@ -1634,6 +1635,7 @@ govukApplications:
     repoName: government-frontend
     helmValues:
       arch: arm64
+      appEnabled: false
       appResources:
         limits:
           cpu: 1
