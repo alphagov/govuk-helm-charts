@@ -30,7 +30,7 @@ data:
     MaxScanTime 0
     MaxThreads 20
     SelfCheck 900
-    StreamMaxLength 500M
+    StreamMaxLength 750M
     TCPAddr 127.0.0.1
     TCPSocket 3310
   freshclam.conf: |
