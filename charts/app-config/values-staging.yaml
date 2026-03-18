@@ -1767,7 +1767,7 @@ govukApplications:
         - name: govuk-chat-worker
           enabled: true
           spec:
-            maxReplicas: 10
+            maxReplicas: 6 # Setting to 6 for load testing
             minReplicas: 3
             scaleTargetRef:
               apiVersion: apps/v1
