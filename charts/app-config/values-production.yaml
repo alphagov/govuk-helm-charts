@@ -1632,11 +1632,11 @@ govukApplications:
       containerPreStopSleepSecs: 5
       appResources:
         limits:
-          cpu: 1
-          memory: 2Gi
+          cpu: 3 # Setting to 3 for production go-live
+          memory: 3Gi # Setting to 3Gi for production go-live
         requests:
-          cpu: 500m
-          memory: 1Gi
+          cpu: 2 # Setting to 2 for production go-live
+          memory: 2Gi # Setting to 2Gi for production go-live
       dbMigrationEnabled: true
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
@@ -1659,10 +1659,10 @@ govukApplications:
                 value: "eu-west-2"
       workerResources:
         limits:
-          cpu: 2
+          cpu: 4 # Setting to 4 for production go-live
           memory: 4Gi
         requests:
-          cpu: 666m
+          cpu: 2 # Setting to 2 for production go-live
           memory: 2Gi
       ingress:
         enabled: true
@@ -1753,7 +1753,7 @@ govukApplications:
         - name: govuk-chat
           enabled: true
           spec:
-            maxReplicas: 10
+            maxReplicas: 15 # Setting to 15 for production go-live
             minReplicas: 3
             scaleTargetRef:
               apiVersion: apps/v1
@@ -1765,7 +1765,7 @@ govukApplications:
                   name: cpu
                   target:
                     type: Utilization
-                    averageUtilization: 80
+                    averageUtilization: 60 # Setting to 60 for production go-live
             behavior:
               scaleDown:
                 stabilizationWindowSeconds: 300
@@ -1783,7 +1783,7 @@ govukApplications:
           enabled: true
           spec:
             maxReplicas: 10
-            minReplicas: 3
+            minReplicas: 4 # Setting to 4 for production go-live
             scaleTargetRef:
               apiVersion: apps/v1
               kind: Deployment
