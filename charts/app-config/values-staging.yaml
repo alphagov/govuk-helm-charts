@@ -1644,6 +1644,11 @@ govukApplications:
         types:
           - command: ["sidekiq", "-C", "config/sidekiq_answer.yml"]
             name: answer-worker
+            env:
+              - name: SIDEKIQ_CONCURRENCY
+                value: "25"
+              - name: DATABASE_POOL
+                value: "25"
           - command: ["sidekiq", "-C", "config/sidekiq_default.yml"]
             name: default-worker
           - command: ['rake', 'message_queue:published_documents_consumer']
@@ -1767,8 +1772,8 @@ govukApplications:
         - name: govuk-chat-worker
           enabled: true
           spec:
-            maxReplicas: 6 # Setting to 6 for load testing
-            minReplicas: 3
+            maxReplicas: 10 # Setting to 10 for load testing
+            minReplicas: 4 # Setting to 4 for load testing
             scaleTargetRef:
               apiVersion: apps/v1
               kind: Deployment
