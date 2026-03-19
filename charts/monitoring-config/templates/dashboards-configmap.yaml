@@ -11,4 +11,5 @@ data:
   {{- range $path, $_ := .Files.Glob "dashboards/**.json" }}
     {{- $path | trimPrefix "dashboards/" | nindent 2 }}: |
     {{- $.Files.Get $path | replace "AWSACCOUNTID" $.Values.awsAccountId | nindent 4 }}
+    {{- $.Files.Get $path | replace "GOVUKENVIRONMENT" $.Values.govukEnvironment | nindent 4 }}
   {{ end }}
