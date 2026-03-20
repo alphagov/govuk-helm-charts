@@ -1688,6 +1688,10 @@ govukApplications:
           task: "data_retention:delete_old_questions"
           schedule: "0 2 * * *"
           timeZone: "Europe/London"
+        - name: slack-daily-report
+          task: "slack:send_previous_days_activity"
+          schedule: "30 9 * * *"
+          timeZone: "Europe/London"
       extraEnv:
         - name: AI_SLACK_CHANNEL_WEBHOOK_URL
           valueFrom:
