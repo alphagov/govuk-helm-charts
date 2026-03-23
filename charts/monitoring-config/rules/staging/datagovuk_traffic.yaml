@@ -26,4 +26,4 @@ groups:
 
             If this is a live load test, this confirms the alerting threshold is correctly configured.
             If this is unexpected traffic, consider scaling the find and CKAN pods.
-          runbook_url: https://docs.publishing.service.gov.uk/manual/data-gov-uk.html
+          runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/data-gov-uk-high-traffic-alert.html
