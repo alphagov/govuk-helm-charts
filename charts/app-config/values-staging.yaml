@@ -1631,11 +1631,11 @@ govukApplications:
       containerPreStopSleepSecs: 5
       appResources:
         limits:
-          cpu: 3 # Setting to 3 for load testing
-          memory: 3Gi # Setting to 3Gi for load testing
+          cpu: 3
+          memory: 3Gi
         requests:
-          cpu: 2 # Setting this to 2 for load testing
-          memory: 2Gi # Setting this to 2Gi for load testing
+          cpu: 2
+          memory: 2Gi
       dbMigrationEnabled: true
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
@@ -1658,10 +1658,10 @@ govukApplications:
                 value: "eu-west-2"
       workerResources:
         limits:
-          cpu: 4 # Setting to 4 for load testing
+          cpu: 4
           memory: 4Gi
         requests:
-          cpu: 2 # Setting to 2 for load testing
+          cpu: 2
           memory: 2Gi
       ingress:
         enabled: true
@@ -1743,7 +1743,7 @@ govukApplications:
         - name: govuk-chat
           enabled: true
           spec:
-            maxReplicas: 15 # Upping to 15 for load testing
+            maxReplicas: 15
             minReplicas: 3
             scaleTargetRef:
               apiVersion: apps/v1
@@ -1755,7 +1755,7 @@ govukApplications:
                   name: cpu
                   target:
                     type: Utilization
-                    averageUtilization: 60 # Setting at 60 for load testing
+                    averageUtilization: 60
             behavior:
               scaleDown:
                 stabilizationWindowSeconds: 300
@@ -1772,8 +1772,8 @@ govukApplications:
         - name: govuk-chat-worker
           enabled: true
           spec:
-            maxReplicas: 10 # Setting to 10 for load testing
-            minReplicas: 4 # Setting to 4 for load testing
+            maxReplicas: 10
+            minReplicas: 4
             scaleTargetRef:
               apiVersion: apps/v1
               kind: Deployment
