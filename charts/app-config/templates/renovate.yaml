@@ -1,4 +1,4 @@
-{{ if eq .Values.govukEnvironment "production" }}
+{{ if eq .Values.govukEnvironment "env-doesnt-exist-production" }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
