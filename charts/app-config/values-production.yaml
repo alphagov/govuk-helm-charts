@@ -1546,58 +1546,6 @@ govukApplications:
             return 301 https://draft-assets.publishing.service.gov.uk/government/uploads/$item_path;
           }
       cronTasks: []
-  - name: government-frontend
-    helmValues:
-      arch: arm64
-      replicaCount: 6
-      appResources:
-        limits:
-          cpu: 4
-          memory: 2Gi
-        requests:
-          cpu: 1
-          memory: 768Mi
-      extraEnv:
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.production.govuk-internal.digital
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-government-frontend-publishing-api
-              key: bearer_token
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
-      cronTasks: []
-  - name: draft-government-frontend
-    repoName: government-frontend
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1.5Gi
-        requests:
-          cpu: 10m
-          memory: 512Mi
-      rails:
-        createKeyBaseSecret: false
-      sentry:
-        createSecret: false # Sentry DSNs are per repo.
-      uploadAssets:
-        enabled: false
-      extraEnv:
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: PLEK_HOSTNAME_PREFIX
-          value: draft-
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-government-frontend-publishing-api
-              key: bearer_token
-      cronTasks: []
   - name: govspeak-preview
     helmValues:
       arch: arm64
@@ -2807,8 +2755,6 @@ govukApplications:
           value: "http://email-alert-frontend"
         - name: BACKEND_URL_frontend
           value: "http://frontend"
-        - name: BACKEND_URL_government-frontend
-          value: "http://government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://smartanswers"
         - name: BACKEND_URL_account-api
@@ -2866,8 +2812,6 @@ govukApplications:
           value: "http://draft-finder-frontend"
         - name: BACKEND_URL_frontend
           value: "http://draft-frontend"
-        - name: BACKEND_URL_government-frontend
-          value: "http://draft-government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://draft-smartanswers"
         - name: BACKEND_URL_account-api
