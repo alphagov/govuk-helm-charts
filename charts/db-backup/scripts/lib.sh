@@ -33,7 +33,7 @@ default_db_owner () {
 
 # Write a pointer file for the specified file
 write_pointer () {
-  echo -n "${1}" | s5cmd pipe "${BUCKET}/${DB_HOST}/latest.txt"
+  echo -n "${1}" | s5cmd pipe "${BUCKET}/${DB_HOST}/latest-${DB_DATABASE}.txt"
 }
 
 get_object_size () {
@@ -61,7 +61,7 @@ object_uri () {
   # if FILENAME is not set
   if [ -z "${FILENAME+x}" ]; then
     local latest_pointer
-    if latest_pointer=$(s5cmd cat "${BUCKET}/${DB_HOST}/latest.txt" | tr -d '\n'); then
+    if latest_pointer=$(s5cmd cat "${BUCKET}/${DB_HOST}/latest-${DB_DATABASE}.txt" | tr -d '\n'); then
       echo "Latest successful backup: ${latest_pointer}" >&2
       file_name=$(basename "$latest_pointer")
     else
