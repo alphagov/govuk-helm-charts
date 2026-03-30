@@ -3085,7 +3085,7 @@ govukApplications:
           schedule: "09 8-17 * * *" # 9 minutes past the hour every day from 8am-5pm
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
-          value: "true"
+          value: "false"
         # TODO: remove GOVUK_PROMETHEUS_EXPORTER once govuk_app_config >=9.10 is everywhere.
         - name: GOVUK_PROMETHEUS_EXPORTER
           value: force
