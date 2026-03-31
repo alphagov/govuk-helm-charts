@@ -3052,7 +3052,7 @@ govukApplications:
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: search-api.{{ .Values.k8sExternalDomainSuffix }}
-      replicaCount: 6
+      replicaCount: 9
       uploadAssets:
         enabled: false
       workers:
