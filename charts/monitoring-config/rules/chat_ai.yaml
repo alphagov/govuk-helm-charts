@@ -213,7 +213,8 @@ groups:
           sum(
             rate(
               govuk_chat_answer_count{
-                status=~"error_.*"
+                status=~"error_.*",
+                container="answer-worker"
               }[20m]
             )
           ) >= (3 / 1200)
