@@ -3688,16 +3688,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
         - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
           valueFrom:
             secretKeyRef:
