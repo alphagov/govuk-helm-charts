@@ -2039,6 +2039,8 @@ govukApplications:
           task: "export:google_analytics:bad_links"
           schedule: "0 6 * * *"
       dbMigrationEnabled: true
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
