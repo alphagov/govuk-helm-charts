@@ -1289,6 +1289,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
@@ -1322,6 +1324,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
