@@ -1002,6 +1002,8 @@ govukApplications:
                       name: email-alert-api
                       port:
                         number: 80
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
