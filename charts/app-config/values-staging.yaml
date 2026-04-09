@@ -1075,6 +1075,8 @@ govukApplications:
           memory: 450Mi
       redis:
         enabled: true
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
@@ -1113,6 +1115,8 @@ govukApplications:
         createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
