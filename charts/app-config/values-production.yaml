@@ -1178,6 +1178,8 @@ govukApplications:
         requests:
           cpu: 30m
           memory: 400Mi
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1237,6 +1239,8 @@ govukApplications:
         createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
