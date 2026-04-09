@@ -1285,8 +1285,6 @@ govukApplications:
             secretKeyRef:
               name: feedback-notify
               key: GOVUK_NOTIFY_API_KEY
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
       cronTasks: []
   - name: finder-frontend
     helmValues:
