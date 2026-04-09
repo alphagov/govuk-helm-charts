@@ -1298,6 +1298,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1331,6 +1333,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
