@@ -1176,6 +1176,8 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 320Mi
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1234,6 +1236,8 @@ govukApplications:
         createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1273,8 +1277,6 @@ govukApplications:
             secretKeyRef:
               name: feedback-notify
               key: GOVUK_NOTIFY_API_KEY
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
   - name: finder-frontend
     helmValues:
       arch: arm64
