@@ -1,3 +1,35 @@
 externalSecrets:
   deletionPolicy: Delete
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.
+
+provisionDatabaseReadonlySecrets:
+  documentdb:
+    - shared-documentdb
+  mysql:
+    - collections_publisher
+    - release
+    - search_admin
+    - signon
+    - whitehall
+  postgres:
+    - account_api
+    - authenticating_proxy
+    - chat
+    - content_block_manager
+    - content_data_admin
+    - content_data_api
+    - content_store
+    - content_tagger
+    - draft_content_store
+    - email_alert_api
+    - fact_check_manager
+    - govuk_ai_accelerator
+    - link_checker_api
+    - local_links_manager
+    - locations_api
+    - places_manager
+    - publisher
+    - publishing_api
+    - service_manual_publisher
+    - support_api
+    - transition
