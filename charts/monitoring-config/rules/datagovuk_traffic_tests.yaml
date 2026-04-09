@@ -52,4 +52,4 @@ tests:
                 Threshold (80% of 55.8 req/s): 44.6 req/s
 
                 Consider scaling the find and CKAN pods before traffic reaches 100% capacity.
-              runbook_url: https://docs.publishing.service.gov.uk/manual/data-gov-uk.html
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/data-gov-uk-high-traffic-alert.html

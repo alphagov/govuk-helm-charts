@@ -4,6 +4,11 @@ Disallow: /*/print$
 Disallow: /search/all*
 Sitemap: https://www.gov.uk/sitemap.xml
 
+# The Meta-ExternalAgent crawler crawls the web for use cases such as training foundation AI models.
+# It results in timeouts from Vertex that back up requests from users making genuine searches
+User-agent: meta-externalagent
+Disallow: /search/all*
+
 # https://ahrefs.com/robot/ crawls the site frequently
 User-agent: AhrefsBot
 Crawl-delay: 10

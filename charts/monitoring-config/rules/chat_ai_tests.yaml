@@ -599,23 +599,35 @@ tests:
   - interval: 1m
     input_series:
       # No alert: total answers with error status > 3
-      - series: 'govuk_chat_answer_count{status="error_answer_service_error"}'
-        values: '1 2'
+      - series: 'govuk_chat_answer_count{status="error_answer_service_error", container="answer-worker"}'
+        values: '0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 2'
     alert_rule_test:
       - alertname: ElevatedAnswerErrorStatuses
-        eval_time: 2m
+        eval_time: 20m
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      # No alert: total answers with error status > 3 but not all from the answer-worker container
+      - series: 'govuk_chat_answer_count{status="error_answer_guardrails", container="answer-worker"}'
+        values: '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 2'
+      - series: 'govuk_chat_answer_count{status="error_answer_guardrails", container="default-worker"}'
+        values: '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 2'
+    alert_rule_test:
+      - alertname: ElevatedAnswerErrorStatuses
+        eval_time: 20m
         exp_alerts: []
 
   - interval: 1m
     input_series:
       # Alert: aggregate total answers with error status >= 3 in 20 minutes
-      - series: 'govuk_chat_answer_count{status="error_answer_guardrails"}'
-        values: '0 1 2'
-      - series: 'govuk_chat_answer_count{status="error_answer_service_error"}'
-        values: '0 1 1'
+      - series: 'govuk_chat_answer_count{status="error_answer_guardrails", container="answer-worker"}'
+        values: '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 2'
+      - series: 'govuk_chat_answer_count{status="error_answer_service_error", container="answer-worker"}'
+        values: '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1'
     alert_rule_test:
       - alertname: ElevatedAnswerErrorStatuses
-        eval_time: 3m
+        eval_time: 20m
         exp_alerts:
           - exp_labels:
               alertname: ElevatedAnswerErrorStatuses

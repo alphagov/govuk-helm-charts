@@ -342,13 +342,13 @@ govukApplications:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
         - name: GRAPHQL_RATE_MINISTERS_INDEX
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_ROLE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_TOPICAL_EVENT
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_WORLD_INDEX
-          value: "0.5"
+          value: "0"
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
   - name: draft-collections
@@ -523,6 +523,11 @@ govukApplications:
           valueFrom:
             secretKeyRef:
               name: content-block-manager-jwt-auth-secret
+              key: JWT_AUTH_SECRET
+        - name: AUTHENTICATING_PROXY_JWT_AUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: authenticating-proxy-jwt-auth-secret
               key: JWT_AUTH_SECRET
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
@@ -1000,6 +1005,8 @@ govukApplications:
                       name: email-alert-api
                       port:
                         number: 80
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ACCOUNT_API_BEARER_TOKEN
           valueFrom:
@@ -1171,6 +1178,8 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 320Mi
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1229,6 +1238,8 @@ govukApplications:
         createSecret: false # Sentry DSNs are per repo.
       uploadAssets:
         enabled: false
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1268,8 +1279,6 @@ govukApplications:
             secretKeyRef:
               name: feedback-notify
               key: GOVUK_NOTIFY_API_KEY
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
   - name: finder-frontend
     helmValues:
       arch: arm64
@@ -1284,6 +1293,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
@@ -1317,6 +1328,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1391,59 +1404,59 @@ govukApplications:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
         - name: GRAPHQL_RATE_ANSWER
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_CALENDAR
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_CALL_FOR_EVIDENCE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_CASE_STUDY
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_CORPORATE_INFORMATION_PAGE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_DOCUMENT_COLLECTION
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_FATALITY_NOTICE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_FIELDS_OF_OPERATION
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_GUIDE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_HELP_PAGE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_HOMEPAGE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_LANDING_PAGE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_LOCAL_TRANSACTION
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_NEWS_ARTICLE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_PLACE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_PUBLICATION
-          value: "0.1"
+          value: "0"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_GUIDE
-          value: "0.01"
+          value: "0"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_HOMEPAGE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_SERVICE_STANDARD
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_SERVICE_TOOLKIT
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_SERVICE_MANUAL_TOPIC
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_SIMPLE_SMART_ANSWER
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_SPECIALIST_DOCUMENT
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_SPEECH
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_STATISTICAL_DATA_SET
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_TOPICAL_EVENT_ABOUT_PAGE
-          value: "0.5"
+          value: "0"
         - name: GRAPHQL_RATE_TRANSACTION
-          value: "0.5"
+          value: "0"
         - name: OS_MAPS_API_KEY
           valueFrom:
             secretKeyRef:
@@ -1607,57 +1620,6 @@ govukApplications:
           valueFrom:
             secretKeyRef:
               name: signon-token-fact-check-manager-publisher
-              key: bearer_token
-  - name: government-frontend
-    helmValues:
-      arch: arm64
-      appEnabled: false
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1Gi
-        requests:
-          cpu: 10m
-          memory: 384Mi
-      extraEnv:
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-government-frontend-publishing-api
-              key: bearer_token
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
-  - name: draft-government-frontend
-    repoName: government-frontend
-    helmValues:
-      arch: arm64
-      appEnabled: false
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1.5Gi
-        requests:
-          cpu: 10m
-          memory: 512Mi
-      rails:
-        createKeyBaseSecret: false
-      sentry:
-        createSecret: false # Sentry DSNs are per repo.
-      uploadAssets:
-        enabled: false
-      extraEnv:
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: PLEK_HOSTNAME_PREFIX
-          value: draft-
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-government-frontend-publishing-api
               key: bearer_token
   - name: govspeak-preview
     helmValues:
@@ -2081,6 +2043,8 @@ govukApplications:
           task: "export:google_analytics:bad_links"
           schedule: "0 6 * * *"
       dbMigrationEnabled: true
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -2785,8 +2749,6 @@ govukApplications:
           value: "http://email-alert-frontend"
         - name: BACKEND_URL_frontend
           value: "http://frontend"
-        - name: BACKEND_URL_government-frontend
-          value: "http://government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://smartanswers"
         - name: BACKEND_URL_account-api
@@ -2844,8 +2806,6 @@ govukApplications:
           value: "http://draft-finder-frontend"
         - name: BACKEND_URL_frontend
           value: "http://draft-frontend"
-        - name: BACKEND_URL_government-frontend
-          value: "http://draft-government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://draft-smartanswers"
         - name: BACKEND_URL_account-api
@@ -3032,11 +2992,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-search-api
               key: oauth_secret
-        - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: govuk-view-id
         - name: GOOGLE_ACCOUNT_TYPE
           valueFrom:
             secretKeyRef:
@@ -3743,16 +3698,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
         - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
           valueFrom:
             secretKeyRef:

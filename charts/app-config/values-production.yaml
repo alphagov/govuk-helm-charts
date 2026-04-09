@@ -526,6 +526,11 @@ govukApplications:
             secretKeyRef:
               name: content-block-manager-jwt-auth-secret
               key: JWT_AUTH_SECRET
+        - name: AUTHENTICATING_PROXY_JWT_AUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: authenticating-proxy-jwt-auth-secret
+              key: JWT_AUTH_SECRET
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -1007,6 +1012,8 @@ govukApplications:
           value: email-alert-api-alert-listener@digital.cabinet-office.gov.uk
         - name: BULK_MIGRATE_CONFIRMATION_EMAIL_ACCOUNT
           value: email-alert-api-bulk-migrate@digital.cabinet-office.gov.uk
+        - name: AWS_S3_ASSET_BUCKET_NAME
+          value: "govuk-app-assets-production"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -1287,6 +1294,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1453,6 +1462,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1543,58 +1554,6 @@ govukApplications:
           location ~ /government/uploads/(?<item_path>.+) {
             return 301 https://draft-assets.publishing.service.gov.uk/government/uploads/$item_path;
           }
-      cronTasks: []
-  - name: government-frontend
-    helmValues:
-      arch: arm64
-      replicaCount: 6
-      appResources:
-        limits:
-          cpu: 4
-          memory: 2Gi
-        requests:
-          cpu: 1
-          memory: 768Mi
-      extraEnv:
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.production.govuk-internal.digital
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-government-frontend-publishing-api
-              key: bearer_token
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
-      cronTasks: []
-  - name: draft-government-frontend
-    repoName: government-frontend
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1.5Gi
-        requests:
-          cpu: 10m
-          memory: 512Mi
-      rails:
-        createKeyBaseSecret: false
-      sentry:
-        createSecret: false # Sentry DSNs are per repo.
-      uploadAssets:
-        enabled: false
-      extraEnv:
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: PLEK_HOSTNAME_PREFIX
-          value: draft-
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-government-frontend-publishing-api
-              key: bearer_token
       cronTasks: []
   - name: govspeak-preview
     helmValues:
@@ -1687,6 +1646,10 @@ govukApplications:
         - name: delete-old-questions
           task: "data_retention:delete_old_questions"
           schedule: "0 2 * * *"
+          timeZone: "Europe/London"
+        - name: slack-daily-report
+          task: "slack:send_previous_days_activity"
+          schedule: "30 9 * * *"
           timeZone: "Europe/London"
       extraEnv:
         - name: AI_SLACK_CHANNEL_WEBHOOK_URL
@@ -2088,6 +2051,8 @@ govukApplications:
           task: "export:google_analytics:bad_links"
           schedule: "0 6 * * *"
       dbMigrationEnabled: true
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -2801,8 +2766,6 @@ govukApplications:
           value: "http://email-alert-frontend"
         - name: BACKEND_URL_frontend
           value: "http://frontend"
-        - name: BACKEND_URL_government-frontend
-          value: "http://government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://smartanswers"
         - name: BACKEND_URL_account-api
@@ -2860,8 +2823,6 @@ govukApplications:
           value: "http://draft-finder-frontend"
         - name: BACKEND_URL_frontend
           value: "http://draft-frontend"
-        - name: BACKEND_URL_government-frontend
-          value: "http://draft-government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://draft-smartanswers"
         - name: BACKEND_URL_account-api
@@ -3039,11 +3000,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-search-api
               key: oauth_secret
-        - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: govuk-view-id
         - name: GOOGLE_ACCOUNT_TYPE
           valueFrom:
             secretKeyRef:
@@ -3102,7 +3058,7 @@ govukApplications:
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
         hosts:
           - name: search-api.{{ .Values.k8sExternalDomainSuffix }}
-      replicaCount: 6
+      replicaCount: 9
       uploadAssets:
         enabled: false
       workers:
@@ -3741,16 +3697,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
         - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
           valueFrom:
             secretKeyRef:

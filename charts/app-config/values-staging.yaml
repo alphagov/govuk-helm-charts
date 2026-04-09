@@ -531,6 +531,11 @@ govukApplications:
             secretKeyRef:
               name: content-block-manager-jwt-auth-secret
               key: JWT_AUTH_SECRET
+        - name: AUTHENTICATING_PROXY_JWT_AUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: authenticating-proxy-jwt-auth-secret
+              key: JWT_AUTH_SECRET
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -1012,6 +1017,8 @@ govukApplications:
           value: email-alert-api-staging@digital.cabinet-office.gov.uk
         - name: BULK_MIGRATE_CONFIRMATION_EMAIL_ACCOUNT
           value: email-alert-api-staging@digital.cabinet-office.gov.uk
+        - name: AWS_S3_ASSET_BUCKET_NAME
+          value: "govuk-app-assets-staging"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -1291,6 +1298,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMAIL_ALERT_API_BEARER_TOKEN
           valueFrom:
@@ -1324,6 +1333,8 @@ govukApplications:
         - name: registries-refresh
           task: "registries:cache_refresh"
           schedule: "15 * * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
@@ -1549,57 +1560,6 @@ govukApplications:
             return 301 https://draft-assets.staging.publishing.service.gov.uk/government/uploads/$item_path;
           }
       cronTasks: []
-  - name: government-frontend
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 4
-          memory: 2Gi
-        requests:
-          cpu: 1
-          memory: 768Mi
-      extraEnv:
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: MEMCACHE_SERVERS
-          value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-government-frontend-publishing-api
-              key: bearer_token
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
-      cronTasks: []
-  - name: draft-government-frontend
-    repoName: government-frontend
-    helmValues:
-      arch: arm64
-      appResources:
-        limits:
-          cpu: 1
-          memory: 1.5Gi
-        requests:
-          cpu: 10m
-          memory: 512Mi
-      rails:
-        createKeyBaseSecret: false
-      sentry:
-        createSecret: false # Sentry DSNs are per repo.
-      uploadAssets:
-        enabled: false
-      extraEnv:
-        - name: EMERGENCY_BANNER_REDIS_URL
-          value: *emergency-banner-redis
-        - name: PLEK_HOSTNAME_PREFIX
-          value: draft-
-        - name: PUBLISHING_API_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-government-frontend-publishing-api
-              key: bearer_token
-      cronTasks: []
   - name: govspeak-preview
     helmValues:
       arch: arm64
@@ -1631,11 +1591,11 @@ govukApplications:
       containerPreStopSleepSecs: 5
       appResources:
         limits:
-          cpu: 3 # Setting to 3 for load testing
-          memory: 3Gi # Setting to 3Gi for load testing
+          cpu: 3
+          memory: 3Gi
         requests:
-          cpu: 2 # Setting this to 2 for load testing
-          memory: 2Gi # Setting this to 2Gi for load testing
+          cpu: 2
+          memory: 2Gi
       dbMigrationEnabled: true
       kubernetesProbeEndpoints:
         readinessProbe: "/healthcheck/ready"
@@ -1658,10 +1618,10 @@ govukApplications:
                 value: "eu-west-2"
       workerResources:
         limits:
-          cpu: 4 # Setting to 4 for load testing
+          cpu: 4
           memory: 4Gi
         requests:
-          cpu: 2 # Setting to 2 for load testing
+          cpu: 2
           memory: 2Gi
       ingress:
         enabled: true
@@ -1743,7 +1703,7 @@ govukApplications:
         - name: govuk-chat
           enabled: true
           spec:
-            maxReplicas: 15 # Upping to 15 for load testing
+            maxReplicas: 15
             minReplicas: 3
             scaleTargetRef:
               apiVersion: apps/v1
@@ -1755,7 +1715,7 @@ govukApplications:
                   name: cpu
                   target:
                     type: Utilization
-                    averageUtilization: 60 # Setting at 60 for load testing
+                    averageUtilization: 60
             behavior:
               scaleDown:
                 stabilizationWindowSeconds: 300
@@ -1772,8 +1732,8 @@ govukApplications:
         - name: govuk-chat-worker
           enabled: true
           spec:
-            maxReplicas: 10 # Setting to 10 for load testing
-            minReplicas: 4 # Setting to 4 for load testing
+            maxReplicas: 10
+            minReplicas: 4
             scaleTargetRef:
               apiVersion: apps/v1
               kind: Deployment
@@ -2072,6 +2032,8 @@ govukApplications:
           task: "export:google_analytics:bad_links"
           schedule: "0 6 * * *"
       dbMigrationEnabled: true
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -2775,8 +2737,6 @@ govukApplications:
           value: "http://email-alert-frontend"
         - name: BACKEND_URL_frontend
           value: "http://frontend"
-        - name: BACKEND_URL_government-frontend
-          value: "http://government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://smartanswers"
         - name: BACKEND_URL_account-api
@@ -2834,8 +2794,6 @@ govukApplications:
           value: "http://draft-finder-frontend"
         - name: BACKEND_URL_frontend
           value: "http://draft-frontend"
-        - name: BACKEND_URL_government-frontend
-          value: "http://draft-government-frontend"
         - name: BACKEND_URL_smartanswers
           value: "http://draft-smartanswers"
         - name: BACKEND_URL_account-api
@@ -3003,11 +2961,6 @@ govukApplications:
             secretKeyRef:
               name: signon-app-search-api
               key: oauth_secret
-        - name: GOOGLE_ANALYTICS_GOVUK_VIEW_ID
-          valueFrom:
-            secretKeyRef:
-              name: search-api-google-analytics
-              key: govuk-view-id
         - name: GOOGLE_ACCOUNT_TYPE
           valueFrom:
             secretKeyRef:
@@ -3680,16 +3633,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
-        - name: ZENDESK_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: username
-        - name: ZENDESK_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: support-zendesk
-              key: password
         - name: ZENDESK_ANONYMOUS_TICKET_EMAIL
           valueFrom:
             secretKeyRef:
