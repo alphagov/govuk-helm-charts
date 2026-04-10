@@ -68,7 +68,7 @@ jobs:
         with:
           entrypoint: /kubeconform
           args: >
-            -kubernetes-version 1.31.6
+            -kubernetes-version 1.34.6
             -schema-location default
             -schema-location
             "https://alphagov.github.io/govuk-crd-library/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json"
