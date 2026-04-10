@@ -80,6 +80,8 @@ govukApplications:
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
         hosts:
           - name: account-api.{{ .Values.k8sExternalDomainSuffix }}
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
