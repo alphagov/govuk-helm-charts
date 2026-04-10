@@ -2309,6 +2309,8 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 200Mi
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
