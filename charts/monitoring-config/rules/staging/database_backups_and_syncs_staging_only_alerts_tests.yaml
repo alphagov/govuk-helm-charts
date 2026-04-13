@@ -480,7 +480,7 @@ tests:
         exp_alerts: []  # No alert on Sunday
       - alertname: Database backup/restore not completed - Weekday backups
         eval_time: 2d23h
-        exp_alerts: []  # No alert on Sunday before the backup completes
+        exp_alerts: []  # No alert on Monday before the backup completes
       - alertname: Database backup/restore not completed - Weekday backups
         eval_time: 3d1h1m
         exp_alerts: []  # No alert on Monday after the backup completes
