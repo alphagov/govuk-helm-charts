@@ -19,6 +19,8 @@ metadata:
     imageTag: "{{ $imageTag }}"
     promoteDeployment: "{{ $promoteDeployment }}"
     automaticDeploysEnabled: "{{ $autoDeploysEnabled }}"
+    postSyncGithubActionRepo: "{{ .postSyncGithubAction.repo | default "" }}"
+    postSyncGithubActionWorkflow: "{{ .postSyncGithubAction.workflow }}"
     notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
     notifications.argoproj.io/subscribe.deployment.grafana: "deployment|{{ .name }}"
     postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
