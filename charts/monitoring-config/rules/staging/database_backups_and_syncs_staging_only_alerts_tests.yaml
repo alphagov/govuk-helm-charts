@@ -445,7 +445,7 @@ tests:
     interval: 1m
     external_labels:
       environment: test
-    start_timestamp: 1753606800  # Sunday 27/07/2025 09:00 UTC
+    start_timestamp: 1753430400  # Friday 27/07/2025 08:00 UTC
     input_series:
       - series: >-
           db_backup_job_status_timestamp_seconds{
@@ -456,7 +456,8 @@ tests:
           state="succeeded",
           instance="db-backup-transition-postgres-12345678-a1b2c"
           }
-        values: '1753430400x1500 1753693200x4260'  # Fri 25/07/2025 for 1 day and 1 hour, then 28/07/2025 10:00 UTC for 2 days 23 hours
+        # Friday 25/07/2025 for 3 days, then Monday 28/07/2025 08:00 UTC and 08:00 every day until (incl.) Friday 01/08/2025
+        values: '1753430400x4319 1753689600x1439 1753776000x1439 1753862400x1439 1753948800x1439 1754035200x4319'
       - series: >-
           db_backup_job_status_timestamp_seconds{
           database_engine="postgres",
@@ -466,16 +467,25 @@ tests:
           state="succeeded",
           instance="db-backup-signon-postgres-12345678-a1b2c"
           }
-        values: '1753430400x5760'  # 19/07/2025 08:00 UTC (1 week 1 day and 1 hours before the evaluation time) for 4 days
+        values: '1753430400x4319 1753689600x10080'  # Friday 25/07/2025 for 3 days, then Monday 28/07/2025 08:00 UTC and no more
     alert_rule_test:
       - alertname: Database backup/restore not completed - Weekday backups
-        eval_time: 1m  # No alert on Sunday
+        eval_time: 1h1m  # No alert on Friday
         exp_alerts: []
       - alertname: Database backup/restore not completed - Weekday backups
-        eval_time: 1d1m
-        exp_alerts: []  # No alert on Monday
+        eval_time: 1d1h1m
+        exp_alerts: []  # No alert on Saturday
       - alertname: Database backup/restore not completed - Weekday backups
-        eval_time: 2d1h  # Alert expected on Tuesday
+        eval_time: 2d1h1m
+        exp_alerts: []  # No alert on Sunday
+      - alertname: Database backup/restore not completed - Weekday backups
+        eval_time: 2d23h
+        exp_alerts: []  # No alert on Monday before the backup completes
+      - alertname: Database backup/restore not completed - Weekday backups
+        eval_time: 3d1h1m
+        exp_alerts: []  # No alert on Monday after the backup completes
+      - alertname: Database backup/restore not completed - Weekday backups
+        eval_time: 4d1h1m  # Alert expected on Tuesday
         exp_alerts:
           - exp_labels:
               alertname: Database backup/restore not completed - Weekday backups
@@ -504,7 +514,7 @@ tests:
     interval: 1m
     external_labels:
       environment: test
-    start_timestamp: 1753520400  # Saturday 26/07/2025 09:00 UTC
+    start_timestamp: 1753344000  # Thursday 24/07/2025 08:00 UTC
     input_series:
       - series: >-
           db_backup_job_status_timestamp_seconds{
@@ -515,7 +525,8 @@ tests:
           state="succeeded",
           instance="db-backup-content-store-postgres-12345678-a1b2c"
           }
-        values: '1753344000x1380 1753603200x1440 1753689600x2940'  # Thu 24/07/2025 for 23 hours, then 27/07/2025 08:00 UTC for 1 day, then 28/07/2025 08:00 UTC for 2 days 1 hours
+        # Thu 24/07/2025 08:00 UTC, Sun 27/27/2025 08:00 and each day until (incl) Thursday at 08:00 (range extends out to Sunday again)
+        values: '1753344000x4319 1753603200x1439 1753689600x1439 1753776000x1439 1753862400x1439 1753948800x4319'
       - series: >-
           db_backup_job_status_timestamp_seconds{
           database_engine="postgres",
@@ -525,16 +536,16 @@ tests:
           state="succeeded",
           instance="db-backup-draft-content-store-postgres-12345678-a1b2c"
           }
-        values: '1753344000x5760'  # Thu 24/07/2025 08:00 UTC for 4 days
+        values: '1753344000x4319 1753603200x8639'  # Thu 24/07/2025 08:00 UTC, Sun 27/27/2025 08:00 until Sat
     alert_rule_test:
       - alertname: Database backup/restore not completed - Sunday to Thursday backups
-        eval_time: 1m  # No alert on Saturday
+        eval_time: 2d1h1m  # No alert on Saturday
         exp_alerts: []
       - alertname: Database backup/restore not completed - Sunday to Thursday backups
-        eval_time: 1d1m
+        eval_time: 3d1h1m
         exp_alerts: []  # No alert on Sunday
       - alertname: Database backup/restore not completed - Sunday to Thursday backups
-        eval_time: 2d1h  # Alert expected on Monday
+        eval_time: 4d1h1m  # Alert expected on Monday
         exp_alerts:
           - exp_labels:
               alertname: Database backup/restore not completed - Sunday to Thursday backups
@@ -558,3 +569,31 @@ tests:
 
                 You can see the logs for this job in this Logit search for the pod name:
                 <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-draft-content-store-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-draft-content-store-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-draft-content-store-postgres-12345678-a1b2c>
+      - alertname: Database backup/restore not completed - Sunday to Thursday backups
+        eval_time: 7d1h1m  # Alert expected on Thursday
+        exp_alerts:
+          - exp_labels:
+              alertname: Database backup/restore not completed - Sunday to Thursday backups
+              severity: warning
+              destination: slack-platform-engineering-database-syncs
+              database_engine: postgres
+              database_instance: draft-content-store-postgres
+              database_db_name: draft-content-store_production
+              instance: db-backup-draft-content-store-postgres-12345678-a1b2c
+              operation: backup
+              state: succeeded
+            exp_annotations:
+              summary: Database backup for draft-content-store-postgres.draft-content-store_production did not succeed in the last 25 hours
+              runbook_url: https://docs.publishing.service.gov.uk/manual/govuk-env-sync.html#alerts
+              description: >-
+                The draft-content-store_production database in the draft-content-store-postgres instance did not successfully perform a Sunday to Thursday backup in the last
+                25 hours.
+
+                You can see a snapshot of the overall status on the Grafana Dashboard:
+                https://grafana.eks.test.govuk.digital/d/jfc4fnp/database-backups-and-syncs
+
+                You can see the logs for this job in this Logit search for the pod name:
+                <https://kibana.logit.io/s/12345678-abcd-1234-abcd-123456789abc/app/data-explorer/discover#?_a=(discover:(columns:!(message),isDirty:!t,sort:!(!('@timestamp',asc))),metadata:(indexPattern:'filebeat-*',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-1w,to:now))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'filebeat-*',key:kubernetes.pod.name,negate:!f,params:(query:db-backup-draft-content-store-postgres-12345678-a1b2c),type:phrase),query:(match_phrase:(kubernetes.pod.name:db-backup-draft-content-store-postgres-12345678-a1b2c)))),query:(language:kuery,query:''))|db-backup-draft-content-store-postgres-12345678-a1b2c>
+      - alertname: Database backup/restore not completed - Sunday to Thursday backups
+        eval_time: 8d1h1m
+        exp_alerts: []  # No alert on Friday

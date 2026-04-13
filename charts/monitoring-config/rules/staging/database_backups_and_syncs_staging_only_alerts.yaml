@@ -165,7 +165,7 @@ groups:
               state="succeeded",
               database_instance!~"ckan-postgres|content-data-api-postgres|(draft-)?content-store-postgres|release-mysql"
           }
-          and on() (day_of_week() > 1 and day_of_week() <=6))
+          and on() (day_of_week() > 1 and day_of_week() <=5))
           < time() - 90000 # 25 hours ago
         labels:
           severity: warning
@@ -191,7 +191,7 @@ groups:
               state="succeeded",
               database_instance=~"(draft-)?content-store-postgres"
           }
-          and on() (day_of_week() > 0 and day_of_week() <=5))
+          and on() (day_of_week() > 0 and day_of_week() <=4))
           < time() - 90000 # 25 hours ago
         labels:
           severity: warning
