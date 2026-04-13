@@ -21,7 +21,9 @@ template.send-argo-events-webhook: |
           "repoName": "{{.app.metadata.annotations.repoName}}",
           "imageTag": "{{.app.metadata.annotations.imageTag}}",
           "promoteDeployment": "{{.app.metadata.annotations.promoteDeployment}}",
-          "automaticDeploysEnabled": "{{.app.metadata.annotations.automaticDeploysEnabled}}"
+          "automaticDeploysEnabled": "{{.app.metadata.annotations.automaticDeploysEnabled}}",
+          "postSyncGithubActionRepo": "{{.app.metadata.annotations.postSyncGithubActionRepo}}",
+          "postSyncGithubActionWorkflow": "{{.app.metadata.annotations.postSyncGithubActionWorkflow}}"
         }
       method: "POST"
       path: "/api/v1/events/apps/post-sync"
