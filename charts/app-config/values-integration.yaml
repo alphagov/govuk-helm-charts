@@ -548,6 +548,9 @@ govukApplications:
               key: bearer_token
         - name: E2E_USER_EMAILS
           value: "2nd-line-support@digital.cabinet-office.gov.uk,govuk-publishing-content-modelling-team@digital.cabinet-office.gov.uk"
+      postSyncGithubAction:
+        repo: "alphagov/content-modelling-e2e"
+        workflow: "playwright.yml"
   - name: content-data-admin
     helmValues:
       arch: arm64
