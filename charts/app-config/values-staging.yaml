@@ -2292,6 +2292,8 @@ govukApplications:
           memory: 200Mi
       redis:
         enabled: true
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
