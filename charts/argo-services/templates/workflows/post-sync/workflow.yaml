@@ -29,6 +29,8 @@ spec:
       - name: imageTag
       - name: promoteDeployment
       - name: automaticDeploysEnabled
+      - name: postSyncGithubActionRepo
+      - name: postSyncGithubActionWorkflow
   podSpecPatch: |
     containers:
       - name: main
@@ -48,6 +50,16 @@ spec:
               parameters:
                 - name: grep
                   value: "{{"@app-{{workflow.parameters.application}}"}}"
+          - name: trigger-github-action
+            depends: govuk-e2e-tests.Succeeded
+            when: "{{"'{{workflow.parameters.postSyncGithubActionRepo}}' != ''"}}"
+            template: trigger-github-action
+            arguments:
+              parameters:
+                - name: repo
+                  value: "{{"{{workflow.parameters.postSyncGithubActionRepo}}"}}"
+                - name: workflow
+                  value: "{{"{{workflow.parameters.postSyncGithubActionWorkflow}}"}}"
     {{ if .Values.nextEnvironment }}
           - name: promote-release
             depends: govuk-e2e-tests.Succeeded
@@ -98,6 +110,29 @@ spec:
                 name: deploy-image-webhook-endpoint
                 key: url
     {{- end }}
+
+    - name: trigger-github-action
+      inputs:
+        parameters:
+          - name: repo
+          - name: workflow
+      script:
+        image: quay.io/curl/curl
+        command:
+          - sh
+        source: >
+          curl --fail-with-body -sS -X POST "https://api.github.com/repos/{{"{{inputs.parameters.repo}}"}}/actions/workflows/{{"{{inputs.parameters.workflow}}"}}/dispatches" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            --json '{
+              "ref": "main"
+            }'
+        env:
+          - name: GITHUB_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: govuk-ci-github-creds
+                key: token
 
     - name: parse-failures
       inputs: {}

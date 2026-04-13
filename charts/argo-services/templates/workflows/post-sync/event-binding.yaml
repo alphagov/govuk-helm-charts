@@ -25,3 +25,9 @@ spec:
         - name: automaticDeploysEnabled
           valueFrom:
             event: payload.automaticDeploysEnabled
+        - name: postSyncGithubActionRepo
+          valueFrom:
+            event: payload.postSyncGithubActionRepo
+        - name: postSyncGithubActionWorkflow
+          valueFrom:
+            event: payload.postSyncGithubActionWorkflow
