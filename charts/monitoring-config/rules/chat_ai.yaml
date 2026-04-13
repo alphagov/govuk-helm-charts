@@ -123,34 +123,6 @@ groups:
           runbook_url: >-
             https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html#highpod-alerts
 
-      - alert: NearTokensRateLimit
-        expr: >-
-          govuk_chat_openai_tokens_used_percentage > 80
-        labels:
-          severity: warning
-          destination: slack-chat-notifications
-        annotations:
-          summary: Exceeded 80% of OpenAI token rate limit
-          description: >-
-            Over 80% of tokens have been used for {{ $labels.model }} on the
-            {{ $labels.exported_endpoint }} endpoint.
-          runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
-
-      - alert: NearRequestsRateLimit
-        expr: >-
-          govuk_chat_openai_requests_used_percentage > 80
-        labels:
-          severity: warning
-          destination: slack-chat-notifications
-        annotations:
-          summary: Exceeded 80% of OpenAI requests rate limit
-          description: >-
-            Over 80% of requests have been used for {{ $labels.model }} on the
-            {{ $labels.exported_endpoint }} endpoint.
-          runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/alerts/chat-ai-alerts.html
-
       - alert: SidekiqAnswerQueueLength
         expr: >-
           max(sidekiq_queue_backlog{
