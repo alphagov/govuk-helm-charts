@@ -543,13 +543,24 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"datagovuk\"}[5m])) by (le, job))",
-          "legendFormat": "__auto",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"datagovuk\", job=\"datagovuk-find\"}[5m])) by (le))",
+          "legendFormat": "directory p95 (datagovuk-find)",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"datagovuk\", job=\"datagovuk-frontend-find\"}[5m])) by (le))",
+          "legendFormat": "collections p95 (datagovuk-frontend-find)",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "P95 Response Time",
+      "title": "P95 Response Time — Directory vs Collections",
       "type": "timeseries"
     },
     {
@@ -664,10 +675,11 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum by (job) (rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=~\"${app}\"}[$__rate_interval])) / sum by (job) (rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=~\"${app}\"}[$__rate_interval]))",
+          "expr": "sum(rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=\"datagovuk-find\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=\"datagovuk-find\"}[$__rate_interval]))",
           "instant": false,
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "directory (datagovuk-find)",
+          "range": true,
           "refId": "A"
         },
         {
@@ -676,13 +688,15 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum (rate(http_request_duration_seconds_sum{namespace=\"${namespace}\"}[$__rate_interval])) / sum (rate(http_request_duration_seconds_count{namespace=\"${namespace}\"}[$__rate_interval]))",
-          "legendFormat": "all",
+          "expr": "sum(rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=\"datagovuk-frontend-find\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=\"datagovuk-frontend-find\"}[$__rate_interval]))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "collections (datagovuk-frontend-find)",
           "range": true,
           "refId": "B"
         }
       ],
-      "title": "Average Request Duration",
+      "title": "Average Request Duration — Directory vs Collections",
       "type": "timeseries"
     },
     {
