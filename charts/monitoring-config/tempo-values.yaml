@@ -14,7 +14,7 @@ traces:
       enabled: true
     http:
       enabled: true
-global_overrides:
+overrides:
   defaults:
     ingestion:
       burst_size_bytes: 32000000  # 32Mb
