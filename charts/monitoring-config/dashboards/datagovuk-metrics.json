@@ -15,7 +15,7 @@
           "limit": 100,
           "matchAny": false,
           "tags": [
-            "$app",
+            "datagovuk",
             "deployment"
           ],
           "type": "tags"
@@ -298,7 +298,7 @@
             "lastNotNull",
             "max"
           ],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -394,10 +394,6 @@
                 "value": 0
               },
               {
-                "color": "dark-red",
-                "value": 0
-              },
-              {
                 "color": "dark-green",
                 "value": 1
               }
@@ -457,7 +453,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "95th percentile response time. Target: <2s (Production),  <3s (Staging) ",
+      "description": "95th percentile response time. Target: <500ms (p95 SLO). Warning at 500ms, critical at 2s.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -494,7 +490,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -507,11 +503,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 2
+                "value": 0.5
               },
               {
                 "color": "red",
-                "value": 3
+                "value": 2
               }
             ]
           },
@@ -605,7 +601,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -785,7 +781,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "5XX error rate as percentage of total requests . Target: <0.5% (production) ",
+      "description": "5XX error rate as percentage of total requests. Target: <0.1% (production SLO). Warning at 0.1%, critical at 0.5%.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -822,7 +818,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -835,11 +831,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 0.5
+                "value": 0.1
               },
               {
                 "color": "red",
-                "value": 1
+                "value": 0.5
               }
             ]
           },
@@ -871,7 +867,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "(sum(rate(http_requests_total{namespace=\"${namespace}\", status=~\"5..\"}[${__rate_interval}])) by (job) / sum(rate(http_requests_total{namespace=\"${namespace}\"}[${__rate_interval}])) by (job)) * 100",
+          "expr": "(sum(rate(http_requests_total{namespace=\"${namespace}\", job=~\"${app}\", status=~\"5..\"}[$__rate_interval])) by (job) / sum(rate(http_requests_total{namespace=\"${namespace}\", job=~\"${app}\"}[$__rate_interval])) by (job)) * 100",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -914,7 +910,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "always",
+            "showPoints": "auto",
             "showValues": false,
             "spanNulls": false,
             "stacking": {
@@ -932,14 +928,10 @@
               {
                 "color": "green",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
-          "unit": "none"
+          "unit": "reqps"
         },
         "overrides": []
       },
@@ -1061,32 +1053,12 @@
               {
                 "color": "green",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
-          "unit": "none"
+          "unit": "reqps"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Errors"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#E24D42",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
