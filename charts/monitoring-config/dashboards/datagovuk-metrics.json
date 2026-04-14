@@ -490,7 +490,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -503,11 +503,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 2
+                "value": 0.5
               },
               {
                 "color": "red",
-                "value": 3
+                "value": 2
               }
             ]
           },
@@ -601,7 +601,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -613,8 +613,12 @@
                 "value": 0
               },
               {
+                "color": "#EAB839",
+                "value": 0.5
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 2
               }
             ]
           },
