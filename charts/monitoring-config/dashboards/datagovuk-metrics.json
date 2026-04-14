@@ -47,7 +47,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Memory usage by container. Warning: >3 GiB, Critical: >4 GiB",
+      "description": "Memory usage by container. Warning: >3 GiB (75% of 4 GiB limit), Critical: >3.5 GiB (87% of limit). Dashed lines show requests and limits per container.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -101,7 +101,7 @@
               },
               {
                 "color": "red",
-                "value": 4294967296
+                "value": 3758096384
               }
             ]
           },
@@ -182,7 +182,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (container) (\n  container_memory_working_set_bytes{\n    namespace=\"datagovuk\",\n    pod=~\"$pod\",\n    container!=\"\",\n    container!=\"POD\"\n  }\n)",
+          "expr": "sum by (container) (\n  container_memory_working_set_bytes{\n    namespace=\"${namespace}\",\n    pod=~\"$pod\",\n    container!=\"\",\n    container!=\"POD\"\n  }\n)",
           "instant": false,
           "legendFormat": "{{container}}",
           "range": true,
@@ -194,7 +194,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "max by (container) (\n  kube_pod_container_resource_requests{\n    namespace=\"datagovuk\",\n    resource=\"memory\"\n  }\n)",
+          "expr": "max by (container) (\n  kube_pod_container_resource_requests{\n    namespace=\"${namespace}\",\n    resource=\"memory\"\n  }\n)",
           "instant": false,
           "legendFormat": "{{container}} requests",
           "range": true,
@@ -206,7 +206,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "max by (container) (\n  kube_pod_container_resource_limits{\n    namespace=\"datagovuk\",\n    resource=\"memory\"\n  }\n)",
+          "expr": "max by (container) (\n  kube_pod_container_resource_limits{\n    namespace=\"${namespace}\",\n    resource=\"memory\"\n  }\n)",
           "instant": false,
           "legendFormat": "{{container}} limits",
           "range": true,
@@ -316,7 +316,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum by (container) (\n  kube_pod_container_status_restarts_total{\n    namespace=\"datagovuk\"\n  }\n)",
+          "expr": "sum by (container) (\n  kube_pod_container_status_restarts_total{\n    namespace=\"${namespace}\"\n  }\n)",
           "instant": false,
           "legendFormat": "{{container}}",
           "range": true,
@@ -430,7 +430,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (deployment) ( kube_deployment_status_replicas_available{namespace=\"datagovuk\"} )",
+          "expr": "sum by (deployment) ( kube_deployment_status_replicas_available{namespace=\"${namespace}\"} )",
           "legendFormat": "{{deployment}}",
           "range": true,
           "refId": "A"
@@ -543,7 +543,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"datagovuk\", job=\"datagovuk-find\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-find\"}[$__rate_interval])) by (le))",
           "legendFormat": "directory p95 (datagovuk-find)",
           "range": true,
           "refId": "A"
@@ -568,7 +568,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Time in Millisecond to process a request",
+      "description": "Average request duration in seconds per service. Target: <0.5s (p95 SLO reference)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -617,30 +617,18 @@
                 "value": 0
               },
               {
+                "color": "#EAB839",
+                "value": 0.5
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 2
               }
             ]
           },
-          "unit": "none"
+          "unit": "s"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Errors"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#E24D42",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 7,
@@ -883,7 +871,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "(sum(rate(http_requests_total{namespace=\"datagovuk\", status=~\"5..\"}[${__rate_interval}])) by (job) / sum(rate(http_requests_total{namespace=\"datagovuk\"}[${__rate_interval}])) by (job)) * 100",
+          "expr": "(sum(rate(http_requests_total{namespace=\"${namespace}\", status=~\"5..\"}[${__rate_interval}])) by (job) / sum(rate(http_requests_total{namespace=\"${namespace}\"}[${__rate_interval}])) by (job)) * 100",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -953,53 +941,7 @@
           },
           "unit": "none"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Errors"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#E24D42",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "code_400"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#EAB839",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "code_500"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#E24D42",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 7,
@@ -1036,7 +978,7 @@
           "exemplar": true,
           "expr": "sum(rate(http_requests_total{namespace=\"${namespace}\", job=~\"${app}\", status=~\"${error_status}\"}[$__rate_interval])) by (job)",
           "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{job}}",
           "range": true,
           "refId": "A"
         },
@@ -1143,30 +1085,6 @@
                 }
               }
             ]
-          },
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "datagovuk/ckan-ckan"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": true,
-                  "viz": true
-                }
-              }
-            ]
           }
         ]
       },
@@ -1203,7 +1121,7 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(http_requests_total{namespace=\"datagovuk\", job=~\"${app}\"}[$__rate_interval])) by (job)",
+          "expr": "sum(rate(http_requests_total{namespace=\"${namespace}\", job=~\"${app}\"}[$__rate_interval])) by (job)",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
@@ -1305,7 +1223,7 @@
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
-        "regex": "/^([2345][0-9][0-9])$/",
+        "regex": "/^([45][0-9][0-9])$/",
         "regexApplyTo": "value",
         "sort": 3,
         "type": "query"
