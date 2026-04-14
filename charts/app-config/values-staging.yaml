@@ -1962,7 +1962,7 @@ govukApplications:
       workerResources:
         limits:
           cpu: 1
-          memory: 1Gi
+          memory: 2Gi
         requests:
           cpu: 10m
           memory: 256Mi
