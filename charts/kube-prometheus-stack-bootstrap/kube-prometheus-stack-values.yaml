@@ -45,6 +45,15 @@
       "jsonData":
         "serviceMap":
           "datasourceUid": "prometheus"
+        "tracesToMetrics":
+          "datasourceUid": "prometheus"
+          "spanStartTimeShift": "-5m"
+          "spanEndTimeShift": "5m"
+          "tags":
+            - "key": "service.name"
+              "value": "service_name"
+            - "key": "service.namespace"
+              "value": "service_namespace"
       "name": "Tempo"
       "type": "tempo"
       "uid": "tempo"
