@@ -1,0 +1,67 @@
+groups:
+  - name: SearchApiElasticsearchAlerts
+    rules:
+      - alert: SearchApiElasticsearchClusterStatus
+        expr: search_api_elasticsearch_status == 2
+        for: 5m
+        labels:
+          severity: critical
+          destination: slack-search-team
+        annotations:
+          summary: Elasticsearch cluster status is RED
+          description: >-
+            The Elasticsearch cluster used by Search API is in RED state.
+            Some primary shards are unavailable and search indexing may fail.
+      - alert: SearchApiElasticsearchClusterStatus
+        expr: search_api_elasticsearch_status == 1
+        for: 30m
+        labels:
+          severity: warning
+          destination: slack-search-team
+        annotations:
+          summary: Elasticsearch cluster status is YELLOW
+          description: >-
+            The Elasticsearch cluster used by Search API is in YELLOW state.
+            Replica shards are not allocated. The cluster is still functional
+            but resilience is reduced.
+      - alert: SearchApiElasticsearchDiskSpace
+        expr: search_api_elasticsearch_disk_space < 0.30
+        for: 15m
+        labels:
+          severity: warning
+          destination: slack-search-team
+        annotations:
+          summary: Elasticsearch disk space low
+          description: >-
+            Elasticsearch node {{ $labels.node }} has less than 30% disk space
+            remaining. Consider increasing storage capacity.
+      - alert: SearchApiElasticsearchDiskSpace
+        expr: search_api_elasticsearch_disk_space < 0.10
+        for: 10m
+        labels:
+          severity: critical
+          destination: slack-search-team
+        annotations:
+          summary: Elasticsearch disk space critical
+          description: >-
+            Elasticsearch node {{ $labels.node }} has less than 10% disk space
+            remaining.
+  - name: SearchApiCronjobs
+    rules:
+      - alert: CronjobFailed => CronjobSuccessThreshold
+        # Set alert to trigger when last successful time is over 50 hours
+        expr: >-
+          time() -
+          kube_cronjob_status_last_successful_time{cronjob="search-api-load-page-traffic"}
+          > 180000
+        for: 5m
+        labels:
+          severity: critical
+          destination: slack-search-team
+        annotations:
+          summary: search-api-load-page-traffic cronjob failing
+          description: >-
+            The cronjob "search-api-load-page-traffic" has not run successfully
+            since {{ $value | humanizeTimestamp }}
+          cronjob_uri: >-
+            applications/search-api?orphaned=false&resource=&node=batch%2FCronJob%2Fapps%2Fsearch-api-load-page-traffic%2F0&tab=logs
