@@ -1620,7 +1620,7 @@ govukApplications:
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
-              name: fact-check-manager-jwt-auth-secret
+              name: authenticating-proxy-jwt-auth-secret
               key: JWT_AUTH_SECRET
         - name: PUBLISHER_BEARER_TOKEN
           valueFrom:
