@@ -47,7 +47,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Memory usage by container. Warning: >3 GiB (75% of 4 GiB limit), Critical: >3.5 GiB (87% of limit). Dashed lines show requests and limits per container.",
+      "description": "Memory usage by container. Warning: >3 GiB (75% of 4 GiB limit), Critical: >4 GiB (limit). Dashed lines show requests and limits per container.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -101,7 +101,7 @@
               },
               {
                 "color": "red",
-                "value": 3758096384
+                "value": 4294967296
               }
             ]
           },
@@ -453,7 +453,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "95th percentile response time. Target: <500ms (p95 SLO). Warning at 500ms, critical at 2s.",
+      "description": "95th percentile response time.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -490,7 +490,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -503,11 +503,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 0.5
+                "value": 2
               },
               {
                 "color": "red",
-                "value": 2
+                "value": 3
               }
             ]
           },
@@ -601,7 +601,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -613,12 +613,8 @@
                 "value": 0
               },
               {
-                "color": "#EAB839",
-                "value": 0.5
-              },
-              {
                 "color": "red",
-                "value": 2
+                "value": 80
               }
             ]
           },
@@ -781,7 +777,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "5XX error rate as percentage of total requests. Target: <0.1% (production SLO). Warning at 0.1%, critical at 0.5%.",
+      "description": "5XX error rate as percentage of total requests.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -818,7 +814,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -831,11 +827,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 0.1
+                "value": 0.5
               },
               {
                 "color": "red",
-                "value": 0.5
+                "value": 1
               }
             ]
           },
