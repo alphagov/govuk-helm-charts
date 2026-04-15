@@ -1,0 +1,22 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: fact-check-manager-notify-team
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Notify API team key - allows real messages to be sent to team members for testing
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: fact-check-manager-notify-team
+  dataFrom:
+    - extract:
+        key: govuk/fact-check-manager/notify-team
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
