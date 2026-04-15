@@ -499,8 +499,8 @@ cronjobs:
       schedule: "28 1 * * 1-5"
       db: whitehall_production
       operations:
-        - op: restore
-          bucket: s3://govuk-production-database-backups
+        # - op: restore
+        #   bucket: s3://govuk-production-database-backups
         - op: transform
           script: whitehall.sql
         - op: backup
