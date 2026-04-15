@@ -550,7 +550,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"datagovuk\", job=\"datagovuk-frontend-find\"}[5m])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-frontend-find\"}[$__rate_interval])) by (le))",
           "legendFormat": "collections p95 (datagovuk-frontend-find)",
           "range": true,
           "refId": "B"
@@ -659,10 +659,10 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=\"datagovuk-find\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=\"datagovuk-find\"}[$__rate_interval]))",
+          "expr": "sum(rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-find\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-find\"}[$__rate_interval]))",
           "instant": false,
           "interval": "",
-          "legendFormat": "directory (datagovuk-find)",
+          "legendFormat": "directory avg (datagovuk-find)",
           "range": true,
           "refId": "A"
         },
@@ -672,10 +672,10 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=\"datagovuk-frontend-find\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=\"datagovuk-frontend-find\"}[$__rate_interval]))",
+          "expr": "sum(rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-frontend-find\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-frontend-find\"}[$__rate_interval]))",
           "instant": false,
           "interval": "",
-          "legendFormat": "collections (datagovuk-frontend-find)",
+          "legendFormat": "collections avg (datagovuk-frontend-find)",
           "range": true,
           "refId": "B"
         }
