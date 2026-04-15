@@ -564,7 +564,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Average request duration in seconds per service. Target: <0.5s (p95 SLO reference)",
+      "description": "Average request duration in seconds per service.",
       "fieldConfig": {
         "defaults": {
           "color": {
