@@ -56,16 +56,9 @@ WHERE
   );
 
 -- Redact slugs for access-limited drafts.
-UPDATE documents
-SET slug = CONCAT(@lipsum_slug, id)
-WHERE
-  id IN (
-    SELECT document_id
-    FROM
-      editions
-    WHERE
-      access_limited = 1
-  );
+UPDATE editions
+SET slug = CONCAT(@lipsum_slug, document_id), slug_from_title = CONCAT(@lipsum_slug, document_id)
+WHERE access_limited = 1;
 
 -- Redact email addresses and comments in fact checks.
 UPDATE fact_check_requests
