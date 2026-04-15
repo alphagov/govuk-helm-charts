@@ -490,7 +490,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -503,11 +503,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 0.5
+                "value": 2
               },
               {
                 "color": "red",
-                "value": 2
+                "value": 3
               }
             ]
           },
@@ -564,7 +564,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Average request duration in seconds per service. Target: <0.5s (p95 SLO reference)",
+      "description": "Average request duration in seconds per service.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -601,7 +601,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -613,12 +613,8 @@
                 "value": 0
               },
               {
-                "color": "#EAB839",
-                "value": 0.5
-              },
-              {
                 "color": "red",
-                "value": 2
+                "value": 80
               }
             ]
           },
