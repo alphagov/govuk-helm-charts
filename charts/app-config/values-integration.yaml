@@ -1607,6 +1607,16 @@ govukApplications:
             secretKeyRef:
               name: fact-check-manager-postgres
               key: DATABASE_URL
+        - name: GOVUK_NOTIFY_TEAM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: fact-check-manager-notify-team
+              key: notify-team
+        - name: GOVUK_NOTIFY_TEST_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: fact-check-manager-notify-test
+              key: notify-test
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:

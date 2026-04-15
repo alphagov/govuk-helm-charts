@@ -1,0 +1,22 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: fact-check-manager-notify-test
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Notify API test key - allows integration with GOV.UK Notify to be tested
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    name: fact-check-manager-notify-test
+  dataFrom:
+    - extract:
+        key: govuk/fact-check-manager/notify-test
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None
