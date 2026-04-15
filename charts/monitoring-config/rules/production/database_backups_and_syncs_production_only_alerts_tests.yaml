@@ -153,6 +153,8 @@ tests:
           state="succeeded",
           instance="db-backup-release-mysql-12345678-a1b2c"
           }
+        # See https://github.com/alphagov/govuk-helm-charts/blob/main/charts/monitoring-config/rules/staging/database_backups_and_syncs_staging_only_alerts_tests.yaml#L1
+        # for a detailed breakdown of how this expansion notation works
         values: '1753599600x5'  # 27/07/2025 08:00 UTC (2 hours before the evaluation time)
       - series: >-
           db_backup_job_status_timestamp_seconds{
@@ -163,6 +165,8 @@ tests:
           state="succeeded",
           instance="db-backup-publishing-api-postgres-12345678-a1b2c"
           }
+        # See https://github.com/alphagov/govuk-helm-charts/blob/main/charts/monitoring-config/rules/staging/database_backups_and_syncs_staging_only_alerts_tests.yaml#L1
+        # for a detailed breakdown of how this expansion notation works
         values: '1753513200x5'  # 26/07/2025 08:00 UTC (26 hours before the evaluation time)
     alert_rule_test:
       - alertname: Database backup not completed

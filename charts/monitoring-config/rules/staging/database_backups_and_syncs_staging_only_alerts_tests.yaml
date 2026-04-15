@@ -1,3 +1,63 @@
+# Throughout this (and other similar) tests you will see use of the promtetheus test rules "expanding notation"
+# (see https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules/#series").
+#
+# In the case in this file we will use only one of the simplest cases, the form of "AxN" where the number represented
+# by A is repeated N more times. For example
+#
+# * 1x4: This means a 1 followed by 4 more 1s (meaning 1x4 generates five 1's)
+#
+# Each test specifies an `interval`. If the interval is "1m" that means each generated data point in the series is at 1 minute intervals.
+#
+# * 1x4: means a 1 at 0 minutes, a 1 at 1 minutes, a 1 at 2 minutes, a 1 at 3 minutes and a 1 at 4 minutes
+#
+# Since a lot of our series using guages representing a timestamp you will see something more akin to:
+#
+# * 1753430400x1439: Note 1440 is 1 day, but we stop 1 short so we do not put a data point at minute 0 of the following day
+#
+# With an `interval` of `1m` this means we see the value 1753430400 at minute 0, and again at every minute for the next 1440 1 minute intervals (aka a whole day)
+#
+# To take a concrete example:
+#
+#  - name: Database backup not completed - Sunday to Thursday backups
+#    interval: 1m
+#    ...SNIP...
+#    start_timestamp: 1753344000  # Thursday 24/07/2025 08:00 UTC
+#    input_series:
+#      - series: >-
+#          db_backup_job_status_timestamp_seconds{
+#          database_instance="content-store-postgres",
+#          ...SNIP...
+#          }
+#        # Thu 24/07/2025 08:00 UTC, Sun 27/27/2025 08:00 and each day until (incl) Thursday at 08:00 (range extends out to Sunday again)
+#        values: '1753344000x4319 1753603200x1439 1753689600x1439 1753776000x1439 1753862400x1439 1753948800x4319'
+#      - series: >-
+#          db_backup_job_status_timestamp_seconds{
+#          database_instance="draft-content-store-postgres",
+#          }
+#        values: '1753344000x4319 1753603200x8639'  # Thu 24/07/2025 08:00 UTC, Sun 27/27/2025 08:00 until Sat
+#    alert_rule_test:
+#      - alertname: Database backup/restore not completed - Sunday to Thursday backups
+#        eval_time: 2d1h1m  # No alert on Saturday
+#        exp_alerts: []
+#
+# * start_timestamp: This shows us the generated series begins at 24/07/2025 at 08:00 UTC
+# * interval: This shows us there will be a data point generated every 1 minuteo
+# * values:
+#     * series with database_instance draft-content-store-postgres:
+#         * 1753344000x4319 1753603200x8639: The value 1753344000 is at the timestamp of start_timestamp, and every 4319 more 1 minute intervals (72 hours) then
+#               1753603200 is at 4320 minutes after start_timestamp and again every minute for the next 8639 minutes (6 days)
+#     * series with database instance content-store-ppostgres
+#         * 1753344000x4319 1753603200x1439 1753689600x1439 1753776000x1439 1753862400x1439 1753948800x4319: As with the previous the value 1753344000 at start_timestamp
+#            and every minute for 4319 1 minute intervals (72 hours) then 1753603200 at 4320 minutes after start_timestamp every minute for 1439 minutes, and so on
+#            increasing the value of the gauge by 1 day (1440 minutes * 60 seconds) and then repeating for 1439 more minutes, until the final repetion at 1753948800
+#            where this value is repeated for 4319 more instances (for a total of another 72 hours)
+#
+# * eval_time: For each alert_rule_test this is the time after start_timestamp at which the rule will be evaluated.
+#     * 2d1h1m: Evaluate this rule at the datapoint which is 2 days, 1 hour, and 1 minute after the start_timestamp of 1753344000. Since the start_timestamp is
+#         Thursday 24/07/2025 08:00 UTC it means our rule test will be evaluated at 26/07/2025 09:01 UTC.
+#
+#
+
 rule_files:
   - database_backups_and_syncs_staging_only_alerts.yaml
 
@@ -403,6 +463,8 @@ tests:
           state="succeeded",
           instance="db-backup-release-mysql-12345678-a1b2c"
           }
+        # See https://github.com/alphagov/govuk-helm-charts/blob/main/charts/monitoring-config/rules/staging/database_backups_and_syncs_staging_only_alerts_tests.yaml#L1
+        # for a detailed breakdown of how this expansion notation works
         values: '1753599600x5'  # 27/07/2025 08:00 UTC (2 hours before the evaluation time)
       - series: >-
           db_backup_job_status_timestamp_seconds{
@@ -413,6 +475,8 @@ tests:
           state="succeeded",
           instance="db-backup-content-data-api-postgres-12345678-a1b2c"
           }
+        # See https://github.com/alphagov/govuk-helm-charts/blob/main/charts/monitoring-config/rules/staging/database_backups_and_syncs_staging_only_alerts_tests.yaml#L1
+        # for a detailed breakdown of how this expansion notation works
         values: '1752912000x5'  # 19/07/2025 08:00 UTC (1 week 1 day and 1 hours before the evaluation time)
     alert_rule_test:
       - alertname: Database backup/restore not completed - Weekly backups
@@ -456,6 +520,8 @@ tests:
           state="succeeded",
           instance="db-backup-transition-postgres-12345678-a1b2c"
           }
+        # See https://github.com/alphagov/govuk-helm-charts/blob/main/charts/monitoring-config/rules/staging/database_backups_and_syncs_staging_only_alerts_tests.yaml#L1
+        # for a detailed breakdown of how this expansion notation works
         # Friday 25/07/2025 for 3 days, then Monday 28/07/2025 08:00 UTC and 08:00 every day until (incl.) Friday 01/08/2025
         values: '1753430400x4319 1753689600x1439 1753776000x1439 1753862400x1439 1753948800x1439 1754035200x4319'
       - series: >-
@@ -467,6 +533,8 @@ tests:
           state="succeeded",
           instance="db-backup-signon-postgres-12345678-a1b2c"
           }
+        # See https://github.com/alphagov/govuk-helm-charts/blob/main/charts/monitoring-config/rules/staging/database_backups_and_syncs_staging_only_alerts_tests.yaml#L1
+        # for a detailed breakdown of how this expansion notation works
         values: '1753430400x4319 1753689600x10080'  # Friday 25/07/2025 for 3 days, then Monday 28/07/2025 08:00 UTC and no more
     alert_rule_test:
       - alertname: Database backup/restore not completed - Weekday backups
@@ -525,6 +593,8 @@ tests:
           state="succeeded",
           instance="db-backup-content-store-postgres-12345678-a1b2c"
           }
+        # See https://github.com/alphagov/govuk-helm-charts/blob/main/charts/monitoring-config/rules/staging/database_backups_and_syncs_staging_only_alerts_tests.yaml#L1
+        # for a detailed breakdown of how this expansion notation works
         # Thu 24/07/2025 08:00 UTC, Sun 27/27/2025 08:00 and each day until (incl) Thursday at 08:00 (range extends out to Sunday again)
         values: '1753344000x4319 1753603200x1439 1753689600x1439 1753776000x1439 1753862400x1439 1753948800x4319'
       - series: >-
@@ -536,6 +606,8 @@ tests:
           state="succeeded",
           instance="db-backup-draft-content-store-postgres-12345678-a1b2c"
           }
+        # See https://github.com/alphagov/govuk-helm-charts/blob/main/charts/monitoring-config/rules/staging/database_backups_and_syncs_staging_only_alerts_tests.yaml#L1
+        # for a detailed breakdown of how this expansion notation works
         values: '1753344000x4319 1753603200x8639'  # Thu 24/07/2025 08:00 UTC, Sun 27/27/2025 08:00 until Sat
     alert_rule_test:
       - alertname: Database backup/restore not completed - Sunday to Thursday backups
