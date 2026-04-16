@@ -1,5 +1,5 @@
 {
-    "$schema": "https:\/\/docs.renovatebot.com\/renovate-schema.json",
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
         "config:recommended",
         "helpers:pinGitHubActionDigests"
@@ -11,27 +11,27 @@
     ],
     "argocd": {
         "managerFilePatterns": [
-            "\/charts\\\/.*\\.yaml$\/"
+            "/charts\\/.*\\.yaml$/"
         ]
     },
     "helm-values": {
         "managerFilePatterns": [
-            "\/charts\\\/.*\\.yaml$\/"
+            "/charts\\/.*\\.yaml$/"
         ],
         "pinDigests": false
     },
     "kubernetes": {
         "managerFilePatterns": [
-            "\/charts\\\/.*\\.yaml$\/"
+            "/charts\\/.*\\.yaml$/"
         ]
     },
     "ignorePaths": [
-        "charts\/app-config\/image-tags\/**"
+        "charts/app-config/image-tags/**"
     ],
     "packageRules": [
         {
             "matchPackageNames": [
-                "renovate\/renovate"
+                "renovate/renovate"
             ],
             "automerge": true,
             "automergeType": "branch",
@@ -71,10 +71,10 @@
         },
         {
             "matchFileNames": [
-                "**\/helm-versions\/*"
+                "**/helm-versions/*"
             ],
-            "additionalBranchPrefix": "{{replace '^.+\\\/' '' packageFile}}-",
-            "commitMessageSuffix": " ({{replace '^.+\\\/' '' packageFile}})",
+            "additionalBranchPrefix": "{{replace '^.+\\/' '' packageFile}}-",
+            "commitMessageSuffix": " ({{replace '^.+\\/' '' packageFile}})",
             "minimumReleaseAge": "10 days"
         }
     ],
@@ -82,7 +82,7 @@
         {
             "customType": "regex",
             "managerFilePatterns": [
-                "\/.*\\\/helm-versions\\\/.*\/"
+                "/.*\\/helm-versions\\/.*/"
             ],
             "datasourceTemplate": "helm",
             "matchStrings": [
