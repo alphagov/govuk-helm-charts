@@ -3917,6 +3917,9 @@ govukApplications:
         - name: taxonomy-rebuild
           task: "taxonomy:rebuild_cache"
           schedule: "*/10 7-20 * * *"
+        - name: fix-world-news-story-conversions
+          task: "data_hygiene:remove_org_links_from_world_news"
+          schedule: "0 17 * * *"
       dbMigrationEnabled: true
       dbMigrationActiveDeadlineSeconds: 3700 # 1 hour + 10 min buffer to match StrongMigrations.statement_timeout
       workers:
