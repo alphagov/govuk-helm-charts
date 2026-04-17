@@ -80,6 +80,12 @@ cronjobs:
           value: govuk-staging
         - name: SUBDOMAIN
           value: elasticsearch6
+    green-es6-snapshot: # This would be too long as green-elasticsearch6-domain-snapshot
+      schedule: "37 5 * * 1"
+      args: [create_and_clean_up]
+      extraEnv:
+        - name: SUBDOMAIN
+          value: elasticsearch6
     chat-engine-cp-prod:
       schedule: "12 4 * * *"
       args: [restore_latest]
