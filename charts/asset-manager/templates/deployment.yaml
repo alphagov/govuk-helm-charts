@@ -83,6 +83,8 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.repoName }}-rails-secret-key-base
                   key: secret-key-base
+            - name: GOVUK_OTEL_SERVICE_NAME
+              value: "{{ $fullName }}"
             {{- if .Values.sentry.enabled }}
             - name: SENTRY_DSN
               valueFrom:

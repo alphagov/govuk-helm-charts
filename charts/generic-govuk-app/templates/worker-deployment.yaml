@@ -63,6 +63,8 @@ spec:
             - configMapRef:
                 name: govuk-apps-env
           env:
+            - name: GOVUK_OTEL_SERVICE_NAME
+              value: "{{ $fullName }}-worker"
             {{- if $.Values.rails.enabled }}
             - name: SECRET_KEY_BASE
               valueFrom:
