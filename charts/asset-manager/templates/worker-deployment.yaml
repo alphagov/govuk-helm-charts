@@ -77,6 +77,8 @@ spec:
           env:
             - name: GOVUK_UPLOADS_ROOT
               value: *uploads-path
+            - name: GOVUK_OTEL_SERVICE_NAME
+              value: "{{ $fullName }}-worker"
             {{- if .Values.sentry.enabled }}
             - name: SENTRY_DSN
               valueFrom:

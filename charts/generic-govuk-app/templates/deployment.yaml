@@ -74,6 +74,8 @@ spec:
           env:
             - name: PORT
               value: "{{ .Values.appPort }}"
+            - name: GOVUK_OTEL_SERVICE_NAME
+              value: "{{ $fullName }}"
             {{- if .Values.rails.enabled }}
             - name: SECRET_KEY_BASE
               valueFrom:
