@@ -2982,9 +2982,6 @@ govukApplications:
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
           schedule: "35 00 * * *"
-          env:
-            - name: SEARCH_INDEX
-              value: govuk
       extraEnv:
         - name: AWS_S3_RELEVANCY_BUCKET_NAME
           value: govuk-production-search-relevancy
