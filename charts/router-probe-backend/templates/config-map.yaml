@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "router-probe-backend"
+data:
+  openresty.conf: |
+    {{- $.Files.Get "files/openresty.conf" | trim | nindent 4 }}
+
+  headers.lua: |
+    {{- $.Files.Get "files/lua/headers.lua" | trim | nindent 4 }}

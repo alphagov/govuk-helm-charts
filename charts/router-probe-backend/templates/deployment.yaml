@@ -1,0 +1,99 @@
+{{- $fullName := include "router-probe-backend.fullname" . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "router-probe-backend.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/component: nginx
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: {{ $fullName }}
+  template:
+    metadata:
+      labels:
+        {{- include "router-probe-backend.labels" . | nindent 8 }}
+        app: {{ $fullName }}
+        app.kubernetes.io/name: {{ $fullName }}
+        app.kubernetes.io/component: nginx
+    spec:
+      terminationGracePeriodSeconds: 30
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: 1001
+        runAsNonRoot: false
+        runAsUser: 1001
+        runAsGroup: 1001
+      volumes:
+        - name: openresty-config
+          configMap:
+            name: router-probe-backend
+            items:
+              - key: openresty.conf
+                path: nginx.conf
+        - name: headers-lua-script
+          configMap:
+            name: router-probe-backend
+            items:
+              - key: headers.lua
+                path: headers.lua
+        - name: nginx-tmp
+          emptyDir: {}
+      containers:
+        - name: nginx
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
+          ports:
+            - name: http
+              containerPort: 80
+          livenessProbe:
+            httpGet: &nginx-probe
+              path: /readyz
+              port: http
+            initialDelaySeconds: 2
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 20
+          readinessProbe:
+            httpGet: *nginx-probe
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            failureThreshold: 2
+            timeoutSeconds: 15
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 50m
+            memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: openresty-config
+              mountPath: /usr/local/openresty/nginx/conf/
+              subPath: nginx.conf
+            - name: headers-lua-script
+              mountPath: /usr/local/openresty/lua/
+              subPath: headers.lua
+            - name: nginx-tmp
+              mountPath: /tmp
+      tolerations:
+        - key: arch
+          operator: Equal
+          value: arm64
+          effect: NoSchedule
+      nodeSelector:
+        kubernetes.io/arch: arm64
