@@ -1,0 +1,8 @@
+image:
+  repository: openresty/openresty
+  tag: "1.27.1.2-12-alpine-slim-arm64"
+  pullPolicy: IfNotPresent
+
+arch: arm64
+
+replicaCount: 2

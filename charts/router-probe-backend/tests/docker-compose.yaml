@@ -1,0 +1,22 @@
+---
+services:
+  nginx:
+    image: ${IMAGE}
+    volumes:
+      - type: bind
+        source: ../files/openresty.conf
+        target: /usr/local/openresty/nginx/conf/nginx.conf
+        read_only: true
+      - type: bind
+        source: ../files/lua
+        target: /usr/local/openresty/lua
+        read_only: true
+    ports:
+      - 80:80
+    healthcheck:
+      test: ["CMD", "wget", "-q", "http://nginx:80/readyz"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+      start_interval: 1s

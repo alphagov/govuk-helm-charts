@@ -1,0 +1,5 @@
+apiVersion: v2
+name: router-probe-backend
+description: Creates a simple backend application to sit behind router and return static responses to allow smoke and e2e testing router
+type: application
+version: "1.0.0"
