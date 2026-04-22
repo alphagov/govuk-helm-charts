@@ -4146,3 +4146,60 @@ govukApplications:
             secretKeyRef:
               name: govuk-ai-accelerator-postgres
               key: DATABASE_URL
+  - name: govuk-ai-graph-tools-app
+    repoName: govuk-ai-graph-tools
+    helmValues:
+      serviceAccount:
+        enabled: true
+        create: true
+        name: govuk-ai-graph-tools-app
+        annotations:
+          eks.amazonaws.com/role-arn: arn:aws:iam::210287912431:role/govuk-ai-graph-tools-app-govuk
+      rails:
+        enabled: false
+      sentry:
+        enabled: false
+      uploadAssets:
+        enabled: false
+      arch: arm64
+      appResources:
+        limits:
+          cpu: 4
+          memory: 5Gi
+        requests:
+          cpu: 10m
+          memory: 1.5Gi
+      nginxClientMaxBodySize: &max-upload-size 500M
+      nginxDenyCrawlers: true
+      ingress:
+        enabled: true
+        annotations:
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "300"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+              "govuk-ai-graph-tools-app.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: govuk-ai-graph-tools-app.{{ .Values.k8sExternalDomainSuffix }}
+      nginxConfigMap:
+        extraServerConf:
+          auth_basic "Enter the GOV.UK username/password (not your personal username/password)";
+          auth_basic_user_file /etc/nginx/htpasswd/htpasswd;
+      nginxExtraVolumeMounts:
+        - name: router-nginx-htpasswd
+          mountPath: /etc/nginx/htpasswd
+      extraVolumes:
+        - name: router-nginx-htpasswd
+          secret:
+            secretName: router-nginx-htpasswd
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
+        livenessProbe: "/healthcheck/ready"
+        readinessProbe: "/healthcheck/ready"
+      extraEnv:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-ai-accelerator-postgres
+              key: DATABASE_URL
