@@ -2925,9 +2925,6 @@ govukApplications:
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
           schedule: "35 00 * * *"
-          env:
-            - name: SEARCH_INDEX
-              value: govuk
       workers:
         enabled: true
         types:
