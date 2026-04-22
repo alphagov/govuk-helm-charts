@@ -2939,12 +2939,6 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
-        - name: reindex-with-new-schemas
-          task: "search:migrate_schema"
-          schedule: "5 21 * * 1"
-          env:
-            - name: SEARCH_INDEX
-              value: all
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
