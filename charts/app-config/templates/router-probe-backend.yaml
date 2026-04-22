@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: router-probe-backend
-  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  namespace: {{ $.Values.appsNamespace | default .Release.Namespace }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
