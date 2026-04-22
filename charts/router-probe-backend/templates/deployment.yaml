@@ -84,10 +84,10 @@ spec:
               drop: ["ALL"]
           volumeMounts:
             - name: openresty-config
-              mountPath: /usr/local/openresty/nginx/conf/
+              mountPath: /usr/local/openresty/nginx/conf/nginx.conf
               subPath: nginx.conf
             - name: headers-lua-script
-              mountPath: /usr/local/openresty/lua/
+              mountPath: /usr/local/openresty/lua/headers.lua
               subPath: headers.lua
             - name: nginx-tmp
               mountPath: /tmp
