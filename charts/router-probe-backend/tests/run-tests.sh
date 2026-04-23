@@ -93,10 +93,41 @@ function expect {
     >&2 echo "  Status Code for $RESOURCE:"
     >&2 echo "    Expected: $EXPECTED_STATUS"
     >&2 echo "    Actual:   $ACTUAL_STATUS"
+    return 1
   fi
 
   cat "$TMPFILE"
 }
+
+function expect_redirect_to_location {
+  # Args:
+  #   $1: HTTP Method
+  #   $2: Resource path to curl
+  #   $3: Redirect Location Header Expected in response
+  local METHOD="$1"
+  local RESOURCE="$2"
+  local EXPECTED_LOCATION="$3"
+  local ACTUAL_LOCATION
+
+  >&2 echo -n "Testing ${METHOD} ${RESOURCE} redirects to ${EXPECTED_LOCATION} ... "
+  ACTUAL_LOCATION=$(
+    curl --request "${METHOD}" --verbose "http://127.0.0.1:80${RESOURCE}" 2>&1 | \
+      grep -i '< location:' | \
+      tr -d '\r' | \
+      sed -E 's/.*[Ll]ocation: //'
+  )
+
+  if [ "$ACTUAL_LOCATION" == "$EXPECTED_LOCATION" ]; then
+    >&2 echo "OK"
+  else
+    >&2 echo "ERROR"
+    >&2 echo "  Redirect Location for $RESOURCE:"
+    >&2 echo "    Expected: [$EXPECTED_LOCATION]"
+    >&2 echo "    Actual:   [$ACTUAL_LOCATION]"
+    return 1
+  fi
+}
+
 
 echo "============================================="
 echo "Executing Tests:"
@@ -105,6 +136,7 @@ echo "============================================="
   expect "GET" "/" "404"
   expect "GET" "/__probe__/ok" "200"
   expect "GET" "/__probe__/redirect" "301"
+  expect_redirect_to_location "GET" "/__probe__/redirect" "/__probe__/redirected"
   expect "GET" "/__probe__/not-found" "404"
   expect "GET" "/__probe__/internal-server-error" "500"
   expect "GET" "/__probe__/get" "200"
