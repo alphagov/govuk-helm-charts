@@ -103,14 +103,14 @@ echo "Executing Tests:"
 echo "============================================="
 {
   expect "GET" "/" "404"
-  expect "GET" "/ok" "200"
-  expect "GET" "/redirect" "301"
-  expect "GET" "/not-found" "404"
-  expect "GET" "/internal-server-error" "500"
-  expect "GET" "/get" "200"
-  expect "POST" "/get" "403"
-  expect "GET" "/post" "403"
-  expect "POST" "/post" "200"
+  expect "GET" "/__probe__/ok" "200"
+  expect "GET" "/__probe__/redirect" "301"
+  expect "GET" "/__probe__/not-found" "404"
+  expect "GET" "/__probe__/internal-server-error" "500"
+  expect "GET" "/__probe__/get" "200"
+  expect "POST" "/__probe__/get" "403"
+  expect "GET" "/__probe__/post" "403"
+  expect "POST" "/__probe__/post" "200"
 } >> /dev/null
 
 function expect_correct_header_redaction {
@@ -150,9 +150,9 @@ function expect_correct_header_redaction {
   echo "OK"
 }
 
-expect_correct_header_redaction "GET" "/headers/get"
-expect "POST" "/headers/get" "403" >>/dev/null
-expect_correct_header_redaction "POST" "/headers/post"
-expect "GET" "/headers/post" "403" >>/dev/null
+expect_correct_header_redaction "GET" "/__probe__/headers/get"
+expect "POST" "/__probe__/headers/get" "403" >>/dev/null
+expect_correct_header_redaction "POST" "/__probe__/headers/post"
+expect "GET" "/__probe__/headers/post" "403" >>/dev/null
 
 echo "============================================="
