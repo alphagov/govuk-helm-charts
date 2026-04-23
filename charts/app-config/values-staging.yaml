@@ -2761,6 +2761,8 @@ govukApplications:
           value: "http://licensify-frontend.licensify"
         - name: BACKEND_URL_search-api
           value: "http://search-api"
+        - name: BACKEND_URL-router-probe-backend
+          value: "http://router-probe-backend"
         - name: ROUTER_ROUTE_RELOAD_INTERVAL
           value: 5m
         - name: CONTENT_STORE_DATABASE_URL
