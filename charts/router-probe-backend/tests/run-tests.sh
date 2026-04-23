@@ -135,7 +135,7 @@ function expect_correct_header_redaction {
       >&2 echo "    Actual:   $HEADER_VALUE"
       exit 1
     fi
-    echo "OK"
+    >&2 echo "OK"
   done
 
   >&2 echo -n "Testing to ensure other headers (X-Non-Redacted specifically) are not redacted by $METHOD in $RESOURCE ... "
@@ -147,7 +147,7 @@ function expect_correct_header_redaction {
     >&2 echo "    Actual:   $HEADER_VALUE"
     exit 1
   fi
-  echo "OK"
+  >&2 echo "OK"
 }
 
 expect_correct_header_redaction "GET" "/__probe__/headers/get"
