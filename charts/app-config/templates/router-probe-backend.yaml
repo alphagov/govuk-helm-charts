@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: router-probe-backend
-  namespace: {{ $.Values.appsNamespace | default .Release.Namespace }}
+  namespace: {{ $.Values.argoNamespace | default .Release.Namespace }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,7 +13,7 @@ spec:
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
-    namespace: {{ .Values.argoNamespace }}
+    namespace: {{ .Values.appsNamespace }}
   syncPolicy:
     automated:
       prune: true
