@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1528,
   "links": [],
   "panels": [
     {
@@ -102,7 +101,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "editorMode": "code",
@@ -118,7 +117,6 @@
           },
           "editorMode": "code",
           "expr": "label_replace(\n  max by (signon_user) (govuk_chat_rate_limit_api_user_write_percentage_used), \n  \"uid_and_request_type\", \"$1 - write\", \"signon_user\", \"(.*)\"\n)",
-          "hide": false,
           "instant": false,
           "legendFormat": "{{uid_and_request_type}}",
           "range": true,
@@ -133,7 +131,7 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "Calculation of percentage based on token limit of 300K per minute",
+      "description": "Calculation of percentage based on token limit of each model",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -197,11 +195,11 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 24,
         "x": 0,
         "y": 8
       },
-      "id": 39,
+      "id": 52,
       "options": {
         "legend": {
           "calcs": [
@@ -211,7 +209,7 @@
           "placement": "right",
           "showLegend": true,
           "sortBy": "Name",
-          "sortDesc": true
+          "sortDesc": false
         },
         "tooltip": {
           "hideZeros": false,
@@ -219,7 +217,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -231,7 +229,7 @@
           },
           "expression": "",
           "hide": true,
-          "id": "itc1",
+          "id": "itc_titan_eu_west_1",
           "label": "",
           "logGroups": [],
           "matchExact": true,
@@ -253,9 +251,9 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "itc1 / 12000",
+          "expression": "itc_titan_eu_west_1 / 12000",
           "id": "",
-          "label": "eu-west-1",
+          "label": "Titan - eu-west-1",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 1,
@@ -280,7 +278,7 @@
           },
           "expression": "",
           "hide": true,
-          "id": "itc2",
+          "id": "itc_titan_eu_west_2",
           "label": "",
           "logGroups": [],
           "matchExact": true,
@@ -302,9 +300,9 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "itc2 / 12000",
+          "expression": "itc_titan_eu_west_2 / 12000",
           "id": "",
-          "label": "eu-west-2",
+          "label": "Titan - eu-west-2",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 1,
@@ -318,113 +316,18 @@
           "region": "eu-west-2",
           "sqlExpression": "",
           "statistic": "Average"
-        }
-      ],
-      "title": "Bedrock Titan Tokens Used Percentage",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "cloudwatch"
-      },
-      "description": "Calculation of percentage based on token limit of 3M per minute",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "showValues": false,
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "line+area"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "#EAB839",
-                "value": 50
-              },
-              {
-                "color": "red",
-                "value": 100
-              }
-            ]
-          },
-          "unit": "percent"
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 8
-      },
-      "id": 33,
-      "options": {
-        "legend": {
-          "calcs": [
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.3.3",
-      "targets": [
         {
           "datasource": {
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+            "ModelId": "openai.gpt-oss-120b-1:0"
           },
           "expression": "",
           "hide": true,
-          "id": "itc",
+          "id": "itc_gpt_oss",
           "label": "",
           "logGroups": [],
           "matchExact": true,
@@ -435,7 +338,82 @@
           "period": "5m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
-          "refId": "A",
+          "refId": "E",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "openai.gpt-oss-120b-1:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "otc_gpt_oss",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "OutputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "F",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "(itc_gpt_oss + otc_gpt_oss) / 1000000",
+          "id": "",
+          "label": "GPT OSS 120b",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 1,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "G",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "itc_sonnet_4",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "H",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
@@ -450,7 +428,7 @@
           },
           "expression": "",
           "hide": true,
-          "id": "cwitc",
+          "id": "cwitc_sonnet_4",
           "label": "",
           "logGroups": [],
           "matchExact": true,
@@ -461,7 +439,7 @@
           "period": "5m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
-          "refId": "B",
+          "refId": "I",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
@@ -476,7 +454,7 @@
           },
           "expression": "",
           "hide": true,
-          "id": "otc",
+          "id": "otc_sonnet_4",
           "label": "",
           "logGroups": [],
           "matchExact": true,
@@ -487,7 +465,7 @@
           "period": "5m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
-          "refId": "C",
+          "refId": "J",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
@@ -498,12 +476,11 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "(itc + cwitc + (otc * 5)) / 30000",
-          "hide": false,
+          "expression": "(itc_sonnet_4 + cwitc_sonnet_4 + (otc_sonnet_4 * 5)) / 30000",
           "id": "",
-          "label": "PercentageTokensUsed",
+          "label": "Sonnet 4",
           "logGroups": [],
-          "matchExact": true,
+          "matchExact": false,
           "metricEditorMode": 1,
           "metricName": "",
           "metricQueryType": 0,
@@ -511,13 +488,215 @@
           "period": "5m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
-          "refId": "D",
+          "refId": "K",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "itc_sonnet_4_5",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "L",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "cwitc_sonnet_4_5",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "CacheWriteInputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "M",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "otc_sonnet_4_5",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "OutputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "N",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "(itc_sonnet_4_5 + cwitc_sonnet_4_5 + (otc_sonnet_4_5 * 5)) / 50000",
+          "id": "",
+          "label": "Sonnet 4.5",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 1,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "O",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "itc_haiku_4_5",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "InputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "P",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "cwitc_haiku_4_5",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "CacheWriteInputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "Q",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+          },
+          "expression": "",
+          "hide": true,
+          "id": "otc_haiku_4_5",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "OutputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "R",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "(itc_haiku_4_5 + cwitc_haiku_4_5 + (otc_haiku_4_5 * 5)) / 50000",
+          "id": "",
+          "label": "Haiku 4.5",
+          "logGroups": [],
+          "matchExact": false,
+          "metricEditorMode": 1,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "S",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Average"
         }
       ],
-      "title": "Bedrock Sonnet Tokens Used Percentage",
+      "title": "Tokens used percentage - all models",
       "type": "timeseries"
     },
     {
@@ -525,7 +704,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "Calculation of percentage based on token limit of 100M per minute",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -575,25 +753,25 @@
               },
               {
                 "color": "#EAB839",
-                "value": 50
+                "value": 100
               },
               {
                 "color": "red",
-                "value": 100
+                "value": 200
               }
             ]
           },
-          "unit": "percent"
+          "unit": "reqpm"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 8
+        "w": 24,
+        "x": 0,
+        "y": 16
       },
-      "id": 43,
+      "id": 45,
       "options": {
         "legend": {
           "calcs": [
@@ -601,7 +779,9 @@
           ],
           "displayMode": "table",
           "placement": "right",
-          "showLegend": true
+          "showLegend": true,
+          "sortBy": "Name",
+          "sortDesc": false
         },
         "tooltip": {
           "hideZeros": false,
@@ -609,7 +789,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -620,16 +800,15 @@
             "ModelId": "openai.gpt-oss-120b-1:0"
           },
           "expression": "",
-          "hide": true,
-          "id": "itc",
-          "label": "",
+          "id": "",
+          "label": "GPT OSS 120b",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "InputTokenCount",
+          "metricName": "Invocations",
           "metricQueryType": 0,
           "namespace": "AWS/Bedrock",
-          "period": "5m",
+          "period": "1m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "A",
@@ -643,22 +822,71 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "openai.gpt-oss-120b-1:0"
+            "ModelId": "amazon.titan-embed-text-v2:0"
           },
           "expression": "",
-          "hide": true,
-          "id": "otc",
-          "label": "",
+          "id": "",
+          "label": "Titan - eu-west-1",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "OutputTokenCount",
+          "metricName": "Invocations",
           "metricQueryType": 0,
           "namespace": "AWS/Bedrock",
-          "period": "5m",
+          "period": "1m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "B",
+          "region": "eu-west-1",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "amazon.titan-embed-text-v2:0"
+          },
+          "expression": "",
+          "id": "",
+          "label": "Titan - eu-west-2",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "1m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "C",
+          "region": "eu-west-2",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+          },
+          "expression": "",
+          "id": "",
+          "label": "Haiku 4.5",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "1m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "D",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
@@ -668,27 +896,53 @@
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
-          "dimensions": {},
-          "expression": "(itc + otc) / 1000000",
-          "hide": false,
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
+          "expression": "",
           "id": "",
-          "label": "PercentageTokensUsed",
+          "label": "Sonnet 4",
           "logGroups": [],
           "matchExact": true,
-          "metricEditorMode": 1,
-          "metricName": "",
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
           "metricQueryType": 0,
-          "namespace": "",
-          "period": "5m",
+          "namespace": "AWS/Bedrock",
+          "period": "1m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
-          "refId": "D",
+          "refId": "E",
           "region": "default",
           "sqlExpression": "",
-          "statistic": "Average"
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          },
+          "expression": "",
+          "id": "",
+          "label": "Sonnet 4.5",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "Invocations",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "1m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "F",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
         }
       ],
-      "title": "Bedrock gpt-oss-120b Tokens Used Percentage",
+      "title": "Invocations - all models",
       "type": "timeseries"
     },
     {
@@ -761,7 +1015,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 38,
       "options": {
@@ -779,7 +1033,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -905,9 +1159,9 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 16
+        "y": 24
       },
-      "id": 32,
+      "id": 44,
       "options": {
         "legend": {
           "calcs": [
@@ -923,7 +1177,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -931,7 +1185,7 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+            "ModelId": "openai.gpt-oss-120b-1:0"
           },
           "expression": "",
           "id": "itc",
@@ -956,36 +1210,9 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+            "ModelId": "openai.gpt-oss-120b-1:0"
           },
           "expression": "",
-          "hide": false,
-          "id": "cwitc",
-          "label": "",
-          "logGroups": [],
-          "matchExact": true,
-          "metricEditorMode": 0,
-          "metricName": "CacheWriteInputTokenCount",
-          "metricQueryType": 0,
-          "namespace": "AWS/Bedrock",
-          "period": "5m",
-          "queryLanguage": "CWLI",
-          "queryMode": "Metrics",
-          "refId": "B",
-          "region": "default",
-          "sqlExpression": "",
-          "statistic": "Sum"
-        },
-        {
-          "datasource": {
-            "type": "cloudwatch",
-            "uid": "cloudwatch"
-          },
-          "dimensions": {
-            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
-          },
-          "expression": "",
-          "hide": false,
           "id": "otc",
           "label": "",
           "logGroups": [],
@@ -1008,8 +1235,7 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "itc + cwitc + (otc * 5)",
-          "hide": false,
+          "expression": "itc + otc",
           "id": "",
           "label": "TotalTokenCount",
           "logGroups": [],
@@ -1027,7 +1253,7 @@
           "statistic": "Average"
         }
       ],
-      "title": "Bedrock Sonnet Tokens Used",
+      "title": "Bedrock gpt-oss-120b Tokens Used",
       "type": "timeseries"
     },
     {
@@ -1100,9 +1326,9 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 16
+        "y": 24
       },
-      "id": 44,
+      "id": 32,
       "options": {
         "legend": {
           "calcs": [
@@ -1118,7 +1344,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -1126,7 +1352,7 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "openai.gpt-oss-120b-1:0"
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
           },
           "expression": "",
           "id": "itc",
@@ -1151,10 +1377,34 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "openai.gpt-oss-120b-1:0"
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
           },
           "expression": "",
-          "hide": false,
+          "id": "cwitc",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "CacheWriteInputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "B",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+          },
+          "expression": "",
           "id": "otc",
           "label": "",
           "logGroups": [],
@@ -1177,8 +1427,7 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "itc + otc",
-          "hide": false,
+          "expression": "itc + cwitc + (otc * 5)",
           "id": "",
           "label": "TotalTokenCount",
           "logGroups": [],
@@ -1196,7 +1445,7 @@
           "statistic": "Average"
         }
       ],
-      "title": "Bedrock gpt-oss-120b Tokens Used",
+      "title": "Bedrock Sonnet 4 Tokens Used",
       "type": "timeseries"
     },
     {
@@ -1204,7 +1453,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "If this graph turns blank, it may be that the ModelId Dimension (currently \"amazon.titan-embed-text-v2:0\") has changed and needs updating in Helm.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1254,15 +1502,15 @@
               },
               {
                 "color": "#EAB839",
-                "value": 3000
+                "value": 1500000
               },
               {
                 "color": "red",
-                "value": 6000
+                "value": 3000000
               }
             ]
           },
-          "unit": "reqpm"
+          "unit": "short"
         },
         "overrides": []
       },
@@ -1270,9 +1518,9 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 24
+        "y": 32
       },
-      "id": 36,
+      "id": 50,
       "options": {
         "legend": {
           "calcs": [
@@ -1288,7 +1536,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -1296,22 +1544,22 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "amazon.titan-embed-text-v2:0"
+            "ModelId": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
           },
           "expression": "",
-          "id": "",
-          "label": "eu-west-1 titan-embed-text-v2",
+          "id": "itc",
+          "label": "",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "Invocations",
+          "metricName": "InputTokenCount",
           "metricQueryType": 0,
           "namespace": "AWS/Bedrock",
-          "period": "1m",
+          "period": "5m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "A",
-          "region": "eu-west-1",
+          "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
         },
@@ -1321,27 +1569,75 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "amazon.titan-embed-text-v2:0"
+            "ModelId": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
           },
           "expression": "",
-          "id": "",
-          "label": "eu-west-2 titan-embed-text-v2",
+          "id": "cwitc",
+          "label": "",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "Invocations",
+          "metricName": "CacheWriteInputTokenCount",
           "metricQueryType": 0,
           "namespace": "AWS/Bedrock",
-          "period": "1m",
+          "period": "5m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "B",
-          "region": "eu-west-2",
+          "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          },
+          "expression": "",
+          "id": "otc",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "OutputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "C",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "itc + cwitc + (otc * 5)",
+          "id": "",
+          "label": "TotalTokenCount",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "D",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
         }
       ],
-      "title": "Bedrock Titan Invocations",
+      "title": "Bedrock Sonnet 4.5 Tokens Used",
       "type": "timeseries"
     },
     {
@@ -1349,7 +1645,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "If this graph turns blank, it may be that the ModelId Dimension (currently \"eu.anthropic.claude-sonnet-4-20250514-v1:0\") has changed and needs updating in Helm.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1399,15 +1694,15 @@
               },
               {
                 "color": "#EAB839",
-                "value": 100
+                "value": 1500000
               },
               {
                 "color": "red",
-                "value": 200
+                "value": 3000000
               }
             ]
           },
-          "unit": "reqpm"
+          "unit": "short"
         },
         "overrides": []
       },
@@ -1415,9 +1710,9 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 24
+        "y": 32
       },
-      "id": 35,
+      "id": 47,
       "options": {
         "legend": {
           "calcs": [
@@ -1433,7 +1728,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -1441,149 +1736,100 @@
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "eu.anthropic.claude-sonnet-4-20250514-v1:0"
+            "ModelId": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
           },
           "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "sonnet-4-20250514",
+          "id": "itc",
+          "label": "",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "Invocations",
+          "metricName": "InputTokenCount",
           "metricQueryType": 0,
           "namespace": "AWS/Bedrock",
-          "period": "1m",
+          "period": "5m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
           "refId": "A",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
-        }
-      ],
-      "title": "Bedrock Sonnet Invocations",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "cloudwatch",
-        "uid": "cloudwatch"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "showValues": false,
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "line+area"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "#EAB839",
-                "value": 100
-              },
-              {
-                "color": "red",
-                "value": 200
-              }
-            ]
-          },
-          "unit": "reqpm"
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 24
-      },
-      "id": 45,
-      "options": {
-        "legend": {
-          "calcs": [
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.3.3",
-      "targets": [
         {
           "datasource": {
             "type": "cloudwatch",
             "uid": "cloudwatch"
           },
           "dimensions": {
-            "ModelId": "openai.gpt-oss-120b-1:0"
+            "ModelId": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
           },
           "expression": "",
-          "hide": false,
-          "id": "",
-          "label": "gpt-oss-120b",
+          "id": "cwitc",
+          "label": "",
           "logGroups": [],
           "matchExact": true,
           "metricEditorMode": 0,
-          "metricName": "Invocations",
+          "metricName": "CacheWriteInputTokenCount",
           "metricQueryType": 0,
           "namespace": "AWS/Bedrock",
-          "period": "1m",
+          "period": "5m",
           "queryLanguage": "CWLI",
           "queryMode": "Metrics",
-          "refId": "A",
+          "refId": "B",
           "region": "default",
           "sqlExpression": "",
           "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {
+            "ModelId": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
+          },
+          "expression": "",
+          "id": "otc",
+          "label": "",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 0,
+          "metricName": "OutputTokenCount",
+          "metricQueryType": 0,
+          "namespace": "AWS/Bedrock",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "C",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Sum"
+        },
+        {
+          "datasource": {
+            "type": "cloudwatch",
+            "uid": "cloudwatch"
+          },
+          "dimensions": {},
+          "expression": "itc + cwitc + (otc * 5)",
+          "id": "",
+          "label": "TotalTokenCount",
+          "logGroups": [],
+          "matchExact": true,
+          "metricEditorMode": 1,
+          "metricName": "",
+          "metricQueryType": 0,
+          "namespace": "",
+          "period": "5m",
+          "queryLanguage": "CWLI",
+          "queryMode": "Metrics",
+          "refId": "D",
+          "region": "default",
+          "sqlExpression": "",
+          "statistic": "Average"
         }
       ],
-      "title": "Bedrock gpt-oss-120b Invocations",
+      "title": "Bedrock Haiku 4.5 Tokens Used",
       "type": "timeseries"
     },
     {
@@ -1652,7 +1898,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 40
       },
       "id": 40,
       "options": {
@@ -1670,7 +1916,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -1779,7 +2025,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 40
       },
       "id": 37,
       "options": {
@@ -1797,7 +2043,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "editorMode": "code",
@@ -1816,7 +2062,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1878,7 +2123,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 48
       },
       "id": 16,
       "options": {
@@ -1897,7 +2142,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -1908,7 +2153,6 @@
           "editorMode": "code",
           "expr": "sum(rate(http_requests_total{job=\"govuk-chat\"}[$__rate_interval]))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "Total",
@@ -1925,7 +2169,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1987,7 +2230,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 48
       },
       "id": 17,
       "options": {
@@ -2006,7 +2249,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -2033,7 +2276,6 @@
           "editorMode": "code",
           "expr": "sum(rate(http_requests_total{job=\"govuk-chat\", status=~\"3..\"}[$__rate_interval]))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "3xx",
@@ -2050,7 +2292,6 @@
           "editorMode": "code",
           "expr": "sum(rate(http_requests_total{job=\"govuk-chat\", status=~\"5..\"}[$__rate_interval]))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "5xx",
@@ -2068,7 +2309,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2130,7 +2370,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 56
       },
       "id": 23,
       "options": {
@@ -2149,7 +2389,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -2234,7 +2474,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 56
       },
       "id": 22,
       "options": {
@@ -2253,7 +2493,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -2264,7 +2504,6 @@
           "editorMode": "code",
           "expr": "quantile(0.75, sum(rate(http_request_duration_seconds_sum{job=\"govuk-chat\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{job=\"govuk-chat\"}[$__rate_interval])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": true,
           "instant": false,
           "legendFormat": "requests/ps",
@@ -2281,7 +2520,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2342,7 +2580,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 56
+        "y": 64
       },
       "id": 21,
       "options": {
@@ -2361,7 +2599,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -2453,7 +2691,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 56
+        "y": 64
       },
       "id": 20,
       "options": {
@@ -2472,7 +2710,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -2572,7 +2810,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 64
+        "y": 72
       },
       "id": 19,
       "options": {
@@ -2591,7 +2829,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -2675,7 +2913,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 64
+        "y": 72
       },
       "id": 18,
       "options": {
@@ -2694,7 +2932,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -2787,7 +3025,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 72
+        "y": 80
       },
       "id": 41,
       "options": {
@@ -2805,7 +3043,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "editorMode": "code",
@@ -2884,7 +3122,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 72
+        "y": 80
       },
       "id": 42,
       "options": {
@@ -2902,7 +3140,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "editorMode": "code",
@@ -2920,7 +3158,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2981,7 +3218,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 80
+        "y": 88
       },
       "id": 1,
       "options": {
@@ -2997,7 +3234,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -3110,7 +3347,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 80
+        "y": 88
       },
       "id": 2,
       "options": {
@@ -3126,7 +3363,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -3184,7 +3421,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3246,7 +3482,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 80
+        "y": 88
       },
       "id": 3,
       "options": {
@@ -3262,7 +3498,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -3297,7 +3533,6 @@
             "DomainName": "chat-engine"
           },
           "expression": "",
-          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -3322,7 +3557,6 @@
             "DomainName": "chat-engine"
           },
           "expression": "",
-          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -3408,7 +3642,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 88
+        "y": 96
       },
       "id": 6,
       "options": {
@@ -3424,7 +3658,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -3520,7 +3754,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 88
+        "y": 96
       },
       "id": 4,
       "options": {
@@ -3536,7 +3770,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -3631,7 +3865,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 88
+        "y": 96
       },
       "id": 5,
       "options": {
@@ -3647,7 +3881,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -3743,7 +3977,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 96
+        "y": 104
       },
       "id": 8,
       "options": {
@@ -3759,7 +3993,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -3794,7 +4028,6 @@
             "DBInstanceIdentifier": "chat-GOVUKENVIRONMENT-postgres"
           },
           "expression": "",
-          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -3879,7 +4112,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 96
+        "y": 104
       },
       "id": 7,
       "options": {
@@ -3895,7 +4128,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -3930,7 +4163,6 @@
             "DBInstanceIdentifier": "chat-GOVUKENVIRONMENT-postgres"
           },
           "expression": "",
-          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -3955,7 +4187,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4017,7 +4248,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 96
+        "y": 104
       },
       "id": 9,
       "options": {
@@ -4033,7 +4264,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -4068,7 +4299,6 @@
             "DBInstanceIdentifier": "chat-GOVUKENVIRONMENT-postgres"
           },
           "expression": "",
-          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -4154,7 +4384,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 104
+        "y": 112
       },
       "id": 15,
       "options": {
@@ -4170,7 +4400,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -4205,7 +4435,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4267,7 +4496,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 104
+        "y": 112
       },
       "id": 10,
       "options": {
@@ -4283,7 +4512,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -4378,7 +4607,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 104
+        "y": 112
       },
       "id": 11,
       "options": {
@@ -4394,7 +4623,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.3",
+      "pluginVersion": "12.4.1",
       "targets": [
         {
           "datasource": {
@@ -4429,7 +4658,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4491,7 +4719,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 112
+        "y": 120
       },
       "id": 12,
       "options": {
@@ -4518,7 +4746,6 @@
             "CacheClusterId": "chat-redis-001"
           },
           "expression": "",
-          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -4543,7 +4770,6 @@
             "CacheClusterId": "chat-redis-001"
           },
           "expression": "",
-          "hide": false,
           "id": "",
           "label": "",
           "logGroups": [],
@@ -4568,7 +4794,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4630,7 +4855,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 112
+        "y": 120
       },
       "id": 14,
       "options": {
@@ -4681,7 +4906,6 @@
         "type": "cloudwatch",
         "uid": "cloudwatch"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4743,7 +4967,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 112
+        "y": 120
       },
       "id": 13,
       "options": {
@@ -4856,7 +5080,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 120
+        "y": 128
       },
       "id": 24,
       "options": {
@@ -4964,7 +5188,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 120
+        "y": 128
       },
       "id": 25,
       "options": {
@@ -5072,7 +5296,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 120
+        "y": 128
       },
       "id": 26,
       "options": {
@@ -5129,5 +5353,5 @@
   "timezone": "browser",
   "title": "GOV.UK Chat Technical",
   "uid": "govuk-chat-technical",
-  "version": 25
+  "version": 26
 }
