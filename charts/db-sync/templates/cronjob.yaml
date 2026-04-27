@@ -3,8 +3,13 @@
 
 {{- range $jobName, $job := get .Values.cronjobs .Values.govukEnvironment }}
   {{- $jobFullName := printf "%s-%s" $fullName $jobName }}
+  {{- $isBackup := eq $job.operation "backup" }}
+  {{- $isRestore := eq $job.operation "restore" }}
+  {{- $usesSource := $isBackup }}
+  {{- $usesDest := $isRestore }}
+  {{- $usesTransform := and $isBackup $job.transformScript }}
   {{- $sourcePasswordKey := $job.sourcePasswordSecretKey | default $jobName }}
-  {{- $destPasswordKey := $job.destPasswordSecretKey | default $sourcePasswordKey }}
+  {{- $destPasswordKey := $job.destPasswordSecretKey | default $jobName }}
   {{- $transformUser := $job.transformUsername | default "postgres" }}
   {{- if eq $job.dbType "documentdb" }}
     {{- $transformUser = $job.transformUsername | default "mongoadmin" }}
@@ -74,13 +79,13 @@ spec:
               emptyDir: {}
           containers:
             - name: db-sync
-              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
-              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+              imagePullPolicy: {{ $.Values.appImage.pullPolicy }}
               command:
                 - /app/db-sync
               args:
                 - {{ $job.operation }}
-                {{- if $job.transformScript }}
+                {{- if $usesTransform }}
                 - --transform-script
                 - /scripts/{{ $job.transformScript }}
                 {{- end }}
@@ -108,10 +113,30 @@ spec:
                 - name: DB_OWNER
                   value: {{ $job.dbOwner }}
                 {{- end }}
+                {{- if $job.threads }}
+                - name: THREADS
+                  value: {{ $job.threads | quote }}
+                {{- end }}
+                {{- if $usesSource }}
                 {{- if $job.sourceUri }}
                 - name: SOURCE_URI
                   value: {{ $job.sourceUri }}
                 {{- end }}
+                {{- if ne $job.dbType "documentdb" }}
+                - name: SOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $sourcePasswordKey }}
+                {{- else if $job.sourcePasswordSecretKey }}
+                - name: SOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $job.sourcePasswordSecretKey }}
+                {{- end }}
+                {{- end }}
+                {{- if $usesDest }}
                 {{- if $job.destUri }}
                 - name: DEST_URI
                   value: {{ $job.destUri }}
@@ -122,26 +147,19 @@ spec:
                       name: {{ $fullName }}-passwd
                       key: {{ $jobName }}-dest
                 {{- end }}
+                {{- if and $isRestore (eq $job.dbType "documentdb") }}
+                {{- if $job.docdbSourceDb }}
+                - name: DOCDB_SOURCE_DB
+                  value: {{ $job.docdbSourceDb }}
+                {{- end }}
+                {{- end }}
                 {{- if ne $job.dbType "documentdb" }}
-                - name: SOURCE_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ $fullName }}-passwd
-                      key: {{ $sourcePasswordKey }}
                 - name: DEST_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       name: {{ $fullName }}-passwd
                       key: {{ $destPasswordKey }}
-                {{- else }}
-                {{- if $job.sourcePasswordSecretKey }}
-                - name: SOURCE_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ $fullName }}-passwd
-                      key: {{ $job.sourcePasswordSecretKey }}
-                {{- end }}
-                {{- if $job.destPasswordSecretKey }}
+                {{- else if $job.destPasswordSecretKey }}
                 - name: DEST_PASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -157,7 +175,7 @@ spec:
                 - name: S3_PATH
                   value: {{ $job.s3Path }}
                 {{- end }}
-                {{- if $job.transformScript }}
+                {{- if $usesTransform }}
                 - name: TRANSFORM_SCRIPT
                   value: {{ $job.transformScript }}
                 {{- if $job.transformUri }}
@@ -183,11 +201,11 @@ spec:
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp
-            {{- if $job.transformScript }}
+            {{- if $usesTransform }}
             {{ if eq $job.dbType "documentdb" }}
             - name: transform-db
-              image: "{{ $.Values.transformImage.docDb.repository }}:{{ $.Values.transformImage.docDb.tag }}"
-              imagePullPolicy: {{ $.Values.transformImage.docDb.pullPolicy }}
+              image: "{{ $.Values.transformImage.docdb.repository }}:{{ $.Values.transformImage.docdb.tag }}"
+              imagePullPolicy: {{ $.Values.transformImage.docdb.pullPolicy }}
               command:
                 - /app/transform-db
               env:
@@ -199,7 +217,7 @@ spec:
                   value: {{ $transformUser | quote }}
               resources:
                 {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
-              securityContext:
+              transformSecurityContext:
                 {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
             {{ else if eq $job.dbType "mysql" }}
             - name: transform-db
@@ -214,7 +232,7 @@ spec:
                   value: {{ $job.transformPassword | default "secret" | quote }}
               resources:
                 {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
-              securityContext:
+              transformSecurityContext:
                 {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
             {{ else if eq $job.dbType "postgres" }}
             - name: transform-db
@@ -231,7 +249,7 @@ spec:
                   value: {{ $transformUser | quote }}
               resources:
                 {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
-              securityContext:
+              transformSecurityContext:
                 {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
             {{ else }}
               {{- fail (printf "Unsupported dbType '%s' for job %s" $job.dbType $jobName) }}

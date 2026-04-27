@@ -1,0 +1,254 @@
+# Production values for db-sync Helm Chart
+# Overrides govukEnvironment and provides production-specific job configuration
+
+govukEnvironment: production
+
+cronjobs:
+  production:
+    # PostgreSQL backups
+    account-api-postgres:
+      schedule: "37 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: account-api_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: account-api/db
+
+    authenticating-proxy-postgres:
+      schedule: "23 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: authenticating_proxy_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: authenticating-proxy/db
+
+    chat-postgres:
+      schedule: "47 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: govuk_chat_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: chat/db
+
+    ckan-postgres:
+      schedule: "43 4 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: ckan_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: ckan/db
+
+    content-block-manager-postgres:
+      schedule: "43 0 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: content_block_manager_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: content-block-manager/db
+
+    content-data-admin-postgres:
+      schedule: "4 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: content_data_admin_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: content-data-admin/db
+
+    content-data-api-postgres:
+      schedule: "35 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: content_performance_manager_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: content-data-api/db
+
+    content-store-postgres:
+      schedule: "06 21 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: content_store_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: content-store/db
+      maxJobRuntimeSeconds: 86400  # 24 hours for large DB
+
+    draft-content-store-postgres:
+      schedule: "16 21 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: draft_content_store_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: draft-content-store/db
+      maxJobRuntimeSeconds: 86400  # 24 hours for large DB
+
+    content-tagger-postgres:
+      schedule: "31 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: content_tagger_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: content-tagger/db
+
+    email-alert-api-postgres:
+      schedule: "54 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: email-alert-api_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: email-alert-api/db
+
+    places-manager-postgres:
+      schedule: "18 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: imminence_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: places-manager/db
+
+    link-checker-api-postgres:
+      schedule: "43 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: link_checker_api_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: link-checker-api/db
+
+    local-links-manager-postgres:
+      schedule: "8 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: local-links-manager_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: local-links-manager/db
+
+    locations-api-postgres:
+      schedule: "32 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: locations_api_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: locations-api/db
+
+    publishing-api-postgres:
+      schedule: "36 21 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: publishing_api_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: publishing-api/db
+      maxJobRuntimeSeconds: 86400  # 24 hours for large DB
+      dbOwner: publishing-api-owner-role
+
+    publisher-postgres:
+      schedule: "41 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: publisher_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: publisher/db
+
+    service-manual-publisher-postgres:
+      schedule: "49 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: service-manual-publisher_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: service-manual-publisher/db
+
+    support-api-postgres:
+      schedule: "38 23 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: support_contacts_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: support-api/db
+
+    transition-postgres:
+      schedule: "24 3 * * *"
+      operation: backup
+      dbType: postgres
+      dbName: transition_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: transition/db
+
+    # MySQL backups
+    collections-publisher-mysql:
+      schedule: "21 23 * * *"
+      operation: backup
+      dbType: mysql
+      dbName: collections_publisher_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: collections-publisher/db
+
+    release-mysql:
+      schedule: "11 23 * * *"
+      operation: backup
+      dbType: mysql
+      dbName: release_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: release/db
+
+    search-admin-mysql:
+      schedule: "56 23 * * *"
+      operation: backup
+      dbType: mysql
+      dbName: search_admin_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: search-admin/db
+
+    signon-mysql:
+      schedule: "3 23 * * *"
+      operation: backup
+      dbType: mysql
+      dbName: signon_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: signon/db
+
+    whitehall-mysql:
+      schedule: "28 0 * * *"
+      operation: backup
+      dbType: mysql
+      dbName: whitehall_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: whitehall/db
+      maxJobRuntimeSeconds: 86400  # 24 hours for large DB
+
+    # DocumentDB backups (shared instance, multiple databases)
+    publisher-documentdb:
+      schedule: "13 0 * * *"
+      operation: backup
+      dbType: documentdb
+      dbName: publisher_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: publisher/docdb
+
+    short-url-manager-documentdb:
+      schedule: "13 0 * * *"
+      operation: backup
+      dbType: documentdb
+      dbName: short_url_manager_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: short-url-manager/docdb
+
+    travel-advice-publisher-documentdb:
+      schedule: "13 0 * * *"
+      operation: backup
+      dbType: documentdb
+      dbName: travel_advice_publisher_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: travel-advice-publisher/docdb
+
+    govuk-content-documentdb:
+      schedule: "13 0 * * *"
+      operation: backup
+      dbType: documentdb
+      dbName: govuk_content_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: govuk-content/docdb
+
+    govuk-assets-documentdb:
+      schedule: "13 0 * * *"
+      operation: backup
+      dbType: documentdb
+      dbName: govuk_assets_production
+      s3Bucket: s3://govuk-prod-database-backups
+      s3Path: govuk-assets/docdb
