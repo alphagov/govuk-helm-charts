@@ -52,7 +52,6 @@ http {
   map $upstream_http_x_content_type_options $x_content_type_options {
     "" "nosniff";
   }
-
   log_format json_event escape=json '{'
     '"@timestamp":"$time_iso8601",'
     '"body_bytes_sent":$body_bytes_sent,'
@@ -164,6 +163,7 @@ http {
       add_header "Access-Control-Allow-Origin" "*";
       add_header "Access-Control-Allow-Methods" "GET, OPTIONS";
       add_header "Access-Control-Allow-Headers" "origin, authorization";
+      add_header Content-Security-Policy "script-src 'none'" always;
     }
 
     # Uncacheable resource for use by external probers (Pingdom).

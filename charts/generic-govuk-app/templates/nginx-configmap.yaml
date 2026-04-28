@@ -56,7 +56,6 @@ data:
       map $upstream_http_x_content_type_options $x_content_type_options {
         "" "nosniff";
       }
-
       log_format json_event escape=json '{'
         '"@timestamp":"$time_iso8601",'
         '"body_bytes_sent":$body_bytes_sent,'
@@ -126,6 +125,7 @@ data:
           proxy_hide_header  x-amz-version-id;
           add_header         Cache-Control "public, max-age=31536000, immutable";
           add_header         Surrogate-Key "assets assets-{{ $fullName }}";
+          add_header         Content-Security-Policy "script-src 'none'" always;
 
           proxy_intercept_errors on;
           proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;

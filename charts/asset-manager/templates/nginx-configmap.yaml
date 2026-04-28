@@ -56,7 +56,6 @@ data:
       map $upstream_http_x_content_type_options $x_content_type_options {
         "" "nosniff";
       }
-
       log_format json_event escape=json '{'
         '"@timestamp":"$time_iso8601",'
         '"body_bytes_sent":$body_bytes_sent,'
@@ -181,6 +180,7 @@ data:
           add_header Strict-Transport-Security $strict_transport_security;
           add_header Permissions-Policy $permissions_policy;
           add_header X-Content-Type-Options $x_content_type_options always;
+          add_header Content-Security-Policy "script-src 'none'" always;
 
           # Additionally, we always prohibit passing on these headers from S3 to
           # the client as they are very likely to be wrong. There appears to be
