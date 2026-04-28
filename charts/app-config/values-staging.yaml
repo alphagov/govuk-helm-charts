@@ -115,13 +115,6 @@ govukApplications:
             secretKeyRef:
               name: govuk-account-oauth
               key: GOVUK_ACCOUNT_OAUTH_PROVIDER_URI
-        - name: GOVUK_NOTIFY_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: account-api-notify
-              key: GOVUK_NOTIFY_API_KEY
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: 6074fdc2-03b3-4bb6-83fe-31220779c13b
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
