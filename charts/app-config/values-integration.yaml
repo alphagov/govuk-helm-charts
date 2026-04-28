@@ -4189,18 +4189,3 @@ govukApplications:
             secretKeyRef:
               name: govuk-ai-accelerator-postgres
               key: DATABASE_URL
-        - name: OPENSEARCH_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: govuk/ai-accelerator/opensearch
-              key: username
-        - name: OPENSEARCH_URL
-          valueFrom:
-            secretKeyRef:
-              name: govuk/ai-accelerator/opensearch
-              key: url
-        - name: OPENSEARCH_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: govuk/ai-accelerator/opensearch
-              key: password
