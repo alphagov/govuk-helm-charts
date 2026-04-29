@@ -10,18 +10,17 @@
   {{- $usesTransform := and $isBackup $job.transformScript }}
   {{- $sourcePasswordKey := $job.sourcePasswordSecretKey | default $jobName }}
   {{- $destPasswordKey := $job.destPasswordSecretKey | default $jobName }}
-  {{- $transformUser := $job.transformUsername | default "postgres" }}
-  {{- if eq $job.dbType "documentdb" }}
-    {{- $transformUser = $job.transformUsername | default "mongoadmin" }}
-  {{- else if eq $job.dbType "mysql" }}
-    {{- $transformUser = $job.transformUsername | default "root" }}
-  {{- end }}
+  {{- $transformUser := include "db-sync.transformUser" (dict "job" $job) | trim }}
+  {{- $transformUri := include "db-sync.transformUri" (dict "job" $job "transformUser" $transformUser) | trim }}
+  {{- $sourceUri := include "db-sync.sourceUri" (dict "root" $ "job" $job) | trim }}
+  {{- $destUri := include "db-sync.destUri" (dict "root" $ "job" $job) | trim }}
   {{- /* Ensure required fields are present */}}
   {{- $_ := $job.schedule | required (printf "schedule is required for job %s" $jobName) }}
   {{- $_ := $job.operation | required (printf "operation is required for job %s" $jobName) }}
   {{- $_ := $job.dbType | required (printf "dbType is required for job %s" $jobName) }}
   {{- $_ := $job.dbName | required (printf "dbName is required for job %s" $jobName) }}
-  {{- $_ := $job.s3Bucket | required (printf "s3Bucket is required for job %s" $jobName) }}
+  {{- $s3Bucket := $job.s3Bucket | default $.Values.defaultS3Bucket }}
+  {{- $_ := $s3Bucket | required (printf "s3Bucket is required for job %s (set per-job or via defaultS3Bucket)" $jobName) }}
   {{- $_ := $job.s3Path | required (printf "s3Path is required for job %s" $jobName) }}
 ---
 apiVersion: batch/v1
@@ -77,6 +76,73 @@ spec:
           volumes:
             - name: tmp
               emptyDir: {}
+          {{- if $usesTransform }}
+          initContainers:
+            {{ if eq $job.dbType "documentdb" }}
+            - name: transform-db
+              image: "{{ $.Values.transformImage.docdb.repository }}:{{ $.Values.transformImage.docdb.tag }}"
+              imagePullPolicy: {{ $.Values.transformImage.docdb.pullPolicy }}
+              restartPolicy: Always
+              command:
+                - /app/transform-db
+              ports:
+                - containerPort: 27017
+                  name: documentdb
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment }}
+                - name: MONGO_INITDB_ROOT_PASSWORD
+                  value: {{ $job.transformPassword | default "secret" | quote }}
+                - name: MONGO_INITDB_ROOT_USERNAME
+                  value: {{ $transformUser | quote }}
+              resources:
+                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
+              securityContext:
+                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
+            {{ else if eq $job.dbType "mysql" }}
+            - name: transform-db
+              image: "{{ $.Values.transformImage.mysql.repository }}:{{ $.Values.transformImage.mysql.tag }}"
+              imagePullPolicy: {{ $.Values.transformImage.mysql.pullPolicy }}
+              restartPolicy: Always
+              command:
+                - /app/transform-db
+              ports:
+                - containerPort: 3306
+                  name: mysql
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment }}
+                - name: MYSQL_ROOT_PASSWORD
+                  value: {{ $job.transformPassword | default "secret" | quote }}
+              resources:
+                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
+              securityContext:
+                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
+            {{ else if eq $job.dbType "postgres" }}
+            - name: transform-db
+              image: "{{ $.Values.transformImage.postgres.repository }}:{{ $.Values.transformImage.postgres.tag }}"
+              imagePullPolicy: {{ $.Values.transformImage.postgres.pullPolicy }}
+              restartPolicy: Always
+              command:
+                - /app/transform-db
+              ports:
+                - containerPort: 5432
+                  name: postgres
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment }}
+                - name: POSTGRES_PASSWORD
+                  value: {{ $job.transformPassword | default "secret" | quote }}
+                - name: POSTGRES_USERNAME
+                  value: {{ $transformUser | quote }}
+              resources:
+                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
+              securityContext:
+                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
+            {{ else }}
+              {{- fail (printf "Unsupported dbType '%s' for job %s" $job.dbType $jobName) }}
+            {{- end }}
+          {{- end }}
           containers:
             - name: db-sync
               image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
@@ -118,9 +184,9 @@ spec:
                   value: {{ $job.threads | quote }}
                 {{- end }}
                 {{- if $usesSource }}
-                {{- if $job.sourceUri }}
+                {{- if $sourceUri }}
                 - name: SOURCE_URI
-                  value: {{ $job.sourceUri }}
+                  value: {{ $sourceUri }}
                 {{- end }}
                 {{- if ne $job.dbType "documentdb" }}
                 - name: SOURCE_PASSWORD
@@ -137,9 +203,9 @@ spec:
                 {{- end }}
                 {{- end }}
                 {{- if $usesDest }}
-                {{- if $job.destUri }}
+                {{- if $destUri }}
                 - name: DEST_URI
-                  value: {{ $job.destUri }}
+                  value: {{ $destUri }}
                 {{- else if eq $job.dbType "documentdb" }}
                 - name: DEST_URI
                   valueFrom:
@@ -170,7 +236,7 @@ spec:
                 - name: S3_REGION
                   value: {{ $job.s3Region | default "eu-west-1" }}
                 - name: S3_BUCKET
-                  value: {{ $job.s3Bucket }}
+                  value: {{ $s3Bucket }}
                 {{- if $job.s3Path }}
                 - name: S3_PATH
                   value: {{ $job.s3Path }}
@@ -178,13 +244,8 @@ spec:
                 {{- if $usesTransform }}
                 - name: TRANSFORM_SCRIPT
                   value: {{ $job.transformScript }}
-                {{- if $job.transformUri }}
                 - name: TRANSFORM_URI
-                  value: {{ $job.transformUri }}
-                {{- else }}
-                - name: TRANSFORM_URI
-                  value: {{ printf "app://%s:password@localhost/%s" $transformUser ($job.transformDbName | default $job.dbName) | quote }}
-                {{- end }}
+                  value: {{ $transformUri }}
                 - name: TRANSFORM_PASSWORD
                   value: {{ $job.transformPassword | default "secret" | quote }}
                 {{- end }}
@@ -201,58 +262,4 @@ spec:
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp
-            {{- if $usesTransform }}
-            {{ if eq $job.dbType "documentdb" }}
-            - name: transform-db
-              image: "{{ $.Values.transformImage.docdb.repository }}:{{ $.Values.transformImage.docdb.tag }}"
-              imagePullPolicy: {{ $.Values.transformImage.docdb.pullPolicy }}
-              command:
-                - /app/transform-db
-              env:
-                - name: GOVUK_ENVIRONMENT
-                  value: {{ $.Values.govukEnvironment }}
-                - name: MONGO_INITDB_ROOT_PASSWORD
-                  value: {{ $job.transformPassword | default "secret" | quote }}
-                - name: MONGO_INITDB_ROOT_USERNAME
-                  value: {{ $transformUser | quote }}
-              resources:
-                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
-              transformSecurityContext:
-                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
-            {{ else if eq $job.dbType "mysql" }}
-            - name: transform-db
-              image: "{{ $.Values.transformImage.mysql.repository }}:{{ $.Values.transformImage.mysql.tag }}"
-              imagePullPolicy: {{ $.Values.transformImage.mysql.pullPolicy }}
-              command:
-                - /app/transform-db
-              env:
-                - name: GOVUK_ENVIRONMENT
-                  value: {{ $.Values.govukEnvironment }}
-                - name: MYSQL_ROOT_PASSWORD
-                  value: {{ $job.transformPassword | default "secret" | quote }}
-              resources:
-                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
-              transformSecurityContext:
-                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
-            {{ else if eq $job.dbType "postgres" }}
-            - name: transform-db
-              image: "{{ $.Values.transformImage.postgres.repository }}:{{ $.Values.transformImage.postgres.tag }}"
-              imagePullPolicy: {{ $.Values.transformImage.postgres.pullPolicy }}
-              command:
-                - /app/transform-db
-              env:
-                - name: GOVUK_ENVIRONMENT
-                  value: {{ $.Values.govukEnvironment }}
-                - name: POSTGRES_PASSWORD
-                  value: {{ $job.transformPassword | default "secret" | quote }}
-                - name: POSTGRES_USERNAME
-                  value: {{ $transformUser | quote }}
-              resources:
-                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
-              transformSecurityContext:
-                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
-            {{ else }}
-              {{- fail (printf "Unsupported dbType '%s' for job %s" $job.dbType $jobName) }}
-            {{- end }}
-            {{- end }}
 {{- end }}

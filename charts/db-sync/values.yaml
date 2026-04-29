@@ -6,6 +6,14 @@ fullnameOverride: ""
 # Suspend all CronJobs globally
 suspendAllCronJobs: false
 
+# External Secrets configuration for AWS Secrets Manager
+externalSecrets:
+  refreshInterval: 1h
+  deletionPolicy: Delete
+  # AWS Secrets Manager secret key containing database passwords
+  # Expected format: {hostname: password, ...}
+  secretKey: "govuk/db-backup/passwd"
+
 # Image configuration for the main db-sync app container
 appImage:
   repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-db-sync"
@@ -74,13 +82,15 @@ serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: ""  # Overridden in app-config (Argo CD)
 
-# External Secrets configuration for AWS Secrets Manager
-externalSecrets:
-  refreshInterval: 1h
-  deletionPolicy: Delete
-  # AWS Secrets Manager secret key containing database passwords
-  # Expected format: {hostname: password, ...}
-  secretKey: "govuk/db-sync/passwd"
+# Default S3 bucket for all jobs in this release (can be overridden per-job with s3Bucket)
+defaultS3Bucket: ""
+
+# Default database connection settings (can be overridden per-job)
+defaultDbUsername: aws_db_admin
+defaultSourceDbHostname: ""
+defaultSourceDbPort: ""
+defaultDestDbHostname: ""
+defaultDestDbPort: ""
 
 # Global extra environment variables
 extraEnv: []
@@ -98,10 +108,16 @@ govukEnvironment: staging  # Overridden in app-config (Argo CD)
 #         operation: backup              # Operation: backup or restore (required)
 #         dbType: postgres               # Database type: postgres, mysql, documentdb (required)
 #         dbName: mydb                   # Database name (required)
-#         s3Bucket: s3://my-bucket       # S3 bucket (required for backup/restore)
+#         s3Bucket: s3://my-bucket       # S3 bucket override (falls back to defaultS3Bucket)
 #         s3Path: app/db                 # S3 path prefix (required for backup/restore)
-#         sourceUri: postgres://...      # Source connection URI (required for backup)
-#         destUri: postgres://...        # Destination connection URI (required for restore)
+#         sourceDbHostname: db-prod.internal  # Source DB hostname (required for backup if not sourceUri)
+#         sourceDbPort: "5432"           # Source DB port (overrides default for dbType)
+#         sourceDbUsername: aws_db_admin # Source DB username (overrides defaultDbUsername)
+#         sourceUri: postgres://...      # Full source URI (overrides constructed from components)
+#         destDbHostname: db-staging.internal  # Dest DB hostname (required for restore if not destUri)
+#         destDbPort: "5432"             # Dest DB port (overrides default for dbType)
+#         destDbUsername: aws_db_admin   # Dest DB username (overrides defaultDbUsername)
+#         destUri: postgres://...        # Full dest URI (overrides constructed from components)
 #         suspend: false                 # Suspend this job (optional)
 #         maxJobRuntimeSeconds: 43200    # Max runtime in seconds (default: 12 hours)
 #         transformScript: script.sql    # Transform script filename from ConfigMap (optional, backup only)
