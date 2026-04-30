@@ -1602,7 +1602,7 @@ govukApplications:
             secretKeyRef:
               name: fact-check-manager-postgres
               key: DATABASE_URL
-        - name: GOVUK_NOTIFY_TEAM_API_KEY
+        - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
               name: fact-check-manager-notify-team
