@@ -198,28 +198,28 @@ cronjobs:
       s3Path: publisher_documentdb/publisher_production
 
     short-url-manager-documentdb:
-      schedule: "13 0 * * *"
+      schedule: "13 2 * * *"
       operation: backup
       dbType: documentdb
       dbName: short_url_manager_production
       s3Path: short-url-manager_documentdb/short_url_manager_production
 
     travel-advice-publisher-documentdb:
-      schedule: "13 0 * * *"
+      schedule: "13 4 * * *"
       operation: backup
       dbType: documentdb
       dbName: travel_advice_publisher_production
       s3Path: travel-advice-publisher_documentdb/travel_advice_publisher_production
 
     govuk-content-documentdb:
-      schedule: "13 0 * * *"
+      schedule: "13 6 * * *"
       operation: backup
       dbType: documentdb
       dbName: govuk_content_production
       s3Path: govuk-content_documentdb/govuk_content_production
 
     govuk-assets-documentdb:
-      schedule: "13 0 * * *"
+      schedule: "13 8 * * *"
       operation: backup
       dbType: documentdb
       dbName: govuk_assets_production
