@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 577,
   "links": [],
   "panels": [
     {
@@ -147,7 +146,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -215,7 +214,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -278,7 +277,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -392,7 +391,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -410,7 +409,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -460,7 +458,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -478,7 +476,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -528,7 +525,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -629,7 +626,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -647,7 +644,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -697,7 +693,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -715,7 +711,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -765,7 +760,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -933,7 +928,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -949,7 +944,6 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.9, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"search-api-v2\", controller=\"searches\"}[5m])))",
-          "hide": false,
           "instant": false,
           "legendFormat": "90th percentile",
           "range": true,
@@ -962,7 +956,6 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"search-api-v2\", controller=\"searches\"}[5m])))",
-          "hide": false,
           "instant": false,
           "legendFormat": "99th percentile",
           "range": true,
@@ -1114,7 +1107,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "editorMode": "code",
@@ -1130,7 +1123,6 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.9, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"search-api-v2\", controller=\"autocompletes\"}[5m])))",
-          "hide": false,
           "instant": false,
           "legendFormat": "90th percentile",
           "range": true,
@@ -1143,7 +1135,6 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"search-api-v2\", controller=\"autocompletes\"}[5m])))",
-          "hide": false,
           "instant": false,
           "legendFormat": "99th percentile",
           "range": true,
@@ -1280,7 +1271,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "disableTextWrap": false,
@@ -1304,7 +1295,6 @@
           "editorMode": "builder",
           "expr": "histogram_quantile(0.9, sum by(le) (rate(search_api_v2_vertex_search_request_duration_bucket[5m])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "90th percentile",
@@ -1321,7 +1311,6 @@
           "editorMode": "builder",
           "expr": "histogram_quantile(0.99, sum by(le) (rate(search_api_v2_vertex_search_request_duration_bucket[5m])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "99th percentile",
@@ -1471,7 +1460,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "disableTextWrap": false,
@@ -1495,7 +1484,6 @@
           "editorMode": "builder",
           "expr": "histogram_quantile(0.9, sum by(le) (rate(search_api_v2_vertex_autocomplete_request_duration_bucket[5m])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "90th percentile",
@@ -1512,7 +1500,6 @@
           "editorMode": "builder",
           "expr": "histogram_quantile(0.99, sum by(le) (rate(search_api_v2_vertex_autocomplete_request_duration_bucket[5m])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "99th percentile",
@@ -1628,7 +1615,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "datasource": {
@@ -1652,7 +1639,6 @@
           },
           "editorMode": "code",
           "expr": "",
-          "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -1750,7 +1736,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "datasource": {
@@ -1774,7 +1760,6 @@
           },
           "editorMode": "code",
           "expr": "",
-          "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -1782,6 +1767,196 @@
         }
       ],
       "title": "Clickstream NDCG top 10",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Green: Cluster operates normally\nYellow: Primary shards allocated, but some replica shards unassigned\nRed: Primary shards unallocated",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Green"
+                },
+                "1": {
+                  "color": "yellow",
+                  "index": 1,
+                  "text": "Yellow"
+                },
+                "2": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "Red"
+                },
+                "3": {
+                  "color": "purple",
+                  "index": 3,
+                  "text": "Unknown"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 0,
+        "y": 45
+      },
+      "id": 25,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.0",
+      "targets": [
+        {
+          "editorMode": "builder",
+          "expr": "max(search_api_elasticsearch_status)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Elasticsearch Cluster Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Percentage of free diskspace per node\n",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 11,
+        "x": 11,
+        "y": 45
+      },
+      "id": 24,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.0",
+      "targets": [
+        {
+          "editorMode": "builder",
+          "expr": "avg by(node) (search_api_elasticsearch_disk_space)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Elasticsearch - Percent disk space free",
       "type": "timeseries"
     }
   ],
@@ -1800,5 +1975,6 @@
   "timezone": "browser",
   "title": "GOV.UK Search",
   "uid": "govuk-search",
-  "version": 4
+  "version": 1,
+  "weekStart": ""
 }
