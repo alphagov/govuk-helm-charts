@@ -63,6 +63,7 @@ cronjobs:
       dbType: postgres
       dbName: content_store_production
       s3Path: content-store_postgres/content_store_production
+      transformScript: content-store_postgres.sql
       maxJobRuntimeSeconds: 86400  # 24 hours for large DB
 
     draft-content-store-postgres:
@@ -85,6 +86,7 @@ cronjobs:
       operation: backup
       dbType: postgres
       dbName: email-alert-api_production
+      transformScript: email-alert-api_postgres.sql
       s3Path: email-alert-api_postgres/email-alert-api_production
 
     places-manager-postgres:
@@ -121,6 +123,7 @@ cronjobs:
       dbType: postgres
       dbName: publishing_api_production
       s3Path: publishing-api_postgres/publishing_api_production
+      transformScript: publishing-api_postgres.sql
       maxJobRuntimeSeconds: 86400  # 24 hours for large DB
       dbOwner: publishing-api-owner-role
 
@@ -187,6 +190,7 @@ cronjobs:
       dbType: mysql
       dbName: whitehall_production
       s3Path: whitehall_mysql/whitehall_production
+      transformScript: whitehall_mysql.sql
       maxJobRuntimeSeconds: 86400  # 24 hours for large DB
 
     # DocumentDB backups (shared instance, multiple databases)
@@ -195,6 +199,7 @@ cronjobs:
       operation: backup
       dbType: documentdb
       dbName: publisher_production
+      sourcePasswordSecretKey: shared-documentdb
       s3Path: publisher_documentdb/publisher_production
 
     short-url-manager-documentdb:
@@ -202,6 +207,7 @@ cronjobs:
       operation: backup
       dbType: documentdb
       dbName: short_url_manager_production
+      sourcePasswordSecretKey: shared-documentdb
       s3Path: short-url-manager_documentdb/short_url_manager_production
 
     travel-advice-publisher-documentdb:
@@ -209,6 +215,7 @@ cronjobs:
       operation: backup
       dbType: documentdb
       dbName: travel_advice_publisher_production
+      sourcePasswordSecretKey: shared-documentdb
       s3Path: travel-advice-publisher_documentdb/travel_advice_publisher_production
 
     govuk-content-documentdb:
@@ -216,6 +223,7 @@ cronjobs:
       operation: backup
       dbType: documentdb
       dbName: govuk_content_production
+      sourcePasswordSecretKey: shared-documentdb
       s3Path: govuk-content_documentdb/govuk_content_production
 
     govuk-assets-documentdb:
@@ -223,4 +231,6 @@ cronjobs:
       operation: backup
       dbType: documentdb
       dbName: govuk_assets_production
+      sourcePasswordSecretKey: shared-documentdb
+      transformScript: asset-manager_documentdb.js
       s3Path: govuk-assets_documentdb/govuk_assets_production

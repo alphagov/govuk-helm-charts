@@ -104,17 +104,18 @@ Expected dict keys: job
 
 {{/*
 Build source URI from components unless sourceUri is explicitly set.
-Expected dict keys: root, job
+Expected dict keys: root, job, jobName
 */}}
 {{- define "db-sync.sourceUri" -}}
 {{- $root := .root -}}
 {{- $job := .job -}}
+{{- $jobName := .jobName -}}
 {{- if $job.sourceUri -}}
 {{- $job.sourceUri -}}
 {{- else -}}
-	{{- $hostname := default $root.Values.defaultSourceDbHostname $job.sourceDbHostname -}}
+	{{- $hostname := default $jobName $job.sourceDbHostname -}}
 	{{- if $hostname -}}
-		{{- $port := default $root.Values.defaultSourceDbPort $job.sourceDbPort -}}
+		{{- $port := $job.sourceDbPort -}}
 		{{- if not $port -}}
 			{{- $port = include "db-sync.defaultDbPort" $job.dbType | trim -}}
 		{{- end -}}
@@ -127,17 +128,18 @@ Expected dict keys: root, job
 
 {{/*
 Build destination URI from components unless destUri is explicitly set.
-Expected dict keys: root, job
+Expected dict keys: root, job, jobName
 */}}
 {{- define "db-sync.destUri" -}}
 {{- $root := .root -}}
 {{- $job := .job -}}
+{{- $jobName := .jobName -}}
 {{- if $job.destUri -}}
 {{- $job.destUri -}}
 {{- else if ne $job.dbType "documentdb" -}}
-	{{- $hostname := default $root.Values.defaultDestDbHostname $job.destDbHostname -}}
+	{{- $hostname := default $jobName $job.destDbHostname -}}
 	{{- if $hostname -}}
-		{{- $port := default $root.Values.defaultDestDbPort $job.destDbPort -}}
+		{{- $port := $job.destDbPort -}}
 		{{- if not $port -}}
 			{{- $port = include "db-sync.defaultDbPort" $job.dbType | trim -}}
 		{{- end -}}
@@ -161,6 +163,6 @@ Expected dict keys: job, transformUser
 	{{- $scheme := include "db-sync.dbUriScheme" $job.dbType | trim -}}
 	{{- $port := include "db-sync.defaultDbPort" $job.dbType | trim -}}
 	{{- $transformDbName := default $job.dbName $job.transformDbName -}}
-	{{- printf "%s://%s:password@127.0.0.1:%s/%s" $scheme $transformUser $port $transformDbName -}}
+	{{- printf "%s://%s@127.0.0.1:%s/%s" $scheme $transformUser $port $transformDbName -}}
 {{- end -}}
 {{- end }}

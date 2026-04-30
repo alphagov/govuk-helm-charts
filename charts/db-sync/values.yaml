@@ -62,7 +62,7 @@ podSecurityContext:
     type: RuntimeDefault
 
 # Container security context
-securityContext:
+appSecurityContext:
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true
   capabilities:
@@ -87,10 +87,6 @@ defaultS3Bucket: ""
 
 # Default database connection settings (can be overridden per-job)
 defaultDbUsername: aws_db_admin
-defaultSourceDbHostname: ""
-defaultSourceDbPort: ""
-defaultDestDbHostname: ""
-defaultDestDbPort: ""
 
 # Global extra environment variables
 extraEnv: []
@@ -110,11 +106,11 @@ govukEnvironment: staging  # Overridden in app-config (Argo CD)
 #         dbName: mydb                   # Database name (required)
 #         s3Bucket: s3://my-bucket       # S3 bucket override (falls back to defaultS3Bucket)
 #         s3Path: app/db                 # S3 path prefix (required for backup/restore)
-#         sourceDbHostname: db-prod.internal  # Source DB hostname (required for backup if not sourceUri)
+#         sourceDbHostname: db-prod.internal  # Source DB hostname (defaults to job name)
 #         sourceDbPort: "5432"           # Source DB port (overrides default for dbType)
 #         sourceDbUsername: aws_db_admin # Source DB username (overrides defaultDbUsername)
 #         sourceUri: postgres://...      # Full source URI (overrides constructed from components)
-#         destDbHostname: db-staging.internal  # Dest DB hostname (required for restore if not destUri)
+#         destDbHostname: db-staging.internal  # Dest DB hostname (defaults to job name)
 #         destDbPort: "5432"             # Dest DB port (overrides default for dbType)
 #         destDbUsername: aws_db_admin   # Dest DB username (overrides defaultDbUsername)
 #         destUri: postgres://...        # Full dest URI (overrides constructed from components)

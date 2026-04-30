@@ -12,8 +12,8 @@
   {{- $destPasswordKey := $job.destPasswordSecretKey | default $jobName }}
   {{- $transformUser := include "db-sync.transformUser" (dict "job" $job) | trim }}
   {{- $transformUri := include "db-sync.transformUri" (dict "job" $job "transformUser" $transformUser) | trim }}
-  {{- $sourceUri := include "db-sync.sourceUri" (dict "root" $ "job" $job) | trim }}
-  {{- $destUri := include "db-sync.destUri" (dict "root" $ "job" $job) | trim }}
+  {{- $sourceUri := include "db-sync.sourceUri" (dict "root" $ "job" $job "jobName" $jobName) | trim }}
+  {{- $destUri := include "db-sync.destUri" (dict "root" $ "job" $job "jobName" $jobName) | trim }}
   {{- /* Ensure required fields are present */}}
   {{- $_ := $job.schedule | required (printf "schedule is required for job %s" $jobName) }}
   {{- $_ := $job.operation | required (printf "operation is required for job %s" $jobName) }}
@@ -22,6 +22,12 @@
   {{- $s3Bucket := $job.s3Bucket | default $.Values.defaultS3Bucket }}
   {{- $_ := $s3Bucket | required (printf "s3Bucket is required for job %s (set per-job or via defaultS3Bucket)" $jobName) }}
   {{- $_ := $job.s3Path | required (printf "s3Path is required for job %s" $jobName) }}
+  {{- if and $isBackup (not $sourceUri) }}
+    {{- fail (printf "backup job %s requires either sourceUri or a resolvable source hostname" $jobName) }}
+  {{- end }}
+  {{- if and $isRestore (ne $job.dbType "documentdb") (not $destUri) }}
+    {{- fail (printf "restore job %s requires either destUri or a resolvable destination hostname" $jobName) }}
+  {{- end }}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -104,8 +110,6 @@ spec:
               image: "{{ $.Values.transformImage.mysql.repository }}:{{ $.Values.transformImage.mysql.tag }}"
               imagePullPolicy: {{ $.Values.transformImage.mysql.pullPolicy }}
               restartPolicy: Always
-              command:
-                - /app/transform-db
               ports:
                 - containerPort: 3306
                   name: mysql
@@ -133,7 +137,7 @@ spec:
                   value: {{ $.Values.govukEnvironment }}
                 - name: POSTGRES_PASSWORD
                   value: {{ $job.transformPassword | default "secret" | quote }}
-                - name: POSTGRES_USERNAME
+                - name: POSTGRES_USER
                   value: {{ $transformUser | quote }}
               resources:
                 {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
@@ -256,9 +260,9 @@ spec:
                   {{- toYaml . | nindent 16 }}
                 {{- end }}
               resources:
-                {{- toYaml $job.resources | default $.Values.resources | nindent 16 }}
+                {{- toYaml $job.appResources | default $.Values.appResources | nindent 16 }}
               securityContext:
-                {{- toYaml $.Values.securityContext | nindent 16 }}
+                {{- toYaml $.Values.appSecurityContext | nindent 16 }}
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp

@@ -45,7 +45,6 @@ cronjobs:
       dbName: email-alert-api_production
       s3Bucket: s3://govuk-staging-database-backups
       s3Path: email-alert-api/db
-      transformScript: email-alert-api.sql
       extraEnv:
         - name: DB_OWNER
           value: email-alert-api
@@ -73,7 +72,7 @@ cronjobs:
 
 - **suspend**: Set to `true` to disable a job (default: `false`)
 - **maxJobRuntimeSeconds**: Maximum job runtime in seconds (default: 43200 = 12 hours)
-- **transformScript**: Name of a transform script from the `scripts/` ConfigMap
+- **transformScript**: Name of a transform script including path.
 - **extraEnv**: Job-specific environment variables
 - **resources**: Override default resource limits/requests
 
