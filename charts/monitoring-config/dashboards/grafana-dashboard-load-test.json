@@ -1,0 +1,527 @@
+{
+  "title": "NDL - Load Test Results (k6)",
+  "uid": "dgu-load-test-k6",
+  "description": "k6 load test results for www.staging.data.gov.uk — VUs, response times per endpoint, error rate and infrastructure impact during the test",
+  "tags": ["load-test", "k6", "datagovuk"],
+  "timezone": "browser",
+  "refresh": "10s",
+  "time": { "from": "now-30m", "to": "now" },
+  "schemaVersion": 42,
+  "editable": true,
+  "graphTooltip": 1,
+  "panels": [
+
+    {
+      "id": 1, "type": "row",
+      "title": "Test Progress",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 }
+    },
+
+    {
+      "id": 2, "type": "stat",
+      "title": "Active Virtual Users",
+      "description": "Number of VUs currently running. Follows the stage ramp-up/ramp-down profile.",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "auto",
+        "colorMode": "background",
+        "graphMode": "area",
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "yellow", "value": 50 },
+              { "color": "red", "value": 90 }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_vus",
+          "legendFormat": "VUs",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 3, "type": "stat",
+      "title": "Total Requests Sent",
+      "description": "Total HTTP requests sent by k6 in this test run.",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "blue" },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "sum(k6_http_reqs_total)",
+          "legendFormat": "Total",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 4, "type": "stat",
+      "title": "Error Rate",
+      "description": "Percentage of failed HTTP requests. Target: <1%",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "background",
+        "graphMode": "area",
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "yellow", "value": 0.5 },
+              { "color": "red", "value": 1 }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_errors_rate * 100",
+          "legendFormat": "Error %",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 5, "type": "stat",
+      "title": "Requests / sec",
+      "description": "Current HTTP request throughput from k6.",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "green" },
+          "unit": "reqps",
+          "decimals": 1
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "rate(k6_http_reqs_total[30s])",
+          "legendFormat": "req/s",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 6, "type": "timeseries",
+      "title": "Virtual Users Over Test Duration",
+      "description": "VU ramp-up profile — shows warm-up, ramp-up, soak, and ramp-down phases.",
+      "gridPos": { "h": 7, "w": 24, "x": 0, "y": 5 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "blue" },
+          "custom": {
+            "drawStyle": "line", "lineWidth": 2, "fillOpacity": 15,
+            "gradientMode": "none", "showPoints": "never"
+          },
+          "unit": "short",
+          "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_vus",
+          "legendFormat": "Active VUs",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_vus_max",
+          "legendFormat": "Max VUs",
+          "refId": "B"
+        }
+      ]
+    },
+
+    {
+      "id": 7, "type": "row",
+      "title": "Response Times by Endpoint",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 12 }
+    },
+
+    {
+      "id": 8, "type": "timeseries",
+      "title": "p95 Response Time by Endpoint",
+      "description": "95th percentile response time per endpoint. Target: homepage/search/dataset <2s, API <3s. Spikes indicate the breaking point.",
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 13 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true, "calcs": ["mean", "max", "lastNotNull"] },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "drawStyle": "line", "lineWidth": 2, "fillOpacity": 5,
+            "showPoints": "never", "spanNulls": false
+          },
+          "unit": "ms",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "yellow", "value": 1500 },
+              { "color": "red", "value": 2000 }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "API p95" },
+            "properties": [{ "id": "thresholds", "value": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }, { "color": "red", "value": 3000 }] } }]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_http_req_duration{type=\"homepage\", quantile=\"p(95)\"}",
+          "legendFormat": "Homepage p95",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_http_req_duration{type=\"search\", quantile=\"p(95)\"}",
+          "legendFormat": "Search p95",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_http_req_duration{type=\"dataset\", quantile=\"p(95)\"}",
+          "legendFormat": "Dataset p95",
+          "refId": "C"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_http_req_duration{type=\"api\", quantile=\"p(95)\"}",
+          "legendFormat": "API p95",
+          "refId": "D"
+        }
+      ]
+    },
+
+    {
+      "id": 9, "type": "timeseries",
+      "title": "Average Response Time by Endpoint",
+      "description": "Mean response time per endpoint throughout the test.",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "drawStyle": "line", "lineWidth": 1, "fillOpacity": 5, "showPoints": "never" },
+          "unit": "ms", "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_http_req_duration{type=\"homepage\", quantile=\"avg\"}",
+          "legendFormat": "Homepage avg",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_http_req_duration{type=\"search\", quantile=\"avg\"}",
+          "legendFormat": "Search avg",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_http_req_duration{type=\"dataset\", quantile=\"avg\"}",
+          "legendFormat": "Dataset avg",
+          "refId": "C"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_http_req_duration{type=\"api\", quantile=\"avg\"}",
+          "legendFormat": "API avg",
+          "refId": "D"
+        }
+      ]
+    },
+
+    {
+      "id": 10, "type": "timeseries",
+      "title": "HTTP Request Rate by Endpoint",
+      "description": "Requests per second broken down by endpoint — shows test load distribution.",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "drawStyle": "line", "lineWidth": 1, "fillOpacity": 10, "showPoints": "never" },
+          "unit": "reqps", "min": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "rate(k6_http_reqs_total{type=\"homepage\"}[30s])",
+          "legendFormat": "Homepage",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "rate(k6_http_reqs_total{type=\"search\"}[30s])",
+          "legendFormat": "Search",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "rate(k6_http_reqs_total{type=\"dataset\"}[30s])",
+          "legendFormat": "Dataset",
+          "refId": "C"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "rate(k6_http_reqs_total{type=\"api\"}[30s])",
+          "legendFormat": "API",
+          "refId": "D"
+        }
+      ]
+    },
+
+    {
+      "id": 11, "type": "row",
+      "title": "Infrastructure Impact During Test",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 30 }
+    },
+
+    {
+      "id": 12, "type": "timeseries",
+      "title": "CPU Utilization During Load Test (%)",
+      "description": "CPU per container in datagovuk namespace. Watch for spikes above 80% — indicates the breaking point.",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 31 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "drawStyle": "line", "lineWidth": 1, "fillOpacity": 5, "showPoints": "never" },
+          "unit": "percent", "max": 150,
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }, { "color": "yellow", "value": 70 }, { "color": "red", "value": 80 }] }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "sum by (container) (rate(container_cpu_usage_seconds_total{namespace=\"datagovuk\", container!=\"\", container!=\"POD\"}[5m])) * 100",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 13, "type": "timeseries",
+      "title": "Memory Usage During Load Test",
+      "description": "Memory per container in datagovuk namespace. Steady growth indicates a memory leak.",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 31 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "drawStyle": "line", "lineWidth": 1, "fillOpacity": 5, "showPoints": "never" },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "sum by (container) (container_memory_usage_bytes{namespace=\"datagovuk\", container!=\"\", container!=\"POD\"})",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 14, "type": "timeseries",
+      "title": "Application P95 Response Time (from CKAN/Find metrics)",
+      "description": "Server-side p95 response time measured by the applications themselves — compare with k6 client-side timings above.",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 39 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "multi" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 5, "showPoints": "never" },
+          "unit": "s",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }, { "color": "yellow", "value": 2 }, { "color": "red", "value": 3 }] }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"datagovuk\"}[5m])) by (le, job))",
+          "legendFormat": "{{job}} p95",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 15, "type": "row",
+      "title": "Error Analysis",
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 47 }
+    },
+
+    {
+      "id": 16, "type": "timeseries",
+      "title": "k6 Error Rate Over Time",
+      "description": "Percentage of requests that failed according to k6. Crosses 1% threshold = test fails.",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 48 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "fixed", "fixedColor": "red" },
+          "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 20, "showPoints": "never" },
+          "unit": "percentunit",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }, { "color": "red", "value": 0.01 }] }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "k6_errors_rate",
+          "legendFormat": "Error Rate",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 17, "type": "timeseries",
+      "title": "Application 5XX Error Rate",
+      "description": "Server-side 5XX errors from CKAN/Find during the load test. Spikes indicate the service is breaking under load.",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 48 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "legend": { "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single" }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 10, "showPoints": "never" },
+          "unit": "percent",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": 0 }, { "color": "red", "value": 0.5 }] }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "expr": "(sum(rate(http_requests_total{namespace=\"datagovuk\", status=~\"5..\"}[1m])) by (job) / sum(rate(http_requests_total{namespace=\"datagovuk\"}[1m])) by (job)) * 100",
+          "legendFormat": "{{job}} 5XX %",
+          "refId": "A"
+        }
+      ]
+    }
+
+  ],
+
+  "templating": { "list": [] },
+  "annotations": { "list": [] },
+  "links": [
+    {
+      "title": "Infrastructure Dashboard",
+      "url": "/d/dgu-app-requests/ndl-data-gov-uk",
+      "type": "link",
+      "icon": "external link",
+      "tooltip": "Open the main NDL Data Gov UK dashboard"
+    }
+  ],
+  "fiscalYearStartMonth": 0,
+  "weekStart": ""
+}
