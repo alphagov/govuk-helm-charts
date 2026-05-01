@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+set -e
+
+APP_NAME="${1}"
+OUTPUT_DIR="output"
+
+if [ -z "${APP_NAME}" ]; then
+  echo "Render a Helm chart for a GOV.UK application across all environments."
+  echo "Usage: $0 <app-name>"
+  echo "Examples:"
+  echo "  $0 whitehall-admin"
+  echo "  $0 db-backup"
+  exit 1
+fi
+
+
+function render_app() {
+  ENV_NAME="${1}"
+
+  VALUES_FILE="$(mktemp)"
+  mkdir -p "${OUTPUT_DIR}/${ENV_NAME}"
+
+  # shellcheck disable=SC2016
+  yq "explode(.) |
+    (.govukApplications[] |
+    select(.name == \"${APP_NAME}\")).helmValues as \$appVal |
+    del(.govukApplications) | . *= \$appVal" "charts/app-config/values-${ENV_NAME}.yaml" \
+    > "${VALUES_FILE}"
+
+  CHART_NAME=$(
+    yq "(.govukApplications[] | select(.name == \"${APP_NAME}\")).chartPath // \"charts/generic-govuk-app\"" \
+    "charts/app-config/values-${ENV_NAME}.yaml"
+  )
+
+  helm template "${APP_NAME}" "${CHART_NAME}" -f "${VALUES_FILE}" --output-dir "${OUTPUT_DIR}/${ENV_NAME}"
+
+  rm "${VALUES_FILE}"
+}
+
+render_app "integration"
+render_app "staging"
+render_app "production"
