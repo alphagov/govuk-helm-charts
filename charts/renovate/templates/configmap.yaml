@@ -13,6 +13,7 @@ data:
         "alphagov/govuk-helm-charts",
         "alphagov/govuk-infrastructure",
         "alphagov/govuk-user-reviewer",
+        "alphagov/router",
         "alphagov/terraform-govuk-infrastructure-sensitive"
       ]
     }
