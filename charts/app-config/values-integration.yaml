@@ -1622,6 +1622,8 @@ govukApplications:
             secretKeyRef:
               name: signon-app-fact-check-manager
               key: oauth_secret
+        - name: GOVUK_NOTIFY_NEW_FACT_CHECK_REQUEST_TEMPLATE_ID
+          value: 5dfdadd2-2df5-43a3-8cb3-2b2024dd992e
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
