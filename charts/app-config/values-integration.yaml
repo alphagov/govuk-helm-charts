@@ -1624,6 +1624,8 @@ govukApplications:
               key: oauth_secret
         - name: GOVUK_NOTIFY_NEW_FACT_CHECK_REQUEST_TEMPLATE_ID
           value: 5dfdadd2-2df5-43a3-8cb3-2b2024dd992e
+        - name: GOVUK_NOTIFY_RESPONSE_ACCEPTED_TEMPLATE_ID
+          value: 92dde303-f0fb-4a74-ac3e-4f4b48792c7a
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
