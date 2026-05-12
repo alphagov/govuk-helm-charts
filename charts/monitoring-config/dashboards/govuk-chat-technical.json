@@ -577,7 +577,7 @@
             "uid": "cloudwatch"
           },
           "dimensions": {},
-          "expression": "(itc_sonnet_4_5 + cwitc_sonnet_4_5 + (otc_sonnet_4_5 * 5)) / 50000",
+          "expression": "(itc_sonnet_4_5 + cwitc_sonnet_4_5 + (otc_sonnet_4_5 * 5)) / 150000",
           "id": "",
           "label": "Sonnet 4.5",
           "logGroups": [],
