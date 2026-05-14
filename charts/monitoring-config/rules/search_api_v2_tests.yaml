@@ -333,7 +333,7 @@ tests:
         exp_alerts:
           - exp_labels:
               alertname: SearchDegradedLong
-              severity: critical
+              severity: warning
               destination: slack-search-team
             exp_annotations:
               summary: "Search API v2: Degraded search performance (long)"
