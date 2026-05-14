@@ -153,7 +153,7 @@ groups:
         expr: search_api_v2:search_successful_requests:ratio_rate24h < 0.9999
         for: 24h
         labels:
-          severity: critical
+          severity: warning
           destination: slack-search-team
         annotations:
           summary: "Search API v2: Degraded search performance (long)"
