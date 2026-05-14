@@ -1626,6 +1626,8 @@ govukApplications:
           value: 5dfdadd2-2df5-43a3-8cb3-2b2024dd992e
         - name: GOVUK_NOTIFY_RESPONSE_ACCEPTED_TEMPLATE_ID
           value: 92dde303-f0fb-4a74-ac3e-4f4b48792c7a
+        - name: GOVUK_NOTIFY_RESPONSE_REJECTED_TEMPLATE_ID
+          value: 748abb1d-8876-4888-b133-6e8f0e53b5fb
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
