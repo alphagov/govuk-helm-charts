@@ -1158,7 +1158,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Duration of response from Google Vertex to a search request (in seconds)",
+      "description": "Duration of response from Google Cloud Discovery Engine (previously known as 'Vertex AI Search') to a search request (in seconds)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1330,7 +1330,7 @@
           "useBackend": false
         }
       ],
-      "title": "Google Vertex response times: Search",
+      "title": "Google Cloud Discovery Engine response times: Search",
       "type": "timeseries"
     },
     {
@@ -1338,7 +1338,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Duration of response from Google Vertex to an autocomplete request (in seconds)",
+      "description": "Duration of response from Google Cloud Discovery Engine (previously known as 'Vertex AI Search') to an autocomplete request (in seconds)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1521,7 +1521,7 @@
           "useBackend": false
         }
       ],
-      "title": "Google Vertex response times: Autocomplete",
+      "title": "Google Cloud Discovery Engine response times: Autocomplete",
       "type": "timeseries"
     },
     {
