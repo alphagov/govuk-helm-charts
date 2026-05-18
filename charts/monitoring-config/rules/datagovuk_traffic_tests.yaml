@@ -5,13 +5,13 @@ evaluation_interval: 1m
 
 tests:
   ##
-  # Test 1: No alert when origin request rate is below the 80% threshold (20 req/s)
+  # Test 1: No alert when origin request rate is below the 80% threshold (10 req/s)
   ##
-  - name: No alert when traffic is below 80% of load-tested capacity
+  - name: No alert when traffic is below 80% of rightsized capacity
     interval: 1m
     input_series:
       - series: 'fastly_rt_origin_fetches_total{service_name="staging data.gov.uk"}'
-        values: '0+1200x30'  # 1200 counter increment per minute = 20 req/s — below 44.6 threshold
+        values: '0+600x30'  # 600 counter increment per minute = 10 req/s — below 20.0 threshold
 
     alert_rule_test:
       - alertname: DataGovUkHighTrafficRate
@@ -19,17 +19,17 @@ tests:
         exp_alerts: []
 
   ##
-  # Test 2: Alert fires when origin request rate is sustained above 80% threshold (50 req/s)
+  # Test 2: Alert fires when origin request rate is sustained above 80% threshold (22 req/s)
   #
-  # With rate([5m]) and a constant 3000/min (50 req/s) increment:
+  # With rate([5m]) and a constant 1320/min (22 req/s) increment:
   #   - Condition first becomes TRUE at t=5m (full 5-minute window populated)
   #   - With for: 5m the alert FIRES at t=10m
   ##
-  - name: Alert fires when traffic exceeds 80% of load-tested capacity for 5+ minutes
+  - name: Alert fires when traffic exceeds 80% of rightsized capacity for 5+ minutes
     interval: 1m
     input_series:
       - series: 'fastly_rt_origin_fetches_total{service_name="staging data.gov.uk"}'
-        values: '0+3000x30'  # 3000 counter increment per minute = 50 req/s — exceeds 44.6 threshold
+        values: '0+1320x30'  # 1320 counter increment per minute = 22 req/s — exceeds 20.0 threshold
 
     alert_rule_test:
       - alertname: DataGovUkHighTrafficRate
@@ -43,13 +43,13 @@ tests:
               severity: warning
               destination: slack-datagovuk-technical
             exp_annotations:
-              summary: data.gov.uk origin request rate exceeds 80% of load-tested capacity
+              summary: data.gov.uk origin request rate exceeds 80% of rightsized capacity
               description: >-
                 The request rate to the data.gov.uk origin has exceeded 80% of the
-                peak capacity established by load testing (55.8 req/s at 100 virtual users).
+                rightsized capacity target (25 req/s, validated by load testing at 45 virtual users).
 
-                Current rate: 50 req/s
-                Threshold (80% of 55.8 req/s): 44.6 req/s
+                Current rate: 22 req/s
+                Threshold (80% of 25 req/s): 20.0 req/s
 
-                Consider scaling the find and CKAN pods before traffic reaches 100% capacity.
+                Consider scaling the find and CKAN pods before traffic reaches 100% capacity (25 req/s).
               runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/data-gov-uk-high-traffic-alert.html
