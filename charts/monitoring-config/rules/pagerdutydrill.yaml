@@ -4,7 +4,7 @@ groups:
     rules:
       - alert: PagerDutyDrill
         expr: |
-          (day_of_week() == 1) and (hour() == 10) and (minute() >= 0) and (minute() <= 10)
+          (day_of_week() == 2) and (hour() == 10) and (minute() >= 0) and (minute() <= 10)
         labels:
           severity: page
         annotations:
