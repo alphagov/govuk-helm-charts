@@ -3984,6 +3984,12 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxDenyCrawlers: true
       nginxProxyReadTimeout: 60s
+      nginxConfigMap:
+        # Block public access to internal healthcheck endpoints.
+        extraServerConf: |
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
       ingress:
         enabled: true
         annotations:
