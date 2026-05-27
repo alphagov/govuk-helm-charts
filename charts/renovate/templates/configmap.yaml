@@ -6,6 +6,7 @@ data:
   config.json: |-
     {
       "repositories": [
+        "alphagov/govuk-cli",
         "alphagov/govuk-dependabot-merger",
         "alphagov/govuk-dns-tf",
         "alphagov/govuk-fastly",
