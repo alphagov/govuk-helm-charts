@@ -1,0 +1,16 @@
+groups:
+  - name: PublishingApiAlerts
+    rules:
+      - alert: PublishingApiOldLocksPresent
+        expr: >-
+          publishing_api_old_lock_count > 0
+        for: 20m
+        labels:
+          severity: warning
+          destination: slack-content-apis-team
+        annotations:
+          summary: Sidekiq jobs locked for too long in Publishing API.
+          description: >-
+            Sidekiq jobs have been locked for more than one hour in Publishing API.
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/alerts/publishing-api-old-locks-present.md

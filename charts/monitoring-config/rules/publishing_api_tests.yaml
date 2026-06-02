@@ -1,0 +1,30 @@
+rule_files:
+  - publishing_api.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - input_series:
+      - series: 'publishing_api_old_lock_count'
+        values: '0x20'
+    alert_rule_test:
+      - alertname: PublishingApiOldLocksPresent
+        eval_time: 20m
+        exp_alerts: []
+  - input_series:
+      - series: 'publishing_api_old_lock_count'
+        values: '1x20'
+    alert_rule_test:
+      - alertname: PublishingApiOldLocksPresent
+        eval_time: 20m
+        exp_alerts:
+          - exp_labels:
+              alertname: PublishingApiOldLocksPresent
+              severity: warning
+              destination: slack-content-apis-team
+            exp_annotations:
+              summary: Sidekiq jobs locked for too long in Publishing API.
+              description: >-
+                Sidekiq jobs have been locked for more than one hour in Publishing API.
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/alerts/publishing-api-old-locks-present.md
