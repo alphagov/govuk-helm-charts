@@ -67,7 +67,7 @@ tests:
           - exp_labels:
               alertname: LongRequestDurationFastSchemas
               severity: warning
-              destination: slack-graphql-notifications
+              destination: slack-content-apis-team
             exp_annotations:
               summary: Elevated GraphQL request duration
               description: >-
@@ -79,7 +79,7 @@ tests:
           - exp_labels:
               alertname: LongRequestDurationFastSchemas
               severity: critical
-              destination: slack-graphql-notifications
+              destination: slack-content-apis-team
             exp_annotations:
               summary: Elevated GraphQL request duration
               description: >-
@@ -111,7 +111,7 @@ tests:
           - exp_labels:
               alertname: LongRequestDurationSlowSchemas
               severity: warning
-              destination: slack-graphql-notifications
+              destination: slack-content-apis-team
             exp_annotations:
               summary: Elevated GraphQL request duration
               description: >-
@@ -123,7 +123,7 @@ tests:
           - exp_labels:
               alertname: LongRequestDurationSlowSchemas
               severity: critical
-              destination: slack-graphql-notifications
+              destination: slack-content-apis-team
             exp_annotations:
               summary: Elevated GraphQL request duration
               description: >-
@@ -182,7 +182,7 @@ tests:
           - exp_labels:
               alertname: HighQueryFailureRate
               severity: warning
-              destination: slack-graphql-notifications
+              destination: slack-content-apis-team
             exp_annotations:
               summary: Elevated GraphQL error rate
               description: >-

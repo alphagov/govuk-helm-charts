@@ -124,9 +124,9 @@ spec:
       groupInterval: 30m
     - matchers:
         - name: destination
-          value: slack-graphql-notifications
+          value: slack-content-apis-team
           matchType: =
-      receiver: 'slack-graphql-notifications'
+      receiver: 'slack-content-apis-team'
       repeatInterval: 1h
       groupWait: 5m
       groupInterval: 30m
@@ -208,7 +208,7 @@ spec:
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
-  - name: 'slack-graphql-notifications'
+  - name: 'slack-content-apis-team'
     slackConfigs:
     - channel: '#govuk-content-apis-system-alerts'
       {{- include "slack.template" . | nindent 6 }}

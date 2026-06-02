@@ -25,7 +25,7 @@ groups:
         for: 5m
         labels:
           severity: warning
-          destination: slack-graphql-notifications
+          destination: slack-content-apis-team
         annotations:
           summary: Elevated GraphQL request duration
           description: >-
@@ -44,7 +44,7 @@ groups:
         for: 5m
         labels:
           severity: warning
-          destination: slack-graphql-notifications
+          destination: slack-content-apis-team
         annotations:
           summary: Elevated GraphQL request duration
           description: >-
@@ -63,7 +63,7 @@ groups:
         for: 10m
         labels:
           severity: critical
-          destination: slack-graphql-notifications
+          destination: slack-content-apis-team
         annotations:
           summary: Elevated GraphQL request duration
           description: >-
@@ -82,7 +82,7 @@ groups:
         for: 10m
         labels:
           severity: critical
-          destination: slack-graphql-notifications
+          destination: slack-content-apis-team
         annotations:
           summary: Elevated GraphQL request duration
           description: >-
@@ -105,7 +105,7 @@ groups:
         for: 4m
         labels:
           severity: warning
-          destination: slack-graphql-notifications
+          destination: slack-content-apis-team
         annotations:
           summary: Elevated GraphQL error rate
           description: >-
