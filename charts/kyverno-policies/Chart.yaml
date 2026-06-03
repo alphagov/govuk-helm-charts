@@ -1,0 +1,6 @@
+apiVersion: v2
+name: kyverno-policies
+description: A Helm chart for deploying Kyverno admission and mutation policies
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

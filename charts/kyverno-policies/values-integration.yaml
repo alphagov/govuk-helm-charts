@@ -1,0 +1,4 @@
+sigstorePolicy:
+  enabled: true
+  # Provide the default OIDC subject:
+  subject: "https://github.com/alphagov/*/.github/workflows/*"

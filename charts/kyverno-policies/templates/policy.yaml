@@ -1,0 +1,37 @@
+{{- if .Values.sigstorePolicy.enabled }}
+apiVersion: kyverno.io/v1
+kind: Policy # Or "ClusterPolicy" for cluster-wide enforcement
+metadata:
+  name: require-signed-images
+  namespace: {{ default "sigstore-test" .Release.Namespace }} # Scopes enforcement to ONLY this namespace
+  annotations:
+    policies.kyverno.io/title: Require Keyless Cosign Signatures
+    policies.kyverno.io/description: >-
+      This policy enforces that any Pod deployed to this namespace must use
+      an image signed via keyless (OIDC) signing in GitHub Actions.
+spec:
+  validationFailureAction: Enforce # Or "Audit" for non-blocking enforcement
+  background: false
+  rules:
+    - name: verify-github-actions-signature
+      match:
+        any:
+        - resources:
+            kinds:
+              - Pod
+      verifyImages:
+      - imageReferences:
+        # Best Practice: Scope to specific regisries/images
+        # rather than "*" to avoid breaking standard sidecars or init containers.
+        - "ghcr.io/alphagov/*"
+        - "*/alphagov/*"
+        mutateDigest: true # Automatically changes mutable tags (like :latest) to the verified SHA256 digest
+        required: true
+        attestors:
+        - count: 1
+          entries:
+          - keyless:
+              # Typical: https://github.com/ORG/REPO/.github/workflows/WORKFLOW.yml@refs/heads/BRANCH
+              subject: {{ required "A valid OIDC subject is required for Sigstore" .Values.sigstorePolicy.subject | quote }}
+              issuer: "https://token.actions.githubusercontent.com"
+{{- end }}
