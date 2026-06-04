@@ -64,7 +64,7 @@
       "enabled": true
       "api_url": "https://dex.{{ $domainSuffix }}/userinfo"
       "auth_url": "https://dex.{{ $domainSuffix }}/auth"
-      "role_attribute_path": "'Admin'"
+      "role_attribute_path": "\"'Admin'\"" # This needs to end up double quoted in the ini file, so we need triple quoting here :cry:
       "token_url": "https://dex.{{ $domainSuffix }}/token"
       "scopes": "openid profile email groups"
     "date_formats":
