@@ -1,0 +1,24 @@
+{{ if eq .Values.govukEnvironment "integration" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno-policies
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: govuk
+  source:
+    repoURL: git@github.com/alphagov/govuk-helm-charts
+    path: charts/kyverno-policies
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: sigstore-test
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - ApplyOutOfSyncOnly=true
+    - ServerSideApply=true
+{{ end }}
