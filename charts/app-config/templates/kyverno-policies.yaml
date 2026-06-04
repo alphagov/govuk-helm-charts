@@ -11,6 +11,11 @@ spec:
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
     path: charts/kyverno-policies
+    helm:
+      valueFiles:
+      - values.yaml
+      - values-{{ .Values.govukEnvironment }}.yaml
+      ignoreMissingValueFiles: true
   destination:
     server: https://kubernetes.default.svc
     namespace: sigstore-test
@@ -19,6 +24,7 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
+    - CreateNamespace=true
     - ApplyOutOfSyncOnly=true
     - ServerSideApply=true
 {{ end }}
