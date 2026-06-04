@@ -44,6 +44,12 @@
       "type": "tempo"
       "uid": "tempo"
       "url": "http://tempo-query-frontend.monitoring.svc.cluster.local:3100"
+    - "name": "Loki"
+      "type": "loki"
+      "url": "http://loki-query-frontend.loki.svc.cluster.local:3100"
+      "jsonData":
+        "timeout": 60
+        "maxLines": 1000
   "defaultDashboardsTimezone": "Europe/London"
   "env":
     "AWS_ROLE_ARN": "arn:aws:iam::{{ .Values.awsAccountId }}:role/kube-prometheus-stack-grafana-govuk"
