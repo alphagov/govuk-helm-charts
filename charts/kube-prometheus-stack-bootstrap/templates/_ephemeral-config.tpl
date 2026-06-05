@@ -51,6 +51,9 @@
         "X-Scope-OrgID": "test"
         "timeout": 60
         "maxLines": 1000
+        "httpHeaderName1": "X-Scope-OrgID"
+      "secureJsonData":
+        "httpHeaderValue1": "test"
   "defaultDashboardsTimezone": "Europe/London"
   "env":
     "AWS_ROLE_ARN": "arn:aws:iam::{{ .Values.awsAccountId }}:role/kube-prometheus-stack-grafana-govuk"
