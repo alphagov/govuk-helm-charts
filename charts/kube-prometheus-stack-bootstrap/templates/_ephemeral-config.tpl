@@ -48,6 +48,7 @@
       "type": "loki"
       "url": "http://loki-query-frontend.loki.svc.cluster.local:3100"
       "jsonData":
+        "X-Scope-OrgID": "test"
         "timeout": 60
         "maxLines": 1000
   "defaultDashboardsTimezone": "Europe/London"
