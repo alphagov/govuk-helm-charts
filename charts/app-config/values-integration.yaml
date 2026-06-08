@@ -633,7 +633,7 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_PREVIEW
           value: env-7
         - name: GOOGLE_TAG_MANAGER_GA4_ID
-          value: &publishing-design-system-gtm-id GTM-P93SHJ4Z
+          value: &publishing-design-system-gtm-id GTM-KHZP7S7Q
         - name: GOOGLE_TAG_MANAGER_GA4_AUTH # Non-prod only
           value: &publishing-design-system-gtm-auth 8jHx-VNEguw67iX9TBC6_g
         - name: GOOGLE_TAG_MANAGER_GA4_PREVIEW # Non-prod only
@@ -2481,7 +2481,7 @@ govukApplications:
         - name: REPORTS_S3_BUCKET_NAME
           value: govuk-integration-publisher-csvs
         - name: GOOGLE_TAG_MANAGER_ID
-          value: &publishing-bootstrap-gtm-id GTM-W573BJPG
+          value: &publishing-bootstrap-gtm-id GTM-5T5SVMQX
         - name: GOOGLE_TAG_MANAGER_AUTH # Non-prod only
           value: &publishing-bootstrap-gtm-auth 2jaYNm4QqCxqsb10EcYo5w
         - name: GOOGLE_TAG_MANAGER_PREVIEW # Non-prod only

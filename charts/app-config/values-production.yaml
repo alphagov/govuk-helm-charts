@@ -632,7 +632,7 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_ID
           value: GTM-NZG8SF2
         - name: GOOGLE_TAG_MANAGER_GA4_ID
-          value: &publishing-design-system-gtm-id GTM-P93SHJ4Z
+          value: &publishing-design-system-gtm-id GTM-KHZP7S7Q
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -2466,7 +2466,7 @@ govukApplications:
         - name: REPORTS_S3_BUCKET_NAME
           value: govuk-production-publisher-csvs
         - name: GOOGLE_TAG_MANAGER_ID
-          value: &publishing-bootstrap-gtm-id GTM-W573BJPG
+          value: &publishing-bootstrap-gtm-id GTM-5T5SVMQX
         - name: MAINTENANCE_MODE
           value: "false"
   - name: publishing-api
