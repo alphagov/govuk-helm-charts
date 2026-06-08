@@ -635,9 +635,9 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_GA4_ID
           value: &publishing-design-system-gtm-id GTM-KHZP7S7Q
         - name: GOOGLE_TAG_MANAGER_GA4_AUTH # Non-prod only
-          value: &publishing-design-system-gtm-auth 8jHx-VNEguw67iX9TBC6_g
+          value: &publishing-design-system-gtm-auth GoGeIsCL2PK9Dv50tgM6Lg
         - name: GOOGLE_TAG_MANAGER_GA4_PREVIEW # Non-prod only
-          value: &publishing-design-system-gtm-preview env-50
+          value: &publishing-design-system-gtm-preview env-172
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
@@ -2483,9 +2483,9 @@ govukApplications:
         - name: GOOGLE_TAG_MANAGER_ID
           value: &publishing-bootstrap-gtm-id GTM-5T5SVMQX
         - name: GOOGLE_TAG_MANAGER_AUTH # Non-prod only
-          value: &publishing-bootstrap-gtm-auth 2jaYNm4QqCxqsb10EcYo5w
+          value: &publishing-bootstrap-gtm-auth 3_JLa__ZHE9RiHdjBAW-7g
         - name: GOOGLE_TAG_MANAGER_PREVIEW # Non-prod only
-          value: &publishing-bootstrap-gtm-preview env-18
+          value: &publishing-bootstrap-gtm-preview env-41
         - name: MAINTENANCE_MODE
           value: "false"
   - name: publishing-api
