@@ -34,4 +34,6 @@ spec:
               # Typical: https://github.com/ORG/REPO/.github/workflows/WORKFLOW.yml@refs/heads/BRANCH
               subject: {{ required "A valid OIDC subject is required for Sigstore" .Values.sigstorePolicy.subject | quote }}
               issuer: "https://token.actions.githubusercontent.com"
+              rekor:
+                url: "https://rekor.sigstore.dev"
 {{- end }}
