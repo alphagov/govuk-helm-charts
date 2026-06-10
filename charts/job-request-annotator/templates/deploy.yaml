@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: job-request-annotator
+  labels:
+    name: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: api
+  template:
+    metadata:
+      labels:
+        name: api
+    spec:
+      securityContext:
+          runAsNonRoot: true
+          seccompProfile:
+            type: "RuntimeDefault"
+          runAsUser: 1000
+          fsGroup: 1000
+      containers:
+        - name: api
+          securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                  drop:
+                    - ALL
+          image: '{{ .Values.containerImageUrl }}:{{ .Values.imageTag }}'
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+              httpGet:
+                scheme: HTTPS
+                path: /healthz
+                port: 3000
+              initialDelaySeconds: 2
+          livenessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /healthz
+              port: 3000
+              initialDelaySeconds: 30
+              periodSeconds: 60
+          volumeMounts:
+          - name: ssl-certs
+            mountPath: /app/certs/
+            readOnly: false
+          env:
+            - name: GIN_MODE
+              value: "release"
+      volumes:
+        - name: ssl-certs
+          secret:
+            secretName: webhook-server-cert
+
+

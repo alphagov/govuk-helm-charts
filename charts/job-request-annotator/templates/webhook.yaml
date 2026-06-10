@@ -1,0 +1,33 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: job-request-annotator
+  labels:
+    name: api
+  annotations:
+    cert-manager.io/inject-ca-from: cloud-platform-label-pods/serving-cert
+webhooks:
+  - name: api.job-request-annotator.svc.cluster.local
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: NotIn
+          values: ["job-request-annotator"]
+    failurePolicy: Ignore
+    sideEffects: None
+    reinvocationPolicy: IfNeeded
+    admissionReviewVersions: ["v1", "v1beta1"]
+    clientConfig:
+      caBundle: Cg==
+      service:
+        name: api
+        namespace: job-request-annotator
+        path: "/mutate/configmap"
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: ["*"]
+        apiVersions: ["v1"]
+        resources: ["configmaps"]
+        scope: "*"
+
+
