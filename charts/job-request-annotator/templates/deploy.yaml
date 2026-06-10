@@ -28,7 +28,7 @@ spec:
               capabilities:
                   drop:
                     - ALL
-          image: '{{ .Values.containerImageUrl }}:{{ .Values.imageTag }}'
+          image: '{{ .Values.image.repo }}:{{ .Values.image.tag }}'
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

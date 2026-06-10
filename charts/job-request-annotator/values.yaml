@@ -1,2 +1,3 @@
-containerImageUrl: "${ containerImageUrl }"
-imageTag: "${ imageTag }"
+image:
+  repo: "${ containerImageUrl }"
+  tag: "${ imageTag }"
