@@ -55,6 +55,6 @@ spec:
       volumes:
         - name: ssl-certs
           secret:
-            secretName: webhook-server-cert
+            secretName: self-signed-cert
 
 

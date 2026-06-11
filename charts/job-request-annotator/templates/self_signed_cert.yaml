@@ -4,7 +4,7 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: selfsigned-issuer
-  namespace: cloud-platform-label-pods
+  namespace: job-request-annotator
 spec:
   selfSigned: {}
 ---
@@ -12,15 +12,15 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: serving-cert
-  namespace: cloud-platform-label-pods
+  namespace: job-request-annotator
 spec:
-  commonName: api.cloud-platform-label-pods.svc
+  commonName: api.job-request-annotator.svc
   dnsNames:
-    - api.cloud-platform-label-pods.svc.cluster.local 
-    - api.cloud-platform-label-pods.svc
+    - api.job-request-annotator.svc.cluster.local 
+    - api.job-request-annotator.svc
   issuerRef:
     kind: Issuer
     name: selfsigned-issuer
-  secretName: webhook-server-cert
+  secretName: self-signed-cert
 
 
