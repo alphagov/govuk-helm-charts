@@ -169,6 +169,28 @@ tests:
           - labels: 'search_api_v2:search_successful_requests:ratio_rate1h{}'
             value: 0.92
 
+  # Tests for search_api_v2:discovery_engine_autocomplete_suggestions_response:p100_increase1h
+  - interval: 5m
+    input_series:
+      # 1st hour of responses all have 5 suggestions, next hour's have 0
+      - series: 'search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket{le="0.0"}'
+        values: '0x11 0+100x13'
+      - series: 'search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket{le="5.0"}'
+        values: '0+100x24'
+      - series: 'search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket{le="+Inf"}'
+        values: '0+100x24'
+    promql_expr_test:
+      - expr: search_api_v2:discovery_engine_autocomplete_suggestions_response:p100_increase1h
+        eval_time: 1h55m
+        exp_samples:
+          - value: 5
+            labels: 'search_api_v2:discovery_engine_autocomplete_suggestions_response:p100_increase1h'
+      - expr: 'search_api_v2:discovery_engine_autocomplete_suggestions_response:p100_increase1h'
+        eval_time: 2h
+        exp_samples:
+          - value: 0
+            labels: 'search_api_v2:discovery_engine_autocomplete_suggestions_response:p100_increase1h'
+
   # Tests for SearchDegradedMid
   - interval: 5m
     input_series:
@@ -194,6 +216,31 @@ tests:
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
               description: "1 hour rolling success rate for search requests has dropped below 99.9% for more than 2 hours."
+
+  # Tests for AutocompleteDegradedMid
+  - interval: 5m
+    input_series:
+      - series: 'search_api_v2:discovery_engine_autocomplete_suggestions_response:p100_increase1h'
+        values: '5x12 0x12'
+    alert_rule_test:
+      - eval_time: 1h10m
+        alertname: AutocompleteDegradedMid
+        exp_alerts: []
+      - eval_time: 1h15m
+        alertname: AutocompleteDegradedMid
+        exp_alerts:
+          - exp_labels:
+              alertname: AutocompleteDegradedMid
+              severity: warning
+              destination: slack-search-team
+            exp_annotations:
+              summary: "Search API v2: Degraded autocomplete performance (mid)"
+              grafana_path: >-
+                d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+              description: "Maximum number of autocomplete suggestions returned by Google Cloud Discovery Engine over 1 hour
+            has dropped to zero for more than 10 minutes."
 
   # Tests for search_api_v2:search_requests:rate24h
   - interval: 1h
