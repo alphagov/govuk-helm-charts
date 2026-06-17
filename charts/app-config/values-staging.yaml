@@ -157,7 +157,7 @@ govukApplications:
           memory: 4Gi
         requests:
           cpu: 10m
-          memory: 2Gi
+          memory: 4Gi
       redis:
         enabled: true
       ingress:
