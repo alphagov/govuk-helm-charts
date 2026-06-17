@@ -351,8 +351,6 @@ govukApplications:
           value: "0"
         - name: GRAPHQL_RATE_WORLD_INDEX
           value: "0"
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
       cronTasks: []
   - name: draft-collections
     repoName: collections
@@ -1225,8 +1223,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.staging.govuk-internal.digital
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
       cronTasks: []
   - name: draft-feedback
     repoName: feedback
@@ -1473,8 +1469,6 @@ govukApplications:
               key: api_key
         - name: WEB_CONCURRENCY
           value: '4'
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
       nginxConfigMap:
         extraServerConf: |
           location ~ /government/uploads/(?<item_path>.+) {
