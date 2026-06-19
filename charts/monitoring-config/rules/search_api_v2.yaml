@@ -21,30 +21,12 @@ groups:
               }[5m]
             )
           )
-      - record: search_api_v2:autocomplete_requests:rate5m
-        expr: |
-          sum by (status) (
-            rate(
-              http_requests_total{
-                namespace="apps",
-                job="search-api-v2",
-                controller="autocompletes"
-              }[5m]
-            )
-          )
       - record: search_api_v2:search_successful_requests:ratio_rate5m
         expr: |
           (
             sum (search_api_v2:search_requests:rate5m{status="200"})
             /
             sum (search_api_v2:search_requests:rate5m) > 0
-          ) or vector(1)
-      - record: search_api_v2:autocomplete_successful_requests:ratio_rate5m
-        expr: |
-          (
-            sum (search_api_v2:autocomplete_requests:rate5m{status="200"})
-            /
-            sum (search_api_v2:autocomplete_requests:rate5m) > 0
           ) or vector(1)
       - alert: HighVertexP90Latency
         expr: search_api_v2:vertex_search_response_times_p90:rate5m > 2
@@ -75,21 +57,6 @@ groups:
           description: >-
             5 minute rolling success rate for search requests has dropped below 99% for more than 10
             minutes.
-      - alert: AutocompleteDegradedAcute
-        expr: search_api_v2:autocomplete_successful_requests:ratio_rate5m < 0.9
-        for: 10m
-        labels:
-          severity: warning
-          destination: slack-search-team
-        annotations:
-          summary: "Search API v2: Degraded autocomplete performance (acute)"
-          grafana_path: >-
-            d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
-          runbook_url: >-
-            https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
-          description: >-
-            5 minute rolling success rate for autocomplete requests has dropped below 90% for more
-            than 10 minutes.
 
   - name: SearchApiV2MidMetrics
     interval: 5m
@@ -112,6 +79,13 @@ groups:
             /
             sum (search_api_v2:search_requests:rate1h) > 0
           ) or vector(1)
+      - record: search_api_v2:discovery_engine_autocomplete_suggestions_response:p100_increase1h
+        expr: |
+          histogram_quantile(1, sum by(le) (
+            increase(
+              search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket[1h]
+            )
+          )) and sum(increase(search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket{le="+Inf"}[1h])) > 500
       - alert: SearchDegradedMid
         expr: search_api_v2:search_successful_requests:ratio_rate1h < 0.999
         for: 2h
@@ -127,6 +101,21 @@ groups:
           description: >-
             1 hour rolling success rate for search requests has dropped below 99.9% for more than 2
             hours.
+      - alert: AutocompleteDegradedMid
+        expr: search_api_v2:discovery_engine_autocomplete_suggestions_response:p100_increase1h == 0
+        for: 10m
+        labels:
+          severity: warning
+          destination: slack-search-team
+        annotations:
+          summary: "Search API v2: Degraded autocomplete performance (mid)"
+          grafana_path: >-
+            d/govuk-search/gov-uk-search?orgId=1&from=now-24h&to=now&timezone=browser
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/search-alerts-and-monitoring.html#alertmanager
+          description: >-
+            Maximum number of autocomplete suggestions returned by Google Cloud Discovery Engine over 1 hour
+            has dropped to zero for more than 10 minutes.
 
   - name: SearchApiV2LongMetrics
     interval: 1h
