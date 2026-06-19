@@ -534,7 +534,6 @@ cronjobs:
         - op: backup
 
     ckan-postgres:
-      suspend: true
       schedule: "43 3 * * 1"
       db: ckan_production
       operations:
