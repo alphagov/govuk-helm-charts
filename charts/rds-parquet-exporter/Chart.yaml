@@ -1,0 +1,7 @@
+apiVersion: v2
+name: rds-parquet-exporter
+description: A Helm chart to execute RDS snapshot exports to S3 as Parquet.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+icon: https://raw.githubusercontent.com/cncf/artwork/main/projects/kubernetes/icon/color/kubernetes-icon-color.png
