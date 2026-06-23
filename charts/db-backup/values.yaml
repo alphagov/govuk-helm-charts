@@ -539,6 +539,8 @@ cronjobs:
       operations:
         - op: restore
           bucket: s3://govuk-staging-database-backups
+        - op: transform
+          script: ckan.sql
         - op: backup
 
     collections-publisher-mysql:
