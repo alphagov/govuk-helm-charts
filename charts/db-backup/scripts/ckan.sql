@@ -19,19 +19,17 @@
 -- Excludes active sysadmin accounts with a @dsit.gov.uk email — these are
 -- real admin accounts that must remain functional after restore.
 
-UPDATE public."user"
+UPDATE public.user
 SET
-  name     = 'user_' || id,
+  name = 'user_' || id,
   fullname = CASE
-               WHEN fullname IS NOT NULL THEN repeat('*', length(fullname))
-               ELSE NULL
-             END,
-  email    = 'user_' || id || '@example.com',
-  apikey   = CASE
-               WHEN apikey IS NOT NULL THEN repeat('*', length(apikey))
-               ELSE NULL
-             END
-WHERE NOT (sysadmin = true AND state = 'active' AND email ILIKE '%@dsit.gov.uk');
+    WHEN fullname IS NOT NULL THEN repeat('*', length(fullname))
+  END,
+  email = 'user_' || id || '@example.com',
+  apikey = CASE
+    WHEN apikey IS NOT NULL THEN repeat('*', length(apikey))
+  END
+WHERE NOT (sysadmin = TRUE AND state = 'active' AND email ILIKE '%@dsit.gov.uk');
 
 -- ---------------------------------------------------------------------------
 -- package
@@ -42,22 +40,18 @@ WHERE NOT (sysadmin = true AND state = 'active' AND email ILIKE '%@dsit.gov.uk')
 
 UPDATE public.package
 SET
-  author           = CASE
-                       WHEN author IS NOT NULL THEN repeat('*', greatest(length(author), 1))
-                       ELSE NULL
-                     END,
-  author_email     = CASE
-                       WHEN author_email IS NOT NULL THEN 'masked@example.com'
-                       ELSE NULL
-                     END,
-  maintainer       = CASE
-                       WHEN maintainer IS NOT NULL THEN repeat('*', greatest(length(maintainer), 1))
-                       ELSE NULL
-                     END,
+  author = CASE
+    WHEN author IS NOT NULL THEN repeat('*', greatest(length(author), 1))
+  END,
+  author_email = CASE
+    WHEN author_email IS NOT NULL THEN 'masked@example.com'
+  END,
+  maintainer = CASE
+    WHEN maintainer IS NOT NULL THEN repeat('*', greatest(length(maintainer), 1))
+  END,
   maintainer_email = CASE
-                       WHEN maintainer_email IS NOT NULL THEN 'masked@example.com'
-                       ELSE NULL
-                     END;
+    WHEN maintainer_email IS NOT NULL THEN 'masked@example.com'
+  END;
 
 -- ---------------------------------------------------------------------------
 -- package_extra
@@ -80,10 +74,10 @@ WHERE key IN (
 );
 
 UPDATE public.package_extra
-SET value = CASE
-              WHEN value IS NOT NULL THEN repeat('*', greatest(length(value), 1))
-              ELSE NULL
-            END
+SET
+  value = CASE
+    WHEN value IS NOT NULL THEN repeat('*', greatest(length(value), 1))
+  END
 WHERE key IN (
   'publisher_name',
   'license_name',
