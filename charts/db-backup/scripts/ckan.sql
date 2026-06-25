@@ -15,6 +15,9 @@
 -- name:     user_{id}              — replaces username slug (often email-derived)
 -- fullname: repeat '*' to match original length
 -- apikey:   repeat '*' to match original length
+--
+-- Excludes active sysadmin accounts with a @dsit.gov.uk email — these are
+-- real admin accounts that must remain functional after restore.
 
 UPDATE public."user"
 SET
@@ -27,7 +30,8 @@ SET
   apikey   = CASE
                WHEN apikey IS NOT NULL THEN repeat('*', length(apikey))
                ELSE NULL
-             END;
+             END
+WHERE NOT (sysadmin = true AND state = 'active' AND email ILIKE '%@dsit.gov.uk');
 
 -- ---------------------------------------------------------------------------
 -- package
