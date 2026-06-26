@@ -4,9 +4,12 @@
 -- Runs as part of the db-backup transform step after restore from staging.
 --
 -- Tables covered:
---   user          (name, fullname, email, apikey)
+--   user          (name, fullname, email, apikey, password)
 --   package       (author, author_email, maintainer, maintainer_email)
 --   package_extra (value for PII-bearing keys)
+--
+-- User accounts anonymised fully and deactivated.
+-- Test admin accounts will be created elsewhere.
 
 -- ---------------------------------------------------------------------------
 -- user
@@ -15,9 +18,8 @@
 -- name:     user_{id}              — replaces username slug (often email-derived)
 -- fullname: repeat '*' to match original length
 -- apikey:   repeat '*' to match original length
---
--- Excludes active sysadmin accounts with a @dsit.gov.uk email — these are
--- real admin accounts that must remain functional after restore.
+-- password: null - no logins restored from prod via staging need to work
+-- state: deleted - again no logins preserved
 
 UPDATE public.user
 SET
@@ -28,8 +30,9 @@ SET
   email = 'user_' || id || '@example.com',
   apikey = CASE
     WHEN apikey IS NOT NULL THEN repeat('*', length(apikey))
-  END
-WHERE NOT (sysadmin = TRUE AND state = 'active' AND email ILIKE '%@dsit.gov.uk');
+  END,
+  password = NULL,
+  state = 'deleted';
 
 -- ---------------------------------------------------------------------------
 -- package
