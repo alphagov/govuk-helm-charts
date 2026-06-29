@@ -25,12 +25,61 @@ EOF
   exit 64  # EX_USAGE; see sysexits(3).
 }
 
+check_state_of_snapshot() {
+  : "${SNAPSHOT_NAME:?required}"
+  local result
+  result=$(mycurl -XGET "$ES_URL/_snapshot/${SNAPSHOT_REPO}/${SNAPSHOT_NAME}")
+  jq -r '.snapshots[0].state' <<< "$result"
+}
+
 create () {
   : "${SNAPSHOT_NAME:?required}"
   local result
+  local start_time
+  local deadline
+  local current_time
+  local state
+
+  start_time=$(date +%s)
+  readonly start_time
+  deadline=$((start_time + REQUEST_DEADLINE_SECONDS))
+  readonly deadline
+  
+  set +e
   result=$(mycurl -XPUT "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME?wait_for_completion=true")
+  set -e
+  state=$(jq -r .snapshot.state <<<"$result")
   echo "$result" | jq
-  echo "$result" | jq -r .snapshot.state | grep -Fx "SUCCESS"
+
+  current_time=$(date +%s)
+  while [[ "$state" != "SUCCESS" ]] && [[ "$current_time" -le "$deadline" ]]; do
+    echo "Snapshot state currently: $state"
+    case "$state" in
+      "IN_PROGRESS")
+        echo "Snapshot still in progress."
+        ;;
+      "FAILED"|"PARTIAL"|"INCOMPATIBLE")
+        echo "Snapshot reached a bad terminal state of: $state"
+        return 1
+        ;;
+      *)
+        echo "Snapshot in a state I do not understand: $state."
+        ;;
+    esac
+
+    echo "Sleeping for 5 seconds before checking state again"
+    sleep 5
+    state=$(check_state_of_snapshot)
+    current_time=$(date +%s)
+  done
+
+  state=$(check_state_of_snapshot)
+  if [[ "$state" == "SUCCESS" ]]; then
+    echo "Successful snapshot"
+  else
+    echo "Error: Snapshot did not reach a terminal state in the deadline of $REQUEST_DEADLINE_SECONDS seconds, final state was $state"
+    return 1
+  fi
 }
 
 delete () {
