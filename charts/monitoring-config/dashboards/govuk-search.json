@@ -147,7 +147,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -215,7 +215,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -278,7 +278,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -392,7 +392,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -410,7 +410,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -460,7 +459,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -478,7 +477,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -528,7 +526,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -629,7 +627,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -647,7 +645,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -697,7 +694,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -715,7 +712,6 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -765,7 +761,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -933,7 +929,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -949,7 +945,6 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.9, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"search-api-v2\", controller=\"searches\"}[5m])))",
-          "hide": false,
           "instant": false,
           "legendFormat": "90th percentile",
           "range": true,
@@ -962,7 +957,6 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"search-api-v2\", controller=\"searches\"}[5m])))",
-          "hide": false,
           "instant": false,
           "legendFormat": "99th percentile",
           "range": true,
@@ -1114,7 +1108,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "editorMode": "code",
@@ -1130,7 +1124,6 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.9, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"search-api-v2\", controller=\"autocompletes\"}[5m])))",
-          "hide": false,
           "instant": false,
           "legendFormat": "90th percentile",
           "range": true,
@@ -1143,7 +1136,6 @@
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.99, sum by (le) (rate(http_request_duration_seconds_bucket{job=\"search-api-v2\", controller=\"autocompletes\"}[5m])))",
-          "hide": false,
           "instant": false,
           "legendFormat": "99th percentile",
           "range": true,
@@ -1185,6 +1177,9 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 2,
             "pointSize": 1,
             "scaleDistribution": {
@@ -1257,6 +1252,42 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "99th percentile (old)"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    0,
+                    10
+                  ],
+                  "fill": "dot"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "90th percentile (old)"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
           }
         ]
       },
@@ -1280,12 +1311,12 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.5, sum by(le) (rate(search_api_v2_vertex_search_request_duration_bucket[5m])))",
+          "expr": "histogram_quantile(0.5, sum by(le) (rate(search_api_v2_discovery_engine_search_request_duration_bucket[5m])))",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
@@ -1302,9 +1333,8 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.9, sum by(le) (rate(search_api_v2_vertex_search_request_duration_bucket[5m])))",
+          "expr": "histogram_quantile(0.9, sum by(le) (rate(search_api_v2_discovery_engine_search_request_duration_bucket[5m])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "90th percentile",
@@ -1319,14 +1349,61 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.99, sum by(le) (rate(search_api_v2_vertex_search_request_duration_bucket[5m])))",
+          "expr": "histogram_quantile(0.99, sum by(le) (rate(search_api_v2_discovery_engine_search_request_duration_bucket[5m])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "99th percentile",
           "range": true,
           "refId": "99th percentile",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(0.5, sum by(le) (rate(search_api_v2_vertex_search_request_duration_bucket[5m])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "instant": false,
+          "legendFormat": "Median (old)",
+          "range": true,
+          "refId": "Median latency (old)",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(0.9, sum by(le) (rate(search_api_v2_vertex_search_request_duration_bucket[5m])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "instant": false,
+          "legendFormat": "90th percentile (old)",
+          "range": true,
+          "refId": "90th percentile (old)",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(0.99, sum by(le) (rate(search_api_v2_vertex_search_request_duration_bucket[5m])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "instant": false,
+          "legendFormat": "99th percentile (old)",
+          "range": true,
+          "refId": "99th percentile (old)",
           "useBackend": false
         }
       ],
@@ -1364,6 +1441,9 @@
             },
             "insertNulls": false,
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 2,
             "pointSize": 1,
             "scaleDistribution": {
@@ -1440,12 +1520,36 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Median"
+              "options": "99th percentile (old)"
             },
             "properties": [
               {
-                "id": "custom.fillOpacity",
-                "value": 100
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    0,
+                    10
+                  ],
+                  "fill": "dot"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "90th percentile (old)"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
               }
             ]
           }
@@ -1471,12 +1575,12 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.5, sum by(le) (rate(search_api_v2_vertex_autocomplete_request_duration_bucket[5m])))",
+          "expr": "histogram_quantile(0.5, sum by(le) (rate(search_api_v2_discovery_engine_autocomplete_request_duration_bucket[5m])))",
           "format": "time_series",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
@@ -1493,9 +1597,8 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.9, sum by(le) (rate(search_api_v2_vertex_autocomplete_request_duration_bucket[5m])))",
+          "expr": "histogram_quantile(0.9, sum by(le) (rate(search_api_v2_discovery_engine_autocomplete_request_duration_bucket[5m])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "90th percentile",
@@ -1510,14 +1613,61 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "histogram_quantile(0.99, sum by(le) (rate(search_api_v2_vertex_autocomplete_request_duration_bucket[5m])))",
+          "expr": "histogram_quantile(0.99, sum by(le) (rate(search_api_v2_discovery_engine_autocomplete_request_duration_bucket[5m])))",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "99th percentile",
           "range": true,
           "refId": "99th percentile",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(0.5, sum by(le) (rate(search_api_v2_vertex_autocomplete_request_duration_bucket[5m])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "instant": false,
+          "legendFormat": "Median (old)",
+          "range": true,
+          "refId": "Median latency (old)",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(0.9, sum by(le) (rate(search_api_v2_vertex_autocomplete_request_duration_bucket[5m])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "instant": false,
+          "legendFormat": "90th percentile (old)",
+          "range": true,
+          "refId": "90th percentile (old)",
+          "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "histogram_quantile(0.99, sum by(le) (rate(search_api_v2_vertex_autocomplete_request_duration_bucket[5m])))",
+          "fullMetaSearch": false,
+          "includeNullMetadata": false,
+          "instant": false,
+          "legendFormat": "99th percentile (old)",
+          "range": true,
+          "refId": "99th percentile (old)",
           "useBackend": false
         }
       ],
@@ -1628,7 +1778,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "datasource": {
@@ -1652,7 +1802,6 @@
           },
           "editorMode": "code",
           "expr": "",
-          "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -1750,7 +1899,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0",
+      "pluginVersion": "12.4.2",
       "targets": [
         {
           "datasource": {
@@ -1774,7 +1923,6 @@
           },
           "editorMode": "code",
           "expr": "",
-          "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
