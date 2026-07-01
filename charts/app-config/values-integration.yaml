@@ -1196,21 +1196,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-feedback-publishing-api
               key: bearer_token
-        - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: feedback-assisted-digital-google-sheet
-              key: sheet_id
-        - name: GOOGLE_CLIENT_EMAIL
-          valueFrom:
-            secretKeyRef:
-              name: feedback-assisted-digital-google-sheet
-              key: client_email
-        - name: GOOGLE_PRIVATE_KEY
-          valueFrom:
-            secretKeyRef:
-              name: feedback-assisted-digital-google-sheet
-              key: private_key
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
@@ -1258,21 +1243,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-feedback-publishing-api
               key: bearer_token
-        - name: ASSISTED_DIGITAL_GOOGLE_SPREADSHEET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: feedback-assisted-digital-google-sheet
-              key: sheet_id
-        - name: GOOGLE_CLIENT_EMAIL
-          valueFrom:
-            secretKeyRef:
-              name: feedback-assisted-digital-google-sheet
-              key: client_email
-        - name: GOOGLE_PRIVATE_KEY
-          valueFrom:
-            secretKeyRef:
-              name: feedback-assisted-digital-google-sheet
-              key: private_key
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
