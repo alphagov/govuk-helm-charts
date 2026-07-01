@@ -2894,13 +2894,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-search-admin-publishing-api
               key: bearer_token
-        - name: GOVUK_NOTIFY_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: search-admin-notify
-              key: GOVUK_NOTIFY_API_KEY
-        - name: GOVUK_NOTIFY_TEMPLATE_ID
-          value: *publishing-notify-template
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
