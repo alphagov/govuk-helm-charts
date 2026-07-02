@@ -1,0 +1,107 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "rds-parquet-exporter.fullname" . }}
+  labels:
+    {{- include "rds-parquet-exporter.labels" . | nindent 4 }}
+spec:
+  schedule: "45 3 * * *"
+  suspend: false
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          # Inherits EC2 EKS Worker Node IAM permissions by omitting ServiceAccountName
+          restartPolicy: Never
+          containers:
+          - name: exporter
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command: ["/bin/bash", "-c"]
+            args:
+              - |
+                # 1. Detect CPU Architecture (AMD64 vs ARM64)
+                ARCH=$(uname -m)
+                if [ "$ARCH" = "x86_64" ]; then
+                  JQ_URL="https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-amd64"
+                elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
+                  JQ_URL="https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-linux-arm64"
+                else
+                  echo "Unsupported architecture: $ARCH" && exit 1
+                fi
+
+                echo "Attempting to download static jq for $ARCH..."
+
+                # 2. Try download tools in order of availability
+                if command -v curl >/dev/null 2>&1; then
+                  echo "Using curl..."
+                  curl -sSL "${JQ_URL}" -o /tmp/jq
+                elif command -v wget >/dev/null 2>&1; then
+                  echo "Using wget..."
+                  wget -q "${JQ_URL}" -O /tmp/jq
+                elif [ -f /usr/local/aws-cli/v2/current/dist/python3 ]; then
+                  echo "Using embedded Python3..."
+                  /usr/local/aws-cli/v2/current/dist/python3 -c "import urllib.request; urllib.request.urlretrieve('${JQ_URL}', '/tmp/jq')"
+                elif [ -f /usr/local/aws-cli/v2/current/dist/python ]; then
+                  echo "Using embedded Python..."
+                  /usr/local/aws-cli/v2/current/dist/python -c "import urllib.request; urllib.request.urlretrieve('${JQ_URL}', '/tmp/jq')"
+                else
+                  echo "ERROR: Could not find curl, wget, or the internal AWS CLI Python runtime."
+                  exit 1
+                fi
+
+                # 3. Grant execution permissions
+                echo "Setting execution permissions..."
+                chmod +x /tmp/jq
+                
+                # 4. Add /tmp to execution PATH so script can call 'jq'
+                export PATH="/tmp:$PATH"
+
+                # 5. Execute your script
+                echo "Executing backup script..."
+                /scripts/export-parquet.sh
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}
+
+
+            podSecurityContext:
+              fsGroup: 1001
+              runAsNonRoot: true
+              runAsUser: 1001
+              runAsGroup: 1001
+              seccompProfile:
+                type: RuntimeDefault
+
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: ["ALL"]            
+                
+            env:
+            - name: AWS_REGION
+              value: {{ .Values.aws.region | quote }}
+            - name: S3_BUCKET
+              value: {{ .Values.aws.s3Bucket | quote }}
+            - name: IAM_ROLE_ARN
+              value: {{ .Values.aws.iamRoleArn | quote }}
+            - name: KMS_KEY_ID
+              value: {{ .Values.aws.kmsKeyId | quote }}
+            - name: DB_TABLES_JSON
+              value: {{ toJson .Values.dbTables | quote }}
+            volumeMounts:
+            - name: script-volume
+              mountPath: /scripts
+            - name: tmp-volume
+              mountPath: /tmp
+          volumes:
+          - name: script-volume
+            configMap:
+              name: {{ include "rds-parquet-exporter.fullname" . }}-script
+              defaultMode: 0755
+          - name: tmp-volume
+            emptyDir: {}
