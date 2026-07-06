@@ -159,6 +159,8 @@ govukApplications:
           memory: 2Gi
       redis:
         enabled: true
+        config:
+          maxmemory: 3500mb
         limits:
           memory: 4Gi
         requests:
