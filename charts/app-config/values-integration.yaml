@@ -159,6 +159,10 @@ govukApplications:
           memory: 2Gi
       redis:
         enabled: true
+        limits:
+          memory: 4Gi
+        requests:
+          memory: 4Gi
       ingress:
         enabled: true
         annotations:
