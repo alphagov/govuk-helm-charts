@@ -161,10 +161,11 @@ govukApplications:
         enabled: true
         config:
           maxmemory: 3500mb
-        limits:
-          memory: 4Gi
-        requests:
-          memory: 4Gi
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            memory: 4Gi
       ingress:
         enabled: true
         annotations:
