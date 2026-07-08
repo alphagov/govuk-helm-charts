@@ -177,6 +177,11 @@ http {
       root /usr/share/nginx/html;
     }
 
+    location = /search/opensearch.xml {
+      add_header cache-control "max-age=1800,public";
+      root /usr/share/nginx/html;
+    }
+
     # Endpoint for liveness and readiness checks of the nginx container.
     location = /readyz {
       return 200 'ok\n';
