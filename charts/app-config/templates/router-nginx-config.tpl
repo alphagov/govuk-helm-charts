@@ -174,6 +174,7 @@ http {
     }
 
     location = /humans.txt {
+      add_header cache-control "max-age=600,public";
       root /usr/share/nginx/html;
     }
 
