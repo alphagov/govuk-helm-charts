@@ -186,6 +186,10 @@ govukApplications:
       nginxConfigMap:
         create: false
         name: asset-manager-nginx-conf
+      cronTasks:
+        - name: svg-batch-scan
+          task: "assets:bulk_fix:scan_next_svg_batch[1000]"
+          schedule: "0 * * * *"
       extraEnv:
         - name: ASSET_MANAGER_CLAMSCAN_PATH
           value: /usr/local/bin/clamdscan
