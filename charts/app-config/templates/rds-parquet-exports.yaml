@@ -1,0 +1,33 @@
+{{- if and .Values.rdsParquetExports .Values.rdsParquetExports.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rds-parquet-exports
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: govuk
+  source:
+    repoURL: git@github.com/alphagov/govuk-helm-charts
+    path: charts/rds-parquet-exports
+    targetRevision: HEAD
+    helm:
+      # Serialise our environment-specific parameters 
+      # under .spec.source.helm.values
+      values: |
+        {{- toYaml .Values.rdsParquetExports | nindent 8 }}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.appsNamespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
+{{- end }}

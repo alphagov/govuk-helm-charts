@@ -47,6 +47,15 @@ _alb-ingress-group-backend: &alb-ingress-group-backend
 
 emergency-banner-redis:
   - &emergency-banner-redis redis://whitehall-admin-redis:6379/1
+rdsParquetExports:
+  enabled: false
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: "arn:aws:iam::210287912431:role/rds-parquet-exporter-job-starter-govuk"
+  aws:
+    s3Bucket: "govuk-integration-database-backups"
+    iamRoleArn: "arn:aws:iam::210287912431:role/rds-parquet-exporter-export-task-govuk"
+    kmsKeyId: "arn:aws:kms:eu-west-1:210287912431:key/cb8ad532-b89a-4303-92c1-3f7ef4cda4fc"
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 govukApplications:
   - name: account-api

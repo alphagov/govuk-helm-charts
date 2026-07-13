@@ -1,0 +1,54 @@
+enabled: true
+
+image:
+  repository: amazon/aws-cli
+  tag: 2.15.15
+  pullPolicy: IfNotPresent
+
+installJqAtRuntime: false
+
+serviceAccount:
+  create: false
+  name: ""
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::696911096973:role/rds-parquet-exporter-job-starter-govuk"
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+aws:
+  region: "eu-west-1"
+  s3Bucket: "govuk-staging-database-backups"
+  iamRoleArn: "arn:aws:iam::696911096973:role/rds-parquet-exporter-export-task-govuk"
+  kmsKeyId: "arn:aws:kms:eu-west-1:696911096973:key/15bdd743-ecd7-4059-86ff-b8b6a72054c4"
+
+dbTables:
+  publisher-integration-postgres:
+    - publisher_production.public.editions
+    - publisher_production.public.actions
+  publishing-api-integration-postgres:
+    - publishing_api_production.public.actions
+    - publishing_api_production.public.change_notes
+    - publishing_api_production.public.documents
+    - publishing_api_production.public.editions
+    - publishing_api_production.public.events
+    - publishing_api_production.public.expanded_links
+    - publishing_api_production.public.link_changes
+    - publishing_api_production.public.link_sets
+    - publishing_api_production.public.links
+    - publishing_api_production.public.path_reservations
+    - publishing_api_production.public.unpublishings
+  support-api-integration-postgres:
+    - support_contacts_production.public.anonymous_contacts
+    - support_contacts_production.public.archived_service_feedbacks
+  whitehall-integration-mysql:
+    - whitehall_production.assets
+    - whitehall_production.attachment_data
+    - whitehall_production.attachments
+    - whitehall_production.documents
+    - whitehall_production.editions

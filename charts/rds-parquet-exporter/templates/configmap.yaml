@@ -1,0 +1,11 @@
+{{- if .Values.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rds-parquet-exporter.fullname" . }}-script
+  labels:
+    {{- include "rds-parquet-exporter.labels" . | nindent 4 }}
+data:
+  export-parquet.sh: |
+{{ .Files.Get "scripts/export-parquet.sh" | indent 4 }}
+{{- end }}
