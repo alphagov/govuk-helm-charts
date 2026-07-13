@@ -10,7 +10,7 @@ spec:
   project: govuk
   source:
     repoURL: git@github.com/alphagov/govuk-helm-charts
-    path: charts/rds-parquet-exports
+    path: charts/rds-parquet-exporter
     targetRevision: HEAD
     helm:
       # Serialise our environment-specific parameters 
