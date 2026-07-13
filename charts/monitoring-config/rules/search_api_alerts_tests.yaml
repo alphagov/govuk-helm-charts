@@ -19,6 +19,21 @@ tests:
   - interval: 1m
     input_series:
       - series: "search_api_elasticsearch_status"
+        values: "3x40"
+    alert_rule_test:
+      - alertname: SearchApiElasticsearchClusterStatus
+        eval_time: 30m
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: "slack-search-team"
+            exp_annotations:
+              summary: Elasticsearch cluster status is UNKNOWN or UNAVAILABLE
+              description: >-
+                The state of the Elasticsearch cluster used by Search API is unknown.
+  - interval: 1m
+    input_series:
+      - series: "search_api_elasticsearch_status"
         values: "2x40"
     alert_rule_test:
       - alertname: SearchApiElasticsearchClusterStatus
