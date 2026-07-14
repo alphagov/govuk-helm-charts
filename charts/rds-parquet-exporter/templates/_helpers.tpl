@@ -33,3 +33,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/name: {{ include "rds-parquet-exporter.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{/* 
+Create the name of the service account to use.
+If serviceAccount is disabled, fallback to "default".
+If enabled and a custom name is provided, use that custom name.
+Otherwise, default to the helm-generated full name.
+*/}}
+{{- define "rds-parquet-exporter.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "rds-parquet-exporter.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
