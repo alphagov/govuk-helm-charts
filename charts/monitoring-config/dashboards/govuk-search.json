@@ -301,8 +301,76 @@
       },
       "id": 3,
       "panels": [],
-      "title": "Search and autocomplete success rates ",
+      "title": "Search requests to Search API v2",
       "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Percentage of unsuccessful requests to the searches controller.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "noValue": "0.00%",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "light-red",
+                "value": 0.0001
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 11
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum by (controller) (increase(http_requests_total{job=\"search-api-v2\", controller=\"searches\", status!=\"200\"}[$__range])) / sum by (controller) (increase(http_requests_total{job=\"search-api-v2\", controller=\"searches\"}[$__range]))",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Error rate",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -374,8 +442,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 7,
-        "x": 0,
+        "w": 16,
+        "x": 6,
         "y": 11
       },
       "id": 7,
@@ -402,7 +470,7 @@
           "refId": "Success rate"
         }
       ],
-      "title": "Search success rate",
+      "title": "Success rate",
       "type": "timeseries"
     },
     {
@@ -410,38 +478,35 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
+      "description": "Total number of unsuccessful requests to the searches controller.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "decimals": 2,
+          "decimals": 0,
           "mappings": [],
-          "noValue": "0.00%",
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": 0
-              },
-              {
-                "color": "light-red",
-                "value": 0.0001
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "locale"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 7,
-        "y": 11
+        "w": 6,
+        "x": 0,
+        "y": 15
       },
-      "id": 12,
+      "id": 11,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -456,6 +521,7 @@
           "values": false
         },
         "showPercentChange": false,
+        "text": {},
         "textMode": "auto",
         "wideLayout": true
       },
@@ -463,50 +529,67 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (controller) (increase(http_requests_total{job=\"search-api-v2\", controller=\"searches\", status!=\"200\"}[$__range])) / sum by (controller) (increase(http_requests_total{job=\"search-api-v2\", controller=\"searches\"}[$__range]))",
+          "expr": "sum by (controller) (increase(http_requests_total{job=\"search-api-v2\",controller=\"searches\",status!=\"200\"}[$__range]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Search error rate",
+      "title": "Total errors",
       "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "id": 24,
+      "panels": [],
+      "title": "Autocomplete requests to Search API v2",
+      "type": "row"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
       },
+      "description": "Maximum number of suggestions returned from Discovery Engine over the last hour relative to the end of the highlighted range.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "decimals": 2,
           "mappings": [],
-          "noValue": "0.00%",
+          "noValue": "N/A",
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "light-red",
                 "value": 0
               },
               {
-                "color": "light-red",
-                "value": 0.01
+                "color": "light-yellow",
+                "value": 0.5
+              },
+              {
+                "color": "light-green",
+                "value": 4.5
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 11,
-        "y": 11
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 20
       },
       "id": 14,
       "options": {
@@ -530,13 +613,15 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (controller) (increase(http_requests_total{job=\"search-api-v2\", controller=\"autocompletes\", status!=\"200\"}[$__range])) / sum by (controller) (increase(http_requests_total{job=\"search-api-v2\", controller=\"autocompletes\"}[$__range]))",
+          "exemplar": false,
+          "expr": "histogram_quantile(1, sum by(le) (increase(search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket[1h])))",
+          "instant": false,
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Autocomplete error rate",
+      "title": "Max suggestions over last hour",
       "type": "stat"
     },
     {
@@ -544,7 +629,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "5 minute rolling success rate (200 response codes out of all requests) for autocomplete requests",
+      "description": "Maximum number of suggestions returned from Discovery Engine over the previous hour.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -559,7 +644,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 25,
+            "fillOpacity": 0,
             "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
@@ -581,11 +666,12 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "area"
             }
           },
           "mappings": [],
-          "max": 1,
+          "max": 5,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -595,23 +681,23 @@
               },
               {
                 "color": "#EAB839",
-                "value": 0.95
+                "value": 0.5
               },
               {
                 "color": "green",
-                "value": 0.99
+                "value": 4.5
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 7,
-        "x": 15,
-        "y": 11
+        "h": 9,
+        "w": 8,
+        "x": 6,
+        "y": 20
       },
       "id": 8,
       "options": {
@@ -631,13 +717,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(rate(http_requests_total{job=\"search-api-v2\", controller=\"autocompletes\", status=\"200\"}[5m]))\n/\nsum(rate(http_requests_total{job=\"search-api-v2\", controller=\"autocompletes\"}[5m]))",
+          "expr": "histogram_quantile(1, sum by(le) (increase(search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket[1h])))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "Success rate"
         }
       ],
-      "title": "Autocomplete success rate",
+      "title": "Max suggestions",
       "type": "timeseries"
     },
     {
@@ -645,38 +731,145 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
+      "description": "Percentage of requests to Discovery Engine over the previous hour that return zero suggestions.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "decimals": 0,
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
           "mappings": [],
-          "noValue": "0",
+          "max": 1,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "green",
                 "value": 0
               },
               {
-                "color": "light-red",
-                "value": 1
+                "color": "#EAB839",
+                "value": 0.8
+              },
+              {
+                "color": "red",
+                "value": 0.9
               }
             ]
           },
-          "unit": "locale"
+          "unit": "percentunit"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 7,
-        "y": 15
+        "h": 9,
+        "w": 8,
+        "x": 14,
+        "y": 20
       },
-      "id": 11,
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "(sum(increase(search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket{le=\"0.0\"}[1h])) / sum(increase(search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket{le=\"5.0\"}[1h]))) or vector(0)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "Success rate"
+        }
+      ],
+      "title": "Empty suggestion rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Percentage of requests to Discovery Engine over the highlighted range that return zero suggestions.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "noValue": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 0.8
+              },
+              {
+                "color": "light-red",
+                "value": 0.9
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 23
+      },
+      "id": 26,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -698,13 +891,13 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum by (controller) (increase(http_requests_total{job=\"search-api-v2\",controller=\"searches\",status!=\"200\"}[$__range]))",
+          "expr": "(sum(increase(search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket{le=\"0.0\"}[$__range])) / sum(increase(search_api_v2_discovery_engine_autocomplete_suggestions_response_bucket{le=\"5.0\"}[$__range]))) or vector(0)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Total search errors",
+      "title": "Empty suggestion rate",
       "type": "stat"
     },
     {
@@ -712,6 +905,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
+      "description": "Total number of unsuccessful requests to the autocompletes controller. This does not include specific errors from Discovery Engine, which are handled internally.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -738,10 +932,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 11,
-        "y": 15
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 26
       },
       "id": 15,
       "options": {
@@ -771,7 +965,7 @@
           "refId": "A"
         }
       ],
-      "title": "Total autocomplete errors",
+      "title": "Unhandled errors",
       "type": "stat"
     },
     {
@@ -780,7 +974,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 29
       },
       "id": 21,
       "panels": [],
@@ -913,7 +1107,7 @@
         "h": 8,
         "w": 11,
         "x": 0,
-        "y": 20
+        "y": 30
       },
       "id": 9,
       "options": {
@@ -1092,7 +1286,7 @@
         "h": 8,
         "w": 11,
         "x": 11,
-        "y": 20
+        "y": 30
       },
       "id": 13,
       "options": {
@@ -1295,7 +1489,7 @@
         "h": 8,
         "w": 11,
         "x": 0,
-        "y": 28
+        "y": 38
       },
       "id": 22,
       "options": {
@@ -1559,7 +1753,7 @@
         "h": 8,
         "w": 11,
         "x": 11,
-        "y": 28
+        "y": 38
       },
       "id": 23,
       "options": {
@@ -1680,7 +1874,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 46
       },
       "id": 20,
       "panels": [],
@@ -1762,7 +1956,7 @@
         "h": 8,
         "w": 11,
         "x": 0,
-        "y": 37
+        "y": 47
       },
       "id": 18,
       "options": {
@@ -1883,7 +2077,7 @@
         "h": 8,
         "w": 11,
         "x": 11,
-        "y": 37
+        "y": 47
       },
       "id": 19,
       "options": {
