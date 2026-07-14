@@ -16,7 +16,7 @@ spec:
       backoffLimit: 0
       template:
         spec:
-          serviceAccountName: {{ default (include "rds-parquet-exporter.fullname" .) .Values.serviceAccount.name }}
+          serviceAccountName: {{ include "rds-parquet-exporter.serviceAccountName" . }}
           restartPolicy: Never
           # Pod-level Security Context
           securityContext:

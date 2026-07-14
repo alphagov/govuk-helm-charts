@@ -8,8 +8,8 @@ image:
 installJqAtRuntime: false
 
 serviceAccount:
-  create: false
-  name: ""
+  create: true
+  name: "rds-parquet-exporter"
   annotations:
     eks.amazonaws.com/role-arn: "arn:aws:iam::696911096973:role/rds-parquet-exporter-job-starter-govuk"
 
