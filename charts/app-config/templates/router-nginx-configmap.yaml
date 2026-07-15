@@ -24,6 +24,8 @@ data:
     {{- $.Files.Get "humans.txt" | nindent 4 }}
   nginx.conf: |-
     {{- include "app-config.router-nginx-config" ( mergeOverwrite . ( dict "Stack" "live" ) ) | nindent 4 }}
+  opensearch.xml: |-
+    {{- $.Files.Get "opensearch.xml" | nindent 4 }}
   robots.txt: |-
     {{- if eq .Values.govukEnvironment "production" }}
       {{- $.Files.Get "www-production-robots.txt" | nindent 4 }}
