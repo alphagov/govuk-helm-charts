@@ -1947,6 +1947,8 @@ govukApplications:
         mongo:
           dbHosts:
             - licensify-documentdb-clone-0.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-clone-1.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-clone-2.ceu7s3y9xx35.eu-west-1.docdb.amazonaws.com
         adminBaseUrl: https://licensify-admin.integration.publishing.service.gov.uk
         frontendBaseUrl: https://www.integration.publishing.service.gov.uk
         signonBaseUrl: https://signon.integration.publishing.service.gov.uk
