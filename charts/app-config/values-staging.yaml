@@ -1846,9 +1846,9 @@ govukApplications:
       config:
         mongo:
           dbHosts:
-            - licensify-documentdb-0.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
-            - licensify-documentdb-1.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
-            - licensify-documentdb-2.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-clone-0.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-clone-1.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
+            - licensify-documentdb-clone-2.ca5itorbs5wc.eu-west-1.docdb.amazonaws.com
         adminBaseUrl: https://licensify-admin.staging.publishing.service.gov.uk
         frontendBaseUrl: https://www.staging.publishing.service.gov.uk
         signonBaseUrl: https://signon.staging.publishing.service.gov.uk
