@@ -2940,6 +2940,7 @@ govukApplications:
         - name: quality-monitoring-assert-invariants
           task: "quality_monitoring:assert_invariants"
           schedule: "09 8-17 * * *" # 9 minutes past the hour every day from 8am-5pm
+          suspend: true # The results from job are not being monitored, and it's in review for being deleted.
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
