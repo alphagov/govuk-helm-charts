@@ -137,7 +137,7 @@ groups:
         expr: >-
           db_backup_job_status_timestamp_seconds{
             state="succeeded",
-            database_instance=~"signon-mysql"
+            database_instance!~"signon-mysql|publisher-postgres" # Publisher-postgres temporarily disabled while syncs for the environment are paused
           } < time() - 648000  # 1 week + 12 hours
         labels:
           severity: warning

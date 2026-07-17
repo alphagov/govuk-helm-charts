@@ -683,6 +683,7 @@ cronjobs:
         - op: backup
 
     publisher-postgres:
+      suspend: true
       schedule: "41 3 * * 1"
       db: publisher_production
       operations:
