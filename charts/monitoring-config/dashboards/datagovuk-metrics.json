@@ -550,8 +550,8 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-frontend-find\"}[$__rate_interval])) by (le))",
-          "legendFormat": "collections p95 (datagovuk-frontend-find)",
+          "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-datagovuk\"}[$__rate_interval])) by (le))",
+          "legendFormat": "collections p95 (datagovuk-datagovuk)",
           "range": true,
           "refId": "B"
         }
@@ -668,10 +668,10 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-frontend-find\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-frontend-find\"}[$__rate_interval]))",
+          "expr": "sum(rate(http_request_duration_seconds_sum{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-datagovuk\"}[$__rate_interval])) / sum(rate(http_request_duration_seconds_count{namespace=\"${namespace}\", job=\"datagovuk/datagovuk-datagovuk\"}[$__rate_interval]))",
           "instant": false,
           "interval": "",
-          "legendFormat": "collections avg (datagovuk-frontend-find)",
+          "legendFormat": "collections avg (datagovuk-datagovuk)",
           "range": true,
           "refId": "B"
         }
