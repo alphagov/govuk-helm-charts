@@ -1609,8 +1609,8 @@ govukApplications:
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
-              name: fact-check-manager-notify-team
-              key: notify-team
+              name: fact-check-manager-notify
+              key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEST_API_KEY
           valueFrom:
             secretKeyRef:
