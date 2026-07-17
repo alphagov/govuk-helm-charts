@@ -9,6 +9,8 @@ metadata:
   name: {{ .name }}
   labels:
     {{- include "licensify.labels" $ | nindent 4 }}
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: {{ .replicaCount }}
   revisionHistoryLimit: 2
@@ -73,7 +75,7 @@ spec:
               containerPort: {{ .port }}
           livenessProbe:
             httpGet: &app-probe
-              path: {{ .healthcheckPath }} 
+              path: {{ .healthcheckPath }}
               port: http
             failureThreshold: 3
             periodSeconds: 5
