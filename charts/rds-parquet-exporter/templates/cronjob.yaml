@@ -6,7 +6,7 @@ metadata:
   labels:
     {{- include "rds-parquet-exporter.labels" . | nindent 4 }}
 spec:
-  schedule: "45 3 * * *"
+  schedule: "45 3 * * 1-5"
   suspend: false
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 5
