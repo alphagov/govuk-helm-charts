@@ -25,12 +25,12 @@ data:
     # Whitehall and Specialist Publisher allow up to 500 MB uploads. Keep in
     # sync with StreamMaxLen, because clamdscan streams when connecting via TCP
     # (as opposed to UNIX socket).
-    MaxFileSize 750M
+    MaxFileSize {{ .Values.clamav.maxFileSizeMB }}M
     MaxScanSize 5000M
     MaxScanTime 0
     MaxThreads 20
     SelfCheck 900
-    StreamMaxLength 750M
+    StreamMaxLength {{ .Values.clamav.maxFileSizeMB }}M
     TCPAddr 127.0.0.1
     TCPSocket 3310
   freshclam.conf: |
