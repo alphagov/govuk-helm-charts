@@ -52,13 +52,13 @@ WHERE
     FROM
       editions
     WHERE
-      access_limited = 1
+      access_limiting != 'none'
   );
 
 -- Redact slugs for access-limited drafts.
 UPDATE editions
 SET slug = CONCAT(@lipsum_slug, document_id), slug_from_title = CONCAT(@lipsum_slug, document_id)
-WHERE access_limited = 1;
+WHERE access_limiting != 'none';
 
 -- Redact email addresses and comments in fact checks.
 UPDATE fact_check_requests
@@ -76,7 +76,7 @@ WHERE
     FROM
       editions
     WHERE
-      access_limited = 1
+      access_limiting != 'none'
   );
 
 -- Redact HTML attachment data for access-limited drafts.
@@ -89,7 +89,7 @@ WHERE
     FROM
       editions
     WHERE
-      access_limited = 1
+      access_limiting != 'none'
   );
 
 -- Redact file names for attachments on access-limited drafts.
@@ -107,7 +107,7 @@ WHERE
         FROM
           editions
         WHERE
-          editions.access_limited = 1
+          editions.access_limiting != 'none'
       )
   );
 
@@ -117,4 +117,8 @@ INNER JOIN attachments ON govspeak_contents.html_attachment_id = attachments.id
 INNER JOIN editions ON attachments.attachable_id = editions.id
 SET govspeak_contents.body = @lipsum_body
 WHERE
-  attachments.attachable_type = 'EDITION' AND editions.access_limited = 1;
+  attachments.attachable_type = 'EDITION' AND editions.access_limiting != 'none';
+
+-- Redact email addresses in access_limiting_individuals.
+UPDATE access_limiting_individuals
+SET email = CONCAT('access-limited-email-', id, '@example.com');
