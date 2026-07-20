@@ -118,3 +118,7 @@ INNER JOIN editions ON attachments.attachable_id = editions.id
 SET govspeak_contents.body = @lipsum_body
 WHERE
   attachments.attachable_type = 'EDITION' AND editions.access_limiting != 'none';
+
+-- Redact email addresses in access_limiting_individuals.
+UPDATE access_limiting_individuals
+SET email = CONCAT('access-limited-email-', id, '@example.com');
