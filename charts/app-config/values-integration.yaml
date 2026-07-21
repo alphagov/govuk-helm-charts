@@ -238,6 +238,8 @@ govukApplications:
             secretKeyRef:
               name: authenticating-proxy-jwt-auth-secret
               key: JWT_AUTH_SECRET
+        - name: MAX_FILE_SIZE_MB
+          value: "{{ .Values.clamav.maxFileSizeMB }}"
         - name: MONGODB_URI
           valueFrom:
             secretKeyRef:

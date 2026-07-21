@@ -146,3 +146,6 @@ nfs:
   assetStorage: 15Gi
 
 appEnabled: true
+
+clamav:
+  maxFileSizeMB: 750
