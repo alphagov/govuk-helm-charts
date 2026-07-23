@@ -30,9 +30,40 @@ data:
       server_tokens off;
 
       sendfile        on;
+
+      {{- if or (eq .Values.govukEnvironment "integration") (eq .Values.govukEnvironment "staging") }}
+      tcp_nopush      on;
+      tcp_nodelay     on;
+
+      keepalive_timeout  75;
+      keepalive_requests 10000;
+
+      # Gzip Compression
+      gzip on;
+      gzip_comp_level 5;
+      gzip_min_length  256;
+      gzip_proxied any;
+      gzip_vary on;
+      gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/javascript
+        application/x-javascript
+        application/json
+        application/xml
+        application/rss+xml
+        application/atom+xml
+        image/svg+xml;
+
+      resolver kube-dns.kube-system.svc.cluster.local. valid=5s ipv6=off;
+      resolver_timeout 2s;
+      {{- else }}
       keepalive_timeout  65;
 
       resolver kube-dns.kube-system.svc.cluster.local.;
+      {{- end }}
 
       upstream {{ $fullName }} {
         server 127.0.0.1:{{ .Values.appPort }};
@@ -141,6 +172,11 @@ data:
         location ~ /cloud-storage-proxy/(.*) {
           # Prevent requests to this location from outside Nginx
           internal;
+
+          {{- if or (eq .Values.govukEnvironment "integration") (eq .Values.govukEnvironment "staging") }}
+          # Stream S3 payload to ALB w/o going through tmp directory.
+          proxy_buffering off;
+          {{- end }}
 
           # Construct download URL from:
           # $1:       Host + path from regexp match in location
