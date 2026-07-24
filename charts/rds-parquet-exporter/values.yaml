@@ -2,7 +2,7 @@ enabled: true
 
 image:
   repository: amazon/aws-cli
-  tag: 2.15.15
+  tag: 2.36.7
   pullPolicy: IfNotPresent
 
 installJqAtRuntime: false
