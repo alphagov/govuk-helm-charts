@@ -1890,6 +1890,8 @@ govukApplications:
       extraEnv:
         - name: ALLOW_UNKNOWN_HMRC_MANUAL_SLUGS
           value: "1"
+        - name: ALLOW_ASSET_MANAGER_REQUESTS
+          value: "1"
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
