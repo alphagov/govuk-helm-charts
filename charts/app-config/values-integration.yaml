@@ -2970,7 +2970,7 @@ govukApplications:
               memory: 800Mi
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
-          schedule: "35 00 * * *"
+          schedule: "15 00 * * *"
       workers:
         enabled: true
         replicaCount: 3
