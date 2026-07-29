@@ -1771,6 +1771,7 @@ govukApplications:
           cpu: 10m
           memory: 320Mi
       nginxClientMaxBodySize: 2M
+      proxyRailsAssetsToS3: false
       ingress:
         enabled: true
         annotations:
