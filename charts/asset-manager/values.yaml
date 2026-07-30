@@ -85,6 +85,9 @@ clamdResources:
     cpu: 500m
     memory: 2000Mi
 
+svgBatchScan:
+  enabled: false
+
 # clamMountConfigPath is the path to which the clamav.conf and freshclam.conf are mounted
 clamMountConfigPath: "/usr/local/etc"
 
