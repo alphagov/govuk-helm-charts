@@ -39,7 +39,7 @@ cronjobs:
 
   staging:
     green-es6-cp-prod:  # This would be too long as green-elasticsearch6-domain-cp-prod
-      schedule: "00 3 * * *"
+      schedule: "30 2 * * *"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
@@ -47,7 +47,7 @@ cronjobs:
         - name: SUBDOMAIN
           value: elasticsearch6
     green-es6-snapshot:  # This would be too long as green-elasticsearch6-domain-snapshot
-      schedule: "37 2 * * *"
+      schedule: "07 3 * * *"
       args: [create_and_clean_up]
       extraEnv:
         - name: SUBDOMAIN
@@ -73,7 +73,7 @@ cronjobs:
 
   integration:
     green-es6-cp-stag:  # This would be too long as green-elasticsearch6-domain-cp-stag
-      schedule: "17 6 * * *"
+      schedule: "17 4 * * 1"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
