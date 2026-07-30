@@ -1,0 +1,27 @@
+{{ if eq .Values.govukEnvironment "integration" }}
+{{- $fullName := include "asset-manager.fullname" . }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $fullName }}-svg-batch-scan
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}-svg-batch-scan
+    app.kubernetes.io/name: {{ $fullName }}-svg-batch-scan
+    app.kubernetes.io/component: svg-batch-scan
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    metadata:
+      labels:
+        {{- include "asset-manager.labels" . | nindent 8 }}
+        app: {{ $fullName }}-svg-batch-scan
+        app.kubernetes.io/name: {{ $fullName }}-svg-batch-scan
+        app.kubernetes.io/component: svg-batch-scan
+    spec:
+      backoffLimit: 1
+      template:
+        {{- include "asset-manager.svgbatchscan.podspec" . | indent 8 }}
+{{ end }}
