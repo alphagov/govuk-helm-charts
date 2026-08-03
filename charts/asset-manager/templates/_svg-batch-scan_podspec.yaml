@@ -24,7 +24,7 @@ spec:
       image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
       imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
       command: ["rake"]
-      args: ["assets:bulk_scan_svgs[1000]"]
+      args: ["assets:bulk_scan_svgs[2000]"]
       envFrom:
         - configMapRef:
             name: govuk-apps-env

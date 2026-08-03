@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/name: {{ $fullName }}-svg-batch-scan
     app.kubernetes.io/component: svg-batch-scan
 spec:
-  schedule: "0 * * * *"
+  schedule: "*/5 * * * *"
   jobTemplate:
     metadata:
       labels:
