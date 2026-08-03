@@ -38,6 +38,9 @@ spec:
         - name: REDIS_URL
           value: {{ .Values.redis.redisUrlOverride.workers | default (printf "redis://%s-redis" $fullName) }}
         {{- end }}
+        {{- with .Values.extraEnv }}
+          {{- (tpl (toYaml .) $) | trim | nindent 8 }}
+        {{- end }}
       {{- with .Values.appResources }}
       resources:
         {{- . | toYaml | trim | nindent 8 }}
