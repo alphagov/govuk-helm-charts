@@ -1,0 +1,63 @@
+{{- define "asset-manager.svg-batch-scan.podspec" }}
+{{- $fullName := include "asset-manager.fullname" . }}
+metadata:
+  labels:
+    {{- include "asset-manager.labels" . | nindent 4 }}
+    app: {{ $fullName }}-svg-batch-scan
+    app.kubernetes.io/name: {{ $fullName }}-svg-batch-scan
+    app.kubernetes.io/component: svg-batch-scan
+spec:
+  activeDeadlineSeconds: 300
+  automountServiceAccountToken: false
+  enableServiceLinks: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
+  volumes:
+    - name: app-tmp
+      emptyDir: {}
+  containers:
+    - name: svg-batch-scan
+      image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
+      imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
+      command: ["rake"]
+      args: ["assets:bulk_scan_svgs[1000]"]
+      envFrom:
+        - configMapRef:
+            name: govuk-apps-env
+      env:
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.repoName }}-rails-secret-key-base
+              key: secret-key-base
+        {{- if .Values.redis.enabled }}
+        - name: REDIS_URL
+          value: {{ .Values.redis.redisUrlOverride.workers | default (printf "redis://%s-redis" $fullName) }}
+        {{- end }}
+      {{- with .Values.appResources }}
+      resources:
+        {{- . | toYaml | trim | nindent 8 }}
+      {{- end }}
+      volumeMounts:
+        - name: app-tmp
+          mountPath: /tmp
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]
+  restartPolicy: Never
+  {{- if eq "arm64" .Values.arch }}
+  tolerations:
+    - key: arch
+      operator: Equal
+      value: {{ .Values.arch }}
+      effect: NoSchedule
+  nodeSelector:
+    kubernetes.io/arch: {{ .Values.arch }}
+  {{- end }}
+{{- end }}
