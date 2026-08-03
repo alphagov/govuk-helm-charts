@@ -3401,6 +3401,7 @@ govukApplications:
       arch: arm64
       podTerminationGracePeriodSecs: 50
       containerPreStopSleepSecs: 40
+      nginxProxyReadTimeout: 30s
       appResources:
         limits:
           cpu: 1
@@ -3472,6 +3473,7 @@ govukApplications:
   - name: support-api
     helmValues:
       arch: arm64
+      nginxProxyReadTimeout: 30s
       appResources:
         limits:
           cpu: 1
