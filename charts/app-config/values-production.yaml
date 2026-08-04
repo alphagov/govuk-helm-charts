@@ -3029,15 +3029,14 @@ govukApplications:
         - name: setup-sample-query-sets
           task: "quality:setup_sample_query_sets"
           schedule: "0 2 1 * *" # 02:00 first day of the month
-        - name: report-evaluations-may
-          task: "report:evaluations[2026-05, succeeded running]"
-          schedule: "0 0 1 1 * " # midnight on Jan 1st - placeholder to be run manually.
-        - name: report-evaluations-june
-          task: "report:evaluations[2026-06, succeeded running]"
-          schedule: "0 0 1 1 * "
+        - name: report-evaluations-aug
+          task: "report:evaluations[2026-08, failed]"
+          schedule: "0 0 31 2 *" # to be run manually
+          suspend: true
         - name: report-evaluations-july
-          task: "report:evaluations[2026-07, succeeded running]"
-          schedule: "0 0 1 1 * "
+          task: "report:evaluations[2026-07, failed]"
+          schedule: "0 0 31 2 *" # to be run manually
+          suspend: true
       extraEnv:
         - name: GOOGLE_CLOUD_CREDENTIALS
           valueFrom:
