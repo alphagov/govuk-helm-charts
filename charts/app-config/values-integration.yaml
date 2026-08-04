@@ -217,6 +217,7 @@ govukApplications:
               - path: /
       assetManagerNFS: &assets-nfs assets.integration.govuk-internal.digital
       clamMountConfigPath: /usr/local/etc
+      nginxAlbOptimisation: true
       nginxConfigMap:
         create: false
         name: asset-manager-nginx-conf

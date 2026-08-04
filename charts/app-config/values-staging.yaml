@@ -218,6 +218,7 @@ govukApplications:
             paths:
               - path: /
       assetManagerNFS: &assets-nfs assets.staging.govuk-internal.digital
+      nginxAlbOptimisation: true
       nginxConfigMap:
         create: false
         name: asset-manager-nginx-conf
