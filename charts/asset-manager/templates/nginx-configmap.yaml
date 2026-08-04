@@ -31,7 +31,7 @@ data:
 
       sendfile        on;
 
-      {{- if or (eq .Values.govukEnvironment "integration") (eq .Values.govukEnvironment "staging") }}
+      {{- if .Values.nginxAlbOptimisation }}
       tcp_nopush      on;
       tcp_nodelay     on;
 
@@ -173,7 +173,7 @@ data:
           # Prevent requests to this location from outside Nginx
           internal;
 
-          {{- if or (eq .Values.govukEnvironment "integration") (eq .Values.govukEnvironment "staging") }}
+          {{- if .Values.nginxAlbOptimisation }}
           # Stream S3 payload to ALB w/o going through tmp directory.
           proxy_buffering off;
           {{- end }}
