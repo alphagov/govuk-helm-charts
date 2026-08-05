@@ -249,9 +249,17 @@ http {
     # Error pages
     charset utf-8;
 
+    {{- if eq $.Values.govukEnvironment "integration" }}
+      error_page 460 =410 /410.html;
+      {{- range(list 400 401 403 404 405 406 422 429 500 502 503 504) }}
+      error_page {{ . }} /{{ . }}.html;
+    {{- else }}
+      {{- range(list 400 401 403 404 405 406 410 422 429 500 502 503 504) }}
+      error_page {{ . }} /{{ . }}.html;
+    {{- end }}
+
     {{- range(list 400 401 403 404 405 406 410 422 429 500 502 503 504) }}
 
-    error_page {{ . }} /{{ . }}.html;
     location /{{ . }}.html {
       proxy_pass https://govuk-app-assets-{{ $.Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com/error_pages/{{ . }}.html;
       internal;
