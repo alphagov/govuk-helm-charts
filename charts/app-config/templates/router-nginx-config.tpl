@@ -252,38 +252,40 @@ http {
     {{- if eq $.Values.govukEnvironment "integration" }}
       error_page 460 =410 /410.html;
       {{- range(list 400 401 403 404 405 406 422 429 500 502 503 504) }}
-      error_page {{ . }} /{{ . }}.html;
+        error_page {{ . }} /{{ . }}.html;
+      {{- end }}
     {{- else }}
       {{- range(list 400 401 403 404 405 406 410 422 429 500 502 503 504) }}
-      error_page {{ . }} /{{ . }}.html;
+        error_page {{ . }} /{{ . }}.html;
+      {{- end }}
     {{- end }}
 
     {{- range(list 400 401 403 404 405 406 410 422 429 500 502 503 504) }}
 
-    location /{{ . }}.html {
-      proxy_pass https://govuk-app-assets-{{ $.Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com/error_pages/{{ . }}.html;
-      internal;
-      proxy_set_header   Authorization "";
-      proxy_set_header   Connection "";
-      proxy_set_header   X-Real-IP $remote_addr;  # TODO: pass the actual end-client address
-      proxy_hide_header  x-amz-id-2;
-      proxy_hide_header  x-amz-meta-server-side-encryption;
-      proxy_hide_header  x-amz-request-id;
-      proxy_hide_header  x-amz-server-side-encryption;
-      proxy_hide_header  x-amz-version-id;
+      location /{{ . }}.html {
+        proxy_pass https://govuk-app-assets-{{ $.Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com/error_pages/{{ . }}.html;
+        internal;
+        proxy_set_header   Authorization "";
+        proxy_set_header   Connection "";
+        proxy_set_header   X-Real-IP $remote_addr;  # TODO: pass the actual end-client address
+        proxy_hide_header  x-amz-id-2;
+        proxy_hide_header  x-amz-meta-server-side-encryption;
+        proxy_hide_header  x-amz-request-id;
+        proxy_hide_header  x-amz-server-side-encryption;
+        proxy_hide_header  x-amz-version-id;
 
-      {{- if eq . 404 }}
-      # Set Cache-Control headers on 404 pages since we overide those set by apps.
-      # So that we dont fall through to the default provided by the CDN.
-      add_header Cache-Control "public, max-age=30" always;
+        {{- if eq . 404 }}
+          # Set Cache-Control headers on 404 pages since we overide those set by apps.
+          # So that we dont fall through to the default provided by the CDN.
+          add_header Cache-Control "public, max-age=30" always;
 
-      # Required since the `return` directive in an `if` block above
-      # interferes with the 304 functionality of Fastly so this disables
-      # this Fastly functionality
-      proxy_hide_header  ETag;
-      proxy_hide_header  Last-Modified;
-      {{- end }}
-    }
+          # Required since the `return` directive in an `if` block above
+          # interferes with the 304 functionality of Fastly so this disables
+          # this Fastly functionality
+          proxy_hide_header  ETag;
+          proxy_hide_header  Last-Modified;
+        {{- end }}
+      }
     {{- end }}
   }
 }
