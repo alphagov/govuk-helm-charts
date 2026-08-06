@@ -39,6 +39,7 @@ create () {
   local deadline
   local current_time
   local state
+  local snapshot_retry_count
 
   start_time=$(date +%s)
   readonly start_time
@@ -47,6 +48,15 @@ create () {
   
   set +e
   result=$(mycurl -XPUT "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME?wait_for_completion=true")
+
+  snapshot_retry_count=1
+  while [[ "$result" == *"504 Gateway Time-out"* ]] && [[ "$snapshot_retry_count" -le 3 ]]; do
+    echo "Gateway timed-out, retrying snapshot creation"
+    sleep 5
+    result=$(mycurl -XPUT "$ES_URL/_snapshot/$SNAPSHOT_REPO/$SNAPSHOT_NAME?wait_for_completion=true")
+    ((snapshot_retry_count++))
+  done
+
   set -e
   state=$(jq -r .snapshot.state <<<"$result")
   echo "$result" | jq
