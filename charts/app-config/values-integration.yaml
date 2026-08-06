@@ -221,8 +221,6 @@ govukApplications:
       nginxConfigMap:
         create: false
         name: asset-manager-nginx-conf
-      svgBatchScan:
-        enabled: true
       extraEnv:
         - name: ASSET_MANAGER_CLAMSCAN_PATH
           value: /usr/local/bin/clamdscan
