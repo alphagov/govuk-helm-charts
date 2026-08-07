@@ -1,0 +1,85 @@
+rule_files:
+  - datagovuk_slo_alerts.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - name: No alert when Find error rate is below 1% threshold
+    interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="datagovuk", job="datagovuk-find", status="200"}'
+        values: '0+1000x30'
+      - series: 'http_requests_total{namespace="datagovuk", job="datagovuk-find", status="500"}'
+        values: '0+5x30'
+
+    alert_rule_test:
+      - alertname: DataGovUkFindHighErrorRate
+        eval_time: 30m
+        exp_alerts: []
+
+  - name: Alert fires when Find error rate exceeds 1% for 5+ minutes
+    interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="datagovuk", job="datagovuk-find", status="200"}'
+        values: '0+1000x30'
+      - series: 'http_requests_total{namespace="datagovuk", job="datagovuk-find", status="500"}'
+        values: '0+20x30'
+
+    alert_rule_test:
+      - alertname: DataGovUkFindHighErrorRate
+        eval_time: 4m
+        exp_alerts: []
+
+      - alertname: DataGovUkFindHighErrorRate
+        eval_time: 6m
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: slack-datagovuk-technical
+            exp_annotations:
+              summary: data.gov.uk Find error rate above 1% SLO threshold
+              description: >-
+                The 5xx error rate for the datagovuk-find service has exceeded the 1% SLO target.
+
+                Check the datagovuk-find pods and upstream CKAN connectivity.
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/data-gov-uk-high-error-rate.html
+
+  - name: No alert when CKAN error rate is below 0.5% threshold
+    interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="datagovuk", job="ckan-ckan", status="200"}'
+        values: '0+1000x30'
+      - series: 'http_requests_total{namespace="datagovuk", job="ckan-ckan", status="500"}'
+        values: '0+2x30'
+
+    alert_rule_test:
+      - alertname: DataGovUkCkanHighErrorRate
+        eval_time: 30m
+        exp_alerts: []
+
+  - name: Alert fires when CKAN error rate exceeds 0.5% for 5+ minutes
+    interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="datagovuk", job="ckan-ckan", status="200"}'
+        values: '0+1000x30'
+      - series: 'http_requests_total{namespace="datagovuk", job="ckan-ckan", status="500"}'
+        values: '0+10x30'
+
+    alert_rule_test:
+      - alertname: DataGovUkCkanHighErrorRate
+        eval_time: 4m
+        exp_alerts: []
+
+      - alertname: DataGovUkCkanHighErrorRate
+        eval_time: 6m
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: slack-datagovuk-technical
+            exp_annotations:
+              summary: data.gov.uk CKAN error rate above 0.5% SLO threshold
+              description: >-
+                The 5xx error rate for the ckan-ckan service has exceeded the 0.5% SLO target.
+
+                Check the ckan-ckan pods, Solr connectivity, and database health.
+              runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/data-gov-uk-high-error-rate.html

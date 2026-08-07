@@ -556,7 +556,7 @@
           "refId": "B"
         }
       ],
-      "title": "P95 Response Time — Directory vs Collections",
+      "title": "P95 Response Time \u2014 Directory vs Collections",
       "type": "timeseries"
     },
     {
@@ -676,7 +676,7 @@
           "refId": "B"
         }
       ],
-      "title": "Average Request Duration — Directory vs Collections",
+      "title": "Average Request Duration \u2014 Directory vs Collections",
       "type": "timeseries"
     },
     {
@@ -722,7 +722,7 @@
           "color": "rgba(255,0,255,0.7)"
         },
         "filterValues": {
-          "le": 1e-9
+          "le": 1e-09
         },
         "legend": {
           "show": true
@@ -814,7 +814,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
