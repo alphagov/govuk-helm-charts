@@ -1789,8 +1789,6 @@ govukApplications:
       uploadAssets:
         enabled: false
       extraEnv:
-        - name: ALLOW_UNKNOWN_HMRC_MANUAL_SLUGS
-          value: "1"
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
@@ -1811,8 +1809,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-hmrc-manuals-api-publishing-api
               key: bearer_token
-        - name: PUBLISH_TOPICS
-          value: "1"
         - name: PUMA_TIMEOUT
           value: "300"
       cronTasks: []
