@@ -249,14 +249,8 @@ http {
     # Error pages
     charset utf-8;
 
-    {{- if eq $.Values.govukEnvironment "integration" }}
-      {{- range(list 400 401 403 404 405 406 422 429 500 502 503 504) }}
-        error_page {{ . }} /{{ . }}.html;
-      {{- end }}
-    {{- else }}
-      {{- range(list 400 401 403 404 405 406 410 422 429 500 502 503 504) }}
-        error_page {{ . }} /{{ . }}.html;
-      {{- end }}
+    {{- range(list 400 401 403 404 405 406 422 429 500 502 503 504) }}
+      error_page {{ . }} /{{ . }}.html;
     {{- end }}
 
     error_page 460 =410 /410.html;
