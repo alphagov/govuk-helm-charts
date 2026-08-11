@@ -9,6 +9,9 @@
 # Helm Charts
 /charts/ @alphagov/gov-uk-platform-engineering
 
+# Charts owned by app teams
+/charts/search-index-env-sync/ @alphagov/gov-uk-search @alphagov/gov-uk-platform-engineering
+
 # Allow changes to non-prod app values
 /charts/app-config/values-integration.yaml
 /charts/app-config/values-staging.yaml
