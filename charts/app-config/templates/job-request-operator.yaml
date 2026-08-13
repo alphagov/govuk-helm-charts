@@ -1,0 +1,37 @@
+{{- $helmReleaseInfo := include "app-config.helm-release"
+        ( merge (deepCopy .) (dict "repoURL" "oci://ghcr.io/alphagov/govuk/charts/govuk-job-request-operator" "chart" "govuk-job-request-operator") )
+}}
+{{- $imageTag := get ($helmReleaseInfo|fromYaml) "targetRevision" }}
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: job-request-operator
+  namespace: {{ $.Values.argoNamespace | default $.Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    slackChannel: "#govuk-platform-engineering-support"
+    repoName: "alphagov/govuk-job-request-operator/releases"
+    imageTag: "{{ $imageTag }}"
+    notifications.argoproj.io/subscribe.on-deployed.argo_events: ""
+    notifications.argoproj.io/subscribe.deployment.grafana: "deployment|{{ .name }}"
+    postSyncWorkflowEnabled: "{{ .postSyncWorkflowEnabled | default "true" }}"
+spec:
+  project: govuk-operators
+  source:
+    {{- $helmReleaseInfo | nindent 4 }}
+    path: .
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: job-request-operator
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
