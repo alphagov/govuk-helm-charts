@@ -1465,11 +1465,6 @@ govukApplications:
           value: "0"
         - name: GRAPHQL_RATE_TRANSACTION
           value: "0"
-        - name: OS_MAPS_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: frontend-os-maps-api
-              key: api_key
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
       nginxConfigMap:
@@ -1547,11 +1542,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
-        - name: OS_MAPS_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: frontend-os-maps-api
-              key: api_key
         - name: PLEK_SERVICE_PUBLISHING_API_URI
           value: "http://publishing-api-read-replica"
         - name: PUBLISHING_API_BEARER_TOKEN
