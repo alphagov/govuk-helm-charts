@@ -1504,7 +1504,7 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 512Mi
-      dbMigrationEnabled: false
+      dbMigrationEnabled: true
       workers:
         enabled: true
       workerResources:
@@ -1532,6 +1532,11 @@ govukApplications:
       extraEnv:
         - name: MAINTENANCE_MODE
           value: "false"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: fact-check-manager-postgres
+              key: DATABASE_URL
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
