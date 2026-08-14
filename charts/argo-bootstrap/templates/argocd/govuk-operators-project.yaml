@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: govuk-operators
+  finalizers:
+    # Ensure that project is not deleted until it is not referenced by any application
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: ArgoCD project containing operators deployed as part of the GOV.UK platform
+
+  sourceRepos:
+    - '*'
+
+  # Allow a lot of cluster-scoped resource types to be created, because the operators
+  # being deployed will be more privileged than the things in the govuk project
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+
+    - group: "external-secrets.io"
+      kind: ClusterExternalSecret
+
+    - group: ''
+      kind: PersistentVolume
+
+    - group: "rbac.authorization.k8s.io:"
+      kind: ClusterRole
+    - group: "rbac.authorization.k8s.io:"
+      kind: ClusterRoleBinding
+
+    - group: "admissionregistration.k8s.io"
+      kind: MutatingAdmissionPolicy
+    - group: "admissionregistration.k8s.io"
+      kind: MutatingAdmissionPolicyBinding
+
+    - group: "apiextensions.k8s.io"
+      kind: "CustomResourceDefinition"
+
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+
+  orphanedResources:
+    warn: false
