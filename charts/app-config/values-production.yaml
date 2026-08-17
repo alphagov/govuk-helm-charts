@@ -1462,6 +1462,51 @@ govukApplications:
             return 301 https://draft-assets.publishing.service.gov.uk/government/uploads/$item_path;
           }
       cronTasks: []
+  - name: fact-check-manager
+    helmValues:
+      arch: arm64
+      podTerminationGracePeriodSecs: 5
+      containerPreStopSleepSecs: 3
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1.5Gi
+        requests:
+          cpu: 10m
+          memory: 512Mi
+      dbMigrationEnabled: false
+      workers:
+        enabled: true
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 10m
+          memory: 200Mi
+      redis:
+        enabled: true
+      ingress:
+        enabled: true
+        annotations:
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          alb.ingress.kubernetes.io/group.order: "155"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "fact-check-manager.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
+        hosts:
+          - name: fact-check-manager.{{ .Values.k8sExternalDomainSuffix }}
+      nginxProxyReadTimeout: 30s
+      extraEnv:
+        - name: MAINTENANCE_MODE
+          value: "false"
+        - name: JWT_AUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: authenticating-proxy-jwt-auth-secret
+              key: JWT_AUTH_SECRET
   - name: govspeak-preview
     helmValues:
       arch: arm64
