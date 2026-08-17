@@ -2,6 +2,14 @@ apiVersion: v1
 entries:
   argo-bootstrap:
   - apiVersion: v2
+    created: "2026-08-17T10:17:06.814769733Z"
+    description: Bootstraps ArgoCD with initial configuration
+    digest: fcf5243fd0c301bd50b1d6a27ddcf2d12ad7b348257198ea45a8b7086e1d74ac
+    name: argo-bootstrap
+    urls:
+    - https://github.com/alphagov/govuk-helm-charts/releases/download/argo-bootstrap-0.6.0/argo-bootstrap-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
     created: "2026-08-14T14:55:49.751483446Z"
     description: Bootstraps ArgoCD with initial configuration
     digest: 4267ad14c8151dbc0cb2f7a216f818f44ebf5286b84ddf0cb89323dcadfe131e
@@ -288,4 +296,4 @@ entries:
     urls:
     - https://github.com/alphagov/govuk-helm-charts/releases/download/kubernetes-events-shipper-1.0.0/kubernetes-events-shipper-1.0.0.tgz
     version: 1.0.0
-generated: "2026-08-14T14:55:49.886723193Z"
+generated: "2026-08-17T10:17:06.814864048Z"
