@@ -23,9 +23,9 @@ spec:
     - group: ''
       kind: PersistentVolume
 
-    - group: "rbac.authorization.k8s.io:"
+    - group: "rbac.authorization.k8s.io"
       kind: ClusterRole
-    - group: "rbac.authorization.k8s.io:"
+    - group: "rbac.authorization.k8s.io"
       kind: ClusterRoleBinding
 
     - group: "admissionregistration.k8s.io"
