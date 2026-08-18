@@ -162,7 +162,7 @@ spec:
         {{- include "slack.expiringtokenstext" . | nindent 8 }}
   - name: 'slack-chat-notifications'
     slackConfigs:
-    - channel: '#dev-notifications-ai-govuk'
+    - channel: '#ai-govuk-chat-devs'
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
