@@ -1502,6 +1502,11 @@ govukApplications:
       extraEnv:
         - name: MAINTENANCE_MODE
           value: "false"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: fact-check-manager-postgres
+              key: DATABASE_URL
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
