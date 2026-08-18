@@ -3068,7 +3068,6 @@ govukApplications:
         - name: rpt-binary-metrics
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8-16/2 * * 1-5" # every two hours between 8am and 4pm on weekdays
-          suspend: true # temporarily suspend 17/08/2026 to manually rerun failing evaluations
         - name: rpt-binary-metric-wknd
           task: "quality:report_quality_metrics[binary]"
           schedule: "0 8 * * 6,0" # at 08:00 GMT on saturday and sunday
