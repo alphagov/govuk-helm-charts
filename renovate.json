@@ -86,7 +86,17 @@
             ],
             "datasourceTemplate": "helm",
             "matchStrings": [
-                "(?<registryUrl>.+) (?<depName>.+): \"(?<currentValue>[0-9\\.]+)\""
+                "(?<registryUrl>https://.+) (?<depName>.+): \"(?<currentValue>[0-9\\.]+)\""
+            ]
+        },
+        {
+            "customType": "regex",
+            "managerFilePatterns": [
+                "/.*\\/helm-versions\\/.*/"
+            ],
+            "datasourceTemplate": "docker",
+            "matchStrings": [
+                "(?<registryUrl>oci://.+) (?<depName>.+): \"(?<currentValue>v?[0-9\\.]+)\""
             ]
         }
     ]
