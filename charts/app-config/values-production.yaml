@@ -2359,6 +2359,11 @@ govukApplications:
             secretKeyRef:
               name: signon-token-publisher-asset-manager
               key: bearer_token
+        - name: FACT_CHECK_MANAGER_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-publisher-fact-check-manager
+              key: bearer_token
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
