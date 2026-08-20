@@ -1512,6 +1512,21 @@ govukApplications:
             secretKeyRef:
               name: authenticating-proxy-jwt-auth-secret
               key: JWT_AUTH_SECRET
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-fact-check-manager
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-fact-check-manager
+              key: oauth_secret
+        - name: PUBLISHER_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: signon-token-fact-check-manager-publisher
+              key: bearer_token
   - name: govspeak-preview
     helmValues:
       arch: arm64
