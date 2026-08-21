@@ -3170,11 +3170,11 @@ govukApplications:
         - name: setup-sample-query-sets
           task: "quality:setup_sample_query_sets"
           schedule: "0 2 1 * *" # 02:00 first day of the month
-        - name: report-evaluations-this-month
+        - name: report-evals-this-month
           task: "report:evaluations_this_month[failed]"
           schedule: "0 0 31 2 *" # to be run manually
           suspend: true
-        - name: report-evaluations-last-month
+        - name: report-evals-last-month
           task: "report:evaluations_last_month[failed]"
           schedule: "0 0 31 2 *" # to be run manually
           suspend: true
