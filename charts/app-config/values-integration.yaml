@@ -381,8 +381,6 @@ govukApplications:
           value: "0"
         - name: GRAPHQL_RATE_WORLD_INDEX
           value: "0"
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
   - name: draft-collections
     repoName: collections
     helmValues:
@@ -410,8 +408,6 @@ govukApplications:
           value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
   - name: collections-publisher
     helmValues:
       arch: arm64
@@ -1240,8 +1236,6 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.integration.govuk-internal.digital
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
   - name: draft-feedback
     repoName: feedback
     helmValues:
@@ -1465,8 +1459,6 @@ govukApplications:
           value: "0"
         - name: GRAPHQL_RATE_TRANSACTION
           value: "0"
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
       nginxConfigMap:
         extraServerConf: |
           location ~ /government/uploads/(?<item_path>.+) {
@@ -1542,8 +1534,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
-        - name: PLEK_SERVICE_PUBLISHING_API_URI
-          value: "http://publishing-api-read-replica"
         - name: PUBLISHING_API_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
