@@ -1159,9 +1159,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-email-alert-service-email-alert-api
               key: bearer_token
-        # TODO: remove GOVUK_PROMETHEUS_EXPORTER once govuk_app_config >=9.10 is everywhere.
-        - name: GOVUK_PROMETHEUS_EXPORTER
-          value: force
         - name: RABBITMQ_URL
           valueFrom:
             secretKeyRef:
@@ -3014,9 +3011,6 @@ govukApplications:
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
-        # TODO: remove GOVUK_PROMETHEUS_EXPORTER once govuk_app_config >=9.10 is everywhere.
-        - name: GOVUK_PROMETHEUS_EXPORTER
-          value: force
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_NAME
           value: search_api_v2_published_documents
         - name: PUBLISHED_DOCUMENTS_MESSAGE_QUEUE_THREADS
