@@ -2898,7 +2898,7 @@ govukApplications:
           schedule: "0 22 * * *"
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
-          schedule: "15 00 * * *"
+          schedule: "30 23 * * *"
       extraEnv:
         - name: AWS_S3_RELEVANCY_BUCKET_NAME
           value: govuk-production-search-relevancy
