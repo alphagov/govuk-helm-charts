@@ -1529,11 +1529,6 @@ govukApplications:
             secretKeyRef:
               name: fact-check-manager-notify
               key: GOVUK_NOTIFY_API_KEY
-        - name: GOVUK_NOTIFY_TEST_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: fact-check-manager-notify-test
-              key: notify-test
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
