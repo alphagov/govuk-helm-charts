@@ -1524,6 +1524,8 @@ govukApplications:
             secretKeyRef:
               name: fact-check-manager-postgres
               key: DATABASE_URL
+        - name: GOVUK_CSP_REPORT_ONLY
+          value: "true"
         - name: GOVUK_NOTIFY_API_KEY
           valueFrom:
             secretKeyRef:
