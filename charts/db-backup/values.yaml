@@ -155,6 +155,12 @@ cronjobs:
       operations:
         - op: backup
 
+    fact-check-manager-postgres:
+      schedule: "26 23 * * *"
+      db: fact-check-manager_production
+      operations:
+        - op: backup
+
     places-manager-postgres:
       schedule: "18 23 * * *"
       db: imminence_production
@@ -359,6 +365,14 @@ cronjobs:
       extraEnv:
         - name: DB_OWNER
           value: email-alert-api
+
+    fact-check-manager-postgres:
+      schedule: "26 1 * * 1-5"
+      db: fact-check-manager_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-production-database-backups
+        - op: backup
 
     places-manager-postgres:
       schedule: "18 1 * * 1-5"
@@ -621,6 +635,14 @@ cronjobs:
       extraEnv:
         - name: DB_OWNER
           value: email-alert-api
+
+    fact-check-manager-postgres:
+      schedule: "26 3 * * 1"
+      db: fact-check-manager_production
+      operations:
+        - op: restore
+          bucket: s3://govuk-staging-database-backups
+        - op: backup
 
     places-manager-postgres:
       schedule: "18 3 * * 1"
