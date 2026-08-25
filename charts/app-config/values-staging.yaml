@@ -1536,6 +1536,11 @@ govukApplications:
               key: DATABASE_URL
         - name: GOVUK_CSP_REPORT_ONLY
           value: "true"
+        - name: GOVUK_NOTIFY_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: fact-check-manager-notify
+              key: GOVUK_NOTIFY_API_KEY
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
@@ -1551,6 +1556,12 @@ govukApplications:
             secretKeyRef:
               name: signon-app-fact-check-manager
               key: oauth_secret
+        - name: GOVUK_NOTIFY_NEW_FACT_CHECK_REQUEST_TEMPLATE_ID
+          value: 673dc314-b0b4-4900-9e9a-2c9386a87781
+        - name: GOVUK_NOTIFY_RESPONSE_ACCEPTED_TEMPLATE_ID
+          value: f0c23f77-704c-4b0c-9d72-648fdbc7ee6c
+        - name: GOVUK_NOTIFY_RESPONSE_REJECTED_TEMPLATE_ID
+          value: 9cb24bc3-e239-4f44-9b2e-f122f713fdeb
         - name: PUBLISHER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:

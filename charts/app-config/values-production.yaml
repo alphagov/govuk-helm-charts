@@ -1521,6 +1521,12 @@ govukApplications:
             secretKeyRef:
               name: signon-app-fact-check-manager
               key: oauth_secret
+        - name: GOVUK_NOTIFY_NEW_FACT_CHECK_REQUEST_TEMPLATE_ID
+          value: 5fd98fb2-6145-400a-8fe6-17c0d05965a8
+        - name: GOVUK_NOTIFY_RESPONSE_ACCEPTED_TEMPLATE_ID
+          value: 1d5486d4-841d-4ca5-b2f3-f806191c4ce8
+        - name: GOVUK_NOTIFY_RESPONSE_REJECTED_TEMPLATE_ID
+          value: 11abc603-5662-4921-ba5c-b21277f640dd
         - name: PUBLISHER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
