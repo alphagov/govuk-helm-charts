@@ -3453,6 +3453,11 @@ govukApplications:
           value: *publishing-bootstrap-gtm-auth
         - name: GOOGLE_TAG_MANAGER_PREVIEW # Non-prod only
           value: *publishing-bootstrap-gtm-preview
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: specialist-publisher-mysql
+              key: DATABASE_URL
   - name: support
     helmValues:
       arch: arm64
