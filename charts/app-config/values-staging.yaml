@@ -3463,6 +3463,11 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: GOVUK_NOTIFY_TEMPLATE_ID
           value: *publishing-notify-template
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: specialist-publisher-mysql
+              key: DATABASE_URL
       cronTasks: []
   - name: support
     helmValues:

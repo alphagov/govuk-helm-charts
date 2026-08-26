@@ -3497,6 +3497,11 @@ govukApplications:
           value: *publishing-notify-template
         - name: GOOGLE_TAG_MANAGER_ID
           value: *publishing-bootstrap-gtm-id
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: specialist-publisher-mysql
+              key: DATABASE_URL
       cronTasks: []
   - name: support
     helmValues:
