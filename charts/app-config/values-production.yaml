@@ -1506,6 +1506,11 @@ govukApplications:
               key: DATABASE_URL
         - name: GOVUK_CSP_REPORT_ONLY
           value: "true"
+        - name: GOVUK_NOTIFY_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: fact-check-manager-notify
+              key: GOVUK_NOTIFY_API_KEY
         - name: JWT_AUTH_SECRET
           valueFrom:
             secretKeyRef:
