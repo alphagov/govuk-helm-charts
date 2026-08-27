@@ -1,1 +1,1 @@
-mysql2://{{ .username | toString }}:{{ .password | toString }}@{{ .host | toString }}
+mysql2://{{ .username | urlquery }}:{{ .password | urlquery }}@{{ .host | toString }}
