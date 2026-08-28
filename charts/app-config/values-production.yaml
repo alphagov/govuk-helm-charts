@@ -3423,6 +3423,7 @@ govukApplications:
         requests:
           cpu: 10m
           memory: 450Mi
+      dbMigrationEnabled: true
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
