@@ -10,6 +10,7 @@ provisionDatabaseReadonlySecrets:
     - release
     - search_admin
     - signon
+    - specialist_publisher
     - whitehall
   postgres:
     - account_api
