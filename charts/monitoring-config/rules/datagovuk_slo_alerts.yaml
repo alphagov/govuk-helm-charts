@@ -1,0 +1,38 @@
+groups:
+  - name: DataGovUkSloAlerts
+    rules:
+      - alert: DataGovUkFindHighErrorRate
+        expr: |
+          sum(rate(http_requests_total{namespace="datagovuk", job="datagovuk-find", status=~"5.."}[5m]))
+          /
+          sum(rate(http_requests_total{namespace="datagovuk", job="datagovuk-find"}[5m]))
+          > 0.01
+        for: 5m
+        labels:
+          severity: warning
+          destination: slack-datagovuk-technical
+        annotations:
+          summary: data.gov.uk Find error rate above 1% SLO threshold
+          description: >-
+            The 5xx error rate for the datagovuk-find service has exceeded the 1% SLO target.
+
+            Check the datagovuk-find pods and upstream CKAN connectivity.
+          runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/data-gov-uk-high-error-rate.html
+
+      - alert: DataGovUkCkanHighErrorRate
+        expr: |
+          sum(rate(http_requests_total{namespace="datagovuk", job="ckan-ckan", status=~"5.."}[5m]))
+          /
+          sum(rate(http_requests_total{namespace="datagovuk", job="ckan-ckan"}[5m]))
+          > 0.005
+        for: 5m
+        labels:
+          severity: warning
+          destination: slack-datagovuk-technical
+        annotations:
+          summary: data.gov.uk CKAN error rate above 0.5% SLO threshold
+          description: >-
+            The 5xx error rate for the ckan-ckan service has exceeded the 0.5% SLO target.
+
+            Check the ckan-ckan pods, Solr connectivity, and database health.
+          runbook_url: https://docs.publishing.service.gov.uk/manual/alerts/data-gov-uk-high-error-rate.html
