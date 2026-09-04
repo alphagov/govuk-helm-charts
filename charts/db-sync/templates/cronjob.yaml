@@ -1,0 +1,269 @@
+{{- $_ := .Values.govukEnvironment | required "govukEnvironment is required" }}
+{{- $fullName := include "db-sync.fullname" . }}
+
+{{- range $jobName, $job := get .Values.cronjobs .Values.govukEnvironment }}
+  {{- $jobFullName := printf "%s-%s" $fullName $jobName }}
+  {{- $isBackup := eq $job.operation "backup" }}
+  {{- $isRestore := eq $job.operation "restore" }}
+  {{- $usesSource := $isBackup }}
+  {{- $usesDest := $isRestore }}
+  {{- $usesTransform := and $isBackup $job.transformScript }}
+  {{- $sourcePasswordKey := $job.sourcePasswordSecretKey | default $jobName }}
+  {{- $destPasswordKey := $job.destPasswordSecretKey | default $jobName }}
+  {{- $transformUser := include "db-sync.transformUser" (dict "job" $job) | trim }}
+  {{- $transformUri := include "db-sync.transformUri" (dict "job" $job "transformUser" $transformUser) | trim }}
+  {{- $sourceUri := include "db-sync.sourceUri" (dict "root" $ "job" $job "jobName" $jobName) | trim }}
+  {{- $destUri := include "db-sync.destUri" (dict "root" $ "job" $job "jobName" $jobName) | trim }}
+  {{- /* Ensure required fields are present */}}
+  {{- $_ := $job.schedule | required (printf "schedule is required for job %s" $jobName) }}
+  {{- $_ := $job.operation | required (printf "operation is required for job %s" $jobName) }}
+  {{- $_ := $job.dbType | required (printf "dbType is required for job %s" $jobName) }}
+  {{- $_ := $job.dbName | required (printf "dbName is required for job %s" $jobName) }}
+  {{- $s3Bucket := $job.s3Bucket | default $.Values.defaultS3Bucket }}
+  {{- $_ := $s3Bucket | required (printf "s3Bucket is required for job %s (set per-job or via defaultS3Bucket)" $jobName) }}
+  {{- $_ := $job.s3Path | required (printf "s3Path is required for job %s" $jobName) }}
+  {{- if and $isBackup (not $sourceUri) }}
+    {{- fail (printf "backup job %s requires either sourceUri or a resolvable source hostname" $jobName) }}
+  {{- end }}
+  {{- if and $isRestore (ne $job.dbType "documentdb") (not $destUri) }}
+    {{- fail (printf "restore job %s requires either destUri or a resolvable destination hostname" $jobName) }}
+  {{- end }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $jobFullName }}
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
+  labels:
+    {{- include "db-sync.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $jobName }}
+spec:
+  schedule: {{ $job.schedule | quote }}
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 28800  # 8 hours
+  suspend: {{ or $.Values.suspendAllCronJobs $job.suspend | default false }}
+  failedJobsHistoryLimit: 2
+  successfulJobsHistoryLimit: 2
+  jobTemplate:
+    metadata:
+      name: {{ $jobFullName }}
+      labels:
+        {{- include "db-sync.selectorLabels" $ | nindent 8 }}
+        app.kubernetes.io/component: {{ $jobName }}
+    spec:
+      activeDeadlineSeconds: {{ $job.maxJobRuntimeSeconds | default 43200 }} # Default: 12 hours
+      backoffLimit: 0
+      # Ignore pod disruptions
+      podFailurePolicy:
+        rules:
+          - action: Ignore
+            onPodConditions:
+              - type: DisruptionTarget
+                status: "True"
+      template:
+        metadata:
+          name: {{ $jobFullName }}
+          labels:
+            {{- include "db-sync.selectorLabels" $ | nindent 12 }}
+            app.kubernetes.io/component: {{ $jobName }}
+          annotations:
+            cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+        spec:
+          enableServiceLinks: false
+          restartPolicy: Never
+          dnsConfig:
+            searches:
+              - blue.{{ $.Values.govukEnvironment }}.govuk-internal.digital
+              - {{ $.Values.govukEnvironment }}.govuk-internal.digital
+          serviceAccountName: {{ include "db-sync.serviceAccountName" $ }}
+          securityContext:
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+          volumes:
+            - name: tmp
+              emptyDir: {}
+          {{- if $usesTransform }}
+          initContainers:
+            {{ if eq $job.dbType "documentdb" }}
+            - name: transform-db
+              image: "{{ $.Values.transformImage.docdb.repository }}:{{ $.Values.transformImage.docdb.tag }}"
+              imagePullPolicy: {{ $.Values.transformImage.docdb.pullPolicy }}
+              restartPolicy: Always
+              command:
+                - /app/transform-db
+              ports:
+                - containerPort: 27017
+                  name: documentdb
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment }}
+                - name: MONGO_INITDB_ROOT_PASSWORD
+                  value: {{ $job.transformPassword | default "secret" | quote }}
+                - name: MONGO_INITDB_ROOT_USERNAME
+                  value: {{ $transformUser | quote }}
+              resources:
+                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
+              securityContext:
+                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
+            {{ else if eq $job.dbType "mysql" }}
+            - name: transform-db
+              image: "{{ $.Values.transformImage.mysql.repository }}:{{ $.Values.transformImage.mysql.tag }}"
+              imagePullPolicy: {{ $.Values.transformImage.mysql.pullPolicy }}
+              restartPolicy: Always
+              ports:
+                - containerPort: 3306
+                  name: mysql
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment }}
+                - name: MYSQL_ROOT_PASSWORD
+                  value: {{ $job.transformPassword | default "secret" | quote }}
+              resources:
+                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
+              securityContext:
+                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
+            {{ else if eq $job.dbType "postgres" }}
+            - name: transform-db
+              image: "{{ $.Values.transformImage.postgres.repository }}:{{ $.Values.transformImage.postgres.tag }}"
+              imagePullPolicy: {{ $.Values.transformImage.postgres.pullPolicy }}
+              restartPolicy: Always
+              command:
+                - /app/transform-db
+              ports:
+                - containerPort: 5432
+                  name: postgres
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment }}
+                - name: POSTGRES_PASSWORD
+                  value: {{ $job.transformPassword | default "secret" | quote }}
+                - name: POSTGRES_USER
+                  value: {{ $transformUser | quote }}
+              resources:
+                {{- toYaml $job.transformResources | default $.Values.transformResources | nindent 16 }}
+              securityContext:
+                {{- toYaml $.Values.transformSecurityContext | nindent 16 }}
+            {{ else }}
+              {{- fail (printf "Unsupported dbType '%s' for job %s" $job.dbType $jobName) }}
+            {{- end }}
+          {{- end }}
+          containers:
+            - name: db-sync
+              image: "{{ $.Values.appImage.repository }}:{{ $.Values.appImage.tag }}"
+              imagePullPolicy: {{ $.Values.appImage.pullPolicy }}
+              command:
+                - /app/db-sync
+              args:
+                - {{ $job.operation }}
+                {{- if $usesTransform }}
+                - --transform-script
+                - /scripts/{{ $job.transformScript }}
+                {{- end }}
+              env:
+                - name: GOVUK_ENVIRONMENT
+                  value: {{ $.Values.govukEnvironment }}
+                - name: PUSHGATEWAY_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: govuk-apps-env
+                      key: PROMETHEUS_PUSHGATEWAY_URL
+                {{- if eq $job.dryRun "true" }}
+                - name: DRY_RUN
+                  value: {{ $job.dryRun }}
+                {{- end }}
+                {{- if $job.appName }}
+                - name: APP_NAME
+                  value: {{ $job.appName }}
+                {{- end }}
+                - name: DB_TYPE
+                  value: {{ $job.dbType }}
+                - name: DB_NAME
+                  value: {{ $job.dbName }}
+                {{- if $job.dbOwner }}
+                - name: DB_OWNER
+                  value: {{ $job.dbOwner }}
+                {{- end }}
+                {{- if $job.threads }}
+                - name: THREADS
+                  value: {{ $job.threads | quote }}
+                {{- end }}
+                {{- if $usesSource }}
+                {{- if $sourceUri }}
+                - name: SOURCE_URI
+                  value: {{ $sourceUri }}
+                {{- end }}
+                {{- if ne $job.dbType "documentdb" }}
+                - name: SOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $sourcePasswordKey }}
+                {{- else if $job.sourcePasswordSecretKey }}
+                - name: SOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $job.sourcePasswordSecretKey }}
+                {{- end }}
+                {{- end }}
+                {{- if $usesDest }}
+                {{- if $destUri }}
+                - name: DEST_URI
+                  value: {{ $destUri }}
+                {{- else if eq $job.dbType "documentdb" }}
+                - name: DEST_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $jobName }}-dest
+                {{- end }}
+                {{- if and $isRestore (eq $job.dbType "documentdb") }}
+                {{- if $job.docdbSourceDb }}
+                - name: DOCDB_SOURCE_DB
+                  value: {{ $job.docdbSourceDb }}
+                {{- end }}
+                {{- end }}
+                {{- if ne $job.dbType "documentdb" }}
+                - name: DEST_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $destPasswordKey }}
+                {{- else if $job.destPasswordSecretKey }}
+                - name: DEST_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ $fullName }}-passwd
+                      key: {{ $job.destPasswordSecretKey }}
+                {{- end }}
+                {{- end }}
+                - name: S3_REGION
+                  value: {{ $job.s3Region | default "eu-west-1" }}
+                - name: S3_BUCKET
+                  value: {{ $s3Bucket }}
+                {{- if $job.s3Path }}
+                - name: S3_PATH
+                  value: {{ $job.s3Path }}
+                {{- end }}
+                {{- if $usesTransform }}
+                - name: TRANSFORM_SCRIPT
+                  value: {{ $job.transformScript }}
+                - name: TRANSFORM_URI
+                  value: {{ $transformUri }}
+                - name: TRANSFORM_PASSWORD
+                  value: {{ $job.transformPassword | default "secret" | quote }}
+                {{- end }}
+                {{- with $.Values.extraEnv }}
+                  {{- toYaml . | nindent 16 }}
+                {{- end }}
+                {{- with $job.extraEnv }}
+                  {{- toYaml . | nindent 16 }}
+                {{- end }}
+              resources:
+                {{- toYaml $job.appResources | default $.Values.appResources | nindent 16 }}
+              securityContext:
+                {{- toYaml $.Values.appSecurityContext | nindent 16 }}
+              volumeMounts:
+                - name: tmp
+                  mountPath: /tmp
+{{- end }}
