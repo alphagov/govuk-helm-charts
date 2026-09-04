@@ -77,6 +77,12 @@
             "additionalBranchPrefix": "{{replace '^.+\\/' '' packageFile}}-",
             "commitMessageSuffix": " ({{replace '^.+\\/' '' packageFile}})",
             "minimumReleaseAge": "10 days"
+        },
+        {
+            "matchPackageNames": [
+                "ghcr.io/alphagov/govuk/charts/govuk-job-request-operator"
+            ],
+            "minimumReleaseAge": null
         }
     ],
     "customManagers": [
