@@ -47,9 +47,9 @@ spec:
                 {{- toYaml $.Values.securityContext | nindent 16 }}
               env:
                 - name: COMPARE_TOP_UNSAMPLED_COUNT
-                  value: '100'
+                  value: '1000'
                 - name: COMPARE_REMAINING_SAMPLED_COUNT
-                  value: '100'
+                  value: '0'
                 - name: SITE
                   value: 'https://{{ .Values.externalDomainSuffix }}'
                 - name: SLACK_WEBHOOK
