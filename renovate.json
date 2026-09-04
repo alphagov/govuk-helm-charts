@@ -96,8 +96,9 @@
                 "/.*\\/helm-versions\\/.*/"
             ],
             "datasourceTemplate": "docker",
+            "packageNameTemplate": "{{dockerUrl}}",
             "matchStrings": [
-                "(?<registryUrl>oci://.+) (?<depName>.+): \"(?<currentValue>v?[0-9\\.]+)\""
+                "oci://(?<dockerUrl>.+) (?<depName>.+): \"(?<currentValue>v?[0-9\\.]+)\""
             ]
         }
     ]
