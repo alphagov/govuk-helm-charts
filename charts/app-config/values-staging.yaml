@@ -2849,6 +2849,10 @@ govukApplications:
       redis:
         enabled: true
       cronTasks:
+        - name: elasticdump
+          task: "elasticdump"
+          schedule: "0 0 31 2 *" # never
+          suspend: true # Only run this task manually
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
@@ -2923,6 +2927,11 @@ govukApplications:
             secretKeyRef:
               name: search-api-rabbitmq
               key: RABBITMQ_URL
+        - name: ELASTICDUMP_PARAMETERS
+          valueFrom:
+            secretKeyRef:
+              name: search-api-elasticdump
+              key: parameters
         - name: TENSORFLOW_SAGEMAKER_ENDPOINT
           value: govuk-staging-search-ltr-endpoint
   - name: search-api-v2
