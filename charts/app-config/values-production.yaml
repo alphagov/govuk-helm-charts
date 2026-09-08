@@ -2905,8 +2905,8 @@ govukApplications:
       cronTasks:
         - name: elasticdump
           task: "elasticdump"
-          schedule: "0 0 31 2 *" # never
-          suspend: true # Only run this task manually
+          schedule: "30 02 9 9 3" # Wednesday 9 September 2:30 UTC
+          suspend: false
         - name: generate-sitemap
           task: "sitemap:generate_and_upload"
           schedule: "50 2 * * *"
