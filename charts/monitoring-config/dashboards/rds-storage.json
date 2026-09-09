@@ -1,0 +1,2859 @@
+{
+  "apiVersion": "dashboard.grafana.app/v2",
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "dal9d7m",
+    "namespace": "default",
+    "uid": "X5T2jFLpASXADYxqbUipS3iUBptY6BcCzKGvlXx54ScX",
+    "resourceVersion": "1788887968920005",
+    "generation": 17,
+    "creationTimestamp": "2026-08-27T11:51:59Z",
+    "labels": {
+      "grafana.app/deprecatedInternalID": "10313"
+    },
+    "annotations": {
+      "grafana.app/createdBy": "user:u000000036",
+      "grafana.app/saved-from-ui": "Grafana v13.2.0 (f681b1359f)",
+      "grafana.app/updatedBy": "user:u000000036",
+      "grafana.app/updatedTimestamp": "2026-09-08T17:19:28Z"
+    }
+  },
+  "spec": {
+    "annotations": [
+      {
+        "kind": "AnnotationQuery",
+        "spec": {
+          "query": {
+            "kind": "DataQuery",
+            "group": "grafana",
+            "version": "v0",
+            "datasource": {
+              "name": "-- Grafana --"
+            },
+            "spec": {}
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "builtIn": true
+        }
+      }
+    ],
+    "cursorSync": "Off",
+    "description": "(David Mays WIP)",
+    "editable": true,
+    "elements": {
+      "panel-1": {
+        "kind": "Panel",
+        "spec": {
+          "id": 1,
+          "title": "RDS Free Storage",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "*"
+                        },
+                        "expression": "",
+                        "id": "",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Minimum"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "renameByRegex",
+                  "spec": {
+                    "options": {
+                      "regex": "(.*)-production-(mysql|postgres)",
+                      "renamePattern": "$1"
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "decbytes",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "seriesBy": "max"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "Free Space",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.9,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineStyle": {
+                      "fill": "solid"
+                    },
+                    "lineWidth": 1,
+                    "pointSize": 1,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "always",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-10": {
+        "kind": "Panel",
+        "spec": {
+          "id": 10,
+          "title": "⏱️ Time to Depletion Trend",
+          "description": "How long is estimated (in hours) before Free Storage hits 0 and is depleted",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "6h",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Minimum"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": true
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "IF(RATE(m1) < 0, m1 / (RATE(m1) * -21600), 9999)",
+                        "id": "e1",
+                        "label": "HoursToDepletion",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 1,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "default",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "h",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      },
+                      {
+                        "value": 0,
+                        "color": "dark-red"
+                      },
+                      {
+                        "value": 48,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 168,
+                        "color": "transparent"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "noValue": "0",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "log": 2,
+                      "type": "symlog"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "area"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "HoursToDepletion"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.showPoints",
+                        "value": "always"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "continuous-purples",
+                          "seriesBy": "max"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-11": {
+        "kind": "Panel",
+        "spec": {
+          "id": 11,
+          "title": "🔥 Burn Rate Acceleration",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "6h",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Minimum"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": true
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "RATE(ABS(RATE(m1) * 3600))",
+                        "id": "e1",
+                        "label": "BurnRateAcceleration",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 1,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "3600s",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "ANOMALY_DETECTION_BAND(e1,4)",
+                        "id": "",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 1,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "binBps",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "shades",
+                    "fixedColor": "dark-orange"
+                  },
+                  "noValue": "0",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "BurnRateAcceleration High"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.fillBelowTo",
+                        "value": "BurnRateAcceleration Low"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#808080",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 0
+                      },
+                      {
+                        "id": "custom.showPoints",
+                        "value": "never"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "BurnRateAcceleration Low"
+                    },
+                    "properties": [
+                      {
+                        "id": "noValue",
+                        "value": "0"
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 0
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#808080",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.showPoints",
+                        "value": "never"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-12": {
+        "kind": "Panel",
+        "spec": {
+          "id": 12,
+          "title": "🔥 WAL / Transaction Log Disk Usage",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "WAL Disk Usage (Max)",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "TransactionLogsDiskUsage",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Maximum"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m2",
+                        "label": "WAL Generation Rate (bytes/sec)",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "TransactionLogsGeneration",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "dark-orange"
+                  },
+                  "noValue": "0",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "series",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "WAL Disk Usage (Max)"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "light-red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "unit",
+                        "value": "bytes"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "WAL Generation Rate (bytes/sec)"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "super-light-orange",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.axisPlacement",
+                        "value": "right"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "binBps"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-13": {
+        "kind": "Panel",
+        "spec": {
+          "id": 13,
+          "title": "🔗 Replication Slot Disk Usage & Lag",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "Replication Slot Disk Usage (Max)",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "ReplicationSlotDiskUsage",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Maximum"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m2",
+                        "label": "Oldest Replication Slot Lag",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "OldestReplicationSlotLag",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Maximum"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "bytes",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "dark-orange"
+                  },
+                  "noValue": "0",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "series",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "Replication Slot Disk Usage (Max)"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#bc7b55",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "Oldest Replication Slot Lag"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#17becf",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.axisPlacement",
+                        "value": "right"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-14": {
+        "kind": "Panel",
+        "spec": {
+          "id": 14,
+          "title": "✍️ Write Activity (IOPS & Throughput)",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "Write IOPS",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "WriteIOPS",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m2",
+                        "label": "Write Throughput (bytes/sec)",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "WriteThroughput",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "iops",
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "dark-orange"
+                  },
+                  "noValue": "0",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "series",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "Write IOPS"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "blue",
+                          "mode": "fixed"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "Write Throughput (bytes/sec)"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "orange",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.axisPlacement",
+                        "value": "right"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "binBps"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-15": {
+        "kind": "Panel",
+        "spec": {
+          "id": 15,
+          "title": "🔗 Database Connections & Max Used Transaction IDs",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "Database Connections",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "DatabaseConnections",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m2",
+                        "label": "Max Used Transaction IDs",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "MaximumUsedTransactionIDs",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Maximum"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "multi",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "dark-orange"
+                  },
+                  "noValue": "0",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "series",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  },
+                  "fieldMinMax": false
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "Database Connections"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "semi-dark-green",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "unit",
+                        "value": "none"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "Max Used Transaction IDs"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "dark-red",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.axisPlacement",
+                        "value": "right"
+                      },
+                      {
+                        "id": "unit",
+                        "value": "short"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-3": {
+        "kind": "Panel",
+        "spec": {
+          "id": 3,
+          "title": "",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "text",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "code": {
+                  "language": "plaintext",
+                  "showLineNumbers": false,
+                  "showMiniMap": false
+                },
+                "content": "# Storage Health: ${DbInstanceName} ",
+                "mode": "markdown"
+              },
+              "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+              }
+            }
+          },
+          "transparent": true
+        }
+      },
+      "panel-4": {
+        "kind": "Panel",
+        "spec": {
+          "id": 4,
+          "title": "🔥 Current Burn Rate",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "300s",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Minimum"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": true
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "ABS(RATE(m1) * 3600 )",
+                        "id": "e1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 1,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "3600s",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "default",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "Bps",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-RdYlGr"
+                  },
+                  "noValue": "0"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-5": {
+        "kind": "Panel",
+        "spec": {
+          "id": 5,
+          "title": "Current Free Storage",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "300s",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "filter instanceID = '${DbInstanceName}'\n| stats max(fileSys.0.total * 1024) as TotalStorageSpace by bin(5m)",
+                        "id": "",
+                        "label": "",
+                        "logGroups": [
+                          {
+                            "accountId": "172025368201",
+                            "arn": "arn:aws:logs:eu-west-1:172025368201:log-group:RDSOSMetrics:*",
+                            "name": "RDSOSMetrics"
+                          }
+                        ],
+                        "matchExact": false,
+                        "metricEditorMode": 0,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Logs",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average",
+                        "statsGroups": [
+                          "bin(5m)"
+                        ]
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": true
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "bytes",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "percentage",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "dark-red"
+                      },
+                      {
+                        "value": 5,
+                        "color": "#EAB839"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-RdYlGr"
+                  },
+                  "noValue": "0"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-6": {
+        "kind": "Panel",
+        "spec": {
+          "id": 6,
+          "title": "⏱️ Estimated Hours to Depletion",
+          "description": "How long is estimated (in hours) before Free Storage hits 0 and is depleted",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "3600s",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Minimum"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": true
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "IF(RATE(m1) < 0, m1 / (RATE(m1) * -3600), 9999)",
+                        "id": "e1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 1,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "3600s",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "default",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "stat",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                  "calcs": [
+                    "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "auto",
+                "wideLayout": true
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "h",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "continuous-GrYlRd"
+                  },
+                  "noValue": "0"
+                },
+                "overrides": []
+              }
+            }
+          }
+        }
+      },
+      "panel-7": {
+        "kind": "Panel",
+        "spec": {
+          "id": 7,
+          "title": "Free Storage Space",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "",
+                        "id": "m1",
+                        "label": "FreeStorage",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "1h",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "ANOMALY_DETECTION_BAND(m1,2)",
+                        "id": "",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 1,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "filter instanceID = '${DbInstanceName}'\n| stats max(fileSys.0.total * 1024) as TotalStorageSpace by bin(5m)",
+                        "id": "",
+                        "label": "",
+                        "logGroups": [
+                          {
+                            "accountId": "172025368201",
+                            "arn": "arn:aws:logs:eu-west-1:172025368201:log-group:RDSOSMetrics:*",
+                            "name": "RDSOSMetrics"
+                          }
+                        ],
+                        "matchExact": false,
+                        "metricEditorMode": 0,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Logs",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average",
+                        "statsGroups": [
+                          "bin(5m)"
+                        ]
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "bytes",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "percentage",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "dark-red"
+                      },
+                      {
+                        "value": 5,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 10,
+                        "color": "transparent"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "palette-classic",
+                    "fixedColor": "#808080"
+                  },
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "axisSoftMin": 0,
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "area"
+                    }
+                  },
+                  "fieldMinMax": true
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "TotalStorageSpace"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.lineStyle",
+                        "value": {
+                          "dash": [
+                            10,
+                            10
+                          ],
+                          "fill": "dash"
+                        }
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "blue",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.showPoints",
+                        "value": "never"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "FreeStorage High"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.fillBelowTo",
+                        "value": "FreeStorage Low"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 0
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "FreeStorage Low"
+                    },
+                    "properties": [
+                      {
+                        "id": "color",
+                        "value": {
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-8": {
+        "kind": "Panel",
+        "spec": {
+          "id": 8,
+          "title": "Storage Health",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "",
+                        "id": "m1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "5m",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "filter instanceID = '${DbInstanceName}'\n| stats max(fileSys.0.total * 1024) as TotalStorageSpace by bin(5m)",
+                        "id": "",
+                        "label": "",
+                        "logGroups": [
+                          {
+                            "accountId": "172025368201",
+                            "arn": "arn:aws:logs:eu-west-1:172025368201:log-group:RDSOSMetrics:*",
+                            "name": "RDSOSMetrics"
+                          }
+                        ],
+                        "matchExact": false,
+                        "metricEditorMode": 0,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Logs",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average",
+                        "statsGroups": [
+                          "bin(5m)"
+                        ]
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": true
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "state-timeline",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "alignValue": "left",
+                "legend": {
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "mergeValues": true,
+                "rowHeight": 0.9,
+                "showValue": "auto",
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "bytes",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "percentage",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "dark-red"
+                      },
+                      {
+                        "value": 5,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 10,
+                        "color": "dark-green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "thresholds"
+                  },
+                  "custom": {
+                    "axisPlacement": "auto",
+                    "fillOpacity": 70,
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineWidth": 0,
+                    "spanNulls": false
+                  },
+                  "fieldMinMax": true
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "FreeStorageSpace"
+                    },
+                    "properties": [
+                      {
+                        "id": "displayName",
+                        "value": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "panel-9": {
+        "kind": "Panel",
+        "spec": {
+          "id": 9,
+          "title": "🔥 Hourly Storage Burn Rate",
+          "description": "",
+          "links": [],
+          "data": {
+            "kind": "QueryGroup",
+            "spec": {
+              "queries": [
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {
+                          "DBInstanceIdentifier": "$DbInstanceName"
+                        },
+                        "expression": "-RATE(m1) * 3600",
+                        "id": "m1",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": true,
+                        "metricEditorMode": 0,
+                        "metricName": "FreeStorageSpace",
+                        "metricQueryType": 0,
+                        "namespace": "AWS/RDS",
+                        "period": "6h",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "A",
+                    "hidden": true
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "ABS(RATE(m1) * 3600 )",
+                        "id": "e1",
+                        "label": "BurnRate",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 1,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "3600s",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "B",
+                    "hidden": false
+                  }
+                },
+                {
+                  "kind": "PanelQuery",
+                  "spec": {
+                    "query": {
+                      "kind": "DataQuery",
+                      "group": "cloudwatch",
+                      "version": "v0",
+                      "datasource": {
+                        "name": "cloudwatch"
+                      },
+                      "spec": {
+                        "dimensions": {},
+                        "expression": "ANOMALY_DETECTION_BAND(e1,6)",
+                        "id": "",
+                        "label": "",
+                        "logGroups": [],
+                        "matchExact": false,
+                        "metricEditorMode": 1,
+                        "metricName": "",
+                        "metricQueryType": 0,
+                        "namespace": "",
+                        "period": "",
+                        "queryLanguage": "CWLI",
+                        "queryMode": "Metrics",
+                        "region": "eu-west-1",
+                        "sqlExpression": "",
+                        "statistic": "Average"
+                      }
+                    },
+                    "refId": "C",
+                    "hidden": false
+                  }
+                }
+              ],
+              "transformations": [],
+              "queryOptions": {}
+            }
+          },
+          "vizConfig": {
+            "kind": "VizConfig",
+            "group": "timeseries",
+            "version": "13.2.0",
+            "spec": {
+              "options": {
+                "legend": {
+                  "calcs": [],
+                  "displayMode": "list",
+                  "enableFacetedFilter": false,
+                  "placement": "bottom",
+                  "showLegend": false
+                },
+                "tooltip": {
+                  "hideZeros": false,
+                  "mode": "single",
+                  "sort": "none"
+                }
+              },
+              "fieldConfig": {
+                "defaults": {
+                  "unit": "binBps",
+                  "min": 0,
+                  "thresholds": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "value": 0,
+                        "color": "green"
+                      }
+                    ]
+                  },
+                  "color": {
+                    "mode": "shades",
+                    "fixedColor": "dark-red"
+                  },
+                  "noValue": "0",
+                  "custom": {
+                    "axisBorderShow": false,
+                    "axisCenteredZero": false,
+                    "axisColorMode": "text",
+                    "axisLabel": "",
+                    "axisPlacement": "auto",
+                    "barAlignment": 0,
+                    "barWidthFactor": 0.6,
+                    "drawStyle": "line",
+                    "fillOpacity": 0,
+                    "gradientMode": "none",
+                    "hideFrom": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    },
+                    "insertNulls": false,
+                    "lineInterpolation": "linear",
+                    "lineWidth": 1,
+                    "pointSize": 5,
+                    "scaleDistribution": {
+                      "type": "linear"
+                    },
+                    "showPoints": "auto",
+                    "showValues": false,
+                    "spanNulls": false,
+                    "stacking": {
+                      "group": "A",
+                      "mode": "none"
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
+                    }
+                  }
+                },
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "BurnRate High"
+                    },
+                    "properties": [
+                      {
+                        "id": "custom.fillBelowTo",
+                        "value": "BurnRate Low"
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#808080",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 0
+                      },
+                      {
+                        "id": "custom.showPoints",
+                        "value": "never"
+                      }
+                    ]
+                  },
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "scope": "series",
+                      "options": "BurnRate Low"
+                    },
+                    "properties": [
+                      {
+                        "id": "noValue",
+                        "value": "0"
+                      },
+                      {
+                        "id": "custom.lineWidth",
+                        "value": 0
+                      },
+                      {
+                        "id": "color",
+                        "value": {
+                          "fixedColor": "#808080",
+                          "mode": "fixed"
+                        }
+                      },
+                      {
+                        "id": "custom.showPoints",
+                        "value": "never"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "layout": {
+      "kind": "GridLayout",
+      "spec": {
+        "items": [
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 6,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-1"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 6,
+              "width": 24,
+              "height": 2,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-3"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 8,
+              "width": 5,
+              "height": 4,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-5"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 5,
+              "y": 8,
+              "width": 5,
+              "height": 4,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-4"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 10,
+              "y": 8,
+              "width": 5,
+              "height": 4,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-6"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 12,
+              "width": 24,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-7"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 19,
+              "width": 24,
+              "height": 9,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-10"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 28,
+              "width": 24,
+              "height": 3,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-8"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 31,
+              "width": 24,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-9"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 38,
+              "width": 24,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-11"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 45,
+              "width": 12,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-12"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 12,
+              "y": 45,
+              "width": 12,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-13"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 0,
+              "y": 52,
+              "width": 12,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-14"
+              }
+            }
+          },
+          {
+            "kind": "GridLayoutItem",
+            "spec": {
+              "x": 12,
+              "y": 52,
+              "width": 12,
+              "height": 7,
+              "element": {
+                "kind": "ElementReference",
+                "name": "panel-15"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "links": [],
+    "liveNow": false,
+    "preload": false,
+    "tags": [],
+    "timeSettings": {
+      "timezone": "browser",
+      "from": "2026-08-27T06:29:52.387Z",
+      "to": "2026-08-27T10:07:17.932Z",
+      "autoRefresh": "",
+      "autoRefreshIntervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "hideTimepicker": false,
+      "fiscalYearStartMonth": 0
+    },
+    "title": "WIP: RDS Storage",
+    "variables": [
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "DbInstanceName",
+          "current": {
+            "text": "authenticating-proxy-production-postgres",
+            "value": "authenticating-proxy-production-postgres"
+          },
+          "label": "Database Instance",
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "description": "The RDS Database Instance Name to view",
+          "query": {
+            "kind": "DataQuery",
+            "group": "cloudwatch",
+            "version": "v0",
+            "datasource": {
+              "name": "cloudwatch"
+            },
+            "spec": {
+              "dimensionFilters": {},
+              "dimensionKey": "DBInstanceIdentifier",
+              "metricName": "FreeStorageSpace",
+              "namespace": "AWS/RDS",
+              "queryType": "dimensionValues",
+              "refId": "CloudWatchVariableQueryEditor-VariableQuery",
+              "region": "eu-west-1"
+            }
+          },
+          "regex": "/^(?=(?<value>.*))(?<text>.*?)-production-(mysql|postgres)/",
+          "regexApplyTo": "text",
+          "sort": "alphabeticalAsc",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": false,
+          "allowCustomValue": true
+        }
+      }
+    ]
+  }
+}
