@@ -14,12 +14,12 @@ govukEnvironment: staging
 
 cronjobs:
   production:
-    green-es6-snapshot:  # This would be too long as green-elasticsearch6-domain-snapshot
+    blue-os3-snapshot:  # This would be too long as blue-opensearch3-domain-snapshot
       schedule: "51 1 * * *"
       args: [create_and_clean_up]
       extraEnv:
         - name: SUBDOMAIN
-          value: elasticsearch6
+          value: search-domain-opensearch
     chat-engine-snapshot:
       schedule: "12 1 * * *"
       args: [create_and_clean_up]
@@ -38,20 +38,20 @@ cronjobs:
               key: password
 
   staging:
-    green-es6-cp-prod:  # This would be too long as green-elasticsearch6-domain-cp-prod
+    blue-os3-cp-prod:  # This would be too long as blue-opensearch3-domain-cp-prod
       schedule: "50 2 * * *"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
           value: govuk-production
         - name: SUBDOMAIN
-          value: elasticsearch6
-    green-es6-snapshot:  # This would be too long as green-elasticsearch6-domain-snapshot
+          value: search-domain-opensearch
+    blue-os3-snapshot:  # This would be too long as blue-opensearch3-domain-snapshot
       schedule: "37 3 * * *"
       args: [create_and_clean_up]
       extraEnv:
         - name: SUBDOMAIN
-          value: elasticsearch6
+          value: search-domain-opensearch
     chat-engine-cp-prod:
       schedule: "12 2 * * *"
       args: [restore_latest]
@@ -72,22 +72,22 @@ cronjobs:
               key: password
 
   integration:
-    green-es6-cp-stag:  # This would be too long as green-elasticsearch6-domain-cp-stag
+    blue-os3-cp-stag:  # This would be too long as blue-opensearch3-domain-cp-staging
       schedule: "35 4 * * 1"
       args: [restore_latest]
       extraEnv:
         - name: SNAPSHOT_REPO
           value: govuk-staging
         - name: SUBDOMAIN
-          value: elasticsearch6
-      suspend: true # Only re-enable after the blue clusters have been created
-    green-es6-snapshot: # This would be too long as green-elasticsearch6-domain-snapshot
+          value: search-domain-opensearch
+      suspend: false
+    blue-os3-snapshot:  # This would be too long as blue-opensearch3-domain-snapshot
       schedule: "37 5 * * 1"
       args: [create_and_clean_up]
       extraEnv:
         - name: SUBDOMAIN
-          value: elasticsearch6
-      suspend: true # Only re-enable after the blue clusters have been created
+          value: search-domain-opensearch
+      suspend: false
     chat-engine-cp-prod:
       schedule: "12 4 * * *"
       args: [restore_latest]
