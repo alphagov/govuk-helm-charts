@@ -3,20 +3,10 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "dal9d7m",
-    "namespace": "default",
-    "uid": "X5T2jFLpASXADYxqbUipS3iUBptY6BcCzKGvlXx54ScX",
-    "resourceVersion": "1788887968920005",
-    "generation": 17,
+    "generation": 20,
     "creationTimestamp": "2026-08-27T11:51:59Z",
-    "labels": {
-      "grafana.app/deprecatedInternalID": "10313"
-    },
-    "annotations": {
-      "grafana.app/createdBy": "user:u000000036",
-      "grafana.app/saved-from-ui": "Grafana v13.2.0 (f681b1359f)",
-      "grafana.app/updatedBy": "user:u000000036",
-      "grafana.app/updatedTimestamp": "2026-09-08T17:19:28Z"
-    }
+    "labels": {},
+    "annotations": {}
   },
   "spec": {
     "annotations": [
@@ -27,10 +17,10 @@
             "kind": "DataQuery",
             "group": "grafana",
             "version": "v0",
-            "datasource": {
-              "name": "-- Grafana --"
-            },
-            "spec": {}
+            "spec": {},
+            "labels": {
+              "grafana.app/export-label": "grafana-1"
+            }
           },
           "enable": true,
           "hide": true,
@@ -41,7 +31,7 @@
       }
     ],
     "cursorSync": "Off",
-    "description": "(David Mays WIP)",
+    "description": "Monitor storage health and depletion predictions for RDS instances.",
     "editable": true,
     "elements": {
       "panel-1": {
@@ -62,9 +52,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "*"
@@ -84,6 +71,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Minimum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -202,9 +193,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -224,6 +212,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Minimum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -237,9 +229,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "IF(RATE(m1) < 0, m1 / (RATE(m1) * -21600), 9999)",
@@ -257,6 +246,10 @@
                         "region": "default",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -303,11 +296,11 @@
                         "color": "dark-red"
                       },
                       {
-                        "value": 48,
+                        "value": 72,
                         "color": "#EAB839"
                       },
                       {
-                        "value": 168,
+                        "value": 336,
                         "color": "transparent"
                       }
                     ]
@@ -397,9 +390,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -419,6 +409,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Minimum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -432,9 +426,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "RATE(ABS(RATE(m1) * 3600))",
@@ -452,6 +443,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -465,9 +460,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "ANOMALY_DETECTION_BAND(e1,4)",
@@ -485,6 +477,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "C",
@@ -648,9 +644,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -670,6 +663,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Maximum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -683,9 +680,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -705,6 +699,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -855,9 +853,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -877,6 +872,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Maximum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -890,9 +889,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -912,6 +908,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Maximum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -1055,9 +1055,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -1077,6 +1074,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -1090,9 +1091,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -1112,6 +1110,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -1259,9 +1261,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -1281,6 +1280,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -1294,9 +1297,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -1316,6 +1316,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Maximum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -1505,9 +1509,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -1527,6 +1528,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Minimum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -1540,9 +1545,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "ABS(RATE(m1) * 3600 )",
@@ -1560,6 +1562,10 @@
                         "region": "default",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -1635,9 +1641,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -1657,6 +1660,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -1670,9 +1677,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "filter instanceID = '${DbInstanceName}'\n| stats max(fileSys.0.total * 1024) as TotalStorageSpace by bin(5m)",
@@ -1699,6 +1703,10 @@
                         "statsGroups": [
                           "bin(5m)"
                         ]
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -1778,9 +1786,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -1800,6 +1805,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Minimum"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -1813,9 +1822,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "IF(RATE(m1) < 0, m1 / (RATE(m1) * -3600), 9999)",
@@ -1833,6 +1839,10 @@
                         "region": "default",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -1908,9 +1918,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -1930,6 +1937,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -1943,9 +1954,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "ANOMALY_DETECTION_BAND(m1,2)",
@@ -1963,6 +1971,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -1976,9 +1988,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "filter instanceID = '${DbInstanceName}'\n| stats max(fileSys.0.total * 1024) as TotalStorageSpace by bin(5m)",
@@ -2005,6 +2014,10 @@
                         "statsGroups": [
                           "bin(5m)"
                         ]
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "C",
@@ -2192,9 +2205,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -2214,6 +2224,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -2227,9 +2241,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "filter instanceID = '${DbInstanceName}'\n| stats max(fileSys.0.total * 1024) as TotalStorageSpace by bin(5m)",
@@ -2256,6 +2267,10 @@
                         "statsGroups": [
                           "bin(5m)"
                         ]
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "C",
@@ -2364,9 +2379,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {
                           "DBInstanceIdentifier": "$DbInstanceName"
@@ -2386,6 +2398,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "A",
@@ -2399,9 +2415,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "ABS(RATE(m1) * 3600 )",
@@ -2419,6 +2432,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "B",
@@ -2432,9 +2449,6 @@
                       "kind": "DataQuery",
                       "group": "cloudwatch",
                       "version": "v0",
-                      "datasource": {
-                        "name": "cloudwatch"
-                      },
                       "spec": {
                         "dimensions": {},
                         "expression": "ANOMALY_DETECTION_BAND(e1,6)",
@@ -2452,6 +2466,10 @@
                         "region": "eu-west-1",
                         "sqlExpression": "",
                         "statistic": "Average"
+                      },
+                      "labels": {
+                        "grafana.app/export-label": "cloudwatch-1",
+                        "grafana.app/export-datasource-name": "CloudWatch"
                       }
                     },
                     "refId": "C",
@@ -2794,8 +2812,8 @@
     "tags": [],
     "timeSettings": {
       "timezone": "browser",
-      "from": "2026-08-27T06:29:52.387Z",
-      "to": "2026-08-27T10:07:17.932Z",
+      "from": "now-7d",
+      "to": "now",
       "autoRefresh": "",
       "autoRefreshIntervals": [
         "5s",
@@ -2812,15 +2830,15 @@
       "hideTimepicker": false,
       "fiscalYearStartMonth": 0
     },
-    "title": "WIP: RDS Storage",
+    "title": "RDS Storage Health",
     "variables": [
       {
         "kind": "QueryVariable",
         "spec": {
           "name": "DbInstanceName",
           "current": {
-            "text": "authenticating-proxy-production-postgres",
-            "value": "authenticating-proxy-production-postgres"
+            "text": "",
+            "value": ""
           },
           "label": "Database Instance",
           "hide": "dontHide",
@@ -2831,9 +2849,6 @@
             "kind": "DataQuery",
             "group": "cloudwatch",
             "version": "v0",
-            "datasource": {
-              "name": "cloudwatch"
-            },
             "spec": {
               "dimensionFilters": {},
               "dimensionKey": "DBInstanceIdentifier",
@@ -2842,6 +2857,10 @@
               "queryType": "dimensionValues",
               "refId": "CloudWatchVariableQueryEditor-VariableQuery",
               "region": "eu-west-1"
+            },
+            "labels": {
+              "grafana.app/export-label": "cloudwatch-1",
+              "grafana.app/export-datasource-name": "CloudWatch"
             }
           },
           "regex": "/^(?=(?<value>.*))(?<text>.*?)-production-(mysql|postgres)/",
