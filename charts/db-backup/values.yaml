@@ -254,7 +254,7 @@ cronjobs:
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
-      schedule: "28 0 * * *"
+      schedule: "28 21 * * *"
       db: whitehall_production
       operations:
         - op: backup
@@ -535,7 +535,7 @@ cronjobs:
 
     whitehall-mysql:
       <<: *s5cmd-ram-workaround
-      schedule: "28 1 * * 1-5"
+      schedule: "28 22 * * 0-4"
       db: whitehall_production
       operations:
         - op: reboot
