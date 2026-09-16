@@ -22,6 +22,10 @@ spec:
   source:
     {{- $helmReleaseInfo | nindent 4 }}
     path: .
+    helm:
+      values: |
+        prometheus:
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: job-request-operator
