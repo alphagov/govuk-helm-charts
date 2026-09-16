@@ -30,6 +30,8 @@ _alb-ingress-defaults: &alb-ingress-defaults
   alb.ingress.kubernetes.io/load-balancer-name: "{{ .Release.Name }}"
   alb.ingress.kubernetes.io/load-balancer-attributes: >
     access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/{{ .Release.Name }}
+  alb.ingress.kubernetes.io/tags: >
+    Name={{ .Release.Name }},Service={{ .Release.Name }},Owner=govuk-platform-engineering@digital.cabinet-office.gov.uk,Environment={{ .Values.govukEnvironment }}
 
   alb.ingress.kubernetes.io/shield-advanced-protection: "true"
 _alb-ingress-waf-ruleset-www: &alb-ingress-waf-ruleset-www
@@ -44,6 +46,8 @@ _alb-ingress-group-backend: &alb-ingress-group-backend
   alb.ingress.kubernetes.io/load-balancer-name: backend
   alb.ingress.kubernetes.io/load-balancer-attributes: >
     access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/backend
+  alb.ingress.kubernetes.io/tags: >
+    Name=backend,Service=backend,Owner=govuk-platform-engineering@digital.cabinet-office.gov.uk,Environment={{ .Values.govukEnvironment }}
 
 emergency-banner-redis:
   - &emergency-banner-redis redis://whitehall-admin-redis:6379/1
@@ -202,6 +206,8 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "20"
           alb.ingress.kubernetes.io/load-balancer-attributes: &assets-lb-attributes >
             access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/assets-origin
+          alb.ingress.kubernetes.io/tags: >
+            Name=assets-origin,Service=assets-origin,Owner=govuk-platform-engineering@digital.cabinet-office.gov.uk,Environment={{ .Values.govukEnvironment }}
 
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: &assets-lb-conditions |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
@@ -1352,6 +1358,8 @@ govukApplications:
           alb.ingress.kubernetes.io/load-balancer-attributes: *assets-lb-attributes
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: *assets-lb-conditions
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
+          alb.ingress.kubernetes.io/tags: >
+            Name=assets-origin,Service=assets-origin,Owner=govuk-platform-engineering@digital.cabinet-office.gov.uk,Environment={{ .Values.govukEnvironment }}
         hosts:
           - name: assets-origin.{{ .Values.k8sExternalDomainSuffix }}
             path: /media/*/*/preview
@@ -1425,6 +1433,8 @@ govukApplications:
                 "draft-assets*.{{ .Values.publishingDomainSuffix }}"
             ]}}]
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=1
+          alb.ingress.kubernetes.io/tags: >
+            Name=assets-origin,Service=assets-origin,Owner=govuk-platform-engineering@digital.cabinet-office.gov.uk,Environment={{ .Values.govukEnvironment }}
         hosts:
           - name: draft-assets.{{ .Values.k8sExternalDomainSuffix }}
             path: /media/*/*/preview
