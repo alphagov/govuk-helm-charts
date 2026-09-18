@@ -148,6 +148,7 @@
     "enabled": true
 "prometheus":
   "prometheusSpec":
+    "scrapeNativeHistograms": true
     "enableRemoteWriteReceiver": true
     "evaluationInterval": "1m"
     "podAntiAffinity": ""
