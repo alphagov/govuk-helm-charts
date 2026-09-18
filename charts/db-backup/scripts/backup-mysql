@@ -4,6 +4,10 @@ set -euo pipefail
 source_dir=$(dirname "${BASH_SOURCE[0]}")
 . "$source_dir/lib.sh"
 
+reboot () {
+  "$source_dir/reboot"
+}
+
 backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"

@@ -265,6 +265,7 @@ cronjobs:
       schedule: "23 1 * * 1-5"
       db: authenticating_proxy_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -276,6 +277,7 @@ cronjobs:
       schedule: "47 1 * * 1-5"
       db: govuk_chat_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -284,6 +286,7 @@ cronjobs:
       schedule: "43 1 * * 0"
       db: ckan_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -292,6 +295,7 @@ cronjobs:
       schedule: "21 1 * * 1-5"
       db: collections_publisher_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -300,6 +304,7 @@ cronjobs:
       schedule: "43 2 * * 1-5"
       db: content_block_manager_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -311,6 +316,7 @@ cronjobs:
       schedule: "4 1 * * 1-5"
       db: content_data_admin_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -320,6 +326,7 @@ cronjobs:
       db: content_performance_manager_production
       maxJobRuntimeSeconds: 86400 # 24 hours
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -329,16 +336,19 @@ cronjobs:
       db: content_store_production
       schedule: "06 22 * * 0-4"
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: transform
           script: content-store.sql
         - op: backup
+
     draft-content-store-postgres:
       <<: *s5cmd-ram-workaround
       db: draft_content_store_production
       schedule: "16 22 * * 0-4"
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: transform
@@ -349,6 +359,7 @@ cronjobs:
       schedule: "31 1 * * 1-5"
       db: content_tagger_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -357,6 +368,7 @@ cronjobs:
       schedule: "54 1 * * 1-5"
       db: email-alert-api_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: transform
@@ -370,6 +382,7 @@ cronjobs:
       schedule: "26 1 * * 1-5"
       db: fact-check-manager_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -378,6 +391,7 @@ cronjobs:
       schedule: "18 1 * * 1-5"
       db: imminence_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -386,6 +400,7 @@ cronjobs:
       schedule: "43 1 * * 1-5"
       db: link_checker_api_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -394,6 +409,7 @@ cronjobs:
       schedule: "8 1 * * 1-5"
       db: local-links-manager_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -402,6 +418,7 @@ cronjobs:
       schedule: "32 1 * * 1-5"
       db: locations_api_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -411,6 +428,7 @@ cronjobs:
       schedule: "36 1 * * 1-5"
       db: publishing_api_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: transform
@@ -424,6 +442,7 @@ cronjobs:
       schedule: "11 1 * * 1"  # Daily would be overkill.
       db: release_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -432,6 +451,7 @@ cronjobs:
       schedule: "56 1 * * 1-5"
       db: search_admin_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -440,6 +460,7 @@ cronjobs:
       schedule: "42 1 * * 1-5"
       db: publisher_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -448,6 +469,7 @@ cronjobs:
       schedule: "49 1 * * 1-5"
       db: service-manual-publisher_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -489,6 +511,7 @@ cronjobs:
       schedule: "3 1 * * 1-5"
       db: signon_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
 
@@ -496,6 +519,7 @@ cronjobs:
       schedule: "38 1 * * 1-5"
       db: support_contacts_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -504,6 +528,7 @@ cronjobs:
       schedule: "24 1 * * 1-5"
       db: transition_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: backup
@@ -513,6 +538,7 @@ cronjobs:
       schedule: "28 1 * * 1-5"
       db: whitehall_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-production-database-backups
         - op: transform

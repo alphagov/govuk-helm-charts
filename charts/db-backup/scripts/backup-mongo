@@ -6,6 +6,11 @@ source_dir=$(dirname "${BASH_SOURCE[0]}")
 
 db_url="${DB_MONGO_CONNECTION_STRING%/}/$DB_DATABASE"
 
+reboot () {
+  echo "Rebooting mongo instances is not supported"
+  exit 1
+}
+
 backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"
