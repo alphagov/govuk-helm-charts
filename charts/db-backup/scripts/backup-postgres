@@ -9,6 +9,10 @@ export PGPASSWORD=$DB_PASSWORD
 export PGHOST=$DB_HOST
 export PGDATABASE=postgres
 
+reboot () {
+  "$source_dir/reboot"
+}
+
 backup () {
   local s3_path
   s3_path="$DB_HOST/$(date -u +%Y-%m-%dT%H%M%SZ)-$DB_DATABASE.gz"

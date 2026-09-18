@@ -1,0 +1,87 @@
+#!/bin/bash
+set -euo pipefail
+
+: "${DB_HOST:?required}"
+
+# Resolve the DBMS hostname to the AWS endpoint it is a CNAME for
+rds_endpoint () {
+  local endpoint
+  endpoint=$(dig +short +search "$1" | sed 's/\.$//' | grep -E '\.rds\.amazonaws\.com$' | tail -1) || true
+
+  if [ -z "$endpoint" ]; then
+    echo "$1 does not resolve to an RDS endpoint" >&2
+    return 1
+  fi
+
+  echo -n "$endpoint"
+}
+
+# Extract RDS instance identifier from endpoint host
+rds_instance_identifier () {
+  local endpoint="$1"
+
+  if [[ $endpoint == *.cluster-* ]]; then
+    echo "$endpoint is a cluster endpoint, not a DB instance; not rebooting" >&2
+    return 0
+  fi
+
+  echo -n "${endpoint%%.*}"
+}
+
+is_awaiting_reboot () {
+  # shellcheck disable=SC2016
+  AWAITING="$(aws rds describe-db-instances --query 'DBInstances[?DBParameterGroups[?ParameterApplyStatus==`pending-reboot`]].DBInstanceIdentifier' --output text)"
+  if [[ "${AWAITING}" == *"$1"* ]]; then
+    echo 1
+  else
+    echo 0
+  fi
+}
+
+rds_instance_status () {
+  aws rds describe-db-instances \
+    --db-instance-identifier "$1" \
+    --query 'DBInstances[0].DBInstanceStatus' \
+    --output text
+}
+
+# Wait until the instance has left the "available" state and come back to it
+wait_for_reboot () {
+  local identifier="$1"
+  local status
+
+  # The instance stays "available" for a while after the reboot requested, 
+  # so wait for it to start rebooting before waiting for it to
+  # finish. Give up on seeing the transition after a minute, in case we
+  # missed it entirely.
+  for _ in $(seq 1 6); do
+    status=$(rds_instance_status "$identifier")
+    echo "$identifier is $status" >&2
+    if [[ "$status" != "available" ]]; then
+      break
+    fi
+    sleep 10
+  done
+
+  aws rds wait db-instance-available --db-instance-identifier "$identifier"
+  echo "$identifier is $(rds_instance_status "$identifier")" >&2
+}
+
+RDS_ENDPOINT=$(rds_endpoint "$DB_HOST")
+RDS_INSTANCE_IDENTIFIER=$(rds_instance_identifier "$RDS_ENDPOINT")
+
+echo "$DB_HOST is $RDS_ENDPOINT (RDS instance $RDS_INSTANCE_IDENTIFIER)" >&2
+
+IS_AWAITING=$(is_awaiting_reboot "$RDS_INSTANCE_IDENTIFIER")
+if [[ "$IS_AWAITING" == "1" ]]; then
+  echo "$RDS_INSTANCE_IDENTIFIER is awaiting reboot"
+else
+  echo "$RDS_INSTANCE_IDENTIFIER is not awaiting reboot"
+  exit 0
+fi
+
+aws rds reboot-db-instance --db-instance-identifier "$RDS_INSTANCE_IDENTIFIER"
+
+echo "Waiting for $RDS_INSTANCE_IDENTIFIER to finish rebooting" >&2
+wait_for_reboot "$RDS_INSTANCE_IDENTIFIER"
+echo "$RDS_INSTANCE_IDENTIFIER reboot complete" >&2
