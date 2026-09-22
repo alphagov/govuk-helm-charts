@@ -552,12 +552,14 @@ cronjobs:
       db: account-api_production
       # We don't copy account-api data between environments at present.
       operations:
+        - op: reboot
         - op: backup
 
     authenticating-proxy-postgres:
       schedule: "23 3 * * 1"
       db: authenticating_proxy_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -569,6 +571,7 @@ cronjobs:
       schedule: "47 3 * * 1"
       db: govuk_chat_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -577,6 +580,7 @@ cronjobs:
       schedule: "43 3 * * 1"
       db: ckan_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: transform
@@ -587,6 +591,7 @@ cronjobs:
       schedule: "21 3 * * 1"
       db: collections_publisher_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -595,6 +600,7 @@ cronjobs:
       schedule: "43 2 * * 1"
       db: content_block_manager_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -606,6 +612,7 @@ cronjobs:
       schedule: "4 3 * * 1"
       db: content_data_admin_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -615,6 +622,7 @@ cronjobs:
       db: content_performance_manager_production
       maxJobRuntimeSeconds: 86400 # 24 hours
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -624,6 +632,7 @@ cronjobs:
       db: content_store_production
       schedule: "06 23 * * 0"
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: transform
@@ -637,6 +646,7 @@ cronjobs:
       db: draft_content_store_production
       schedule: "16 23 * * 0"
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: transform
@@ -647,6 +657,7 @@ cronjobs:
       schedule: "31 3 * * 1"
       db: content_tagger_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -655,6 +666,7 @@ cronjobs:
       schedule: "54 3 * * 1"
       db: email-alert-api_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -666,6 +678,7 @@ cronjobs:
       schedule: "26 3 * * 1"
       db: fact-check-manager_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -674,6 +687,7 @@ cronjobs:
       schedule: "18 3 * * 1"
       db: imminence_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -682,6 +696,7 @@ cronjobs:
       schedule: "43 3 * * 1"
       db: link_checker_api_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -690,6 +705,7 @@ cronjobs:
       schedule: "8 3 * * 1"
       db: local-links-manager_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -698,6 +714,7 @@ cronjobs:
       schedule: "32 3 * * 1"
       db: locations_api_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -707,6 +724,7 @@ cronjobs:
       schedule: "36 5 * * 1"
       db: publishing_api_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -718,6 +736,7 @@ cronjobs:
       schedule: "11 3 * * 1"
       db: release_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -726,6 +745,7 @@ cronjobs:
       schedule: "56 3 * * 1"
       db: search_admin_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -735,6 +755,7 @@ cronjobs:
       schedule: "41 3 * * 1"
       db: publisher_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -743,6 +764,7 @@ cronjobs:
       schedule: "49 3 * * 1"
       db: service-manual-publisher_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -782,6 +804,7 @@ cronjobs:
       schedule: "3 3 * * *"
       db: signon_production
       operations:
+        - op: reboot
         - op: backup
           bucket: s3://govuk-integration-database-backups
 
@@ -792,6 +815,7 @@ cronjobs:
       dbms: mysql
       db: signon_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-integration-database-backups
 
@@ -799,6 +823,7 @@ cronjobs:
       schedule: "38 3 * * 1"
       db: support_contacts_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -807,6 +832,7 @@ cronjobs:
       schedule: "24 3 * * 1"
       db: transition_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
@@ -816,6 +842,7 @@ cronjobs:
       schedule: "28 3 * * 1"
       db: whitehall_production
       operations:
+        - op: reboot
         - op: restore
           bucket: s3://govuk-staging-database-backups
         - op: backup
