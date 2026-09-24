@@ -26,8 +26,6 @@ spec:
       values: |
         prometheus:
           enabled: true
-        metrics:
-          secure: false
   destination:
     server: https://kubernetes.default.svc
     namespace: job-request-operator
