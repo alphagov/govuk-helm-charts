@@ -87,48 +87,56 @@ cronjobs:
       # unlike the other DBs, we don't copy prod account-api data to staging).
       operations:
         - op: backup
+        - op: reboot
 
     authenticating-proxy-postgres:
       schedule: "23 23 * * *"
       db: authenticating_proxy_production
       operations:
         - op: backup
+        - op: reboot
 
     chat-postgres:
       schedule: "47 23 * * *"
       db: govuk_chat_production
       operations:
         - op: backup
+        - op: reboot
 
     ckan-postgres:
       schedule: "43 4 * * *"
       db: ckan_production
       operations:
         - op: backup
+        - op: reboot
 
     content-block-manager-postgres:
       schedule: "43 0 * * *"
       db: content_block_manager_production
       operations:
         - op: backup
+        - op: reboot
 
     collections-publisher-mysql:
       schedule: "21 23 * * *"
       db: collections_publisher_production
       operations:
         - op: backup
+        - op: reboot
 
     content-data-admin-postgres:
       schedule: "4 23 * * *"
       db: content_data_admin_production
       operations:
         - op: backup
+        - op: reboot
 
     content-data-api-postgres:
       schedule: "35 23 * * *"
       db: content_performance_manager_production
       operations:
         - op: backup
+        - op: reboot
 
     content-store-postgres:
       <<: *s5cmd-ram-workaround
@@ -148,42 +156,49 @@ cronjobs:
       db: content_tagger_production
       operations:
         - op: backup
+        - op: reboot
 
     email-alert-api-postgres:
       schedule: "54 23 * * *"
       db: email-alert-api_production
       operations:
         - op: backup
+        - op: reboot
 
     fact-check-manager-postgres:
       schedule: "26 23 * * *"
       db: fact-check-manager_production
       operations:
         - op: backup
+        - op: reboot
 
     places-manager-postgres:
       schedule: "18 23 * * *"
       db: imminence_production
       operations:
         - op: backup
+        - op: reboot
 
     link-checker-api-postgres:
       schedule: "43 23 * * *"
       db: link_checker_api_production
       operations:
         - op: backup
+        - op: reboot
 
     local-links-manager-postgres:
       schedule: "8 23 * * *"
       db: local-links-manager_production
       operations:
         - op: backup
+        - op: reboot
 
     locations-api-postgres:
       schedule: "32 23 * * *"
       db: locations_api_production
       operations:
         - op: backup
+        - op: reboot
 
     publishing-api-postgres:
       <<: *s5cmd-ram-workaround
@@ -191,6 +206,7 @@ cronjobs:
       db: publishing_api_production
       operations:
         - op: backup
+        - op: reboot
       extraEnv:
         - name: DB_OWNER
           value: publishing-api-owner-role
@@ -200,24 +216,28 @@ cronjobs:
       db: release_production
       operations:
         - op: backup
+        - op: reboot
 
     search-admin-mysql:
       schedule: "56 23 * * *"
       db: search_admin_production
       operations:
         - op: backup
+        - op: reboot
 
     publisher-postgres:
       schedule: "41 23 * * *"
       db: publisher_production
       operations:
         - op: backup
+        - op: reboot
 
     service-manual-publisher-postgres:
       schedule: "49 23 * * *"
       db: service-manual-publisher_production
       operations:
         - op: backup
+        - op: reboot
 
     shared-documentdb:
       <<: *mongo-resources
@@ -239,17 +259,20 @@ cronjobs:
       db: signon_production
       operations:
         - op: backup
+        - op: reboot
 
     support-api-postgres:
       schedule: "38 23 * * *"
       db: support_contacts_production
       operations:
         - op: backup
+        - op: reboot
 
     transition-postgres:
       schedule: "24 3 * * *"
       db: transition_production
       operations:
+        - op: reboot
         - op: backup
 
     whitehall-mysql:
