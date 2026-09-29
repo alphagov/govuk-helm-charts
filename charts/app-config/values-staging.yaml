@@ -2909,8 +2909,6 @@ govukApplications:
           value: govuk-staging-search-relevancy
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
           value: govuk-staging-sitemaps
-        - name: ELASTICSEARCH_URI
-          value: https://vpc-search-domain-blue-2r6mvgunhmodzz3v5wvkufe73u.eu-west-1.es.amazonaws.com
         - name: OPENSEARCH_URI
           value: https://vpc-search-domain-blue-2r6mvgunhmodzz3v5wvkufe73u.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
