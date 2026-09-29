@@ -1798,7 +1798,7 @@ govukApplications:
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=25
         hosts:
           - name: hmrc-manuals-api.{{ .Values.k8sExternalDomainSuffix }}
-      nginxProxyReadTimeout: 300s
+      nginxProxyReadTimeout: 60s
       uploadAssets:
         enabled: false
       extraEnv:
