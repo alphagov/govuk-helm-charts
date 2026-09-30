@@ -150,6 +150,18 @@ cronjobs:
       db: draft_content_store_production
       operations:
         - op: backup
+    content-store-reboot-postgres:
+      schedule: "58 3 * * *"
+      db: content_store_production
+      host: content-store-postgres
+      operations:
+        - op: reboot
+    draft-content-store-reboot-postgres:
+      schedule: "58 3 * * *"
+      db: draft_content_store_production
+      host: draft-content-store-postgres
+      operations:
+        - op: reboot
 
     content-tagger-postgres:
       schedule: "31 23 * * *"
@@ -281,6 +293,13 @@ cronjobs:
       db: whitehall_production
       operations:
         - op: backup
+
+    whitehall-reboot-postgres:
+      schedule: "58 3 * * *"
+      db: whitehall_production
+      host: whitehall-mysql
+      operations:
+        - op: reboot
 
 
   staging:
