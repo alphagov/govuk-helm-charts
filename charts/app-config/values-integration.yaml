@@ -649,18 +649,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-content-data-admin-email-alert-api
               key: bearer_token
-        - name: SITEIMPROVE_API_CLIENT_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: content-data-admin-siteimprove-api-client
-              key: username
-        - name: SITEIMPROVE_API_CLIENT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: content-data-admin-siteimprove-api-client
-              key: password
-        - name: SITEIMPROVE_SITE_ID
-          value: "27169161461"
         # These GA/GTM values are not secrets (not even the the gtm_auth one).
         # https://github.com/alphagov/govuk-puppet/pull/8041
         - name: GOOGLE_TAG_MANAGER_AUTH
@@ -687,8 +675,6 @@ govukApplications:
               key: oauth_secret
         - name: AWS_CSV_EXPORT_BUCKET_NAME
           value: govuk-integration-content-data-csvs
-        - name: AWS_SITEIMPROVE_SITEMAPS_BUCKET_NAME
-          value: govuk-integration-content-data-siteimprove-sitemaps
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
