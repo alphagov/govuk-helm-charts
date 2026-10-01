@@ -26,6 +26,7 @@ spec:
       values: |
         prometheus:
           enabled: true
+        govukEnvironment: {{ .Values.govukEnvironment }}
   destination:
     server: https://kubernetes.default.svc
     namespace: job-request-operator
