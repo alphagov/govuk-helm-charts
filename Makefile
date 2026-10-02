@@ -1,5 +1,5 @@
 SHELL=bash
-.PHONY: check-yamllint lint check help enable-deployment-integration disable-deployment-integration enable-deployment-staging disable-deployment-staging enable-deployment-production disable-deployment-production
+.PHONY: check-yamllint lint lint-helm check help enable-deployment-integration disable-deployment-integration enable-deployment-staging disable-deployment-staging enable-deployment-production disable-deployment-production
 
 # Default target
 help: ## Show this help message
@@ -21,30 +21,7 @@ lint-yaml: check-yamllint ## Run yamllint on all YAML files
 	@echo "Running yamllint..."
 	yamllint -f github .
 
-RENDERED_HELM_CHART_PATH := output
-lint-helm:
-	@EXITCODE=0; \
-	shopt -s nullglob; \
-	cd "$(RENDERED_HELM_CHART_PATH)"; \
-	for values_file in values/*/*/*.yaml; do \
-		echo "$${values_file}" | while IFS="/" read -r _ env chart app; do \
-		  	echo "helm lint for $$app with chart $$chart"; \
-			helm lint --quiet -f "$${values_file}" "raw-charts/$$chart/"; \
-			if [[ $$? != 0 ]]; then \
-				EXITCODE=1; \
-			fi; \
-		done; \
-	done; \
-	\
-	for values_file in raw-charts/app-config/values-*.yaml; do \
-  		echo "helm lint for app-config with $$values_file"; \
-  		helm lint --quiet -f "$$values_file" raw-charts/app-config/; \
-		if [[ $$? != 0 ]]; then \
-			EXITCODE=1; \
-		fi; \
-  	done; \
-  	exit "$$EXITCODE";
-
-
+lint-helm: ## Render every Argo CD app and helm lint this repo's charts
+	bin/render-argo-apps.py --lint --skip-remote-charts
 
 check: lint ## Alias for lint target
