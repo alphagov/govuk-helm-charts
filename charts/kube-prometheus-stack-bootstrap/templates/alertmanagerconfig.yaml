@@ -98,7 +98,7 @@ spec:
         matchType: =
       - name: environment
         value: production
-        matchType: !=
+        matchType: '!='
       receiver: 'slack-search-team-non-production-alerts'
       groupBy: [alertname, severity, environment]
       groupWait: 30s
