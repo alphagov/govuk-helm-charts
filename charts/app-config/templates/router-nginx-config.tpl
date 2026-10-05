@@ -173,6 +173,11 @@ http {
       return 200 '{"message": "Tweet tweet"}\n';
     }
 
+    location = /heroes.txt {
+      add_header cache-control "max-age=600,public";
+      root /usr/share/nginx/html;
+    }
+
     location = /humans.txt {
       add_header cache-control "max-age=600,public";
       root /usr/share/nginx/html;

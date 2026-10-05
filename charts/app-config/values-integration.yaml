@@ -2588,6 +2588,9 @@ govukApplications:
         name: live-router-nginx-conf
       nginxExtraVolumeMounts:
         - name: live-router-nginx-conf
+          mountPath: /usr/share/nginx/html/heroes.txt
+          subPath: heroes.txt
+        - name: live-router-nginx-conf
           mountPath: /usr/share/nginx/html/humans.txt
           subPath: humans.txt
         - name: live-router-nginx-conf

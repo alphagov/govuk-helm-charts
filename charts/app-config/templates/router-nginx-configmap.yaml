@@ -21,7 +21,30 @@ metadata:
     app.kubernetes.io/component: web
 data:
   humans.txt: |-
-    {{- $.Files.Get "humans.txt" | nindent 4 }}
+    {{ $.Files.Get "humans.txt" | nindent 4 }}
+    {{- if eq .Values.govukEnvironment "integration" }}
+      {{- $globPath := printf "humans/*-%s.txt"  (now | date "2006-01-02") -}}
+      {{- range $path, $_ := .Files.Glob $globPath }}
+        {{ $.Files.Get $path | nindent 4 }}
+      {{- end }}
+    {{- end }}
+  heroes.txt: |-
+    {{- if eq .Values.govukEnvironment "integration" }}
+      {{- $c := 0 }}
+      {{- range $path, $_ := .Files.Glob ("humans/*.txt") }}
+        {{- $c = add1 $c }}
+      {{- end }}
+      {{- $randomNumber := randInt 0 (int $c) }}
+      {{- $c := 0 }}
+      {{- range $potential_path, $_ := .Files.Glob ("humans/*.txt") }}
+        {{- if eq $c $randomNumber }}
+    Random humans.txt from {{ $potential_path }}:
+          {{ $.Files.Get $potential_path | nindent 4 }}
+        {{- end }}
+        {{- $c = add1 $c }}
+      {{- end }}
+    {{- end }}
+
   nginx.conf: |-
     {{- include "app-config.router-nginx-config" ( mergeOverwrite . ( dict "Stack" "live" ) ) | nindent 4 }}
   opensearch.xml: |-
