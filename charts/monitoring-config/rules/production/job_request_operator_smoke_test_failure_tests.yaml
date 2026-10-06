@@ -1,0 +1,21 @@
+rule_files:
+  - job_request_operator_smoke_test_failure.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: "job_request_operator_smoke_test_success"
+        values: 0
+    alert_rule_test:
+      - alertname: JobRequestOperatorSmokeTestFailure
+        eval_time: 1m
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+            exp_annotations:
+              summary: Job request operator smoke tests are failing
+              description: >-
+                The scheduled job request operator smoke tests are failing.

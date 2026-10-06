@@ -59,6 +59,14 @@ spec:
       groupInterval: 30m
       groupBy: [alertname, database_instance]
     - matchers:
+        - name: alertname
+          value: JobRequestOperatorSmokeTestFailure
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 1h
+      groupWait: 0s
+      groupInterval: 1h
+    - matchers:
       - name: destination
         value: slack-platform-engineering
         matchType: =
