@@ -4101,3 +4101,89 @@ govukApplications:
             secretKeyRef:
               name: govuk-ai-accelerator-opensearch
               key: password
+
+  # Ephemeral per-branch previews of other GOV.UK apps, for reviewing a PR
+  # before merge. Only on Integration - this doesn't exist in
+  # staging/production (see govuk-ai-accelerator-app/govuk-replatform-test-app
+  # above for the same integration-only pattern). Its ServiceAccount is
+  # what charts/govuk-previews' Role/RoleBinding grants access to the
+  # `previews` namespace - see that chart for the rest of what this app
+  # needs beyond the standard Deployment/Service/Ingress below.
+  - name: govuk-preview-app
+    helmValues:
+      serviceAccount:
+        enabled: true
+        create: true
+        name: govuk-preview-app
+      rails:
+        enabled: true
+      uploadAssets:
+        enabled: false
+      arch: arm64
+      appResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 50m
+          memory: 384Mi
+      workers:
+        enabled: true
+        types:
+          - name: worker
+            # The standard PreSync migration job (below) already guarantees
+            # the schema exists before this Deployment's pods ever start, so
+            # unlike kubernetes/local/preview-app.yaml's own worker command
+            # there's no need to wait/poll for it here - just the two things
+            # with no generic-govuk-app equivalent: reconcile any previews
+            # left stale by a restart, and resume any job interrupted
+            # mid-build, before taking on new work.
+            command:
+              - bash
+              - -c
+              - bin/rails previews:reconcile previews:resume && exec bundle exec sidekiq -C ./config/sidekiq.yml
+      workerResources:
+        limits:
+          cpu: 1
+          memory: 1Gi
+        requests:
+          cpu: 50m
+          memory: 256Mi
+      redis:
+        enabled: true
+      dbMigrationEnabled: true
+      # Overridden from the default `rails db:migrate` - RDS creates the
+      # instance but not a database inside it, so a brand new app needs
+      # db:create too; db:prepare does both and stays safe to re-run on
+      # every later deploy.
+      dbMigrationCommand: ["bin/rails", "db:prepare"]
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
+        readinessProbe: "/healthcheck/ready"
+      ingress:
+        enabled: true
+        annotations:
+          !!merge <<: [*alb-ingress-group-backend, *alb-ingress-defaults]
+          alb.ingress.kubernetes.io/group.order: "310"
+          alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "govuk-preview-app.{{ .Values.publishingDomainSuffix }}",
+                "*.govuk-preview-app.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+        hosts:
+          - name: govuk-preview-app.{{ .Values.k8sExternalDomainSuffix }}
+          - name: '*.govuk-preview-app.{{ .Values.k8sExternalDomainSuffix }}'
+      extraEnv:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: govuk-preview-app-postgres
+              key: DATABASE_URL
+        - name: PREVIEW_APP_KUBERNETES_NAMESPACE
+          value: previews
+        - name: PREVIEW_APP_BASE_DOMAIN
+          value: govuk-preview-app.{{ .Values.k8sExternalDomainSuffix }}
+        - name: PREVIEW_APP_SCHEME
+          value: https
+        # PREVIEW_APP_LOCAL_IMAGES deliberately absent - local: image
+        # sources only exist in local kind development.
