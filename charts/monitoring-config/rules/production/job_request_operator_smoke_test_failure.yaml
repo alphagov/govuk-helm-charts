@@ -1,0 +1,12 @@
+groups:
+  - name: JobRequestOperatorSmokeTestAlerts
+    rules:
+      - alert: JobRequestOperatorSmokeTestFailure
+        expr: job_request_operator_smoke_test_success == 0
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: Job request operator smoke tests are failing
+          description: >-
+            The scheduled job request operator smoke tests are failing.
