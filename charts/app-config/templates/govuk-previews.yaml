@@ -1,0 +1,28 @@
+{{ if eq .Values.govukEnvironment "integration" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: govuk-previews
+  namespace: {{ .Values.argoNamespace | default .Release.Namespace }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: govuk
+  source:
+    repoURL: git@github.com/alphagov/govuk-helm-charts
+    path: charts/govuk-previews
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: previews
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - ApplyOutOfSyncOnly=true
+    - ServerSideApply=true
+    # Deliberately no CreateNamespace=true - the `previews` namespace
+    # itself (and its restricted Pod Security Standard labels) is created
+    # by govuk-infrastructure's Terraform, not by Argo CD, so this never
+    # races to create it a second, less-locked-down way.
+{{ end }}

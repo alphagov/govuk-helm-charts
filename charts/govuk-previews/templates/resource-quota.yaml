@@ -1,0 +1,49 @@
+# The hard cap on what previews can use between them - once reached, new
+# preview pods are refused rather than scaling the cluster up indefinitely,
+# and PreviewCapacity puts the least recently used previews to sleep to
+# make room. With the per-app memory settings in govuk-preview-app's own
+# config/govuk_apps.yml, a Whitehall stack requests about 1.5Gi (core) or
+# 2.2Gi (full), 3.75Gi/6.25Gi limits. Sized to comfortably hold 25
+# lightweight previews (budgeted at core-Whitehall's own 1.5Gi/3.75Gi, the
+# heaviest "lightweight" example - genuinely small apps cost far less)
+# plus 3 full-stack Whitehall previews at once, with headroom left over
+# for a build or a setup/migration Job running alongside that steady
+# state:
+#   requests: 25*1.5Gi + 3*2.2Gi = 44.1Gi -> 48Gi
+#   limits:   25*3.75Gi + 3*6.25Gi = 112.5Gi -> 128Gi
+# requests.memory is the one figure here with a real cost impact (the
+# cluster autoscaler sizes nodes off requests, not limits) - limits.memory
+# is purely an admission-control ceiling, raising it is close to free.
+#
+# govuk-preview-app's own kubernetes/previews/resource-quota.yaml is a
+# separate, deliberately much smaller quota - what a single kind node can
+# actually hold for local development, not a mirror of this one. This
+# file alone is the real figure for Integration.
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: previews
+  namespace: previews
+spec:
+  hard:
+    requests.memory: 48Gi
+    limits.memory: 128Gi
+    requests.storage: 80Gi
+    persistentvolumeclaims: "80"
+    pods: "220"
+---
+# Defaults for anything that doesn't set its own (a ResourceQuota on
+# memory makes every pod declare requests/limits, or be rejected).
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: previews
+  namespace: previews
+spec:
+  limits:
+    - type: Container
+      defaultRequest:
+        cpu: 50m
+        memory: 256Mi
+      default:
+        memory: 1Gi

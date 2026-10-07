@@ -1,0 +1,4 @@
+# Nothing here is configurable per-environment - this chart only exists
+# on Integration (see charts/app-config/templates/govuk-previews.yaml),
+# and every object in it is a fixed, shared part of the `previews`
+# namespace, not something that varies.
