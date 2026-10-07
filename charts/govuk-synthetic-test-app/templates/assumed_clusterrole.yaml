@@ -4,7 +4,7 @@ metadata:
   name: synthetic-test-assumed
 rules:
   - apiGroups: [argoproj.io]
-    resources: [applications]
+    resources: [applications, workflows]
     verbs: [get, watch, list]
   - apiGroups: [""]
     resources: [pods]
