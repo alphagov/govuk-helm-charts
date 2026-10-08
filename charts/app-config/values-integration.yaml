@@ -4180,6 +4180,16 @@ govukApplications:
             secretKeyRef:
               name: govuk-preview-app-postgres
               key: DATABASE_URL
+        - name: GDS_SSO_OAUTH_ID
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-govuk-preview-app
+              key: oauth_id
+        - name: GDS_SSO_OAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: signon-app-govuk-preview-app
+              key: oauth_secret
         - name: PREVIEW_APP_KUBERNETES_NAMESPACE
           value: previews
         - name: PREVIEW_APP_BASE_DOMAIN
