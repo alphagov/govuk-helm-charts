@@ -1,0 +1,44 @@
+# What govuk-preview-app's own ServiceAccount (apps:govuk-preview-app) may
+# do - only in the previews namespace, and only to the kinds of object its
+# KubernetesRunner/KubernetesDatabaseRunner create. Deliberately no access
+# to Secrets (there are none here anyway), and nothing cluster-wide.
+#
+# Cross-namespace by design, same shape as charts/release's
+# licensify_pod_reader.yaml: the Role lives here, in `previews`, but its
+# RoleBinding's subject is a ServiceAccount in a different namespace
+# (`apps`, where govuk-preview-app itself is deployed as a standard
+# generic-govuk-app).
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: previews
+  name: govuk-preview-app
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]
+  - apiGroups: [""]
+    resources: ["services", "configmaps", "persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]
+  # Read-only: to find a failed Job's pod and read its logs, and to see
+  # how much room is left for previews (see PreviewCapacity).
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "resourcequotas"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: previews
+  name: govuk-preview-app
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: govuk-preview-app
+subjects:
+  - kind: ServiceAccount
+    name: govuk-preview-app
+    namespace: apps

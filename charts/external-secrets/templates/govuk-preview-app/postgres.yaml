@@ -1,0 +1,26 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: govuk-preview-app-postgres
+  labels:
+    {{- include "external-secrets.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/description: >
+      Connection to Postgres DB hosted in RDS for govuk-preview-app.
+spec:
+  refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+  secretStoreRef:
+    name: aws-secretsmanager
+    kind: ClusterSecretStore
+  target:
+    deletionPolicy: {{ .Values.externalSecrets.deletionPolicy }}
+    name: govuk-preview-app-postgres
+    template:
+      data:
+        DATABASE_URL: '{{ $.Files.Get "externalsecrets-templates/psql-conn-string.tpl" | trim }}/govuk_preview_app_production'
+  dataFrom:
+    - extract:
+        key: govuk/govuk-preview-app/postgres
+        conversionStrategy: Default
+        decodingStrategy: None
+        metadataPolicy: None

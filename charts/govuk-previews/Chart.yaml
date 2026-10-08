@@ -1,0 +1,4 @@
+apiVersion: v2
+name: govuk-previews
+description: Shared objects for the `previews` namespace govuk-preview-app creates ephemeral per-branch previews of other apps in
+version: 1.0.0
