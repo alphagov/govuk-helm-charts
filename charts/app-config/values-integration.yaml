@@ -4193,7 +4193,7 @@ govukApplications:
         - name: PREVIEW_APP_KUBERNETES_NAMESPACE
           value: previews
         - name: PREVIEW_APP_BASE_DOMAIN
-          value: govuk-preview-app.{{ .Values.k8sExternalDomainSuffix }}
+          value: govuk-preview-app.{{ .Values.publishingDomainSuffix }}
         - name: PREVIEW_APP_SCHEME
           value: https
         # PREVIEW_APP_LOCAL_IMAGES deliberately absent - local: image
