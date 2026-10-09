@@ -4120,6 +4120,7 @@ govukApplications:
         name: govuk-preview-app
       rails:
         enabled: true
+      proxyRailsAssetsToS3: false
       uploadAssets:
         enabled: false
       arch: arm64
