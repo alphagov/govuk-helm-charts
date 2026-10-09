@@ -4171,10 +4171,12 @@ govukApplications:
           alb.ingress.kubernetes.io/group.order: "310"
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
-                "govuk-preview-app.{{ .Values.publishingDomainSuffix }}"
+                "govuk-preview-app.{{ .Values.publishingDomainSuffix }}",
+                "*.govuk-preview-app.{{ .Values.publishingDomainSuffix }}"
             ]}}]
         hosts:
           - name: govuk-preview-app.{{ .Values.k8sExternalDomainSuffix }}
+          - name: '*.govuk-preview-app.{{ .Values.k8sExternalDomainSuffix }}'
       extraEnv:
         - name: DATABASE_URL
           valueFrom:
