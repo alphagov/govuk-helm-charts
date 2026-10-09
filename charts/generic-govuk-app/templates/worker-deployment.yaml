@@ -86,10 +86,10 @@ spec:
               value: {{ $.Values.redis.redisUrlOverride.workers | default (printf "redis://%s-redis" $fullName) }}
             {{- end }}
             {{- with $.Values.extraEnv }}
-              {{- . | toYaml | trim | nindent 12 }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
             {{- with .env }}
-              {{- . | toYaml | trim | nindent 12 }}
+              {{- (tpl (toYaml .) $) | trim | nindent 12 }}
             {{- end }}
           {{- with $.Values.workerResources }}
           resources:
