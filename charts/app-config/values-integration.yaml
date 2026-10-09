@@ -4197,6 +4197,13 @@ govukApplications:
           value: previews
         - name: PREVIEW_APP_BASE_DOMAIN
           value: govuk-preview-app.{{ .Values.publishingDomainSuffix }}
+        # Temporary: previews live on a different domain to Preview App
+        # itself until *.govuk-preview-app.{{ .Values.publishingDomainSuffix }}
+        # has its own wildcard ACM cert (see alphagov/govuk-helm-charts#4550
+        # and alphagov/govuk-infrastructure's matching wildcard cert for
+        # this eks domain, which already exists).
+        - name: PREVIEW_HOSTNAME_BASE_DOMAIN
+          value: govuk-preview-app.{{ .Values.k8sExternalDomainSuffix }}
         - name: PREVIEW_APP_SCHEME
           value: https
         # PREVIEW_APP_LOCAL_IMAGES deliberately absent - local: image
