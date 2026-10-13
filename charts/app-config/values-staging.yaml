@@ -1392,6 +1392,8 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
+        - name: MAINTENANCE_MESSAGE
+          value: "We're sorry but postcode lookups are unavailable while we do routine maintenance. Please try again in 15 minutes"
         - name: WEB_CONCURRENCY
           value: '4'
       nginxConfigMap:
