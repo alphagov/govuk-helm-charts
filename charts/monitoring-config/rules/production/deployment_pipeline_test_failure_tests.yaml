@@ -1,0 +1,51 @@
+rule_files:
+  - deployment_pipeline_test_failure.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'deployment_pipeline_test_success{environment="production"}'
+        values: "0"
+      - series: 'deployment_pipeline_test_success{environment="staging"}'
+        values: "0"
+      - series: 'deployment_pipeline_test_success{environment="integration"}'
+        values: "0"
+
+    alert_rule_test:
+      - alertname: DeploymentPipelineTestFailure
+        eval_time: 1m
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              environment: production
+            exp_annotations:
+              summary: "[PRODUCTION] Deployment pipeline tests are failing"
+              description: >-
+                The scheduled job for testing our deployment pipeline in production is failing.
+
+                `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
+
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              environment: staging
+            exp_annotations:
+              summary: "[STAGING] Deployment pipeline tests are failing"
+              description: >-
+                The scheduled job for testing our deployment pipeline in staging is failing.
+
+                `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
+
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              environment: integration
+            exp_annotations:
+              summary: "[INTEGRATION] Deployment pipeline tests are failing"
+              description: >-
+                The scheduled job for testing our deployment pipeline in integration is failing.
+
+                `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
