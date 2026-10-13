@@ -1994,6 +1994,7 @@ govukApplications:
   - name: local-links-manager
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 20
       containerPreStopSleepSecs: 15
       appResources:
@@ -2249,6 +2250,7 @@ govukApplications:
   - name: places-manager
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 20
       containerPreStopSleepSecs: 15
       appResources:
