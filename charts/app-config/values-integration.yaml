@@ -1359,7 +1359,7 @@ govukApplications:
               name: signon-token-frontend-account-api
               key: bearer_token
         - name: ALLOWED_GEOJSON_SLUGS
-          value: "motorcycle-approved-training-bodies"
+          value: "motorcycle-approved-training-bodies,scan-id-document"
         - name: ASSET_MANAGER_BEARER_TOKEN
           valueFrom:
             secretKeyRef:
