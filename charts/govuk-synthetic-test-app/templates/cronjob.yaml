@@ -8,18 +8,16 @@ metadata:
     kubernetes.io/description: >
       This cronjob runs synthetic tests against GOV.UK cluster using a Ginkgo test framework.
 
-      The tests are currently checking that:
-      - all running pods in the apps namespace are running with arm64 images.
-      - the synthetic test assumed roles have the correct permissions and access according to 
-      the environment that they are running in.
+      The tests check that apps can be deployed through the deployment pipeline
 spec:
-  schedule: "0 11 * * 1-5"
+  schedule: "0,30 * * * *"
   jobTemplate:
     metadata:
       labels:
         app: govuk-synthetic-test-app-cronjob
         app.kubernetes.io/arch: arm64
     spec:
+      backoffLimit: 0
       template:
         metadata:
           labels:
@@ -30,8 +28,26 @@ spec:
           restartPolicy: Never
           containers:
             - name: govuk-synthetic-test-app-cronjob
-              image: '172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-synthetic-test-app:{{ .Values.image_tag }}'
+              image: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-synthetic-test-app:{{ .Values.image_tag }}"
               imagePullPolicy: Always
+              env:
+                - name: PROMETHEUS_PUSHGATEWAY_URL
+                  value: "http://prometheus-pushgateway.monitoring.svc.cluster.local:9091"
+                - name: GITHUB_PEM_STR
+                  valueFrom:
+                    secretKeyRef:
+                      key: govuk_synthetic-test-app_github_pem_str
+                      name: synthetic-test-app-github
+                - name: GITHUB_INSTALL_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: govuk_synthetic-test-app_github_install_id
+                      name: synthetic-test-app-github
+                - name: GITHUB_APP_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: govuk_synthetic-test-app_github_app_id
+                      name: synthetic-test-app-github
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:

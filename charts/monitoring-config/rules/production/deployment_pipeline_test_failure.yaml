@@ -1,0 +1,14 @@
+groups:
+  - name: DeploymentPipelineTestAlerts
+    rules:
+      - alert: DeploymentPipelineTestFailure
+        expr: deployment_pipeline_test_success == 0
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[{{ $labels.environment | toUpper }}] Deployment pipeline tests are failing"
+          description: >-
+            The scheduled job for testing our deployment pipeline in {{ $labels.environment }} is failing.
+
+            `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
