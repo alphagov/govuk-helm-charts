@@ -526,6 +526,10 @@ govukApplications:
           memory: 512Mi
       redis:
         enabled: true
+      cronTasks:
+        - name: refresh-host-content-metrics
+          task: "host_content_metrics:refresh_rollups"
+          schedule: "0 1 * * *"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
