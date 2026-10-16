@@ -1,4 +1,4 @@
-{{ if eq .Values.awsAccountId "172025368201" }}
+{{ if eq .Values.enableCron }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
