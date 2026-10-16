@@ -8,7 +8,7 @@ groups:
           destination: generic-slack-platform-engineering
         annotations:
           summary: "[{{ $labels.environment | toUpper }}] Deployment pipeline tests are failing"
-          description: >-
-            The scheduled job for testing our deployment pipeline in {{ $labels.environment }} is failing.
+          description: |-
+            The deployment pipeline is broken, please investigate immediately:
 
             `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
