@@ -14,6 +14,7 @@ spec:
     helm:
       values: |
         awsAccountId: "{{ .Values.awsAccountId }}"
+        enableCron: {{ eq .Values.govukEnvironment "production" }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.argoNamespace }}
