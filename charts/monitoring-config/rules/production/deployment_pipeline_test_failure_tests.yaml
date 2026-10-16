@@ -23,8 +23,8 @@ tests:
               environment: production
             exp_annotations:
               summary: "[PRODUCTION] Deployment pipeline tests are failing"
-              description: >-
-                The scheduled job for testing our deployment pipeline in production is failing.
+              description: |-
+                The deployment pipeline is broken, please investigate immediately:
 
                 `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
 
@@ -34,8 +34,8 @@ tests:
               environment: staging
             exp_annotations:
               summary: "[STAGING] Deployment pipeline tests are failing"
-              description: >-
-                The scheduled job for testing our deployment pipeline in staging is failing.
+              description: |-
+                The deployment pipeline is broken, please investigate immediately:
 
                 `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
 
@@ -45,7 +45,7 @@ tests:
               environment: integration
             exp_annotations:
               summary: "[INTEGRATION] Deployment pipeline tests are failing"
-              description: >-
-                The scheduled job for testing our deployment pipeline in integration is failing.
+              description: |-
+                The deployment pipeline is broken, please investigate immediately:
 
                 `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
