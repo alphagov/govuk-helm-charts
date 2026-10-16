@@ -118,11 +118,8 @@ kubeconform -schema-location default \
 
 ## Team
 
-[GOV.UK Platform Engineering](https://github.com/orgs/alphagov/teams/gov-uk-platform-engineering) team looks after this repo. If you're inside GDS, you can find us in [#govuk-platform-engineering] or view our [kanban board](https://trello.com/b/u4FCzm53/).
+[GOV.UK Platform Engineering team](https://github.com/orgs/alphagov/teams/gov-uk-platform-engineering) looks after this repo. If you're inside GDS, you can find us in [#govuk-ask-platform-engineering](https://gds.slack.com/archives/C013F737737).
 
 ## Licence
 
 [MIT License](LICENCE)
-
-
-[#govuk-platform-engineering]: https://gds.slack.com/channels/govuk-platform-engineering
