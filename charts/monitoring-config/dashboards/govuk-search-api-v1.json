@@ -35,7 +35,7 @@
         "spec": {
           "id": 11,
           "title": "Search API V1 valid request errors",
-          "description": "Errors for http requests to Search API, excluding requests containing client errors. This covers all endpoints including sitemap requests.",
+          "description": "Errors for http requests to Search API, excluding requests containing client errors. This covers the search endpoint only.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -53,7 +53,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sum(increase(http_requests_total{job=\"search-api\", status=~\"$server_error_status\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status=~\"$server_error_status\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -118,7 +118,7 @@
         "spec": {
           "id": 12,
           "title": "Search API V1 valid request error rate",
-          "description": "Error rate for http requests to Search API, excluding requests containing client errors. This covers all endpoints including sitemap requests.",
+          "description": "Error rate for http requests to Search API, excluding requests containing client errors. This covers just requests to the search endpoint.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -136,7 +136,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(increase(http_requests_total{job=\"search-api\", status=~\"$server_error_status\"}[$__range])) / sum(increase(http_requests_total{job=\"search-api\", status!~\"$client_error_status\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status=~\"$server_error_status\"}[$__range])) / sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status!~\"$client_error_status\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -205,7 +205,7 @@
         "spec": {
           "id": 14,
           "title": "Finder Frontend valid request error rate",
-          "description": "Server error rate for search requests to Finder Frontend, excluding requests containing client errors. This covers requests to search API V1 and search API V2.",
+          "description": "Server error rate for search requests to Finder Frontend, excluding requests containing client errors. This covers requests to Search API V1 only.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -223,7 +223,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status=~\"$server_error_status\"}[$__range])) / sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status!~\"$client_error_status\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status=~\"$server_error_status\"}[$__range])) / sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status!~\"$client_error_status\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -292,7 +292,7 @@
         "spec": {
           "id": 15,
           "title": "Total Finder Frontend valid request errors",
-          "description": "Errors for search requests to Finder Frontend, excluding requests containing client errors. This covers requests to search API V1 and search API V2.",
+          "description": "Errors for search requests to Finder Frontend, excluding requests containing client errors. This covers requests to Search API V1 only.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -310,7 +310,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status=~\"$server_error_status\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status=~\"$server_error_status\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -375,7 +375,7 @@
         "spec": {
           "id": 23,
           "title": "Search API V1 Total requests",
-          "description": "The total number of requests to Search API V1 in the selected time period. Note that this is all requests to Search API, including sitemap requests.",
+          "description": "The total number of requests to Search API V1 in the selected time period. Note that this is requests to the search endpoint only.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -393,7 +393,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=\"search-api\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{namespace=\"apps\", job=\"search-api\", search_api_endpoint=\"search\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -936,7 +936,7 @@
         "spec": {
           "id": 35,
           "title": "Search API V1 request latency: 99th percentile",
-          "description": "The 99th percentile of request duration measured over a rolling 5 minute period, at various layers. \n\nNote that the request duration for Search API v1 includes requests to sitemap, so is not directly comparable to Opensearch latency and search request latency from within Finder Frontend.",
+          "description": "The 99th percentile of request duration measured over a rolling 5 minute period, at various layers. \n\nNote that the request duration for Search API v1 only includes requests to the search endpoint, so should be directly comparable to Opensearch latency.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1143,7 +1143,7 @@
         "spec": {
           "id": 36,
           "title": "Search API V1 request latency: median",
-          "description": "The median request duration measured over a rolling 5 minute period, at various layers. \n\nNote that the request duration for Search API v1 includes requests to sitemap, so is not directly comparable to Opensearch latency and search request latency from within Finder Frontend.",
+          "description": "The median request duration measured over a rolling 5 minute period, at various layers. \n\nNote that the request duration for Search API v1 includes requests to the search endpoint only, so should be directly comparable to Opensearch latency.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1161,7 +1161,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "histogram_quantile(0.5, sum by(le) (rate(http_request_duration_seconds_bucket{job=\"search-api\"}[5m])))",
+                        "expr": "histogram_quantile(0.5, sum by(le) (rate(http_request_duration_seconds_bucket{job=\"search-api\", search_api_endpoint=\"search\"}[5m])))",
                         "instant": false,
                         "legendFormat": "Search API V1",
                         "range": true
@@ -1350,7 +1350,7 @@
         "spec": {
           "id": 37,
           "title": "Search API V1 error rates",
-          "description": "5 minute rolling error rates for all search API V1 endpoints, including sitemaps, split by error code.",
+          "description": "5 minute rolling error rates for Search API V1, search endpoint only, split by error code.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1368,7 +1368,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum by(status) (rate(http_requests_total{job=\"search-api\", status!=\"200\"}[5m])) / ignoring(status) group_left sum(rate(http_requests_total{job=\"search-api\"}[5m]))",
+                        "expr": "sum by(status) (rate(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status!=\"200\"}[5m])) / ignoring(status) group_left sum(rate(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\"}[5m]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -1467,7 +1467,7 @@
         "spec": {
           "id": 38,
           "title": "Total search API V1 errors",
-          "description": "Total errors for all http requests to Search API, including server and client errors. This covers all endpoints including sitemap requests.",
+          "description": "Total errors for all http requests to Search API, including server and client errors. This covers the search endpoint only.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1485,7 +1485,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sum(increase(http_requests_total{job=\"search-api\", status=~\"$client_error_status|$server_error_status\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status=~\"$client_error_status|$server_error_status\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -1550,7 +1550,7 @@
         "spec": {
           "id": 39,
           "title": "Total Search API V1 error rate",
-          "description": "Total error rate for all http requests to Search API, including server and client errors. This covers all endpoints including sitemap requests.",
+          "description": "Total error rate for all http requests to Search API, including server and client errors. This covers just requests to the search endpoint.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1568,7 +1568,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(increase(http_requests_total{job=\"search-api\", status!=\"200\"}[$__range])) / sum(increase(http_requests_total{job=\"search-api\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status!=\"200\"}[$__range])) / sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -1634,7 +1634,7 @@
         "spec": {
           "id": 40,
           "title": "Finder Frontend error rates",
-          "description": "5 minute rolling errors rates for V1 & V2 search requests, split by error code.",
+          "description": "5 minute rolling errors rates for V1 search requests, split by error code.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1652,7 +1652,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum by(status) (rate(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status=~\"$client_error_status|$server_error_status\"}[5m])) / ignoring(status) group_left sum(rate(http_requests_total{job=\"finder-frontend\", controller=\"finders\"}[5m]))",
+                        "expr": "sum by(status) (rate(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status=~\"$client_error_status|$server_error_status\"}[5m])) / ignoring(status) group_left sum(rate(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\"}[5m]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -1768,7 +1768,7 @@
         "spec": {
           "id": 41,
           "title": "Total Finder Frontend search errors",
-          "description": "Total errors for search requests to Finder Frontend, including server and client errors. This covers requests to search API V1 and search API V2.",
+          "description": "Total errors for search requests to Finder Frontend, including server and client errors. This covers requests to Search API V1 only.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1786,7 +1786,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status=~\"$client_error_status|$server_error_status\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status=~\"$client_error_status|$server_error_status\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -1851,7 +1851,7 @@
         "spec": {
           "id": 42,
           "title": "Finder Frontend total search error rate",
-          "description": "Total error rate for search requests to Finder Frontend, including server and client errors. This covers requests to search API V1 and search API V2.",
+          "description": "Total error rate for search requests to Finder Frontend, including server and client errors. This covers requests to Search API V1 only.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1869,7 +1869,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status=~\"$server_error_status|$client_error_status\"}[$__range])) / sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\"}[$__range]))",
+                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status=~\"$server_error_status|$client_error_status\"}[$__range])) / sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\"}[$__range]))",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -1939,7 +1939,7 @@
         "spec": {
           "id": 43,
           "title": "Search API V1 request latency: 90th percentile",
-          "description": "The 90th percentile of request duration measured over a rolling 5 minute period, at various layers. \n\nNote that the request duration for Search API v1 includes requests to sitemap, so is not directly comparable to Opensearch latency and search request latency from within Finder Frontend.",
+          "description": "The 90th percentile of request duration measured over a rolling 5 minute period, at various layers. \n\nNote that the request duration for Search API v1 includes requests to the search endpoint only, so should be directly comparable to Opensearch latency.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -1957,7 +1957,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "histogram_quantile(0.9, sum by(le) (rate(http_request_duration_seconds_bucket{job=\"search-api\"}[5m])))",
+                        "expr": "histogram_quantile(0.9, sum by(le) (rate(http_request_duration_seconds_bucket{job=\"search-api\", search_api_endpoint=\"search\"}[5m])))",
                         "instant": false,
                         "legendFormat": "Search API V1",
                         "range": true
@@ -2146,7 +2146,7 @@
         "spec": {
           "id": 5,
           "title": "Search API V1 Rate of usage",
-          "description": "The rate (requests per minute) of usage for Search API v1 measured over a rolling 5 minute period. \n\nThis reflects Search API v1 requests received by Finder Frontend as well as all requests received by Search API v1. \n\nNote that the requests count for Search API v1 includes requests to sitemap. ",
+          "description": "The rate (requests per minute) of usage for Search API v1 measured over a rolling 5 minute period. \n\nThis reflects Search API v1 requests received by Finder Frontend as well as all requests received by Search API v1. \n\nNote that the requests count for Search API v1 only includes requests to the search endpoint. ",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2164,7 +2164,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sum(rate(http_requests_total{job=\"search-api\"}[5m])) * 60",
+                        "expr": "sum(rate(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\"}[5m])) * 60",
                         "instant": false,
                         "legendFormat": "All Search API V1 requests",
                         "range": true
@@ -2402,7 +2402,7 @@
         "spec": {
           "id": 7,
           "title": "Search API V1 success rates",
-          "description": "5 minute rolling success rates for all search API V1 endpoints, including sitemaps.",
+          "description": "5 minute rolling success rates for Search API V1, search endpoint only.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2420,7 +2420,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(increase(http_requests_total{job=\"search-api\", status=\"200\"}[5m])) / (sum(increase(http_requests_total{job=\"search-api\"}[5m])))",
+                        "expr": "sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status=\"200\"}[5m])) / (sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\"}[5m])))",
                         "legendFormat": "All requests",
                         "range": true
                       }
@@ -2441,7 +2441,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(increase(http_requests_total{job=\"search-api\", status!~\"$server_error_status|$client_error_status\"}[5m])) / (sum(increase(http_requests_total{job=\"search-api\", status!~\"$client_error_status\"}[5m])))",
+                        "expr": "sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status!~\"$server_error_status|$client_error_status\"}[5m])) / (sum(increase(http_requests_total{job=\"search-api\", search_api_endpoint=\"search\", status!~\"$client_error_status\"}[5m])))",
                         "legendFormat": "Excluding bad requests",
                         "range": true
                       }
@@ -2561,7 +2561,7 @@
         "spec": {
           "id": 8,
           "title": "Finder Frontend search success rates",
-          "description": "5 minute rolling success rates for V1 & V2 search requests.",
+          "description": "5 minute rolling success rates for V1 search requests.",
           "links": [],
           "data": {
             "kind": "QueryGroup",
@@ -2579,7 +2579,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status!~\"$client_error_status|$server_error_status\"}[5m])) / sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\"}[5m]))",
+                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status!~\"$client_error_status|$server_error_status\"}[5m])) / sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\"}[5m]))",
                         "legendFormat": "All requests",
                         "range": true
                       }
@@ -2600,7 +2600,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status!~\"$server_error_status|$client_error_status\"}[5m])) / (sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", status!~\"$client_error_status\"}[5m])))",
+                        "expr": "sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status!~\"$server_error_status|$client_error_status\"}[5m])) / (sum(increase(http_requests_total{job=\"finder-frontend\", controller=\"finders\", search_api_version=\"v1\", status!~\"$client_error_status\"}[5m])))",
                         "legendFormat": "Excluding bad requests",
                         "range": true
                       }
@@ -3115,6 +3115,7 @@
       "fiscalYearStartMonth": 0
     },
     "title": "GOV.UK Search API V1",
+    "uid": "govuk-search-api-v1",
     "variables": [
       {
         "kind": "QueryVariable",
@@ -3182,7 +3183,7 @@
               "refId": "PrometheusVariableQueryEditor-VariableQuery"
             }
           },
-          "regex": "/^([5][0-9][0-9])$/",
+          "regex": "/^(([5][0-9][0-9])|(-1))$/",
           "regexApplyTo": "value",
           "sort": "numericalAsc",
           "definition": "label_values(http_requests_total{namespace=\"apps\"},status)",
