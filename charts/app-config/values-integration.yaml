@@ -86,6 +86,7 @@ govukApplications:
   - name: account-api
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 10
       containerPreStopSleepSecs: 5
       uploadAssets:
