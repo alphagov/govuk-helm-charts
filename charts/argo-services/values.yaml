@@ -13,3 +13,9 @@ iamRoleServiceAccounts:
   tagImageWorkflow:
     name: service-account-name
     iamRoleArn: arn:aws:iam::$account_id:role/$role_name
+
+# https://github.com/alphagov/govuk-toolbox-image/tree/main
+toolbox:
+  image:
+    repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image"
+    tag: "v59"
