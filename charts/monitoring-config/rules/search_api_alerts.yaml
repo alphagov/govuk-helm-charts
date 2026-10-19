@@ -1,4 +1,72 @@
 groups:
+  - name: SearchApiDegradationAlerts
+    interval: 1m
+    rules:
+      - record: search_api:search_requests:increase5m
+        expr: |
+          sum by (status) (
+            increase(
+              http_requests_total{
+                namespace="apps",
+                job="search-api",
+                search_api_endpoint="search"
+              }[5m]
+            )
+          )
+      - record: search_api:successful_search_requests:ratio_increase5m
+        expr: |
+          (
+            sum (search_api:search_requests:increase5m{status!~"(4..|5..|-1)"})  #  exclude bad requests and server errors
+            /
+            sum (search_api:search_requests:increase5m{status!~"(4..)"}) > 0  # exclude bad requests
+          ) or vector(1)
+      - record: search_api:search_requests:increase1h
+        expr: |
+          sum by (status) (
+            increase(
+              http_requests_total{
+                namespace="apps",
+                job="search-api",
+                search_api_endpoint="search"
+              }[1h]
+            )
+          )
+      - record: search_api:successful_search_requests:ratio_increase1h
+        expr: |
+          (
+            sum (search_api:search_requests:increase1h{status!~"(4..|5..|-1)"})  #  exclude bad requests and server errors
+            /
+            sum (search_api:search_requests:increase1h{status!~"(4..)"}) > 0  # exclude bad requests
+          ) or vector(1)
+
+
+      - alert: SearchApiSearchSuccessRateDegradedAcute
+        expr: search_api:successful_search_requests:ratio_increase5m < 0.99
+        labels:
+          severity: critical
+          destination: slack-search-team
+        annotations:
+          summary: "Search API: Search success rate degraded (acute)"
+          grafana_path: >-
+            d/emvd8hx/gov-uk-search-api-v1?orgId=1&from=now-24h&to=now&timezone=browser&viewPanel=panel-7
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html
+          description: >-
+            5 minute rolling success rate for search requests to search-api has dropped below 99%.
+      - alert: SearchApiSearchSuccessRateDegradedMid
+        expr: search_api:successful_search_requests:ratio_increase1h < 0.999
+        labels:
+          severity: critical
+          destination: slack-search-team
+        annotations:
+          summary: "Search API: Search success rate degraded (mid)"
+          grafana_path: >-
+            d/emvd8hx/gov-uk-search-api-v1?orgId=1&from=now-24h&to=now&timezone=browser&viewPanel=panel-7
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html
+          description: >-
+            1 hour rolling success rate for search requests to search-api has dropped below 99.9%.
+
   - name: SearchApiElasticsearchAlerts
     rules:
       - alert: SearchApiElasticsearchClusterStatus
@@ -56,6 +124,7 @@ groups:
           description: >-
             Elasticsearch node {{ $labels.node }} has less than 10% disk space
             remaining.
+
   - name: SearchApiCronjobs
     rules:
       - alert: CronjobFailed => CronjobSuccessThreshold
