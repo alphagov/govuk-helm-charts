@@ -1987,6 +1987,7 @@ govukApplications:
               key: DATABASE_URL
   - name: local-links-manager
     helmValues:
+      appEnabled: false
       arch: arm64
       podTerminationGracePeriodSecs: 20
       containerPreStopSleepSecs: 15
@@ -2119,6 +2120,7 @@ govukApplications:
         enabled: false
   - name: locations-api
     helmValues:
+      appEnabled: false
       arch: arm64
       appResources:
         limits:
@@ -2246,6 +2248,7 @@ govukApplications:
       cronTasks: []
   - name: places-manager
     helmValues:
+      appEnabled: false
       arch: arm64
       podTerminationGracePeriodSecs: 20
       containerPreStopSleepSecs: 15
