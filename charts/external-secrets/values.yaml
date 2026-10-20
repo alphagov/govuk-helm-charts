@@ -25,6 +25,7 @@ provisionDatabaseReadonlySecrets:
     - email_alert_api
     - fact_check_manager
     - govuk_ai_accelerator
+    - govuk_preview_app
     - link_checker_api
     - local_links_manager
     - locations_api
