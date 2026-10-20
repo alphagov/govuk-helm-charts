@@ -1332,6 +1332,8 @@ govukApplications:
               key: bearer_token
         - name: WEB_CONCURRENCY
           value: "4"
+        - name: MAINTENANCE_MESSAGE
+          value: "Sorry, this page is unavailable while we perform a database upgrade. Please try again in 15 minutes."
       nginxConfigMap:
         extraServerConf: |
           location ~ /government/uploads/(?<item_path>.+) {
