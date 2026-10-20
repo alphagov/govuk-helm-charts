@@ -1777,6 +1777,7 @@ govukApplications:
       - govuk-dependency-checker
   - name: govuk-synthetic-test-app-canary
     helmValues:
+      replicaCount: 1
       arch: arm64
       rails:
         enabled: false
