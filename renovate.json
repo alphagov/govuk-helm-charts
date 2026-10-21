@@ -106,6 +106,19 @@
             "matchStrings": [
                 "oci://(?<dockerUrl>.+) (?<depName>.+): \"(?<currentValue>v?[0-9\\.]+)\""
             ]
+        },
+        {
+            "customType": "regex",
+            "managerFilePatterns": [
+                "/charts\\/.*values\\.yaml$/"
+            ],
+            "matchStrings": [
+                "repository:\\s+\"*govuk-toolbox-image\"\\s+tag:\\s+\"(?<currentValue>v\\d+)\""
+            ],
+            "packageNameTemplate": "alphagov/govuk-toolbox-image",
+            "datasourceTemplate": "github-releases",
+            "depNameTemplate": "Toolbox image",
+            "versioningTemplate": "github-releases"
         }
     ]
 }
