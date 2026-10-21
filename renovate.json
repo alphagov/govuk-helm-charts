@@ -113,7 +113,7 @@
                 "/charts\\/.*values\\.yaml$/"
             ],
             "matchStrings": [
-                "repository:\\s+\"*govuk-toolbox-image\"\\s+tag:\\s+\"(?<currentValue>v\\d+)\""
+                "repository:\\s+\".*govuk-toolbox-image\"\\s+tag:\\s+\"(?<currentValue>v\\d+)\""
             ],
             "packageNameTemplate": "alphagov/govuk-toolbox-image",
             "datasourceTemplate": "github-releases",
