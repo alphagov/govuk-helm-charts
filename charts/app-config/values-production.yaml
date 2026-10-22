@@ -2373,6 +2373,12 @@ govukApplications:
         hosts:
           - name: publisher.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
+      nginxConfigMap:
+        # Block public access to internal healthcheck endpoints.
+        extraServerConf: |
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
