@@ -2116,6 +2116,10 @@ govukApplications:
             proxy_pass
               https://govuk-app-assets-production.s3.eu-west-1.amazonaws.com/data/local-links-manager;
           }
+          # Block public access to internal healthcheck endpoints.
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
       workers:
         enabled: false
   - name: locations-api
@@ -2304,6 +2308,12 @@ govukApplications:
               name: signon-app-imminence
               key: oauth_secret
       cronTasks: []
+      nginxConfigMap:
+        # Block public access to internal healthcheck endpoints.
+        extraServerConf: |
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
   - name: publisher
     helmValues:
       arch: arm64
