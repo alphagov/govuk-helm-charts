@@ -922,6 +922,12 @@ govukApplications:
           memory: 200Mi
       redis:
         enabled: true
+      nginxConfigMap:
+        # Block public access to internal healthcheck endpoints.
+        extraServerConf: |
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
       ingress:
         enabled: true
         annotations:
