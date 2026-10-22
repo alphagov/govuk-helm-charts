@@ -1490,6 +1490,12 @@ govukApplications:
         hosts:
           - name: fact-check-manager.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
+      nginxConfigMap:
+        # Block public access to internal healthcheck endpoints.
+        extraServerConf: |
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
       extraEnv:
         - name: MAINTENANCE_MODE
           value: "false"
