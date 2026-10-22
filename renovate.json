@@ -117,8 +117,7 @@
             ],
             "packageNameTemplate": "alphagov/govuk-toolbox-image",
             "datasourceTemplate": "github-releases",
-            "depNameTemplate": "Toolbox image",
-            "versioningTemplate": "github-releases"
+            "depNameTemplate": "Toolbox image"
         }
     ]
 }
