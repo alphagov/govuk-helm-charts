@@ -16,6 +16,7 @@ data:
         "alphagov/govuk-infrastructure",
         "alphagov/govuk-job-request-operator",
         "alphagov/govuk-s3-mirror",
+        "alphagov/govuk-toolbox-image",
         "alphagov/govuk-user-reviewer",
         "alphagov/router",
         "alphagov/terraform-govuk-infrastructure-sensitive"
