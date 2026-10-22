@@ -436,6 +436,12 @@ govukApplications:
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
         hosts:
           - name: collections-publisher.{{ .Values.k8sExternalDomainSuffix }}
+      nginxConfigMap:
+        # Block public access to internal healthcheck endpoints.
+        extraServerConf: |
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: &anonymous_user_id_secret
@@ -1506,6 +1512,12 @@ govukApplications:
         hosts:
           - name: fact-check-manager.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
+      nginxConfigMap:
+        # Block public access to internal healthcheck endpoints.
+        extraServerConf: |
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
       extraEnv:
         - name: MAINTENANCE_MODE
           value: "false"
@@ -2310,6 +2322,12 @@ govukApplications:
         hosts:
           - name: publisher.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 30s
+      nginxConfigMap:
+        # Block public access to internal healthcheck endpoints.
+        extraServerConf: |
+          location ~ ^/healthcheck(/|$|\.) {
+            return 403;
+          }
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
