@@ -4,6 +4,152 @@ rule_files:
 evaluation_interval: 1m
 
 tests:
+  # Tests for search_api:search_requests:increase5m
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="200"}'
+        values: '0+60x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="400"}'
+        values: '0+6x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="502"}'
+        values: '0+3x5'
+    promql_expr_test:
+      - expr: search_api:search_requests:increase5m{status="200"}
+        eval_time: 5m
+        exp_samples:
+          - labels: 'search_api:search_requests:increase5m{status="200"}'
+            value: 300
+      - expr: search_api:search_requests:increase5m{status="400"}
+        eval_time: 5m
+        exp_samples:
+          - labels: 'search_api:search_requests:increase5m{status="400"}'
+            value: 30
+      - expr: search_api:search_requests:increase5m{status="502"}
+        eval_time: 5m
+        exp_samples:
+          - labels: 'search_api:search_requests:increase5m{status="502"}'
+            value: 15
+
+  # Tests for search_api:successful_search_requests:ratio_increase5m
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="200"}'
+        values: '0x5 0+92x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="500"}'
+        values: '0x5 0+8x5'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="400"}'
+        values: '0x5 0+100x5'
+    promql_expr_test:
+      - expr: search_api:successful_search_requests:ratio_increase5m
+        eval_time: 5m
+        exp_samples:
+          - labels: 'search_api:successful_search_requests:ratio_increase5m{}'
+            value: 1  # No requests means 100% success rate
+      - expr: search_api:successful_search_requests:ratio_increase5m
+        eval_time: 10m
+        exp_samples:
+          - labels: 'search_api:successful_search_requests:ratio_increase5m{}'
+            value: 0.92  # 400s don't count towards total
+
+  # Tests for search_api:search_requests:increase1h
+  - interval: 5m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="200"}'
+        values: '0+30x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="400"}'
+        values: '0+30x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="502"}'
+        values: '0+3x12'
+    promql_expr_test:
+      - expr: search_api:search_requests:increase1h{status="200"}
+        eval_time: 1h
+        exp_samples:
+          - labels: 'search_api:search_requests:increase1h{status="200"}'
+            value: 360
+      - expr: search_api:search_requests:increase1h{status="400"}
+        eval_time: 1h
+        exp_samples:
+          - labels: 'search_api:search_requests:increase1h{status="400"}'
+            value: 360
+      - expr: search_api:search_requests:increase1h{status="502"}
+        eval_time: 1h
+        exp_samples:
+          - labels: 'search_api:search_requests:increase1h{status="502"}'
+            value: 36
+
+  # Tests for search_api:successful_search_requests:ratio_increase1h
+  - interval: 5m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="200"}'
+        values: '0x12 0+92x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="500"}'
+        values: '0x12 0+8x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="400"}'
+        values: '0x12 0+100x12'
+    promql_expr_test:
+      - expr: search_api:successful_search_requests:ratio_increase1h
+        eval_time: 1h
+        exp_samples:
+          - labels: 'search_api:successful_search_requests:ratio_increase1h{}'
+            value: 1  # No requests means 100% success rate
+      - expr: search_api:successful_search_requests:ratio_increase1h
+        eval_time: 2h
+        exp_samples:
+          - labels: 'search_api:successful_search_requests:ratio_increase1h{}'
+            value: 0.92  # 400s don't count towards total
+
+  # Tests for SearchApiSearchSuccessRateDegradedAcute alert
+  - interval: 1m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="200"}'
+        values: '0x10 0+98x10'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="500"}'
+        values: '0x10 0+2x10'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: SearchApiSearchSuccessRateDegradedAcute
+        exp_alerts: []
+      - eval_time: 15m
+        alertname: SearchApiSearchSuccessRateDegradedAcute
+        exp_alerts:
+          - exp_labels:
+              alertname: SearchApiSearchSuccessRateDegradedAcute
+              severity: critical
+              destination: slack-search-team
+            exp_annotations:
+              summary: "Search API: Search success rate degraded (acute)"
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?orgId=1&from=now-24h&to=now&timezone=browser&viewPanel=panel-7
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html
+              description: "5 minute rolling success rate for search requests to search-api has dropped below 99%."
+
+  # Tests for SearchApiSearchSuccessRateDegradedMid alert
+  - interval: 5m
+    input_series:
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="200"}'
+        values: '0+1000x12 0+998x12'
+      - series: 'http_requests_total{namespace="apps", job="search-api", search_api_endpoint="search", status="500"}'
+        values: '0+0x12 0+2x12'
+    alert_rule_test:
+      - eval_time: 1h30m
+        alertname: SearchApiSearchSuccessRateDegradedMid
+        exp_alerts: []
+      - eval_time: 1h35m
+        alertname: SearchApiSearchSuccessRateDegradedMid
+        exp_alerts:
+          - exp_labels:
+              alertname: SearchApiSearchSuccessRateDegradedMid
+              severity: critical
+              destination: slack-search-team
+            exp_annotations:
+              summary: "Search API: Search success rate degraded (mid)"
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?orgId=1&from=now-24h&to=now&timezone=browser&viewPanel=panel-7
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html
+              description: "1 hour rolling success rate for search requests to search-api has dropped below 99.9%."
+
 # elasticsearch cluster status tests
   - interval: 1m
     input_series:
