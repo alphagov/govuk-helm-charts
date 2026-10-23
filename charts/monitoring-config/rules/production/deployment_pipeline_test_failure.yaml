@@ -12,3 +12,15 @@ groups:
             The deployment pipeline is broken, please investigate immediately:
 
             `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
+      - alert: DeploymentPipelineTestDidNotRun
+        # yamllint disable-line rule:line-length
+        expr: absent(kube_cronjob_status_last_schedule_time{namespace="apps", cronjob="govuk-synthetic-test-app-cronjob"}) or (time() - kube_cronjob_status_last_schedule_time{namespace="apps", cronjob="govuk-synthetic-test-app-cronjob"} > 2100)
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[DID NOT RUN] No Deployment pipeline tests have ran in the past 35 mins"
+          description: |-
+            The deployment pipeline is broken, the tests should run every 30 mins, please investigate immediately:
+
+            `kubectl get job -l app=govuk-synthetic-test-app-cronjob -n apps`

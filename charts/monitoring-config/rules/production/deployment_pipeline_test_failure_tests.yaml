@@ -6,6 +6,50 @@ evaluation_interval: 1m
 tests:
   - interval: 1m
     input_series:
+      - series: 'kube_cronjob_status_last_schedule_time{namespace="apps", cronjob="govuk-synthetic-test-app-cronjob"}'
+        values: "0x40"
+    alert_rule_test:
+      # At 35m (2100s), time() - 0 == 2100 (threshold not exceeded yet)
+      - eval_time: 35m
+        alertname: DeploymentPipelineTestDidNotRun
+        exp_alerts: []
+
+      # At 36m (2160s), time() - 0 == 2160 (> 2100, alert should fire)
+      - eval_time: 36m
+        alertname: DeploymentPipelineTestDidNotRun
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              cronjob: govuk-synthetic-test-app-cronjob
+              namespace: apps
+            exp_annotations:
+              summary: "[DID NOT RUN] No Deployment pipeline tests have ran in the past 35 mins"
+              description: |-
+                The deployment pipeline is broken, the tests should run every 30 mins, please investigate immediately:
+
+                `kubectl get job -l app=govuk-synthetic-test-app-cronjob -n apps`
+
+  - interval: 1m
+    input_series: [] # No metrics provided
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: DeploymentPipelineTestDidNotRun
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              cronjob: govuk-synthetic-test-app-cronjob
+              namespace: apps
+            exp_annotations:
+              summary: "[DID NOT RUN] No Deployment pipeline tests have ran in the past 35 mins"
+              description: |-
+                The deployment pipeline is broken, the tests should run every 30 mins, please investigate immediately:
+
+                `kubectl get job -l app=govuk-synthetic-test-app-cronjob -n apps`
+
+  - interval: 1m
+    input_series:
       - series: 'deployment_pipeline_test_success{environment="production"}'
         values: "0"
       - series: 'deployment_pipeline_test_success{environment="staging"}'

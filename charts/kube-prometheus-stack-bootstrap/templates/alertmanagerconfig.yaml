@@ -68,12 +68,20 @@ spec:
       groupInterval: 1h
     - matchers:
         - name: alertname
+          value: DeploymentPipelineTestDidNotRun
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
           value: DeploymentPipelineTestFailure
           matchType: =
       receiver: 'generic-slack-platform-engineering'
-      repeatInterval: 1h
+      repeatInterval: 30m
       groupWait: 0s
-      groupInterval: 1h
+      groupInterval: 5m
     - matchers:
       - name: destination
         value: slack-platform-engineering
