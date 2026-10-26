@@ -2040,12 +2040,6 @@ govukApplications:
         - name: export-links
           task: "export:links:s3"
           schedule: "0 3 * * *"
-        - name: import-ga
-          task: "import:google_analytics"
-          schedule: "0 5 * * *"
-        - name: export-ga-bad-links
-          task: "export:google_analytics:bad_links"
-          schedule: "0 6 * * *"
       dbMigrationEnabled: true
       kubernetesProbeEndpoints:
         startupProbe: "/healthcheck/ready"
