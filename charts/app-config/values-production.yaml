@@ -53,7 +53,6 @@ rdsParquetExports:
 govukApplications:
   - name: account-api
     helmValues:
-      appEnabled: false
       arch: arm64
       podTerminationGracePeriodSecs: 10
       containerPreStopSleepSecs: 5
@@ -68,7 +67,7 @@ govukApplications:
         enabled: false
       dbMigrationEnabled: true
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
