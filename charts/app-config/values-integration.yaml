@@ -3929,6 +3929,10 @@ govukApplications:
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=30
         hosts:
           - name: whitehall-admin.{{ .Values.k8sExternalDomainSuffix }}
+      serviceAccount:
+        enabled: true
+        create: false
+        name: whitehall-admin
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
