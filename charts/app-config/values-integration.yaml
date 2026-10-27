@@ -1402,7 +1402,8 @@ govukApplications:
             name: govuk-apps-emergency-banner
       appExtraVolumeMounts:
         - name: govuk-apps-emergency-banner-vol
-          mountPath: /etc/emergency-banner.yaml
+          mountPath: /etc/emergency-banner
+          readOnly: true
       nginxConfigMap:
         extraServerConf: |
           location ~ /government/uploads/(?<item_path>.+) {

@@ -10,8 +10,10 @@ metadata:
     kubernetes.io/description: >
       Emergency banner config applied to relevant frontend apps and read/written by Whitehall.
 data:
-  campaign_class:
-  heading:
-  link_text:
-  link_url:
-  short_description:
+  config.yaml: |
+    ---
+    campaign_class: null
+    heading: null
+    link_text: null
+    link_url: null
+    short_description: null
