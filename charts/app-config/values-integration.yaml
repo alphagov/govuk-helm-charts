@@ -1396,6 +1396,13 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
+      extraVolumes:
+        - name: govuk-apps-emergency-banner-vol
+          configMap:
+            name: govuk-apps-emergency-banner
+      appExtraVolumeMounts:
+        - name: govuk-apps-emergency-banner-vol
+          mountPath: /etc/emergency-banner.yaml
       nginxConfigMap:
         extraServerConf: |
           location ~ /government/uploads/(?<item_path>.+) {
