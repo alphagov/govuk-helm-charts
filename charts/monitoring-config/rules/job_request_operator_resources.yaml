@@ -1,0 +1,96 @@
+# yamllint disable rule:line-length
+groups:
+  - name: JobRequestOperator
+    rules:
+      - alert: JobRequestOperatorCurrentFailed
+        expr: "abs(delta(job_request_current_failed[5m])) > 3 * stddev_over_time(job_request_current_failed[1h] offset 5m)" # Triggers if the change in the last 5 minutes is 3 times higher than the normal variation over the last hour
+        for: 5m
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[Job Request Operator] Unusual amount job requests that are 'failed'"
+          description: |-
+            The Job Request Operator is seeing a spike in the number of failed job requests
+
+            `kubectl get jr -A`
+
+      - alert: JobRequestOperatorCurrentMalformed
+        expr: "abs(delta(job_request_current_malformed[5m])) > 3 * stddev_over_time(job_request_current_malformed[1h] offset 5m)"
+        for: 5m
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[Job Request Operator] Unusual amount job requests that are 'malformed'"
+          description: |-
+            The Job Request Operator is seeing a spike in the number of malformed job requests
+
+            `kubectl get jr -A`
+
+      - alert: JobRequestOperatorReviewCurrentMalformed
+        expr: "abs(delta(job_request_review_current_malformed[5m])) > 3 * stddev_over_time(job_request_review_current_malformed[1h] offset 5m)"
+        for: 5m
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[Job Request Operator] Unusual amount job request reviews that are 'malformed'"
+          description: |-
+            The Job Request Operator is seeing a spike in the number of malformed job request reviews
+
+            `kubectl get jrr -A`
+
+      - alert: JobRequestOperatorReviewCurrentNotFound
+        expr: "abs(delta(job_request_review_current_not_found[5m])) > 3 * stddev_over_time(job_request_review_current_not_found[1h] offset 5m)"
+        for: 5m
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[Job Request Operator] Unusual amount job request reviews that are 'not_found' by the API server"
+          description: |-
+            The Job Request Operator is seeing a spike in the number of not found job request reviews
+
+            `kubectl get jrr -A`
+
+      - alert: JobRequestOperatorReviewCurrentConflict
+        expr: "abs(delta(job_request_review_current_conflict[5m])) > 3 * stddev_over_time(job_request_review_current_conflict[1h] offset 5m)"
+        for: 5m
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[Job Request Operator] Unusual amount job request reviews that are in 'conflict'"
+          description: |-
+            The Job Request Operator is seeing a spike in the number of job request reviews in conflict
+
+            `kubectl get jrr -A`
+
+      - alert: JobRequestOperatorErrorGettingJR
+        expr: "job_request_get_error_total > 0"
+        for: 5m
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[Job Request Operator] Error getting job request from API server"
+          description: |-
+            The Job Request Operator is unable to get the job request from the k8s API server
+
+            `kubectl get jr {{ $labels.namespaced_name }}`
+
+      - alert: JobRequestOperatorErrorGettingJRR
+        expr: "job_request_review_getting_review_error_total > 0"
+        for: 5m
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[Job Request Operator] Error getting job request review from API server"
+          description: |-
+            The Job Request Operator is unable to get the job request review from the k8s API server
+
+            `kubectl get jrr {{ $labels.namespaced_name }}`
+
+# yamllint enable rule:line-length
