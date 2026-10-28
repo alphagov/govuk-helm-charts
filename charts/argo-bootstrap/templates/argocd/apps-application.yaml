@@ -30,3 +30,10 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
     - ApplyOutOfSyncOnly=true
+
+  ignoreDifferences:
+    - kind: ConfigMap
+      name: govuk-apps-emergency-banner
+      namespace: "{{ $namespace }}"
+      jsonPointers:
+        - /data/config.yaml
