@@ -899,6 +899,7 @@ govukApplications:
   - name: content-tagger
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 10
       containerPreStopSleepSecs: 5
       appResources:
@@ -910,7 +911,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
