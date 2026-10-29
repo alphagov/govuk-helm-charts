@@ -14,10 +14,13 @@ gh repo clone alphagov/govuk-helm-charts -- --depth 1 --branch main
 cd "govuk-helm-charts" || exit 1
 
 current_image_tag="$(yq '.image_tag' "${FILE}")"
+current_promote_deployment="$(yq '.promote_deployment' "${FILE}")"
 
-# Ignore if image tag already set
-if [[ "${current_image_tag}" = "${IMAGE_TAG}" ]]; then
+# Ignore if image tag and promote deployment already set
+if [[ "${current_image_tag}" = "${IMAGE_TAG}" ]] &&
+  [[ "${current_promote_deployment}" = "${PROMOTE_DEPLOYMENT}" ]]; then
   echo "Image tag already set as ${IMAGE_TAG}"
+  echo "Promote deployment already set as ${PROMOTE_DEPLOYMENT}"
   exit 0
 fi
 
