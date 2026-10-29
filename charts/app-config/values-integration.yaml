@@ -579,7 +579,6 @@ govukApplications:
   - name: content-data-admin
     helmValues:
       arch: arm64
-      appEnabled: false
       podTerminationGracePeriodSecs: 80
       containerPreStopSleepSecs: 70
       appResources:
@@ -625,7 +624,7 @@ govukApplications:
           - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
