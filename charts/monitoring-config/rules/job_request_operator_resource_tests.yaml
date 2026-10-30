@@ -1,0 +1,172 @@
+rule_files:
+  - job_request_operator_resources.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: "job_request_current_failed"
+        values: "5+0x60 10 15 20 25 30 35 40 45 50 55" # 1hr of steady metrics followed by 10 min spike
+      - series: "job_request_current_malformed"
+        values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
+      - series: "job_request_review_current_malformed"
+        values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
+      - series: "job_request_review_current_not_found"
+        values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
+      - series: "job_request_review_current_conflict"
+        values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
+      - series: 'job_request_get_error_total{namespaced_name="default/jr-test"}'
+        values: "1+0x10"
+      - series: 'job_request_review_getting_review_error_total{namespaced_name="default/jrr-test"}'
+        values: "1+0x10"
+
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: JobRequestOperatorCurrentFailed
+        exp_alerts: []
+
+      - eval_time: 66m
+        alertname: JobRequestOperatorCurrentFailed
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+            exp_annotations:
+              summary: "[Job Request Operator] Unusual amount job requests that are 'failed'"
+              description: |-
+                The Job Request Operator is seeing a spike in the number of failed job requests
+
+                `kubectl get jr -A`
+
+      - eval_time: 75m
+        alertname: JobRequestOperatorCurrentFailed
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorCurrentMalformed
+        exp_alerts: []
+
+      - eval_time: 66m
+        alertname: JobRequestOperatorCurrentMalformed
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+            exp_annotations:
+              summary: "[Job Request Operator] Unusual amount job requests that are 'malformed'"
+              description: |-
+                The Job Request Operator is seeing a spike in the number of malformed job requests
+
+                `kubectl get jr -A`
+
+      - eval_time: 75m
+        alertname: JobRequestOperatorCurrentMalformed
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorReviewCurrentMalformed
+        exp_alerts: []
+
+      - eval_time: 66m
+        alertname: JobRequestOperatorReviewCurrentMalformed
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+            exp_annotations:
+              summary: "[Job Request Operator] Unusual amount job request reviews that are 'malformed'"
+              description: |-
+                The Job Request Operator is seeing a spike in the number of malformed job request reviews
+
+                `kubectl get jrr -A`
+
+      - eval_time: 75m
+        alertname: JobRequestOperatorReviewCurrentMalformed
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorReviewCurrentNotFound
+        exp_alerts: []
+
+      - eval_time: 66m
+        alertname: JobRequestOperatorReviewCurrentNotFound
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+            exp_annotations:
+              summary: "[Job Request Operator] Unusual amount job request reviews that are 'not_found' by the API server"
+              description: |-
+                The Job Request Operator is seeing a spike in the number of not found job request reviews
+
+                `kubectl get jrr -A`
+
+      - eval_time: 75m
+        alertname: JobRequestOperatorReviewCurrentNotFound
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorReviewCurrentConflict
+        exp_alerts: []
+
+      - eval_time: 66m
+        alertname: JobRequestOperatorReviewCurrentConflict
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+            exp_annotations:
+              summary: "[Job Request Operator] Unusual amount job request reviews that are in 'conflict'"
+              description: |-
+                The Job Request Operator is seeing a spike in the number of job request reviews in conflict
+
+                `kubectl get jrr -A`
+
+      - eval_time: 75m
+        alertname: JobRequestOperatorReviewCurrentConflict
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorErrorGettingJR
+        exp_alerts: []
+
+      - eval_time: 6m
+        alertname: JobRequestOperatorErrorGettingJR
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              namespaced_name: default/jr-test
+            exp_annotations:
+              summary: "[Job Request Operator] Error getting job request from API server"
+              description: |-
+                The Job Request Operator is unable to get the job request from the k8s API server
+
+                `kubectl get jr default/jr-test`
+
+      - eval_time: 18m
+        alertname: JobRequestOperatorErrorGettingJR
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorErrorGettingJRR
+        exp_alerts: []
+
+      - eval_time: 6m
+        alertname: JobRequestOperatorErrorGettingJRR
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              namespaced_name: default/jrr-test
+            exp_annotations:
+              summary: "[Job Request Operator] Error getting job request review from API server"
+              description: |-
+                The Job Request Operator is unable to get the job request review from the k8s API server
+
+                `kubectl get jrr default/jrr-test`
+
+      - eval_time: 18m
+        alertname: JobRequestOperatorErrorGettingJRR
+        exp_alerts: []

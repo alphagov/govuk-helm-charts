@@ -1,0 +1,299 @@
+rule_files:
+  - job_request_operator_container.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'controller_runtime_reconcile_time_seconds{le="1", controller="jobrequest", pod="job-request-operator-controller-manager-slow"}'
+        values: "0+1x11"
+      - series: 'controller_runtime_reconcile_time_seconds{le="10", controller="jobrequest", pod="job-request-operator-controller-manager-slow"}'
+        values: "0+5x11"
+      - series: 'controller_runtime_reconcile_time_seconds{le="+Inf", controller="jobrequest", pod="job-request-operator-controller-manager-slow"}'
+        values: "0+5x11"
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: JobRequestOperatorControllerHighLatency
+        exp_alerts: []
+
+      - eval_time: 10m
+        alertname: JobRequestOperatorControllerHighLatency
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              controller: jobrequest
+              pod: job-request-operator-controller-manager-slow
+            exp_annotations:
+              summary: "[Job Request Operator] Jobrequest controller reconcile time is slow"
+              description: |-
+                The Job Request Operator is experiencing slow reconcile times:
+
+                `kubectl logs job-request-operator-controller-manager-slow -n job-request-operator`
+
+      - eval_time: 20m
+        alertname: JobRequestOperatorControllerHighLatency
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'controller_runtime_reconcile_total{controller="jobrequest", result="success", pod="job-request-operator-controller-manager-stuck"}'
+        values: "0 100 200 300 400 500 580 660 740 820 900"
+
+      - series: 'controller_runtime_reconcile_total{controller="jobrequest", result="requeue", pod="job-request-operator-controller-manager-stuck"}'
+        values: "0 50 100 200 300 400 500 600 740 820 900"
+
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: JobRequestOperatorRequestControllerStuckReconciliation
+        exp_alerts: []
+
+      - eval_time: 11m
+        alertname: JobRequestOperatorRequestControllerStuckReconciliation
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              controller: jobrequest
+              pod: job-request-operator-controller-manager-stuck
+            exp_annotations:
+              summary: "[Job Request Operator] The Reconcile loop is filling with requeues"
+              description: |-
+                The Job Request Operator is experiencing an increased rate of requeues, meaning reconiliations are likely stuck:
+
+                `kubectl logs job-request-operator-controller-manager-stuck -n job-request-operator`
+
+      - eval_time: 20m
+        alertname: JobRequestOperatorRequestControllerStuckReconciliation
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'controller_runtime_reconcile_total{controller="jobrequest", result="success", pod="job-request-operator-controller-manager-high-error"}'
+        values: "0 100 200 300 400 500 600 700 800 900 1000 1000 1000 1000"
+
+      - series: 'controller_runtime_reconcile_total{controller="jobrequest", result="error", pod="job-request-operator-controller-manager-high-error"}'
+        values: "0 0 0 0 0 0 20 40 60 80 100 200 300 0 0 0 0 0"
+
+      - series: 'kube_pod_container_status_ready{namespace="job-request-operator"}'
+        values: "0+0x70" # Permanently NotReady
+      - series: 'kube_deployment_status_condition{condition="Progressing", status="false"}'
+        values: "1+0x70" # Rollout permanently stuck
+      - series: 'kube_pod_container_status_waiting_reason{reason="CrashLoopBackOff"}'
+        values: "1+0x70"
+      - series: 'kube_pod_container_status_waiting_reason{reason="ContainerCreating"}'
+        values: "0 0 1+0x11" # Triggers the PodWaiting alert (reason != CrashLoopBackOff)
+      - series: "kube_pod_container_status_restarts_total"
+        values: "0+0x60 1 1 1 1 1 1 1 1 1 1"
+      - series: 'kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}'
+        values: "0+0x60 1 1 1 1 1 1 1 1 1 1"
+
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: JobRequestOperatorRequestControllerHighErrorRate
+        exp_alerts: []
+
+      - eval_time: 13m
+        alertname: JobRequestOperatorRequestControllerHighErrorRate
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              controller: jobrequest
+              pod: job-request-operator-controller-manager-high-error
+            exp_annotations:
+              summary: "[Job Request Operator] High reconcile error rate"
+              description: |-
+                The Job Request Operator is experiencing an increased rate of errors for the jobrequest controller:
+
+                `kubectl logs job-request-operator-controller-manager-high-error -n job-request-operator`
+
+      - eval_time: 18m
+        alertname: JobRequestOperatorRequestControllerHighErrorRate
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{pod="job-request-operator-controller-manager-123", container="manager"}'
+        values: "0.9+0x11" # Sustained 90% CPU usage
+      - series: 'container_memory_working_set_bytes{pod="job-request-operator-controller-manager-123"}'
+        values: "900000000+0x11" # 900mb
+      - series: 'kube_pod_container_resource_limits{pod="job-request-operator-controller-manager-123", resource="memory"}'
+        values: "1000000000+0x11" # 1000mb limit (90% usage)
+
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: JobRequestOperatorHighPodCPU
+        exp_alerts: []
+
+      - eval_time: 10m
+        alertname: JobRequestOperatorHighPodCPU
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              container: manager
+            exp_annotations:
+              summary: "[Job Request Operator] High CPU"
+              description: |-
+                The Job Request Operator has high CPU (over 80%) for at least 5mins:
+
+                `kubectl top pods -n job-request-operator`
+
+      - eval_time: 20m
+        alertname: JobRequestOperatorHighPodCPU
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorHighPodMemory
+        exp_alerts: []
+
+      - eval_time: 10m
+        alertname: JobRequestOperatorHighPodMemory
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              pod: job-request-operator-controller-manager-123
+            exp_annotations:
+              summary: "[Job Request Operator] High memory usage"
+              description: |-
+                The Job Request Operator pod has high Memory usage (over 85%) for at least 5mins:
+
+                `kubectl top pods -n job-request-operator`
+
+      - eval_time: 20m
+        alertname: JobRequestOperatorHighPodMemory
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'kube_pod_container_status_ready{namespace="job-request-operator"}'
+        values: "0+0x11" # Permanently NotReady
+      - series: 'kube_deployment_status_condition{pod="job-request-operator-controller-manager-stuck", condition="Progressing", status="false"}'
+        values: "1+0x11" # Rollout permanently stuck
+      - series: 'kube_pod_container_status_waiting_reason{pod="job-request-operator-controller-manager-foo-bar", reason="CrashLoopBackOff"}'
+        values: "0 0 1+0x11"
+      - series: 'kube_pod_container_status_waiting_reason{pod="job-request-operator-controller-manager-waiting", reason="ContainerCreating"}'
+        values: "0 0 1+0x11" # Triggers the PodWaiting alert (reason != CrashLoopBackOff)
+      - series: 'kube_pod_container_status_restarts_total{pod="job-request-operator-controller-manager-oomkilled"}'
+        values: "0 0 0 0 0 0 1 1 1 1 1 1 1"
+
+      - series: 'kube_pod_container_status_last_terminated_reason{pod="job-request-operator-controller-manager-oomkilled", reason="OOMKilled"}'
+        values: "0 0 0 0 0 0 1 1 1 1 1 1 1"
+
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: JobRequestOperatorNotReady
+        exp_alerts: []
+
+      - eval_time: 10m
+        alertname: JobRequestOperatorNotReady
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              namespace: job-request-operator
+            exp_annotations:
+              summary: "[Job Request Operator] Pod NotReady"
+              description: |-
+                The Job Request Operator has not been ready for more than 5 mins:
+
+                `kubectl get pods -n job-request-operator`
+
+      - eval_time: 20m
+        alertname: JobRequestOperatorNotReady
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorCrashLooping
+        exp_alerts: []
+
+      - eval_time: 10m
+        alertname: JobRequestOperatorCrashLooping
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              reason: CrashLoopBackOff
+              pod: job-request-operator-controller-manager-foo-bar
+            exp_annotations:
+              summary: "[Job Request Operator] CrashLooping"
+              description: |-
+                The Job Request Operator is Crashlooping:
+
+                `kubectl get pods -n job-request-operator`
+
+      - eval_time: 20m
+        alertname: JobRequestOperatorCrashLooping
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorPodWaiting
+        exp_alerts: []
+
+      - eval_time: 10m
+        alertname: JobRequestOperatorPodWaiting
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              reason: ContainerCreating
+              pod: job-request-operator-controller-manager-waiting
+            exp_annotations:
+              summary: "[Job Request Operator] Stuck waiting"
+              description: |-
+                The Job Request Operator is stuck waiting to come up:
+
+                `kubectl get pods -n job-request-operator`
+
+      - eval_time: 20m
+        alertname: JobRequestOperatorPodWaiting
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorRolloutStuck
+        exp_alerts: []
+
+      - eval_time: 10m
+        alertname: JobRequestOperatorRolloutStuck
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              condition: Progressing
+              status: "false"
+              pod: job-request-operator-controller-manager-stuck
+            exp_annotations:
+              summary: "[Job Request Operator] Failing to rollout"
+              description: |-
+                The Job Request Operator is stuck trying to rollout
+
+                `kubectl get pods -n job-request-operator`
+
+      - eval_time: 20m
+        alertname: JobRequestOperatorRolloutStuck
+        exp_alerts: []
+
+      - eval_time: 1m
+        alertname: JobRequestOperatorOOMKilled
+        exp_alerts: []
+
+      - eval_time: 7m
+        alertname: JobRequestOperatorOOMKilled
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: generic-slack-platform-engineering
+              pod: job-request-operator-controller-manager-oomkilled
+            exp_annotations:
+              summary: "[Job Request Operator] OOMKilled"
+              description: |-
+                In the last 5mins the Job Request Operator has been OOM Killed:
+
+                `kubectl describe pods -n job-request-operator`
+
+      - eval_time: 12m
+        alertname: JobRequestOperatorOOMKilled
+        exp_alerts: []
