@@ -34,6 +34,6 @@ spec:
   ignoreDifferences:
     - kind: ConfigMap
       name: govuk-apps-emergency-banner
-      namespace: "{{ $namespace }}"
+      namespace: "apps"
       jsonPointers:
         - /data/config.yaml
