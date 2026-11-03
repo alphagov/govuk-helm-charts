@@ -6,7 +6,6 @@ metadata:
   labels:
     {{- include "router-probe-backend.labels" . | nindent 4 }}
     app: {{ $fullName }}
-    app.kubernetes.io/name: {{ $fullName }}
     app.kubernetes.io/component: nginx
   annotations:
     reloader.stakater.com/auto: "true"
@@ -21,7 +20,6 @@ spec:
       labels:
         {{- include "router-probe-backend.labels" . | nindent 8 }}
         app: {{ $fullName }}
-        app.kubernetes.io/name: {{ $fullName }}
         app.kubernetes.io/component: nginx
     spec:
       terminationGracePeriodSeconds: 30

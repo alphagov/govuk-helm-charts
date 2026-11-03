@@ -1,0 +1,16 @@
+# Static stand-in for the values Terraform passes when installing this chart:
+# https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/argo.tf
+#
+# Used by bin/render-argo-apps to render the full tree of Argo CD
+# Applications. Values other than awsAccountId and govukEnvironment are dummies.
+awsAccountId: "172025368201"
+govukEnvironment: production
+argocdUrl: https://argo.eks.production.govuk.digital
+argoWorkflowsUrl: https://argo-workflows.eks.production.govuk.digital
+rbacTeams:
+  read_only: alphagov:dummy-read-only-team
+  read_write: alphagov:dummy-read-write-team
+iamRoleServiceAccounts:
+  tagImageWorkflow:
+    name: dummy-tag-image
+    iamRoleArn: arn:aws:iam::172025368201:role/dummy-tag-image
