@@ -2,22 +2,9 @@
 groups:
   - name: JobRequestOperator
     rules:
-      - alert: JobRequestOperatorCurrentFailed
-        expr: "abs(delta(job_request_current_failed[5m])) > 3 * stddev_over_time(job_request_current_failed[1h] offset 5m)" # Triggers if the change in the last 5 minutes is 3 times higher than the normal variation over the last hour
-        for: 5m
-        labels:
-          severity: warning
-          destination: generic-slack-platform-engineering
-        annotations:
-          summary: "[Job Request Operator] Unusual amount job requests that are 'failed'"
-          description: |-
-            The Job Request Operator is seeing a spike in the number of failed job requests
-
-            `kubectl get jr -A`
-
       - alert: JobRequestOperatorCurrentMalformed
-        expr: "abs(delta(job_request_current_malformed[5m])) > 3 * stddev_over_time(job_request_current_malformed[1h] offset 5m)"
-        for: 5m
+        expr: "job_request_current_malformed > 0"
+        for: 15m
         labels:
           severity: warning
           destination: generic-slack-platform-engineering
@@ -29,8 +16,8 @@ groups:
             `kubectl get jr -A`
 
       - alert: JobRequestOperatorReviewCurrentMalformed
-        expr: "abs(delta(job_request_review_current_malformed[5m])) > 3 * stddev_over_time(job_request_review_current_malformed[1h] offset 5m)"
-        for: 5m
+        expr: "job_request_review_current_malformed > 0"
+        for: 15m
         labels:
           severity: warning
           destination: generic-slack-platform-engineering
@@ -42,8 +29,8 @@ groups:
             `kubectl get jrr -A`
 
       - alert: JobRequestOperatorReviewCurrentNotFound
-        expr: "abs(delta(job_request_review_current_not_found[5m])) > 3 * stddev_over_time(job_request_review_current_not_found[1h] offset 5m)"
-        for: 5m
+        expr: "job_request_review_current_not_found > 0"
+        for: 15m
         labels:
           severity: warning
           destination: generic-slack-platform-engineering
@@ -55,8 +42,8 @@ groups:
             `kubectl get jrr -A`
 
       - alert: JobRequestOperatorReviewCurrentConflict
-        expr: "abs(delta(job_request_review_current_conflict[5m])) > 3 * stddev_over_time(job_request_review_current_conflict[1h] offset 5m)"
-        for: 5m
+        expr: "job_request_review_current_conflict > 0"
+        for: 15m
         labels:
           severity: warning
           destination: generic-slack-platform-engineering
@@ -69,7 +56,7 @@ groups:
 
       - alert: JobRequestOperatorErrorGettingJR
         expr: "job_request_get_error_total > 0"
-        for: 5m
+        for: 15m
         labels:
           severity: warning
           destination: generic-slack-platform-engineering
@@ -82,7 +69,7 @@ groups:
 
       - alert: JobRequestOperatorErrorGettingJRR
         expr: "job_request_review_getting_review_error_total > 0"
-        for: 5m
+        for: 15m
         labels:
           severity: warning
           destination: generic-slack-platform-engineering

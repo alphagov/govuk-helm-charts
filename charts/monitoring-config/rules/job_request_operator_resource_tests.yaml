@@ -6,8 +6,6 @@ evaluation_interval: 1m
 tests:
   - interval: 1m
     input_series:
-      - series: "job_request_current_failed"
-        values: "5+0x60 10 15 20 25 30 35 40 45 50 55" # 1hr of steady metrics followed by 10 min spike
       - series: "job_request_current_malformed"
         values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
       - series: "job_request_review_current_malformed"
@@ -17,32 +15,11 @@ tests:
       - series: "job_request_review_current_conflict"
         values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
       - series: 'job_request_get_error_total{namespaced_name="default/jr-test"}'
-        values: "1+0x10"
+        values: "1+0x20"
       - series: 'job_request_review_getting_review_error_total{namespaced_name="default/jrr-test"}'
-        values: "1+0x10"
+        values: "1+0x20"
 
     alert_rule_test:
-      - eval_time: 1m
-        alertname: JobRequestOperatorCurrentFailed
-        exp_alerts: []
-
-      - eval_time: 66m
-        alertname: JobRequestOperatorCurrentFailed
-        exp_alerts:
-          - exp_labels:
-              severity: warning
-              destination: generic-slack-platform-engineering
-            exp_annotations:
-              summary: "[Job Request Operator] Unusual amount job requests that are 'failed'"
-              description: |-
-                The Job Request Operator is seeing a spike in the number of failed job requests
-
-                `kubectl get jr -A`
-
-      - eval_time: 75m
-        alertname: JobRequestOperatorCurrentFailed
-        exp_alerts: []
-
       - eval_time: 1m
         alertname: JobRequestOperatorCurrentMalformed
         exp_alerts: []
@@ -131,7 +108,7 @@ tests:
         alertname: JobRequestOperatorErrorGettingJR
         exp_alerts: []
 
-      - eval_time: 6m
+      - eval_time: 16m
         alertname: JobRequestOperatorErrorGettingJR
         exp_alerts:
           - exp_labels:
@@ -145,7 +122,7 @@ tests:
 
                 `kubectl get jr default/jr-test`
 
-      - eval_time: 18m
+      - eval_time: 25m
         alertname: JobRequestOperatorErrorGettingJR
         exp_alerts: []
 
@@ -153,7 +130,7 @@ tests:
         alertname: JobRequestOperatorErrorGettingJRR
         exp_alerts: []
 
-      - eval_time: 6m
+      - eval_time: 16m
         alertname: JobRequestOperatorErrorGettingJRR
         exp_alerts:
           - exp_labels:
@@ -167,6 +144,6 @@ tests:
 
                 `kubectl get jrr default/jrr-test`
 
-      - eval_time: 18m
+      - eval_time: 25m
         alertname: JobRequestOperatorErrorGettingJRR
         exp_alerts: []
