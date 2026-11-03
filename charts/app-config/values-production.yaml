@@ -302,7 +302,7 @@ govukApplications:
           alb.ingress.kubernetes.io/target-type: ip
           alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
           alb.ingress.kubernetes.io/healthcheck-path: /readyz
-          alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin, origin_alb_from_fastly, origin_alb_from_office
+          alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin, origin_alb_from_fastly, origin_alb_from_office, origin_alb
           alb.ingress.kubernetes.io/shield-advanced-protection: "true"
           alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=3
           external-dns.alpha.kubernetes.io/hostname: bouncer.{{ .Values.k8sExternalDomainSuffix }}
@@ -2664,7 +2664,7 @@ govukApplications:
         enabled: true
         annotations:
           !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
-          alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin, origin_alb_from_cloudfront, origin_alb_from_fastly, origin_alb_from_office
+          alb.ingress.kubernetes.io/security-groups: eks_ingress_www_origin, origin_alb_from_cloudfront, origin_alb_from_fastly, origin_alb_from_office, origin_alb
           alb.ingress.kubernetes.io/load-balancer-name: www-origin
           alb.ingress.kubernetes.io/load-balancer-attributes: >
             access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/www-origin
