@@ -50,6 +50,158 @@ spec:
       groupInterval: 30m
       groupBy: [alertname, app_name]
     - matchers:
+        - name: alertname
+          value: JobRequestOperatorRequestControllerHighErrorRate
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorRequestControllerStuckReconciliation
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorReviewControllerHighErrorRate
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorReviewControllerStuckReconciliation
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorControllerHighLatency
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorHighPodCPU
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorHighPodMemory
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorNotReady
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorOOMKilled
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorCrashLooping
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorRolloutStuck
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorPodWaiting
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorCurrentFailed
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorCurrentMalformed
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorReviewCurrentMalformed
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorReviewCurrentNotFound
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorReviewCurrentConflict
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorErrorGettingJR
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorErrorGettingJRR
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
       - name: destination
         value: slack-platform-engineering-database-syncs
         matchType: =
