@@ -12,3 +12,29 @@ groups:
             The deployment pipeline is broken, please investigate immediately:
 
             `kubectl logs govuk-synthetic-test-app-cronjob -n apps`
+
+      - alert: DeploymentPipelineTestDidNotRun
+        # yamllint disable-line rule:line-length
+        expr: absent(kube_cronjob_status_last_schedule_time{namespace="apps", cronjob="govuk-synthetic-test-app-cronjob"}) or (time() - kube_cronjob_status_last_schedule_time{namespace="apps", cronjob="govuk-synthetic-test-app-cronjob"} > 2100)
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[DID NOT RUN] No Deployment pipeline tests have ran in the past 35 mins"
+          description: |-
+            The deployment pipeline is broken, the tests should run every 30 mins, please investigate immediately:
+
+            `kubectl get job -l app=govuk-synthetic-test-app-cronjob -n apps`
+
+      - alert: DeploymentPipelineTestJobTakingTooLong
+        # yamllint disable-line rule:line-length
+        expr: 'kube_job_status_start_time{job_name=~"govuk-synthetic-test-app-cronjob-.*"} > 0  and kube_job_status_active{job_name=~"govuk-synthetic-test-app-cronjob-.*"} == 1 and (time() - kube_job_status_start_time{job_name=~"govuk-synthetic-test-app-cronjob-.*"}) > 1500'
+        labels:
+          severity: warning
+          destination: generic-slack-platform-engineering
+        annotations:
+          summary: "[TAKING TOO LONG] The Deployment pipeline tests are taking > 25 mins"
+          description: |-
+            The deployment pipeline currently running job is taking too long, the tests run every 30 mins and should finish within 20 mins, please investigate immediately:
+
+            `kubectl logs {{ $labels.job_name }} -n apps`
