@@ -23,7 +23,12 @@ spec:
         app.kubernetes.io/name: {{ $fullName }}-dbmigrate
         app.kubernetes.io/component: dbmigrate
     spec:
+      {{- if $.Values.serviceAccount.enabled }}
+      automountServiceAccountToken: true
+      serviceAccountName: {{ $.Values.serviceAccount.name | default $fullName }}
+      {{- else }}
       automountServiceAccountToken: false
+      {{- end }}
       enableServiceLinks: false
       securityContext:
         seccompProfile:
