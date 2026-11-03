@@ -3970,11 +3970,6 @@ govukApplications:
             secretKeyRef:
               name: signon-token-whitehall-publishing-api
               key: bearer_token
-        - name: RUMMAGER_BEARER_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: signon-token-whitehall-search-api
-              key: bearer_token
         - name: AWS_S3_BUCKET_NAME
           value: govuk-integration-whitehall-csvs
         - name: GOVUK_NOTIFY_TEMPLATE_ID
