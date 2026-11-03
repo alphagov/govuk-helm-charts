@@ -7,17 +7,17 @@ tests:
   - interval: 1m
     input_series:
       - series: 'controller_runtime_reconcile_time_seconds{le="1", controller="jobrequest", pod="job-request-operator-controller-manager-slow"}'
-        values: "0+1x11"
+        values: "0+1x20"
       - series: 'controller_runtime_reconcile_time_seconds{le="10", controller="jobrequest", pod="job-request-operator-controller-manager-slow"}'
-        values: "0+5x11"
+        values: "0+5x20"
       - series: 'controller_runtime_reconcile_time_seconds{le="+Inf", controller="jobrequest", pod="job-request-operator-controller-manager-slow"}'
-        values: "0+5x11"
+        values: "0+5x20"
     alert_rule_test:
       - eval_time: 1m
         alertname: JobRequestOperatorControllerHighLatency
         exp_alerts: []
 
-      - eval_time: 10m
+      - eval_time: 16m
         alertname: JobRequestOperatorControllerHighLatency
         exp_alerts:
           - exp_labels:
@@ -32,24 +32,24 @@ tests:
 
                 `kubectl logs job-request-operator-controller-manager-slow -n job-request-operator`
 
-      - eval_time: 20m
+      - eval_time: 29m
         alertname: JobRequestOperatorControllerHighLatency
         exp_alerts: []
 
   - interval: 1m
     input_series:
       - series: 'controller_runtime_reconcile_total{controller="jobrequest", result="success", pod="job-request-operator-controller-manager-stuck"}'
-        values: "0 100 200 300 400 500 580 660 740 820 900"
+        values: "0 100+0x20"
 
       - series: 'controller_runtime_reconcile_total{controller="jobrequest", result="requeue", pod="job-request-operator-controller-manager-stuck"}'
-        values: "0 50 100 200 300 400 500 600 740 820 900"
+        values: "0 50 100+50x20"
 
     alert_rule_test:
       - eval_time: 1m
         alertname: JobRequestOperatorRequestControllerStuckReconciliation
         exp_alerts: []
 
-      - eval_time: 11m
+      - eval_time: 20m
         alertname: JobRequestOperatorRequestControllerStuckReconciliation
         exp_alerts:
           - exp_labels:
@@ -64,17 +64,17 @@ tests:
 
                 `kubectl logs job-request-operator-controller-manager-stuck -n job-request-operator`
 
-      - eval_time: 20m
+      - eval_time: 26m
         alertname: JobRequestOperatorRequestControllerStuckReconciliation
         exp_alerts: []
 
   - interval: 1m
     input_series:
       - series: 'controller_runtime_reconcile_total{controller="jobrequest", result="success", pod="job-request-operator-controller-manager-high-error"}'
-        values: "0 100 200 300 400 500 600 700 800 900 1000 1000 1000 1000"
+        values: "0 100+50x20"
 
       - series: 'controller_runtime_reconcile_total{controller="jobrequest", result="error", pod="job-request-operator-controller-manager-high-error"}'
-        values: "0 0 0 0 0 0 20 40 60 80 100 200 300 0 0 0 0 0"
+        values: "0 100+50x20"
 
       - series: 'kube_pod_container_status_ready{namespace="job-request-operator"}'
         values: "0+0x70" # Permanently NotReady
@@ -94,7 +94,7 @@ tests:
         alertname: JobRequestOperatorRequestControllerHighErrorRate
         exp_alerts: []
 
-      - eval_time: 13m
+      - eval_time: 23m
         alertname: JobRequestOperatorRequestControllerHighErrorRate
         exp_alerts:
           - exp_labels:
@@ -109,25 +109,25 @@ tests:
 
                 `kubectl logs job-request-operator-controller-manager-high-error -n job-request-operator`
 
-      - eval_time: 18m
+      - eval_time: 26m
         alertname: JobRequestOperatorRequestControllerHighErrorRate
         exp_alerts: []
 
   - interval: 1m
     input_series:
       - series: 'node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{pod="job-request-operator-controller-manager-123", container="manager"}'
-        values: "0.9+0x11" # Sustained 90% CPU usage
+        values: "0.9+0x20" # Sustained 90% CPU usage
       - series: 'container_memory_working_set_bytes{pod="job-request-operator-controller-manager-123"}'
-        values: "900000000+0x11" # 900mb
+        values: "900000000+0x20" # 900mb
       - series: 'kube_pod_container_resource_limits{pod="job-request-operator-controller-manager-123", resource="memory"}'
-        values: "1000000000+0x11" # 1000mb limit (90% usage)
+        values: "1000000000+0x20" # 1000mb limit (90% usage)
 
     alert_rule_test:
       - eval_time: 1m
         alertname: JobRequestOperatorHighPodCPU
         exp_alerts: []
 
-      - eval_time: 10m
+      - eval_time: 16m
         alertname: JobRequestOperatorHighPodCPU
         exp_alerts:
           - exp_labels:
@@ -137,11 +137,11 @@ tests:
             exp_annotations:
               summary: "[Job Request Operator] High CPU"
               description: |-
-                The Job Request Operator has high CPU (over 80%) for at least 5mins:
+                The Job Request Operator has high CPU (over 80%) for at least 15mins:
 
                 `kubectl top pods -n job-request-operator`
 
-      - eval_time: 20m
+      - eval_time: 26m
         alertname: JobRequestOperatorHighPodCPU
         exp_alerts: []
 
@@ -149,7 +149,7 @@ tests:
         alertname: JobRequestOperatorHighPodMemory
         exp_alerts: []
 
-      - eval_time: 10m
+      - eval_time: 16m
         alertname: JobRequestOperatorHighPodMemory
         exp_alerts:
           - exp_labels:
@@ -159,11 +159,11 @@ tests:
             exp_annotations:
               summary: "[Job Request Operator] High memory usage"
               description: |-
-                The Job Request Operator pod has high Memory usage (over 85%) for at least 5mins:
+                The Job Request Operator pod has high Memory usage (over 85%) for at least 15mins:
 
                 `kubectl top pods -n job-request-operator`
 
-      - eval_time: 20m
+      - eval_time: 26m
         alertname: JobRequestOperatorHighPodMemory
         exp_alerts: []
 
