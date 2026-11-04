@@ -178,6 +178,11 @@ data:
           proxy_buffering off;
           {{- end }}
 
+          proxy_buffer_size 32k;  # Max total size of response headers.
+          # n * m = max response size before spooling to disk. p95 response size should
+          # fit comfortably within this in order to avoid performance issues.
+          proxy_buffers 24 32k;
+
           # Construct download URL from:
           # $1:       Host + path from regexp match in location
           # $is_args: Optional ? delimiter
