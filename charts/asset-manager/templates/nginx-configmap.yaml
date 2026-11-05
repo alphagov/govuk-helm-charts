@@ -144,15 +144,16 @@ data:
         rewrite ^/government/assets/(.*)$ /assets/whitehall/$1 permanent;
 
         location / {
-          proxy_buffer_size 32k;  # Max total size of response headers.
-          # n * m = max response size before spooling to disk. p95 response size should
-          # fit comfortably within this in order to avoid performance issues.
-          proxy_buffers 24 32k;
-
           try_files $uri/index.html $uri.html $uri @app;
         }
 
         location @app {
+          # Max total size of response headers.
+          proxy_buffer_size 16k;
+
+          # n * m = max response size before spooling to disk. p95 response size should
+          # fit comfortably within this in order to avoid performance issues.
+          proxy_buffers 24 16k;
           proxy_pass http://{{ $fullName }};
         }
 
@@ -177,11 +178,6 @@ data:
           # Stream S3 payload to ALB w/o going through tmp directory.
           proxy_buffering off;
           {{- end }}
-
-          proxy_buffer_size 32k;  # Max total size of response headers.
-          # n * m = max response size before spooling to disk. p95 response size should
-          # fit comfortably within this in order to avoid performance issues.
-          proxy_buffers 24 32k;
 
           # Construct download URL from:
           # $1:       Host + path from regexp match in location
