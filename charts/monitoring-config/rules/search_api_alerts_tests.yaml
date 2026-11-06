@@ -150,64 +150,79 @@ tests:
                 https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html
               description: "1 hour rolling success rate for search requests to search-api has dropped below 99.9%."
 
-# elasticsearch cluster status tests
+# opensearch cluster status tests
   - interval: 1m
     input_series:
-      - series: "search_api_elasticsearch_status"
+      - series: "search_api_opensearch_status"
         values: "0x40"
     alert_rule_test:
-      - alertname: SearchApiElasticsearchClusterStatus
+      - alertname: SearchApiOpensearchClusterStatusRed
         eval_time: 5m
         exp_alerts: []
-      - alertname: SearchApiElasticsearchClusterStatus
+      - alertname: SearchApiOpensearchClusterStatusYellow
         eval_time: 30m
+        exp_alerts: []
+      - alertname: SearchApiOpensearchClusterStatusUnkUnav
+        eval_time: 5m
         exp_alerts: []
   - interval: 1m
     input_series:
-      - series: "search_api_elasticsearch_status"
+      - series: "search_api_opensearch_status"
         values: "3x40"
     alert_rule_test:
-      - alertname: SearchApiElasticsearchClusterStatus
-        eval_time: 30m
-        exp_alerts:
-          - exp_labels:
-              severity: warning
-              destination: "slack-search-team"
-            exp_annotations:
-              summary: Elasticsearch cluster status is UNKNOWN or UNAVAILABLE
-              description: >-
-                The state of the Elasticsearch cluster used by Search API is unknown.
-  - interval: 1m
-    input_series:
-      - series: "search_api_elasticsearch_status"
-        values: "2x40"
-    alert_rule_test:
-      - alertname: SearchApiElasticsearchClusterStatus
+      - alertname: SearchApiOpensearchClusterStatusUnkUnav
         eval_time: 5m
         exp_alerts:
           - exp_labels:
               severity: critical
               destination: "slack-search-team"
             exp_annotations:
-              summary: Elasticsearch cluster status is RED
+              summary: Opensearch cluster status is UNKNOWN or UNAVAILABLE
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&var-client_error_status=$__all&var-server_error_status=$__all&dtab=Users-get-search-results-quickly&viewPanel=panel-28
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html#opensearch-alerts
               description: >-
-                The Elasticsearch cluster used by Search API is in RED state.
+                The state of the Opensearch cluster used by Search API is unknown.
+  - interval: 1m
+    input_series:
+      - series: "search_api_opensearch_status"
+        values: "2x40"
+    alert_rule_test:
+      - alertname: SearchApiOpensearchClusterStatusRed
+        eval_time: 5m
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              destination: "slack-search-team"
+            exp_annotations:
+              summary: Opensearch cluster status is RED
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&var-client_error_status=$__all&var-server_error_status=$__all&dtab=Users-get-search-results-quickly&viewPanel=panel-28
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html#opensearch-alerts
+              description: >-
+                The Opensearch cluster used by Search API is in RED state.
                 Some primary shards are unavailable and search indexing may fail.
   - interval: 1m
     input_series:
-      - series: "search_api_elasticsearch_status"
+      - series: "search_api_opensearch_status"
         values: "1x40"
     alert_rule_test:
-      - alertname: SearchApiElasticsearchClusterStatus
+      - alertname: SearchApiOpensearchClusterStatusYellow
         eval_time: 30m
         exp_alerts:
           - exp_labels:
               severity: warning
               destination: "slack-search-team"
             exp_annotations:
-              summary: Elasticsearch cluster status is YELLOW
+              summary: Opensearch cluster status is YELLOW
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&var-client_error_status=$__all&var-server_error_status=$__all&dtab=Users-get-search-results-quickly&viewPanel=panel-28
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html#opensearch-alerts
               description: >-
-                The Elasticsearch cluster used by Search API is in YELLOW state.
+                The Opensearch cluster used by Search API is in YELLOW state.
                 Replica shards are not allocated. The cluster is still functional
                 but resilience is reduced.
 # opensearch disk space tests
