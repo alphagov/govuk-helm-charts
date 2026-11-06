@@ -210,24 +210,24 @@ tests:
                 The Elasticsearch cluster used by Search API is in YELLOW state.
                 Replica shards are not allocated. The cluster is still functional
                 but resilience is reduced.
-# elasticsearch disk space tests
+# opensearch disk space tests
   - interval: 1m
     input_series:
-      - series: 'search_api_elasticsearch_disk_space{node="node1"}'
+      - series: 'search_api_opensearch_disk_space{node="node1"}'
         values: "0.5x20"
     alert_rule_test:
-      - alertname: SearchApiElasticsearchDiskSpaceLow
+      - alertname: SearchApiOpensearchDiskSpaceLow
         eval_time: 15m
         exp_alerts: []
-      - alertname: SearchApiElasticsearchDiskSpaceCritical
+      - alertname: SearchApiOpensearchDiskSpaceCritical
         eval_time: 10m
         exp_alerts: []
   - interval: 1m
     input_series:
-      - series: 'search_api_elasticsearch_disk_space{node="node1"}'
+      - series: 'search_api_opensearch_disk_space{node="node1"}'
         values: "0.25x20"
     alert_rule_test:
-      - alertname: SearchApiElasticsearchDiskSpace
+      - alertname: SearchApiOpensearchDiskSpaceLow
         eval_time: 15m
         exp_alerts:
           - exp_labels:
@@ -235,16 +235,20 @@ tests:
               destination: "slack-search-team"
               node: node1
             exp_annotations:
-              summary: Elasticsearch disk space low
+              summary: Opensearch disk space low
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&var-client_error_status=$__all&var-server_error_status=$__all&dtab=Users-get-search-results-quickly&viewPanel=panel-29
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html#opensearch-alerts
               description: >-
-                Elasticsearch node node1 has less than 30% disk space
+                Opensearch node node1 has less than 30% disk space
                 remaining. Consider increasing storage capacity.
   - interval: 1m
     input_series:
-      - series: 'search_api_elasticsearch_disk_space{node="node1"}'
+      - series: 'search_api_opensearch_disk_space{node="node1"}'
         values: "0.05x20"
     alert_rule_test:
-      - alertname: SearchApiElasticsearchDiskSpace
+      - alertname: SearchApiOpensearchDiskSpaceCritical
         eval_time: 10m
         exp_alerts:
           - exp_labels:
@@ -252,10 +256,14 @@ tests:
               destination: "slack-search-team"
               node: node1
             exp_annotations:
-              summary: Elasticsearch disk space critical
+              summary: Opensearch disk space critical
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&var-client_error_status=$__all&var-server_error_status=$__all&dtab=Users-get-search-results-quickly&viewPanel=panel-29
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html#opensearch-alerts
               description: >-
-                Elasticsearch node node1 has less than 10% disk space
-                remaining.
+                Opensearch node node1 has less than 10% disk space
+                remaining. Increase storage capacity as a matter of priority.
 # search-api cronjob tests
   - interval: 1m
     input_series:
