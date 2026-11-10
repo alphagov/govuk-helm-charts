@@ -3393,6 +3393,7 @@ govukApplications:
   - name: specialist-publisher
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 15
       containerPreStopSleepSecs: 10
       appResources:
@@ -3406,7 +3407,7 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
