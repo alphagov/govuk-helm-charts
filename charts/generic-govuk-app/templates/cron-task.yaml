@@ -53,6 +53,11 @@ spec:
           volumes:
             - name: app-tmp
               emptyDir: {}
+            {{- if $.Values.supports_emergency_banner }}
+            - name: govuk-apps-emergency-banner-vol
+              configMap:
+                name: govuk-apps-emergency-banner
+            {{- end }}
             {{- with $.Values.extraVolumes }}
               {{- . | toYaml | trim | nindent 12 }}
             {{- end }}
@@ -109,6 +114,11 @@ spec:
               volumeMounts:
                 - name: app-tmp
                   mountPath: /tmp
+                {{- if $.Values.supports_emergency_banner }}
+                - name: govuk-apps-emergency-banner-vol
+                  mountPath: /etc/emergency-banner
+                  readOnly: true
+                {{- end }}
                 {{- with $.Values.appExtraVolumeMounts }}
                   {{- . | toYaml | trim | nindent 16 }}
                 {{- end }}
