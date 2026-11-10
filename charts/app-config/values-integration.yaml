@@ -3735,6 +3735,7 @@ govukApplications:
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 25
       containerPreStopSleepSecs: 20
       appResources:
@@ -3750,7 +3751,7 @@ govukApplications:
           schedule: "29 5 * * *"
       nginxClientMaxBodySize: *max-upload-size
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
