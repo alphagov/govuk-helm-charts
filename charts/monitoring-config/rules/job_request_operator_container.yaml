@@ -1,6 +1,6 @@
 # yamllint disable rule:line-length
 groups:
-  - name: JobRequestOperator
+  - name: JobRequestOperatorContainer
     rules:
       - alert: JobRequestOperatorRequestControllerHighErrorRate
         expr: 'sum by (controller, pod) (rate(controller_runtime_reconcile_total{controller=~"jobrequest", result="error"}[5m])) / sum by (controller, pod) (rate(controller_runtime_reconcile_total{controller=~"jobrequest"}[5m])) > 0.10'
