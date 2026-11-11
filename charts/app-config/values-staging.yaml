@@ -585,7 +585,6 @@ govukApplications:
   - name: content-data-admin
     helmValues:
       arch: arm64
-      appEnabled: false
       podTerminationGracePeriodSecs: 80
       containerPreStopSleepSecs: 70
       appResources:
@@ -633,7 +632,7 @@ govukApplications:
           - name: content-data.{{ .Values.k8sExternalDomainSuffix }}
       nginxProxyReadTimeout: 60s
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -691,7 +690,6 @@ govukApplications:
   - name: content-data-api
     helmValues:
       arch: arm64
-      appEnabled: false
       podTerminationGracePeriodSecs: 80
       containerPreStopSleepSecs: 70
       appResources:
@@ -727,7 +725,7 @@ govukApplications:
           cpu: 10m
           memory: 650Mi
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["sidekiq", "-C", "config/sidekiq.yml"]
             name: worker
