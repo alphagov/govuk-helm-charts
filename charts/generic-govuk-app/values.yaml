@@ -62,6 +62,10 @@ cronTasks: []
 #    task: "reports:generate"  # Rake task.
 #    schedule: "3 * * * *"
 
+# if true, mounts the govuk-apps-emergency-banner configMap at
+# /etc/emergency-banner/config.yaml
+supports_emergency_banner: false
+
 # extraVolumes defines Volumes on the app Pods (in both deployment.yaml and
 # worker-deployment.yaml).
 extraVolumes: []
