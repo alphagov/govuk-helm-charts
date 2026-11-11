@@ -28,7 +28,7 @@ tests:
             exp_annotations:
               summary: "[Job Request Operator] Jobrequest controller reconcile time is slow"
               description: |-
-                The Job Request Operator is experiencing slow reconcile times:
+                The Job Request Operator is experiencing slow reconcile times (95% of requests are taking longer than 1.5secs):
 
                 `kubectl logs job-request-operator-controller-manager-slow -n job-request-operator`
 
