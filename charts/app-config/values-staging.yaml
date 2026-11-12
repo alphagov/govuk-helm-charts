@@ -86,6 +86,7 @@ govukApplications:
   - name: account-api
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 10
       containerPreStopSleepSecs: 5
       uploadAssets:
@@ -99,7 +100,7 @@ govukApplications:
           memory: 400Mi
       dbMigrationEnabled: true
       workers:
-        enabled: true
+        enabled: false
       workerResources:
         limits:
           cpu: 1
@@ -1117,6 +1118,8 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+        - name: MAINTENANCE_MESSAGE
+          value: "Email subscription management will be unavailable for essential database updates. Please try again later."
       cronTasks: []
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
@@ -1159,6 +1162,8 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+        - name: MAINTENANCE_MESSAGE
+          value: "Email subscription management will be unavailable for essential database updates. Please try again later."
       cronTasks: []
   - name: email-alert-service
     helmValues:
