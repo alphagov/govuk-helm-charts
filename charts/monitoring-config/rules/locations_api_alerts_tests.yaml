@@ -1,0 +1,31 @@
+rule_files:
+  - locations_api_alerts.yaml
+
+evaluation_interval: 1m
+
+tests:
+  # Alert does not fire if least recently updated is less or equal to 30 days old
+  - name: least_recently_updated_postcode_stale_alert_test_not_stale
+    input_series:
+      - series: 'locations_api_oldest_os_places_postcode_age_days'
+        values: '30'
+
+    alert_rule_test:
+      - alertname: LeastRecentlyUpdatedPostcodeStaleAlert
+        exp_alerts: []
+
+  # Alert fires if least recently updated is more than 30 days old
+  - name: least_recently_updated_postcode_stale_alert_test_stale
+    input_series:
+      - series: 'locations_api_oldest_os_places_postcode_age_days'
+        values: '31'
+
+    alert_rule_test:
+      - alertname: LeastRecentlyUpdatedPostcodeStaleAlert
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+            exp_annotations:
+              summary: Least recently updated postcode hasn't been updated in over 30 days
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/repos/locations-api/alerts.html
