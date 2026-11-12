@@ -979,7 +979,6 @@ govukApplications:
   - name: email-alert-api
     helmValues:
       arch: arm64
-      appEnabled: false
       podTerminationGracePeriodSecs: 40
       containerPreStopSleepSecs: 35
       appResources:
