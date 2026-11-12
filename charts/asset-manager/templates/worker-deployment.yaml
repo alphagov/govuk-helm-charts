@@ -67,7 +67,8 @@ spec:
             - name: asset-manager-efs
               mountPath: &uploads-path /mnt/asset-manager
             - name: etc-clamav
-              mountPath: {{ .Values.clamMountConfigPath }}
+              mountPath: /etc/clamav/clamd.conf
+              subPath: clamd.conf
             {{- with .Values.appExtraVolumeMounts }}
               {{ . | toYaml | trim | nindent 12 }}
             {{- end }}
@@ -113,10 +114,22 @@ spec:
             capabilities:
               drop: ["ALL"]
         - name: clamd
-          image: "{{ required "A valid .Values.appImage.repository entry required!" .Values.appImage.repository }}:{{ .Values.appImage.tag }}"
-          imagePullPolicy: {{ .Values.appImage.pullPolicy | default "Always" }}
-          command: ["clamd"]
+          image: "{{ .Values.clamavImage.repository }}:{{ .Values.clamavImage.tag }}"
+          imagePullPolicy: {{ .Values.clamavImage.pullPolicy | default "Always" }}
+          command: ["/usr/sbin/clamd"]
           args: ["--foreground"]
+          ports:
+            - name: clamd
+              containerPort: 3310
+          startupProbe:
+            tcpSocket:
+              port: clamd
+            periodSeconds: 10
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: clamd
+            periodSeconds: 10
           {{- with .Values.clamdResources }}
           resources:
             {{- . | toYaml | trim | nindent 12 }}
@@ -129,7 +142,8 @@ spec:
             - name: clamd-tmp
               mountPath: /tmp
             - name: etc-clamav
-              mountPath: {{ .Values.clamMountConfigPath }}
+              mountPath: /etc/clamav/clamd.conf
+              subPath: clamd.conf
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
