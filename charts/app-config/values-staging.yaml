@@ -3725,6 +3725,7 @@ govukApplications:
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 25
       containerPreStopSleepSecs: 20
       appResources:
