@@ -1,0 +1,12 @@
+groups:
+  - name: LocationAPIAlerts
+    rules:
+      - alert: LeastRecentlyUpdatedPostcodeStaleAlert
+        expr: >
+          locations_api_oldest_os_places_postcode_age_days > 30
+        labels:
+          severity: warning
+        annotations:
+          summary: Least recently updated postcode hasn't been updated in over 30 days
+          runbook_url: >-
+            https://docs.publishing.service.gov.uk/repos/locations-api/alerts.html
