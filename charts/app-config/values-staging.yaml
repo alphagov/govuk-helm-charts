@@ -1170,7 +1170,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: true
+        enabled: false
         types:
           - command: ['bin/email-alert-service']
             name: email-alert-service
@@ -3408,6 +3408,7 @@ govukApplications:
   - name: specialist-publisher
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 15
       containerPreStopSleepSecs: 10
       appResources:
@@ -3724,6 +3725,7 @@ govukApplications:
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
+      appEnabled: false
       podTerminationGracePeriodSecs: 25
       containerPreStopSleepSecs: 20
       appResources:
