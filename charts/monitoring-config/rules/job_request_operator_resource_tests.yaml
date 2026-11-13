@@ -7,24 +7,24 @@ tests:
   - interval: 1m
     input_series:
       - series: "job_request_current_malformed"
-        values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
+        values: "1x60 5x20"
       - series: "job_request_review_current_malformed"
-        values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
+        values: "1x60 5x20"
       - series: "job_request_review_current_not_found"
-        values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
+        values: "1x60 5x20"
       - series: "job_request_review_current_conflict"
-        values: "5+0x60 10 15 20 25 30 35 40 45 50 55"
+        values: "1x60 5x20"
       - series: 'job_request_get_error_total{namespaced_name="default/jr-test"}'
-        values: "1+0x20"
+        values: "0+1x60 70+10x20"
       - series: 'job_request_review_getting_review_error_total{namespaced_name="default/jrr-test"}'
-        values: "1+0x20"
+        values: "0+1x60 70+10x20"
 
     alert_rule_test:
       - eval_time: 1m
         alertname: JobRequestOperatorCurrentMalformed
         exp_alerts: []
 
-      - eval_time: 66m
+      - eval_time: 80m
         alertname: JobRequestOperatorCurrentMalformed
         exp_alerts:
           - exp_labels:
@@ -37,7 +37,7 @@ tests:
 
                 `kubectl get jr -A`
 
-      - eval_time: 75m
+      - eval_time: 90m
         alertname: JobRequestOperatorCurrentMalformed
         exp_alerts: []
 
@@ -45,7 +45,7 @@ tests:
         alertname: JobRequestOperatorReviewCurrentMalformed
         exp_alerts: []
 
-      - eval_time: 66m
+      - eval_time: 80m
         alertname: JobRequestOperatorReviewCurrentMalformed
         exp_alerts:
           - exp_labels:
@@ -58,7 +58,7 @@ tests:
 
                 `kubectl get jrr -A`
 
-      - eval_time: 75m
+      - eval_time: 90m
         alertname: JobRequestOperatorReviewCurrentMalformed
         exp_alerts: []
 
@@ -66,7 +66,7 @@ tests:
         alertname: JobRequestOperatorReviewCurrentNotFound
         exp_alerts: []
 
-      - eval_time: 66m
+      - eval_time: 80m
         alertname: JobRequestOperatorReviewCurrentNotFound
         exp_alerts:
           - exp_labels:
@@ -79,7 +79,7 @@ tests:
 
                 `kubectl get jrr -A`
 
-      - eval_time: 75m
+      - eval_time: 90m
         alertname: JobRequestOperatorReviewCurrentNotFound
         exp_alerts: []
 
@@ -87,7 +87,7 @@ tests:
         alertname: JobRequestOperatorReviewCurrentConflict
         exp_alerts: []
 
-      - eval_time: 66m
+      - eval_time: 80m
         alertname: JobRequestOperatorReviewCurrentConflict
         exp_alerts:
           - exp_labels:
@@ -100,7 +100,7 @@ tests:
 
                 `kubectl get jrr -A`
 
-      - eval_time: 75m
+      - eval_time: 90m
         alertname: JobRequestOperatorReviewCurrentConflict
         exp_alerts: []
 
@@ -108,7 +108,7 @@ tests:
         alertname: JobRequestOperatorErrorGettingJR
         exp_alerts: []
 
-      - eval_time: 16m
+      - eval_time: 80m
         alertname: JobRequestOperatorErrorGettingJR
         exp_alerts:
           - exp_labels:
@@ -122,7 +122,7 @@ tests:
 
                 `kubectl get jr default/jr-test`
 
-      - eval_time: 25m
+      - eval_time: 90m
         alertname: JobRequestOperatorErrorGettingJR
         exp_alerts: []
 
@@ -130,7 +130,7 @@ tests:
         alertname: JobRequestOperatorErrorGettingJRR
         exp_alerts: []
 
-      - eval_time: 16m
+      - eval_time: 80m
         alertname: JobRequestOperatorErrorGettingJRR
         exp_alerts:
           - exp_labels:
@@ -144,6 +144,6 @@ tests:
 
                 `kubectl get jrr default/jrr-test`
 
-      - eval_time: 25m
+      - eval_time: 90m
         alertname: JobRequestOperatorErrorGettingJRR
         exp_alerts: []
