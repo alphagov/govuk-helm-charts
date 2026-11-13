@@ -62,6 +62,10 @@ cronTasks: []
 #    task: "reports:generate"  # Rake task.
 #    schedule: "3 * * * *"
 
+# if true, mounts the govuk-apps-emergency-banner configMap at
+# /etc/emergency-banner/config.yaml
+supports_emergency_banner: false
+
 # extraVolumes defines Volumes on the app Pods (in both deployment.yaml and
 # worker-deployment.yaml).
 extraVolumes: []
@@ -174,7 +178,7 @@ rails:
 toolbox:
   image:
     repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/govuk-toolbox-image"
-    tag: "v73"
+    tag: "v74"
 
 externalSecrets:
   refreshInterval: 1h  # Be kind to etcd and don't set this too short.

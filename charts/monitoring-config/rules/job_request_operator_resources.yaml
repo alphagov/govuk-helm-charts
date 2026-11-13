@@ -1,6 +1,6 @@
 # yamllint disable rule:line-length
 groups:
-  - name: JobRequestOperator
+  - name: JobRequestOperatorResources
     rules:
       - alert: JobRequestOperatorCurrentMalformed
         expr: "job_request_current_malformed > 0"

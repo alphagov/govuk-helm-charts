@@ -1,6 +1,6 @@
 # yamllint disable rule:line-length
 groups:
-  - name: JobRequestOperator
+  - name: JobRequestOperatorContainer
     rules:
       - alert: JobRequestOperatorRequestControllerHighErrorRate
         expr: 'sum by (controller, pod) (rate(controller_runtime_reconcile_total{controller=~"jobrequest", result="error"}[5m])) / sum by (controller, pod) (rate(controller_runtime_reconcile_total{controller=~"jobrequest"}[5m])) > 0.10'
@@ -55,7 +55,7 @@ groups:
             `kubectl logs {{ $labels.pod }} -n job-request-operator`
 
       - alert: JobRequestOperatorControllerHighLatency
-        expr: 'histogram_quantile(0.95, sum(rate(controller_runtime_reconcile_time_seconds{controller=~"jobrequest|jobrequestreview"}[10m])) by (le, controller, pod))'
+        expr: 'histogram_quantile(0.95, sum(rate(controller_runtime_reconcile_time_seconds{controller=~"jobrequest|jobrequestreview"}[10m])) by (le, controller, pod)) > 1.5'
         for: 15m
         labels:
           severity: warning
@@ -63,7 +63,7 @@ groups:
         annotations:
           summary: "[Job Request Operator] {{ $labels.controller | title }} controller reconcile time is slow"
           description: |-
-            The Job Request Operator is experiencing slow reconcile times:
+            The Job Request Operator is experiencing slow reconcile times (95% of requests are taking longer than 1.5secs):
 
             `kubectl logs {{ $labels.pod }} -n job-request-operator`
 

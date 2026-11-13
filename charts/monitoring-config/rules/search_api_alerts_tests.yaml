@@ -231,10 +231,7 @@ tests:
       - series: 'search_api_opensearch_disk_space{node="node1"}'
         values: "0.5x20"
     alert_rule_test:
-      - alertname: SearchApiOpensearchDiskSpaceLow
-        eval_time: 15m
-        exp_alerts: []
-      - alertname: SearchApiOpensearchDiskSpaceCritical
+      - alertname: SearchApiOpensearchDiskSpace
         eval_time: 10m
         exp_alerts: []
   - interval: 1m
@@ -242,8 +239,8 @@ tests:
       - series: 'search_api_opensearch_disk_space{node="node1"}'
         values: "0.25x20"
     alert_rule_test:
-      - alertname: SearchApiOpensearchDiskSpaceLow
-        eval_time: 15m
+      - alertname: SearchApiOpensearchDiskSpace
+        eval_time: 10m
         exp_alerts:
           - exp_labels:
               severity: warning
@@ -252,7 +249,7 @@ tests:
             exp_annotations:
               summary: Opensearch disk space low
               grafana_path: >-
-                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&var-client_error_status=$__all&var-server_error_status=$__all&dtab=Users-get-search-results-quickly&viewPanel=panel-29
+                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&dtab=Users-get-search-results-quickly&viewPanel=panel-29
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html#opensearch-alerts
               description: >-
@@ -263,9 +260,22 @@ tests:
       - series: 'search_api_opensearch_disk_space{node="node1"}'
         values: "0.05x20"
     alert_rule_test:
-      - alertname: SearchApiOpensearchDiskSpaceCritical
+      - alertname: SearchApiOpensearchDiskSpace
         eval_time: 10m
         exp_alerts:
+          - exp_labels:
+              severity: warning
+              destination: "slack-search-team"
+              node: node1
+            exp_annotations:
+              summary: Opensearch disk space low
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&dtab=Users-get-search-results-quickly&viewPanel=panel-29
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html#opensearch-alerts
+              description: >-
+                Opensearch node node1 has less than 30% disk space
+                remaining. Consider increasing storage capacity.
           - exp_labels:
               severity: critical
               destination: "slack-search-team"
@@ -273,7 +283,7 @@ tests:
             exp_annotations:
               summary: Opensearch disk space critical
               grafana_path: >-
-                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&var-client_error_status=$__all&var-server_error_status=$__all&dtab=Users-get-search-results-quickly&viewPanel=panel-29
+                d/emvd8hx/gov-uk-search-api-v1?from=now-24h&to=now&timezone=browser&dtab=Users-get-search-results-quickly&viewPanel=panel-29
               runbook_url: >-
                 https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html#opensearch-alerts
               description: >-
