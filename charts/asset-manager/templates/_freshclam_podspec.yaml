@@ -32,7 +32,8 @@ spec:
         - name: clam-virus-db
           mountPath: /var/lib/clamav
         - name: etc-clamav
-          mountPath: {{ .Values.clamMountConfigPath }}
+          mountPath: /etc/clamav/freshclam.conf
+          subPath: freshclam.conf
       securityContext:
         allowPrivilegeEscalation: false
         readOnlyRootFilesystem: true
