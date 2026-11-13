@@ -581,7 +581,7 @@
                   "spec": {
                     "options": {
                       "fields": {
-                        "yMax Rejected": {
+                        "yMax Approved": {
                           "aggregations": [],
                           "operation": "groupby"
                         }
@@ -768,7 +768,7 @@
                   "spec": {
                     "options": {
                       "fields": {
-                        "yMax Approved": {
+                        "yMax Rejected": {
                           "aggregations": [],
                           "operation": "groupby"
                         }
