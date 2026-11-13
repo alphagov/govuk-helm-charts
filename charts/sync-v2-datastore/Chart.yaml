@@ -1,0 +1,5 @@
+apiVersion: v2
+name: sync-v2-datastore
+description: A CronJob that purges search-api-v2 documents, then republishes all content from publishing-api
+type: application
+version: 0.1.0

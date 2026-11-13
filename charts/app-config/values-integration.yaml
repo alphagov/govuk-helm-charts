@@ -3076,6 +3076,18 @@ govukApplications:
     # See ../charts/search-index-env-sync/values.yaml for job configuration.
     chartPath: charts/search-index-env-sync
     postSyncWorkflowEnabled: "false"
+  - name: sync-v2-datastore
+    # Daily 02:00: search-api-v2 documents:purge_docs, then publishing-api republish_all.
+    chartPath: charts/sync-v2-datastore
+    postSyncWorkflowEnabled: "false"
+    imageValues:
+      - search-api-v2
+      - publishing-api
+    helmValues:
+      schedule:
+        cron: "0 2 * * *"
+        timezone: "Europe/London"
+        suspend: false
   - name: service-manual-publisher
     helmValues:
       arch: arm64
