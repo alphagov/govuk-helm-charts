@@ -1,0 +1,115 @@
+# Kubernetes runs initContainers one at a time and stops the Pod if one fails,
+# so publishing-api only runs after search-api-v2 succeeds.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    argocd.argoproj.io/ignore-healthcheck: "true"
+spec:
+  schedule: {{ .Values.schedule.cron | quote }}
+  timeZone: {{ .Values.schedule.timezone | quote }}
+  suspend: {{ .Values.schedule.suspend | default false }}
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 28800  # 8 hours
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: {{ .Chart.Name }}
+            app.kubernetes.io/instance: {{ .Release.Name }}
+        spec:
+          automountServiceAccountToken: false
+          enableServiceLinks: false
+          restartPolicy: Never
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
+          volumes:
+            - name: tmp
+              emptyDir: {}
+          tolerations:
+            - key: arch
+              operator: Equal
+              value: arm64
+              effect: NoSchedule
+          initContainers:
+            - name: search-api-v2-purge-docs
+              image: "{{ .Values.images.SearchApiV2.repository }}:{{ .Values.images.SearchApiV2.tag }}"
+              command: ["rake", "documents:purge_all"]
+              envFrom:
+                - configMapRef:
+                    name: govuk-apps-env
+              env:
+                - name: REDIS_URL
+                  value: redis://search-api-v2-redis
+                - name: GOOGLE_CLOUD_CREDENTIALS
+                  valueFrom:
+                    secretKeyRef: {name: search-api-v2-google-cloud-discovery-engine-configuration, key: GOOGLE_CLOUD_CREDENTIALS}
+                - name: GOOGLE_CLOUD_PROJECT_ID
+                  valueFrom:
+                    secretKeyRef: {name: search-api-v2-google-cloud-discovery-engine-configuration, key: GOOGLE_CLOUD_PROJECT_ID}
+                - name: GOOGLE_CLOUD_PROJECT_ID_NUMBER
+                  valueFrom:
+                    secretKeyRef: {name: search-api-v2-google-cloud-discovery-engine-configuration, key: GOOGLE_CLOUD_PROJECT_ID_NUMBER}
+                - name: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME
+                  valueFrom:
+                    secretKeyRef: {name: search-api-v2-google-cloud-discovery-engine-configuration, key: DISCOVERY_ENGINE_DEFAULT_COLLECTION_NAME}
+                - name: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME
+                  valueFrom:
+                    secretKeyRef: {name: search-api-v2-google-cloud-discovery-engine-configuration, key: DISCOVERY_ENGINE_DEFAULT_LOCATION_NAME}
+              securityContext: &securityContext
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+              volumeMounts: &volumeMounts
+                - name: tmp
+                  mountPath: /tmp
+          containers:
+            - name: publishing-api-republish-all
+              image: "{{ .Values.images.PublishingApi.repository }}:{{ .Values.images.PublishingApi.tag }}"
+              command: ["rake", "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"]
+              envFrom:
+                - configMapRef:
+                    name: govuk-apps-env
+              env:
+                - name: REDIS_URL
+                  value: redis://publishing-api-redis
+                - name: GOVUK_CONTENT_SCHEMAS_PATH
+                  value: /app/content_schemas
+                - name: SECRET_KEY_BASE
+                  valueFrom:
+                    secretKeyRef: {name: publishing-api-rails-secret-key-base, key: secret-key-base}
+                - name: GDS_SSO_OAUTH_ID
+                  valueFrom:
+                    secretKeyRef: {name: signon-app-publishing-api, key: oauth_id}
+                - name: GDS_SSO_OAUTH_SECRET
+                  valueFrom:
+                    secretKeyRef: {name: signon-app-publishing-api, key: oauth_secret}
+                - name: CONTENT_STORE_BEARER_TOKEN
+                  valueFrom:
+                    secretKeyRef: {name: signon-token-publishing-api-content-store, key: bearer_token}
+                - name: DRAFT_CONTENT_STORE_BEARER_TOKEN
+                  valueFrom:
+                    secretKeyRef: {name: signon-token-publishing-api-draft-content-store, key: bearer_token}
+                - name: RABBITMQ_URL
+                  valueFrom:
+                    secretKeyRef: {name: publishing-api-rabbitmq, key: RABBITMQ_URL}
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef: {name: publishing-api-postgres, key: DATABASE_URL}
+              securityContext: *securityContext
+              volumeMounts: *volumeMounts

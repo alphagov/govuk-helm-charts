@@ -1,0 +1,12 @@
+images:
+  SearchApiV2:
+    repository: ""
+    tag: ""
+  PublishingApi:
+    repository: ""
+    tag: ""
+
+# Schedule for the CronJob; override via `helmValues.schedule` in app-config.
+schedule:
+  cron: "0 3 * * *"
+  timezone: Europe/London
