@@ -541,6 +541,10 @@
       "panel-14": {
         "kind": "Panel",
         "spec": {
+          "id": 14,
+          "title": "Approval Times Over last 30d",
+          "description": "",
+          "links": [],
           "data": {
             "kind": "QueryGroup",
             "spec": {
@@ -548,98 +552,186 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "version": "v0",
+                      "group": "prometheus",
                       "datasource": {
                         "name": "prometheus"
                       },
-                      "group": "prometheus",
-                      "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
+                        "expr": "sum by (state) (job_request_time_til_review_seconds{state=\"Approved\"})",
+                        "legendFormat": "__auto",
+                        "range": true,
+                        "instant": false,
                         "exemplar": false,
-                        "expr": "sum(\n  increase(\n    job_request_time_til_review_seconds_bucket{state=\"Approved\"}[$__range]\n  )\n) by (le)",
-                        "format": "table",
-                        "instant": true,
-                        "legendFormat": "Average Approval Time",
-                        "range": false
-                      },
-                      "version": "v0"
+                        "format": "time_series"
+                      }
                     },
-                    "refId": "C"
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "groupBy",
+                  "spec": {
+                    "options": {
+                      "fields": {
+                        "yMax Rejected": {
+                          "aggregations": [],
+                          "operation": "groupby"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "histogram",
+                  "spec": {
+                    "options": {
+                      "fields": {},
+                      "combine": false,
+                      "bucketSize": "20"
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "filterFieldsByName",
+                  "spec": {
+                    "options": {
+                      "include": {
+                        "names": [
+                          "xMax",
+                          "yMax"
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "organize",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "indexByName": {},
+                      "renameByName": {
+                        "yMax": "count",
+                        "xMax": "time til review"
+                      },
+                      "includeByName": {}
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {
+                "timeFrom": "30d"
+              }
             }
           },
-          "description": "",
-          "id": 14,
-          "links": [],
-          "title": "Approval Times Over Current View",
           "vizConfig": {
-            "group": "histogram",
             "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.3.0",
             "spec": {
+              "options": {
+                "orientation": "auto",
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 0,
+                "showValue": "auto",
+                "stacking": "none",
+                "groupWidth": 0.7,
+                "barWidth": 0.99,
+                "barRadius": 0,
+                "fullHighlight": false,
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none",
+                  "hideZeros": false
+                },
+                "legend": {
+                  "showLegend": true,
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "calcs": []
+                },
+                "xField": "xMax"
+              },
               "fieldConfig": {
                 "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
                   "custom": {
+                    "lineWidth": 1,
                     "fillOpacity": 80,
                     "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
+                    "axisPlacement": "auto",
+                    "axisLabel": "",
+                    "axisColorMode": "text",
+                    "axisBorderShow": false,
+                    "scaleDistribution": {
+                      "type": "linear"
                     },
-                    "lineWidth": 1,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
+                    "axisCenteredZero": false,
+                    "hideFrom": {
+                      "tooltip": false,
+                      "viz": false,
+                      "legend": false
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
                     }
+                  },
+                  "color": {
+                    "mode": "palette-classic"
                   },
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
                       {
-                        "color": "green",
-                        "value": 0
+                        "value": null,
+                        "color": "green"
                       },
                       {
-                        "color": "red",
-                        "value": 80
+                        "value": 80,
+                        "color": "red"
                       }
                     ]
                   },
-                  "unit": "s"
+                  "fieldMinMax": false,
+                  "noValue": "0"
                 },
-                "overrides": []
-              },
-              "options": {
-                "combine": true,
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "xMax",
+                      "scope": "series"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "s"
+                      }
+                    ]
+                  }
+                ]
               }
-            },
-            "version": "13.2.0"
+            }
           }
         }
       },
       "panel-15": {
         "kind": "Panel",
         "spec": {
+          "id": 15,
+          "title": "Rejection Times Over last 30d",
+          "description": "",
+          "links": [],
           "data": {
             "kind": "QueryGroup",
             "spec": {
@@ -647,90 +739,176 @@
                 {
                   "kind": "PanelQuery",
                   "spec": {
-                    "hidden": false,
                     "query": {
+                      "kind": "DataQuery",
+                      "version": "v0",
+                      "group": "prometheus",
                       "datasource": {
                         "name": "prometheus"
                       },
-                      "group": "prometheus",
-                      "kind": "DataQuery",
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum(\n  increase(\n    job_request_time_til_review_seconds_bucket{state=\"Rejected\"}[$__range]\n  )\n) by (le)",
+                        "expr": "sum by (state) (job_request_time_til_review_seconds{state=\"Rejected\"})",
+                        "legendFormat": "__auto",
+                        "range": true,
                         "instant": false,
-                        "legendFormat": "Average Rejection Time",
-                        "range": true
-                      },
-                      "version": "v0"
+                        "exemplar": false,
+                        "format": "time_series"
+                      }
                     },
-                    "refId": "Rejection Time"
+                    "refId": "A",
+                    "hidden": false
                   }
                 }
               ],
-              "queryOptions": {},
-              "transformations": []
+              "transformations": [
+                {
+                  "kind": "Transformation",
+                  "group": "groupBy",
+                  "spec": {
+                    "options": {
+                      "fields": {
+                        "yMax Approved": {
+                          "aggregations": [],
+                          "operation": "groupby"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "histogram",
+                  "spec": {
+                    "options": {
+                      "fields": {},
+                      "combine": false,
+                      "bucketSize": "20"
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "filterFieldsByName",
+                  "spec": {
+                    "options": {
+                      "include": {
+                        "names": [
+                          "xMax",
+                          "yMax"
+                        ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "Transformation",
+                  "group": "organize",
+                  "spec": {
+                    "options": {
+                      "excludeByName": {},
+                      "indexByName": {},
+                      "renameByName": {
+                        "yMax": "count",
+                        "xMax": "time til review"
+                      },
+                      "includeByName": {}
+                    }
+                  }
+                }
+              ],
+              "queryOptions": {
+                "timeFrom": "30d"
+              }
             }
           },
-          "description": "",
-          "id": 15,
-          "links": [],
-          "title": "Rejection Times Over Current View",
           "vizConfig": {
-            "group": "histogram",
             "kind": "VizConfig",
+            "group": "barchart",
+            "version": "13.3.0",
             "spec": {
+              "options": {
+                "orientation": "auto",
+                "xTickLabelRotation": 0,
+                "xTickLabelSpacing": 0,
+                "showValue": "auto",
+                "stacking": "none",
+                "groupWidth": 0.7,
+                "barWidth": 0.99,
+                "barRadius": 0,
+                "fullHighlight": false,
+                "tooltip": {
+                  "mode": "single",
+                  "sort": "none",
+                  "hideZeros": false
+                },
+                "legend": {
+                  "showLegend": true,
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "calcs": []
+                },
+                "xField": "xMax"
+              },
               "fieldConfig": {
                 "defaults": {
-                  "color": {
-                    "mode": "palette-classic"
-                  },
                   "custom": {
+                    "lineWidth": 1,
                     "fillOpacity": 80,
                     "gradientMode": "none",
-                    "hideFrom": {
-                      "legend": false,
-                      "tooltip": false,
-                      "viz": false
+                    "axisPlacement": "auto",
+                    "axisLabel": "",
+                    "axisColorMode": "text",
+                    "axisBorderShow": false,
+                    "scaleDistribution": {
+                      "type": "linear"
                     },
-                    "lineWidth": 1,
-                    "stacking": {
-                      "group": "A",
-                      "mode": "none"
+                    "axisCenteredZero": false,
+                    "hideFrom": {
+                      "tooltip": false,
+                      "viz": false,
+                      "legend": false
+                    },
+                    "thresholdsStyle": {
+                      "mode": "off"
                     }
+                  },
+                  "color": {
+                    "mode": "palette-classic"
                   },
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
                       {
-                        "color": "green",
-                        "value": 0
+                        "value": null,
+                        "color": "green"
                       },
                       {
-                        "color": "red",
-                        "value": 80
+                        "value": 80,
+                        "color": "red"
                       }
                     ]
                   },
-                  "unit": "s"
+                  "fieldMinMax": false,
+                  "noValue": "0"
                 },
-                "overrides": []
-              },
-              "options": {
-                "combine": true,
-                "legend": {
-                  "calcs": [],
-                  "displayMode": "list",
-                  "placement": "bottom",
-                  "showLegend": true
-                },
-                "tooltip": {
-                  "hideZeros": false,
-                  "mode": "single",
-                  "sort": "none"
-                }
+                "overrides": [
+                  {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "xMax",
+                      "scope": "series"
+                    },
+                    "properties": [
+                      {
+                        "id": "unit",
+                        "value": "s"
+                      }
+                    ]
+                  }
+                ]
               }
-            },
-            "version": "13.2.0"
+            }
           }
         }
       },
