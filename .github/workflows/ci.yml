@@ -19,7 +19,7 @@ jobs:
 
       - uses: azure/setup-helm@2f5e7bc67f1f9972ab16657bb795f36d8f04de0e   # v5.1.0
 
-      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7   # v10.2.0
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2   # v10.3.3
 
       - name: Render apps
         run: ./bin/render-argo-apps.py --lint
