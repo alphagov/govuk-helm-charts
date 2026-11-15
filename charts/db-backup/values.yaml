@@ -794,7 +794,7 @@ cronjobs:
 
     publisher-postgres:
       suspend: false
-      schedule: "41 3 * * 1"
+      schedule: "41 3 * * 2"
       db: publisher_production
       operations:
         - op: reboot
