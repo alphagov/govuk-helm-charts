@@ -6,6 +6,7 @@ groups:
           locations_api_oldest_os_places_postcode_age_days > 30
         labels:
           severity: warning
+          destination: slack-patterns-and-pages
         annotations:
           summary: Least recently updated postcode hasn't been updated in over 30 days
           runbook_url: >-

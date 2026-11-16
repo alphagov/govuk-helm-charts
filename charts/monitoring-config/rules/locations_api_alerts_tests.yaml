@@ -25,6 +25,7 @@ tests:
         exp_alerts:
           - exp_labels:
               severity: warning
+              destination: slack-patterns-and-pages
             exp_annotations:
               summary: Least recently updated postcode hasn't been updated in over 30 days
               runbook_url: >-
