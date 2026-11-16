@@ -148,6 +148,7 @@ http {
       client_max_body_size 50M;
     }
 
+    # Only used by draft-Router when serving up static assets.
     location /assets {
       proxy_set_header   Authorization "";
       proxy_set_header   Connection "";
