@@ -232,6 +232,20 @@ spec:
         - inhours
     - matchers:
       - name: destination
+        value: slack-patterns-and-pages
+        matchType: =
+      - name: environment
+        value: production
+        matchType: =
+      receiver: 'slack-patterns-and-pages-production-alerts'
+      groupBy: [alertname, severity, environment]
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 1d
+      activeTimeIntervals:
+        - inhours
+    - matchers:
+      - name: destination
         value: slack-search-team
         matchType: =
       - name: environment
@@ -333,6 +347,12 @@ spec:
   - name: 'generic-slack-platform-engineering-low-priority'
     slackConfigs:
     - channel: '#govuk-platform-engineering-low-priority-alarms'
+      {{- include "slack.template" . | nindent 6 }}
+      text: |-
+        {{- include "slack.text" . | nindent 8 }}
+  - name: 'slack-patterns-and-pages-production-alerts'
+    slackConfigs:
+    - channel: '#govuk-patterns-and-pages-tech'
       {{- include "slack.template" . | nindent 6 }}
       text: |-
         {{- include "slack.text" . | nindent 8 }}
