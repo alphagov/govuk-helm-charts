@@ -148,7 +148,7 @@
                 }
               }
             },
-            "version": "13.2.0"
+            "version": "13.3.0"
           }
         }
       },
@@ -181,7 +181,9 @@
                   }
                 }
               ],
-              "queryOptions": {},
+              "queryOptions": {
+                "timeFrom": "now-5m"
+              },
               "transformations": []
             }
           },
@@ -237,7 +239,7 @@
                 "wideLayout": true
               }
             },
-            "version": "13.2.0"
+            "version": "13.3.0"
           }
         }
       },
@@ -274,7 +276,7 @@
                 "mode": "markdown"
               }
             },
-            "version": "13.2.0"
+            "version": "13.3.0"
           }
         }
       }
