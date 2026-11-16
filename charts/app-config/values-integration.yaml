@@ -171,6 +171,7 @@ govukApplications:
               key: oauth_secret
   - name: asset-manager
     chartPath: charts/asset-manager
+    targetRevision: pp-8165-clamav-test
     helmValues:
       arch: arm64
       podTerminationGracePeriodSecs: 30
@@ -221,8 +222,6 @@ govukApplications:
         create: false
         name: asset-manager-nginx-conf
       extraEnv:
-        - name: ASSET_MANAGER_CLAMSCAN_PATH
-          value: /usr/local/bin/clamdscan
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
             secretKeyRef:
