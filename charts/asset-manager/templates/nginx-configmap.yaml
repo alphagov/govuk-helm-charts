@@ -149,7 +149,7 @@ data:
           try_files $uri/index.html $uri.html $uri @app;
         }
 
-        # Proxy the request to the Rails app. For public asset requests it
+        # Proxy the request to the Rails app. For uploaded assets requests it
         # will respond with the X-Accel-Redirect header contains the presigned S3 url
         # prefixed with /cloud-storage-proxy/. This triggers an nginx internal redirect
         # to location ~ /cloud-storage-proxy/(.*)

@@ -115,6 +115,7 @@ data:
         }
 
 {{- if .Values.proxyRailsAssetsToS3 }}
+        # Publishing apps don't use Router nor draft-Router so their static assets are proxied to S3 here
         location /assets {
           proxy_set_header   Authorization "";
           proxy_set_header   Connection "";
