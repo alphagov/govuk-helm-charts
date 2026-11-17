@@ -155,6 +155,22 @@ spec:
       groupInterval: 5m
     - matchers:
         - name: alertname
+          value: JobRequestOperatorCurrentMalformed
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorReviewCurrentMalformed
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
           value: JobRequestOperatorReviewCurrentNotFound
           matchType: =
       receiver: 'generic-slack-platform-engineering'
@@ -164,6 +180,22 @@ spec:
     - matchers:
         - name: alertname
           value: JobRequestOperatorReviewCurrentConflict
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorErrorGettingJR
+          matchType: =
+      receiver: 'generic-slack-platform-engineering'
+      repeatInterval: 30m
+      groupWait: 0s
+      groupInterval: 5m
+    - matchers:
+        - name: alertname
+          value: JobRequestOperatorErrorGettingJRR
           matchType: =
       receiver: 'generic-slack-platform-engineering'
       repeatInterval: 30m

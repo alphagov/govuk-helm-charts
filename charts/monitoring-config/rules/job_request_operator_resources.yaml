@@ -3,7 +3,9 @@ groups:
   - name: JobRequestOperatorResources
     rules:
       - alert: JobRequestOperatorCurrentMalformed
-        expr: "job_request_current_malformed > 0"
+        expr: >
+          job_request_current_malformed > (avg_over_time(job_request_current_malformed[1h]) * 2)
+          and job_request_current_malformed > 2
         for: 15m
         labels:
           severity: warning
@@ -16,7 +18,9 @@ groups:
             `kubectl get jr -A`
 
       - alert: JobRequestOperatorReviewCurrentMalformed
-        expr: "job_request_review_current_malformed > 0"
+        expr: >
+          job_request_review_current_malformed > (avg_over_time(job_request_review_current_malformed[1h]) * 2)
+          and job_request_review_current_malformed > 2
         for: 15m
         labels:
           severity: warning
@@ -29,7 +33,9 @@ groups:
             `kubectl get jrr -A`
 
       - alert: JobRequestOperatorReviewCurrentNotFound
-        expr: "job_request_review_current_not_found > 0"
+        expr: >
+          job_request_review_current_not_found > (avg_over_time(job_request_review_current_not_found[1h]) * 2)
+          and job_request_review_current_not_found > 2
         for: 15m
         labels:
           severity: warning
@@ -42,7 +48,9 @@ groups:
             `kubectl get jrr -A`
 
       - alert: JobRequestOperatorReviewCurrentConflict
-        expr: "job_request_review_current_conflict > 0"
+        expr: >
+          job_request_review_current_conflict > (avg_over_time(job_request_review_current_conflict[1h]) * 2)
+          and job_request_review_current_conflict > 2
         for: 15m
         labels:
           severity: warning
@@ -55,7 +63,9 @@ groups:
             `kubectl get jrr -A`
 
       - alert: JobRequestOperatorErrorGettingJR
-        expr: "job_request_get_error_total > 0"
+        expr: >
+          rate(job_request_get_error_total[5m]) > (avg_over_time(rate(job_request_get_error_total[5m])[1h:5m]) * 2)
+          and rate(job_request_get_error_total[5m]) > 0.05
         for: 15m
         labels:
           severity: warning
@@ -68,7 +78,9 @@ groups:
             `kubectl get jr {{ $labels.namespaced_name }}`
 
       - alert: JobRequestOperatorErrorGettingJRR
-        expr: "job_request_review_getting_review_error_total > 0"
+        expr: >
+          rate(job_request_review_getting_review_error_total[5m]) > (avg_over_time(rate(job_request_review_getting_review_error_total[5m])[1h:5m]) * 2)
+          and rate(job_request_review_getting_review_error_total[5m]) > 0.05
         for: 15m
         labels:
           severity: warning
