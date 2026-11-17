@@ -11,6 +11,11 @@ spec:
     repoURL: git@github.com/alphagov/govuk-helm-charts
     path: charts/router-probe-backend
     targetRevision: HEAD
+    {{- with .Values.routerProbeBackend }}
+    helm:
+      values: |
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
   destination:
     server: https://kubernetes.default.svc
     namespace: {{ .Values.appsNamespace }}
