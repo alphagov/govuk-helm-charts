@@ -2843,6 +2843,8 @@ govukApplications:
         - name: reimport-completion-denylist
           task: "completion:import_denylist"
           schedule: "56 2 * * 1-5" # one hour after the DB is restored from production
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ANONYMOUS_USER_ID_SECRET
           valueFrom: *anonymous_user_id_secret
@@ -2907,6 +2909,8 @@ govukApplications:
         - name: update-govuk-index-popularity
           task: "search:update_popularity"
           schedule: "30 23 * * *"
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       workers:
         enabled: true
         types:
@@ -3036,6 +3040,8 @@ govukApplications:
           task: "quality_monitoring:assert_invariants"
           schedule: "09 9 * * *" # 09:09am daily
           suspend: true # The results from job are not being monitored, and it's in review for being deleted.
+      kubernetesProbeEndpoints:
+        startupProbe: "/healthcheck/ready"
       extraEnv:
         - name: ENABLE_AUTOCOMPLETE
           value: "true"
