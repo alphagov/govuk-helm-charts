@@ -1,0 +1,45 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: previews
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+      - {}
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: apps
+          app.kubernetes.io/name: govuk-preview-app
+          app.kubernetes.io/component: app
+  egress:
+    - toEndpoints:
+      - {}
+    - toEndpoints:
+      - matchLabels:
+          k8s:io.kubernetes.pod.namespace: kube-system
+          k8s-app: kube-dns
+      toPorts:
+        - ports:
+          - { protocol: UDP, port: '53' }
+          - { protocol: TCP, port: '53' }
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+            - 169.254.0.0/16
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: previews-whitehall
+spec:
+  endpointSelector:
+    matchLabels:
+      govuk-preview-app/app: whitehall
+  egress:
+    - toEntities: [kube-apiserver]
+      toPorts:
+        - ports:
+          - { protocol: TCP, port: '6443' }
