@@ -1090,6 +1090,8 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+        - name: MAINTENANCE_MESSAGE
+          value: "Email subscription management will be unavailable for essential database updates. Please try again later."
       supports_emergency_banner: true
       cronTasks: []
   - name: draft-email-alert-frontend
@@ -1133,6 +1135,8 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+        - name: MAINTENANCE_MESSAGE
+          value: "Email subscription management will be unavailable for essential database updates. Please try again later."
       supports_emergency_banner: true
       cronTasks: []
   - name: email-alert-service
