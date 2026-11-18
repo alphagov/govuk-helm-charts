@@ -2898,7 +2898,7 @@ govukApplications:
         - name: AWS_S3_SITEMAPS_BUCKET_NAME
           value: govuk-integration-sitemaps
         - name: OPENSEARCH_URI
-          value: https://vpc-search-domain-blue-7ejykdejkxvqpyoer2gii7gryi.eu-west-1.es.amazonaws.com
+          value: https://vpc-search-domain-green-fvyt576okp2hcnnl5liyv74wwe.eu-west-1.es.amazonaws.com
         - name: LOG_LEVEL
           value: info
         - name: GDS_SSO_OAUTH_ID
