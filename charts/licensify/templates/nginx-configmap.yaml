@@ -88,6 +88,9 @@ data:
 
       server {
         listen {{ $.Values.nginx.port }};
+
+        http2 off;
+
         proxy_connect_timeout {{ $.Values.nginx.proxyConnectTimeout }};
         proxy_read_timeout    {{ $.Values.nginx.proxyReadTimeout }};
 

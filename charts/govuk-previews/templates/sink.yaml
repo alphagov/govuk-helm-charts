@@ -12,6 +12,8 @@ metadata:
 data:
   default.conf: |
     server {
+      http2 off;
+
       listen 8080;
       location / {
         default_type application/json;

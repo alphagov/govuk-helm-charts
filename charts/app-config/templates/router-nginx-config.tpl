@@ -85,6 +85,8 @@ http {
   server {
     listen 8080;
 
+    http2 off;
+
     proxy_read_timeout 20s;
     proxy_intercept_errors on;
 

@@ -92,6 +92,8 @@ data:
         proxy_connect_timeout {{ .Values.nginxProxyConnectTimeout }};
         proxy_read_timeout    {{ .Values.nginxProxyReadTimeout }};
 
+        http2 off;
+
         access_log /dev/stdout json_event;
         error_log /dev/stderr;
 
