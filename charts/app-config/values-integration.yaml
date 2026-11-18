@@ -2965,8 +2965,8 @@ govukApplications:
         rules:
           - http:
               paths:
-                - path: /api/search
-                  pathType: Prefix
+                - path: /api/search.json
+                  pathType: Exact
                   backend:
                     service:
                       name: router
