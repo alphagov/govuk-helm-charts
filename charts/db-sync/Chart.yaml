@@ -1,0 +1,14 @@
+apiVersion: v2
+name: db-sync
+description: Helm chart for govuk-db-sync CronJobs (backup/restore for PostgreSQL, MySQL, DocumentDB)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - backup
+  - restore
+  - database
+  - cronjob
+maintainers:
+  - name: GOV.UK Platform Engineering
+    email: govuk-platform-engineering@digital.cabinet-office.gov.uk
