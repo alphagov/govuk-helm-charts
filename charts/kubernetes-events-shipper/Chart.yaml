@@ -1,5 +1,5 @@
 apiVersion: v2
 name: kubernetes-events-shipper
-description: Creates a fluent bit stateful set which will send all kuberenetes events in a cluster to logit
+description: Creates a fluent bit stateful set which will send all Kubernetes events in a cluster to Logit
 type: application
-version: "1.2.0"
+version: "1.3.0"
