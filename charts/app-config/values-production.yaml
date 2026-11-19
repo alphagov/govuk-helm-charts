@@ -350,6 +350,7 @@ govukApplications:
               key: bearer_token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+      supports_emergency_banner: true
       cronTasks: []
   - name: draft-collections
     repoName: collections
@@ -378,6 +379,7 @@ govukApplications:
           value: *emergency-banner-redis
         - name: PLEK_HOSTNAME_PREFIX
           value: draft-
+      supports_emergency_banner: true
       cronTasks: []
   - name: collections-publisher
     helmValues:
@@ -1087,6 +1089,7 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+      supports_emergency_banner: true
       cronTasks: []
   - name: draft-email-alert-frontend
     repoName: email-alert-frontend
@@ -1129,6 +1132,7 @@ govukApplications:
               key: token
         - name: EMERGENCY_BANNER_REDIS_URL
           value: *emergency-banner-redis
+      supports_emergency_banner: true
       cronTasks: []
   - name: email-alert-service
     helmValues:
@@ -1204,6 +1208,7 @@ govukApplications:
               key: GOVUK_NOTIFY_API_KEY
         - name: MEMCACHE_SERVERS
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
+      supports_emergency_banner: true
       cronTasks: []
   - name: draft-feedback
     repoName: feedback
@@ -1248,6 +1253,7 @@ govukApplications:
             secretKeyRef:
               name: feedback-notify
               key: GOVUK_NOTIFY_API_KEY
+      supports_emergency_banner: true
       cronTasks: []
   - name: finder-frontend
     helmValues:
@@ -1278,6 +1284,7 @@ govukApplications:
           value: frontend-memcached-govuk.eks.production.govuk-internal.digital
         - name: WEB_CONCURRENCY
           value: "4"
+      supports_emergency_banner: true
   - name: frontend
     helmValues:
       arch: arm64
@@ -1346,6 +1353,7 @@ govukApplications:
               key: bearer_token
         - name: WEB_CONCURRENCY
           value: "4"
+      supports_emergency_banner: true
       nginxConfigMap:
         extraServerConf: |
           location ~ /government/uploads/(?<item_path>.+) {
@@ -1385,6 +1393,7 @@ govukApplications:
             secretKeyRef:
               name: signon-token-finder-frontend-email-alert-api
               key: bearer_token
+      supports_emergency_banner: true
   - name: draft-frontend
     repoName: frontend
     helmValues:
@@ -1457,6 +1466,7 @@ govukApplications:
             secretKeyRef:
               name: signon-token-frontend-email-alert-api
               key: bearer_token
+      supports_emergency_banner: true
       nginxConfigMap:
         extraServerConf: |
           location ~ /government/uploads/(?<item_path>.+) {
@@ -3380,6 +3390,7 @@ govukApplications:
             secretKeyRef:
               name: signon-token-smart-answers-publishing-api
               key: bearer_token
+      supports_emergency_banner: true
       cronTasks: []
   - name: short-url-manager
     helmValues:
