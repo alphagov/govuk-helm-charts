@@ -1144,7 +1144,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
         types:
           - command: ["bin/email-alert-service"]
             name: email-alert-service
@@ -3461,7 +3461,6 @@ govukApplications:
   - name: specialist-publisher
     helmValues:
       arch: arm64
-      appEnabled: false
       podTerminationGracePeriodSecs: 15
       containerPreStopSleepSecs: 10
       appResources:
@@ -3475,7 +3474,7 @@ govukApplications:
       nginxClientMaxBodySize: *max-upload-size
       nginxProxyReadTimeout: 30s
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
@@ -3785,7 +3784,6 @@ govukApplications:
   - name: travel-advice-publisher
     helmValues:
       arch: arm64
-      appEnabled: false
       podTerminationGracePeriodSecs: 25
       containerPreStopSleepSecs: 20
       appResources:
@@ -3801,7 +3799,7 @@ govukApplications:
           schedule: "29 5 * * *"
       nginxClientMaxBodySize: *max-upload-size
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1
