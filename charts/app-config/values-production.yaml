@@ -951,7 +951,6 @@ govukApplications:
   - name: email-alert-api
     helmValues:
       arch: arm64
-      appEnabled: false
       podTerminationGracePeriodSecs: 40
       containerPreStopSleepSecs: 35
       appResources:
@@ -965,7 +964,7 @@ govukApplications:
       uploadAssets:
         enabled: false
       workers:
-        enabled: false
+        enabled: true
       workerResources:
         limits:
           cpu: 1.5
