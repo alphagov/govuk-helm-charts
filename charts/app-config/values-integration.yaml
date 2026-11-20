@@ -171,7 +171,6 @@ govukApplications:
               key: oauth_secret
   - name: asset-manager
     chartPath: charts/asset-manager
-    targetRevision: pp-8165-clamav-test
     helmValues:
       arch: arm64
       podTerminationGracePeriodSecs: 30
