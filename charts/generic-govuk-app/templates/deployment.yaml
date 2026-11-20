@@ -154,8 +154,8 @@ spec:
               sleep:
                 seconds: {{ .Values.containerPreStopSleepSecs | default 25 }}
         - name: nginx
-          image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
-          imagePullPolicy: {{ .Values.nginxImage.pullPolicy | default "Always" }}
+          image: "{{ .Values.nginxImage }}"
+          imagePullPolicy: "{{ .Values.nginxImagePullPolicy }}"
           ports:
             - name: http
               containerPort: {{ .Values.nginxPort }}

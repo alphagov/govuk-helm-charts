@@ -139,7 +139,8 @@ spec:
               exec:
                 command: ["sleep", "15"] # To allow time for ALB to deregister pod before termination
         - name: nginx
-          image: "{{ .Values.nginxImage.repository }}:{{ .Values.nginxImage.tag }}"
+          image: "{{ .Values.nginxImage }}"
+          imagePullPolicy: "{{ .Values.nginxImagePullPolicy }}"
           ports:
             - name: http
               containerPort: {{ .Values.nginxPort }}
