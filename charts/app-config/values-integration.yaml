@@ -81,6 +81,11 @@ rdsParquetExports:
       - whitehall_production.attachments
       - whitehall_production.documents
       - whitehall_production.editions
+# Per-environment Helm values for charts/router-probe-backend. Anything here
+# overrides that chart's values.yaml in this environment only.
+routerProbeBackend:
+  image:
+    tag: "1.27.1.2-13-alpine-slim-arm64"
 # Apps for Argo CD to deploy, along with any app-specific Helm values.
 govukApplications:
   - name: account-api
