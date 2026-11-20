@@ -45,8 +45,7 @@
                 "oauth2-proxy",
                 "prometheus-pushgateway",
                 "prometheus-fastly-exporter",
-                "reloader",
-                "tempo-distributed"
+                "reloader"
             ],
             "matchUpdateTypes": [
                 "minor",
@@ -77,6 +76,65 @@
             "additionalBranchPrefix": "{{replace '^.+\\/' '' packageFile}}-",
             "commitMessageSuffix": " ({{replace '^.+\\/' '' packageFile}})",
             "minimumReleaseAge": "10 days"
+        },
+        {
+            "description": "Hold tempo-distributed on chart 2.x (Tempo 2.10). Chart 3.x ships Tempo 3, which needs Kafka in microservices mode and a parallel-deployment migration. Remove when ready to migrate.",
+            "matchPackageNames": [
+                "tempo-distributed"
+            ],
+            "allowedVersions": "<3.0.0"
+        },
+        {
+            "description": "Keep the pinned Tempo image on 2.10.x until the Tempo 3 migration. Remove when ready to migrate.",
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchPackageNames": [
+                "grafana/tempo"
+            ],
+            "allowedVersions": "/^2\\.10\\.\\d+$/"
+        },
+        {
+            "description": "Auto-merge Tempo 2.10.x patch releases.",
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchPackageNames": [
+                "grafana/tempo"
+            ],
+            "matchUpdateTypes": [
+                "patch"
+            ],
+            "automerge": true,
+            "automergeType": "branch",
+            "minimumReleaseAge": "10 days"
+        },
+        {
+            "description": "Tempo's bundled memcached cache. Minor and patch updates auto-merge.",
+            "matchDatasources": [
+                "docker"
+            ],
+            "matchPackageNames": [
+                "memcached"
+            ],
+            "matchFileNames": [
+                "charts/monitoring-config/tempo-values-*.yaml"
+            ],
+            "matchUpdateTypes": [
+                "minor",
+                "patch"
+            ],
+            "automerge": true,
+            "automergeType": "branch",
+            "minimumReleaseAge": "10 days"
+        },
+        {
+            "description": "Raise one PR per environment for images pinned in per-environment Tempo values, like helm-versions.",
+            "matchFileNames": [
+                "charts/monitoring-config/tempo-values-*.yaml"
+            ],
+            "additionalBranchPrefix": "{{replace '^.+tempo-values-(.+)\\.yaml$' '$1' packageFile}}-",
+            "commitMessageSuffix": " ({{replace '^.+tempo-values-(.+)\\.yaml$' '$1' packageFile}})"
         },
         {
             "matchPackageNames": [
@@ -128,6 +186,17 @@
             "matchStrings": [
                 "nginxImage: (?<depName>.+):(?<currentValue>[0-9\\.]+)"
             ]
+        },
+        {
+            "description": "Images pinned in per-environment Tempo values (the helm-values manager is not in the inherited enabledManagers).",
+            "customType": "regex",
+            "managerFilePatterns": [
+                "/charts\\/monitoring-config\\/tempo-values-[a-z]+\\.yaml$/"
+            ],
+            "matchStrings": [
+                "image:\\s+repository:\\s+(?<depName>grafana\\/tempo|memcached)\\s+tag:\\s+\"?(?<currentValue>[^\\s\"]+)\"?"
+            ],
+            "datasourceTemplate": "docker"
         }
     ]
 }
