@@ -107,8 +107,8 @@ spec:
             - name: app-tmp
               mountPath: /tmp
         - name: nginx
-          image: "{{ $.Values.images.nginx.repository }}:{{ $.Values.images.nginx.tag }}"
-          imagePullPolicy: {{ $.Values.images.nginx.pullPolicy | default "Always" }}
+          image: "{{ $.Values.nginxImage }}"
+          imagePullPolicy: {{ $.Values.nginxImagePullPolicy }}
           ports:
             - name: http
               containerPort: {{ $.Values.nginx.port }}
