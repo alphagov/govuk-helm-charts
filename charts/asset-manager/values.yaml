@@ -33,6 +33,9 @@ arch: amd64
 appImage:
   repository: "172025368201.dkr.ecr.eu-west-1.amazonaws.com/github/alphagov/govuk/asset-manager"
   tag: latest
+clamavImage:
+  repository: "ghcr.io/alphagov/govuk/clamav"
+  tag: latest
 appPort: 3000
 
 # appProbes defines liveness/readiness/startup probes for the app container.
@@ -88,9 +91,6 @@ clamdResources:
 
 svgBatchScan:
   enabled: false
-
-# clamMountConfigPath is the path to which the clamav.conf and freshclam.conf are mounted
-clamMountConfigPath: "/usr/local/etc"
 
 # assetManagerNFS is the address of the NFSv4 (or Amazon EFS) server where uploaded
 assetManagerNFS: "asset-manager-efs.dev.gov.uk"
