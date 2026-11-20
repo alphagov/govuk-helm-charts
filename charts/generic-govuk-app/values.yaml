@@ -90,10 +90,8 @@ appExtraVolumeMounts: []
 # them - the whole block is replaced.
 appProbes: {}
 
-nginxImage:
-  repository: public.ecr.aws/nginx/nginx
-  pullPolicy: Always
-  tag: stable
+nginxImage: public.ecr.aws/nginx/nginx:1.31.9
+nginxImagePullPolicy: IfNotPresent
 nginxPort: 8080
 nginxProxyConnectTimeout: 2s
 nginxProxyReadTimeout: 15s
