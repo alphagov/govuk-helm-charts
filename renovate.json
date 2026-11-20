@@ -118,6 +118,16 @@
             "packageNameTemplate": "alphagov/govuk-toolbox-image",
             "datasourceTemplate": "github-releases",
             "depNameTemplate": "Toolbox image"
+        },
+        {
+            "customType": "regex",
+            "datasourceTemplate": "docker",
+            "managerFilePatterns": [
+                "**/values.yaml"
+            ],
+            "matchStrings": [
+                "nginxImage: (?<depName>.+):(?<currentValue>[0-9\\.]+)"
+            ]
         }
     ]
 }
