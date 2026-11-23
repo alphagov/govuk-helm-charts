@@ -122,13 +122,13 @@ spec:
             - name: clamd
               containerPort: 3310
           startupProbe:
-            tcpSocket:
-              port: clamd
+            exec:
+              command: ["clamdscan", "--ping", "1"]
             periodSeconds: 10
             failureThreshold: 30
           readinessProbe:
-            tcpSocket:
-              port: clamd
+            exec:
+              command: ["clamdscan", "--ping", "1"]
             periodSeconds: 10
           {{- with .Values.clamdResources }}
           resources:
