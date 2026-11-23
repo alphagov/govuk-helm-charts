@@ -90,7 +90,7 @@ appExtraVolumeMounts: []
 # them - the whole block is replaced.
 appProbes: {}
 
-nginxImage: public.ecr.aws/nginx/nginx:1.31.9
+nginxImage: public.ecr.aws/nginx/nginx:1.31.10
 nginxImagePullPolicy: IfNotPresent
 nginxPort: 8080
 nginxProxyConnectTimeout: 2s
