@@ -150,6 +150,49 @@ tests:
                 https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html
               description: "1 hour rolling success rate for search requests to search-api has dropped below 99.9%."
 
+  # Tests for search_api:search_http_request_duration_seconds:p90_rate5m
+  - interval: 1m
+    input_series:
+      # Bucket 0.5: 0 requests
+      - series: 'http_request_duration_seconds_bucket{job="search-api", search_api_endpoint="search", le="0.5"}'
+        values: '0x10'
+      # Bucket 1.0: 90% of total requests (18 req/min * 5 min = 90 total requests.)
+      - series: 'http_request_duration_seconds_bucket{job="search-api", search_api_endpoint="search", le="1"}'
+        values: '0+18x10'
+      # Bucket +Inf: 100% of total requests (20 req/min * 5 min = 100 total requests.)
+      - series: 'http_request_duration_seconds_bucket{job="search-api", search_api_endpoint="search", le="+Inf"}'
+        values: '0+20x10'
+    promql_expr_test:
+      - expr: search_api:search_http_request_duration_seconds:p90_rate5m
+        eval_time: 5m
+        exp_samples:
+          - value: 1
+            labels: 'search_api:search_http_request_duration_seconds:p90_rate5m'
+
+  # Tests for SearchApiHighP90SearchLatency
+  - interval: 1m
+    input_series:
+      - series: 'search_api:search_http_request_duration_seconds:p90_rate5m'
+        values: '3x20'
+    alert_rule_test:
+      - eval_time: 14m
+        alertname: SearchApiHighP90SearchLatency
+        exp_alerts: []
+      - eval_time: 15m
+        alertname: SearchApiHighP90SearchLatency
+        exp_alerts:
+          - exp_labels:
+              alertname: SearchApiHighP90SearchLatency
+              severity: critical
+              destination: slack-search-team
+            exp_annotations:
+              summary: "Search API: High Search Latency"
+              grafana_path: >-
+                d/emvd8hx/gov-uk-search-api-v1?orgId=1&from=now-24h&to=now&timezone=browser&viewPanel=panel-43
+              runbook_url: >-
+                https://docs.publishing.service.gov.uk/manual/search-api-alerts-and-monitoring.html
+              description: "90th percentile of search request duration has exceeded 2.5 seconds for more than 15 minutes."
+
 # opensearch cluster status tests
   - interval: 1m
     input_series:
