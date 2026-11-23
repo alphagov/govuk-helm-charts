@@ -130,14 +130,6 @@ data:
 
           proxy_intercept_errors on;
           proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
-
-          # Set CORS allow origin for fonts only
-          location ~* \.(eot|otf|ttf|woff|woff2)$ {
-            add_header Access-Control-Allow-Origin "*";
-            add_header Access-Control-Allow-Methods "GET, OPTIONS";
-            add_header Access-Control-Allow-Headers "origin, authorization";
-            proxy_pass https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
-          }
         }
 {{- end }}
 

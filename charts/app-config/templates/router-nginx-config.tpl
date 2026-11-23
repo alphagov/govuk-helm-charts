@@ -162,9 +162,6 @@ http {
       proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
 
       add_header Cache-Control "max-age=31536000, public, immutable";
-      add_header "Access-Control-Allow-Origin" "*";
-      add_header "Access-Control-Allow-Methods" "GET, OPTIONS";
-      add_header "Access-Control-Allow-Headers" "origin, authorization";
     }
 
     # Uncacheable resource for use by external probers (Pingdom).
