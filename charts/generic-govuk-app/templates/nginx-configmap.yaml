@@ -128,7 +128,6 @@ data:
           add_header         Cache-Control "public, max-age=31536000, immutable";
           add_header         Surrogate-Key "assets assets-{{ $fullName }}";
 
-          proxy_intercept_errors on;
           proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
         }
 {{- end }}

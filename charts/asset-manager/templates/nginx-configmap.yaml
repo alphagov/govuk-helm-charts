@@ -140,9 +140,6 @@ data:
         access_log /dev/stdout json_event;
         error_log /dev/stderr;
 
-        # Add as an ALB rule and direct to whitehall service
-        rewrite ^/government/assets/(.*)$ /assets/whitehall/$1 permanent;
-
         # Try to serve the request through static files otherwise do an
         # internal redirect to location @app
         location / {

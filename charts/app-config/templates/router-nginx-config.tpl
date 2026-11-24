@@ -158,7 +158,6 @@ http {
       proxy_hide_header  x-amz-request-id;
       proxy_hide_header  x-amz-server-side-encryption;
       proxy_hide_header  x-amz-version-id;
-      proxy_intercept_errors on;
       proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
 
       add_header Cache-Control "max-age=31536000, public, immutable";
