@@ -1,5 +1,6 @@
 {{- if .Values.appEnabled -}}
 {{- $fullName := include "generic-govuk-app.fullname" . }}
+{{- $rofs := has .Values.govukEnvironment (list "integration") }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -135,7 +136,7 @@ spec:
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFileSystem }}
+            readOnlyRootFilesystem: {{ $rofs }}
             capabilities:
               drop: ["ALL"]
           volumeMounts:
