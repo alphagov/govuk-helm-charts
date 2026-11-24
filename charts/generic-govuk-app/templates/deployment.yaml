@@ -1,6 +1,6 @@
 {{- if .Values.appEnabled -}}
 {{- $fullName := include "generic-govuk-app.fullname" . }}
-{{- $rofs := has .Values.govukEnvironment (list "integration") }}
+{{- $rofs := has .Values.govukEnvironment (list "integration" "staging") }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
