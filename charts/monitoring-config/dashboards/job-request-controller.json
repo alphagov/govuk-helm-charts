@@ -561,7 +561,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum by (state) (job_request_time_til_review_seconds{state=\"Approved\", exported_namespace!=\"job-request-operator-smoke-test\"})",
+                        "expr": "sum by (state) (job_request_time_til_review_seconds{state=\"Approved\", exported_namespace!=\"job-request-operator-smoke-test\", exported_namespace!=\"\"})",
                         "legendFormat": "__auto",
                         "range": true,
                         "instant": false,
@@ -748,7 +748,7 @@
                       },
                       "spec": {
                         "editorMode": "code",
-                        "expr": "sum by (state) (job_request_time_til_review_seconds{state=\"Rejected\", exported_namespace!=\"job-request-operator-smoke-test\"})",
+                        "expr": "sum by (state) (job_request_time_til_review_seconds{state=\"Rejected\", exported_namespace!=\"job-request-operator-smoke-test\", exported_namespace!=\"\"})",
                         "legendFormat": "__auto",
                         "range": true,
                         "instant": false,
