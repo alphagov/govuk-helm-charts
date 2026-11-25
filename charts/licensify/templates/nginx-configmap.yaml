@@ -107,7 +107,7 @@ data:
 
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
-          proxy_set_header GOVUK-Request-Id $govuk_request_id;
+          proxy_set_header   GOVUK-Request-Id $govuk_request_id;
           proxy_pass         http://{{ .name }};
           proxy_redirect     off;
           client_max_body_size {{ $.Values.nginx.clientMaxBodySize }};
