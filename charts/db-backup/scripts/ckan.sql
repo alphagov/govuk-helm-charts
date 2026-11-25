@@ -4,7 +4,7 @@
 -- Runs as part of the db-backup transform step after restore from staging.
 --
 -- Tables covered:
---   user          (name, fullname, email, apikey, password)
+--   user          (name, fullname, email, apikey, password, reset_key)
 --   package       (author, author_email, maintainer, maintainer_email)
 --   package_extra (value for PII-bearing keys)
 --
@@ -19,6 +19,7 @@
 -- fullname: repeat '*' to match original length
 -- apikey:   repeat '*' to match original length
 -- password: null - no logins restored from prod via staging need to work
+-- reset_key: null - any reset keys from source data should be nullified as CKAN never expires them
 -- state: deleted - again no logins preserved
 
 UPDATE public.user
@@ -32,6 +33,7 @@ SET
     WHEN apikey IS NOT NULL THEN repeat('*', length(apikey))
   END,
   password = NULL,
+  reset_key = NULL,
   state = 'deleted';
 
 -- ---------------------------------------------------------------------------
