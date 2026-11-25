@@ -3170,7 +3170,7 @@ govukApplications:
       schedule:
         cron: "0 2 * * *"
         timezone: "Europe/London"
-        suspend: false
+        suspend: true
   - name: service-manual-publisher
     helmValues:
       arch: arm64
