@@ -20,3 +20,14 @@ metricsGenerator:
             http://prometheus-kube-prometheus-stack-prometheus-1.prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
         - url: >-
             http://prometheus-kube-prometheus-stack-prometheus-2.prometheus-operated.monitoring.svc.cluster.local:9090/api/v1/write
+# Images are pinned here so Renovate can update them independently of the
+# chart, which lags behind upstream releases. renovate.json holds grafana/tempo
+# on 2.10.x until we migrate to Tempo 3 (which needs Kafka in microservices mode).
+tempo:
+  image:
+    repository: grafana/tempo
+    tag: 2.10.10
+memcached:
+  image:
+    repository: memcached
+    tag: 1.6.45-alpine
