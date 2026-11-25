@@ -116,11 +116,13 @@ class Node:
         return self.app["metadata"].get("namespace") or self.parent.namespace
 
     def output_path(self, output_dir: Path) -> Path:
-        # Namespaces can't contain dots, so an Application's directory never
-        # clashes with the bootstrap release's file.
+        # Applications are grouped by the namespace they deploy into, not the
+        # one the Application resource lives in. Namespaces can't contain
+        # dots, so an Application's directory never clashes with the bootstrap
+        # release's file.
         if self.app is None:
             return output_dir / self.env / f"{self.name}.yaml"
-        return output_dir / self.env / self.app_namespace / f"{self.name}.yaml"
+        return output_dir / self.env / self.namespace / f"{self.name}.yaml"
 
 
 def normalise_repo_url(url: str) -> str:
@@ -454,6 +456,7 @@ def main() -> int:
     seen: dict[tuple[str, str, str], Node] = {}
     projects: dict[str, set[str]] = {env: {"default"} for env in envs}
     rendered: list[Node] = []
+    outputs: dict[Path, Node] = {}
 
     for env in envs:
         shutil.rmtree(args.output_dir / env, ignore_errors=True)
@@ -484,6 +487,13 @@ def main() -> int:
                     pending.add(lint_future)
 
                 out = node.output_path(args.output_dir)
+                if out in outputs:
+                    problems.append(
+                        f"[{node.env}] {node.path} and {outputs[out].path} both "
+                        f"render to {out}"
+                    )
+                    continue
+                outputs[out] = node
                 out.parent.mkdir(parents=True, exist_ok=True)
                 out.write_text(node.manifests)
 
