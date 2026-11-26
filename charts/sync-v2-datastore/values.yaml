@@ -8,5 +8,5 @@ images:
 
 # Schedule for the CronJob; override via `helmValues.schedule` in app-config.
 schedule:
-  cron: "0 3 * * *"
+  cron: "0 3 * * 0"
   timezone: Europe/London

@@ -2533,6 +2533,7 @@ govukApplications:
         - name: search-api-v2-bulk-import
           task: "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"
           schedule: "0 8 * * 0" # every Sunday at 8am
+          suspend: true
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
@@ -3160,7 +3161,7 @@ govukApplications:
     chartPath: charts/search-index-env-sync
     postSyncWorkflowEnabled: "false"
   - name: sync-v2-datastore
-    # Daily 02:00: search-api-v2 documents:purge_docs, then publishing-api republish_all.
+    # Sunday at 03:00: search-api-v2 documents:purge_docs, then publishing-api republish_all.
     chartPath: charts/sync-v2-datastore
     postSyncWorkflowEnabled: "false"
     imageValues:
@@ -3168,9 +3169,9 @@ govukApplications:
       - publishing-api
     helmValues:
       schedule:
-        cron: "0 2 * * *"
+        cron: "0 3 * * 0"
         timezone: "Europe/London"
-        suspend: true
+        suspend: false
   - name: service-manual-publisher
     helmValues:
       arch: arm64
