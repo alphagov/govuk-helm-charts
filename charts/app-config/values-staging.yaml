@@ -2533,6 +2533,7 @@ govukApplications:
         - name: search-api-v2-bulk-import
           task: "queue:requeue_all_the_ever_published_things[bulk.search_api_v2_sync]"
           schedule: "0 8 * * 0" # every Sunday at 8am
+          suspend: true
       extraEnv:
         - name: GDS_SSO_OAUTH_ID
           valueFrom:
