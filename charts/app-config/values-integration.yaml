@@ -2609,11 +2609,12 @@ govukApplications:
         enabled: true
         annotations:
           !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          alb.ingress.kubernetes.io/group.name: www-origin
+          alb.ingress.kubernetes.io/group.order: "20"
           alb.ingress.kubernetes.io/security-groups: origin_alb_from_cloudfront, origin_alb_from_fastly, origin_alb_from_office, origin_alb
           alb.ingress.kubernetes.io/load-balancer-name: www-origin
           alb.ingress.kubernetes.io/load-balancer-attributes: >
             access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/www-origin
-
           alb.ingress.kubernetes.io/conditions.{{ .Release.Name }}: |
             [{"field": "host-header", "hostHeaderConfig": { "values": [
                 "www.{{ .Values.externalDomainSuffix }}",
@@ -2944,6 +2945,32 @@ govukApplications:
               key: parameters
         - name: TENSORFLOW_SAGEMAKER_ENDPOINT
           value: govuk-integration-search-ltr-endpoint
+      ingress:
+        enabled: true
+        annotations:
+          !!merge <<: [*alb-ingress-defaults, *alb-ingress-waf-ruleset-www]
+          alb.ingress.kubernetes.io/group.name: www-origin
+          alb.ingress.kubernetes.io/group.order: "10"
+          alb.ingress.kubernetes.io/security-groups: origin_alb_from_cloudfront, origin_alb_from_fastly, origin_alb_from_office, origin_alb
+          alb.ingress.kubernetes.io/load-balancer-name: www-origin
+          alb.ingress.kubernetes.io/load-balancer-attributes: >
+            access_logs.s3.enabled=true, access_logs.s3.bucket=govuk-{{ .Values.govukEnvironment }}-aws-logging, access_logs.s3.prefix=elb/www-origin
+          alb.ingress.kubernetes.io/conditions.router: |
+            [{"field": "host-header", "hostHeaderConfig": { "values": [
+                "www.{{ .Values.externalDomainSuffix }}",
+                "www-origin.{{ .Values.publishingDomainSuffix }}"
+            ]}}]
+          alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=10
+        rules:
+          - http:
+              paths:
+                - path: /api/search.json
+                  pathType: Exact
+                  backend:
+                    service:
+                      name: router
+                      port:
+                        number: 80
   - name: search-api-v2
     helmValues:
       arch: arm64
