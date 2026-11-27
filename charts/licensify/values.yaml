@@ -37,7 +37,7 @@ clamav:
     type: ClusterIP
     port: 3310
 
-nginxImage: public.ecr.aws/nginx/nginx:1.31.9
+nginxImage: public.ecr.aws/nginx/nginx:1.31.10
 nginxImagePullPolicy: IfNotPresent
 nginx:
   port: 8080
