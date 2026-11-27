@@ -115,11 +115,23 @@ data:
         }
 
 {{- if .Values.proxyRailsAssetsToS3 }}
-        # Publishing apps don't use Router nor draft-Router so their static assets are proxied to S3 here
+        # Static assets for most apps are served directly from S3 via Fastly. But for the draft stack
+        # they are served from this endpoint by authenticating-proxy which proxies to S3.
+        # Static assets for publishing apps are also served from this endpoint which proxies to S3.
         location /assets {
+          # Strip any Authorization header from the client, as this will cause
+          # S3 to return an error.  We do not use proxy_hide_header here, as
+          # that hides response headers sent FROM S3 to the client; whereas we
+          # want to unset a request header sent TO S3 by nginx.
           proxy_set_header   Authorization "";
           proxy_set_header   Connection "";
           proxy_set_header   X-Real-IP $remote_addr;  # TODO: pass the actual end-client address
+
+          # Additionally, we always prohibit passing on these headers from S3 to
+          # the client as they are very likely to be wrong. There appears to be
+          # a race condition or similar in Nginx that allows the S3 headers to
+          # overwrite those set here or by Rails, possibly depending on the order
+          # in which S3 sends them.
           proxy_hide_header  x-amz-id-2;
           proxy_hide_header  x-amz-meta-server-side-encryption;
           proxy_hide_header  x-amz-request-id;

@@ -148,22 +148,9 @@ http {
       client_max_body_size 50M;
     }
 
-    # Only used by draft-Router when serving up static assets.
-    location /assets {
-      proxy_set_header   Authorization "";
-      proxy_set_header   Connection "";
-      proxy_set_header   X-Real-IP $remote_addr;  # TODO: pass the actual end-client address
-      proxy_hide_header  x-amz-id-2;
-      proxy_hide_header  x-amz-meta-server-side-encryption;
-      proxy_hide_header  x-amz-request-id;
-      proxy_hide_header  x-amz-server-side-encryption;
-      proxy_hide_header  x-amz-version-id;
-      proxy_pass         https://govuk-app-assets-{{ .Values.govukEnvironment }}.s3.eu-west-1.amazonaws.com;
-
-      add_header Cache-Control "max-age=31536000, public, immutable";
-    }
-
-    # Uncacheable resource for use by external probers (Pingdom).
+    # Endpoint that isn't cached, which is used to assert that an external
+    # service can receive a response from GOV.UK origin.
+    # It is intended for Pingdom monitoring.
     location = /__canary__ {
       default_type application/json;
       add_header cache-control "max-age=0,no-store,no-cache";
@@ -204,7 +191,6 @@ http {
 
     # Google Search Console (gov.uk) verification files
     # See https://gov-uk.atlassian.net/wiki/spaces/GOVUK/pages/3585441793/Google+Search+Console for ownership of these verification tokens
-
     location = /googlea6393a390aadfbaa.html {
       add_header Content-Type text/html;
       return 200 'google-site-verification: googlea6393a390aadfbaa.html';
@@ -216,7 +202,6 @@ http {
     }
 
     # Bing (gov.uk) verification files
-
     location = /BingSiteAuth.xml {
       add_header Content-Type application/xml;
       return 200 '<?xml version="1.0"?><users><user>66F6ADB7C4481C94247D1E08FA04C6A4</user></users>';
@@ -248,7 +233,8 @@ http {
       add_header No-Fallback true always;
     }
 
-    # Error pages
+    # Error response is intercepted from the backend (proxy_intercept_errors)
+    # and redirected to error_page which returns the static error pages stored in S3
     charset utf-8;
 
     {{- range(list 400 401 403 404 405 406 422 429 500 502 503 504) }}
@@ -256,6 +242,15 @@ http {
     {{- end }}
 
     error_page 460 =410 /410.html;
+
+    # Strip any Authorization header from the client, as this will cause
+    # S3 to return an error.  We do not use proxy_hide_header here, as
+    # that hides response headers sent FROM S3 to the client; whereas we
+    # want to unset a request header sent TO S3 by nginx.
+    # Remove S3 HTTP headers including those listed in:
+    # http://docs.aws.amazon.com/AmazonS3/latest/API/RESTCommonResponseHeaders.html
+    # This keeps this HTTP response as similar as possible to the response
+    # sent when using Sendfile to serve files from NFS
 
     {{- range(list 400 401 403 404 405 406 410 422 429 500 502 503 504) }}
 
@@ -272,7 +267,7 @@ http {
         proxy_hide_header  x-amz-version-id;
 
         {{- if eq . 404 }}
-          # Set Cache-Control headers on 404 pages since we overide those set by apps.
+          # Set Cache-Control headers on 404 pages since we override those set by apps.
           # So that we dont fall through to the default provided by the CDN.
           add_header Cache-Control "public, max-age=30" always;
 
