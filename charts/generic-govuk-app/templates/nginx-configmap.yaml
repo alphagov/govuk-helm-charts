@@ -105,13 +105,16 @@ data:
         add_header X-Robots-Tag "noindex";
         {{- end }}
 
+        # Proxy the request to the Rails app
         location / {
+          client_max_body_size {{ .Values.nginxClientMaxBodySize }};
+
           proxy_set_header   Host $http_host;
           proxy_set_header   X-Real-IP $remote_addr;
           proxy_set_header GOVUK-Request-Id $govuk_request_id;
-          proxy_pass         http://{{ $fullName }};
+
           proxy_redirect     off;
-          client_max_body_size {{ .Values.nginxClientMaxBodySize }};
+          proxy_pass         http://{{ $fullName }};
         }
 
 {{- if .Values.proxyRailsAssetsToS3 }}
@@ -125,6 +128,8 @@ data:
           proxy_hide_header  x-amz-request-id;
           proxy_hide_header  x-amz-server-side-encryption;
           proxy_hide_header  x-amz-version-id;
+
+          # Set cache headers in response to client
           add_header         Cache-Control "public, max-age=31536000, immutable";
           add_header         Surrogate-Key "assets assets-{{ $fullName }}";
 

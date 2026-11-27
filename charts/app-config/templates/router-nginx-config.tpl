@@ -97,8 +97,6 @@ http {
     add_header Permissions-Policy $permissions_policy;
     add_header X-Content-Type-Options $x_content_type_options always;
 
-    proxy_set_header GOVUK-Request-Id $govuk_request_id;
-
     # Hide some internal headers
     proxy_hide_header X-Rack-Cache;
     proxy_hide_header X-Runtime;
@@ -117,35 +115,60 @@ http {
     # top-level location blocks (see further down) matches.
     location / {
       # Strip cookie headers by default.
-      proxy_pass         http://router;
-      proxy_redirect     off;
       proxy_hide_header  Set-Cookie;
+      proxy_set_header   Cookie '';
 
       proxy_set_header   Host $http_host;
       proxy_set_header   X-Real-IP $remote_addr;
       proxy_set_header   X-Forwarded-Server $host;
       proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header   Cookie '';
+      proxy_set_header   GOVUK-Request-Id $govuk_request_id;
 
       # Redirect to trim a (single) trailing slash or dot.
       rewrite ^\/(.+)[/.]$ $scheme://$host/$1 permanent;
+
+      proxy_pass         http://router;
+      proxy_redirect     off;
     }
 
     # Allow cookie headers to pass for services that require them
     # Requests for these services will use this location as nginx will select the most
     # specific location directive for a given request
-    location ~* ^/(apply-for-a-licence|email|sign-in\/callback) {
-      proxy_pass         http://router;
-      proxy_redirect     off;
+    location ~* ^/(email|sign-in\/callback) {
       proxy_set_header   Host $http_host;
       proxy_set_header   X-Real-IP $remote_addr;
       proxy_set_header   X-Forwarded-Server $host;
       proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header   GOVUK-Request-Id $govuk_request_id;
+
+      proxy_redirect     off;
+      proxy_pass         http://router;
+    }
+
+    # Allow cookie headers to pass
+    location ~ ^/apply-for-a-licence/? {
+      # Set proxy timeout to 50 seconds as a quick fix for problems
+      # where civica QueryPayments calls are taking too long.
+      proxy_read_timeout 50s;
+
+      proxy_set_header   Host $http_host;
+      proxy_set_header   X-Real-IP $remote_addr;
+      proxy_set_header   X-Forwarded-Server $host;
+      proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
+      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header   GOVUK-Request-Id $govuk_request_id;
 
       # Allow large uploads to licensify-frontend
       client_max_body_size 50M;
+
+      # Licensify sends custom 500 errors, and we need to send No-Fallback: true
+      # to prevent the CDN from falling back to the mirror site.
+      add_header No-Fallback true always;
+
+      proxy_redirect     off;
+      proxy_pass http://router;
     }
 
     # Only used by draft-Router when serving up static assets.
@@ -228,24 +251,6 @@ http {
     location = /dla-ending/google6db9c061ce178960.html {
       add_header Content-Type text/html;
       return 200 '';
-    }
-
-    location ~ ^/apply-for-a-licence/? {
-      # Set proxy timeout to 50 seconds as a quick fix for problems
-      # where civica QueryPayments calls are taking too long.
-      proxy_read_timeout 50s;
-      proxy_pass http://router;
-      proxy_set_header   Host $http_host;
-      proxy_set_header   X-Real-IP $remote_addr;
-      proxy_set_header   X-Forwarded-Server $host;
-      proxy_set_header   X-Forwarded-Host $proxy_add_x_forwarded_host;
-      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-
-      # Licensify sends custom 500 errors, and we need to send No-Fallback: true
-      # to prevent the CDN from falling back to the mirror site.
-      # TODO: Put this in the Licensify nginx config when
-      # we have it running on EKS
-      add_header No-Fallback true always;
     }
 
     # Error pages
